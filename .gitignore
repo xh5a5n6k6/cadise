@@ -1,0 +1,27 @@
+# VS Build Results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# VS User Specific Files
+*.vcxproj
+*.filters
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# cmake related
+[Bb]uild/
+
+# Visual Studio Cache/Options Directory
+.vs/
