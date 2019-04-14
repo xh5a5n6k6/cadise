@@ -1,16 +1,17 @@
 #pragma once
 
-#include "core/renderer.h"
-
-#include "core/color.h"
-#include "core/intersection.h"
+#include "core/renderer/renderer.h"
 
 namespace cadise {
 
-class RayTraceRenderer : public Renderer {
+class Intersection;
+class Ray;
+class RGBColor;
+
+class WhittedRenderer : public Renderer {
 public:
-    RayTraceRenderer();
-    RayTraceRenderer(int maxDepth, int sampleNumber);
+    WhittedRenderer();
+    WhittedRenderer(int maxDepth, int sampleNumber);
 
     void render(Scene &scene) override;
 

@@ -1,5 +1,7 @@
 #include "core/scene.h"
 
+#include "core/intersector.h"
+
 namespace cadise {
 
 Scene::Scene() {

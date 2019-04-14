@@ -1,4 +1,8 @@
-#include "core/material.h"
+#include "core/material/material.h"
+
+#include "core/bxdf/bxdf.h"
+
+#include "math/algebra.h"
 
 namespace cadise {
 

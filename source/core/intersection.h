@@ -5,8 +5,6 @@
 
 namespace cadise {
 
-class Primitive;
-
 class Intersection{
 public:
     Intersection();

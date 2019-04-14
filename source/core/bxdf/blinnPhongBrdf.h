@@ -2,6 +2,8 @@
 
 #include "core/bxdf/bxdf.h"
 
+#include "math/algebra.h"
+
 namespace cadise {
 
 class BlinnPhongBRDF : public BxDF {

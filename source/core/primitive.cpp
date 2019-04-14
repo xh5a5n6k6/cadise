@@ -1,6 +1,9 @@
 #include "core/primitive.h"
 
+#include "core/color.h"
 #include "core/intersection.h"
+#include "core/material/material.h"
+#include "core/shape/shape.h"
 
 namespace cadise {
 

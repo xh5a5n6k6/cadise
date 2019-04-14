@@ -1,15 +1,17 @@
 #pragma once
 
-#include "core/camera.h"
-#include "core/intersector.h"
-#include "core/light.h"
-#include "core/material.h"
-#include "core/renderer.h"
-#include "core/scene.h"
+#include "core/basicHeader.h"
 
 #include "math/algebra.h"
 
 namespace cadise {
+
+class Camera;
+class Intersector;
+class Light;
+class Material;
+class Renderer;
+class Scene;
 
 struct Option {
     // TODO

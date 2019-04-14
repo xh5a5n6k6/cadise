@@ -1,5 +1,8 @@
 #include "core/shape/triangle.h"
 
+#include "core/ray.h"
+#include "core/surfaceInfo.h"
+
 namespace cadise {
 
 Triangle::Triangle(Vector3 v1, Vector3 v2, Vector3 v3) {

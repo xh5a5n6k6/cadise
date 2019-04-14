@@ -1,9 +1,9 @@
 #pragma once
 
-#include "core/ray.h"
-#include "core/surfaceInfo.h"
-
 namespace cadise {
+
+class Ray;
+class SurfaceInfo;
 
 class Shape {
 public:

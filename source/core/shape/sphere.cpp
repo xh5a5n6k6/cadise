@@ -1,5 +1,8 @@
 #include "core/shape/sphere.h"
 
+#include "core/ray.h"
+#include "core/surfaceInfo.h"
+
 namespace cadise {
 
 Sphere::Sphere(Vector3 center, float radius) : 

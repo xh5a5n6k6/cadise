@@ -1,6 +1,8 @@
 #pragma once
 
-#include "core/shape.h"
+#include "core/shape/shape.h"
+
+#include "math/algebra.h"
 
 namespace cadise {
 

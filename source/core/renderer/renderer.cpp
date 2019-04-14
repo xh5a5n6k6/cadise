@@ -1,4 +1,4 @@
-#include "core/renderer.h"
+#include "core/renderer/renderer.h"
 
 namespace cadise {
 

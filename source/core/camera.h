@@ -1,10 +1,12 @@
 #pragma once
 
-#include "math/algebra.h"
-#include "core/ray.h"
 #include "core/image.h"
 
+#include "math/algebra.h"
+
 namespace cadise {
+
+class Ray;
 
 class Camera {
 public:

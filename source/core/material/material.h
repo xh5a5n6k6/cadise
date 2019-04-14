@@ -1,10 +1,12 @@
 #pragma once
 
-#include "core/bxdf/bxdf.h"
-
-#include "core/surfaceInfo.h"
+#include "core/basicHeader.h"
 
 namespace cadise {
+
+class BxDF;
+class SurfaceInfo;
+class Vector3;
 
 class Material {
 public:

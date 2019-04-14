@@ -1,8 +1,11 @@
 #pragma once
 
+#include "core/basicHeader.h"
 #include "core/renderOption.h"
 
 namespace cadise {
+
+class RenderOption;
 
 class Parser {
 public:

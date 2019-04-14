@@ -1,11 +1,14 @@
 #pragma once
 
+#include "core/basicHeader.h"
 #include "core/intersector.h"
-#include "core/shape.h"
-#include "core/material.h"
-#include "core/color.h"
 
 namespace cadise {
+
+class Material;
+class Shape;
+class SurfaceInfo;
+class Vector3;
 
 class Primitive : public Intersector {
 public:

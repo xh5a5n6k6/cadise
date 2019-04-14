@@ -1,5 +1,7 @@
 #include "core/camera.h"
 
+#include "core/ray.h"
+
 // Tmp
 #include <random>
 

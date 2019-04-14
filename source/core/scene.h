@@ -1,12 +1,14 @@
 #pragma once
 
-#include "core/camera.h"
-#include "core/shape.h"
-
-#include "core/intersector.h"
-#include "core/light.h"
+#include "core/basicHeader.h"
 
 namespace cadise {
+
+class Camera;
+class Intersection;
+class Intersector;
+class Light;
+class Ray;
 
 class Scene {
 public:

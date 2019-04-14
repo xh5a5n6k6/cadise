@@ -1,4 +1,4 @@
-#include "core/shape.h"
+#include "core/shape/shape.h"
 
 namespace cadise {
 

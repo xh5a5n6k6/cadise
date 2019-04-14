@@ -1,8 +1,8 @@
 #pragma once
 
-#include "core/scene.h"
-
 namespace cadise {
+
+class Scene;
 
 class Renderer {
 public:

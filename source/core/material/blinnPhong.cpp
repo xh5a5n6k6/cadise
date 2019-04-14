@@ -2,6 +2,8 @@
 
 #include "core/bxdf/blinnPhongBrdf.h"
 
+#include "math/algebra.h"
+
 namespace cadise {
 
 BlinnPhong::BlinnPhong(Vector3 albedo, float diffuseRatio, float exponent){

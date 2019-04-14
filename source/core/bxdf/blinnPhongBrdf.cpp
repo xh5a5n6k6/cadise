@@ -1,5 +1,7 @@
 #include "core/bxdf/blinnPhongBrdf.h"
 
+#include "core/surfaceInfo.h"
+
 namespace cadise {
 
 BlinnPhongBRDF::BlinnPhongBRDF(Vector3 albedo, float exponent, float diffuseRatio) :

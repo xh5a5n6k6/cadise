@@ -1,13 +1,11 @@
 #include "core/renderOption.h"
 
+#include "core/camera.h"
 #include "core/light/pointLight.h"
-
 #include "core/material/blinnPhong.h"
-
 #include "core/primitive.h"
-
-#include "core/renderer/rayTraceRenderer.h"
-
+#include "core/renderer/whittedRenderer.h"
+#include "core/scene.h"
 #include "core/shape/sphere.h"
 #include "core/shape/triangle.h"
 
@@ -82,7 +80,7 @@ std::unique_ptr<Scene> RenderOption::createScene() {
 std::unique_ptr<Renderer> RenderOption::createRenderer() {
     std::unique_ptr<Renderer> renderer = nullptr;
 
-    renderer = std::make_unique<RayTraceRenderer>();
+    renderer = std::make_unique<WhittedRenderer>();
 
     return renderer;
 }

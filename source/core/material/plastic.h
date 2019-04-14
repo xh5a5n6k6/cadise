@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/material.h"
+#include "core/material/material.h"
 
 namespace cadise {
 

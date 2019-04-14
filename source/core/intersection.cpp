@@ -1,7 +1,5 @@
 #include "core/intersection.h"
 
-#include "core/primitive.h"
-
 namespace cadise {
 
 Intersection::Intersection() {

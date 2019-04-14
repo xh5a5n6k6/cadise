@@ -1,8 +1,9 @@
 #pragma once
 
-#include "core/surfaceInfo.h"
-
 namespace cadise {
+
+class SurfaceInfo;
+class Vector3;
 
 class BxDF {
 public:

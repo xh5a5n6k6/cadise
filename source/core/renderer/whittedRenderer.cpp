@@ -1,18 +1,24 @@
-#include "core/renderer/rayTraceRenderer.h"
+#include "core/renderer/whittedRenderer.h"
 
+#include "core/camera.h"
+#include "core/color.h"
+#include "core/intersection.h"
+#include "core/light/light.h"
 #include "core/primitive.h"
+#include "core/ray.h"
+#include "core/scene.h"
 
 namespace cadise {
 
-RayTraceRenderer::RayTraceRenderer() :
-    RayTraceRenderer(2, 1) {
+WhittedRenderer::WhittedRenderer() :
+    WhittedRenderer(2, 1) {
 }
 
-RayTraceRenderer::RayTraceRenderer(int maxDepth, int sampleNumber) :
+WhittedRenderer::WhittedRenderer(int maxDepth, int sampleNumber) :
     _maxDepth(maxDepth), _sampleNumber(sampleNumber) {
 }
 
-void RayTraceRenderer::render(Scene &scene) {
+void WhittedRenderer::render(Scene &scene) {
     // create _rx*_ry image
     int rx = 480;
     int ry = 480;
@@ -52,7 +58,7 @@ void RayTraceRenderer::render(Scene &scene) {
     fclose(output);
 }
 
-RGBColor RayTraceRenderer::_luminance(Scene &scene, Ray &ray, Intersection &intersection) {
+RGBColor WhittedRenderer::_luminance(Scene &scene, Ray &ray, Intersection &intersection) {
     RGBColor color = RGBColor(0.0f, 0.0f, 0.0f);
     if (scene.isIntersecting(ray, intersection)) {
         //color.rgb() = Vector3(255.0f, 255.0f, 255.0f);
@@ -81,7 +87,7 @@ RGBColor RayTraceRenderer::_luminance(Scene &scene, Ray &ray, Intersection &inte
     return color;
 }
 
-RGBColor RayTraceRenderer::_reflect(Scene &scene, Ray &ray, Intersection &intersection) {
+RGBColor WhittedRenderer::_reflect(Scene &scene, Ray &ray, Intersection &intersection) {
     Vector3 reflectDir = 2 * intersection.surfaceInfo().hitNormal() - -ray.direction();
     Ray r = Ray(intersection.surfaceInfo().hitPoint() + CADISE_RAY_EPSILON * reflectDir,
                 reflectDir,
