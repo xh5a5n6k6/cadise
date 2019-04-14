@@ -6,15 +6,15 @@ namespace cadise {
 
 class Image {
 public:
-	Image();
-	Image(int rx, int ry);
+    Image();
+    Image(int rx, int ry);
 
-	void writeInImage(std::string filename){}
+    void writeInImage(std::string filename){}
 
-	int resolutionX();
-	int resolutionY();
+    int resolutionX();
+    int resolutionY();
 
-	int _resolutionX, _resolutionY;
+    int _resolutionX, _resolutionY;
 };
 
 } // namespace cadise

@@ -8,19 +8,19 @@ Intersection::Intersection() {
 }
 
 void Intersection::setSurfaceInfo(SurfaceInfo surfaceInfo) {
-	_surfaceInfo = surfaceInfo;
+    _surfaceInfo = surfaceInfo;
 }
 
 void Intersection::setPrimitive(Primitive primitive) {
-	_primitive = primitive;
+    _primitive = primitive;
 }
 
 SurfaceInfo& Intersection::surfaceInfo() {
-	return _surfaceInfo;
+    return _surfaceInfo;
 }
 
 Primitive Intersection::primitive() {
-	return _primitive;
+    return _primitive;
 }
 
 } // namespace cadise

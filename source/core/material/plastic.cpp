@@ -2,6 +2,4 @@
 
 namespace cadise {
 
-
-
 } // namespace cadise

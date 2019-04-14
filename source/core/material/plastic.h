@@ -5,7 +5,6 @@
 namespace cadise {
 
 class Plastic : public Material {
-
 };
 
 } // namespace cadise

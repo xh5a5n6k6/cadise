@@ -6,14 +6,14 @@ namespace cadise {
 
 class Parser {
 public:
-	Parser();
+    Parser();
 
-	void parseFile(std::string filename);
+    void parseFile(std::string filename);
 
 private:
-	void _parseEnd();
+    void _parseEnd();
 
-	std::unique_ptr<RenderOption> _renderOption;
+    std::unique_ptr<RenderOption> _renderOption;
 };
 
 } // namespace cadise

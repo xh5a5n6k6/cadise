@@ -9,17 +9,17 @@ class Primitive;
 
 class Intersection{
 public:
-	Intersection();
+    Intersection();
 
-	void setSurfaceInfo(SurfaceInfo surfaceInfo);
-	void setPrimitive(Primitive primitive);
+    void setSurfaceInfo(SurfaceInfo surfaceInfo);
+    void setPrimitive(Primitive primitive);
 
-	SurfaceInfo& surfaceInfo();
-	Primitive primitive();
+    SurfaceInfo& surfaceInfo();
+    Primitive primitive();
 
 private:
-	SurfaceInfo _surfaceInfo;
-	Primitive _primitive;
+    SurfaceInfo _surfaceInfo;
+    Primitive _primitive;
 };
 
 } // namespace cadise

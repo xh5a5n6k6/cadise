@@ -14,15 +14,15 @@
 namespace cadise {
 
 inline constexpr float CADISE_RAY_EPSILON 
-	= 0.01f;
+    = 0.01f;
 
 inline constexpr float CADISE_PI 
-	= 3.1415926535897932f;
+    = 3.1415926535897932f;
 
 inline constexpr float CADISE_INV_PI 
-	= 0.3183098861837906f;
+    = 0.3183098861837906f;
 
 inline constexpr float CADISE_INV_EIGHT_PI 
-	= 0.0397887357729738f;
+    = 0.0397887357729738f;
 
 } // namespace cadise

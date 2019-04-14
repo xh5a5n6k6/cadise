@@ -5,7 +5,6 @@
 namespace cadise {
 
 class Sampler {
-
 };
 
 } // namespace cadise
