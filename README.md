@@ -1,3 +1,3 @@
 # Cadise Renderer
-<img src="./gallery/cornell_box.png"><br />
-<i>Cornell Box (initial version) Rendered with Cadise</i>
+<img src="./gallery/cornell-box/20190415.png"><br />
+<i>Cornell Box (mirror sphere) Rendered with Cadise</i>
