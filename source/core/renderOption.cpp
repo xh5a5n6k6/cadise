@@ -70,7 +70,8 @@ void RenderOption::setupData(std::vector<std::string> data) {
     }
     else if (!type.compare("Mirror")) {
         std::shared_ptr<Material> material = nullptr;
-        material = std::make_shared<Mirror>();
+        Vector3 albedo = Vector3(stof(data.at(1)), stof(data.at(2)), stof(data.at(3)));
+        material = std::make_shared<Mirror>(albedo);
 
         _option.material = material;
     }

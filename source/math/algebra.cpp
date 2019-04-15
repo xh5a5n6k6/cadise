@@ -99,6 +99,11 @@ Vector3 Vector3::clamp(float min, float max) {
                    std::clamp(_z, min, max));
 }
 
+Vector3 Vector3::reflect(Vector3 normal) {
+    Vector3 result = 2.0f * Dot(*this, normal) * normal;
+    return result - *this;
+}
+
 void Vector3::swap(Vector3 &v) {
     std::swap(_x, v._x);
     std::swap(_y, v._y);

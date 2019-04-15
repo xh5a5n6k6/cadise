@@ -6,7 +6,7 @@ namespace cadise {
 
 class Mirror : public Material {
 public:
-    Mirror();
+    Mirror(Vector3 albedo);
 };
 
 } // namespace cadise

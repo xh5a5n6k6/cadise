@@ -29,6 +29,7 @@ public:
     float squaredLength();
     Vector3 normalize();
     Vector3 clamp(float min, float max);
+    Vector3 reflect(Vector3 normal);
     void swap(Vector3 &v);
 
     float x();
