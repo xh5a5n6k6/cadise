@@ -19,7 +19,8 @@ public:
     virtual bool isOccluded(Ray &ray) override;
     virtual RGBColor emittance() override;
 
-    Vector3 evaluateBSDF(Vector3 &inDirection, Vector3 &outDirection, SurfaceInfo &surfaceInfo);
+    Vector3 evaluateBSDF(Vector3 inDirection, Vector3 outDirection, SurfaceInfo &surfaceInfo);
+    Vector3 evaluateSampleBSDF(Vector3 inDirection, Vector3 &outDirection, SurfaceInfo &surfaceInfo);
 
 private:
     std::shared_ptr<Shape> _shape;

@@ -76,6 +76,10 @@ Vector3& Vector3::operator=(const Vector3 &v) {
     return *this;
 }
 
+bool Vector3::isZero() {
+    return (_x == 0.0f) && (_y == 0.0f) && (_z == 0.0f);
+}
+
 float Vector3::length() {
     return std::sqrtf(squaredLength());
 }

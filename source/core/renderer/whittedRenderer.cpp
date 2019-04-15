@@ -10,10 +10,6 @@
 
 namespace cadise {
 
-WhittedRenderer::WhittedRenderer() :
-    WhittedRenderer(2, 1) {
-}
-
 WhittedRenderer::WhittedRenderer(int maxDepth, int sampleNumber) :
     _maxDepth(maxDepth), _sampleNumber(sampleNumber) {
 }
@@ -68,16 +64,19 @@ RGBColor WhittedRenderer::_luminance(Scene &scene, Ray &ray, Intersection &inter
         for (int i = 0; i < scene._lights.size(); i++) {
             Vector3 hitPoint = intersection.surfaceInfo().hitPoint();
             Vector3 lightDir = (scene._lights[i]->position() - hitPoint).normalize();
-            Vector3 rayDir = -ray.direction();
 
-            Ray r = Ray(hitPoint + CADISE_RAY_EPSILON * lightDir, lightDir, CADISE_RAY_EPSILON, FLT_MAX);
+            Ray r = Ray(hitPoint + CADISE_RAY_EPSILON * lightDir, 
+                        lightDir, 
+                        CADISE_RAY_EPSILON, FLT_MAX);
             if (scene.isOccluded(r)) {
                 float t = (scene._lights[i]->position().x() - hitPoint.x()) / r.direction().x();
                 if (r.maxT() < t) 
                     continue;
             }
-            Vector3 reflectance = intersection.primitive().evaluateBSDF(lightDir, rayDir, intersection.surfaceInfo());
-            color.rgb() += reflectance * scene._lights[i]->color() * AbsDot(lightDir, intersection.surfaceInfo().hitNormal());
+            Vector3 reflectance = intersection.primitive().evaluateBSDF(lightDir, -ray.direction(), intersection.surfaceInfo());
+
+            if (!reflectance.isZero())
+                color.rgb() += reflectance * scene._lights[i]->color() * AbsDot(lightDir, intersection.surfaceInfo().hitNormal());
         }
         if (ray.depth() + 1 < _maxDepth) {
             color.rgb() += _reflect(scene, ray, intersection).rgb();
@@ -88,13 +87,18 @@ RGBColor WhittedRenderer::_luminance(Scene &scene, Ray &ray, Intersection &inter
 }
 
 RGBColor WhittedRenderer::_reflect(Scene &scene, Ray &ray, Intersection &intersection) {
-    Vector3 reflectDir = 2 * intersection.surfaceInfo().hitNormal() - -ray.direction();
-    Ray r = Ray(intersection.surfaceInfo().hitPoint() + CADISE_RAY_EPSILON * reflectDir,
-                reflectDir,
-                CADISE_RAY_EPSILON, FLT_MAX, ray.depth() + 1);
-    Intersection intersect;
     RGBColor color;
-    color.rgb() = 0.0f * _luminance(scene, r, intersect).rgb() * AbsDot(reflectDir, intersection.surfaceInfo().hitNormal());
+
+    Vector3 sampleDir;
+    Vector3 reflectance = intersection.primitive().evaluateSampleBSDF(-ray.direction(), sampleDir, intersection.surfaceInfo());
+
+    if (!reflectance.isZero()) {
+        Ray r = Ray(intersection.surfaceInfo().hitPoint() + CADISE_RAY_EPSILON * sampleDir,
+                    sampleDir,
+                    CADISE_RAY_EPSILON, FLT_MAX, ray.depth() + 1);
+        Intersection intersect;
+        color.rgb() = reflectance * _luminance(scene, r, intersect).rgb() * AbsDot(sampleDir, intersection.surfaceInfo().hitNormal());
+    }
 
     return color;
 }

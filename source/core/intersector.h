@@ -6,7 +6,7 @@ class Intersection;
 class Ray;
 class RGBColor;
 
-// Intersector represents an object that is intersectable (includs primitives and lights)
+// Intersector represents an object that is intersectable (includs primitives and area lights)
 class Intersector {
 public:
     virtual bool isIntersecting(Ray &ray, Intersection &intersection) = 0;

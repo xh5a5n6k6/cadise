@@ -1,7 +1,6 @@
 #include "core/parser.h"
 
 #include "core/renderer/renderer.h"
-#include "core/renderOption.h"
 #include "core/scene.h"
 
 namespace cadise {

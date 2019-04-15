@@ -2,7 +2,9 @@
 
 #include "core/camera.h"
 #include "core/light/pointLight.h"
-#include "core/material/blinnPhong.h"
+#include "core/material/matte.h"
+#include "core/material/mirror.h"
+#include "core/material/plastic.h"
 #include "core/primitive.h"
 #include "core/renderer/whittedRenderer.h"
 #include "core/scene.h"
@@ -50,12 +52,25 @@ void RenderOption::setupData(std::vector<std::string> data) {
         shape = std::make_shared<Triangle>(v1, v2, v3);
         _option.intersectors.push_back(std::make_shared<Primitive>(shape, _option.material));
     }
-    else if (!type.compare("Material")) {
+    else if (!type.compare("Plastic")) {
         std::shared_ptr<Material> material = nullptr;
         Vector3 albedo = Vector3(stof(data.at(1)), stof(data.at(2)), stof(data.at(3)));
-        float diffuseRatio = stof(data.at(4));
-        float exponent = stof(data.at(5));
-        material = std::make_shared<BlinnPhong>(albedo, exponent, diffuseRatio);
+        float exponent = stof(data.at(4));
+        float diffuseRatio = stof(data.at(5));
+        material = std::make_shared<Plastic>(albedo, exponent, diffuseRatio);
+
+        _option.material = material;
+    }
+    else if (!type.compare("Matte")) {
+        std::shared_ptr<Material> material = nullptr;
+        Vector3 albedo = Vector3(stof(data.at(1)), stof(data.at(2)), stof(data.at(3)));
+        material = std::make_shared<Matte>(albedo);
+
+        _option.material = material;
+    }
+    else if (!type.compare("Mirror")) {
+        std::shared_ptr<Material> material = nullptr;
+        material = std::make_shared<Mirror>();
 
         _option.material = material;
     }
@@ -66,6 +81,10 @@ void RenderOption::setupData(std::vector<std::string> data) {
         light = std::make_shared<PointLight>(position, color);
 
         _option.lights.push_back(light);
+    }
+    else if (!type.compare("WhittedRenderer")) {
+        _option.maxDepth = std::stoi(data.at(1));
+        _option.sampleNumber = std::stoi(data.at(2));
     }
 }
 
@@ -80,7 +99,7 @@ std::unique_ptr<Scene> RenderOption::createScene() {
 std::unique_ptr<Renderer> RenderOption::createRenderer() {
     std::unique_ptr<Renderer> renderer = nullptr;
 
-    renderer = std::make_unique<WhittedRenderer>();
+    renderer = std::make_unique<WhittedRenderer>(_option.maxDepth, _option.sampleNumber);
 
     return renderer;
 }

@@ -25,6 +25,8 @@ struct Option {
 
     std::vector<std::shared_ptr<Light> > lights;
     std::vector<std::shared_ptr<Intersector> > intersectors;
+
+    int maxDepth, sampleNumber;
 };
 
 class RenderOption {

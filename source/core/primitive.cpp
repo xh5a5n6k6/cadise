@@ -36,8 +36,12 @@ RGBColor Primitive::emittance() {
     return RGBColor(0.0f, 0.0f, 0.0f);
 }
 
-Vector3 Primitive::evaluateBSDF(Vector3 &inDirection, Vector3 &outDirection, SurfaceInfo &surfaceInfo) {
+Vector3 Primitive::evaluateBSDF(Vector3 inDirection, Vector3 outDirection, SurfaceInfo &surfaceInfo) {
     return _material->evaluateBSDF(inDirection, outDirection, surfaceInfo);
+}
+
+Vector3 Primitive::evaluateSampleBSDF(Vector3 inDirection, Vector3 &outDirection, SurfaceInfo &surfaceInfo) {
+    return _material->evaluateSampleBSDF(inDirection, outDirection, surfaceInfo);
 }
 
 } // namespace cadise

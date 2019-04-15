@@ -24,6 +24,7 @@ public:
     Vector3& operator/=(const Vector3 &v);
     Vector3& operator=(const Vector3 &v);
 
+    bool isZero();
     float length();
     float squaredLength();
     Vector3 normalize();
@@ -111,9 +112,9 @@ inline Matrix4 Matrix4Scale(float sx, float sy, float sz) {
 }
 
 inline Matrix4 Matrix4Translate(float tx, float ty, float tz) {
-    return Matrix4(1.0f, 0.0f, 0.0f,  tx,
-                   0.0f, 1.0f, 0.0f,  ty,
-                   0.0f, 0.0f, 1.0f,  tz,
+    return Matrix4(1.0f, 0.0f, 0.0f,   tx,
+                   0.0f, 1.0f, 0.0f,   ty,
+                   0.0f, 0.0f, 1.0f,   tz,
                    0.0f, 0.0f, 0.0f, 1.0f);
 }
 

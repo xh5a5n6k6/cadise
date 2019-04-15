@@ -10,7 +10,6 @@ class RGBColor;
 
 class WhittedRenderer : public Renderer {
 public:
-    WhittedRenderer();
     WhittedRenderer(int maxDepth, int sampleNumber);
 
     void render(Scene &scene) override;
