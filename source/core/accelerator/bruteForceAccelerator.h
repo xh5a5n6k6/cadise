@@ -7,9 +7,9 @@
 
 namespace cadise {
 
-class BruteAccelerator : public Accelerator {
+class BruteForceAccelerator : public Accelerator {
 public:
-    BruteAccelerator(std::vector<std::shared_ptr<Intersector> > intersectors);
+    BruteForceAccelerator(std::vector<std::shared_ptr<Intersector> > intersectors);
 
     bool isIntersecting(Ray &ray, Intersection &intersection) override;
     bool isOccluded(Ray &ray) override;
