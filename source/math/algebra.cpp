@@ -100,7 +100,7 @@ Vector3 Vector3::clamp(float min, float max) {
 }
 
 Vector3 Vector3::reflect(Vector3 normal) {
-    Vector3 result = 2.0f * Dot(*this, normal) * normal;
+    Vector3 result = 2.0f * AbsDot(*this, normal) * normal;
     return result - *this;
 }
 

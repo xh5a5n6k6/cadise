@@ -1,5 +1,6 @@
 #include "core/renderOption.h"
 
+#include "core/accelerator/bruteAccelerator.h"
 #include "core/camera.h"
 #include "core/light/pointLight.h"
 #include "core/material/matte.h"
@@ -92,7 +93,8 @@ void RenderOption::setupData(std::vector<std::string> data) {
 std::unique_ptr<Scene> RenderOption::createScene() {
     std::unique_ptr<Scene> scene = nullptr;
 
-    scene = std::make_unique<Scene>(_option.intersectors, _option.lights, _option.camera);
+    std::shared_ptr<Accelerator> accelerator = std::make_shared<BruteAccelerator>(_option.intersectors);
+    scene = std::make_unique<Scene>(accelerator, _option.lights, _option.camera);
 
     return scene;
 }
