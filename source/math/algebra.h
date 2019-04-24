@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/basicHeader.h"
+#include <cmath>
 
 namespace cadise {
 

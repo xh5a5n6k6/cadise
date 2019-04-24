@@ -13,7 +13,6 @@ public:
 
 private:
     float _exponent;
-    float _brdfFactor;
 };
 
 } // namespace cadise

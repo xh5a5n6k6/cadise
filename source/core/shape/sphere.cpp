@@ -3,6 +3,10 @@
 #include "core/ray.h"
 #include "core/surfaceInfo.h"
 
+#include "math/constant.h"
+
+#include <limits>
+
 namespace cadise {
 
 Sphere::Sphere(Vector3 center, float radius) : 
@@ -13,7 +17,7 @@ Sphere::Sphere(Vector3 center, float radius) :
 bool Sphere::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
     Ray r = Ray(TransformPoint(_worldToLocal, ray.origin()),
                 TransformVector(_worldToLocal, ray.direction()),
-                CADISE_RAY_EPSILON, FLT_MAX);
+                CADISE_RAY_EPSILON, std::numeric_limits<float>::max());
 
     int isOutside = r.origin().squaredLength() > _radius * _radius;
     float t = Dot(-r.origin(), r.direction());
@@ -49,7 +53,7 @@ bool Sphere::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
 bool Sphere::isOccluded(Ray &ray) {
     Ray r = Ray(TransformPoint(_worldToLocal, ray.origin()),
                 TransformVector(_worldToLocal, ray.direction()),
-                CADISE_RAY_EPSILON, FLT_MAX);
+                CADISE_RAY_EPSILON, std::numeric_limits<float>::max());
 
     int isOutside = r.origin().squaredLength() > _radius * _radius;
     float t = Dot(-r.origin(), r.direction());

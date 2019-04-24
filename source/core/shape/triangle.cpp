@@ -3,6 +3,10 @@
 #include "core/ray.h"
 #include "core/surfaceInfo.h"
 
+#include "math/constant.h"
+
+#include <limits>
+
 namespace cadise {
 
 Triangle::Triangle(Vector3 v1, Vector3 v2, Vector3 v3) {
@@ -22,7 +26,7 @@ bool Triangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
     Vector3 P = Cross(D, E2);
 
     float denominator = Dot(P, E1);
-    if (denominator - 0.0f < FLT_EPSILON)
+    if (denominator - 0.0f < std::numeric_limits<float>::epsilon())
         return false;
 
     float invDenominator = 1.0f / denominator;
@@ -60,7 +64,7 @@ bool Triangle::isOccluded(Ray &ray) {
     Vector3 P = Cross(D, E2);
 
     float denominator = Dot(P, E1);
-    if (denominator - 0.0f < FLT_EPSILON)
+    if (denominator - 0.0f < std::numeric_limits<float>::epsilon())
         return false;
 
     float invDenominator = 1.0f / denominator;

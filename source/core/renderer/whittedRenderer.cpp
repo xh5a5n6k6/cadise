@@ -8,6 +8,8 @@
 #include "core/ray.h"
 #include "core/scene.h"
 
+#include "math/constant.h"
+
 namespace cadise {
 
 WhittedRenderer::WhittedRenderer(int maxDepth, int sampleNumber) :
@@ -57,17 +59,13 @@ void WhittedRenderer::render(Scene &scene) {
 RGBColor WhittedRenderer::_luminance(Scene &scene, Ray &ray, Intersection &intersection) {
     RGBColor color = RGBColor(0.0f, 0.0f, 0.0f);
     if (scene.isIntersecting(ray, intersection)) {
-        //color.rgb() = Vector3(255.0f, 255.0f, 255.0f);
-
-        //Vector3 ambient = hitSurface._phongAttribute.x() * hitSurface._rgb;
-        //color.rgb() += ambient;
         for (int i = 0; i < scene._lights.size(); i++) {
             Vector3 hitPoint = intersection.surfaceInfo().hitPoint();
             Vector3 lightDir = (scene._lights[i]->position() - hitPoint).normalize();
 
             Ray r = Ray(hitPoint + CADISE_RAY_EPSILON * lightDir, 
                         lightDir, 
-                        CADISE_RAY_EPSILON, FLT_MAX);
+                        CADISE_RAY_EPSILON, std::numeric_limits<float>::max());
             if (scene.isOccluded(r)) {
                 float t = (scene._lights[i]->position().x() - hitPoint.x()) / r.direction().x();
                 if (r.maxT() < t) 

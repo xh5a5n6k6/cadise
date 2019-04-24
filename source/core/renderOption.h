@@ -1,8 +1,9 @@
 #pragma once
 
-#include "core/basicHeader.h"
-
 #include "math/algebra.h"
+
+#include <memory>
+#include <vector>
 
 namespace cadise {
 

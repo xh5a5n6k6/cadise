@@ -2,6 +2,10 @@
 
 #include "core/ray.h"
 
+#include "math/constant.h"
+
+#include <limits>
+
 // Tmp
 #include <random>
 
@@ -20,7 +24,7 @@ PerspectiveCamera::PerspectiveCamera() {
 PerspectiveCamera::PerspectiveCamera(int rx, int ry, Matrix4 worldToCamera, float fov) :
     _rx(rx), _ry(ry), Camera(worldToCamera), _fov(fov) {
 
-    float halfScreenLength = tanf(fov / 2.0f * M_PI / 180.0f);
+    float halfScreenLength = tanf(fov / 2.0f * CADISE_PI / 180.0f);
     _pixelWidth = 2.0f * halfScreenLength / _rx;
     _pixelHeight = 2.0f * halfScreenLength / _ry;
 }
@@ -38,8 +42,8 @@ Ray PerspectiveCamera::createRay(int px, int py) {
 
     float sampleX = px * _pixelWidth + sx * _pixelWidth;
     float sampleY = py * _pixelHeight + sy * _pixelHeight;
-    float left = -tanf(_fov / 2.0f * M_PI / 180.0f);
-    float up = tanf(_fov / 2.0f * M_PI / 180.0f);
+    float left = -tanf(_fov / 2.0f * CADISE_PI / 180.0f);
+    float up = tanf(_fov / 2.0f * CADISE_PI / 180.0f);
     Vector3 samplePoint = Vector3(left + sampleX, up - sampleY, -1.0f);
 
     // from camera space to world space
@@ -49,7 +53,7 @@ Ray PerspectiveCamera::createRay(int px, int py) {
     Vector3 dir = TransformVector(cameraToWorld, samplePoint);
 
     // create ray in world space
-    Ray ray = Ray(origin, dir, CADISE_RAY_EPSILON, FLT_MAX);
+    Ray ray = Ray(origin, dir, CADISE_RAY_EPSILON, std::numeric_limits<float>::max());
 
     return ray;
 }

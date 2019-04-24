@@ -2,6 +2,8 @@
 
 #include "core/surfaceInfo.h"
 
+#include <algorithm>
+
 namespace cadise {
 
 SpecularBRDF::SpecularBRDF(Vector3 albedo) :

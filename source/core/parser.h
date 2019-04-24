@@ -1,6 +1,5 @@
 #pragma once
 
-#include "core/basicHeader.h"
 #include "core/renderOption.h"
 
 namespace cadise {

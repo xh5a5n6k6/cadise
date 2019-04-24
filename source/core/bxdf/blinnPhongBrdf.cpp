@@ -2,11 +2,14 @@
 
 #include "core/surfaceInfo.h"
 
+#include "math/constant.h"
+
+#include <algorithm>
+
 namespace cadise {
 
 BlinnPhongBRDF::BlinnPhongBRDF(float exponent) :
     _exponent(exponent) {
-    _brdfFactor = (_exponent + 2.0f) * (_exponent + 4.0f) * CADISE_INV_EIGHT_PI / (std::exp2f(-_exponent / 2.0f) + _exponent);
 }
 
 // inDirection  : light direction

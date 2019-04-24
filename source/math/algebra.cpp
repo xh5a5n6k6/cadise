@@ -1,5 +1,8 @@
 #include "math/algebra.h"
 
+#include <algorithm>
+#include <iostream>
+
 namespace cadise {
 
 /* Vector3 */
@@ -173,7 +176,7 @@ Matrix4 Matrix4::inverse() {
         }
 
         if (head == -1) {
-            fprintf(stderr, "Inverse matrix doesn't exists !\n");
+            std::cerr << "Inverse matrix doesn't exists !" << std::endl;
             exit(0);
         }
 

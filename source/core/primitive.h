@@ -1,7 +1,8 @@
 #pragma once
 
-#include "core/basicHeader.h"
 #include "core/intersector.h"
+
+#include <memory>
 
 namespace cadise {
 
