@@ -53,7 +53,7 @@ Ray PerspectiveCamera::createRay(int px, int py) {
     Vector3 dir = TransformVector(cameraToWorld, samplePoint);
 
     // create ray in world space
-    Ray ray = Ray(origin, dir, CADISE_RAY_EPSILON, std::numeric_limits<float>::max());
+    Ray ray = Ray(origin, dir, 0.0f, std::numeric_limits<float>::max());
 
     return ray;
 }

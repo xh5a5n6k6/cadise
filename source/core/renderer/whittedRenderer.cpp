@@ -59,23 +59,31 @@ void WhittedRenderer::render(Scene &scene) {
 RGBColor WhittedRenderer::_luminance(Scene &scene, Ray &ray, Intersection &intersection) {
     RGBColor color = RGBColor(0.0f, 0.0f, 0.0f);
     if (scene.isIntersecting(ray, intersection)) {
+        // add radiance if hit area light
+        color.rgb() += intersection.intersector()->emittance(-ray.direction()).rgb();
+
         for (int i = 0; i < scene._lights.size(); i++) {
-            Vector3 hitPoint = intersection.surfaceInfo().hitPoint();
-            Vector3 lightDir = (scene._lights[i]->position() - hitPoint).normalize();
+            Vector3 hitPoint = intersection.surfaceInfo().hitPoint(); 
+            Vector3 lightDir;
+            float t;
+            Vector3 radiance = scene._lights[i]->evaluateSampleRadiance(lightDir, intersection.surfaceInfo(), t);
 
-            Ray r = Ray(hitPoint + CADISE_RAY_EPSILON * lightDir, 
+            // generate shadow ray to do occluded test
+            Ray r = Ray(hitPoint + CADISE_RAY_EPSILON * intersection.surfaceInfo().hitNormal(), 
                         lightDir, 
-                        CADISE_RAY_EPSILON, std::numeric_limits<float>::max());
-            if (scene.isOccluded(r)) {
-                float t = (scene._lights[i]->position().x() - hitPoint.x()) / r.direction().x();
-                if (r.maxT() < t) 
-                    continue;
+                        0.0f, t);
+            
+            if (scene.isOccluded(r) && r.maxT() < t - CADISE_RAY_EPSILON) {
+                continue;
             }
-            Vector3 reflectance = intersection.primitive().evaluateBSDF(lightDir, -ray.direction(), intersection.surfaceInfo());
 
-            if (!reflectance.isZero())
-                color.rgb() += reflectance * scene._lights[i]->color() * AbsDot(lightDir, intersection.surfaceInfo().hitNormal());
+            Vector3 reflectance = intersection.intersector()->evaluateBSDF(lightDir, -ray.direction(), intersection.surfaceInfo());
+
+            if (!reflectance.isZero()) {
+                color.rgb() += reflectance * radiance * AbsDot(lightDir, intersection.surfaceInfo().hitNormal());
+            }
         }
+
         if (ray.depth() + 1 < _maxDepth) {
             color.rgb() += _reflect(scene, ray, intersection).rgb();
         }
@@ -88,7 +96,7 @@ RGBColor WhittedRenderer::_reflect(Scene &scene, Ray &ray, Intersection &interse
     RGBColor color;
 
     Vector3 sampleDir;
-    Vector3 reflectance = intersection.primitive().evaluateSampleBSDF(-ray.direction(), sampleDir, intersection.surfaceInfo());
+    Vector3 reflectance = intersection.intersector()->evaluateSampleBSDF(-ray.direction(), sampleDir, intersection.surfaceInfo());
 
     if (!reflectance.isZero()) {
         Ray r = Ray(intersection.surfaceInfo().hitPoint() + CADISE_RAY_EPSILON * sampleDir,

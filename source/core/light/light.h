@@ -2,10 +2,12 @@
 
 namespace cadise {
 
+class SurfaceInfo;
 class Vector3;
 
 class Light {
 public:
+    virtual Vector3 evaluateSampleRadiance(Vector3 &lightDirection, SurfaceInfo &surfaceInfo, float &t) = 0;
     virtual Vector3 position() = 0;
     virtual Vector3 color() = 0;
 };

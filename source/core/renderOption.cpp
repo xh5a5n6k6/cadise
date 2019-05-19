@@ -2,6 +2,8 @@
 
 #include "core/accelerator/bruteForceAccelerator.h"
 #include "core/camera.h"
+#include "core/emitter.h"
+#include "core/light/areaLight.h"
 #include "core/light/pointLight.h"
 #include "core/material/matte.h"
 #include "core/material/mirror.h"
@@ -9,6 +11,7 @@
 #include "core/primitive.h"
 #include "core/renderer/whittedRenderer.h"
 #include "core/scene.h"
+#include "core/shape/rectangle.h"
 #include "core/shape/sphere.h"
 #include "core/shape/triangle.h"
 
@@ -19,6 +22,7 @@ RenderOption::RenderOption() {
 
 void RenderOption::setupData(std::vector<std::string> data) {
     std::string type = data.at(0);
+    //fprintf(stdout, "%s", type);
 
     if (!type.compare("LookAt")) {
         Vector3 position = Vector3(stof(data.at(1)), stof(data.at(2)), stof(data.at(3)));
@@ -40,18 +44,30 @@ void RenderOption::setupData(std::vector<std::string> data) {
         std::shared_ptr<Shape> shape = nullptr;
         Vector3 center = Vector3(stof(data.at(1)), stof(data.at(2)), stof(data.at(3)));
         float radius = stof(data.at(4));
-
         shape = std::make_shared<Sphere>(center, radius);
-        _option.intersectors.push_back(std::make_shared<Primitive>(shape, _option.material));
+
+        _option.shape = shape;
     }
     else if (!type.compare("Triangle")) {
         std::shared_ptr<Shape> shape = nullptr;
         Vector3 v1 = Vector3(stof(data.at(1)), stof(data.at(2)), stof(data.at(3)));
         Vector3 v2 = Vector3(stof(data.at(4)), stof(data.at(5)), stof(data.at(6)));
         Vector3 v3 = Vector3(stof(data.at(7)), stof(data.at(8)), stof(data.at(9)));
-
         shape = std::make_shared<Triangle>(v1, v2, v3);
-        _option.intersectors.push_back(std::make_shared<Primitive>(shape, _option.material));
+
+        _option.shape = shape;
+    }
+    else if (!type.compare("Rectangle")) {
+        std::shared_ptr<Shape> shape = nullptr;
+        Vector3 v1 = Vector3(stof(data.at(1)), stof(data.at(2)), stof(data.at(3)));
+        Vector3 v2 = Vector3(stof(data.at(4)), stof(data.at(5)), stof(data.at(6)));
+        Vector3 v3 = Vector3(stof(data.at(7)), stof(data.at(8)), stof(data.at(9)));
+        shape = std::make_shared<Rectangle>(v1, v2, v3);
+
+        _option.shape = shape;
+    }
+    else if (!type.compare("Primitive")) {
+        _option.intersectors.push_back(std::make_shared<Primitive>(_option.shape, _option.material));
     }
     else if (!type.compare("Plastic")) {
         std::shared_ptr<Material> material = nullptr;
@@ -76,13 +92,21 @@ void RenderOption::setupData(std::vector<std::string> data) {
 
         _option.material = material;
     }
-    else if (!type.compare("Light")) {
+    else if (!type.compare("PointLight")) {
         std::shared_ptr<Light> light = nullptr;
         Vector3 position = Vector3(stof(data.at(1)), stof(data.at(2)), stof(data.at(3)));
         Vector3 color = Vector3(stof(data.at(4)), stof(data.at(5)), stof(data.at(6)));
         light = std::make_shared<PointLight>(position, color);
 
         _option.lights.push_back(light);
+    }
+    else if (!type.compare("AreaLight")) {
+        std::shared_ptr<AreaLight> light = nullptr;
+        Vector3 albedo = Vector3(stof(data.at(1)), stof(data.at(2)), stof(data.at(3)));
+        light = std::make_shared<AreaLight>(_option.shape, albedo);
+
+        _option.lights.push_back(light);
+        _option.intersectors.push_back(std::make_shared<Emitter>(*light, _option.material));
     }
     else if (!type.compare("WhittedRenderer")) {
         _option.maxDepth = std::stoi(data.at(1));

@@ -1,23 +1,26 @@
 #pragma once
 
-#include "core/primitive.h"
 #include "core/surfaceInfo.h"
 
+#include <memory>
+
 namespace cadise {
+
+class Intersector;
 
 class Intersection{
 public:
     Intersection();
 
     void setSurfaceInfo(SurfaceInfo surfaceInfo);
-    void setPrimitive(Primitive primitive);
+    void setIntersector(std::shared_ptr<Intersector> intersector);
 
     SurfaceInfo& surfaceInfo();
-    Primitive primitive();
+    std::shared_ptr<Intersector> intersector();
 
 private:
     SurfaceInfo _surfaceInfo;
-    Primitive _primitive;
+    std::shared_ptr<Intersector> _intersector;
 };
 
 } // namespace cadise

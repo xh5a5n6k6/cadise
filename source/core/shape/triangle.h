@@ -12,7 +12,9 @@ public:
 
     bool isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) override;
     bool isOccluded(Ray &ray) override;
+    Vector3 sampleSurfacePoint() override;
 
+private:
     Vector3 _vertex[3];
 };
 

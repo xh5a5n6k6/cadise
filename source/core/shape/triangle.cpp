@@ -6,6 +6,7 @@
 #include "math/constant.h"
 
 #include <limits>
+#include <random>
 
 namespace cadise {
 
@@ -19,26 +20,30 @@ bool Triangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
     Vector3 D = ray.direction();
     Vector3 E1 = _vertex[1] - _vertex[0];
     Vector3 E2 = _vertex[2] - _vertex[0];
-    if (Dot(D, Cross(E1, E2)) > 0.0f)
+    if (Dot(D, Cross(E1, E2)) > 0.0f) {
         E1.swap(E2);
+    }
     Vector3 T = ray.origin() - _vertex[0];
     Vector3 Q = Cross(T, E1);
     Vector3 P = Cross(D, E2);
 
     float denominator = Dot(P, E1);
-    if (denominator - 0.0f < std::numeric_limits<float>::epsilon())
+    if (denominator - 0.0f < std::numeric_limits<float>::epsilon()) {
         return false;
+    }
 
     float invDenominator = 1.0f / denominator;
     float t = Dot(Q, E2) * invDenominator;
     float u = Dot(P, T) * invDenominator;
     float v = Dot(Q, D) * invDenominator;
 
-    if (u < 0.0f || v < 0.0f || u + v > 1.0f)
+    if (u < 0.0f || v < 0.0f || u + v > 1.0f) {
         return false;
+    }
 
-    if (t < ray.minT() || t > ray.maxT())
+    if (t < ray.minT() || t > ray.maxT()) {
         return false;
+    }
 
     ray.setMaxT(t);
 
@@ -57,30 +62,56 @@ bool Triangle::isOccluded(Ray &ray) {
     Vector3 D = ray.direction();
     Vector3 E1 = _vertex[1] - _vertex[0];
     Vector3 E2 = _vertex[2] - _vertex[0];
-    if (Dot(D, Cross(E1, E2)) > 0.0f)
+    if (Dot(D, Cross(E1, E2)) > 0.0f) {
         E1.swap(E2);
+    }
     Vector3 T = ray.origin() - _vertex[0];
     Vector3 Q = Cross(T, E1);
     Vector3 P = Cross(D, E2);
 
     float denominator = Dot(P, E1);
-    if (denominator - 0.0f < std::numeric_limits<float>::epsilon())
+    if (denominator - 0.0f < std::numeric_limits<float>::epsilon()) {
         return false;
+    }
 
     float invDenominator = 1.0f / denominator;
     float t = Dot(Q, E2) * invDenominator;
     float u = Dot(P, T) * invDenominator;
     float v = Dot(Q, D) * invDenominator;
 
-    if (u < 0.0f || v < 0.0f || u + v > 1.0f)
+    if (u < 0.0f || v < 0.0f || u + v > 1.0f) {
         return false;
+    }
 
-    if (t < ray.minT() || t > ray.maxT())
+    if (t < ray.minT() || t > ray.maxT()) {
         return false;
+    }
 
     ray.setMaxT(t);
 
     return true;
+}
+
+Vector3 Triangle::sampleSurfacePoint() {
+    Vector3 E1 = _vertex[1] - _vertex[0];
+    Vector3 E2 = _vertex[2] - _vertex[0];
+
+    // TODO
+    // improve sample point on triangle
+    std::random_device rd;
+    std::default_random_engine gen = std::default_random_engine(rd());
+    std::uniform_real_distribution<float> disS(0.0f, 1.0f);
+    std::uniform_real_distribution<float> disT(0.0f, 1.0f);
+    float s;
+    float t;
+
+    // Use rejection method
+    do {
+        s = disS(gen);
+        t = disT(gen);
+    } while (s + t >= 1.0f);
+
+    return _vertex[0] + s * E1 + t * E2;
 }
 
 } // namespace cadise

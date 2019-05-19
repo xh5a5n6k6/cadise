@@ -13,11 +13,13 @@ class Light;
 class Material;
 class Renderer;
 class Scene;
+class Shape;
 
 struct Option {
     // TODO
     // Adjust parse file syntex
     std::shared_ptr<Material> material;
+    std::shared_ptr<Shape> shape;
 
     Matrix4 worldToCamera;
     float fov;

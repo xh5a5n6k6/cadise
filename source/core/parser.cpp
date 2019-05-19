@@ -20,13 +20,15 @@ void Parser::parseFile(std::string filename) {
     }
     char line[1024];
     while (fgets(line, 1024, f)) {
-        if (line[strlen(line)] == '\n')
+        if (strlen(line) > 1 && line[strlen(line) - 1] == '\n') {
             line[strlen(line) - 1] = '\0';
+        }
 
         std::vector<std::string> lineVector;
-        char *token;
-        char *tokenTmp;
+        char *token = nullptr;
+        char *tokenTmp = nullptr;
         token = strtok_s(line, " ", &tokenTmp);
+
         while (token != nullptr) {
             lineVector.push_back(token);
             token = strtok_s(nullptr, " ", &tokenTmp);

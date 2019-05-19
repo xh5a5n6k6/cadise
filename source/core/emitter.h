@@ -2,20 +2,16 @@
 
 #include "core/intersector.h"
 
-#include <memory>
+#include "core/light/areaLight.h"
 
 namespace cadise {
 
 class Material;
-class Shape;
-class SurfaceInfo;
-class Vector3;
 
-class Primitive : public Intersector {
+class Emitter : public Intersector {
 public:
-    Primitive();
-    Primitive(std::shared_ptr<Shape> shape, std::shared_ptr<Material> material);
-	
+    Emitter(AreaLight areaLight, std::shared_ptr<Material> material);
+
     bool isIntersecting(Ray &ray, Intersection &intersection) override;
     bool isOccluded(Ray &ray) override;
     RGBColor emittance(Vector3 direction) override;
@@ -24,7 +20,7 @@ public:
     Vector3 evaluateSampleBSDF(Vector3 inDirection, Vector3 &outDirection, SurfaceInfo &surfaceInfo) override;
 
 private:
-    std::shared_ptr<Shape> _shape;
+    AreaLight _areaLight;
     std::shared_ptr<Material> _material;
 
     std::shared_ptr<Intersector> _self;
