@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/intersector.h"
+#include "core/intersector/intersector.h"
 
 #include <memory>
 

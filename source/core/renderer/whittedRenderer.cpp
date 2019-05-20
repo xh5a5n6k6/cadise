@@ -3,8 +3,8 @@
 #include "core/camera.h"
 #include "core/color.h"
 #include "core/intersection.h"
+#include "core/intersector/intersector.h"
 #include "core/light/light.h"
-#include "core/primitive.h"
 #include "core/ray.h"
 #include "core/scene.h"
 
@@ -34,7 +34,6 @@ void WhittedRenderer::render(Scene &scene) {
                 // check intersection
                 Intersection intersection;
                 RGBColor sampleColor = _luminance(scene, ray, intersection);
-                //sampleColor.rgb() = Vector3(powf(sampleColor.r(), 2.2f), powf(sampleColor.g(), 2.2f), powf(sampleColor.b(), 2.2f));
                 sampleColor.rgb() *= 255.0f;
                 sampleColor.rgb() = sampleColor.rgb().clamp(0.0f, 255.0f);
 
@@ -99,9 +98,10 @@ RGBColor WhittedRenderer::_reflect(Scene &scene, Ray &ray, Intersection &interse
     Vector3 reflectance = intersection.intersector()->evaluateSampleBSDF(-ray.direction(), sampleDir, intersection.surfaceInfo());
 
     if (!reflectance.isZero()) {
-        Ray r = Ray(intersection.surfaceInfo().hitPoint() + CADISE_RAY_EPSILON * sampleDir,
+        Ray r = Ray(intersection.surfaceInfo().hitPoint() + CADISE_RAY_EPSILON * intersection.surfaceInfo().hitNormal(),
                     sampleDir,
-                    CADISE_RAY_EPSILON, FLT_MAX, ray.depth() + 1);
+                    0.0f, std::numeric_limits<float>::max(),
+                    ray.depth() + 1);
         Intersection intersect;
         color.rgb() = reflectance * _luminance(scene, r, intersect).rgb() * sampleDir.absDot(intersection.surfaceInfo().hitNormal());
     }

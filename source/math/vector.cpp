@@ -1,7 +1,6 @@
 #include "math/vector.h"
 
 #include <algorithm>
-//#include <cmath>
 
 namespace cadise {
 

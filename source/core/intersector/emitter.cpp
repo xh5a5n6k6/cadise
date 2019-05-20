@@ -1,4 +1,4 @@
-#include "core/emitter.h"
+#include "core/intersector/emitter.h"
 
 #include "core/color.h"
 #include "core/intersection.h"

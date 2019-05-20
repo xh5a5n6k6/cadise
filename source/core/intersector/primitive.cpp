@@ -1,4 +1,4 @@
-#include "core/primitive.h"
+#include "core/intersector/primitive.h"
 
 #include "core/color.h"
 #include "core/intersection.h"
