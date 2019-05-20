@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/algebra.h"
+#include "math/matrix.h"
 
 #include <memory>
 #include <vector>
@@ -21,7 +21,7 @@ struct Option {
     std::shared_ptr<Material> material;
     std::shared_ptr<Shape> shape;
 
-    Matrix4 worldToCamera;
+    Matrix4 cameraToWorld;
     float fov;
     int rx, ry;
     std::shared_ptr<Camera> camera;

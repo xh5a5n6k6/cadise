@@ -2,7 +2,7 @@
 
 #include "core/image.h"
 
-#include "math/algebra.h"
+#include "math/matrix.h"
 
 namespace cadise {
 
@@ -11,17 +11,17 @@ class Ray;
 class Camera {
 public:
     Camera();
-    Camera(Matrix4 worldToCamera);
+    Camera(Matrix4 cameraToWorld);
 
     virtual Ray createRay(int px, int py) = 0;
 
-    Matrix4 _worldToCamera;
+    Matrix4 _cameraToWorld;
 };
 
 class PerspectiveCamera : public Camera {
 public:
     PerspectiveCamera();
-    PerspectiveCamera(int rx, int ry, Matrix4 worldToCamera, float fov);
+    PerspectiveCamera(int rx, int ry, Matrix4 cameraToWorld, float fov);
 
     Ray createRay(int px, int py) override;
 	

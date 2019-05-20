@@ -20,22 +20,22 @@ bool Triangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
     Vector3 D = ray.direction();
     Vector3 E1 = _vertex[1] - _vertex[0];
     Vector3 E2 = _vertex[2] - _vertex[0];
-    if (Dot(D, Cross(E1, E2)) > 0.0f) {
+    if (D.dot(E1.cross(E2)) > 0.0f) {
         E1.swap(E2);
     }
     Vector3 T = ray.origin() - _vertex[0];
-    Vector3 Q = Cross(T, E1);
-    Vector3 P = Cross(D, E2);
+    Vector3 Q = T.cross(E1);
+    Vector3 P = D.cross(E2);
 
-    float denominator = Dot(P, E1);
+    float denominator = P.dot(E1);
     if (denominator - 0.0f < std::numeric_limits<float>::epsilon()) {
         return false;
     }
 
     float invDenominator = 1.0f / denominator;
-    float t = Dot(Q, E2) * invDenominator;
-    float u = Dot(P, T) * invDenominator;
-    float v = Dot(Q, D) * invDenominator;
+    float t = Q.dot(E2) * invDenominator;
+    float u = P.dot(T) * invDenominator;
+    float v = Q.dot(D) * invDenominator;
 
     if (u < 0.0f || v < 0.0f || u + v > 1.0f) {
         return false;
@@ -50,8 +50,8 @@ bool Triangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
     /*
         Calculate surface details
     */
-    Vector3 point = ray.at(ray.maxT());
-    Vector3 normal = Cross(E1, E2).normalize();
+    Vector3 point = ray.at(t);
+    Vector3 normal = E1.cross(E2).normalize();
     surfaceInfo.setHitPoint(point);
     surfaceInfo.setHitNormal(normal);
 
@@ -62,22 +62,22 @@ bool Triangle::isOccluded(Ray &ray) {
     Vector3 D = ray.direction();
     Vector3 E1 = _vertex[1] - _vertex[0];
     Vector3 E2 = _vertex[2] - _vertex[0];
-    if (Dot(D, Cross(E1, E2)) > 0.0f) {
+    if (D.dot(E1.cross(E2)) > 0.0f) {
         E1.swap(E2);
     }
     Vector3 T = ray.origin() - _vertex[0];
-    Vector3 Q = Cross(T, E1);
-    Vector3 P = Cross(D, E2);
+    Vector3 Q = T.cross(E1);
+    Vector3 P = D.cross(E2);
 
-    float denominator = Dot(P, E1);
+    float denominator = P.dot(E1);
     if (denominator - 0.0f < std::numeric_limits<float>::epsilon()) {
         return false;
     }
 
     float invDenominator = 1.0f / denominator;
-    float t = Dot(Q, E2) * invDenominator;
-    float u = Dot(P, T) * invDenominator;
-    float v = Dot(Q, D) * invDenominator;
+    float t = Q.dot(E2) * invDenominator;
+    float u = P.dot(T) * invDenominator;
+    float v = Q.dot(D) * invDenominator;
 
     if (u < 0.0f || v < 0.0f || u + v > 1.0f) {
         return false;

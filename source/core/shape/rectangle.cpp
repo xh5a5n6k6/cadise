@@ -17,18 +17,18 @@ Rectangle::Rectangle(Vector3 v1, Vector3 v2, Vector3 v3) {
 bool Rectangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
     Vector3 E1 = _vertex[0] - _vertex[1];
     Vector3 E2 = _vertex[2] - _vertex[1];
-    if (Dot(ray.direction(), Cross(E1, E2)) > 0.0f) {
+    if (ray.direction().dot(E1.cross(E2)) > 0.0f) {
         E1.swap(E2);
     }
-    Vector3 normal = Cross(E1, E2).normalize();
-    float t = (Dot(normal, _vertex[1]) - Dot(normal, ray.origin())) / Dot(normal, ray.direction());
+    Vector3 normal = E1.cross(E2).normalize();
+    float t = (normal.dot(_vertex[1]) - normal.dot(ray.origin())) / normal.dot(ray.direction());
     if (t < 0.0f || t > ray.maxT()) {
         return false;
     }
 
     Vector3 vectorOnPlane = ray.at(t) - _vertex[1];
-    float projection1 = Dot(vectorOnPlane, E1.normalize());
-    float projection2 = Dot(vectorOnPlane, E2.normalize());
+    float projection1 = vectorOnPlane.dot(E1.normalize());
+    float projection2 = vectorOnPlane.dot(E2.normalize());
     if (projection1 < 0.0f || projection1 > E1.length() ||
         projection2 < 0.0f || projection2 > E2.length()) {
         return false;
@@ -48,18 +48,18 @@ bool Rectangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
 bool Rectangle::isOccluded(Ray &ray) {
     Vector3 E1 = _vertex[0] - _vertex[1];
     Vector3 E2 = _vertex[2] - _vertex[1];
-    if (Dot(ray.direction(), Cross(E1, E2)) > 0.0f) {
+    if (ray.direction().dot(E1.cross(E2)) > 0.0f) {
         E1.swap(E2);
     }
-    Vector3 normal = Cross(E1, E2).normalize();
-    float t = (Dot(normal, _vertex[1]) - Dot(normal, ray.origin())) / Dot(normal, ray.direction());
+    Vector3 normal = E1.cross(E2).normalize();
+    float t = (normal.dot(_vertex[1]) - normal.dot(ray.origin())) / normal.dot(ray.direction());
     if (t < 0.0f || t > ray.maxT()) {
         return false;
     }
 
     Vector3 vectorOnPlane = ray.at(t) - _vertex[1];
-    float projection1 = Dot(vectorOnPlane, E1.normalize());
-    float projection2 = Dot(vectorOnPlane, E2.normalize());
+    float projection1 = vectorOnPlane.dot(E1.normalize());
+    float projection2 = vectorOnPlane.dot(E2.normalize());
     if (projection1 < 0.0f || projection1 > E1.length() ||
         projection2 < 0.0f || projection2 > E2.length()) {
         return false;

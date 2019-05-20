@@ -2,7 +2,7 @@
 
 #include "core/shape/shape.h"
 
-#include "math/algebra.h"
+#include "math/vector.h"
 
 namespace cadise {
 

@@ -80,7 +80,7 @@ RGBColor WhittedRenderer::_luminance(Scene &scene, Ray &ray, Intersection &inter
             Vector3 reflectance = intersection.intersector()->evaluateBSDF(lightDir, -ray.direction(), intersection.surfaceInfo());
 
             if (!reflectance.isZero()) {
-                color.rgb() += reflectance * radiance * AbsDot(lightDir, intersection.surfaceInfo().hitNormal());
+                color.rgb() += reflectance * radiance * lightDir.absDot(intersection.surfaceInfo().hitNormal());
             }
         }
 
@@ -103,7 +103,7 @@ RGBColor WhittedRenderer::_reflect(Scene &scene, Ray &ray, Intersection &interse
                     sampleDir,
                     CADISE_RAY_EPSILON, FLT_MAX, ray.depth() + 1);
         Intersection intersect;
-        color.rgb() = reflectance * _luminance(scene, r, intersect).rgb() * AbsDot(sampleDir, intersection.surfaceInfo().hitNormal());
+        color.rgb() = reflectance * _luminance(scene, r, intersect).rgb() * sampleDir.absDot(intersection.surfaceInfo().hitNormal());
     }
 
     return color;

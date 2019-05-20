@@ -15,11 +15,11 @@ BlinnPhongBRDF::BlinnPhongBRDF(float exponent) :
 // inDirection  : light direction
 // outDirection : eye direction
 Vector3 BlinnPhongBRDF::evaluate(Vector3 inDirection, Vector3 outDirection, SurfaceInfo &surfaceInfo) {
-    float brdfFactor = std::max(Dot(surfaceInfo.hitNormal(), outDirection), 0.0f);
+    float brdfFactor = std::max(surfaceInfo.hitNormal().dot(outDirection), 0.0f);
 
     // h : half vector
     Vector3 h = (inDirection + outDirection).normalize();
-    float cosTheta = std::max(Dot(h, surfaceInfo.hitNormal()), 0.0f);
+    float cosTheta = std::max(h.dot(surfaceInfo.hitNormal()), 0.0f);
     float specular = std::powf(cosTheta, _exponent) * brdfFactor;
 	
     return Vector3(specular, specular, specular);

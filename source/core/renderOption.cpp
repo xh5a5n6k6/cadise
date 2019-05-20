@@ -22,14 +22,13 @@ RenderOption::RenderOption() {
 
 void RenderOption::setupData(std::vector<std::string> data) {
     std::string type = data.at(0);
-    //fprintf(stdout, "%s", type);
 
     if (!type.compare("LookAt")) {
         Vector3 position = Vector3(stof(data.at(1)), stof(data.at(2)), stof(data.at(3)));
         Vector3 target = Vector3(stof(data.at(4)), stof(data.at(5)), stof(data.at(6)));
         Vector3 up = Vector3(stof(data.at(7)), stof(data.at(8)), stof(data.at(9)));
 
-        _option.worldToCamera = LookAt(position, target, up);
+        _option.cameraToWorld = Matrix4::lookAt(position, target, up);
     }
     else if (!type.compare("Fov")) {
         _option.fov = stof(data.at(1));
@@ -38,7 +37,7 @@ void RenderOption::setupData(std::vector<std::string> data) {
         _option.rx = stoi(data.at(1));
         _option.ry = stoi(data.at(2));
 
-        _option.camera = std::make_shared<PerspectiveCamera>(_option.rx, _option.ry, _option.worldToCamera, _option.fov);
+        _option.camera = std::make_shared<PerspectiveCamera>(_option.rx, _option.ry, _option.cameraToWorld, _option.fov);
     }
     else if (!type.compare("Sphere")) {
         std::shared_ptr<Shape> shape = nullptr;
