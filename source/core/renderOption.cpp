@@ -1,7 +1,7 @@
 #include "core/renderOption.h"
 
 #include "core/accelerator/bruteForceAccelerator.h"
-#include "core/camera.h"
+#include "core/camera/perspectiveCamera.h"
 #include "core/intersector/emitter.h"
 #include "core/intersector/primitive.h"
 #include "core/light/areaLight.h"
@@ -14,6 +14,8 @@
 #include "core/shape/rectangle.h"
 #include "core/shape/sphere.h"
 #include "core/shape/triangle.h"
+
+#include <string>
 
 namespace cadise {
 
@@ -37,7 +39,7 @@ void RenderOption::setupData(std::vector<std::string> data) {
         _option.rx = stoi(data.at(1));
         _option.ry = stoi(data.at(2));
 
-        _option.camera = std::make_shared<PerspectiveCamera>(_option.rx, _option.ry, _option.cameraToWorld, _option.fov);
+        _option.camera = std::make_shared<PerspectiveCamera>(_option.cameraToWorld, _option.rx, _option.ry, _option.fov);
     }
     else if (!type.compare("Sphere")) {
         std::shared_ptr<Shape> shape = nullptr;

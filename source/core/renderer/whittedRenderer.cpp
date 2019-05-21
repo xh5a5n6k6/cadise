@@ -1,6 +1,6 @@
 #include "core/renderer/whittedRenderer.h"
 
-#include "core/camera.h"
+#include "core/camera/camera.h"
 #include "core/color.h"
 #include "core/intersection.h"
 #include "core/intersector/intersector.h"
@@ -70,7 +70,7 @@ RGBColor WhittedRenderer::_luminance(Scene &scene, Ray &ray, Intersection &inter
             // generate shadow ray to do occluded test
             Ray r = Ray(hitPoint + CADISE_RAY_EPSILON * intersection.surfaceInfo().hitNormal(), 
                         lightDir, 
-                        0.0f, t);
+                        CADISE_RAY_EPSILON, t);
             
             if (scene.isOccluded(r) && r.maxT() < t - CADISE_RAY_EPSILON) {
                 continue;
@@ -100,7 +100,7 @@ RGBColor WhittedRenderer::_reflect(Scene &scene, Ray &ray, Intersection &interse
     if (!reflectance.isZero()) {
         Ray r = Ray(intersection.surfaceInfo().hitPoint() + CADISE_RAY_EPSILON * intersection.surfaceInfo().hitNormal(),
                     sampleDir,
-                    0.0f, std::numeric_limits<float>::max(),
+                    CADISE_RAY_EPSILON, std::numeric_limits<float>::max(),
                     ray.depth() + 1);
         Intersection intersect;
         color.rgb() = reflectance * _luminance(scene, r, intersect).rgb() * sampleDir.absDot(intersection.surfaceInfo().hitNormal());

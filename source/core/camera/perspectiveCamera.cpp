@@ -1,4 +1,4 @@
-#include "core/camera.h"
+#include "core/camera/perspectiveCamera.h"
 
 #include "core/ray.h"
 
@@ -11,18 +11,8 @@
 
 namespace cadise {
 
-Camera::Camera() {
-}
-
-Camera::Camera(Matrix4 cameraToWorld) :
-    _cameraToWorld(cameraToWorld) {
-}
-
-PerspectiveCamera::PerspectiveCamera() {
-}
-
-PerspectiveCamera::PerspectiveCamera(int rx, int ry, Matrix4 cameraToWorld, float fov) :
-    _rx(rx), _ry(ry), Camera(cameraToWorld), _fov(fov) {
+PerspectiveCamera::PerspectiveCamera(Matrix4 cameraToWorld, int rx, int ry, float fov) :
+    _cameraToWorld(cameraToWorld), _rx(rx), _ry(ry), _fov(fov) {
 
     float halfScreenLength = tanf(fov / 2.0f * CADISE_PI / 180.0f);
     _pixelWidth = 2.0f * halfScreenLength / _rx;
@@ -46,13 +36,11 @@ Ray PerspectiveCamera::createRay(int px, int py) {
     float up = tanf(_fov / 2.0f * CADISE_PI / 180.0f);
     Vector3 samplePoint = Vector3(left + sampleX, up - sampleY, -1.0f);
 
-    Vector3 origin = _cameraToWorld.transformPoint(Vector3());
+    Vector3 origin = _cameraToWorld.transformPoint(Vector3(0.0f, 0.0f, 0.0f));
     Vector3 dir = _cameraToWorld.transformVector(samplePoint);
 
     // create ray in world space
-    Ray ray = Ray(origin, dir, 0.0f, std::numeric_limits<float>::max());
-
-    return ray;
+    return Ray(origin, dir, CADISE_RAY_EPSILON, std::numeric_limits<float>::max());
 }
 
 } // namespace cadise

@@ -13,13 +13,13 @@ public:
 
     Vector3 origin();
     Vector3 direction();
-    float maxT();
     float minT();
+    float maxT();
     int depth();
     float time();
 
-    void setMaxT(float maxT);
     void setMinT(float minT);
+    void setMaxT(float maxT);
 
 private:
     Vector3 _origin, _direction;

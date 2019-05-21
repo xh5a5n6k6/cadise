@@ -21,12 +21,12 @@ Vector3 Ray::direction() {
     return _direction;
 }
 
-float Ray::maxT() {
-    return _maxT;
-}
-
 float Ray::minT() {
     return _minT;
+}
+
+float Ray::maxT() {
+    return _maxT;
 }
 
 int Ray::depth() {
@@ -37,12 +37,12 @@ float Ray::time() {
     return _time;
 }
 
-void Ray::setMaxT(float maxT) {
-    _maxT = maxT;
-}
-
 void Ray::setMinT(float minT) {
     _minT = minT;
+}
+
+void Ray::setMaxT(float maxT) {
+    _maxT = maxT;
 }
 
 } // namespace cadise

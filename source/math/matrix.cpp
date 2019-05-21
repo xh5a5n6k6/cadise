@@ -126,7 +126,6 @@ Matrix4 Matrix4::lookAt(Vector3 pos, Vector3 tar, Vector3 up) {
                    newX.y(), newY.y(), newZ.y(), pos.y(),
                    newX.z(), newY.z(), newZ.z(), pos.z(),
                        0.0f,     0.0f,     0.0f,    1.0f);
-
 }
 
 void Matrix4::_swapRows(int r1, int r2) {
