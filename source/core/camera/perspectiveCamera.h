@@ -2,6 +2,8 @@
 
 #include "core/camera/camera.h"
 
+#include "core/film.h"
+
 #include "math/matrix.h"
 
 namespace cadise {
@@ -9,12 +11,14 @@ namespace cadise {
 class PerspectiveCamera : public Camera {
 public:
     PerspectiveCamera();
-    PerspectiveCamera(Matrix4 cameraToWorld, int rx, int ry, float fov);
+    PerspectiveCamera(Matrix4 cameraToWorld, float fov, Path filename, int rx, int ry);
 
     Ray createRay(int px, int py) override;
 
+    Film film() override;
+
 private:
-    //Image _image;
+    Film _film;
     Matrix4 _cameraToWorld;
     int _rx, _ry;
     float _fov;

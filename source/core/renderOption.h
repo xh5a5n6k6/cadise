@@ -24,6 +24,7 @@ struct Option {
     Matrix4 cameraToWorld;
     float fov;
     int rx, ry;
+    std::string filename = "cadise.png";
     std::shared_ptr<Camera> camera;
 
     std::vector<std::shared_ptr<Light> > lights;

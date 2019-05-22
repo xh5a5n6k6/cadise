@@ -11,8 +11,13 @@
 
 namespace cadise {
 
-PerspectiveCamera::PerspectiveCamera(Matrix4 cameraToWorld, int rx, int ry, float fov) :
-    _cameraToWorld(cameraToWorld), _rx(rx), _ry(ry), _fov(fov) {
+PerspectiveCamera::PerspectiveCamera() {
+}
+
+PerspectiveCamera::PerspectiveCamera(Matrix4 cameraToWorld, float fov, Path filename, int rx, int ry) :
+    _cameraToWorld(cameraToWorld), _fov(fov), _rx(rx), _ry(ry) {
+
+    _film = Film(filename, _rx, _ry);
 
     float halfScreenLength = tanf(fov / 2.0f * CADISE_PI / 180.0f);
     _pixelWidth = 2.0f * halfScreenLength / _rx;
@@ -41,6 +46,10 @@ Ray PerspectiveCamera::createRay(int px, int py) {
 
     // create ray in world space
     return Ray(origin, dir, CADISE_RAY_EPSILON, std::numeric_limits<float>::max());
+}
+
+Film PerspectiveCamera::film() {
+    return _film;
 }
 
 } // namespace cadise

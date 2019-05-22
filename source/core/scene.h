@@ -21,6 +21,10 @@ public:
     bool isIntersecting(Ray &ray, Intersection &intersection);
     bool isOccluded(Ray &ray);
     
+    std::vector<std::shared_ptr<Light> > lights();
+    std::shared_ptr<Camera> camera();
+
+private:
     std::shared_ptr<Accelerator> _accelerator;
     std::vector<std::shared_ptr<Light> > _lights;
     std::shared_ptr<Camera> _camera;

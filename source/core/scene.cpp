@@ -1,6 +1,8 @@
 #include "core/scene.h"
 
 #include "core/accelerator/accelerator.h"
+#include "core/camera/camera.h"
+#include "core/light/light.h"
 
 namespace cadise {
 
@@ -19,6 +21,14 @@ bool Scene::isIntersecting(Ray &ray, Intersection &intersection) {
 
 bool Scene::isOccluded(Ray &ray) {
     return _accelerator->isOccluded(ray);
+}
+
+std::vector<std::shared_ptr<Light> > Scene::lights() {
+    return _lights;
+}
+
+std::shared_ptr<Camera> Scene::camera() {
+    return _camera;
 }
 
 } // namespace cadise

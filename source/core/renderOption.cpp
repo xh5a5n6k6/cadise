@@ -26,43 +26,48 @@ void RenderOption::setupData(std::vector<std::string> data) {
     std::string type = data.at(0);
 
     if (!type.compare("LookAt")) {
-        Vector3 position = Vector3(stof(data.at(1)), stof(data.at(2)), stof(data.at(3)));
-        Vector3 target = Vector3(stof(data.at(4)), stof(data.at(5)), stof(data.at(6)));
-        Vector3 up = Vector3(stof(data.at(7)), stof(data.at(8)), stof(data.at(9)));
+        Vector3 position = Vector3(std::stof(data.at(1)), std::stof(data.at(2)), std::stof(data.at(3)));
+        Vector3 target = Vector3(std::stof(data.at(4)), std::stof(data.at(5)), std::stof(data.at(6)));
+        Vector3 up = Vector3(std::stof(data.at(7)), std::stof(data.at(8)), std::stof(data.at(9)));
 
         _option.cameraToWorld = Matrix4::lookAt(position, target, up);
     }
     else if (!type.compare("Fov")) {
-        _option.fov = stof(data.at(1));
+        _option.fov = std::stof(data.at(1));
     }
     else if (!type.compare("Resolution")) {
-        _option.rx = stoi(data.at(1));
-        _option.ry = stoi(data.at(2));
-
-        _option.camera = std::make_shared<PerspectiveCamera>(_option.cameraToWorld, _option.rx, _option.ry, _option.fov);
+        _option.rx = std::stoi(data.at(1));
+        _option.ry = std::stoi(data.at(2));
+    }
+    else if (!type.compare("Output")) {
+        _option.filename = data.at(1);
+        _option.camera = std::make_shared<PerspectiveCamera>(_option.cameraToWorld, 
+                                                             _option.fov,
+                                                             Path(_option.filename),
+                                                             _option.rx, _option.ry);
     }
     else if (!type.compare("Sphere")) {
         std::shared_ptr<Shape> shape = nullptr;
-        Vector3 center = Vector3(stof(data.at(1)), stof(data.at(2)), stof(data.at(3)));
-        float radius = stof(data.at(4));
+        Vector3 center = Vector3(std::stof(data.at(1)), std::stof(data.at(2)), std::stof(data.at(3)));
+        float radius = std::stof(data.at(4));
         shape = std::make_shared<Sphere>(center, radius);
 
         _option.shape = shape;
     }
     else if (!type.compare("Triangle")) {
         std::shared_ptr<Shape> shape = nullptr;
-        Vector3 v1 = Vector3(stof(data.at(1)), stof(data.at(2)), stof(data.at(3)));
-        Vector3 v2 = Vector3(stof(data.at(4)), stof(data.at(5)), stof(data.at(6)));
-        Vector3 v3 = Vector3(stof(data.at(7)), stof(data.at(8)), stof(data.at(9)));
+        Vector3 v1 = Vector3(std::stof(data.at(1)), std::stof(data.at(2)), std::stof(data.at(3)));
+        Vector3 v2 = Vector3(std::stof(data.at(4)), std::stof(data.at(5)), std::stof(data.at(6)));
+        Vector3 v3 = Vector3(std::stof(data.at(7)), std::stof(data.at(8)), std::stof(data.at(9)));
         shape = std::make_shared<Triangle>(v1, v2, v3);
 
         _option.shape = shape;
     }
     else if (!type.compare("Rectangle")) {
         std::shared_ptr<Shape> shape = nullptr;
-        Vector3 v1 = Vector3(stof(data.at(1)), stof(data.at(2)), stof(data.at(3)));
-        Vector3 v2 = Vector3(stof(data.at(4)), stof(data.at(5)), stof(data.at(6)));
-        Vector3 v3 = Vector3(stof(data.at(7)), stof(data.at(8)), stof(data.at(9)));
+        Vector3 v1 = Vector3(std::stof(data.at(1)), std::stof(data.at(2)), std::stof(data.at(3)));
+        Vector3 v2 = Vector3(std::stof(data.at(4)), std::stof(data.at(5)), std::stof(data.at(6)));
+        Vector3 v3 = Vector3(std::stof(data.at(7)), std::stof(data.at(8)), std::stof(data.at(9)));
         shape = std::make_shared<Rectangle>(v1, v2, v3);
 
         _option.shape = shape;
@@ -72,38 +77,38 @@ void RenderOption::setupData(std::vector<std::string> data) {
     }
     else if (!type.compare("Plastic")) {
         std::shared_ptr<Material> material = nullptr;
-        Vector3 albedo = Vector3(stof(data.at(1)), stof(data.at(2)), stof(data.at(3)));
-        float exponent = stof(data.at(4));
-        float diffuseRatio = stof(data.at(5));
+        Vector3 albedo = Vector3(std::stof(data.at(1)), std::stof(data.at(2)), std::stof(data.at(3)));
+        float exponent = std::stof(data.at(4));
+        float diffuseRatio = std::stof(data.at(5));
         material = std::make_shared<Plastic>(albedo, exponent, diffuseRatio);
 
         _option.material = material;
     }
     else if (!type.compare("Matte")) {
         std::shared_ptr<Material> material = nullptr;
-        Vector3 albedo = Vector3(stof(data.at(1)), stof(data.at(2)), stof(data.at(3)));
+        Vector3 albedo = Vector3(std::stof(data.at(1)), std::stof(data.at(2)), std::stof(data.at(3)));
         material = std::make_shared<Matte>(albedo);
 
         _option.material = material;
     }
     else if (!type.compare("Mirror")) {
         std::shared_ptr<Material> material = nullptr;
-        Vector3 albedo = Vector3(stof(data.at(1)), stof(data.at(2)), stof(data.at(3)));
+        Vector3 albedo = Vector3(std::stof(data.at(1)), std::stof(data.at(2)), std::stof(data.at(3)));
         material = std::make_shared<Mirror>(albedo);
 
         _option.material = material;
     }
     else if (!type.compare("PointLight")) {
         std::shared_ptr<Light> light = nullptr;
-        Vector3 position = Vector3(stof(data.at(1)), stof(data.at(2)), stof(data.at(3)));
-        Vector3 color = Vector3(stof(data.at(4)), stof(data.at(5)), stof(data.at(6)));
+        Vector3 position = Vector3(std::stof(data.at(1)), std::stof(data.at(2)), std::stof(data.at(3)));
+        Vector3 color = Vector3(std::stof(data.at(4)), std::stof(data.at(5)), std::stof(data.at(6)));
         light = std::make_shared<PointLight>(position, color);
 
         _option.lights.push_back(light);
     }
     else if (!type.compare("AreaLight")) {
         std::shared_ptr<AreaLight> light = nullptr;
-        Vector3 albedo = Vector3(stof(data.at(1)), stof(data.at(2)), stof(data.at(3)));
+        Vector3 albedo = Vector3(std::stof(data.at(1)), std::stof(data.at(2)), std::stof(data.at(3)));
         light = std::make_shared<AreaLight>(_option.shape, albedo);
 
         _option.lights.push_back(light);
