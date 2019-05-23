@@ -14,6 +14,7 @@ public:
     bool isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) override;
     bool isOccluded(Ray &ray) override;
 
+private:
     Matrix4 _worldToLocal;
     Vector3 _center;
     float _radius;

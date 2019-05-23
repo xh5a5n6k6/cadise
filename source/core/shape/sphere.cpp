@@ -19,13 +19,13 @@ bool Sphere::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
                 _worldToLocal.transformVector(ray.direction()),
                 CADISE_RAY_EPSILON, std::numeric_limits<float>::max());
 
-    int isOutside = r.origin().squaredLength() > _radius * _radius;
+    int isOutside = r.origin().lengthSquared() > _radius * _radius;
     float t = r.direction().dot(-r.origin());
     if (isOutside && t < 0.0f) {
         return false;
     }
 
-    float d2 = r.origin().squaredLength() - t * t;
+    float d2 = r.origin().lengthSquared() - t * t;
     float s2 = _radius * _radius - d2;
     if (s2 < 0.0f) {
         return false;
@@ -47,8 +47,8 @@ bool Sphere::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
     */
     Vector3 point = ray.at(t);
     Vector3 normal = (point - _center).normalize();
-    surfaceInfo.setHitPoint(point);
-    surfaceInfo.setHitNormal(normal);
+    surfaceInfo.setPoint(point);
+    surfaceInfo.setNormal(normal);
 
     return true;
 }
@@ -58,13 +58,13 @@ bool Sphere::isOccluded(Ray &ray) {
         _worldToLocal.transformVector(ray.direction()),
         CADISE_RAY_EPSILON, std::numeric_limits<float>::max());
 
-    int isOutside = r.origin().squaredLength() > _radius * _radius;
+    int isOutside = r.origin().lengthSquared() > _radius * _radius;
     float t = r.direction().dot(-r.origin());
     if (isOutside && t < 0.0f) {
         return false;
     }
 
-    float d2 = r.origin().squaredLength() - t * t;
+    float d2 = r.origin().lengthSquared() - t * t;
     float s2 = _radius * _radius - d2;
     if (s2 < 0.0f) {
         return false;

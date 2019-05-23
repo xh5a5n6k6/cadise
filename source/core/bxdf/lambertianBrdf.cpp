@@ -2,6 +2,8 @@
 
 #include "core/surfaceInfo.h"
 
+#include "math/constant.h"
+
 namespace cadise {
 
 LambertianBRDF::LambertianBRDF(Vector3 albedo) :
@@ -9,7 +11,7 @@ LambertianBRDF::LambertianBRDF(Vector3 albedo) :
 }
 
 Vector3 LambertianBRDF::evaluate(Vector3 inDirection, Vector3 outDirection, SurfaceInfo &surfaceInfo) {
-    return _albedo;
+    return _albedo * CADISE_INV_PI;
 }
 
 Vector3 LambertianBRDF::evaluateSample(Vector3 inDirection, Vector3 &outDirection, SurfaceInfo &surfaceInfo) {

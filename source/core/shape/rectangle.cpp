@@ -39,8 +39,8 @@ bool Rectangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
     /*
         Calculate surface details
     */
-    surfaceInfo.setHitPoint(ray.at(t));
-    surfaceInfo.setHitNormal(normal);
+    surfaceInfo.setPoint(ray.at(t));
+    surfaceInfo.setNormal(normal);
 
     return true;
 }
@@ -70,7 +70,7 @@ bool Rectangle::isOccluded(Ray &ray) {
     return true;
 }
 
-Vector3 Rectangle::sampleSurfacePoint() {
+void Rectangle::sampleSurface(SurfaceInfo inSurface, SurfaceInfo &outSurface) {
     Vector3 E1 = _vertex[0] - _vertex[1];
     Vector3 E2 = _vertex[2] - _vertex[1];
     if (E1.length() < E2.length()) {
@@ -94,7 +94,22 @@ Vector3 Rectangle::sampleSurfacePoint() {
         t = disT(gen);
     } while (t > shortWidth / longWidth);
 
-    return _vertex[1] + s * E1 + t * E1.length() * E2.normalize();
+    Vector3 point = _vertex[1] + s * E1 + t * E1.length() * E2.normalize();
+    Vector3 direction = point - inSurface.point();
+    if (direction.dot(E1.cross(E2)) > 0.0f) {
+        E1.swap(E2);
+    }
+    Vector3 normal = E1.cross(E2).normalize();
+
+    outSurface.setPoint(point);
+    outSurface.setNormal(normal);
+}
+
+float Rectangle::area() {
+    Vector3 E1 = _vertex[0] - _vertex[1];
+    Vector3 E2 = _vertex[2] - _vertex[1];
+
+    return E1.length() * E2.length();
 }
 
 } // namespace cadise

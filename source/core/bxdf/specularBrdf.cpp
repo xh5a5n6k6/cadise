@@ -15,8 +15,8 @@ Vector3 SpecularBRDF::evaluate(Vector3 inDirection, Vector3 outDirection, Surfac
 }
 
 Vector3 SpecularBRDF::evaluateSample(Vector3 inDirection, Vector3 &outDirection, SurfaceInfo &surfaceInfo) {
-    outDirection = inDirection.reflect(surfaceInfo.hitNormal());
-    float cosTheta = std::max(outDirection.dot(surfaceInfo.hitNormal()), 0.0f);
+    outDirection = inDirection.reflect(surfaceInfo.normal());
+    float cosTheta = std::max(outDirection.dot(surfaceInfo.normal()), 0.0f);
 
     return _albedo / cosTheta;
 }

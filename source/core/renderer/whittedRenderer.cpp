@@ -50,14 +50,14 @@ RGBColor WhittedRenderer::_luminance(Scene &scene, Ray &ray, Intersection &inter
         color.rgb() += intersection.intersector()->emittance(-ray.direction()).rgb();
 
         for (int i = 0; i < scene.lights().size(); i++) {
-            Vector3 hitPoint = intersection.surfaceInfo().hitPoint();
+            Vector3 hitPoint = intersection.surfaceInfo().point();
             Vector3 lightDir;
             float t;
             float pdf;
             Vector3 radiance = scene.lights().at(i)->evaluateSampleRadiance(lightDir, intersection.surfaceInfo(), t, pdf);
 
             // generate shadow ray to do occluded test
-            Ray r = Ray(hitPoint + CADISE_RAY_EPSILON * intersection.surfaceInfo().hitNormal(),
+            Ray r = Ray(hitPoint + CADISE_RAY_EPSILON * intersection.surfaceInfo().normal(),
                         lightDir,
                         CADISE_RAY_EPSILON, t);
 
@@ -68,7 +68,7 @@ RGBColor WhittedRenderer::_luminance(Scene &scene, Ray &ray, Intersection &inter
             Vector3 reflectance = intersection.intersector()->evaluateBSDF(lightDir, -ray.direction(), intersection.surfaceInfo());
 
             if (!reflectance.isZero()) {
-                color.rgb() += reflectance * radiance * lightDir.absDot(intersection.surfaceInfo().hitNormal()) / pdf;
+                color.rgb() += reflectance * radiance * lightDir.absDot(intersection.surfaceInfo().normal()) / pdf;
             }
         }
 
@@ -87,12 +87,12 @@ RGBColor WhittedRenderer::_reflect(Scene &scene, Ray &ray, Intersection &interse
     Vector3 reflectance = intersection.intersector()->evaluateSampleBSDF(-ray.direction(), sampleDir, intersection.surfaceInfo());
 
     if (!reflectance.isZero()) {
-        Ray r = Ray(intersection.surfaceInfo().hitPoint() + CADISE_RAY_EPSILON * intersection.surfaceInfo().hitNormal(),
+        Ray r = Ray(intersection.surfaceInfo().point() + CADISE_RAY_EPSILON * intersection.surfaceInfo().normal(),
                     sampleDir,
                     CADISE_RAY_EPSILON, std::numeric_limits<float>::max(),
                     ray.depth() + 1);
         Intersection intersect;
-        color.rgb() = reflectance * _luminance(scene, r, intersect).rgb() * sampleDir.absDot(intersection.surfaceInfo().hitNormal());
+        color.rgb() = reflectance * _luminance(scene, r, intersect).rgb() * sampleDir.absDot(intersection.surfaceInfo().normal());
     }
 
     return color;

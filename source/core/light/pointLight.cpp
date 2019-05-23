@@ -11,7 +11,7 @@ PointLight::PointLight(Vector3 position, Vector3 color) :
 }
 
 Vector3 PointLight::evaluateSampleRadiance(Vector3 &lightDirection, SurfaceInfo &surfaceInfo, float &t, float &pdf) {
-    Vector3 offsetOrigin = surfaceInfo.hitPoint() + CADISE_RAY_EPSILON * surfaceInfo.hitNormal();
+    Vector3 offsetOrigin = surfaceInfo.point() + CADISE_RAY_EPSILON * surfaceInfo.normal();
     Vector3 direction = _position - offsetOrigin;
     t = direction.length();
     lightDirection = direction.normalize();

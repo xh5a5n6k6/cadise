@@ -1,15 +1,21 @@
 #include "core/shape/shape.h"
 
+#include "core/surfaceInfo.h"
+
 #include "math/vector.h"
 
 #include <iostream>
 
 namespace cadise {
 
-Vector3 Shape::sampleSurfacePoint() {
+void Shape::sampleSurface(SurfaceInfo inSurface, SurfaceInfo &outSurface) {
+    std::cerr << "This shape of area light doesn't support\n";
+}
+
+float Shape::area() {
     std::cerr << "This shape of area light doesn't support\n";
 
-    return Vector3(0.0f, 0.0f, 0.0f);
+    return 0.0f;
 }
 
 } // namespace cadise

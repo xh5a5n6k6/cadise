@@ -6,24 +6,24 @@ SurfaceInfo::SurfaceInfo() :
     SurfaceInfo(Vector3(), Vector3()) {
 }
 
-SurfaceInfo::SurfaceInfo(Vector3 hitPoint, Vector3 hitNormal) :
-    _hitPoint(hitPoint), _hitNormal(hitNormal) {
+SurfaceInfo::SurfaceInfo(Vector3 point, Vector3 normal) :
+    _point(point), _normal(normal) {
 }
 
-Vector3 SurfaceInfo::hitPoint() {
-    return _hitPoint;
+Vector3 SurfaceInfo::point() {
+    return _point;
 }
 
-Vector3 SurfaceInfo::hitNormal() {
-    return _hitNormal;
+Vector3 SurfaceInfo::normal() {
+    return _normal;
 }
 
-void SurfaceInfo::setHitPoint(Vector3 hitPoint) {
-    _hitPoint = hitPoint;
+void SurfaceInfo::setPoint(Vector3 point) {
+    _point = point;
 }
 
-void SurfaceInfo::setHitNormal(Vector3 hitNormal) {
-    _hitNormal = hitNormal;
+void SurfaceInfo::setNormal(Vector3 normal) {
+    _normal = normal;
 }
 
 } // namespace cadise

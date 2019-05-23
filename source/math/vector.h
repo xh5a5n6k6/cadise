@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+
 namespace cadise {
 
 class Vector3 {
@@ -24,7 +26,7 @@ public:
 
     bool isZero();
     float length();
-    float squaredLength();
+    float lengthSquared();
     Vector3 normalize();
     Vector3 clamp(float min, float max);
     

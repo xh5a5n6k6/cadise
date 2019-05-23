@@ -10,9 +10,10 @@ class Rectangle : public Shape {
 public:
     Rectangle(Vector3 v1, Vector3 v2, Vector3 v3);
 
-    virtual bool isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) override;
-    virtual bool isOccluded(Ray &ray) override;
-    virtual Vector3 sampleSurfacePoint() override;
+    bool isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) override;
+    bool isOccluded(Ray &ray) override;
+    void sampleSurface(SurfaceInfo inSurface, SurfaceInfo &outSurface) override;
+    float area() override;
 
 private:
     Vector3 _vertex[3];

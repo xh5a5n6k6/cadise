@@ -11,15 +11,17 @@ AreaLight::AreaLight(std::shared_ptr<Shape> shape, Vector3 albedo) :
 }
 
 Vector3 AreaLight::evaluateSampleRadiance(Vector3 &lightDirection, SurfaceInfo &surfaceInfo, float &t, float &pdf) {
-    Vector3 offsetOrigin = surfaceInfo.hitPoint() + CADISE_RAY_EPSILON * surfaceInfo.hitNormal();
-    Vector3 direction = _shape->sampleSurfacePoint() - offsetOrigin;
+    Vector3 offsetOrigin = surfaceInfo.point() + CADISE_RAY_EPSILON * surfaceInfo.normal();
+    SurfaceInfo sampleSurface;
+    _shape->sampleSurface(surfaceInfo, sampleSurface);
+    Vector3 direction = sampleSurface.point() - offsetOrigin;
     t = direction.length();
     lightDirection = direction.normalize();
     pdf = 1.0f;
     // TODO
     // correct pdf value
-    // pdf = 1.0f / _shape.area()
-    // pdf = pdf * direction.lengthSquared() / xxx.dot(-direction.normalize());
+    pdf = 1.0f / _shape->area();
+    pdf = pdf * direction.lengthSquared() / sampleSurface.normal().dot(-direction.normalize());
 
     return _albedo;
 }

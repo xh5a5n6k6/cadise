@@ -52,8 +52,8 @@ bool Triangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
     */
     Vector3 point = ray.at(t);
     Vector3 normal = E1.cross(E2).normalize();
-    surfaceInfo.setHitPoint(point);
-    surfaceInfo.setHitNormal(normal);
+    surfaceInfo.setPoint(point);
+    surfaceInfo.setNormal(normal);
 
     return true;
 }
@@ -92,10 +92,7 @@ bool Triangle::isOccluded(Ray &ray) {
     return true;
 }
 
-Vector3 Triangle::sampleSurfacePoint() {
-    Vector3 E1 = _vertex[1] - _vertex[0];
-    Vector3 E2 = _vertex[2] - _vertex[0];
-
+void Triangle::sampleSurface(SurfaceInfo inSurface, SurfaceInfo &outSurface) {
     // TODO
     // improve sample point on triangle
     std::random_device rd;
@@ -111,7 +108,18 @@ Vector3 Triangle::sampleSurfacePoint() {
         t = disT(gen);
     } while (s + t >= 1.0f);
 
-    return _vertex[0] + s * E1 + t * E2;
+    Vector3 E1 = _vertex[1] - _vertex[0];
+    Vector3 E2 = _vertex[2] - _vertex[0];
+
+    Vector3 point = _vertex[0] + s * E1 + t * E2;
+    Vector3 direction = point - inSurface.point();
+    if (direction.dot(E1.cross(E2)) > 0.0f) {
+        E1.swap(E2);
+    }
+    Vector3 normal = E1.cross(E2).normalize();
+
+    outSurface.setPoint(point);
+    outSurface.setNormal(normal);
 }
 
 } // namespace cadise

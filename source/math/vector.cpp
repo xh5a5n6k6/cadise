@@ -82,10 +82,10 @@ bool Vector3::isZero() {
 }
 
 float Vector3::length() {
-    return std::sqrtf(squaredLength());
+    return std::sqrtf(lengthSquared());
 }
 
-float Vector3::squaredLength() {
+float Vector3::lengthSquared() {
     return _x * _x + _y * _y + _z * _z;
 }
 

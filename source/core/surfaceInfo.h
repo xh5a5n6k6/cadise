@@ -7,17 +7,17 @@ namespace cadise {
 class SurfaceInfo {
 public:
     SurfaceInfo();
-    SurfaceInfo(Vector3 hitPoint, Vector3 hitNormal);
+    SurfaceInfo(Vector3 point, Vector3 normal);
 
-    Vector3 hitPoint();
-    Vector3 hitNormal();
+    Vector3 point();
+    Vector3 normal();
 
-    void setHitPoint(Vector3 hitPoint);
-    void setHitNormal(Vector3 hitNormal);
+    void setPoint(Vector3 point);
+    void setNormal(Vector3 normal);
 
 private:
-    Vector3 _hitPoint;
-    Vector3 _hitNormal;
+    Vector3 _point;
+    Vector3 _normal;
 	
     // TODO
     // calculate differential geometry
