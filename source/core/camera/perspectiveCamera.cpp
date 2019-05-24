@@ -19,7 +19,7 @@ PerspectiveCamera::PerspectiveCamera(Matrix4 cameraToWorld, float fov, Path file
 
     _film = Film(filename, _rx, _ry);
 
-    float halfScreenLength = tanf(fov / 2.0f * CADISE_PI / 180.0f);
+    float halfScreenLength = tanf(fov / 2.0f * constant::PI / 180.0f);
     _pixelWidth = 2.0f * halfScreenLength / _rx;
     _pixelHeight = 2.0f * halfScreenLength / _ry;
 }
@@ -37,15 +37,15 @@ Ray PerspectiveCamera::createRay(int px, int py) {
 
     float sampleX = px * _pixelWidth + sx * _pixelWidth;
     float sampleY = py * _pixelHeight + sy * _pixelHeight;
-    float left = -tanf(_fov / 2.0f * CADISE_PI / 180.0f);
-    float up = tanf(_fov / 2.0f * CADISE_PI / 180.0f);
+    float left = -tanf(_fov / 2.0f * constant::PI / 180.0f);
+    float up = tanf(_fov / 2.0f * constant::PI / 180.0f);
     Vector3F samplePoint = Vector3F(left + sampleX, up - sampleY, -1.0f);
 
     Vector3F origin = _cameraToWorld.transformPoint(Vector3F(0.0f, 0.0f, 0.0f));
     Vector3F dir = _cameraToWorld.transformVector(samplePoint);
 
     // create ray in world space
-    return Ray(origin, dir, CADISE_RAY_EPSILON, std::numeric_limits<float>::max());
+    return Ray(origin, dir, constant::RAY_EPSILON, std::numeric_limits<float>::max());
 }
 
 Film PerspectiveCamera::film() {

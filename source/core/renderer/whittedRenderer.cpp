@@ -28,7 +28,6 @@ void WhittedRenderer::render(Scene &scene) {
             for (int n = 0; n < _sampleNumber; n++) {
                 Ray ray = scene.camera()->createRay(x, y);
 
-                // check intersection
                 Intersection intersection;
                 RGBColor sampleColor = _luminance(scene, ray, intersection);
                 sampleColor.rgb() *= 255.0f;
@@ -57,11 +56,11 @@ RGBColor WhittedRenderer::_luminance(Scene &scene, Ray &ray, Intersection &inter
             Vector3F radiance = scene.lights().at(i)->evaluateSampleRadiance(lightDir, intersection.surfaceInfo(), t, pdf);
             
             // generate shadow ray to do occluded test
-            Ray r = Ray(hitPoint + CADISE_RAY_EPSILON * intersection.surfaceInfo().normal(),
+            Ray r = Ray(hitPoint + constant::RAY_EPSILON * intersection.surfaceInfo().normal(),
                         lightDir,
-                        CADISE_RAY_EPSILON, t);
+                        constant::RAY_EPSILON, t);
 
-            if (scene.isOccluded(r) && r.maxT() < t - CADISE_RAY_EPSILON) {
+            if (scene.isOccluded(r) && r.maxT() < t - constant::RAY_EPSILON) {
                 continue;
             }
 
@@ -84,15 +83,16 @@ RGBColor WhittedRenderer::_reflect(Scene &scene, Ray &ray, Intersection &interse
     RGBColor color;
 
     Vector3F sampleDir;
+    float pdf = 1.0f;
     Vector3F reflectance = intersection.intersector()->evaluateSampleBSDF(-ray.direction(), sampleDir, intersection.surfaceInfo());
 
     if (!reflectance.isZero()) {
-        Ray r = Ray(intersection.surfaceInfo().point() + CADISE_RAY_EPSILON * intersection.surfaceInfo().normal(),
+        Ray r = Ray(intersection.surfaceInfo().point() + constant::RAY_EPSILON * intersection.surfaceInfo().normal(),
                     sampleDir,
-                    CADISE_RAY_EPSILON, std::numeric_limits<float>::max(),
+                    constant::RAY_EPSILON, std::numeric_limits<float>::max(),
                     ray.depth() + 1);
         Intersection intersect;
-        color.rgb() = reflectance * _luminance(scene, r, intersect).rgb() * sampleDir.absDot(intersection.surfaceInfo().normal());
+        color.rgb() = reflectance * _luminance(scene, r, intersect).rgb() * sampleDir.absDot(intersection.surfaceInfo().normal()) / pdf;
     }
 
     return color;

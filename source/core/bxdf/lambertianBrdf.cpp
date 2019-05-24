@@ -11,7 +11,7 @@ LambertianBRDF::LambertianBRDF(Vector3F albedo) :
 }
 
 Vector3F LambertianBRDF::evaluate(Vector3F inDirection, Vector3F outDirection, SurfaceInfo &surfaceInfo) {
-    return _albedo * CADISE_INV_PI;
+    return _albedo * constant::INV_PI;
 }
 
 Vector3F LambertianBRDF::evaluateSample(Vector3F inDirection, Vector3F &outDirection, SurfaceInfo &surfaceInfo) {

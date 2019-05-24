@@ -17,7 +17,7 @@ Sphere::Sphere(Vector3F center, float radius) :
 bool Sphere::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
     Ray r = Ray(_worldToLocal.transformPoint(ray.origin()),
                 _worldToLocal.transformVector(ray.direction()),
-                CADISE_RAY_EPSILON, std::numeric_limits<float>::max());
+                constant::RAY_EPSILON, std::numeric_limits<float>::max());
 
     int isOutside = r.origin().lengthSquared() > _radius * _radius;
     float t = r.direction().dot(-r.origin());
@@ -56,7 +56,7 @@ bool Sphere::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
 bool Sphere::isOccluded(Ray &ray) {
     Ray r = Ray(_worldToLocal.transformPoint(ray.origin()),
         _worldToLocal.transformVector(ray.direction()),
-        CADISE_RAY_EPSILON, std::numeric_limits<float>::max());
+        constant::RAY_EPSILON, std::numeric_limits<float>::max());
 
     int isOutside = r.origin().lengthSquared() > _radius * _radius;
     float t = r.direction().dot(-r.origin());
