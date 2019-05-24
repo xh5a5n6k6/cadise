@@ -18,8 +18,8 @@ WhittedRenderer::WhittedRenderer(int maxDepth, int sampleNumber) :
 }
 
 void WhittedRenderer::render(Scene &scene) {
-    int rx = scene.camera()->film().resolutionX();
-    int ry = scene.camera()->film().resolutionY();
+    int rx = scene.camera()->film().resolution().x();
+    int ry = scene.camera()->film().resolution().y();
 
     // for each pixel, calculate its color
     for (int y = 0; y < ry; y++) {
@@ -48,14 +48,14 @@ RGBColor WhittedRenderer::_luminance(Scene &scene, Ray &ray, Intersection &inter
     if (scene.isIntersecting(ray, intersection)) {
         // add radiance if hit area light
         color.rgb() += intersection.intersector()->emittance(-ray.direction()).rgb();
-
+        
         for (int i = 0; i < scene.lights().size(); i++) {
-            Vector3 hitPoint = intersection.surfaceInfo().point();
-            Vector3 lightDir;
+            Vector3F hitPoint = intersection.surfaceInfo().point();
+            Vector3F lightDir;
             float t;
             float pdf;
-            Vector3 radiance = scene.lights().at(i)->evaluateSampleRadiance(lightDir, intersection.surfaceInfo(), t, pdf);
-
+            Vector3F radiance = scene.lights().at(i)->evaluateSampleRadiance(lightDir, intersection.surfaceInfo(), t, pdf);
+            
             // generate shadow ray to do occluded test
             Ray r = Ray(hitPoint + CADISE_RAY_EPSILON * intersection.surfaceInfo().normal(),
                         lightDir,
@@ -65,7 +65,7 @@ RGBColor WhittedRenderer::_luminance(Scene &scene, Ray &ray, Intersection &inter
                 continue;
             }
 
-            Vector3 reflectance = intersection.intersector()->evaluateBSDF(lightDir, -ray.direction(), intersection.surfaceInfo());
+            Vector3F reflectance = intersection.intersector()->evaluateBSDF(lightDir, -ray.direction(), intersection.surfaceInfo());
 
             if (!reflectance.isZero()) {
                 color.rgb() += reflectance * radiance * lightDir.absDot(intersection.surfaceInfo().normal()) / pdf;
@@ -83,8 +83,8 @@ RGBColor WhittedRenderer::_luminance(Scene &scene, Ray &ray, Intersection &inter
 RGBColor WhittedRenderer::_reflect(Scene &scene, Ray &ray, Intersection &intersection) {
     RGBColor color;
 
-    Vector3 sampleDir;
-    Vector3 reflectance = intersection.intersector()->evaluateSampleBSDF(-ray.direction(), sampleDir, intersection.surfaceInfo());
+    Vector3F sampleDir;
+    Vector3F reflectance = intersection.intersector()->evaluateSampleBSDF(-ray.direction(), sampleDir, intersection.surfaceInfo());
 
     if (!reflectance.isZero()) {
         Ray r = Ray(intersection.surfaceInfo().point() + CADISE_RAY_EPSILON * intersection.surfaceInfo().normal(),

@@ -10,11 +10,11 @@ RGBColor::RGBColor(float r, float g, float b) :
     _rgb(r, g, b) {
 }
 
-RGBColor::RGBColor(Vector3 rgb) : 
+RGBColor::RGBColor(Vector3F rgb) : 
     _rgb(rgb) {
 }
 
-Vector3& RGBColor::rgb() {
+Vector3F& RGBColor::rgb() {
     return _rgb;
 }
 

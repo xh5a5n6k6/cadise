@@ -10,22 +10,22 @@
 
 namespace cadise {
 
-Triangle::Triangle(Vector3 v1, Vector3 v2, Vector3 v3) {
+Triangle::Triangle(Vector3F v1, Vector3F v2, Vector3F v3) {
     _vertex[0] = v1;
     _vertex[1] = v2;
     _vertex[2] = v3;
 }
 
 bool Triangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
-    Vector3 D = ray.direction();
-    Vector3 E1 = _vertex[1] - _vertex[0];
-    Vector3 E2 = _vertex[2] - _vertex[0];
+    Vector3F D = ray.direction();
+    Vector3F E1 = _vertex[1] - _vertex[0];
+    Vector3F E2 = _vertex[2] - _vertex[0];
     if (D.dot(E1.cross(E2)) > 0.0f) {
         E1.swap(E2);
     }
-    Vector3 T = ray.origin() - _vertex[0];
-    Vector3 Q = T.cross(E1);
-    Vector3 P = D.cross(E2);
+    Vector3F T = ray.origin() - _vertex[0];
+    Vector3F Q = T.cross(E1);
+    Vector3F P = D.cross(E2);
 
     float denominator = P.dot(E1);
     if (denominator - 0.0f < std::numeric_limits<float>::epsilon()) {
@@ -50,8 +50,8 @@ bool Triangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
     /*
         Calculate surface details
     */
-    Vector3 point = ray.at(t);
-    Vector3 normal = E1.cross(E2).normalize();
+    Vector3F point = ray.at(t);
+    Vector3F normal = E1.cross(E2).normalize();
     surfaceInfo.setPoint(point);
     surfaceInfo.setNormal(normal);
 
@@ -59,15 +59,15 @@ bool Triangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
 }
 
 bool Triangle::isOccluded(Ray &ray) {
-    Vector3 D = ray.direction();
-    Vector3 E1 = _vertex[1] - _vertex[0];
-    Vector3 E2 = _vertex[2] - _vertex[0];
+    Vector3F D = ray.direction();
+    Vector3F E1 = _vertex[1] - _vertex[0];
+    Vector3F E2 = _vertex[2] - _vertex[0];
     if (D.dot(E1.cross(E2)) > 0.0f) {
         E1.swap(E2);
     }
-    Vector3 T = ray.origin() - _vertex[0];
-    Vector3 Q = T.cross(E1);
-    Vector3 P = D.cross(E2);
+    Vector3F T = ray.origin() - _vertex[0];
+    Vector3F Q = T.cross(E1);
+    Vector3F P = D.cross(E2);
 
     float denominator = P.dot(E1);
     if (denominator - 0.0f < std::numeric_limits<float>::epsilon()) {
@@ -108,15 +108,15 @@ void Triangle::sampleSurface(SurfaceInfo inSurface, SurfaceInfo &outSurface) {
         t = disT(gen);
     } while (s + t >= 1.0f);
 
-    Vector3 E1 = _vertex[1] - _vertex[0];
-    Vector3 E2 = _vertex[2] - _vertex[0];
+    Vector3F E1 = _vertex[1] - _vertex[0];
+    Vector3F E2 = _vertex[2] - _vertex[0];
 
-    Vector3 point = _vertex[0] + s * E1 + t * E2;
-    Vector3 direction = point - inSurface.point();
+    Vector3F point = _vertex[0] + s * E1 + t * E2;
+    Vector3F direction = point - inSurface.point();
     if (direction.dot(E1.cross(E2)) > 0.0f) {
         E1.swap(E2);
     }
-    Vector3 normal = E1.cross(E2).normalize();
+    Vector3F normal = E1.cross(E2).normalize();
 
     outSurface.setPoint(point);
     outSurface.setNormal(normal);

@@ -8,7 +8,7 @@ namespace cadise {
 
 class Rectangle : public Shape {
 public:
-    Rectangle(Vector3 v1, Vector3 v2, Vector3 v3);
+    Rectangle(Vector3F v1, Vector3F v2, Vector3F v3);
 
     bool isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) override;
     bool isOccluded(Ray &ray) override;
@@ -16,7 +16,7 @@ public:
     float area() override;
 
 private:
-    Vector3 _vertex[3];
+    Vector3F _vertex[3];
 };
 
 } // namespace cadise

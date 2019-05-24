@@ -5,19 +5,19 @@ namespace cadise {
 Ray::Ray() {
 }
 
-Ray::Ray(Vector3 origin, Vector3 direction, float minT, float maxT, int depth) : 
+Ray::Ray(Vector3F origin, Vector3F direction, float minT, float maxT, int depth) : 
     _origin(origin), _direction(direction.normalize()), _minT(minT), _maxT(maxT), _depth(depth) {
 }
 
-Vector3 Ray::at(float t) {
+Vector3F Ray::at(float t) {
     return _origin + _direction * t;
 }
 
-Vector3 Ray::origin() {
+Vector3F Ray::origin() {
     return _origin;
 }
 
-Vector3 Ray::direction() {
+Vector3F Ray::direction() {
     return _direction;
 }
 

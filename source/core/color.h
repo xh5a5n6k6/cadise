@@ -11,15 +11,15 @@ class RGBColor : public Color {
 public:
     RGBColor();
     RGBColor(float r, float g, float b);
-    RGBColor(Vector3 rgb);
+    RGBColor(Vector3F rgb);
 
-    Vector3& rgb();
+    Vector3F& rgb();
     float r();
     float g();
     float b();
 
 private:
-    Vector3 _rgb;
+    Vector3F _rgb;
 };
 
 } // namespace cadise

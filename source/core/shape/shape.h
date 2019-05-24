@@ -4,7 +4,6 @@ namespace cadise {
 
 class Ray;
 class SurfaceInfo;
-class Vector3;
 
 class Shape {
 public:

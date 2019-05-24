@@ -31,15 +31,15 @@ bool Primitive::isOccluded(Ray &ray) {
     return _shape->isOccluded(ray);
 }
 
-RGBColor Primitive::emittance(Vector3 direction) {
+RGBColor Primitive::emittance(Vector3F direction) {
     return RGBColor(0.0f, 0.0f, 0.0f);
 }
 
-Vector3 Primitive::evaluateBSDF(Vector3 inDirection, Vector3 outDirection, SurfaceInfo &surfaceInfo) {
+Vector3F Primitive::evaluateBSDF(Vector3F inDirection, Vector3F outDirection, SurfaceInfo &surfaceInfo) {
     return _material->evaluateBSDF(inDirection, outDirection, surfaceInfo);
 }
 
-Vector3 Primitive::evaluateSampleBSDF(Vector3 inDirection, Vector3 &outDirection, SurfaceInfo &surfaceInfo) {
+Vector3F Primitive::evaluateSampleBSDF(Vector3F inDirection, Vector3F &outDirection, SurfaceInfo &surfaceInfo) {
     return _material->evaluateSampleBSDF(inDirection, outDirection, surfaceInfo);
 }
 

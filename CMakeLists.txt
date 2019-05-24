@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.1)
 project(Cadise)
 
-# In Unix
+# In command line
 # cmake -DCMAKE_GENERATOR_PLATFORM=x64 ..
 set(CMAKE_CONFIGURATION_TYPES "Release")
 
@@ -18,6 +18,6 @@ endif()
 set(INCLUDE_DIR "${CMAKE_SOURCE_DIR}/source")
 include_directories(${INCLUDE_DIR})
 
-file(GLOB_RECURSE HEADER_DIR "./source/*.h")
+file(GLOB_RECURSE HEADER_DIR "./source/*.h" "./source/*.ipp")
 file(GLOB_RECURSE SRC_DIR "./source/*.cpp")
 add_executable(${PROJECT_NAME} ${HEADER_DIR} ${SRC_DIR})

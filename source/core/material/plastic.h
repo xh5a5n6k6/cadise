@@ -6,10 +6,10 @@ namespace cadise {
 
 class Plastic : public Material {
 public:
-    Plastic(Vector3 albedo, float exponent, float diffuseRatio);
+    Plastic(Vector3F albedo, float exponent, float diffuseRatio);
 
-    Vector3 evaluateBSDF(Vector3 inDirection, Vector3 outDirection, SurfaceInfo &surfaceInfo) override;
-    Vector3 evaluateSampleBSDF(Vector3 inDirection, Vector3 &outDirection, SurfaceInfo &surfaceInfo) override;
+    Vector3F evaluateBSDF(Vector3F inDirection, Vector3F outDirection, SurfaceInfo &surfaceInfo) override;
+    Vector3F evaluateSampleBSDF(Vector3F inDirection, Vector3F &outDirection, SurfaceInfo &surfaceInfo) override;
 
 private:
     float _diffuseRatio;

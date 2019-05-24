@@ -8,15 +8,15 @@ namespace cadise {
 
 class PointLight : public Light {
 public:
-    PointLight(Vector3 position, Vector3 color);
+    PointLight(Vector3F position, Vector3F color);
 
-    Vector3 evaluateSampleRadiance(Vector3 &lightDirection, SurfaceInfo &surfaceInfo, float &t, float &pdf) override;
-    Vector3 position();
-    Vector3 color();
+    Vector3F evaluateSampleRadiance(Vector3F &lightDirection, SurfaceInfo &surfaceInfo, float &t, float &pdf) override;
+    Vector3F position();
+    Vector3F color();
 
 private:
-    Vector3 _position;
-    Vector3 _color;
+    Vector3F _position;
+    Vector3F _color;
 };
 
 } // namespace cadise

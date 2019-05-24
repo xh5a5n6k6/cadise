@@ -39,10 +39,10 @@ Ray PerspectiveCamera::createRay(int px, int py) {
     float sampleY = py * _pixelHeight + sy * _pixelHeight;
     float left = -tanf(_fov / 2.0f * CADISE_PI / 180.0f);
     float up = tanf(_fov / 2.0f * CADISE_PI / 180.0f);
-    Vector3 samplePoint = Vector3(left + sampleX, up - sampleY, -1.0f);
+    Vector3F samplePoint = Vector3F(left + sampleX, up - sampleY, -1.0f);
 
-    Vector3 origin = _cameraToWorld.transformPoint(Vector3(0.0f, 0.0f, 0.0f));
-    Vector3 dir = _cameraToWorld.transformVector(samplePoint);
+    Vector3F origin = _cameraToWorld.transformPoint(Vector3F(0.0f, 0.0f, 0.0f));
+    Vector3F dir = _cameraToWorld.transformVector(samplePoint);
 
     // create ray in world space
     return Ray(origin, dir, CADISE_RAY_EPSILON, std::numeric_limits<float>::max());

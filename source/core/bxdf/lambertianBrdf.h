@@ -8,13 +8,13 @@ namespace cadise {
 
 class LambertianBRDF : public BxDF {
 public:
-    LambertianBRDF(Vector3 albedo);
+    LambertianBRDF(Vector3F albedo);
 
-    Vector3 evaluate(Vector3 inDirection, Vector3 outDirection, SurfaceInfo &surfaceInfo) override;
-    Vector3 evaluateSample(Vector3 inDirection, Vector3 &outDirection, SurfaceInfo &surfaceInfo) override;
+    Vector3F evaluate(Vector3F inDirection, Vector3F outDirection, SurfaceInfo &surfaceInfo) override;
+    Vector3F evaluateSample(Vector3F inDirection, Vector3F &outDirection, SurfaceInfo &surfaceInfo) override;
 
 private:
-    Vector3 _albedo;
+    Vector3F _albedo;
 };
 
 } // namespace cadise

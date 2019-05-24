@@ -1,8 +1,8 @@
 #pragma once
 
-namespace cadise {
+#include "math/vector.h"
 
-class Vector3;
+namespace cadise {
 
 class Matrix4 {
 public:
@@ -17,13 +17,13 @@ public:
     Matrix4 transpose();
     Matrix4 inverse();
 
-    Vector3 transformPoint(Vector3 v);
-    Vector3 transformVector(Vector3 v);
+    Vector3F transformPoint(Vector3F v);
+    Vector3F transformVector(Vector3F v);
 
     static Matrix4 identity();
     static Matrix4 scale(float sx, float sy, float sz);
     static Matrix4 translate(float tx, float ty, float tz);
-    static Matrix4 lookAt(Vector3 pos, Vector3 tar, Vector3 up);
+    static Matrix4 lookAt(Vector3F pos, Vector3F tar, Vector3F up);
 
     float n(int i, int j);
 

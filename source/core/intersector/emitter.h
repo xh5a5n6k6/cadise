@@ -14,10 +14,10 @@ public:
 
     bool isIntersecting(Ray &ray, Intersection &intersection) override;
     bool isOccluded(Ray &ray) override;
-    RGBColor emittance(Vector3 direction) override;
+    RGBColor emittance(Vector3F direction) override;
 
-    Vector3 evaluateBSDF(Vector3 inDirection, Vector3 outDirection, SurfaceInfo &surfaceInfo) override;
-    Vector3 evaluateSampleBSDF(Vector3 inDirection, Vector3 &outDirection, SurfaceInfo &surfaceInfo) override;
+    Vector3F evaluateBSDF(Vector3F inDirection, Vector3F outDirection, SurfaceInfo &surfaceInfo) override;
+    Vector3F evaluateSampleBSDF(Vector3F inDirection, Vector3F &outDirection, SurfaceInfo &surfaceInfo) override;
 
 private:
     AreaLight _areaLight;

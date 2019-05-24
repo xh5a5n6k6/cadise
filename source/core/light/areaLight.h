@@ -12,17 +12,17 @@ namespace cadise {
 
 class AreaLight : public Light {
 public:
-    AreaLight(std::shared_ptr<Shape> shape, Vector3 albedo);
+    AreaLight(std::shared_ptr<Shape> shape, Vector3F albedo);
 
-    Vector3 evaluateSampleRadiance(Vector3 &lightDirection, SurfaceInfo &surfaceInfo, float &t, float &pdf) override;
-    Vector3 position() override;
-    Vector3 color() override;
+    Vector3F evaluateSampleRadiance(Vector3F &lightDirection, SurfaceInfo &surfaceInfo, float &t, float &pdf) override;
+    Vector3F position() override;
+    Vector3F color() override;
 
     std::shared_ptr<Shape> shape();
 
 private:
     std::shared_ptr<Shape> _shape;
-    Vector3 _albedo;
+    Vector3F _albedo;
 };
 
 } // namespace cadise

@@ -3,26 +3,26 @@
 namespace cadise {
 
 SurfaceInfo::SurfaceInfo() :
-    SurfaceInfo(Vector3(), Vector3()) {
+    SurfaceInfo(Vector3F(), Vector3F()) {
 }
 
-SurfaceInfo::SurfaceInfo(Vector3 point, Vector3 normal) :
+SurfaceInfo::SurfaceInfo(Vector3F point, Vector3F normal) :
     _point(point), _normal(normal) {
 }
 
-Vector3 SurfaceInfo::point() {
+Vector3F SurfaceInfo::point() {
     return _point;
 }
 
-Vector3 SurfaceInfo::normal() {
+Vector3F SurfaceInfo::normal() {
     return _normal;
 }
 
-void SurfaceInfo::setPoint(Vector3 point) {
+void SurfaceInfo::setPoint(Vector3F point) {
     _point = point;
 }
 
-void SurfaceInfo::setNormal(Vector3 normal) {
+void SurfaceInfo::setNormal(Vector3F normal) {
     _normal = normal;
 }
 

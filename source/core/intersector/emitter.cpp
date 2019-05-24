@@ -26,15 +26,15 @@ bool Emitter::isOccluded(Ray &ray) {
     return _areaLight.shape()->isOccluded(ray);
 }
 
-RGBColor Emitter::emittance(Vector3 direction) {
+RGBColor Emitter::emittance(Vector3F direction) {
     return _areaLight.color();
 }
 
-Vector3 Emitter::evaluateBSDF(Vector3 inDirection, Vector3 outDirection, SurfaceInfo &surfaceInfo) {
+Vector3F Emitter::evaluateBSDF(Vector3F inDirection, Vector3F outDirection, SurfaceInfo &surfaceInfo) {
     return _material->evaluateBSDF(inDirection, outDirection, surfaceInfo);
 }
 
-Vector3 Emitter::evaluateSampleBSDF(Vector3 inDirection, Vector3 &outDirection, SurfaceInfo &surfaceInfo) {
+Vector3F Emitter::evaluateSampleBSDF(Vector3F inDirection, Vector3F &outDirection, SurfaceInfo &surfaceInfo) {
     return _material->evaluateSampleBSDF(inDirection, outDirection, surfaceInfo);
 }
 

@@ -1,8 +1,5 @@
 #include "math/matrix.h"
 
-#include "math/vector.h"
-
-#include <algorithm>
 #include <iostream>
 
 namespace cadise {
@@ -83,16 +80,16 @@ Matrix4 Matrix4::inverse() {
     return inv;
 }
 
-Vector3 Matrix4::transformPoint(Vector3 v) {
-    return Vector3(_n[0][0] * v.x() + _n[0][1] * v.y() + _n[0][2] * v.z() + _n[0][3],
-                   _n[1][0] * v.x() + _n[1][1] * v.y() + _n[1][2] * v.z() + _n[1][3],
-                   _n[2][0] * v.x() + _n[2][1] * v.y() + _n[2][2] * v.z() + _n[2][3]);
+Vector3F Matrix4::transformPoint(Vector3F v) {
+    return Vector3F(_n[0][0] * v.x() + _n[0][1] * v.y() + _n[0][2] * v.z() + _n[0][3],
+                    _n[1][0] * v.x() + _n[1][1] * v.y() + _n[1][2] * v.z() + _n[1][3],
+                    _n[2][0] * v.x() + _n[2][1] * v.y() + _n[2][2] * v.z() + _n[2][3]);
 }
 
-Vector3 Matrix4::transformVector(Vector3 v) {
-    return Vector3(_n[0][0] * v.x() + _n[0][1] * v.y() + _n[0][2] * v.z(),
-                   _n[1][0] * v.x() + _n[1][1] * v.y() + _n[1][2] * v.z(),
-                   _n[2][0] * v.x() + _n[2][1] * v.y() + _n[2][2] * v.z());
+Vector3F Matrix4::transformVector(Vector3F v) {
+    return Vector3F(_n[0][0] * v.x() + _n[0][1] * v.y() + _n[0][2] * v.z(),
+                    _n[1][0] * v.x() + _n[1][1] * v.y() + _n[1][2] * v.z(),
+                    _n[2][0] * v.x() + _n[2][1] * v.y() + _n[2][2] * v.z());
 }
 
 Matrix4 Matrix4::identity() {
@@ -117,10 +114,10 @@ Matrix4 Matrix4::translate(float tx, float ty, float tz) {
 }
 
 // Return cameraToWorld matrix
-Matrix4 Matrix4::lookAt(Vector3 pos, Vector3 tar, Vector3 up) {
-    Vector3 newZ = (pos - tar).normalize();
-    Vector3 newX = up.cross(newZ).normalize();
-    Vector3 newY = newZ.cross(newX);
+Matrix4 Matrix4::lookAt(Vector3F pos, Vector3F tar, Vector3F up) {
+    Vector3F newZ = (pos - tar).normalize();
+    Vector3F newX = up.cross(newZ).normalize();
+    Vector3F newY = newZ.cross(newX);
 
     return Matrix4(newX.x(), newY.x(), newZ.x(), pos.x(),
                    newX.y(), newY.y(), newZ.y(), pos.y(),

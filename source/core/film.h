@@ -2,24 +2,23 @@
 
 #include "file-io/path.h"
 
-namespace cadise {
+#include "math/vector.h"
 
-class Vector3;
+namespace cadise {
 
 class Film {
 public:
     Film();
     Film(Path filename, int rx, int ry);
 
-    void addSample(int px, int py, Vector3 value);
+    void addSample(int px, int py, Vector3F value);
     void save();
 
-    int resolutionX();
-    int resolutionY();
+    Vector2I resolution();
 
 private:
     Path _filename;
-    int _resolutionX, _resolutionY;
+    Vector2I _resolution;
     float* _pixelValue;
 };
 

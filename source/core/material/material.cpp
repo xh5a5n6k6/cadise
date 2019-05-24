@@ -2,12 +2,10 @@
 
 #include "core/bxdf/bxdf.h"
 
-#include "math/vector.h"
-
 namespace cadise {
 
-Vector3 Material::evaluateBSDF(Vector3 inDirection, Vector3 outDirection, SurfaceInfo &surfaceInfo) {
-    Vector3 f;
+Vector3F Material::evaluateBSDF(Vector3F inDirection, Vector3F outDirection, SurfaceInfo &surfaceInfo) {
+    Vector3F f(0.0f);
     for (int i = 0; i < _bsdf.size(); i++) {
         f += _bsdf[i]->evaluate(inDirection, outDirection, surfaceInfo);
     }
@@ -15,8 +13,8 @@ Vector3 Material::evaluateBSDF(Vector3 inDirection, Vector3 outDirection, Surfac
     return f;
 }
 
-Vector3 Material::evaluateSampleBSDF(Vector3 inDirection, Vector3 &outDirection, SurfaceInfo &surfaceInfo) {
-    Vector3 f;
+Vector3F Material::evaluateSampleBSDF(Vector3F inDirection, Vector3F &outDirection, SurfaceInfo &surfaceInfo) {
+    Vector3F f(0.0f);
     for (int i = 0; i < _bsdf.size(); i++) {
         f += _bsdf[i]->evaluateSample(inDirection, outDirection, surfaceInfo);
     }

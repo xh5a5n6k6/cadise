@@ -14,19 +14,19 @@ BlinnPhongBRDF::BlinnPhongBRDF(float exponent) :
 
 // inDirection  : light direction
 // outDirection : eye direction
-Vector3 BlinnPhongBRDF::evaluate(Vector3 inDirection, Vector3 outDirection, SurfaceInfo &surfaceInfo) {
+Vector3F BlinnPhongBRDF::evaluate(Vector3F inDirection, Vector3F outDirection, SurfaceInfo &surfaceInfo) {
     float brdfFactor = std::max(surfaceInfo.normal().dot(outDirection), 0.0f);
 
     // h : half vector
-    Vector3 h = (inDirection + outDirection).normalize();
+    Vector3F h = (inDirection + outDirection).normalize();
     float cosTheta = std::max(h.dot(surfaceInfo.normal()), 0.0f);
     float specular = std::powf(cosTheta, _exponent) * brdfFactor;
 	
-    return Vector3(specular, specular, specular);
+    return Vector3F(specular, specular, specular);
 }
 
-Vector3 BlinnPhongBRDF::evaluateSample(Vector3 inDirection, Vector3 &outDirection, SurfaceInfo &surfaceInfo) {
-    return Vector3(0.0f, 0.0f, 0.0f);
+Vector3F BlinnPhongBRDF::evaluateSample(Vector3F inDirection, Vector3F &outDirection, SurfaceInfo &surfaceInfo) {
+    return Vector3F(0.0f, 0.0f, 0.0f);
 }
 
 } // namespace cadise

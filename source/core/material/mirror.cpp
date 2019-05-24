@@ -4,7 +4,7 @@
 
 namespace cadise {
 
-Mirror::Mirror(Vector3 albedo) {
+Mirror::Mirror(Vector3F albedo) {
     _addBxDF(std::make_shared<SpecularBRDF>(albedo));
 }
 

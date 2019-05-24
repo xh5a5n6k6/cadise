@@ -9,7 +9,7 @@
 
 namespace cadise {
 
-Sphere::Sphere(Vector3 center, float radius) : 
+Sphere::Sphere(Vector3F center, float radius) : 
     _center(center), _radius(radius) {
     _worldToLocal = Matrix4::translate(-_center.x(), -_center.y(), -_center.z());
 }
@@ -45,8 +45,8 @@ bool Sphere::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
     /*
         Calculate surface details
     */
-    Vector3 point = ray.at(t);
-    Vector3 normal = (point - _center).normalize();
+    Vector3F point = ray.at(t);
+    Vector3F normal = (point - _center).normalize();
     surfaceInfo.setPoint(point);
     surfaceInfo.setNormal(normal);
 

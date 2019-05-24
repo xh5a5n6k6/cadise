@@ -4,7 +4,7 @@
 
 namespace cadise {
 
-Matte::Matte(Vector3 albedo) {
+Matte::Matte(Vector3F albedo) {
     _addBxDF(std::make_shared<LambertianBRDF>(albedo));
 }
 
