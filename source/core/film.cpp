@@ -23,17 +23,17 @@ void Film::addSample(int px, int py, Vector3 value) {
 }
 
 void Film::save() {
-    std::unique_ptr<unsigned char[]> data(new unsigned char[3 * _resolutionX * _resolutionY]);
+    std::unique_ptr<uint8[]> data(new uint8[3 * _resolutionX * _resolutionY]);
     for (int y = 0; y < _resolutionY; y++) {
         for (int x = 0; x < _resolutionX; x++) {
             int offset = 3 * (x + y * _resolutionX);
-            data[offset]     = unsigned char(_pixelValue[offset    ]);
-            data[offset + 1] = unsigned char(_pixelValue[offset + 1]);
-            data[offset + 2] = unsigned char(_pixelValue[offset + 2]);
+            data[offset]     = static_cast<uint8>(_pixelValue[offset    ]);
+            data[offset + 1] = static_cast<uint8>(_pixelValue[offset + 1]);
+            data[offset + 2] = static_cast<uint8>(_pixelValue[offset + 2]);
         }
     }
 
-    ImageIO::save(_filename, _resolutionX, _resolutionY, data.get());
+    imageIO::save(_filename, _resolutionX, _resolutionY, data.get());
     data.release();
 }
 

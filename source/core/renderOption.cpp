@@ -15,7 +15,7 @@
 #include "core/shape/sphere.h"
 #include "core/shape/triangle.h"
 
-#include <string>
+//#include <string>
 
 namespace cadise {
 

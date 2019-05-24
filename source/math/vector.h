@@ -1,5 +1,7 @@
 #pragma once
 
+#include "math/type.h"
+
 #include <array>
 
 namespace cadise {
@@ -47,5 +49,56 @@ private:
 inline Vector3 operator*(float s, Vector3 v) {
     return v * s;
 }
+
+template<typename T, uint64 Size>
+class Vector {
+public:
+    Vector() = default;
+    Vector(T v);
+    template<typename... Ts>
+    Vector(T v1, T v2, Ts... ts);
+
+    Vector operator-();
+    Vector operator+(const Vector &v);
+    Vector operator-(const Vector &v);
+    Vector operator*(const T s);
+    Vector operator*(const Vector &v);
+    Vector operator/(const T s);
+    Vector operator/(const Vector &v);
+    Vector& operator+=(const Vector &v);
+    Vector& operator-=(const Vector &v);
+    Vector& operator*=(const T s);
+    Vector& operator*=(const Vector &v);
+    Vector& operator/=(const T s);
+    Vector& operator/=(const Vector &v);
+    Vector& operator=(const Vector &v);
+
+    bool isZero();
+    T length();
+    T lengthSquared();
+    Vector normalize();
+    Vector clamp(T min, T max);
+
+    void swap(Vector &v);
+    T dot(Vector v);
+    T absDot(Vector v);
+    Vector cross(Vector v);
+    Vector reflect(Vector normal);
+
+    T x();
+    T y();
+    T z();
+
+private:
+    std::array<T, Size> _v;
+};
+
+template<typename T, uint64 Size>
+inline Vector<T, Size> operator*(T s, Vector<T, Size> v) {
+    return v * s;
+}
+
+using Vector2I = Vector<int, 2>;
+using Vector3F = Vector<float, 3>;
 
 } // namespace cadise

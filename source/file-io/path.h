@@ -6,7 +6,7 @@ namespace cadise {
 
 class Path {
 public:
-    Path();
+    Path() = default;
     Path(std::string path);
 
     bool isExtendedWith(std::string extension);

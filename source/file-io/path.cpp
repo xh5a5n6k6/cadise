@@ -2,10 +2,6 @@
 
 namespace cadise {
 
-Path::Path() :
-    _path("") {
-}
-
 Path::Path(std::string path) :
     _path(path) {
 }

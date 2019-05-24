@@ -1,18 +1,16 @@
 #pragma once
 
+#include "file-io/path.h"
+
+#include "math/type.h"
+
 namespace cadise {
 
-class Path;
+namespace imageIO {
 
-class ImageIO {
-public:
-    static void save(Path path, int width, int height, unsigned char* data);
+void save(Path path, int width, int height, uint8* data);
 
-private:
-    //static bool saveJPG();
-    static bool _savePNG(Path path, int width, int height, unsigned char* data);
-    //static bool saveBMP();
-    static bool _savePPM(Path path, int width, int height, unsigned char* data);
-};
+
+} // namespace imageIO
 
 } // namespace cadise

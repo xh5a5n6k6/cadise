@@ -15,26 +15,26 @@ class Renderer;
 class Scene;
 class Shape;
 
-struct Option {
-    // TODO
-    // Adjust parse file syntex
-    std::shared_ptr<Material> material;
-    std::shared_ptr<Shape> shape;
-
-    Matrix4 cameraToWorld;
-    float fov;
-    int rx, ry;
-    std::string filename = "cadise.png";
-    std::shared_ptr<Camera> camera;
-
-    std::vector<std::shared_ptr<Light> > lights;
-    std::vector<std::shared_ptr<Intersector> > intersectors;
-
-    int maxDepth, sampleNumber;
-};
-
 class RenderOption {
 public:
+    struct Option {
+        // TODO
+        // Adjust parse file syntex
+        std::shared_ptr<Material> material;
+        std::shared_ptr<Shape> shape;
+
+        Matrix4 cameraToWorld;
+        float fov;
+        int rx, ry;
+        std::string filename = "cadise.png";
+        std::shared_ptr<Camera> camera;
+
+        std::vector<std::shared_ptr<Light> > lights;
+        std::vector<std::shared_ptr<Intersector> > intersectors;
+
+        int maxDepth, sampleNumber;
+    };
+
     RenderOption();
 
     void setupData(std::vector<std::string> data);
