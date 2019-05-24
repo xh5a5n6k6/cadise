@@ -4,10 +4,6 @@
 
 namespace cadise {
 
-Film::Film() :
-    _resolution(0) {
-}
-
 Film::Film(Path filename, int rx, int ry) :
     _filename(filename), _resolution(rx, ry) {
     _pixelValue = new float[3 * _resolution.x() * _resolution.y()];

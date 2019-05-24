@@ -3,7 +3,7 @@
 namespace cadise {
 
 SurfaceInfo::SurfaceInfo() :
-    SurfaceInfo(Vector3F(), Vector3F()) {
+    SurfaceInfo(Vector3F(0.0f), Vector3F(0.0f)) {
 }
 
 SurfaceInfo::SurfaceInfo(Vector3F point, Vector3F normal) :

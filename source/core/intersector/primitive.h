@@ -11,7 +11,6 @@ class Shape;
 
 class Primitive : public Intersector {
 public:
-    Primitive();
     Primitive(std::shared_ptr<Shape> shape, std::shared_ptr<Material> material);
 	
     bool isIntersecting(Ray &ray, Intersection &intersection) override;

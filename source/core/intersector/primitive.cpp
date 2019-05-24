@@ -7,10 +7,6 @@
 
 namespace cadise {
 
-Primitive::Primitive() :
-    _shape(nullptr), _material(nullptr), _self(nullptr) {
-}
-
 Primitive::Primitive(std::shared_ptr<Shape> shape, std::shared_ptr<Material> material) :
     _shape(shape), _material(material) {
     _self = std::make_shared<Primitive>(*this);

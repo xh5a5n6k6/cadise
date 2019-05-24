@@ -9,7 +9,7 @@ namespace cadise {
 template<typename T, uint64 Size>
 class Vector {
 public:
-    Vector() = default;
+    Vector();
     Vector(T v);
     template<typename... Ts>
     Vector(T v1, T v2, Ts... ts);

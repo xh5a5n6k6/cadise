@@ -8,7 +8,6 @@ namespace cadise {
 
 class Film {
 public:
-    Film();
     Film(Path filename, int rx, int ry);
 
     void addSample(int px, int py, Vector3F value);

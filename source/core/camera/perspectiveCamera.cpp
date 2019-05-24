@@ -11,13 +11,8 @@
 
 namespace cadise {
 
-PerspectiveCamera::PerspectiveCamera() {
-}
-
 PerspectiveCamera::PerspectiveCamera(Matrix4 cameraToWorld, float fov, Path filename, int rx, int ry) :
-    _cameraToWorld(cameraToWorld), _fov(fov), _rx(rx), _ry(ry) {
-
-    _film = Film(filename, _rx, _ry);
+    _cameraToWorld(cameraToWorld), _fov(fov), _rx(rx), _ry(ry), _film(filename, rx, ry) {
 
     float halfScreenLength = tanf(fov / 2.0f * constant::PI / 180.0f);
     _pixelWidth = 2.0f * halfScreenLength / _rx;

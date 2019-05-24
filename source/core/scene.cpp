@@ -6,9 +6,6 @@
 
 namespace cadise {
 
-Scene::Scene() {
-}
-
 Scene::Scene(std::shared_ptr<Accelerator> accelerator,
              std::vector<std::shared_ptr<Light> > lights,
              std::shared_ptr<Camera> camera) :

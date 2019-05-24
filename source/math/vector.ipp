@@ -7,6 +7,26 @@
 namespace cadise {
 
 template<typename T, uint64 Size>
+inline Vector<T, Size>::Vector() {
+    for (uint64 i = 0; i < Size; i++) {
+        _v.at(i) = static_cast<T>(0);
+    }
+}
+
+template<typename T, uint64 Size>
+inline Vector<T, Size>::Vector(T v) {
+    for (uint64 i = 0; i < Size; i++) {
+        _v.at(i) = v;
+    }
+}
+
+template<typename T, uint64 Size>
+template<typename... Ts>
+inline Vector<T, Size>::Vector(T v1, T v2, Ts... ts) :
+    _v({ v1, v2, ts... }) {
+}
+
+template<typename T, uint64 Size>
 inline Vector<T, Size> Vector<T, Size>::operator-() {
     Vector<T, Size> result;
     for (uint64 i = 0; i < Size; i++) {
@@ -150,19 +170,6 @@ inline Vector<T, Size>& Vector<T, Size>::operator=(const Vector<T, Size> &v) {
     }
 
     return *this;
-}
-
-template<typename T, uint64 Size>
-inline Vector<T, Size>::Vector(T v) {
-    for (uint64 i = 0; i < Size; i++) {
-        _v.at(i) = v;
-    }
-}
-
-template<typename T, uint64 Size>
-template<typename... Ts>
-inline Vector<T, Size>::Vector(T v1, T v2, Ts... ts) :
-    _v({ v1, v2, ts... }) {
 }
 
 template<typename T, uint64 Size>

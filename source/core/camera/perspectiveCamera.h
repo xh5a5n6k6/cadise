@@ -10,7 +10,6 @@ namespace cadise {
 
 class PerspectiveCamera : public Camera {
 public:
-    PerspectiveCamera();
     PerspectiveCamera(Matrix4 cameraToWorld, float fov, Path filename, int rx, int ry);
 
     Ray createRay(int px, int py) override;
