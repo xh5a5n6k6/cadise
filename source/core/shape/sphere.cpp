@@ -14,6 +14,10 @@ Sphere::Sphere(Vector3F center, float radius) :
     _worldToLocal = Matrix4::translate(-_center.x(), -_center.y(), -_center.z());
 }
 
+AABB3F Sphere::bound() {
+    return AABB3F(_center - _radius, _center + _radius);
+}
+
 bool Sphere::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
     Ray r = Ray(_worldToLocal.transformPoint(ray.origin()),
                 _worldToLocal.transformVector(ray.direction()),
@@ -42,9 +46,7 @@ bool Sphere::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
 
     ray.setMaxT(t);
 
-    /*
-        Calculate surface details
-    */
+    // Calculate surface details
     Vector3F point = ray.at(t);
     Vector3F normal = (point - _center).normalize();
     surfaceInfo.setPoint(point);

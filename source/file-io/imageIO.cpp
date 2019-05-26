@@ -1,5 +1,7 @@
 #include "file-io/imageIO.h"
 
+#include "file-io/path.h"
+
 #include "third-party/tp-stb.h"
 
 namespace cadise {

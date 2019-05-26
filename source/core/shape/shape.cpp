@@ -12,6 +12,12 @@ void Shape::sampleSurface(SurfaceInfo inSurface, SurfaceInfo &outSurface) {
     std::cerr << "This shape of area light doesn't support\n";
 }
 
+float Shape::samplePdf() {
+    std::cerr << "This shape of area light doesn't support\n";
+
+    return 0.0f;
+}
+
 float Shape::area() {
     std::cerr << "This shape of area light doesn't support\n";
 

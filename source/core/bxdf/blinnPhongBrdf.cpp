@@ -2,8 +2,6 @@
 
 #include "core/surfaceInfo.h"
 
-#include "math/constant.h"
-
 #include <algorithm>
 
 namespace cadise {

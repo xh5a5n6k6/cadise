@@ -7,6 +7,8 @@
 
 namespace cadise {
 
+// BruteForceAccelerator is for no acceleration. 
+// It is for debugging usage compared to other accelerators.
 class BruteForceAccelerator : public Accelerator {
 public:
     BruteForceAccelerator(std::vector<std::shared_ptr<Intersector> > intersectors);

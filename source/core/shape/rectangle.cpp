@@ -8,37 +8,37 @@
 
 namespace cadise {
 
-Rectangle::Rectangle(Vector3F v1, Vector3F v2, Vector3F v3) {
-    _vertex[0] = v1;
-    _vertex[1] = v2;
-    _vertex[2] = v3;
+Rectangle::Rectangle(Vector3F v1, Vector3F v2, Vector3F v3) :
+    _v1(v1), _v2(v2), _v3(v3) {
+    _e1 = _v1 - _v2;
+    _e2 = _v3 - _v2;
+}
+
+AABB3F Rectangle::bound() {
+    return AABB3F(_v1).unionWith(_v2).unionWith(_v3).unionWith(_v2 + _e1 + _e2);
 }
 
 bool Rectangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
-    Vector3F E1 = _vertex[0] - _vertex[1];
-    Vector3F E2 = _vertex[2] - _vertex[1];
-    if (ray.direction().dot(E1.cross(E2)) > 0.0f) {
-        E1.swap(E2);
+    if (ray.direction().dot(_e1.cross(_e2)) > 0.0f) {
+        _e1.swap(_e2);
     }
-    Vector3F normal = E1.cross(E2).normalize();
-    float t = (normal.dot(_vertex[1]) - normal.dot(ray.origin())) / normal.dot(ray.direction());
+    Vector3F normal = _e1.cross(_e2).normalize();
+    float t = (normal.dot(_v2) - normal.dot(ray.origin())) / normal.dot(ray.direction());
     if (t < 0.0f || t > ray.maxT()) {
         return false;
     }
 
-    Vector3F vectorOnPlane = ray.at(t) - _vertex[1];
-    float projection1 = vectorOnPlane.dot(E1.normalize());
-    float projection2 = vectorOnPlane.dot(E2.normalize());
-    if (projection1 < 0.0f || projection1 > E1.length() ||
-        projection2 < 0.0f || projection2 > E2.length()) {
+    Vector3F vectorOnPlane = ray.at(t) - _v2;
+    float projection1 = vectorOnPlane.dot(_e1.normalize());
+    float projection2 = vectorOnPlane.dot(_e2.normalize());
+    if (projection1 < 0.0f || projection1 > _e1.length() ||
+        projection2 < 0.0f || projection2 > _e2.length()) {
         return false;
     }
 
     ray.setMaxT(t);
 
-    /*
-        Calculate surface details
-    */
+    //  Calculate surface details
     surfaceInfo.setPoint(ray.at(t));
     surfaceInfo.setNormal(normal);
 
@@ -46,22 +46,20 @@ bool Rectangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
 }
 
 bool Rectangle::isOccluded(Ray &ray) {
-    Vector3F E1 = _vertex[0] - _vertex[1];
-    Vector3F E2 = _vertex[2] - _vertex[1];
-    if (ray.direction().dot(E1.cross(E2)) > 0.0f) {
-        E1.swap(E2);
+    if (ray.direction().dot(_e1.cross(_e2)) > 0.0f) {
+        _e1.swap(_e2);
     }
-    Vector3F normal = E1.cross(E2).normalize();
-    float t = (normal.dot(_vertex[1]) - normal.dot(ray.origin())) / normal.dot(ray.direction());
+    Vector3F normal = _e1.cross(_e2).normalize();
+    float t = (normal.dot(_v2) - normal.dot(ray.origin())) / normal.dot(ray.direction());
     if (t < 0.0f || t > ray.maxT()) {
         return false;
     }
 
-    Vector3F vectorOnPlane = ray.at(t) - _vertex[1];
-    float projection1 = vectorOnPlane.dot(E1.normalize());
-    float projection2 = vectorOnPlane.dot(E2.normalize());
-    if (projection1 < 0.0f || projection1 > E1.length() ||
-        projection2 < 0.0f || projection2 > E2.length()) {
+    Vector3F vectorOnPlane = ray.at(t) - _v2;
+    float projection1 = vectorOnPlane.dot(_e1.normalize());
+    float projection2 = vectorOnPlane.dot(_e2.normalize());
+    if (projection1 < 0.0f || projection1 > _e1.length() ||
+        projection2 < 0.0f || projection2 > _e2.length()) {
         return false;
     }
 
@@ -71,13 +69,11 @@ bool Rectangle::isOccluded(Ray &ray) {
 }
 
 void Rectangle::sampleSurface(SurfaceInfo inSurface, SurfaceInfo &outSurface) {
-    Vector3F E1 = _vertex[0] - _vertex[1];
-    Vector3F E2 = _vertex[2] - _vertex[1];
-    if (E1.length() < E2.length()) {
-        E1.swap(E2);
+    if (_e1.length() < _e2.length()) {
+        _e1.swap(_e2);
     }
-    float longWidth = E1.length();
-    float shortWidth = E2.length();
+    float longWidth = _e1.length();
+    float shortWidth = _e2.length();
 
     // TODO
     // improve sample point on rectangle
@@ -94,22 +90,25 @@ void Rectangle::sampleSurface(SurfaceInfo inSurface, SurfaceInfo &outSurface) {
         t = disT(gen);
     } while (t > shortWidth / longWidth);
 
-    Vector3F point = _vertex[1] + s * E1 + t * E1.length() * E2.normalize();
+    Vector3F point = _v2 + s * _e1 + t * _e1.length() * _e2.normalize();
     Vector3F direction = point - inSurface.point();
-    if (direction.dot(E1.cross(E2)) > 0.0f) {
-        E1.swap(E2);
+    if (direction.dot(_e1.cross(_e2)) > 0.0f) {
+        _e1.swap(_e2);
     }
-    Vector3F normal = E1.cross(E2).normalize();
+    Vector3F normal = _e1.cross(_e2).normalize();
 
     outSurface.setPoint(point);
     outSurface.setNormal(normal);
 }
 
-float Rectangle::area() {
-    Vector3F E1 = _vertex[0] - _vertex[1];
-    Vector3F E2 = _vertex[2] - _vertex[1];
+float Rectangle::samplePdf() {
+    assert(area() > 0.0f);
 
-    return E1.length() * E2.length();
+    return 1.0f / area();
+}
+
+float Rectangle::area() {
+    return _e1.length() * _e2.length();
 }
 
 } // namespace cadise

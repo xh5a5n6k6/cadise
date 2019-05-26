@@ -92,6 +92,10 @@ Vector3F Matrix4::transformVector(Vector3F v) {
                     _n[2][0] * v.x() + _n[2][1] * v.y() + _n[2][2] * v.z());
 }
 
+float Matrix4::n(int i, int j) {
+    return _n[i][j];
+}
+
 Matrix4 Matrix4::identity() {
     return Matrix4(1.0f, 0.0f, 0.0f, 0.0f,
                    0.0f, 1.0f, 0.0f, 0.0f,
@@ -126,22 +130,21 @@ Matrix4 Matrix4::lookAt(Vector3F pos, Vector3F tar, Vector3F up) {
 }
 
 void Matrix4::_swapRows(int r1, int r2) {
-    for (int col = 0; col < 4; col++)
+    for (int col = 0; col < 4; col++) {
         std::swap(_n[r1][col], _n[r2][col]);
+    }
 }
 
 void Matrix4::_divideRow(int r, float s) {
-    for (int col = 0; col < 4; col++)
+    for (int col = 0; col < 4; col++) {
         _n[r][col] /= s;
+    }
 }
 
 void Matrix4::_substractRow(int r1, int r2, float s) {
-    for (int col = 0; col < 4; col++)
+    for (int col = 0; col < 4; col++) {
         _n[r1][col] -= _n[r2][col] * s;
-}
-
-float Matrix4::n(int i, int j) {
-    return _n[i][j];
+    }
 }
 
 } // namespace cadise

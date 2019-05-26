@@ -14,14 +14,14 @@ Vector3F AreaLight::evaluateSampleRadiance(Vector3F &lightDirection, SurfaceInfo
     Vector3F offsetOrigin = surfaceInfo.point() + constant::RAY_EPSILON * surfaceInfo.normal();
     SurfaceInfo sampleSurface;
     _shape->sampleSurface(surfaceInfo, sampleSurface);
+
     Vector3F direction = sampleSurface.point() - offsetOrigin;
     t = direction.length();
     lightDirection = direction.normalize();
-    pdf = 1.0f;
-    // TODO
-    // correct pdf value
-    pdf = 1.0f / _shape->area();
-    pdf = pdf * direction.lengthSquared() / sampleSurface.normal().dot(-direction.normalize());
+
+    // Change delta A to delta w
+    pdf = _shape->samplePdf();
+    pdf *= direction.lengthSquared() / sampleSurface.normal().dot(-direction.normalize());
 
     return _albedo;
 }

@@ -22,8 +22,11 @@ public:
     void setMaxT(float maxT);
 
 private:
-    Vector3F _origin, _direction;
-    float _minT, _maxT;
+    Vector3F _origin;
+    Vector3F _direction;
+
+    float _minT;
+    float _maxT;
     int _depth;
     float _time;
 };

@@ -9,7 +9,7 @@ namespace cadise {
 Scene::Scene(std::shared_ptr<Accelerator> accelerator,
              std::vector<std::shared_ptr<Light> > lights,
              std::shared_ptr<Camera> camera) :
-    _accelerator(accelerator), _lights(lights), _camera(camera) {
+    _accelerator(std::move(accelerator)), _lights(std::move(lights)), _camera(std::move(camera)) {
 }
 
 bool Scene::isIntersecting(Ray &ray, Intersection &intersection) {

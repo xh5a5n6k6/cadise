@@ -3,13 +3,14 @@
 #include "core/shape/shape.h"
 
 #include "math/matrix.h"
-#include "math/vector.h"
 
 namespace cadise {
 
 class Sphere : public Shape {
 public:
     Sphere(Vector3F center, float radius);
+
+    AABB3F bound() override;
 
     bool isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) override;
     bool isOccluded(Ray &ray) override;

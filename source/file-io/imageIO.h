@@ -1,10 +1,10 @@
 #pragma once
 
-#include "file-io/path.h"
-
 #include "math/type.h"
 
 namespace cadise {
+
+class Path;
 
 namespace imageIO {
 

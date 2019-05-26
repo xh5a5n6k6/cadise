@@ -3,7 +3,7 @@
 namespace cadise {
 
 BruteForceAccelerator::BruteForceAccelerator(std::vector<std::shared_ptr<Intersector> > intersectors) :
-    _intersectors(intersectors) {
+    _intersectors(std::move(intersectors)) {
 }
 
 bool BruteForceAccelerator::isIntersecting(Ray &ray, Intersection &intersection) {

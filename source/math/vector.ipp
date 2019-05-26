@@ -37,10 +37,32 @@ inline Vector<T, Size> Vector<T, Size>::operator-() {
 }
 
 template<typename T, uint64 Size>
+template<typename U>
+inline Vector<T, Size> Vector<T, Size>::operator+(const U s) {
+    Vector<T, Size> result;
+    for (uint64 i = 0; i < Size; i++) {
+        result._v.at(i) = _v.at(i) + static_cast<T>(s);
+    }
+
+    return result;
+}
+
+template<typename T, uint64 Size>
 inline Vector<T, Size> Vector<T, Size>::operator+(const Vector<T, Size> &v) {
     Vector<T, Size> result;
     for (uint64 i = 0; i < Size; i++) {
         result._v.at(i) = _v.at(i) + v._v.at(i);
+    }
+
+    return result;
+}
+
+template<typename T, uint64 Size>
+template<typename U>
+inline Vector<T, Size> Vector<T, Size>::operator-(const U s) {
+    Vector<T, Size> result;
+    for (uint64 i = 0; i < Size; i++) {
+        result._v.at(i) = _v.at(i) - static_cast<T>(s);
     }
 
     return result;
@@ -206,6 +228,18 @@ inline Vector<T, Size> Vector<T, Size>::normalize() {
 }
 
 template<typename T, uint64 Size>
+inline Vector<T, Size> Vector<T, Size>::reciprocal() {
+    Vector<T, Size> result;
+    for (uint64 i = 0; i < Size; i++) {
+        assert(_v.at(i) != static_cast<T>(0));
+
+        result._v.at(i) = static_cast<T>(1) / _v.at(i);
+    }
+
+    return result;
+}
+
+template<typename T, uint64 Size>
 inline Vector<T, Size> Vector<T, Size>::clamp(T min, T max) {
     Vector<T, Size> result;
     for (uint64 i = 0; i < Size; i++) {
@@ -269,7 +303,24 @@ inline T Vector<T, Size>::z() {
     return _v.at(2);
 }
 
-using Vector2I = Vector<int, 2>;
-using Vector3F = Vector<float, 3>;
+template<typename T, uint64 Size>
+inline Vector<T, Size> Vector<T, Size>::min(Vector<T, Size> v1, Vector<T, Size> v2) {
+    Vector<T, Size> result;
+    for (uint64 i = 0; i < Size; i++) {
+        result._v.at(i) = std::min(v1._v.at(i), v2._v.at(i));
+    }
+
+    return result;
+}
+
+template<typename T, uint64 Size>
+inline Vector<T, Size> Vector<T, Size>::max(Vector<T, Size> v1, Vector<T, Size> v2) {
+    Vector<T, Size> result;
+    for (uint64 i = 0; i < Size; i++) {
+        result._v.at(i) = std::max(v1._v.at(i), v2._v.at(i));
+    }
+
+    return result;
+}
 
 } // namespace cadise

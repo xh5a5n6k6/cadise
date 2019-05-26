@@ -11,6 +11,9 @@
 
 #include "math/constant.h"
 
+#include <chrono>
+#include <iostream>
+
 namespace cadise {
 
 WhittedRenderer::WhittedRenderer(int maxDepth, int sampleNumber) :
@@ -18,6 +21,8 @@ WhittedRenderer::WhittedRenderer(int maxDepth, int sampleNumber) :
 }
 
 void WhittedRenderer::render(Scene &scene) {
+    std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+
     int rx = scene.camera()->film().resolution().x();
     int ry = scene.camera()->film().resolution().y();
 
@@ -40,6 +45,11 @@ void WhittedRenderer::render(Scene &scene) {
     }
 
     scene.camera()->film().save();
+
+    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    std::cout << "Rendering time : "
+              << std::chrono::duration_cast<std::chrono::seconds>(end - start).count() 
+              << std::endl;
 }
 
 RGBColor WhittedRenderer::_luminance(Scene &scene, Ray &ray, Intersection &intersection) {

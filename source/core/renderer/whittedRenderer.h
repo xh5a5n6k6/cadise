@@ -8,6 +8,7 @@ class Intersection;
 class Ray;
 class RGBColor;
 
+// WhittedRenderer is for Whitted-style ray tracing renderer
 class WhittedRenderer : public Renderer {
 public:
     WhittedRenderer(int maxDepth, int sampleNumber);
