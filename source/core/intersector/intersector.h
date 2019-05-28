@@ -10,7 +10,7 @@ class RGBColor;
 class SurfaceInfo;
 
 // Intersector represents an object that is intersectable, 
-// and it includes primitive and emiiter(area light).
+// and it includes primitive, emiiter(area light), and accelerator.
 class Intersector {
 public:
     virtual bool isIntersecting(Ray &ray, Intersection &intersection) = 0;

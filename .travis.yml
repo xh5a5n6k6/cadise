@@ -1,0 +1,27 @@
+sudo: required
+language: cpp
+
+compiler: gcc
+os: linux
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+
+      - george-edison55-precise-backports
+    package:
+      - gcc-7
+      - g++-7
+
+      - cmake-data
+      - cmake
+
+notification:
+  email: false
+
+script:
+  - mkdir ./build
+  - cd ./build
+  - cmake -DCMAKE_GENERATOR_PLATFORM=x64 ../
+  - make
