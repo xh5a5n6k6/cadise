@@ -4,23 +4,29 @@ language: cpp
 compiler: gcc
 os: linux
 
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
+matrix:
+  include:
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
 
-      - george-edison55-precise-backports
-    package:
-      - gcc-7
-      - g++-7
+            - george-edison55-precise-backports
+          packages:
+            - gcc-7
+            - g++-7
 
-      - cmake-data
-      - cmake
+            - cmake-data
+            - cmake
+      env:
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
 
 notification:
   email: false
 
 before_script:
+  - eval "${MATRIX_EVAL}"
   - export CC=gcc-7
   - export CXX=g++-7
 
