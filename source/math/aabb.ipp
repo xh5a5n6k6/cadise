@@ -7,19 +7,21 @@
 namespace cadise {
 
 template<typename T, uint64 Size>
-inline AABB<T, Size>::AABB<T, Size>() :
+inline cadise::AABB<T, Size>::AABB() :
     _minVertex(std::numeric_limits<T>::max()),
-    _maxVertex(std::numeric_limits<T>::min()) { 
+    _maxVertex(std::numeric_limits<T>::min()) {
 }
 
 template<typename T, uint64 Size>
-inline AABB<T, Size>::AABB<T, Size>(Vector<T, Size> vertex) :
-    _minVertex(vertex), _maxVertex(vertex) {
+inline cadise::AABB<T, Size>::AABB(Vector<T, Size> vertex) :
+    _minVertex(vertex),
+    _maxVertex(vertex) {
 }
 
 template<typename T, uint64 Size>
-inline AABB<T, Size>::AABB<T, Size>(Vector<T, Size> minVertex, Vector<T, Size> maxVertex) :
-    _minVertex(minVertex), _maxVertex(maxVertex) {
+inline cadise::AABB<T, Size>::AABB(Vector<T, Size> minVertex, Vector<T, Size> maxVertex) :
+    _minVertex(minVertex),
+    _maxVertex(maxVertex) { 
 }
 
 template<typename T, uint64 Size>

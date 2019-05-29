@@ -35,8 +35,8 @@ bool Sphere::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
         return false;
     }
 
-    float t0 = t - std::sqrtf(s2);
-    float t1 = t + std::sqrtf(s2);
+    float t0 = t - std::sqrt(s2);
+    float t1 = t + std::sqrt(s2);
     // Fast comparison without if-else branch
     t = isOutside * t0 + (1 - isOutside) * t1;
 
@@ -72,8 +72,8 @@ bool Sphere::isOccluded(Ray &ray) {
         return false;
     }
 
-    float t0 = t - std::sqrtf(s2);
-    float t1 = t + std::sqrtf(s2);
+    float t0 = t - std::sqrt(s2);
+    float t1 = t + std::sqrt(s2);
     // Fast comparison without if-else branch
     t = isOutside * t0 + (1 - isOutside) * t1;
 

@@ -4,6 +4,8 @@
 
 #include "third-party/tp-stb.h"
 
+#include <cstdio>
+
 namespace cadise {
 
 namespace imageIO {
@@ -16,7 +18,7 @@ static bool savePNG(Path path, int width, int height, uint8* data) {
 
 static bool savePPM(Path path, int width, int height, uint8* data) {
     FILE *output;
-    fopen_s(&output, path.path().c_str(), "wb");
+    output = fopen(path.path().c_str(), "wb");
     fprintf(output, "P6 %d %d 255\n", width, height);
     fwrite(data, 1, 3 * width * height, output);
     fclose(output);

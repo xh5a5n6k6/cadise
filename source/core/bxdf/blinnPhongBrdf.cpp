@@ -19,7 +19,7 @@ Vector3F BlinnPhongBRDF::evaluate(Vector3F inDirection, Vector3F outDirection, S
     // h : half vector
     Vector3F h = (inDirection + outDirection).normalize();
     float cosTheta = std::max(h.dot(surfaceInfo.normal()), 0.0f);
-    float specular = std::powf(cosTheta, _exponent) * brdfFactor;
+    float specular = std::pow(cosTheta, _exponent) * brdfFactor;
 	
     return Vector3F(specular, specular, specular);
 }

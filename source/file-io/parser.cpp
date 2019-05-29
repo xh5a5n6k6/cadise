@@ -3,6 +3,9 @@
 #include "core/renderer/renderer.h"
 #include "core/scene.h"
 
+#include <cstring>
+#include <string>
+
 namespace cadise {
 
 Parser::Parser() {
@@ -13,8 +16,7 @@ void Parser::parseFile(std::string filename) {
     _renderOption = std::make_unique<RenderOption>();
 
     FILE *f;
-    errno_t err;
-    if ((err = fopen_s(&f, filename.c_str(), "r")) != 0) {
+    if ((f = fopen(filename.c_str(), "r")) == nullptr) {
         fprintf(stderr, "File can't open !\n");
         exit(0);
     }
@@ -26,12 +28,11 @@ void Parser::parseFile(std::string filename) {
 
         std::vector<std::string> lineVector;
         char *token = nullptr;
-        char *tokenTmp = nullptr;
-        token = strtok_s(line, " ", &tokenTmp);
+        token = strtok(line, " ");
 
         while (token != nullptr) {
             lineVector.push_back(token);
-            token = strtok_s(nullptr, " ", &tokenTmp);
+            token = strtok(nullptr, " ");
         }
 
         _renderOption->setupData(lineVector);

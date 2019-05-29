@@ -2,6 +2,8 @@
 
 #include "file-io/imageIO.h"
 
+#include <memory>
+
 namespace cadise {
 
 Film::Film(Path filename, int rx, int ry) :
