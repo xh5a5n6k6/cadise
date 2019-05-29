@@ -2,7 +2,9 @@
 
 #include "math/vector.h"
 
+#include <algorithm>
 #include <cassert>
+#include <cmath>
 
 namespace cadise {
 
