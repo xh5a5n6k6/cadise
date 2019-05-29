@@ -1,8 +1,9 @@
 cmake_minimum_required(VERSION 3.1)
 project(Cadise)
 
-# In command line
-# cmake -DCMAKE_GENERATOR_PLATFORM=x64 ..
+# In Windows command line, ensure you are in the ./build folder
+# cmake -DCMAKE_GENERATOR_PLATFORM=x64 ../
+
 set(CMAKE_CONFIGURATION_TYPES "Release")
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
