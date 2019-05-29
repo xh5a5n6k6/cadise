@@ -1,9 +1,12 @@
 # Cadise Renderer
+
 <img src="./gallery/cornell-box/20190524.png"><br />
 <i>Cornell Box (mirror sphere) Rendered with Cadise</i>
 
 ## Introduction
 Cadise is a developing ray tracing renderer written in C++17. It now only support some basic features as the cover image shows, and it still has a long way to go.
+
+[![Build Status](https://travis-ci.com/xh5a5n6k6/cadise.svg?branch=master)](https://travis-ci.com/xh5a5n6k6/cadise)
 
 ## License
 Cadise is under the <a href="https://opensource.org/licenses/MIT">MIT</a> license. 
