@@ -6,13 +6,13 @@ namespace cadise {
 
 class BlinnPhongBRDF : public BxDF {
 public:
-    BlinnPhongBRDF(float exponent = 32.0f);
+    BlinnPhongBRDF(real exponent = 32.0_r);
 
-    Vector3F evaluate(Vector3F inDirection, Vector3F outDirection, SurfaceInfo &surfaceInfo) override;
-    Vector3F evaluateSample(Vector3F inDirection, Vector3F &outDirection, SurfaceInfo &surfaceInfo) override;
+    Vector3R evaluate(Vector3R inDirection, Vector3R outDirection, SurfaceInfo &surfaceInfo) override;
+    Vector3R evaluateSample(Vector3R inDirection, Vector3R &outDirection, SurfaceInfo &surfaceInfo) override;
 
 private:
-    float _exponent;
+    real _exponent;
 };
 
 } // namespace cadise

@@ -8,17 +8,17 @@ namespace cadise {
 
 class Sphere : public Shape {
 public:
-    Sphere(Vector3F center, float radius);
+    Sphere(Vector3R center, real radius);
 
-    AABB3F bound() override;
+    AABB3R bound() override;
 
     bool isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) override;
     bool isOccluded(Ray &ray) override;
 
 private:
     Matrix4 _worldToLocal;
-    Vector3F _center;
-    float _radius;
+    Vector3R _center;
+    real _radius;
 };
 
 } // namespace cadise

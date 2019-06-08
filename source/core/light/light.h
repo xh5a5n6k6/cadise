@@ -8,9 +8,9 @@ class SurfaceInfo;
 
 class Light {
 public:
-    virtual Vector3F evaluateSampleRadiance(Vector3F &lightDirection, SurfaceInfo &surfaceInfo, float &t, float &pdf) = 0;
-    virtual Vector3F position() = 0;
-    virtual Vector3F color() = 0;
+    virtual Vector3R evaluateSampleRadiance(Vector3R &lightDirection, SurfaceInfo &surfaceInfo, real &t, real &pdf) = 0;
+    virtual Vector3R position() = 0;
+    virtual Vector3R color() = 0;
 };
 
 } // namespace cadise

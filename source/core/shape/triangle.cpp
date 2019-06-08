@@ -10,36 +10,36 @@
 
 namespace cadise {
 
-Triangle::Triangle(Vector3F v1, Vector3F v2, Vector3F v3) :
+Triangle::Triangle(Vector3R v1, Vector3R v2, Vector3R v3) :
     _v1(v1), _v2(v2), _v3(v3) {
     _e1 = _v2 - _v1;
     _e2 = _v3 - _v1;
 }
 
-AABB3F Triangle::bound() {
-    return AABB3F(_v1).unionWith(_v2).unionWith(_v3);
+AABB3R Triangle::bound() {
+    return AABB3R(_v1).unionWith(_v2).unionWith(_v3);
 }
 
 bool Triangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
-    Vector3F D = ray.direction();
-    if (D.dot(_e1.cross(_e2)) > 0.0f) {
+    Vector3R D = ray.direction();
+    if (D.dot(_e1.cross(_e2)) > 0.0_r) {
         _e1.swap(_e2);
     }
-    Vector3F T = ray.origin() - _v1;
-    Vector3F Q = T.cross(_e1);
-    Vector3F P = D.cross(_e2);
+    Vector3R T = ray.origin() - _v1;
+    Vector3R Q = T.cross(_e1);
+    Vector3R P = D.cross(_e2);
 
-    float denominator = P.dot(_e1);
-    if (denominator - 0.0f < std::numeric_limits<float>::epsilon()) {
+    real denominator = P.dot(_e1);
+    if (denominator - 0.0_r < std::numeric_limits<real>::epsilon()) {
         return false;
     }
 
-    float invDenominator = 1.0f / denominator;
-    float t = Q.dot(_e2) * invDenominator;
-    float u = P.dot(T) * invDenominator;
-    float v = Q.dot(D) * invDenominator;
+    real invDenominator = 1.0_r / denominator;
+    real t = Q.dot(_e2) * invDenominator;
+    real u = P.dot(T) * invDenominator;
+    real v = Q.dot(D) * invDenominator;
 
-    if (u < 0.0f || v < 0.0f || u + v > 1.0f) {
+    if (u < 0.0_r || v < 0.0_r || u + v > 1.0_r) {
         return false;
     }
 
@@ -50,8 +50,8 @@ bool Triangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
     ray.setMaxT(t);
 
     // Calculate surface details
-    Vector3F point = ray.at(t);
-    Vector3F normal = _e1.cross(_e2).normalize();
+    Vector3R point = ray.at(t);
+    Vector3R normal = _e1.cross(_e2).normalize();
     surfaceInfo.setPoint(point);
     surfaceInfo.setNormal(normal);
 
@@ -59,25 +59,25 @@ bool Triangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
 }
 
 bool Triangle::isOccluded(Ray &ray) {
-    Vector3F D = ray.direction();
-    if (D.dot(_e1.cross(_e2)) > 0.0f) {
+    Vector3R D = ray.direction();
+    if (D.dot(_e1.cross(_e2)) > 0.0_r) {
         _e1.swap(_e2);
     }
-    Vector3F T = ray.origin() - _v1;
-    Vector3F Q = T.cross(_e1);
-    Vector3F P = D.cross(_e2);
+    Vector3R T = ray.origin() - _v1;
+    Vector3R Q = T.cross(_e1);
+    Vector3R P = D.cross(_e2);
 
-    float denominator = P.dot(_e1);
-    if (denominator - 0.0f < std::numeric_limits<float>::epsilon()) {
+    real denominator = P.dot(_e1);
+    if (denominator - 0.0_r < std::numeric_limits<real>::epsilon()) {
         return false;
     }
 
-    float invDenominator = 1.0f / denominator;
-    float t = Q.dot(_e2) * invDenominator;
-    float u = P.dot(T) * invDenominator;
-    float v = Q.dot(D) * invDenominator;
+    real invDenominator = 1.0_r / denominator;
+    real t = Q.dot(_e2) * invDenominator;
+    real u = P.dot(T) * invDenominator;
+    real v = Q.dot(D) * invDenominator;
 
-    if (u < 0.0f || v < 0.0f || u + v > 1.0f) {
+    if (u < 0.0_r || v < 0.0_r || u + v > 1.0_r) {
         return false;
     }
 
@@ -95,23 +95,23 @@ void Triangle::sampleSurface(SurfaceInfo inSurface, SurfaceInfo &outSurface) {
     // improve sample point on triangle
     std::random_device rd;
     std::default_random_engine gen = std::default_random_engine(rd());
-    std::uniform_real_distribution<float> disS(0.0f, 1.0f);
-    std::uniform_real_distribution<float> disT(0.0f, 1.0f);
-    float s;
-    float t;
+    std::uniform_real_distribution<real> disS(0.0_r, 1.0_r);
+    std::uniform_real_distribution<real> disT(0.0_r, 1.0_r);
+    real s;
+    real t;
 
     // Use rejection method
     do {
         s = disS(gen);
         t = disT(gen);
-    } while (s + t >= 1.0f);
+    } while (s + t >= 1.0_r);
 
-    Vector3F point = _v1 + s * _e1 + t * _e2;
-    Vector3F direction = point - inSurface.point();
-    if (direction.dot(_e1.cross(_e2)) > 0.0f) {
+    Vector3R point = _v1 + s * _e1 + t * _e2;
+    Vector3R direction = point - inSurface.point();
+    if (direction.dot(_e1.cross(_e2)) > 0.0_r) {
         _e1.swap(_e2);
     }
-    Vector3F normal = _e1.cross(_e2).normalize();
+    Vector3R normal = _e1.cross(_e2).normalize();
 
     outSurface.setPoint(point);
     outSurface.setNormal(normal);

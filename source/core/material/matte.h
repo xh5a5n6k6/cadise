@@ -6,7 +6,7 @@ namespace cadise {
 
 class Matte : public Material {
 public:
-    Matte(Vector3F albedo);
+    Matte(Vector3R albedo);
 };
 
 } // namespace cadise

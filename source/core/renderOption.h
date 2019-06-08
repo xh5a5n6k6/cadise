@@ -24,15 +24,17 @@ public:
         std::shared_ptr<Shape> shape;
 
         Matrix4 cameraToWorld;
-        float fov;
-        int rx, ry;
+        real fov;
+        int32 rx;
+        int32 ry;
         std::string filename = "cadise.png";
         std::shared_ptr<Camera> camera;
 
         std::vector<std::shared_ptr<Light> > lights;
         std::vector<std::shared_ptr<Intersector> > intersectors;
 
-        int maxDepth, sampleNumber;
+        int32 maxDepth;
+        int32 sampleNumber;
     };
 
     RenderOption();

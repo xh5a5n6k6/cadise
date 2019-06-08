@@ -8,7 +8,7 @@ class Path;
 
 namespace imageIO {
 
-void save(Path path, int width, int height, uint8* data);
+void save(Path path, int32 width, int32 height, uint8* data);
 
 } // namespace imageIO
 

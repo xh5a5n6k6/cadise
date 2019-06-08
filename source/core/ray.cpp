@@ -5,43 +5,39 @@ namespace cadise {
 Ray::Ray() {
 }
 
-Ray::Ray(Vector3F origin, Vector3F direction, float minT, float maxT, int depth) : 
+Ray::Ray(Vector3R origin, Vector3R direction, real minT, real maxT, int32 depth) : 
     _origin(origin), _direction(direction.normalize()), _minT(minT), _maxT(maxT), _depth(depth) {
 }
 
-Vector3F Ray::at(float t) {
+Vector3R Ray::at(real t) {
     return _origin + _direction * t;
 }
 
-Vector3F Ray::origin() {
+Vector3R Ray::origin() {
     return _origin;
 }
 
-Vector3F Ray::direction() {
+Vector3R Ray::direction() {
     return _direction;
 }
 
-float Ray::minT() {
+real Ray::minT() {
     return _minT;
 }
 
-float Ray::maxT() {
+real Ray::maxT() {
     return _maxT;
 }
 
-int Ray::depth() {
+int32 Ray::depth() {
     return _depth;
 }
 
-float Ray::time() {
-    return _time;
-}
-
-void Ray::setMinT(float minT) {
+void Ray::setMinT(real minT) {
     _minT = minT;
 }
 
-void Ray::setMaxT(float maxT) {
+void Ray::setMaxT(real maxT) {
     _maxT = maxT;
 }
 

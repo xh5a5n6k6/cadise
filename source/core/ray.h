@@ -7,28 +7,26 @@ namespace cadise {
 class Ray {
 public:
     Ray();
-    Ray(Vector3F origin, Vector3F direction, float minT, float maxT, int depth = 0);
+    Ray(Vector3R origin, Vector3R direction, real minT, real maxT, int32 depth = 0);
 
-    Vector3F at(float t);
+    Vector3R at(real t);
 
-    Vector3F origin();
-    Vector3F direction();
-    float minT();
-    float maxT();
-    int depth();
-    float time();
+    Vector3R origin();
+    Vector3R direction();
+    real minT();
+    real maxT();
+    int32 depth();
 
-    void setMinT(float minT);
-    void setMaxT(float maxT);
+    void setMinT(real minT);
+    void setMaxT(real maxT);
 
 private:
-    Vector3F _origin;
-    Vector3F _direction;
+    Vector3R _origin;
+    Vector3R _direction;
 
-    float _minT;
-    float _maxT;
-    int _depth;
-    float _time;
+    real _minT;
+    real _maxT;
+    int32 _depth;
 };
 
 } // namespace cadise

@@ -6,25 +6,25 @@ namespace cadise {
 
 class Rectangle : public Shape {
 public:
-    Rectangle(Vector3F v1, Vector3F v2, Vector3F v3);
+    Rectangle(Vector3R v1, Vector3R v2, Vector3R v3);
 
-    AABB3F bound() override;
+    AABB3R bound() override;
 
     bool isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) override;
     bool isOccluded(Ray &ray) override;
 
     void sampleSurface(SurfaceInfo inSurface, SurfaceInfo &outSurface) override;
-    float samplePdf() override;
+    real samplePdfA() override;
 
-    float area() override;
+    real area() override;
 
 private:
-    Vector3F _v1;
-    Vector3F _v2;
-    Vector3F _v3;
+    Vector3R _v1;
+    Vector3R _v2;
+    Vector3R _v3;
 
-    Vector3F _e1;
-    Vector3F _e2;
+    Vector3R _e1;
+    Vector3R _e2;
 };
 
 } // namespace cadise

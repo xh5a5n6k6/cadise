@@ -1,17 +1,19 @@
 #pragma once
 
+#include "math/type.h"
+
 namespace cadise {
 
 namespace constant {
 
-inline constexpr float RAY_EPSILON
-    = 0.01f;
+inline constexpr real RAY_EPSILON
+    = 0.01_r;
 
-inline constexpr float PI
-    = 3.1415926535897932f;
+inline constexpr real PI
+    = 3.1415926535897932_r;
 
-inline constexpr float INV_PI
-    = 0.3183098861837906f;
+inline constexpr real INV_PI
+    = 0.3183098861837906_r;
 
 } // namespace constant
 

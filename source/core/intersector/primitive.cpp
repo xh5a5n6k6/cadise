@@ -12,6 +12,10 @@ Primitive::Primitive(std::shared_ptr<Shape> shape, std::shared_ptr<Material> mat
     _self = std::make_shared<Primitive>(*this);
 }
 
+AABB3R Primitive::bound() {
+    return _shape->bound();
+}
+
 bool Primitive::isIntersecting(Ray &ray, Intersection &intersection) {
     SurfaceInfo surfaceInfo;
     bool result = _shape->isIntersecting(ray, surfaceInfo);
@@ -27,15 +31,15 @@ bool Primitive::isOccluded(Ray &ray) {
     return _shape->isOccluded(ray);
 }
 
-RGBColor Primitive::emittance(Vector3F direction) {
-    return RGBColor(0.0f, 0.0f, 0.0f);
+RGBColor Primitive::emittance(Vector3R direction) {
+    return RGBColor(0.0_r, 0.0_r, 0.0_r);
 }
 
-Vector3F Primitive::evaluateBSDF(Vector3F inDirection, Vector3F outDirection, SurfaceInfo &surfaceInfo) {
+Vector3R Primitive::evaluateBSDF(Vector3R inDirection, Vector3R outDirection, SurfaceInfo &surfaceInfo) {
     return _material->evaluateBSDF(inDirection, outDirection, surfaceInfo);
 }
 
-Vector3F Primitive::evaluateSampleBSDF(Vector3F inDirection, Vector3F &outDirection, SurfaceInfo &surfaceInfo) {
+Vector3R Primitive::evaluateSampleBSDF(Vector3R inDirection, Vector3R &outDirection, SurfaceInfo &surfaceInfo) {
     return _material->evaluateSampleBSDF(inDirection, outDirection, surfaceInfo);
 }
 

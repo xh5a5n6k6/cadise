@@ -16,29 +16,29 @@
 
 namespace cadise {
 
-WhittedRenderer::WhittedRenderer(int maxDepth, int sampleNumber) :
+WhittedRenderer::WhittedRenderer(int32 maxDepth, int32 sampleNumber) :
     _maxDepth(maxDepth), _sampleNumber(sampleNumber) {
 }
 
 void WhittedRenderer::render(Scene &scene) {
     std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 
-    int rx = scene.camera()->film().resolution().x();
-    int ry = scene.camera()->film().resolution().y();
+    int32 rx = scene.camera()->film().resolution().x();
+    int32 ry = scene.camera()->film().resolution().y();
 
     // for each pixel, calculate its color
-    for (int y = 0; y < ry; y++) {
-        for (int x = 0; x < rx; x++) { 
+    for (int32 y = 0; y < ry; y++) {
+        for (int32 x = 0; x < rx; x++) { 
             // for each sample calculate its color
-            for (int n = 0; n < _sampleNumber; n++) {
+            for (int32 n = 0; n < _sampleNumber; n++) {
                 Ray ray = scene.camera()->createRay(x, y);
 
                 Intersection intersection;
                 RGBColor sampleColor = _luminance(scene, ray, intersection);
-                sampleColor.rgb() *= 255.0f;
-                sampleColor.rgb() = sampleColor.rgb().clamp(0.0f, 255.0f);
+                sampleColor.rgb() *= 255.0_r;
+                sampleColor.rgb() = sampleColor.rgb().clamp(0.0_r, 255.0_r);
 
-                RGBColor color = sampleColor.rgb() / _sampleNumber;
+                RGBColor color = sampleColor.rgb() / static_cast<real>(_sampleNumber);
                 scene.camera()->film().addSample(x, y, color.rgb());
             }
         }
@@ -48,22 +48,22 @@ void WhittedRenderer::render(Scene &scene) {
 
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
     std::cout << "Rendering time : "
-              << std::chrono::duration_cast<std::chrono::seconds>(end - start).count() 
-              << std::endl;
+              << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() 
+              << " ms" << std::endl;
 }
 
 RGBColor WhittedRenderer::_luminance(Scene &scene, Ray &ray, Intersection &intersection) {
-    RGBColor color = RGBColor(0.0f, 0.0f, 0.0f);
+    RGBColor color = RGBColor(0.0_r, 0.0_r, 0.0_r);
     if (scene.isIntersecting(ray, intersection)) {
         // add radiance if hit area light
         color.rgb() += intersection.intersector()->emittance(-ray.direction()).rgb();
         
-        for (int i = 0; i < scene.lights().size(); i++) {
-            Vector3F hitPoint = intersection.surfaceInfo().point();
-            Vector3F lightDir;
-            float t;
-            float pdf;
-            Vector3F radiance = scene.lights().at(i)->evaluateSampleRadiance(lightDir, intersection.surfaceInfo(), t, pdf);
+        Vector3R hitPoint = intersection.surfaceInfo().point();
+        for (uint64 i = 0; i < scene.lights().size(); i++) {
+            Vector3R lightDir;
+            real t;
+            real pdf;
+            Vector3R radiance = scene.lights()[i]->evaluateSampleRadiance(lightDir, intersection.surfaceInfo(), t, pdf);
             
             // generate shadow ray to do occluded test
             Ray r = Ray(hitPoint + constant::RAY_EPSILON * intersection.surfaceInfo().normal(),
@@ -74,7 +74,7 @@ RGBColor WhittedRenderer::_luminance(Scene &scene, Ray &ray, Intersection &inter
                 continue;
             }
 
-            Vector3F reflectance = intersection.intersector()->evaluateBSDF(lightDir, -ray.direction(), intersection.surfaceInfo());
+            Vector3R reflectance = intersection.intersector()->evaluateBSDF(lightDir, -ray.direction(), intersection.surfaceInfo());
 
             if (!reflectance.isZero()) {
                 color.rgb() += reflectance * radiance * lightDir.absDot(intersection.surfaceInfo().normal()) / pdf;
@@ -92,14 +92,14 @@ RGBColor WhittedRenderer::_luminance(Scene &scene, Ray &ray, Intersection &inter
 RGBColor WhittedRenderer::_reflect(Scene &scene, Ray &ray, Intersection &intersection) {
     RGBColor color;
 
-    Vector3F sampleDir;
-    float pdf = 1.0f;
-    Vector3F reflectance = intersection.intersector()->evaluateSampleBSDF(-ray.direction(), sampleDir, intersection.surfaceInfo());
+    Vector3R sampleDir;
+    real pdf = 1.0_r;
+    Vector3R reflectance = intersection.intersector()->evaluateSampleBSDF(-ray.direction(), sampleDir, intersection.surfaceInfo());
 
     if (!reflectance.isZero()) {
         Ray r = Ray(intersection.surfaceInfo().point() + constant::RAY_EPSILON * intersection.surfaceInfo().normal(),
                     sampleDir,
-                    constant::RAY_EPSILON, std::numeric_limits<float>::max(),
+                    constant::RAY_EPSILON, std::numeric_limits<real>::max(),
                     ray.depth() + 1);
         Intersection intersect;
         color.rgb() = reflectance * _luminance(scene, r, intersect).rgb() * sampleDir.absDot(intersection.surfaceInfo().normal()) / pdf;

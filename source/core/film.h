@@ -8,9 +8,9 @@ namespace cadise {
 
 class Film {
 public:
-    Film(Path filename, int rx, int ry);
+    Film(Path filename, int32 rx, int32 ry);
 
-    void addSample(int px, int py, Vector3F value);
+    void addSample(int32 px, int32 py, Vector3R value);
     void save();
 
     Vector2I resolution();
@@ -18,7 +18,7 @@ public:
 private:
     Path _filename;
     Vector2I _resolution;
-    float* _pixelValue;
+    real* _pixelValue;
 };
 
 } // namespace cadise

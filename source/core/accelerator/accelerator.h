@@ -6,12 +6,15 @@ namespace cadise {
 
 class Accelerator : public Intersector {
 public:
+    virtual AABB3R bound() override;
+
     virtual bool isIntersecting(Ray &ray, Intersection &intersection) override = 0;
     virtual bool isOccluded(Ray &ray) override = 0;
-    virtual RGBColor emittance(Vector3F direction) override;
 
-    virtual Vector3F evaluateBSDF(Vector3F inDirection, Vector3F outDirection, SurfaceInfo &surfaceInfo) override;
-    virtual Vector3F evaluateSampleBSDF(Vector3F inDirection, Vector3F &outDirection, SurfaceInfo &surfaceInfo) override;
+    virtual RGBColor emittance(Vector3R direction) override;
+
+    virtual Vector3R evaluateBSDF(Vector3R inDirection, Vector3R outDirection, SurfaceInfo &surfaceInfo) override;
+    virtual Vector3R evaluateSampleBSDF(Vector3R inDirection, Vector3R &outDirection, SurfaceInfo &surfaceInfo) override;
 };
 
 } // namespace cadise

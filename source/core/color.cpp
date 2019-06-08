@@ -3,30 +3,30 @@
 namespace cadise {
 
 RGBColor::RGBColor() :
-    RGBColor(0.0f, 0.0f, 0.0f) {
+    RGBColor(0.0_r, 0.0_r, 0.0_r) {
 }
 
-RGBColor::RGBColor(float r, float g, float b) : 
+RGBColor::RGBColor(real r, real g, real b) : 
     _rgb(r, g, b) {
 }
 
-RGBColor::RGBColor(Vector3F rgb) : 
+RGBColor::RGBColor(Vector3R rgb) : 
     _rgb(rgb) {
 }
 
-Vector3F& RGBColor::rgb() {
+Vector3R& RGBColor::rgb() {
     return _rgb;
 }
 
-float RGBColor::r() {
+real RGBColor::r() {
     return _rgb.x();
 }
 
-float RGBColor::g() {
+real RGBColor::g() {
     return _rgb.y();
 }
 
-float RGBColor::b() {
+real RGBColor::b() {
     return _rgb.z();
 }
 

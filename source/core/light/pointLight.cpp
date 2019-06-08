@@ -6,25 +6,25 @@
 
 namespace cadise {
 
-PointLight::PointLight(Vector3F position, Vector3F color) :
+PointLight::PointLight(Vector3R position, Vector3R color) :
     _position(position), _color(color) {
 }
 
-Vector3F PointLight::evaluateSampleRadiance(Vector3F &lightDirection, SurfaceInfo &surfaceInfo, float &t, float &pdf) {
-    Vector3F offsetOrigin = surfaceInfo.point() + constant::RAY_EPSILON * surfaceInfo.normal();
-    Vector3F direction = _position - offsetOrigin;
+Vector3R PointLight::evaluateSampleRadiance(Vector3R &lightDirection, SurfaceInfo &surfaceInfo, real &t, real &pdf) {
+    Vector3R offsetOrigin = surfaceInfo.point() + constant::RAY_EPSILON * surfaceInfo.normal();
+    Vector3R direction = _position - offsetOrigin;
     t = direction.length();
     lightDirection = direction.normalize();
-    pdf = 1.0f;
+    pdf = 1.0_r;
 
     return _color;
 }
 
-Vector3F PointLight::position() {
+Vector3R PointLight::position() {
     return _position;
 }
 
-Vector3F PointLight::color() {
+Vector3R PointLight::color() {
     return _color;
 }
 

@@ -6,16 +6,16 @@
 
 namespace cadise {
 
-LambertianBRDF::LambertianBRDF(Vector3F albedo) :
+LambertianBRDF::LambertianBRDF(Vector3R albedo) :
     _albedo(albedo) {
 }
 
-Vector3F LambertianBRDF::evaluate(Vector3F inDirection, Vector3F outDirection, SurfaceInfo &surfaceInfo) {
+Vector3R LambertianBRDF::evaluate(Vector3R inDirection, Vector3R outDirection, SurfaceInfo &surfaceInfo) {
     return _albedo * constant::INV_PI;
 }
 
-Vector3F LambertianBRDF::evaluateSample(Vector3F inDirection, Vector3F &outDirection, SurfaceInfo &surfaceInfo) {
-    return Vector3F(0.0f, 0.0f, 0.0f);
+Vector3R LambertianBRDF::evaluateSample(Vector3R inDirection, Vector3R &outDirection, SurfaceInfo &surfaceInfo) {
+    return Vector3R(0.0_r, 0.0_r, 0.0_r);
 }
 
 } // namespace cadise

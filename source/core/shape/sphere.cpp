@@ -9,35 +9,34 @@
 
 namespace cadise {
 
-Sphere::Sphere(Vector3F center, float radius) : 
+Sphere::Sphere(Vector3R center, real radius) : 
     _center(center), _radius(radius) {
     _worldToLocal = Matrix4::translate(-_center.x(), -_center.y(), -_center.z());
 }
 
-AABB3F Sphere::bound() {
-    return AABB3F(_center - _radius, _center + _radius);
+AABB3R Sphere::bound() {
+    return AABB3R(_center - _radius, _center + _radius);
 }
 
 bool Sphere::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
     Ray r = Ray(_worldToLocal.transformPoint(ray.origin()),
                 _worldToLocal.transformVector(ray.direction()),
-                constant::RAY_EPSILON, std::numeric_limits<float>::max());
+                constant::RAY_EPSILON, std::numeric_limits<real>::max());
 
-    int isOutside = r.origin().lengthSquared() > _radius * _radius;
-    float t = r.direction().dot(-r.origin());
-    if (isOutside && t < 0.0f) {
+    int32 isOutside = r.origin().lengthSquared() > _radius * _radius;
+    real t = r.direction().dot(-r.origin());
+    if (isOutside && t < 0.0_r) {
         return false;
     }
 
-    float d2 = r.origin().lengthSquared() - t * t;
-    float s2 = _radius * _radius - d2;
-    if (s2 < 0.0f) {
+    real d2 = r.origin().lengthSquared() - t * t;
+    real s2 = _radius * _radius - d2;
+    if (s2 < 0.0_r) {
         return false;
     }
 
-    float t0 = t - std::sqrt(s2);
-    float t1 = t + std::sqrt(s2);
-    // Fast comparison without if-else branch
+    real t0 = t - std::sqrt(s2);
+    real t1 = t + std::sqrt(s2);
     t = isOutside * t0 + (1 - isOutside) * t1;
 
     if (t < r.minT() || t > r.maxT()) {
@@ -47,8 +46,8 @@ bool Sphere::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
     ray.setMaxT(t);
 
     // Calculate surface details
-    Vector3F point = ray.at(t);
-    Vector3F normal = (point - _center).normalize();
+    Vector3R point = ray.at(t);
+    Vector3R normal = (point - _center).normalize();
     surfaceInfo.setPoint(point);
     surfaceInfo.setNormal(normal);
 
@@ -58,23 +57,22 @@ bool Sphere::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
 bool Sphere::isOccluded(Ray &ray) {
     Ray r = Ray(_worldToLocal.transformPoint(ray.origin()),
         _worldToLocal.transformVector(ray.direction()),
-        constant::RAY_EPSILON, std::numeric_limits<float>::max());
+        constant::RAY_EPSILON, std::numeric_limits<real>::max());
 
-    int isOutside = r.origin().lengthSquared() > _radius * _radius;
-    float t = r.direction().dot(-r.origin());
-    if (isOutside && t < 0.0f) {
+    int32 isOutside = r.origin().lengthSquared() > _radius * _radius;
+    real t = r.direction().dot(-r.origin());
+    if (isOutside && t < 0.0_r) {
         return false;
     }
 
-    float d2 = r.origin().lengthSquared() - t * t;
-    float s2 = _radius * _radius - d2;
-    if (s2 < 0.0f) {
+    real d2 = r.origin().lengthSquared() - t * t;
+    real s2 = _radius * _radius - d2;
+    if (s2 < 0.0_r) {
         return false;
     }
 
-    float t0 = t - std::sqrt(s2);
-    float t1 = t + std::sqrt(s2);
-    // Fast comparison without if-else branch
+    real t0 = t - std::sqrt(s2);
+    real t1 = t + std::sqrt(s2);
     t = isOutside * t0 + (1 - isOutside) * t1;
 
     if (t < r.minT() || t > r.maxT()) {

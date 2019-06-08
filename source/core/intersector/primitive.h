@@ -13,12 +13,15 @@ class Primitive : public Intersector {
 public:
     Primitive(std::shared_ptr<Shape> shape, std::shared_ptr<Material> material);
 	
+    AABB3R bound() override;
+
     bool isIntersecting(Ray &ray, Intersection &intersection) override;
     bool isOccluded(Ray &ray) override;
-    RGBColor emittance(Vector3F direction) override;
 
-    Vector3F evaluateBSDF(Vector3F inDirection, Vector3F outDirection, SurfaceInfo &surfaceInfo) override;
-    Vector3F evaluateSampleBSDF(Vector3F inDirection, Vector3F &outDirection, SurfaceInfo &surfaceInfo) override;
+    RGBColor emittance(Vector3R direction) override;
+
+    Vector3R evaluateBSDF(Vector3R inDirection, Vector3R outDirection, SurfaceInfo &surfaceInfo) override;
+    Vector3R evaluateSampleBSDF(Vector3R inDirection, Vector3R &outDirection, SurfaceInfo &surfaceInfo) override;
 
 private:
     std::shared_ptr<Shape> _shape;

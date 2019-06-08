@@ -11,6 +11,10 @@ Emitter::Emitter(AreaLight areaLight, std::shared_ptr<Material> material) :
     _self = std::make_shared<Emitter>(*this);
 }
 
+AABB3R Emitter::bound() {
+    return _areaLight.shape()->bound();
+}
+
 bool Emitter::isIntersecting(Ray &ray, Intersection &intersection) {
     SurfaceInfo surfaceInfo;
     bool result = _areaLight.shape()->isIntersecting(ray, surfaceInfo);
@@ -26,15 +30,15 @@ bool Emitter::isOccluded(Ray &ray) {
     return _areaLight.shape()->isOccluded(ray);
 }
 
-RGBColor Emitter::emittance(Vector3F direction) {
+RGBColor Emitter::emittance(Vector3R direction) {
     return _areaLight.color();
 }
 
-Vector3F Emitter::evaluateBSDF(Vector3F inDirection, Vector3F outDirection, SurfaceInfo &surfaceInfo) {
+Vector3R Emitter::evaluateBSDF(Vector3R inDirection, Vector3R outDirection, SurfaceInfo &surfaceInfo) {
     return _material->evaluateBSDF(inDirection, outDirection, surfaceInfo);
 }
 
-Vector3F Emitter::evaluateSampleBSDF(Vector3F inDirection, Vector3F &outDirection, SurfaceInfo &surfaceInfo) {
+Vector3R Emitter::evaluateSampleBSDF(Vector3R inDirection, Vector3R &outDirection, SurfaceInfo &surfaceInfo) {
     return _material->evaluateSampleBSDF(inDirection, outDirection, surfaceInfo);
 }
 

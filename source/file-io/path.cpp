@@ -11,7 +11,7 @@ bool Path::isExtendedWith(std::string extension) {
         return false;
     }
 
-    return _path.substr(_path.length() - 4).compare(extension) == 0;
+    return _path.substr(_path.length() - extension.length()).compare(extension) == 0;
 }
 
 std::string Path::path() {

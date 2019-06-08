@@ -6,13 +6,13 @@ namespace cadise {
 
 class Plastic : public Material {
 public:
-    Plastic(Vector3F albedo, float exponent, float diffuseRatio);
+    Plastic(Vector3R albedo, real exponent, real diffuseRatio);
 
-    Vector3F evaluateBSDF(Vector3F inDirection, Vector3F outDirection, SurfaceInfo &surfaceInfo) override;
-    Vector3F evaluateSampleBSDF(Vector3F inDirection, Vector3F &outDirection, SurfaceInfo &surfaceInfo) override;
+    Vector3R evaluateBSDF(Vector3R inDirection, Vector3R outDirection, SurfaceInfo &surfaceInfo) override;
+    Vector3R evaluateSampleBSDF(Vector3R inDirection, Vector3R &outDirection, SurfaceInfo &surfaceInfo) override;
 
 private:
-    float _diffuseRatio;
+    real _diffuseRatio;
 };
 
 } // namespace cadise

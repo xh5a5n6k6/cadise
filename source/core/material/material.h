@@ -12,8 +12,8 @@ class SurfaceInfo;
 
 class Material {
 public:
-    virtual Vector3F evaluateBSDF(Vector3F inDirection, Vector3F outDirection, SurfaceInfo &surfaceInfo);
-    virtual Vector3F evaluateSampleBSDF(Vector3F inDirection, Vector3F &outDirection, SurfaceInfo &surfaceInfo);
+    virtual Vector3R evaluateBSDF(Vector3R inDirection, Vector3R outDirection, SurfaceInfo &surfaceInfo);
+    virtual Vector3R evaluateSampleBSDF(Vector3R inDirection, Vector3R &outDirection, SurfaceInfo &surfaceInfo);
 
 protected:
     virtual void _addBxDF(std::shared_ptr<BxDF> bxdf);

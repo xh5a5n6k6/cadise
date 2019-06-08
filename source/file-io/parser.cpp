@@ -18,7 +18,7 @@ void Parser::parseFile(std::string filename) {
     FILE *f;
     if ((f = fopen(filename.c_str(), "r")) == nullptr) {
         fprintf(stderr, "File can't open !\n");
-        exit(0);
+        exit(-1);
     }
     char line[1024];
     while (fgets(line, 1024, f)) {
