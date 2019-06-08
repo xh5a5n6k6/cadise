@@ -18,7 +18,7 @@ public:
     AABB(Vector<T, Size> vertex);
     AABB(Vector<T, Size> minVertex, Vector<T, Size> maxVertex);
 
-    bool isIntersecting(const Vector3R origin, const Vector3R invDirection, real tmin, real tmax);
+    bool isIntersecting(const Vector<T, Size> origin, const Vector<T, Size> invDirection, real tmin, real tmax);
     Vector<T, Size> center();
 
     AABB unionWith(Vector<T, Size> vertex);

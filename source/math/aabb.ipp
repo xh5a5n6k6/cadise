@@ -3,6 +3,7 @@
 #include "math/aabb.h"
 
 #include <limits>
+#include <typeinfo>
 
 namespace cadise {
 
@@ -25,9 +26,11 @@ inline cadise::AABB<T, Size>::AABB(Vector<T, Size> minVertex, Vector<T, Size> ma
 }
 
 template<typename T, uint32 Size>
-inline bool AABB<T, Size>::isIntersecting(const Vector3R origin, const Vector3R invDirection, real tmin, real tmax) {
-    Vector3R tnear = (_minVertex - origin) * invDirection;
-    Vector3R tfar  = (_maxVertex - origin) * invDirection;
+inline bool AABB<T, Size>::isIntersecting(const Vector<T, Size> origin, const Vector<T, Size> invDirection, real tmin, real tmax) {
+    static_assert(Size == 3 && typeid(T) == typeid(real), "Not support isIntersecting with this kind of AABB");
+    
+    Vector<T, Size> tnear = (_minVertex - origin) * invDirection;
+    Vector<T, Size> tfar  = (_maxVertex - origin) * invDirection;
     
     // calculate x-slab interval
     if (invDirection.x() > 0.0_r) {
