@@ -11,17 +11,17 @@ class Shape;
 
 class Primitive : public Intersector {
 public:
-    Primitive(std::shared_ptr<Shape> shape, std::shared_ptr<Material> material);
+    Primitive(const std::shared_ptr<Shape> shape, const std::shared_ptr<Material> material);
 	
-    AABB3R bound() override;
+    AABB3R bound() const override;
 
-    bool isIntersecting(Ray &ray, Intersection &intersection) override;
-    bool isOccluded(Ray &ray) override;
+    bool isIntersecting(Ray &ray, Intersection &intersection) const override;
+    bool isOccluded(Ray &ray) const override;
 
-    RGBColor emittance(Vector3R direction) override;
+    RGBColor emittance(const Vector3R direction) const override;
 
-    Vector3R evaluateBSDF(Vector3R inDirection, Vector3R outDirection, SurfaceInfo &surfaceInfo) override;
-    Vector3R evaluateSampleBSDF(Vector3R inDirection, Vector3R &outDirection, SurfaceInfo &surfaceInfo) override;
+    Vector3R evaluateBSDF(const Vector3R inDirection, const Vector3R outDirection, const SurfaceInfo surfaceInfo) const override;
+    Vector3R evaluateSampleBSDF(const Vector3R inDirection, Vector3R &outDirection, const SurfaceInfo surfaceInfo) const override;
 
 private:
     std::shared_ptr<Shape> _shape;

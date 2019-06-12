@@ -13,15 +13,15 @@ class Ray;
 
 class Scene {
 public:
-    Scene(std::shared_ptr<Accelerator> accelerator,
-          std::vector<std::shared_ptr<Light> > lights, 
-          std::shared_ptr<Camera> camera);
+    Scene(const std::shared_ptr<Accelerator> accelerator,
+          const std::vector<std::shared_ptr<Light> > lights,
+          const std::shared_ptr<Camera> camera);
 
-    bool isIntersecting(Ray &ray, Intersection &intersection);
-    bool isOccluded(Ray &ray);
+    bool isIntersecting(Ray &ray, Intersection &intersection) const;
+    bool isOccluded(Ray &ray) const;
     
-    std::vector<std::shared_ptr<Light> > lights();
-    std::shared_ptr<Camera> camera();
+    std::vector<std::shared_ptr<Light> > lights() const;
+    std::shared_ptr<Camera> camera() const;
 
 private:
     std::shared_ptr<Accelerator> _accelerator;

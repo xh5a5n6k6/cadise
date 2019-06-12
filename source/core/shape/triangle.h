@@ -6,14 +6,14 @@ namespace cadise {
 
 class Triangle : public Shape {
 public:
-    Triangle(Vector3R v1, Vector3R v2, Vector3R v3);
+    Triangle(const Vector3R v1, const Vector3R v2, const Vector3R v3);
 
-    AABB3R bound() override;
+    AABB3R bound() const override;
 
-    bool isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) override;
-    bool isOccluded(Ray &ray) override;
+    bool isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) const override;
+    bool isOccluded(Ray &ray) const override;
 
-    void sampleSurface(SurfaceInfo inSurface, SurfaceInfo &outSurface) override;
+    void sampleSurface(const SurfaceInfo inSurface, SurfaceInfo &outSurface) const override;
 
 private:
     Vector3R _v1;

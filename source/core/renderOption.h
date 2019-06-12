@@ -39,7 +39,7 @@ public:
 
     RenderOption();
 
-    void setupData(std::vector<std::string> data);
+    void setupData(const std::vector<std::string> data);
 
     std::unique_ptr<Scene> createScene();
     std::unique_ptr<Renderer> createRenderer();

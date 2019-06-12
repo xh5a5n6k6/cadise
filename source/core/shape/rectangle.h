@@ -6,17 +6,17 @@ namespace cadise {
 
 class Rectangle : public Shape {
 public:
-    Rectangle(Vector3R v1, Vector3R v2, Vector3R v3);
+    Rectangle(const Vector3R v1, const Vector3R v2, const Vector3R v3);
 
-    AABB3R bound() override;
+    AABB3R bound() const override;
 
-    bool isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) override;
-    bool isOccluded(Ray &ray) override;
+    bool isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) const override;
+    bool isOccluded(Ray &ray) const override;
 
-    void sampleSurface(SurfaceInfo inSurface, SurfaceInfo &outSurface) override;
-    real samplePdfA() override;
+    void sampleSurface(const SurfaceInfo inSurface, SurfaceInfo &outSurface) const override;
+    real samplePdfA() const override;
 
-    real area() override;
+    real area() const override;
 
 private:
     Vector3R _v1;

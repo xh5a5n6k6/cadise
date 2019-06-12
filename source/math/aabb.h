@@ -15,14 +15,14 @@ template<typename T, uint32 Size>
 class AABB {
 public:
     AABB();
-    AABB(Vector<T, Size> vertex);
-    AABB(Vector<T, Size> minVertex, Vector<T, Size> maxVertex);
+    AABB(const Vector<T, Size> vertex);
+    AABB(const Vector<T, Size> minVertex, const Vector<T, Size> maxVertex);
 
-    bool isIntersecting(const Vector<T, Size> origin, const Vector<T, Size> invDirection, real tmin, real tmax);
-    Vector<T, Size> center();
+    bool isIntersectingAABB(const Vector<T, Size> origin, const Vector<T, Size> invDirection, real tmin, real tmax) const;
+    Vector<T, Size> center() const;
 
-    AABB unionWith(Vector<T, Size> vertex);
-    AABB unionWith(AABB aabb);
+    AABB unionWith(const Vector<T, Size> vertex);
+    AABB unionWith(const AABB aabb);
 
 private:
     Vector<T, Size> _minVertex;

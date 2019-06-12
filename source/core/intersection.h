@@ -12,11 +12,11 @@ class Intersection{
 public:
     Intersection();
 
-    void setSurfaceInfo(SurfaceInfo surfaceInfo);
-    void setIntersector(std::shared_ptr<Intersector> intersector);
+    void setSurfaceInfo(const SurfaceInfo surfaceInfo);
+    void setIntersector(const std::shared_ptr<Intersector> intersector);
 
-    SurfaceInfo& surfaceInfo();
-    std::shared_ptr<Intersector> intersector();
+    SurfaceInfo surfaceInfo() const;
+    std::shared_ptr<Intersector> intersector() const;
 
 private:
     SurfaceInfo _surfaceInfo;

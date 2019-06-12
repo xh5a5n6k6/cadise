@@ -8,21 +8,24 @@
 
 namespace cadise {
 
-Rectangle::Rectangle(Vector3R v1, Vector3R v2, Vector3R v3) :
+Rectangle::Rectangle(const Vector3R v1, const Vector3R v2, const Vector3R v3) :
     _v1(v1), _v2(v2), _v3(v3) {
     _e1 = _v1 - _v2;
     _e2 = _v3 - _v2;
 }
 
-AABB3R Rectangle::bound() {
+AABB3R Rectangle::bound() const {
     return AABB3R(_v1).unionWith(_v2).unionWith(_v3).unionWith(_v2 + _e1 + _e2);
 }
 
-bool Rectangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
+bool Rectangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) const {
+    Vector3R normal;
     if (ray.direction().dot(_e1.cross(_e2)) > 0.0_r) {
-        _e1.swap(_e2);
+        normal = _e2.cross(_e1).normalize();
     }
-    Vector3R normal = _e1.cross(_e2).normalize();
+    else {
+        normal = _e1.cross(_e2).normalize();
+    }
     real t = (normal.dot(_v2) - normal.dot(ray.origin())) / normal.dot(ray.direction());
     if (t < 0.0_r || t > ray.maxT()) {
         return false;
@@ -45,11 +48,14 @@ bool Rectangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
     return true;
 }
 
-bool Rectangle::isOccluded(Ray &ray) {
+bool Rectangle::isOccluded(Ray &ray) const {
+    Vector3R normal;
     if (ray.direction().dot(_e1.cross(_e2)) > 0.0_r) {
-        _e1.swap(_e2);
+        normal = _e2.cross(_e1).normalize();
     }
-    Vector3R normal = _e1.cross(_e2).normalize();
+    else {
+        normal = _e1.cross(_e2).normalize();
+    }
     real t = (normal.dot(_v2) - normal.dot(ray.origin())) / normal.dot(ray.direction());
     if (t < 0.0_r || t > ray.maxT()) {
         return false;
@@ -68,12 +74,17 @@ bool Rectangle::isOccluded(Ray &ray) {
     return true;
 }
 
-void Rectangle::sampleSurface(SurfaceInfo inSurface, SurfaceInfo &outSurface) {
+void Rectangle::sampleSurface(SurfaceInfo inSurface, SurfaceInfo &outSurface) const {
+    real longWidth;
+    real shortWidth;
     if (_e1.length() < _e2.length()) {
-        _e1.swap(_e2);
+        longWidth = _e2.length();
+        shortWidth = _e1.length();
     }
-    real longWidth = _e1.length();
-    real shortWidth = _e2.length();
+    else {
+        longWidth = _e1.length();
+        shortWidth = _e2.length();
+    }
 
     // TODO
     // improve sample point on rectangle
@@ -92,22 +103,25 @@ void Rectangle::sampleSurface(SurfaceInfo inSurface, SurfaceInfo &outSurface) {
 
     Vector3R point = _v2 + s * _e1 + t * _e1.length() * _e2.normalize();
     Vector3R direction = point - inSurface.point();
+    Vector3R normal;
     if (direction.dot(_e1.cross(_e2)) > 0.0_r) {
-        _e1.swap(_e2);
+        normal = _e2.cross(_e1).normalize();
     }
-    Vector3R normal = _e1.cross(_e2).normalize();
+    else {
+        normal = _e1.cross(_e2).normalize();
+    }
 
     outSurface.setPoint(point);
     outSurface.setNormal(normal);
 }
 
-real Rectangle::samplePdfA() {
+real Rectangle::samplePdfA() const {
     assert(area() > 0.0_r);
 
     return 1.0_r / area();
 }
 
-real Rectangle::area() {
+real Rectangle::area() const {
     return _e1.length() * _e2.length();
 }
 

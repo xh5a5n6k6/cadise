@@ -6,10 +6,10 @@ namespace cadise {
 
 class Plastic : public Material {
 public:
-    Plastic(Vector3R albedo, real exponent, real diffuseRatio);
+    Plastic(const Vector3R albedo, const real exponent, const real diffuseRatio);
 
-    Vector3R evaluateBSDF(Vector3R inDirection, Vector3R outDirection, SurfaceInfo &surfaceInfo) override;
-    Vector3R evaluateSampleBSDF(Vector3R inDirection, Vector3R &outDirection, SurfaceInfo &surfaceInfo) override;
+    Vector3R evaluateBSDF(const Vector3R inDirection, const Vector3R outDirection, const SurfaceInfo surfaceInfo) const override;
+    Vector3R evaluateSampleBSDF(const Vector3R inDirection, Vector3R &outDirection, const SurfaceInfo surfaceInfo) const override;
 
 private:
     real _diffuseRatio;

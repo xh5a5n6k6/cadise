@@ -12,13 +12,13 @@ namespace cadise {
 
 class AreaLight : public Light {
 public:
-    AreaLight(std::shared_ptr<Shape> shape, Vector3R albedo);
+    AreaLight(const std::shared_ptr<Shape> shape, const Vector3R albedo);
 
-    Vector3R evaluateSampleRadiance(Vector3R &lightDirection, SurfaceInfo &surfaceInfo, real &t, real &pdf) override;
-    Vector3R position() override;
-    Vector3R color() override;
+    Vector3R evaluateSampleRadiance(Vector3R &lightDirection, SurfaceInfo &surfaceInfo, real &t, real &pdf) const override;
+    Vector3R position() const override;
+    Vector3R color() const override;
 
-    std::shared_ptr<Shape> shape();
+    std::shared_ptr<Shape> shape() const;
 
 private:
     std::shared_ptr<Shape> _shape;

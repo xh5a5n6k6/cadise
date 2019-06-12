@@ -9,9 +9,9 @@ class Ray;
 
 class Camera {
 public:
-    virtual Ray createRay(int32 px, int32 py) = 0;
+    virtual Ray createRay(const int32 px, const int32 py) const = 0;
 
-    virtual Film film() = 0;
+    virtual Film film() const = 0;
 };
 
 } // namespace cadise

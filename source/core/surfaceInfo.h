@@ -7,13 +7,13 @@ namespace cadise {
 class SurfaceInfo {
 public:
     SurfaceInfo();
-    SurfaceInfo(Vector3R point, Vector3R normal);
+    SurfaceInfo(const Vector3R point, const Vector3R normal);
 
-    Vector3R point();
-    Vector3R normal();
+    Vector3R point() const;
+    Vector3R normal() const;
 
-    void setPoint(Vector3R point);
-    void setNormal(Vector3R normal);
+    void setPoint(const Vector3R point);
+    void setNormal(const Vector3R normal);
 
 private:
     Vector3R _point;

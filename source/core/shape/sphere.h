@@ -8,12 +8,12 @@ namespace cadise {
 
 class Sphere : public Shape {
 public:
-    Sphere(Vector3R center, real radius);
+    Sphere(const Vector3R center, const real radius);
 
-    AABB3R bound() override;
+    AABB3R bound() const override;
 
-    bool isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) override;
-    bool isOccluded(Ray &ray) override;
+    bool isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) const override;
+    bool isOccluded(Ray &ray) const override;
 
 private:
     Matrix4 _worldToLocal;

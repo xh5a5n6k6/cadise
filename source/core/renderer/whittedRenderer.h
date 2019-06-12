@@ -13,13 +13,13 @@ class RGBColor;
 // WhittedRenderer is for Whitted-style ray tracing renderer
 class WhittedRenderer : public Renderer {
 public:
-    WhittedRenderer(int32 maxDepth, int32 sampleNumber);
+    WhittedRenderer(const int32 maxDepth, const int32 sampleNumber);
 
-    void render(Scene &scene) override;
+    void render(const Scene scene) const override;
 
 private:
-    RGBColor _luminance(Scene &scene, Ray &ray, Intersection &intersection);
-    RGBColor _reflect(Scene &scene, Ray &ray, Intersection &intersection);
+    RGBColor _luminance(const Scene scene, Ray &ray, Intersection &intersection) const;
+    RGBColor _reflect(const Scene scene, Ray &ray, Intersection &intersection) const;
 
     int32 _maxDepth;
     int32 _sampleNumber;

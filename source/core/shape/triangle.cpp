@@ -16,26 +16,28 @@ Triangle::Triangle(Vector3R v1, Vector3R v2, Vector3R v3) :
     _e2 = _v3 - _v1;
 }
 
-AABB3R Triangle::bound() {
+AABB3R Triangle::bound() const {
     return AABB3R(_v1).unionWith(_v2).unionWith(_v3);
 }
 
-bool Triangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
+bool Triangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) const {
     Vector3R D = ray.direction();
-    if (D.dot(_e1.cross(_e2)) > 0.0_r) {
-        _e1.swap(_e2);
+    Vector3R e1 = _e1;
+    Vector3R e2 = _e2;
+    if (D.dot(e1.cross(e2)) > 0.0_r) {
+        e1.swap(e2);
     }
     Vector3R T = ray.origin() - _v1;
-    Vector3R Q = T.cross(_e1);
-    Vector3R P = D.cross(_e2);
+    Vector3R Q = T.cross(e1);
+    Vector3R P = D.cross(e2);
 
-    real denominator = P.dot(_e1);
+    real denominator = P.dot(e1);
     if (denominator - 0.0_r < std::numeric_limits<real>::epsilon()) {
         return false;
     }
 
     real invDenominator = 1.0_r / denominator;
-    real t = Q.dot(_e2) * invDenominator;
+    real t = Q.dot(e2) * invDenominator;
     real u = P.dot(T) * invDenominator;
     real v = Q.dot(D) * invDenominator;
 
@@ -51,29 +53,31 @@ bool Triangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
 
     // Calculate surface details
     Vector3R point = ray.at(t);
-    Vector3R normal = _e1.cross(_e2).normalize();
+    Vector3R normal = e1.cross(e2).normalize();
     surfaceInfo.setPoint(point);
     surfaceInfo.setNormal(normal);
 
     return true;
 }
 
-bool Triangle::isOccluded(Ray &ray) {
+bool Triangle::isOccluded(Ray &ray) const {
     Vector3R D = ray.direction();
-    if (D.dot(_e1.cross(_e2)) > 0.0_r) {
-        _e1.swap(_e2);
+    Vector3R e1 = _e1;
+    Vector3R e2 = _e2;
+    if (D.dot(e1.cross(e2)) > 0.0_r) {
+        e1.swap(e2);
     }
     Vector3R T = ray.origin() - _v1;
-    Vector3R Q = T.cross(_e1);
-    Vector3R P = D.cross(_e2);
+    Vector3R Q = T.cross(e1);
+    Vector3R P = D.cross(e2);
 
-    real denominator = P.dot(_e1);
+    real denominator = P.dot(e1);
     if (denominator - 0.0_r < std::numeric_limits<real>::epsilon()) {
         return false;
     }
 
     real invDenominator = 1.0_r / denominator;
-    real t = Q.dot(_e2) * invDenominator;
+    real t = Q.dot(e2) * invDenominator;
     real u = P.dot(T) * invDenominator;
     real v = Q.dot(D) * invDenominator;
 
@@ -90,7 +94,7 @@ bool Triangle::isOccluded(Ray &ray) {
     return true;
 }
 
-void Triangle::sampleSurface(SurfaceInfo inSurface, SurfaceInfo &outSurface) {
+void Triangle::sampleSurface(SurfaceInfo inSurface, SurfaceInfo &outSurface) const {
     // TODO
     // improve sample point on triangle
     std::random_device rd;
@@ -108,10 +112,13 @@ void Triangle::sampleSurface(SurfaceInfo inSurface, SurfaceInfo &outSurface) {
 
     Vector3R point = _v1 + s * _e1 + t * _e2;
     Vector3R direction = point - inSurface.point();
+    Vector3R normal;
     if (direction.dot(_e1.cross(_e2)) > 0.0_r) {
-        _e1.swap(_e2);
+        normal = _e2.cross(_e1).normalize();
     }
-    Vector3R normal = _e1.cross(_e2).normalize();
+    else {
+        normal = _e1.cross(_e2).normalize();
+    }
 
     outSurface.setPoint(point);
     outSurface.setNormal(normal);

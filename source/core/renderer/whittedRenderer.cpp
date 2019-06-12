@@ -16,11 +16,11 @@
 
 namespace cadise {
 
-WhittedRenderer::WhittedRenderer(int32 maxDepth, int32 sampleNumber) :
+WhittedRenderer::WhittedRenderer(const int32 maxDepth, const int32 sampleNumber) :
     _maxDepth(maxDepth), _sampleNumber(sampleNumber) {
 }
 
-void WhittedRenderer::render(Scene &scene) {
+void WhittedRenderer::render(const Scene scene) const {
     std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 
     int32 rx = scene.camera()->film().resolution().x();
@@ -52,7 +52,7 @@ void WhittedRenderer::render(Scene &scene) {
               << " ms" << std::endl;
 }
 
-RGBColor WhittedRenderer::_luminance(Scene &scene, Ray &ray, Intersection &intersection) {
+RGBColor WhittedRenderer::_luminance(const Scene scene, Ray &ray, Intersection &intersection) const {
     RGBColor color = RGBColor(0.0_r, 0.0_r, 0.0_r);
     if (scene.isIntersecting(ray, intersection)) {
         // add radiance if hit area light
@@ -89,7 +89,7 @@ RGBColor WhittedRenderer::_luminance(Scene &scene, Ray &ray, Intersection &inter
     return color;
 }
 
-RGBColor WhittedRenderer::_reflect(Scene &scene, Ray &ray, Intersection &intersection) {
+RGBColor WhittedRenderer::_reflect(const Scene scene, Ray &ray, Intersection &intersection) const {
     RGBColor color;
 
     Vector3R sampleDir;

@@ -12,7 +12,7 @@ Parser::Parser() {
     _renderOption = nullptr;
 }
 
-void Parser::parseFile(std::string filename) {
+void Parser::parseFile(const std::string filename) {
     _renderOption = std::make_unique<RenderOption>();
 
     FILE *f;

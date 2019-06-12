@@ -1,7 +1,7 @@
 #include "core/renderOption.h"
 
-#include "core/accelerator/bruteForceAccelerator.h"
 #include "core/camera/perspectiveCamera.h"
+#include "core/intersector/accelerator/bruteForceAccelerator.h"
 #include "core/intersector/emitter.h"
 #include "core/intersector/primitive.h"
 #include "core/light/areaLight.h"
@@ -20,7 +20,7 @@ namespace cadise {
 RenderOption::RenderOption() {
 }
 
-void RenderOption::setupData(std::vector<std::string> data) {
+void RenderOption::setupData(const std::vector<std::string> data) {
     std::string type = data[0];
 
     if (!type.compare("LookAt")) {
@@ -121,8 +121,8 @@ void RenderOption::setupData(std::vector<std::string> data) {
 std::unique_ptr<Scene> RenderOption::createScene() {
     std::unique_ptr<Scene> scene = nullptr;
 
-    std::shared_ptr<Accelerator> accelerator = std::make_shared<BruteForceAccelerator>(_option.intersectors);
-    scene = std::make_unique<Scene>(accelerator, _option.lights, _option.camera);
+    std::shared_ptr<Accelerator> accelerator = std::make_shared<BruteForceAccelerator>(std::move(_option.intersectors));
+    scene = std::make_unique<Scene>(std::move(accelerator), std::move(_option.lights), std::move(_option.camera));
 
     return scene;
 }

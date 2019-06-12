@@ -9,15 +9,15 @@ class SurfaceInfo;
 
 class Shape {
 public:
-    virtual AABB3R bound() = 0;
+    virtual AABB3R bound() const = 0;
 
-    virtual bool isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) = 0;
-    virtual bool isOccluded(Ray &ray) = 0;
+    virtual bool isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) const = 0;
+    virtual bool isOccluded(Ray &ray) const = 0;
 
-    virtual void sampleSurface(SurfaceInfo inSurface, SurfaceInfo &outSurface);
-    virtual real samplePdfA();
+    virtual void sampleSurface(const SurfaceInfo inSurface, SurfaceInfo &outSurface) const;
+    virtual real samplePdfA() const;
 
-    virtual real area();
+    virtual real area() const;
 };
 
 } // namespace cadise

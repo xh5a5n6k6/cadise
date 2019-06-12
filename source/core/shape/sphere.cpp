@@ -9,16 +9,16 @@
 
 namespace cadise {
 
-Sphere::Sphere(Vector3R center, real radius) : 
+Sphere::Sphere(const Vector3R center, const real radius) : 
     _center(center), _radius(radius) {
     _worldToLocal = Matrix4::translate(-_center.x(), -_center.y(), -_center.z());
 }
 
-AABB3R Sphere::bound() {
+AABB3R Sphere::bound() const {
     return AABB3R(_center - _radius, _center + _radius);
 }
 
-bool Sphere::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
+bool Sphere::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) const {
     Ray r = Ray(_worldToLocal.transformPoint(ray.origin()),
                 _worldToLocal.transformVector(ray.direction()),
                 constant::RAY_EPSILON, std::numeric_limits<real>::max());
@@ -54,10 +54,10 @@ bool Sphere::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) {
     return true;
 }
 
-bool Sphere::isOccluded(Ray &ray) {
+bool Sphere::isOccluded(Ray &ray) const {
     Ray r = Ray(_worldToLocal.transformPoint(ray.origin()),
-        _worldToLocal.transformVector(ray.direction()),
-        constant::RAY_EPSILON, std::numeric_limits<real>::max());
+                _worldToLocal.transformVector(ray.direction()),
+                constant::RAY_EPSILON, std::numeric_limits<real>::max());
 
     int32 isOutside = r.origin().lengthSquared() > _radius * _radius;
     real t = r.direction().dot(-r.origin());

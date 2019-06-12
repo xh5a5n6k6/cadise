@@ -7,13 +7,13 @@
 
 namespace cadise {
 
-BlinnPhongBRDF::BlinnPhongBRDF(real exponent) :
+BlinnPhongBRDF::BlinnPhongBRDF(const real exponent) :
     _exponent(exponent) {
 }
 
 // inDirection  : light direction
 // outDirection : eye direction
-Vector3R BlinnPhongBRDF::evaluate(Vector3R inDirection, Vector3R outDirection, SurfaceInfo &surfaceInfo) {
+Vector3R BlinnPhongBRDF::evaluate(const Vector3R inDirection, const Vector3R outDirection, const SurfaceInfo surfaceInfo) const {
     real brdfFactor = std::max(surfaceInfo.normal().dot(outDirection), 0.0_r);
 
     // H : half vector
@@ -24,7 +24,7 @@ Vector3R BlinnPhongBRDF::evaluate(Vector3R inDirection, Vector3R outDirection, S
     return Vector3R(specular, specular, specular);
 }
 
-Vector3R BlinnPhongBRDF::evaluateSample(Vector3R inDirection, Vector3R &outDirection, SurfaceInfo &surfaceInfo) {
+Vector3R BlinnPhongBRDF::evaluateSample(const Vector3R inDirection, Vector3R &outDirection, const SurfaceInfo surfaceInfo) const {
     return Vector3R(0.0_r, 0.0_r, 0.0_r);
 }
 

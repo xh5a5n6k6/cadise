@@ -12,11 +12,11 @@ class SurfaceInfo;
 
 class Material {
 public:
-    virtual Vector3R evaluateBSDF(Vector3R inDirection, Vector3R outDirection, SurfaceInfo &surfaceInfo);
-    virtual Vector3R evaluateSampleBSDF(Vector3R inDirection, Vector3R &outDirection, SurfaceInfo &surfaceInfo);
+    virtual Vector3R evaluateBSDF(const Vector3R inDirection, const Vector3R outDirection, const SurfaceInfo surfaceInfo) const;
+    virtual Vector3R evaluateSampleBSDF(const Vector3R inDirection, Vector3R &outDirection, const SurfaceInfo surfaceInfo) const;
 
 protected:
-    virtual void _addBxDF(std::shared_ptr<BxDF> bxdf);
+    virtual void _addBxDF(const std::shared_ptr<BxDF> bxdf);
 
     std::vector<std::shared_ptr<BxDF> > _bsdf;
 };

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/accelerator/accelerator.h"
+#include "core/intersector/accelerator/accelerator.h"
 
 #include <memory>
 #include <vector>
@@ -11,10 +11,10 @@ namespace cadise {
 // It is for debugging usage compared to other accelerators.
 class BruteForceAccelerator : public Accelerator {
 public:
-    BruteForceAccelerator(std::vector<std::shared_ptr<Intersector> > intersectors);
+    BruteForceAccelerator(const std::vector<std::shared_ptr<Intersector> > intersectors);
 
-    bool isIntersecting(Ray &ray, Intersection &intersection) override;
-    bool isOccluded(Ray &ray) override;
+    bool isIntersecting(Ray &ray, Intersection &intersection) const override;
+    bool isOccluded(Ray &ray) const override;
 
 private:
     std::vector<std::shared_ptr<Intersector> > _intersectors;

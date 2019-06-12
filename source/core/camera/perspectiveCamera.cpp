@@ -11,7 +11,7 @@
 
 namespace cadise {
 
-PerspectiveCamera::PerspectiveCamera(Matrix4 cameraToWorld, real fov, Path filename, int32 rx, int32 ry) :
+PerspectiveCamera::PerspectiveCamera(const Matrix4 cameraToWorld, const real fov, const Path filename, const int32 rx, const int32 ry) :
     _cameraToWorld(cameraToWorld), _fov(fov), _rx(rx), _ry(ry), _film(filename, rx, ry) {
 
     real halfScreenLength = std::tan(_fov / 2.0_r * constant::PI / 180.0_r);
@@ -19,7 +19,7 @@ PerspectiveCamera::PerspectiveCamera(Matrix4 cameraToWorld, real fov, Path filen
     _pixelHeight = 2.0_r * halfScreenLength / _ry;
 }
 
-Ray PerspectiveCamera::createRay(int32 px, int32 py) {
+Ray PerspectiveCamera::createRay(const int32 px, const int32 py) const {
     // TODO
     // improve sample point calculation
     std::random_device rd;
@@ -43,7 +43,7 @@ Ray PerspectiveCamera::createRay(int32 px, int32 py) {
     return Ray(origin, dir, constant::RAY_EPSILON, std::numeric_limits<real>::max());
 }
 
-Film PerspectiveCamera::film() {
+Film PerspectiveCamera::film() const {
     return _film;
 }
 

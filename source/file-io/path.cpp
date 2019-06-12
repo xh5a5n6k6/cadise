@@ -2,11 +2,11 @@
 
 namespace cadise {
 
-Path::Path(std::string path) :
+Path::Path(const std::string path) :
     _path(path) {
 }
 
-bool Path::isExtendedWith(std::string extension) {
+bool Path::isExtendedWith(const std::string extension) const {
     if (extension.length() > _path.length()) {
         return false;
     }
@@ -14,7 +14,7 @@ bool Path::isExtendedWith(std::string extension) {
     return _path.substr(_path.length() - extension.length()).compare(extension) == 0;
 }
 
-std::string Path::path() {
+std::string Path::path() const {
     return _path;
 }
 

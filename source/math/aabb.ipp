@@ -14,20 +14,20 @@ inline cadise::AABB<T, Size>::AABB() :
 }
 
 template<typename T, uint32 Size>
-inline cadise::AABB<T, Size>::AABB(Vector<T, Size> vertex) :
+inline cadise::AABB<T, Size>::AABB(const Vector<T, Size> vertex) :
     _minVertex(vertex),
     _maxVertex(vertex) {
 }
 
 template<typename T, uint32 Size>
-inline cadise::AABB<T, Size>::AABB(Vector<T, Size> minVertex, Vector<T, Size> maxVertex) :
+inline cadise::AABB<T, Size>::AABB(const Vector<T, Size> minVertex, const Vector<T, Size> maxVertex) :
     _minVertex(minVertex),
     _maxVertex(maxVertex) { 
 }
 
 template<typename T, uint32 Size>
-inline bool AABB<T, Size>::isIntersecting(const Vector<T, Size> origin, const Vector<T, Size> invDirection, real tmin, real tmax) {
-    static_assert(Size == 3 && typeid(T) == typeid(real), "Not support isIntersecting with this kind of AABB");
+inline bool AABB<T, Size>::isIntersectingAABB(const Vector<T, Size> origin, const Vector<T, Size> invDirection, real tmin, real tmax) const {
+    static_assert(Size == 3, "Not support isIntersecting with this kind of AABB");
     
     Vector<T, Size> tnear = (_minVertex - origin) * invDirection;
     Vector<T, Size> tfar  = (_maxVertex - origin) * invDirection;
@@ -71,12 +71,12 @@ inline bool AABB<T, Size>::isIntersecting(const Vector<T, Size> origin, const Ve
 }
 
 template<typename T, uint32 Size>
-inline Vector<T, Size> AABB<T, Size>::center() {
+inline Vector<T, Size> AABB<T, Size>::center() const {
     return (_minVertex + _maxVertex) / static_cast<T>(2);
 }
 
 template<typename T, uint32 Size>
-inline AABB<T, Size> AABB<T, Size>::unionWith(Vector<T, Size> vertex) {
+inline AABB<T, Size> AABB<T, Size>::unionWith(const Vector<T, Size> vertex) {
     _minVertex = Vector<T, Size>::min(_minVertex, vertex);
     _maxVertex = Vector<T, Size>::max(_maxVertex, vertex);
     
@@ -84,7 +84,7 @@ inline AABB<T, Size> AABB<T, Size>::unionWith(Vector<T, Size> vertex) {
 }
 
 template<typename T, uint32 Size>
-inline AABB<T, Size> AABB<T, Size>::unionWith(AABB<T, Size> aabb) {
+inline AABB<T, Size> AABB<T, Size>::unionWith(const AABB<T, Size> aabb) {
     _minVertex = Vector<T, Size>::min(_minVertex, aabb._minVertex);
     _maxVertex = Vector<T, Size>::max(_maxVertex, aabb._maxVertex);
 

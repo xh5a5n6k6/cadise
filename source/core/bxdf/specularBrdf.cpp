@@ -6,15 +6,15 @@
 
 namespace cadise {
 
-SpecularBRDF::SpecularBRDF(Vector3R albedo) :
+SpecularBRDF::SpecularBRDF(const Vector3R albedo) :
     _albedo(albedo) {
 }
 
-Vector3R SpecularBRDF::evaluate(Vector3R inDirection, Vector3R outDirection, SurfaceInfo &surfaceInfo) {
+Vector3R SpecularBRDF::evaluate(const Vector3R inDirection, const Vector3R outDirection, const SurfaceInfo surfaceInfo) const {
     return Vector3R(0.0_r, 0.0_r, 0.0_r);
 }
 
-Vector3R SpecularBRDF::evaluateSample(Vector3R inDirection, Vector3R &outDirection, SurfaceInfo &surfaceInfo) {
+Vector3R SpecularBRDF::evaluateSample(const Vector3R inDirection, Vector3R &outDirection, const SurfaceInfo surfaceInfo) const {
     outDirection = inDirection.reflect(surfaceInfo.normal());
     real LdotN = std::max(outDirection.dot(surfaceInfo.normal()), 0.0_r);
 

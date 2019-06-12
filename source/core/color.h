@@ -10,13 +10,13 @@ class Color {
 class RGBColor : public Color {
 public:
     RGBColor();
-    RGBColor(real r, real g, real b);
-    RGBColor(Vector3R rgb);
+    RGBColor(const real r, const real g, const real b);
+    RGBColor(const Vector3R rgb);
 
     Vector3R& rgb();
-    real r();
-    real g();
-    real b();
+    real r() const;
+    real g() const;
+    real b() const;
 
 private:
     Vector3R _rgb;
