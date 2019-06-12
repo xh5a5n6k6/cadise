@@ -14,7 +14,7 @@ class AreaLight : public Light {
 public:
     AreaLight(const std::shared_ptr<Shape> shape, const Vector3R albedo);
 
-    Vector3R evaluateSampleRadiance(Vector3R &lightDirection, SurfaceInfo &surfaceInfo, real &t, real &pdf) const override;
+    Vector3R evaluateSampleRadiance(Vector3R &lightDirection, const SurfaceInfo surfaceInfo, real &t, real &pdf) const override;
     Vector3R position() const override;
     Vector3R color() const override;
 
