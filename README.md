@@ -11,6 +11,8 @@ Cadise is a developing ray tracing renderer written in C++17. It now only suppor
 ## Feature Lists
 - ### Renderer
     - Whitted Ray Tracing (only direct lighting)
+- ### Accelerator
+    - BVH
 - ### BSDF
     - Lambertian Diffuse
     - Perfect Specular

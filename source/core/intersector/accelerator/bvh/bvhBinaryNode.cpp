@@ -6,7 +6,10 @@ BVHBinaryNode::BVHBinaryNode() :
     _bound(), _children{} {
 }
 
-BVHBinaryNode::~BVHBinaryNode() = default;
+BVHBinaryNode::~BVHBinaryNode() {
+    _children[0].release();
+    _children[1].release();
+}
 
 void BVHBinaryNode::initializeInternalNode(std::unique_ptr<BVHBinaryNode> firstChild, std::unique_ptr<BVHBinaryNode> secondChild, const uint32 splitAxis) {
     _bound = AABB3R().unionWith(firstChild->bound()).unionWith(secondChild->bound());
