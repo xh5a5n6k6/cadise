@@ -2,6 +2,7 @@
 
 #include "core/camera/perspectiveCamera.h"
 #include "core/intersector/accelerator/bruteForceAccelerator.h"
+#include "core/intersector/accelerator/bvh/bvhAccelerator.h"
 #include "core/intersector/emitter.h"
 #include "core/intersector/primitive.h"
 #include "core/light/areaLight.h"
@@ -112,6 +113,9 @@ void RenderOption::setupData(const std::vector<std::string> data) {
         _option.lights.push_back(light);
         _option.intersectors.push_back(std::make_shared<Emitter>(*light, _option.material));
     }
+    else if (!type.compare("Accelerator")) {
+        _option.accelerator = data[1];
+    }
     else if (!type.compare("WhittedRenderer")) {
         _option.maxDepth = std::stoi(data[1]);
         _option.sampleNumber = std::stoi(data[2]);
@@ -121,7 +125,13 @@ void RenderOption::setupData(const std::vector<std::string> data) {
 std::unique_ptr<Scene> RenderOption::createScene() {
     std::unique_ptr<Scene> scene = nullptr;
 
-    std::shared_ptr<Accelerator> accelerator = std::make_shared<BruteForceAccelerator>(std::move(_option.intersectors));
+    std::shared_ptr<Accelerator> accelerator = nullptr;
+    if (!_option.accelerator.compare("bvh")) {
+        accelerator = std::make_shared<BVHAccelerator>(std::move(_option.intersectors));
+    }
+    else {
+        accelerator = std::make_shared<BruteForceAccelerator>(std::move(_option.intersectors));
+    }
     scene = std::make_unique<Scene>(std::move(accelerator), std::move(_option.lights), std::move(_option.camera));
 
     return scene;

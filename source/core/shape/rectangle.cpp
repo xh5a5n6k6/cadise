@@ -15,7 +15,7 @@ Rectangle::Rectangle(const Vector3R v1, const Vector3R v2, const Vector3R v3) :
 }
 
 AABB3R Rectangle::bound() const {
-    return AABB3R(_v1).unionWith(_v2).unionWith(_v3).unionWith(_v2 + _e1 + _e2);
+    return AABB3R(_v1).unionWith(_v2).unionWith(_v3).unionWith(_v2 + _e1 + _e2).expand(0.0001_r);
 }
 
 bool Rectangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) const {
@@ -75,16 +75,14 @@ bool Rectangle::isOccluded(Ray &ray) const {
 }
 
 void Rectangle::sampleSurface(SurfaceInfo inSurface, SurfaceInfo &outSurface) const {
-    real longWidth;
-    real shortWidth;
-    if (_e1.length() < _e2.length()) {
-        longWidth = _e2.length();
-        shortWidth = _e1.length();
+    Vector3R e1 = _e1;
+    Vector3R e2 = _e2;
+    if (e1.length() < e2.length()) {
+        e1.swap(e2);
     }
-    else {
-        longWidth = _e1.length();
-        shortWidth = _e2.length();
-    }
+
+    real longWidth = e1.length();
+    real shortWidth = e2.length();
 
     // TODO
     // improve sample point on rectangle
@@ -101,14 +99,14 @@ void Rectangle::sampleSurface(SurfaceInfo inSurface, SurfaceInfo &outSurface) co
         t = disT(gen);
     } while (t > shortWidth / longWidth);
 
-    Vector3R point = _v2 + s * _e1 + t * _e1.length() * _e2.normalize();
+    Vector3R point = _v2 + s * e1 + t * e1.length() * e2.normalize();
     Vector3R direction = point - inSurface.point();
     Vector3R normal;
-    if (direction.dot(_e1.cross(_e2)) > 0.0_r) {
-        normal = _e2.cross(_e1).normalize();
+    if (direction.dot(e1.cross(e2)) > 0.0_r) {
+        normal = e2.cross(e1).normalize();
     }
     else {
-        normal = _e1.cross(_e2).normalize();
+        normal = e1.cross(e2).normalize();
     }
 
     outSurface.setPoint(point);

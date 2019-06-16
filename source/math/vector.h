@@ -29,13 +29,16 @@ public:
     Vector operator*(const Vector v) const;
     Vector operator/(const T s) const;
     Vector operator/(const Vector v) const;
+    Vector& operator+=(const T s);
     Vector& operator+=(const Vector v);
+    Vector& operator-=(const T s);
     Vector& operator-=(const Vector v);
     Vector& operator*=(const T s);
     Vector& operator*=(const Vector v);
     Vector& operator/=(const T s);
     Vector& operator/=(const Vector v);
     Vector& operator=(const Vector v);
+    T& operator[](const uint32 i);
 
     bool isZero() const;
     T length() const;
@@ -43,6 +46,7 @@ public:
     Vector normalize() const;
     Vector reciprocal() const;
     Vector clamp(const T min, const T max) const;
+    uint32 maxDimension() const;
 
     void swap(Vector &v);
     T dot(const Vector v) const;
@@ -53,10 +57,6 @@ public:
     T x() const;
     T y() const;
     T z() const;
-
-    
-    //friend Vector<T, Size> operator+(const T s, const Vector<T, Size> v);
-    //friend Vector<T, Size> operator*(const T &s, const Vector<T, Size> &v);
 
     static Vector min(const Vector v1, const Vector v2);
     static Vector max(const Vector v1, const Vector v2);

@@ -71,12 +71,17 @@ inline bool AABB<T, Size>::isIntersectingAABB(const Vector<T, Size> origin, cons
 }
 
 template<typename T, uint32 Size>
-inline Vector<T, Size> AABB<T, Size>::center() const {
+inline Vector<T, Size> AABB<T, Size>::centroid() const {
     return (_minVertex + _maxVertex) / static_cast<T>(2);
 }
 
 template<typename T, uint32 Size>
-inline AABB<T, Size> AABB<T, Size>::unionWith(const Vector<T, Size> vertex) {
+inline uint32 AABB<T, Size>::maxAxis() const {
+    return (_maxVertex - _minVertex).maxDimension();
+}
+
+template<typename T, uint32 Size>
+inline AABB<T, Size>& AABB<T, Size>::unionWith(const Vector<T, Size> vertex) {
     _minVertex = Vector<T, Size>::min(_minVertex, vertex);
     _maxVertex = Vector<T, Size>::max(_maxVertex, vertex);
     
@@ -84,9 +89,17 @@ inline AABB<T, Size> AABB<T, Size>::unionWith(const Vector<T, Size> vertex) {
 }
 
 template<typename T, uint32 Size>
-inline AABB<T, Size> AABB<T, Size>::unionWith(const AABB<T, Size> aabb) {
+inline AABB<T, Size>& AABB<T, Size>::unionWith(const AABB<T, Size> aabb) {
     _minVertex = Vector<T, Size>::min(_minVertex, aabb._minVertex);
     _maxVertex = Vector<T, Size>::max(_maxVertex, aabb._maxVertex);
+
+    return *this;
+}
+
+template<typename T, uint32 Size>
+inline AABB<T, Size>& AABB<T, Size>::expand(const T scalar) {
+    _minVertex -= scalar;
+    _maxVertex += scalar;
 
     return *this;
 }

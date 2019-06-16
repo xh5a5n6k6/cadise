@@ -17,7 +17,7 @@ Vector3R PointLight::evaluateSampleRadiance(Vector3R &lightDirection, const Surf
     lightDirection = direction.normalize();
     pdf = 1.0_r;
 
-    return _color;
+    return _color / direction.lengthSquared();
 }
 
 Vector3R PointLight::position() const {

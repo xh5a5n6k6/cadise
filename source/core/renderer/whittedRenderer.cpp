@@ -48,8 +48,8 @@ void WhittedRenderer::render(const Scene scene) const {
 
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
     std::cout << "Rendering time : "
-              << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() 
-              << " ms" << std::endl;
+              << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() / 1000.0_r
+              << " s" << std::endl;
 }
 
 RGBColor WhittedRenderer::_luminance(const Scene scene, Ray &ray, Intersection &intersection) const {

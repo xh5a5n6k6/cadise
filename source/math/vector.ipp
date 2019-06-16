@@ -124,9 +124,27 @@ inline Vector<T, Size> Vector<T, Size>::operator/(const Vector<T, Size> v) const
 }
 
 template<typename T, uint32 Size>
+inline Vector<T, Size>& Vector<T, Size>::operator+=(const T s) {
+    for (uint32 i = 0; i < Size; i++) {
+        _v[i] += s;
+    }
+
+    return *this;
+}
+
+template<typename T, uint32 Size>
 inline Vector<T, Size>& Vector<T, Size>::operator+=(const Vector<T, Size> v) {
     for (uint32 i = 0; i < Size; i++) {
         _v[i] += v._v[i];
+    }
+
+    return *this;
+}
+
+template<typename T, uint32 Size>
+inline Vector<T, Size>& Vector<T, Size>::operator-=(const T s) {
+    for (uint32 i = 0; i < Size; i++) {
+        _v[i] -= s;
     }
 
     return *this;
@@ -191,6 +209,11 @@ inline Vector<T, Size>& Vector<T, Size>::operator=(const Vector<T, Size> v) {
 }
 
 template<typename T, uint32 Size>
+inline T& Vector<T, Size>::operator[](const uint32 i) {
+    return _v[i];
+}
+
+template<typename T, uint32 Size>
 inline bool Vector<T, Size>::isZero() const {
     bool result = true;
     for (uint32 i = 0; i < Size; i++) {
@@ -243,6 +266,20 @@ inline Vector<T, Size> Vector<T, Size>::clamp(const T min, const T max) const {
     }
 
     return result;
+}
+
+template<typename T, uint32 Size>
+inline uint32 Vector<T, Size>::maxDimension() const {
+    T max = _v[0];
+    uint32 maxD = 0;
+    for (uint32 i = 1; i < Size; i++) {
+        if (_v[i] > max) {
+            max = _v[i];
+            maxD = i;
+        }
+    }
+
+    return maxD;
 }
 
 template<typename T, uint32 Size>

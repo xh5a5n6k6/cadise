@@ -17,7 +17,7 @@ Triangle::Triangle(Vector3R v1, Vector3R v2, Vector3R v3) :
 }
 
 AABB3R Triangle::bound() const {
-    return AABB3R(_v1).unionWith(_v2).unionWith(_v3);
+    return AABB3R(_v1).unionWith(_v2).unionWith(_v3).expand(0.0001_r);
 }
 
 bool Triangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) const {

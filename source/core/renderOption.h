@@ -33,6 +33,8 @@ public:
         std::vector<std::shared_ptr<Light> > lights;
         std::vector<std::shared_ptr<Intersector> > intersectors;
 
+        std::string accelerator = "bruteForce";
+
         int32 maxDepth;
         int32 sampleNumber;
     };
