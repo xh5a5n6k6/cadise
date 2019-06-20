@@ -1,6 +1,6 @@
 # Cadise Renderer
 
-<img src="./gallery/cornell-box/20190524.png"><br />
+<img src="./gallery/cornell-box/20190620.png"><br />
 <i>Cornell Box (mirror sphere) Rendered with Cadise</i>
 
 ## Introduction
@@ -10,7 +10,7 @@ Cadise is a developing ray tracing renderer written in C++17. It now only suppor
 
 ## Feature Lists
 - ### Renderer
-    - Whitted Ray Tracing (only direct lighting)
+    - Whitted Ray Tracing
 - ### Accelerator
     - BVH
 - ### BSDF
