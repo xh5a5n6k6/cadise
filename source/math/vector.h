@@ -10,6 +10,7 @@ template<typename T, uint32 Size>
 class Vector;
 
 using Vector2I = Vector<int32, 2>;
+using Vector2R = Vector<real, 2>;
 using Vector3R = Vector<real, 3>;
 
 template<typename T, uint32 Size>
@@ -38,7 +39,7 @@ public:
     Vector& operator/=(const T s);
     Vector& operator/=(const Vector v);
     Vector& operator=(const Vector v);
-    T& operator[](const uint32 i);
+    T& operator[](const uint32 index);
 
     bool isZero() const;
     T length() const;

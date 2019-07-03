@@ -15,7 +15,7 @@ Sphere::Sphere(const Vector3R center, const real radius) :
 }
 
 AABB3R Sphere::bound() const {
-    return AABB3R(_center - _radius - 0.0001_r, _center + _radius + 0.0001_r);
+    return AABB3R(_center - _radius, _center + _radius).expand(0.0001_r);
 }
 
 bool Sphere::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) const {

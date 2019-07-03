@@ -17,7 +17,7 @@ Vector3R Plastic::evaluateBSDF(const Vector3R inDirection, const Vector3R outDir
            (1.0_r - _diffuseRatio) * _bsdf.at(1)->evaluate(inDirection, outDirection, surfaceInfo);
 }
 
-Vector3R Plastic::evaluateSampleBSDF(const Vector3R inDirection, Vector3R &outDirection, const SurfaceInfo surfaceInfo) const {
+Vector3R Plastic::evaluateSampleBSDF(const Vector3R inDirection, Vector3R &outDirection, const SurfaceInfo surfaceInfo, real &pdf) const {
     return Vector3R(0.0_r, 0.0_r, 0.0_r);
 }
 

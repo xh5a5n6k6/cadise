@@ -17,7 +17,7 @@ Vector3R Accelerator::evaluateBSDF(const Vector3R inDirection, const Vector3R ou
     return Vector3R(0.0_r, 0.0_r, 0.0_r);
 }
 
-Vector3R Accelerator::evaluateSampleBSDF(const Vector3R inDirection, Vector3R &outDirection, const SurfaceInfo surfaceInfo) const {
+Vector3R Accelerator::evaluateSampleBSDF(const Vector3R inDirection, Vector3R &outDirection, const SurfaceInfo surfaceInfo, real &pdf) const {
     return Vector3R(0.0_r, 0.0_r, 0.0_r);
 }
 

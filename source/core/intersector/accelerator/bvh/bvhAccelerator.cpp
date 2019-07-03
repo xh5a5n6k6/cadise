@@ -24,7 +24,9 @@ BVHAccelerator::BVHAccelerator(const std::vector<std::shared_ptr<Intersector> > 
     std::unique_ptr<BVHBinaryNode> root = builder.buildBinaryNodes(std::move(intersectors), _intersectors, totalSize);
 
     // flatten the binary tree and use BVHLinearNode to store the informations
-    _nodes = builder.buildLinearNodes(std::move(root), totalSize);
+    _nodes.clear();
+    _nodes.shrink_to_fit();
+    builder.buildLinearNodes(std::move(root), _nodes, totalSize);
 }
 
 AABB3R BVHAccelerator::bound() const {
@@ -36,7 +38,7 @@ bool BVHAccelerator::isIntersecting(Ray &ray, Intersection &intersection) const 
 
     Vector3R origin = ray.origin();
     Vector3R invDirection = ray.direction().reciprocal();
-    int32 dirIsNegtive[3] = { invDirection.x() < 0.0_r, invDirection.y() < 0.0_r, invDirection.z() < 0.0_r };
+    int32 dirIsNegative[3] = { invDirection.x() < 0.0_r, invDirection.y() < 0.0_r, invDirection.z() < 0.0_r };
     uint64 currentNodeIndex = 0;
     uint64 currentStackSize = 0;
     uint64 nodeStack[MAX_STACK_SIZE];
@@ -58,7 +60,7 @@ bool BVHAccelerator::isIntersecting(Ray &ray, Intersection &intersection) const 
                 }
             }
             else {
-                if (dirIsNegtive[currentNode.splitAxis()]) {
+                if (dirIsNegative[currentNode.splitAxis()]) {
                     nodeStack[currentStackSize] = currentNodeIndex + 1;
                     currentStackSize += 1;
                     currentNodeIndex = currentNode.secondChildIndex();
@@ -89,7 +91,7 @@ bool BVHAccelerator::isOccluded(Ray &ray) const {
 
     Vector3R origin = ray.origin();
     Vector3R invDirection = ray.direction().reciprocal();
-    int32 dirIsNegtive[3] = { invDirection.x() < 0.0_r, invDirection.y() < 0.0_r, invDirection.z() < 0.0_r };
+    int32 dirIsNegative[3] = { invDirection.x() < 0.0_r, invDirection.y() < 0.0_r, invDirection.z() < 0.0_r };
     uint64 currentNodeIndex = 0;
     uint64 currentStackSize = 0;
     uint64 nodeStack[MAX_STACK_SIZE];
@@ -111,7 +113,7 @@ bool BVHAccelerator::isOccluded(Ray &ray) const {
                 }
             }
             else {
-                if (dirIsNegtive[currentNode.splitAxis()]) {
+                if (dirIsNegative[currentNode.splitAxis()]) {
                     nodeStack[currentStackSize] = currentNodeIndex + 1;
                     currentStackSize += 1;
                     currentNodeIndex = currentNode.secondChildIndex();

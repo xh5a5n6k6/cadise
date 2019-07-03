@@ -40,8 +40,8 @@ Vector3R Emitter::evaluateBSDF(const Vector3R inDirection, const Vector3R outDir
     return _material->evaluateBSDF(inDirection, outDirection, surfaceInfo);
 }
 
-Vector3R Emitter::evaluateSampleBSDF(const Vector3R inDirection, Vector3R &outDirection, const SurfaceInfo surfaceInfo) const {
-    return _material->evaluateSampleBSDF(inDirection, outDirection, surfaceInfo);
+Vector3R Emitter::evaluateSampleBSDF(const Vector3R inDirection, Vector3R &outDirection, const SurfaceInfo surfaceInfo, real &pdf) const {
+    return _material->evaluateSampleBSDF(inDirection, outDirection, surfaceInfo, pdf);
 }
 
 } // namespace cadise

@@ -14,10 +14,10 @@ Vector3R Material::evaluateBSDF(const Vector3R inDirection, const Vector3R outDi
     return f;
 }
 
-Vector3R Material::evaluateSampleBSDF(const Vector3R inDirection, Vector3R &outDirection, const SurfaceInfo surfaceInfo) const {
+Vector3R Material::evaluateSampleBSDF(const Vector3R inDirection, Vector3R &outDirection, const SurfaceInfo surfaceInfo, real &pdf) const {
     Vector3R f(0.0_r);
     for (uint64 i = 0; i < _bsdf.size(); i++) {
-        f += _bsdf[i]->evaluateSample(inDirection, outDirection, surfaceInfo);
+        f += _bsdf[i]->evaluateSample(inDirection, outDirection, surfaceInfo, pdf);
     }
 
     return f;

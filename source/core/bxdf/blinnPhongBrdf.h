@@ -9,7 +9,7 @@ public:
     BlinnPhongBRDF(const real exponent = 32.0_r);
 
     Vector3R evaluate(const Vector3R inDirection, const Vector3R outDirection, const SurfaceInfo surfaceInfo) const override;
-    Vector3R evaluateSample(const Vector3R inDirection, Vector3R &outDirection, const SurfaceInfo surfaceInfo) const override;
+    Vector3R evaluateSample(const Vector3R inDirection, Vector3R &outDirection, const SurfaceInfo surfaceInfo, real &pdf) const override;
 
 private:
     real _exponent;

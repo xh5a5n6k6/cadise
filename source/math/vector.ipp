@@ -10,15 +10,15 @@ namespace cadise {
 
 template<typename T, uint32 Size>
 inline Vector<T, Size>::Vector() {
-    for (uint32 i = 0; i < Size; i++) {
-        _v[i] = static_cast<T>(0);
+    for (uint32 index = 0; index < Size; index++) {
+        _v[index] = static_cast<T>(0);
     }
 }
 
 template<typename T, uint32 Size>
 inline Vector<T, Size>::Vector(const T v) {
-    for (uint32 i = 0; i < Size; i++) {
-        _v[i] = v;
+    for (uint32 index = 0; index < Size; index++) {
+        _v[index] = v;
     }
 }
 
@@ -31,8 +31,8 @@ inline Vector<T, Size>::Vector(const T v1, const T v2, const Ts... ts) :
 template<typename T, uint32 Size>
 inline Vector<T, Size> Vector<T, Size>::operator-() const {
     Vector<T, Size> result;
-    for (uint32 i = 0; i < Size; i++) {
-        result._v[i] = -_v[i];
+    for (uint32 index = 0; index < Size; index++) {
+        result._v[index] = -_v[index];
     }
 
     return result;
@@ -41,8 +41,8 @@ inline Vector<T, Size> Vector<T, Size>::operator-() const {
 template<typename T, uint32 Size>
 inline Vector<T, Size> Vector<T, Size>::operator+(const T s) const {
     Vector<T, Size> result;
-    for (uint32 i = 0; i < Size; i++) {
-        result._v[i] = _v[i] + s;
+    for (uint32 index = 0; index < Size; index++) {
+        result._v[index] = _v[index] + s;
     }
 
     return result;
@@ -51,8 +51,8 @@ inline Vector<T, Size> Vector<T, Size>::operator+(const T s) const {
 template<typename T, uint32 Size>
 inline Vector<T, Size> Vector<T, Size>::operator+(const Vector<T, Size> v) const {
     Vector<T, Size> result;
-    for (uint32 i = 0; i < Size; i++) {
-        result._v[i] = _v[i] + v._v[i];
+    for (uint32 index = 0; index < Size; index++) {
+        result._v[index] = _v[index] + v._v[index];
     }
 
     return result;
@@ -61,8 +61,8 @@ inline Vector<T, Size> Vector<T, Size>::operator+(const Vector<T, Size> v) const
 template<typename T, uint32 Size>
 inline Vector<T, Size> Vector<T, Size>::operator-(const T s) const {
     Vector<T, Size> result;
-    for (uint32 i = 0; i < Size; i++) {
-        result._v[i] = _v[i] - s;
+    for (uint32 index = 0; index < Size; index++) {
+        result._v[index] = _v[index] - s;
     }
 
     return result;
@@ -71,8 +71,8 @@ inline Vector<T, Size> Vector<T, Size>::operator-(const T s) const {
 template<typename T, uint32 Size>
 inline Vector<T, Size> Vector<T, Size>::operator-(const Vector<T, Size> v) const {
     Vector<T, Size> result;
-    for (uint32 i = 0; i < Size; i++) {
-        result._v[i] = _v[i] - v._v[i];
+    for (uint32 index = 0; index < Size; index++) {
+        result._v[index] = _v[index] - v._v[index];
     }
 
     return result;
@@ -81,8 +81,8 @@ inline Vector<T, Size> Vector<T, Size>::operator-(const Vector<T, Size> v) const
 template<typename T, uint32 Size>
 inline Vector<T, Size> Vector<T, Size>::operator*(const T s) const {
     Vector<T, Size> result;
-    for (uint32 i = 0; i < Size; i++) {
-        result._v[i] = _v[i] * s;
+    for (uint32 index = 0; index < Size; index++) {
+        result._v[index] = _v[index] * s;
     }
 
     return result;
@@ -91,8 +91,8 @@ inline Vector<T, Size> Vector<T, Size>::operator*(const T s) const {
 template<typename T, uint32 Size>
 inline Vector<T, Size> Vector<T, Size>::operator*(const Vector<T, Size> v) const {
     Vector<T, Size> result;
-    for (uint32 i = 0; i < Size; i++) {
-        result._v[i] = _v[i] * v._v[i];
+    for (uint32 index = 0; index < Size; index++) {
+        result._v[index] = _v[index] * v._v[index];
     }
 
     return result;
@@ -104,8 +104,8 @@ inline Vector<T, Size> Vector<T, Size>::operator/(const T s) const {
 
     T invS = static_cast<T>(1) / s;
     Vector<T, Size> result;
-    for (uint32 i = 0; i < Size; i++) {
-        result._v[i] = _v[i] * invS;
+    for (uint32 index = 0; index < Size; index++) {
+        result._v[index] = _v[index] * invS;
     }
 
     return result;
@@ -114,10 +114,10 @@ inline Vector<T, Size> Vector<T, Size>::operator/(const T s) const {
 template<typename T, uint32 Size>
 inline Vector<T, Size> Vector<T, Size>::operator/(const Vector<T, Size> v) const {
     Vector<T, Size> result;
-    for (uint32 i = 0; i < Size; i++) {
-        assert(v._v[i] != static_cast<T>(0));
+    for (uint32 index = 0; index < Size; index++) {
+        assert(v._v[index] != static_cast<T>(0));
 
-        result._v[i] = _v[i] / v._v[i];
+        result._v[index] = _v[index] / v._v[index];
     }
 
     return result;
@@ -125,8 +125,8 @@ inline Vector<T, Size> Vector<T, Size>::operator/(const Vector<T, Size> v) const
 
 template<typename T, uint32 Size>
 inline Vector<T, Size>& Vector<T, Size>::operator+=(const T s) {
-    for (uint32 i = 0; i < Size; i++) {
-        _v[i] += s;
+    for (uint32 index = 0; index < Size; index++) {
+        _v[index] += s;
     }
 
     return *this;
@@ -134,8 +134,8 @@ inline Vector<T, Size>& Vector<T, Size>::operator+=(const T s) {
 
 template<typename T, uint32 Size>
 inline Vector<T, Size>& Vector<T, Size>::operator+=(const Vector<T, Size> v) {
-    for (uint32 i = 0; i < Size; i++) {
-        _v[i] += v._v[i];
+    for (uint32 index = 0; index < Size; index++) {
+        _v[index] += v._v[index];
     }
 
     return *this;
@@ -143,8 +143,8 @@ inline Vector<T, Size>& Vector<T, Size>::operator+=(const Vector<T, Size> v) {
 
 template<typename T, uint32 Size>
 inline Vector<T, Size>& Vector<T, Size>::operator-=(const T s) {
-    for (uint32 i = 0; i < Size; i++) {
-        _v[i] -= s;
+    for (uint32 index = 0; index < Size; index++) {
+        _v[index] -= s;
     }
 
     return *this;
@@ -152,8 +152,8 @@ inline Vector<T, Size>& Vector<T, Size>::operator-=(const T s) {
 
 template<typename T, uint32 Size>
 inline Vector<T, Size>& Vector<T, Size>::operator-=(const Vector<T, Size> v) {
-    for (uint32 i = 0; i < Size; i++) {
-        _v[i] -= v._v[i];
+    for (uint32 index = 0; index < Size; index++) {
+        _v[index] -= v._v[index];
     }
 
     return *this;
@@ -161,8 +161,8 @@ inline Vector<T, Size>& Vector<T, Size>::operator-=(const Vector<T, Size> v) {
 
 template<typename T, uint32 Size>
 inline Vector<T, Size>& Vector<T, Size>::operator*=(const T s) {
-    for (uint32 i = 0; i < Size; i++) {
-        _v[i] *= s;
+    for (uint32 index = 0; index < Size; index++) {
+        _v[index] *= s;
     }
 
     return *this;
@@ -170,8 +170,8 @@ inline Vector<T, Size>& Vector<T, Size>::operator*=(const T s) {
 
 template<typename T, uint32 Size>
 inline Vector<T, Size>& Vector<T, Size>::operator*=(const Vector<T, Size> v) {
-    for (uint32 i = 0; i < Size; i++) {
-        _v[i] *= v._v[i];
+    for (uint32 index = 0; index < Size; index++) {
+        _v[index] *= v._v[index];
     }
 
     return *this;
@@ -181,8 +181,8 @@ template<typename T, uint32 Size>
 inline Vector<T, Size>& Vector<T, Size>::operator/=(const T s) {
     assert(s != static_cast<T>(0));
 
-    for (uint32 i = 0; i < Size; i++) {
-        _v[i] /= s;
+    for (uint32 index = 0; index < Size; index++) {
+        _v[index] /= s;
     }
 
     return *this;
@@ -190,10 +190,10 @@ inline Vector<T, Size>& Vector<T, Size>::operator/=(const T s) {
 
 template<typename T, uint32 Size>
 inline Vector<T, Size>& Vector<T, Size>::operator/=(const Vector<T, Size> v) {
-    for (uint32 i = 0; i < Size; i++) {
-        assert(v._v[i] != static_cast<T>(0));
+    for (uint32 index = 0; index < Size; index++) {
+        assert(v._v[index] != static_cast<T>(0));
 
-        _v[i] /= v._v[i];
+        _v[index] /= v._v[index];
     }
 
     return *this;
@@ -201,23 +201,23 @@ inline Vector<T, Size>& Vector<T, Size>::operator/=(const Vector<T, Size> v) {
 
 template<typename T, uint32 Size>
 inline Vector<T, Size>& Vector<T, Size>::operator=(const Vector<T, Size> v) {
-    for (uint32 i = 0; i < Size; i++) {
-        _v[i] = v._v[i];
+    for (uint32 index = 0; index < Size; index++) {
+        _v[index] = v._v[index];
     }
 
     return *this;
 }
 
 template<typename T, uint32 Size>
-inline T& Vector<T, Size>::operator[](const uint32 i) {
-    return _v[i];
+inline T& Vector<T, Size>::operator[](const uint32 index) {
+    return _v[index];
 }
 
 template<typename T, uint32 Size>
 inline bool Vector<T, Size>::isZero() const {
     bool result = true;
-    for (uint32 i = 0; i < Size; i++) {
-        result &= _v[i] == static_cast<T>(0);
+    for (uint32 index = 0; index < Size; index++) {
+        result &= _v[index] == static_cast<T>(0);
     }
 
     return result;
@@ -231,8 +231,8 @@ inline T Vector<T, Size>::length() const {
 template<typename T, uint32 Size>
 inline T Vector<T, Size>::lengthSquared() const {
     T result = static_cast<T>(0);
-    for (uint32 i = 0; i < Size; i++) {
-        result += _v[i] * _v[i];
+    for (uint32 index = 0; index < Size; index++) {
+        result += _v[index] * _v[index];
     }
 
     return result;
@@ -249,10 +249,10 @@ inline Vector<T, Size> Vector<T, Size>::normalize() const {
 template<typename T, uint32 Size>
 inline Vector<T, Size> Vector<T, Size>::reciprocal() const {
     Vector<T, Size> result;
-    for (uint32 i = 0; i < Size; i++) {
-        assert(_v[i] != static_cast<T>(0));
+    for (uint32 index = 0; index < Size; index++) {
+        assert(_v[index] != static_cast<T>(0));
 
-        result._v[i] = static_cast<T>(1) / _v[i];
+        result._v[index] = static_cast<T>(1) / _v[index];
     }
 
     return result;
@@ -261,8 +261,8 @@ inline Vector<T, Size> Vector<T, Size>::reciprocal() const {
 template<typename T, uint32 Size>
 inline Vector<T, Size> Vector<T, Size>::clamp(const T min, const T max) const {
     Vector<T, Size> result;
-    for (uint32 i = 0; i < Size; i++) {
-        result._v[i] = std::clamp(_v[i], min, max);
+    for (uint32 index = 0; index < Size; index++) {
+        result._v[index] = std::clamp(_v[index], min, max);
     }
 
     return result;
@@ -272,10 +272,10 @@ template<typename T, uint32 Size>
 inline uint32 Vector<T, Size>::maxDimension() const {
     T max = _v[0];
     uint32 maxD = 0;
-    for (uint32 i = 1; i < Size; i++) {
-        if (_v[i] > max) {
-            max = _v[i];
-            maxD = i;
+    for (uint32 index = 1; index < Size; index++) {
+        if (_v[index] > max) {
+            max = _v[index];
+            maxD = index;
         }
     }
 
@@ -284,16 +284,16 @@ inline uint32 Vector<T, Size>::maxDimension() const {
 
 template<typename T, uint32 Size>
 inline void Vector<T, Size>::swap(Vector<T, Size> &v) {
-    for (uint32 i = 0; i < Size; i++) {
-        std::swap(_v[i], v._v[i]);
+    for (uint32 index = 0; index < Size; index++) {
+        std::swap(_v[index], v._v[index]);
     }
 }
 
 template<typename T, uint32 Size>
 inline T Vector<T, Size>::dot(const Vector<T, Size> v) const {
     T result = static_cast<T>(0);
-    for (uint32 i = 0; i < Size; i++) {
-        result += _v[i] * v._v[i];
+    for (uint32 index = 0; index < Size; index++) {
+        result += _v[index] * v._v[index];
     }
 
     return result;
@@ -339,8 +339,8 @@ inline T Vector<T, Size>::z() const {
 template<typename T, uint32 Size>
 inline Vector<T, Size> Vector<T, Size>::min(const Vector<T, Size> v1, const Vector<T, Size> v2) {
     Vector<T, Size> result;
-    for (uint32 i = 0; i < Size; i++) {
-        result._v[i] = std::min(v1._v[i], v2._v[i]);
+    for (uint32 index = 0; index < Size; index++) {
+        result._v[index] = std::min(v1._v[index], v2._v[index]);
     }
 
     return result;
@@ -349,8 +349,8 @@ inline Vector<T, Size> Vector<T, Size>::min(const Vector<T, Size> v1, const Vect
 template<typename T, uint32 Size>
 inline Vector<T, Size> Vector<T, Size>::max(const Vector<T, Size> v1, const Vector<T, Size> v2) {
     Vector<T, Size> result;
-    for (uint32 i = 0; i < Size; i++) {
-        result._v[i] = std::max(v1._v[i], v2._v[i]);
+    for (uint32 index = 0; index < Size; index++) {
+        result._v[index] = std::max(v1._v[index], v2._v[index]);
     }
 
     return result;

@@ -39,8 +39,8 @@ Vector3R Primitive::evaluateBSDF(const Vector3R inDirection, const Vector3R outD
     return _material->evaluateBSDF(inDirection, outDirection, surfaceInfo);
 }
 
-Vector3R Primitive::evaluateSampleBSDF(const Vector3R inDirection, Vector3R &outDirection, const SurfaceInfo surfaceInfo) const {
-    return _material->evaluateSampleBSDF(inDirection, outDirection, surfaceInfo);
+Vector3R Primitive::evaluateSampleBSDF(const Vector3R inDirection, Vector3R &outDirection, const SurfaceInfo surfaceInfo, real &pdf) const {
+    return _material->evaluateSampleBSDF(inDirection, outDirection, surfaceInfo, pdf);
 }
 
 } // namespace cadise

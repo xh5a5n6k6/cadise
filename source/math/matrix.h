@@ -20,7 +20,7 @@ public:
     Vector3R transformPoint(const Vector3R v) const;
     Vector3R transformVector(const Vector3R v) const;
 
-    real n(const int32 i, const int32 j) const;
+    real n(const int32 row, const int32 col) const;
 
     static Matrix4 identity();
     static Matrix4 scale(const real sx, const real sy, const real sz);

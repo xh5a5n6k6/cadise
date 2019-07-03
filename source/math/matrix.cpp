@@ -3,9 +3,9 @@
 namespace cadise {
 
 Matrix4::Matrix4() {
-    for (int32 i = 0; i < 4; i++) {
-        for (int32 j = 0; j < 4; j++) {
-            _n[i][j] = 0.0_r;
+    for (int32 row = 0; row < 4; row++) {
+        for (int32 col = 0; col < 4; col++) {
+            _n[row][col] = 0.0_r;
         }
     }
 }
@@ -21,9 +21,9 @@ Matrix4::Matrix4(const real n00, const real n01, const real n02, const real n03,
 }
 
 Matrix4& Matrix4::operator=(const Matrix4 mat) {
-    for (int32 i = 0; i < 4; i++) {
-        for (int32 j = 0; j < 4; j++) {
-            _n[i][j] = mat._n[i][j];
+    for (int32 row = 0; row < 4; row++) {
+        for (int32 col = 0; col < 4; col++) {
+            _n[row][col] = mat._n[row][col];
         }
     }
 
@@ -42,12 +42,12 @@ Matrix4 Matrix4::inverse() const {
     // First, for each column find a non-zero value to be the diagonal value
     Matrix4 mat = *this;
     Matrix4 inv = identity();
-    for (int32 j = 0; j < 4; j++) {
-        // find non-zero row in column j, and assign it as pivot
+    for (int32 col = 0; col < 4; col++) {
+        // find non-zero row in column col, and assign it as pivot
         int32 head = -1;
-        for (int32 r = j; r < 4; r++) {
-            if (mat._n[r][j] != 0.0_r) {
-                head = r;
+        for (int32 row = col; row < 4; row++) {
+            if (mat._n[row][col] != 0.0_r) {
+                head = row;
                 break;
             }
         }
@@ -57,18 +57,18 @@ Matrix4 Matrix4::inverse() const {
         }
 
         // swap two rows, let pivot be diagonal 
-        inv._swapRows(j, head);
-        mat._swapRows(j, head);
+        inv._swapRows(col, head);
+        mat._swapRows(col, head);
 
         // unitize the pivot row
-        inv._divideRow(j, mat._n[j][j]);
-        mat._divideRow(j, mat._n[j][j]);
+        inv._divideRow(col, mat._n[col][col]);
+        mat._divideRow(col, mat._n[col][col]);
 
         // eliminate off-diagonal elements in column j (from row 0 ~ 3 excluded j)
-        for (int32 r = 0; r < 4; r++) {
-            if (r != j) {
-                inv._substractRow(r, j, mat._n[r][j]);
-                mat._substractRow(r, j, mat._n[r][j]);
+        for (int32 row = 0; row < 4; row++) {
+            if (row != col) {
+                inv._substractRow(row, col, mat._n[row][col]);
+                mat._substractRow(row, col, mat._n[row][col]);
             }
         }
     }
@@ -83,13 +83,13 @@ Vector3R Matrix4::transformPoint(const Vector3R v) const {
 }
 
 Vector3R Matrix4::transformVector(const Vector3R v) const {
-    return Vector3R(_n[0][0] * v.x() + _n[0][1] * v.y() + _n[0][2] * v.z(),
-                    _n[1][0] * v.x() + _n[1][1] * v.y() + _n[1][2] * v.z(),
-                    _n[2][0] * v.x() + _n[2][1] * v.y() + _n[2][2] * v.z());
+    return Vector3R(_n[0][0] * v.x() + _n[1][0] * v.y() + _n[2][0] * v.z(),
+                    _n[0][1] * v.x() + _n[1][1] * v.y() + _n[2][1] * v.z(),
+                    _n[0][2] * v.x() + _n[1][2] * v.y() + _n[2][2] * v.z());
 }
 
-real Matrix4::n(const int32 i, const int32 j) const {
-    return _n[i][j];
+real Matrix4::n(const int32 row, const int32 col) const {
+    return _n[row][col];
 }
 
 Matrix4 Matrix4::identity() {

@@ -27,11 +27,11 @@ void WhittedRenderer::render(const Scene scene) const {
     int32 ry = scene.camera()->film().resolution().y();
 
     // for each pixel, calculate its color
-    for (int32 y = 0; y < ry; y++) {
-        for (int32 x = 0; x < rx; x++) { 
+    for (int32 iy = 0; iy < ry; iy++) {
+        for (int32 ix = 0; ix < rx; ix++) { 
             // for each sample calculate its color
-            for (int32 n = 0; n < _sampleNumber; n++) {
-                Ray ray = scene.camera()->createRay(x, y);
+            for (int32 in = 0; in < _sampleNumber; in++) {
+                Ray ray = scene.camera()->createRay(ix, iy);
 
                 Intersection intersection;
                 RGBColor sampleColor = _luminance(scene, ray, intersection);
@@ -39,7 +39,7 @@ void WhittedRenderer::render(const Scene scene) const {
                 sampleColor.rgb() = sampleColor.rgb().clamp(0.0_r, 255.0_r);
 
                 RGBColor color = sampleColor.rgb() / static_cast<real>(_sampleNumber);
-                scene.camera()->film().addSample(x, y, color.rgb());
+                scene.camera()->film().addSample(ix, iy, color.rgb());
             }
         }
     }
@@ -55,15 +55,15 @@ void WhittedRenderer::render(const Scene scene) const {
 RGBColor WhittedRenderer::_luminance(const Scene scene, Ray &ray, Intersection &intersection) const {
     RGBColor color = RGBColor(0.0_r, 0.0_r, 0.0_r);
     if (scene.isIntersecting(ray, intersection)) {
-        // add radiance if hit area light
+        // add radiance if hitting area light
         color.rgb() += intersection.intersector()->emittance(-ray.direction()).rgb();
         
         Vector3R hitPoint = intersection.surfaceInfo().point();
-        for (uint64 i = 0; i < scene.lights().size(); i++) {
+        for (uint64 index = 0; index < scene.lights().size(); index++) {
             Vector3R lightDir;
             real t;
             real pdf;
-            Vector3R radiance = scene.lights()[i]->evaluateSampleRadiance(lightDir, intersection.surfaceInfo(), t, pdf);
+            Vector3R radiance = scene.lights()[index]->evaluateSampleRadiance(lightDir, intersection.surfaceInfo(), t, pdf);
             
             // generate shadow ray to do occluded test
             Ray r = Ray(hitPoint + constant::RAY_EPSILON * intersection.surfaceInfo().normal(),
@@ -94,7 +94,7 @@ RGBColor WhittedRenderer::_reflect(const Scene scene, Ray &ray, Intersection &in
 
     Vector3R sampleDir;
     real pdf = 1.0_r;
-    Vector3R reflectance = intersection.intersector()->evaluateSampleBSDF(-ray.direction(), sampleDir, intersection.surfaceInfo());
+    Vector3R reflectance = intersection.intersector()->evaluateSampleBSDF(-ray.direction(), sampleDir, intersection.surfaceInfo(), pdf);
 
     if (!reflectance.isZero()) {
         Ray r = Ray(intersection.surfaceInfo().point() + constant::RAY_EPSILON * intersection.surfaceInfo().normal(),

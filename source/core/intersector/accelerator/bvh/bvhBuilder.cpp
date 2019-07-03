@@ -16,18 +16,21 @@ std::unique_ptr<BVHBinaryNode> BVHBuilder::buildBinaryNodes(
     std::vector<std::shared_ptr<Intersector> > &orderedIntersectors,
     uint64 &totalSize) const {
 
-    std::unique_ptr<BVHBinaryNode> root = _buildBinaryNodesRecursively(intersectors, orderedIntersectors, 0, totalSize);
+    std::unique_ptr<BVHBinaryNode> root = nullptr;
+    root = _buildBinaryNodesRecursively(intersectors, orderedIntersectors, 0, totalSize);
 
     return std::move(root);
 }
 
-std::vector<BVHLinearNode> BVHBuilder::buildLinearNodes(std::unique_ptr<BVHBinaryNode> root, const uint64 totalSize) const {
-    std::vector<BVHLinearNode> linearNodes;
-    linearNodes.reserve(totalSize);
-    
-    _buildLinearNodesRecursively(std::move(root), linearNodes, nullptr);
+void BVHBuilder::buildLinearNodes(std::unique_ptr<BVHBinaryNode> root, 
+                                  std::vector<BVHLinearNode> &linearNodes,
+                                  const uint64 totalSize) const {
+    std::vector<BVHLinearNode> nodes;
+    nodes.reserve(totalSize);
 
-    return linearNodes;
+    _buildLinearNodesRecursively(std::move(root), nodes, nullptr);
+
+    linearNodes.swap(nodes);
 }
 
 std::unique_ptr<BVHBinaryNode> BVHBuilder::_buildBinaryNodesRecursively(
@@ -99,7 +102,9 @@ void BVHBuilder::_buildLinearNodesRecursively(std::unique_ptr<BVHBinaryNode> bin
     }
 
     if (binaryNode->isLeaf()) {
-        linearNode.initializeLeafNode(binaryNode->bound(), binaryNode->intersectorIndex(), binaryNode->intersectorCounts());
+        linearNode.initializeLeafNode(binaryNode->bound(), 
+                                      binaryNode->intersectorIndex(), 
+                                      binaryNode->intersectorCounts());
         linearNodes.push_back(linearNode);
     }
     else {

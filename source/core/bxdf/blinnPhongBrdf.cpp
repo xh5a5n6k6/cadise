@@ -24,7 +24,7 @@ Vector3R BlinnPhongBRDF::evaluate(const Vector3R inDirection, const Vector3R out
     return Vector3R(specular, specular, specular);
 }
 
-Vector3R BlinnPhongBRDF::evaluateSample(const Vector3R inDirection, Vector3R &outDirection, const SurfaceInfo surfaceInfo) const {
+Vector3R BlinnPhongBRDF::evaluateSample(const Vector3R inDirection, Vector3R &outDirection, const SurfaceInfo surfaceInfo, real &pdf) const {
     return Vector3R(0.0_r, 0.0_r, 0.0_r);
 }
 

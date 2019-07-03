@@ -20,7 +20,9 @@ public:
         std::vector<std::shared_ptr<Intersector> > &orderedIntersectors,
         uint64 &totalSize) const;
 
-    std::vector<BVHLinearNode> buildLinearNodes(std::unique_ptr<BVHBinaryNode> root, const uint64 totalSize) const;
+    void buildLinearNodes(std::unique_ptr<BVHBinaryNode> root, 
+                          std::vector<BVHLinearNode> &linearNodes,
+                          const uint64 totalSize) const;
 
 private:
     std::unique_ptr<BVHBinaryNode> _buildBinaryNodesRecursively(

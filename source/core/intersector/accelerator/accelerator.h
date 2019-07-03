@@ -14,7 +14,7 @@ public:
     virtual RGBColor emittance(const Vector3R direction) const override;
 
     virtual Vector3R evaluateBSDF(const Vector3R inDirection, const Vector3R outDirection, const SurfaceInfo surfaceInfo) const override;
-    virtual Vector3R evaluateSampleBSDF(const Vector3R inDirection, Vector3R &outDirection, const SurfaceInfo surfaceInfo) const override;
+    virtual Vector3R evaluateSampleBSDF(const Vector3R inDirection, Vector3R &outDirection, const SurfaceInfo surfaceInfo, real &pdf) const override;
 };
 
 } // namespace cadise
