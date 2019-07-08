@@ -7,21 +7,22 @@
 
 namespace cadise {
 
-AreaLight::AreaLight(const Vector3R albedo) :
+AreaLight::AreaLight(const Vector3R& albedo) :
     _albedo(albedo) {
 }
 
-Vector3R AreaLight::evaluateSampleRadiance(Vector3R &lightDirection, const SurfaceGeometryInfo surfaceGeometryInfo, real &t, real &pdf) const {
+Vector3R AreaLight::evaluateSampleRadiance(Vector3R& lightDirection, const SurfaceGeometryInfo& surfaceGeometryInfo, real& t, real& pdf) const {
     Vector3R offsetOrigin = surfaceGeometryInfo.point() + constant::RAY_EPSILON * surfaceGeometryInfo.normal();
     SurfaceGeometryInfo sampleSurface;
-    _primitive->sampleSurface(surfaceGeometryInfo, sampleSurface);
+    std::shared_ptr<Primitive> primitive = _primitive.lock();
+    primitive->sampleSurface(surfaceGeometryInfo, sampleSurface);
 
     Vector3R direction = sampleSurface.point() - offsetOrigin;
     t = direction.length();
     lightDirection = direction.normalize();
 
-    // Change delta A to delta w
-    pdf = _primitive->samplePdfA(sampleSurface.point());
+    // change delta A to delta w
+    pdf = primitive->samplePdfA(sampleSurface.point());
     pdf *= direction.lengthSquared() / sampleSurface.normal().dot(-direction.normalize());
 
     return _albedo;
@@ -35,11 +36,7 @@ Vector3R AreaLight::color() const {
     return _albedo;
 }
 
-std::shared_ptr<Primitive> AreaLight::primitive() const {
-    return _primitive;
-}
-
-void AreaLight::setPrimitive(const std::shared_ptr<Primitive> primitive) {
+void AreaLight::setPrimitive(const std::shared_ptr<Primitive>& primitive) {
     _primitive = primitive;
 }
 

@@ -11,8 +11,12 @@
 
 namespace cadise {
 
-Triangle::Triangle(const std::shared_ptr<BSDF> bsdf, const Vector3R v1, const Vector3R v2, const Vector3R v3) :
-    Primitive(bsdf), _v1(v1), _v2(v2), _v3(v3) {
+Triangle::Triangle(const std::shared_ptr<BSDF>& bsdf, const Vector3R& v1, const Vector3R& v2, const Vector3R& v3) :
+    Primitive(bsdf), 
+    _v1(v1),
+    _v2(v2), 
+    _v3(v3) {
+    
     _e1 = _v2 - _v1;
     _e2 = _v3 - _v1;
 }
@@ -21,7 +25,7 @@ AABB3R Triangle::bound() const {
     return AABB3R(_v1).unionWith(_v2).unionWith(_v3).expand(0.0001_r);
 }
 
-bool Triangle::isIntersecting(Ray &ray, PrimitiveInfo &primitiveInfo) const {
+bool Triangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
     Vector3R D = ray.direction();
     Vector3R e1 = _e1;
     Vector3R e2 = _e2;
@@ -55,15 +59,11 @@ bool Triangle::isIntersecting(Ray &ray, PrimitiveInfo &primitiveInfo) const {
     ray.setMaxT(t);
     primitiveInfo.setPrimitive(this);
     primitiveInfo.setIsBackSide(isBackSide);
-    //Vector3R point = ray.at(t);
-    //Vector3R normal = e1.cross(e2).normalize();
-    //surfaceGeometryInfo.setPoint(point);
-    //surfaceGeometryInfo.setNormal(normal);
 
     return true;
 }
 
-bool Triangle::isOccluded(Ray &ray) const {
+bool Triangle::isOccluded(Ray& ray) const {
     Vector3R D = ray.direction();
     Vector3R e1 = _e1;
     Vector3R e2 = _e2;
@@ -97,17 +97,17 @@ bool Triangle::isOccluded(Ray &ray) const {
     return true;
 }
 
-void Triangle::evaluateGeometryDetail(const PrimitiveInfo primitiveInfo, SurfaceGeometryInfo &geometryInfo) const {
+void Triangle::evaluateGeometryDetail(const PrimitiveInfo& primitiveInfo, SurfaceGeometryInfo& geometryInfo) const {
     Vector3R normal = (primitiveInfo.isBackSide()) ? _e2.cross(_e1) : _e1.cross(_e2);
     normal = normal.normalize();
     geometryInfo.setNormal(normal);
 }
 
-void Triangle::evaluteShadingDetail(SurfaceShadingInfo &shadingInfo) const {
+void Triangle::evaluteShadingDetail(SurfaceShadingInfo& shadingInfo) const {
 
 }
 
-void Triangle::sampleSurface(const SurfaceGeometryInfo inSurface, SurfaceGeometryInfo &outSurface) const {
+void Triangle::sampleSurface(const SurfaceGeometryInfo& inSurface, SurfaceGeometryInfo& outSurface) const {
     // TODO
     // improve sample point on triangle
     std::random_device rd;
@@ -123,21 +123,20 @@ void Triangle::sampleSurface(const SurfaceGeometryInfo inSurface, SurfaceGeometr
         t = disT(gen);
     } while (s + t >= 1.0_r);
 
-    Vector3R point = _v1 + s * _e1 + t * _e2;
+    Vector3R e1 = _e1;
+    Vector3R e2 = _e2;
+    Vector3R point = _v1 + s * e1 + t * e2;
     Vector3R direction = point - inSurface.point();
-    Vector3R normal;
-    if (direction.dot(_e1.cross(_e2)) > 0.0_r) {
-        normal = _e2.cross(_e1).normalize();
+    if (direction.dot(e1.cross(e2)) > 0.0_r) {
+        e1.swap(e2);
     }
-    else {
-        normal = _e1.cross(_e2).normalize();
-    }
+    Vector3R normal = e1.cross(e2).normalize();
 
     outSurface.setPoint(point);
     outSurface.setNormal(normal);
 }
 
-real Triangle::samplePdfA(const Vector3R position) const {
+real Triangle::samplePdfA(const Vector3R& position) const {
     assert(area() > 0.0_r);
 
     return 1.0_r / area();

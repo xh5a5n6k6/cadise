@@ -3,7 +3,8 @@
 namespace cadise {
 
 PrimitiveInfo::PrimitiveInfo() :
-    _primitive(nullptr), _isBackSide(false) {
+    _primitive(nullptr),
+    _isBackSide(false) {
 }
 
 const Primitive* PrimitiveInfo::primitive() const {

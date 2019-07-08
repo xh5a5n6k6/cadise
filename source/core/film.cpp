@@ -6,12 +6,14 @@
 
 namespace cadise {
 
-Film::Film(const Path filename, const int32 rx, const int32 ry) :
-    _filename(filename), _resolution(rx, ry) {
+Film::Film(const Path& filename, const int32 rx, const int32 ry) :
+    _filename(filename), 
+    _resolution(rx, ry) {
+
     _pixelValue = new real[3 * _resolution.x() * _resolution.y()];
 }
 
-void Film::addSample(const int32 px, const int32 py, const Vector3R value) {
+void Film::addSample(const int32 px, const int32 py, const Vector3R& value) {
     int32 offset = 3 * (px + py * _resolution.x());
     _pixelValue[offset]     += value.x();
     _pixelValue[offset + 1] += value.y();

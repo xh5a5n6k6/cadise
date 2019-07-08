@@ -10,7 +10,7 @@ class Parser {
 public:
     Parser();
 
-    void parseFile(const std::string filename);
+    void parseFile(const std::string& filename);
 
 private:
     void _parseEnd();

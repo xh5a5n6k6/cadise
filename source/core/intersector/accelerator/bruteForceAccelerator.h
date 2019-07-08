@@ -11,13 +11,13 @@ namespace cadise {
 // It is for debugging usage compared to other accelerators.
 class BruteForceAccelerator : public Accelerator {
 public:
-    BruteForceAccelerator(const std::vector<std::shared_ptr<Intersector> > intersectors);
+    BruteForceAccelerator(const std::vector<std::shared_ptr<Intersector>>& intersectors);
 
-    bool isIntersecting(Ray &ray, PrimitiveInfo &primitiveInfo) const override;
-    bool isOccluded(Ray &ray) const override;
+    bool isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const override;
+    bool isOccluded(Ray& ray) const override;
 
 private:
-    std::vector<std::shared_ptr<Intersector> > _intersectors;
+    std::vector<std::shared_ptr<Intersector>> _intersectors;
 };
 
 } // namespace cadise

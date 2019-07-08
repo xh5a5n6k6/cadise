@@ -13,8 +13,8 @@ class Intersector {
 public:
     virtual AABB3R bound() const = 0;
 
-    virtual bool isIntersecting(Ray &ray, PrimitiveInfo &primitiveInfo) const = 0;
-    virtual bool isOccluded(Ray &ray) const = 0;
+    virtual bool isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const = 0;
+    virtual bool isOccluded(Ray& ray) const = 0;
 };
 
 } // namespace cadise

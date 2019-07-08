@@ -10,7 +10,7 @@ RGBColor::RGBColor(const real r, const real g, const real b) :
     _rgb(r, g, b) {
 }
 
-RGBColor::RGBColor(const Vector3R rgb) : 
+RGBColor::RGBColor(const Vector3R& rgb) : 
     _rgb(rgb) {
 }
 

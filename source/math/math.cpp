@@ -6,7 +6,7 @@ namespace cadise {
 
 namespace math {
 
-void buildCoordinateSystem(const Vector3R &zAxis, Vector3R &xAxis, Vector3R &yAxis) {
+void buildCoordinateSystem(const Vector3R& zAxis, Vector3R& xAxis, Vector3R& yAxis) {
     if (std::abs(zAxis.x()) > std::abs(zAxis.y())) {
         xAxis = Vector3R(-zAxis.z(), 0.0_r, zAxis.x()) / std::sqrt(zAxis.x() * zAxis.x() + zAxis.z() * zAxis.z());
     }

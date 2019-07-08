@@ -9,8 +9,8 @@ public:
     BVHLinearNode();
     ~BVHLinearNode();
 
-    void initializeInternalNode(const AABB3R bound, const uint64 secondChildIndex, const uint32 splitAxis);
-    void initializeLeafNode(const AABB3R bound, const uint64 intersectorIndex, const uint64 intersectorCounts);
+    void initializeInternalNode(const AABB3R& bound, const uint64 secondChildIndex, const uint32 splitAxis);
+    void initializeLeafNode(const AABB3R& bound, const uint64 intersectorIndex, const uint64 intersectorCounts);
 
     AABB3R bound() const;
     uint64 intersectorIndex() const;

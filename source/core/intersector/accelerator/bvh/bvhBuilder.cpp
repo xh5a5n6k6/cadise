@@ -7,14 +7,14 @@
 
 namespace cadise {
 
-BVHBuilder::BVHBuilder(const BVHSplitter splitter) :
+BVHBuilder::BVHBuilder(const BVHSplitter& splitter) :
     _splitter(splitter) {
 }
 
 std::unique_ptr<BVHBinaryNode> BVHBuilder::buildBinaryNodes(
-    const std::vector<std::shared_ptr<Intersector> > intersectors, 
-    std::vector<std::shared_ptr<Intersector> > &orderedIntersectors,
-    uint64 &totalSize) const {
+    const std::vector<std::shared_ptr<Intersector>>& intersectors, 
+    std::vector<std::shared_ptr<Intersector>>& orderedIntersectors,
+    uint64& totalSize) const {
 
     std::unique_ptr<BVHBinaryNode> root = nullptr;
     root = _buildBinaryNodesRecursively(intersectors, orderedIntersectors, 0, totalSize);
@@ -22,8 +22,8 @@ std::unique_ptr<BVHBinaryNode> BVHBuilder::buildBinaryNodes(
     return std::move(root);
 }
 
-void BVHBuilder::buildLinearNodes(std::unique_ptr<BVHBinaryNode> root, 
-                                  std::vector<BVHLinearNode> &linearNodes,
+void BVHBuilder::buildLinearNodes(std::unique_ptr<BVHBinaryNode>& root, 
+                                  std::vector<BVHLinearNode>& linearNodes,
                                   const uint64 totalSize) const {
     std::vector<BVHLinearNode> nodes;
     nodes.reserve(totalSize);
@@ -34,10 +34,10 @@ void BVHBuilder::buildLinearNodes(std::unique_ptr<BVHBinaryNode> root,
 }
 
 std::unique_ptr<BVHBinaryNode> BVHBuilder::_buildBinaryNodesRecursively(
-    const std::vector<std::shared_ptr<Intersector> > intersectors, 
-    std::vector<std::shared_ptr<Intersector> > &orderedIntersectors,
+    const std::vector<std::shared_ptr<Intersector>>& intersectors, 
+    std::vector<std::shared_ptr<Intersector>>& orderedIntersectors,
     const uint64 startIndex,
-    uint64 &totalSize) const {
+    uint64& totalSize) const {
 
     std::unique_ptr<BVHBinaryNode> node = std::make_unique<BVHBinaryNode>();
 
@@ -92,8 +92,8 @@ std::unique_ptr<BVHBinaryNode> BVHBuilder::_buildBinaryNodesRecursively(
     return std::move(node);
 }
 
-void BVHBuilder::_buildLinearNodesRecursively(std::unique_ptr<BVHBinaryNode> binaryNode, 
-                                              std::vector<BVHLinearNode> &linearNodes,
+void BVHBuilder::_buildLinearNodesRecursively(std::unique_ptr<BVHBinaryNode>& binaryNode, 
+                                              std::vector<BVHLinearNode>& linearNodes,
                                               std::shared_ptr<uint64> nodeIndex) const {
     BVHLinearNode linearNode;
     uint64 index = linearNodes.size();
@@ -120,10 +120,10 @@ void BVHBuilder::_buildLinearNodesRecursively(std::unique_ptr<BVHBinaryNode> bin
     }
 }
 
-bool BVHBuilder::_splitWith_EQUAL(const std::vector<std::shared_ptr<Intersector> > intersectors,
+bool BVHBuilder::_splitWith_EQUAL(const std::vector<std::shared_ptr<Intersector>>& intersectors,
                                   const uint32 splitAxis,
-                                  std::vector<std::shared_ptr<Intersector> > &subIntersectors1,
-                                  std::vector<std::shared_ptr<Intersector> > &subIntersectors2) const {
+                                  std::vector<std::shared_ptr<Intersector>>& subIntersectors1,
+                                  std::vector<std::shared_ptr<Intersector>>& subIntersectors2) const {
     uint64 size = (intersectors.size() + 1) / 2;
     subIntersectors1.reserve(size);
     subIntersectors2.reserve(size);

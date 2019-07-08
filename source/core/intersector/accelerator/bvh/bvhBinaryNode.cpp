@@ -11,15 +11,15 @@ BVHBinaryNode::~BVHBinaryNode() {
     _children[1].release();
 }
 
-void BVHBinaryNode::initializeInternalNode(std::unique_ptr<BVHBinaryNode> firstChild, std::unique_ptr<BVHBinaryNode> secondChild, const uint32 splitAxis) {
-    _bound = AABB3R().unionWith(firstChild->bound()).unionWith(secondChild->bound());
+void BVHBinaryNode::initializeInternalNode(std::unique_ptr<BVHBinaryNode>& firstChild, std::unique_ptr<BVHBinaryNode>& secondChild, const uint32 splitAxis) {
+    _bound = firstChild->bound().unionWith(secondChild->bound());
     _children[0] = std::move(firstChild);
     _children[1] = std::move(secondChild);
     _splitAxis = splitAxis;
     _isLeaf = false;
 }
 
-void BVHBinaryNode::initializeLeafNode(const AABB3R bound, const uint64 intersectorIndex, const uint64 intersectorCounts) {
+void BVHBinaryNode::initializeLeafNode(const AABB3R& bound, const uint64 intersectorIndex, const uint64 intersectorCounts) {
     _bound = bound;
     _intersectorIndex = intersectorIndex;
     _intersectorCounts = intersectorCounts;

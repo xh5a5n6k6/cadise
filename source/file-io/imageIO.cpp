@@ -10,19 +10,19 @@ namespace cadise {
 
 namespace imageIO {
 
-static bool savePNG(const Path path, const int32 width, const int32 height, const uint8* data) {
+static bool savePNG(const Path& path, const int32 width, const int32 height, const uint8* data) {
     int32 result = stbi_write_png(path.path().c_str(), width, height, 3, data, 0);
 
     return result != 0;
 }
 
-static bool saveJPG(const Path path, const int32 width, const int32 height, const uint8* data) {
+static bool saveJPG(const Path& path, const int32 width, const int32 height, const uint8* data) {
     int32 result = stbi_write_jpg(path.path().c_str(), width, height, 3, data, 92);
 
     return result != 0;
 }
 
-static bool savePPM(const Path path, const int32 width, const int32 height, const uint8* data) {
+static bool savePPM(const Path& path, const int32 width, const int32 height, const uint8* data) {
     FILE *output;
     output = fopen(path.path().c_str(), "wb");
     fprintf(output, "P6 %d %d 255\n", width, height);
@@ -32,7 +32,7 @@ static bool savePPM(const Path path, const int32 width, const int32 height, cons
     return true;
 }
 
-void save(const Path path, const int32 width, const int32 height, const uint8* data) {
+void save(const Path& path, const int32 width, const int32 height, const uint8* data) {
     if (path.isExtendedWith(".png")) {
         if (!savePNG(path, width, height, data)) {
 

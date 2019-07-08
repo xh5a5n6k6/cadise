@@ -10,7 +10,7 @@ namespace cadise {
 
 class PerspectiveCamera : public Camera {
 public:
-    PerspectiveCamera(const Matrix4 cameraToWorld, const real fov, const Path filename, const int32 rx, const int32 ry);
+    PerspectiveCamera(const Film& film, const real fov, const Matrix4& cameraToWorld);
 
     Ray createRay(const int32 px, const int32 py) const override;
 
@@ -18,12 +18,9 @@ public:
 
 private:
     Film _film;
+    real _fov;
     Matrix4 _cameraToWorld;
 
-    int32 _rx;
-    int32 _ry;
-
-    real _fov;
     real _pixelWidth;
     real _pixelHeight;
 };

@@ -11,7 +11,7 @@ class RGBColor : public Color {
 public:
     RGBColor();
     RGBColor(const real r, const real g, const real b);
-    RGBColor(const Vector3R rgb);
+    RGBColor(const Vector3R& rgb);
 
     Vector3R& rgb();
     real r() const;

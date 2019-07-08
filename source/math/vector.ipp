@@ -49,7 +49,7 @@ inline Vector<T, Size> Vector<T, Size>::operator+(const T s) const {
 }
 
 template<typename T, uint32 Size>
-inline Vector<T, Size> Vector<T, Size>::operator+(const Vector<T, Size> v) const {
+inline Vector<T, Size> Vector<T, Size>::operator+(const Vector<T, Size>& v) const {
     Vector<T, Size> result;
     for (uint32 index = 0; index < Size; index++) {
         result._v[index] = _v[index] + v._v[index];
@@ -69,7 +69,7 @@ inline Vector<T, Size> Vector<T, Size>::operator-(const T s) const {
 }
 
 template<typename T, uint32 Size>
-inline Vector<T, Size> Vector<T, Size>::operator-(const Vector<T, Size> v) const {
+inline Vector<T, Size> Vector<T, Size>::operator-(const Vector<T, Size>& v) const {
     Vector<T, Size> result;
     for (uint32 index = 0; index < Size; index++) {
         result._v[index] = _v[index] - v._v[index];
@@ -89,7 +89,7 @@ inline Vector<T, Size> Vector<T, Size>::operator*(const T s) const {
 }
 
 template<typename T, uint32 Size>
-inline Vector<T, Size> Vector<T, Size>::operator*(const Vector<T, Size> v) const {
+inline Vector<T, Size> Vector<T, Size>::operator*(const Vector<T, Size>& v) const {
     Vector<T, Size> result;
     for (uint32 index = 0; index < Size; index++) {
         result._v[index] = _v[index] * v._v[index];
@@ -112,7 +112,7 @@ inline Vector<T, Size> Vector<T, Size>::operator/(const T s) const {
 }
 
 template<typename T, uint32 Size>
-inline Vector<T, Size> Vector<T, Size>::operator/(const Vector<T, Size> v) const {
+inline Vector<T, Size> Vector<T, Size>::operator/(const Vector<T, Size>& v) const {
     Vector<T, Size> result;
     for (uint32 index = 0; index < Size; index++) {
         assert(v._v[index] != static_cast<T>(0));
@@ -133,7 +133,7 @@ inline Vector<T, Size>& Vector<T, Size>::operator+=(const T s) {
 }
 
 template<typename T, uint32 Size>
-inline Vector<T, Size>& Vector<T, Size>::operator+=(const Vector<T, Size> v) {
+inline Vector<T, Size>& Vector<T, Size>::operator+=(const Vector<T, Size>& v) {
     for (uint32 index = 0; index < Size; index++) {
         _v[index] += v._v[index];
     }
@@ -151,7 +151,7 @@ inline Vector<T, Size>& Vector<T, Size>::operator-=(const T s) {
 }
 
 template<typename T, uint32 Size>
-inline Vector<T, Size>& Vector<T, Size>::operator-=(const Vector<T, Size> v) {
+inline Vector<T, Size>& Vector<T, Size>::operator-=(const Vector<T, Size>& v) {
     for (uint32 index = 0; index < Size; index++) {
         _v[index] -= v._v[index];
     }
@@ -169,7 +169,7 @@ inline Vector<T, Size>& Vector<T, Size>::operator*=(const T s) {
 }
 
 template<typename T, uint32 Size>
-inline Vector<T, Size>& Vector<T, Size>::operator*=(const Vector<T, Size> v) {
+inline Vector<T, Size>& Vector<T, Size>::operator*=(const Vector<T, Size>& v) {
     for (uint32 index = 0; index < Size; index++) {
         _v[index] *= v._v[index];
     }
@@ -189,7 +189,7 @@ inline Vector<T, Size>& Vector<T, Size>::operator/=(const T s) {
 }
 
 template<typename T, uint32 Size>
-inline Vector<T, Size>& Vector<T, Size>::operator/=(const Vector<T, Size> v) {
+inline Vector<T, Size>& Vector<T, Size>::operator/=(const Vector<T, Size>& v) {
     for (uint32 index = 0; index < Size; index++) {
         assert(v._v[index] != static_cast<T>(0));
 
@@ -200,7 +200,7 @@ inline Vector<T, Size>& Vector<T, Size>::operator/=(const Vector<T, Size> v) {
 }
 
 template<typename T, uint32 Size>
-inline Vector<T, Size>& Vector<T, Size>::operator=(const Vector<T, Size> v) {
+inline Vector<T, Size>& Vector<T, Size>::operator=(const Vector<T, Size>& v) {
     for (uint32 index = 0; index < Size; index++) {
         _v[index] = v._v[index];
     }
@@ -283,14 +283,14 @@ inline uint32 Vector<T, Size>::maxDimension() const {
 }
 
 template<typename T, uint32 Size>
-inline void Vector<T, Size>::swap(Vector<T, Size> &v) {
+inline void Vector<T, Size>::swap(Vector<T, Size>& v) {
     for (uint32 index = 0; index < Size; index++) {
         std::swap(_v[index], v._v[index]);
     }
 }
 
 template<typename T, uint32 Size>
-inline T Vector<T, Size>::dot(const Vector<T, Size> v) const {
+inline T Vector<T, Size>::dot(const Vector<T, Size>& v) const {
     T result = static_cast<T>(0);
     for (uint32 index = 0; index < Size; index++) {
         result += _v[index] * v._v[index];
@@ -300,12 +300,12 @@ inline T Vector<T, Size>::dot(const Vector<T, Size> v) const {
 }
 
 template<typename T, uint32 Size>
-inline T Vector<T, Size>::absDot(const Vector<T, Size> v) const {
+inline T Vector<T, Size>::absDot(const Vector<T, Size>& v) const {
     return std::abs(dot(v));
 }
 
 template<typename T, uint32 Size>
-inline Vector<T, Size> Vector<T, Size>::cross(const Vector<T, Size> v) const {
+inline Vector<T, Size> Vector<T, Size>::cross(const Vector<T, Size>& v) const {
     static_assert(Size == 3, "Error in vector's cross, this vector doesn't support cross method\n");
 
     return Vector<T, Size>(_v[1] * v._v[2] - _v[2] * v._v[1],
@@ -314,7 +314,7 @@ inline Vector<T, Size> Vector<T, Size>::cross(const Vector<T, Size> v) const {
 }
 
 template<typename T, uint32 Size>
-inline Vector<T, Size> Vector<T, Size>::reflect(const Vector<T, Size> normal) const {
+inline Vector<T, Size> Vector<T, Size>::reflect(const Vector<T, Size>& normal) const {
     Vector<T, Size> result = static_cast<T>(2) * absDot(normal) * normal;
     return result - *this;
 }
@@ -337,7 +337,7 @@ inline T Vector<T, Size>::z() const {
 }
 
 template<typename T, uint32 Size>
-inline Vector<T, Size> Vector<T, Size>::min(const Vector<T, Size> v1, const Vector<T, Size> v2) {
+inline Vector<T, Size> Vector<T, Size>::min(const Vector<T, Size>& v1, const Vector<T, Size>& v2) {
     Vector<T, Size> result;
     for (uint32 index = 0; index < Size; index++) {
         result._v[index] = std::min(v1._v[index], v2._v[index]);
@@ -347,7 +347,7 @@ inline Vector<T, Size> Vector<T, Size>::min(const Vector<T, Size> v1, const Vect
 }
 
 template<typename T, uint32 Size>
-inline Vector<T, Size> Vector<T, Size>::max(const Vector<T, Size> v1, const Vector<T, Size> v2) {
+inline Vector<T, Size> Vector<T, Size>::max(const Vector<T, Size>& v1, const Vector<T, Size>& v2) {
     Vector<T, Size> result;
     for (uint32 index = 0; index < Size; index++) {
         result._v[index] = std::max(v1._v[index], v2._v[index]);

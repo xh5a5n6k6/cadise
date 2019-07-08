@@ -18,10 +18,11 @@
 namespace cadise {
 
 WhittedRenderer::WhittedRenderer(const int32 maxDepth, const int32 sampleNumber) :
-    _maxDepth(maxDepth), _sampleNumber(sampleNumber) {
+    _maxDepth(maxDepth), 
+    _sampleNumber(sampleNumber) {
 }
 
-void WhittedRenderer::render(const Scene scene) const {
+void WhittedRenderer::render(const Scene& scene) const {
     std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 
     int32 rx = scene.camera()->film().resolution().x();
@@ -32,8 +33,7 @@ void WhittedRenderer::render(const Scene scene) const {
             for (int32 in = 0; in < _sampleNumber; in++) {
                 Ray ray = scene.camera()->createRay(ix, iy);
 
-                SurfaceIntersection intersection;
-                RGBColor sampleColor = _luminance(scene, ray, intersection);
+                RGBColor sampleColor = _luminance(scene, ray);
                 sampleColor.rgb() *= 255.0_r;
                 sampleColor.rgb() = sampleColor.rgb().clamp(0.0_r, 255.0_r);
 
@@ -51,9 +51,10 @@ void WhittedRenderer::render(const Scene scene) const {
               << " s" << std::endl;
 }
 
-RGBColor WhittedRenderer::_luminance(const Scene scene, Ray &ray, SurfaceIntersection &intersection) const {
+RGBColor WhittedRenderer::_luminance(const Scene& scene, Ray& ray) const {
     RGBColor color = RGBColor(0.0_r, 0.0_r, 0.0_r);
 
+    SurfaceIntersection intersection;
     if (scene.isIntersecting(ray, intersection)) {
         const Primitive* hitPrimitive = intersection.primitiveInfo().primitive();
         std::shared_ptr<BSDF> bsdf = hitPrimitive->bsdf();
@@ -72,7 +73,8 @@ RGBColor WhittedRenderer::_luminance(const Scene scene, Ray &ray, SurfaceInterse
             // generate shadow ray to do occluded test
             Ray r = Ray(hitPoint + constant::RAY_EPSILON * hitNormal,
                         lightDir,
-                        constant::RAY_EPSILON, t);
+                        constant::RAY_EPSILON, 
+                        t);
 
             if (scene.isOccluded(r) && r.maxT() < t - constant::RAY_EPSILON) {
                 continue;
@@ -94,7 +96,7 @@ RGBColor WhittedRenderer::_luminance(const Scene scene, Ray &ray, SurfaceInterse
     return color;
 }
 
-RGBColor WhittedRenderer::_reflect(const Scene scene, Ray &ray, SurfaceIntersection &intersection) const {
+RGBColor WhittedRenderer::_reflect(const Scene& scene, Ray& ray, SurfaceIntersection& intersection) const {
     RGBColor color = RGBColor(0.0_r, 0.0_r, 0.0_r);
 
     const Primitive* primitive = intersection.primitiveInfo().primitive();
@@ -108,11 +110,11 @@ RGBColor WhittedRenderer::_reflect(const Scene scene, Ray &ray, SurfaceIntersect
         Vector3R hitNormal = intersection.surfaceGeometryInfo().normal();
         Ray r = Ray(hitPoint + constant::RAY_EPSILON * hitNormal,
                     intersection.wo(),
-                    constant::RAY_EPSILON, std::numeric_limits<real>::max(),
+                    constant::RAY_EPSILON, 
+                    std::numeric_limits<real>::max(),
                     ray.depth() + 1);
-        SurfaceIntersection intersect;
         real LdotN = intersection.wo().absDot(hitNormal);
-        color.rgb() = reflectance * _luminance(scene, r, intersect).rgb() * LdotN / intersection.pdf();
+        color.rgb() = reflectance * _luminance(scene, r).rgb() * LdotN / intersection.pdf();
     }
 
     return color;

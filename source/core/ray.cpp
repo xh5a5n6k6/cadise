@@ -5,8 +5,12 @@ namespace cadise {
 Ray::Ray() {
 }
 
-Ray::Ray(const Vector3R origin, const Vector3R direction, const real minT, const real maxT, const int32 depth) : 
-    _origin(origin), _direction(direction.normalize()), _minT(minT), _maxT(maxT), _depth(depth) {
+Ray::Ray(const Vector3R& origin, const Vector3R& direction, const real minT, const real maxT, const int32 depth) : 
+    _origin(origin), 
+    _direction(direction.normalize()), 
+    _minT(minT),
+    _maxT(maxT),
+    _depth(depth) {
 }
 
 Vector3R Ray::at(const real t) const {

@@ -8,7 +8,7 @@ class SurfaceGeometryInfo;
 
 class Light {
 public:
-    virtual Vector3R evaluateSampleRadiance(Vector3R &lightDirection, const SurfaceGeometryInfo surfaceGeometryInfo, real &t, real &pdf) const = 0;
+    virtual Vector3R evaluateSampleRadiance(Vector3R& lightDirection, const SurfaceGeometryInfo& surfaceGeometryInfo, real& t, real& pdf) const = 0;
     virtual Vector3R position() const = 0;
     virtual Vector3R color() const = 0;
 };

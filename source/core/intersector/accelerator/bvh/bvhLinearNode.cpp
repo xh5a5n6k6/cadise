@@ -8,14 +8,14 @@ BVHLinearNode::BVHLinearNode() :
 
 BVHLinearNode::~BVHLinearNode() = default;
 
-void BVHLinearNode::initializeInternalNode(const AABB3R bound, const uint64 secondChildIndex, const uint32 splitAxis) {
+void BVHLinearNode::initializeInternalNode(const AABB3R& bound, const uint64 secondChildIndex, const uint32 splitAxis) {
     _bound = bound;
     _secondChildIndex = secondChildIndex;
     _splitAxis = splitAxis;
     _isLeaf = false;
 }
 
-void BVHLinearNode::initializeLeafNode(const AABB3R bound, const uint64 intersectorIndex, const uint64 intersectorCounts) {
+void BVHLinearNode::initializeLeafNode(const AABB3R& bound, const uint64 intersectorIndex, const uint64 intersectorCounts) {
     _bound = bound;
     _intersectorIndex = intersectorIndex;
     _intersectorCounts = intersectorCounts;

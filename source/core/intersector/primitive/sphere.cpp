@@ -10,8 +10,11 @@
 
 namespace cadise {
 
-Sphere::Sphere(const std::shared_ptr<BSDF> bsdf, const Vector3R center, const real radius) :
-    Primitive(bsdf), _center(center), _radius(radius) {
+Sphere::Sphere(const std::shared_ptr<BSDF>& bsdf, const Vector3R& center, const real radius) :
+    Primitive(bsdf), 
+    _center(center),
+    _radius(radius) {
+
     _worldToLocal = Matrix4::translate(-_center.x(), -_center.y(), -_center.z());
 }
 
@@ -19,10 +22,11 @@ AABB3R Sphere::bound() const {
     return AABB3R(_center - _radius, _center + _radius).expand(0.0001_r);
 }
 
-bool Sphere::isIntersecting(Ray &ray, PrimitiveInfo &primitiveInfo) const {
+bool Sphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
     Ray r = Ray(_worldToLocal.transformPoint(ray.origin()),
                 _worldToLocal.transformVector(ray.direction()),
-                constant::RAY_EPSILON, std::numeric_limits<real>::max());
+                constant::RAY_EPSILON, 
+                std::numeric_limits<real>::max());
 
     int32 isOutside = r.origin().lengthSquared() > _radius * _radius;
     real t = r.direction().dot(-r.origin());
@@ -46,19 +50,15 @@ bool Sphere::isIntersecting(Ray &ray, PrimitiveInfo &primitiveInfo) const {
 
     ray.setMaxT(t);
     primitiveInfo.setPrimitive(this);
-    // Calculate surfaceGeometryInfo
-    //Vector3R point = ray.at(t);
-    //Vector3R normal = (point - _center).normalize();
-    //surfaceGeometryInfo.setPoint(point);
-    //surfaceGeometryInfo.setNormal(normal);
 
     return true;
 }
 
-bool Sphere::isOccluded(Ray &ray) const {
+bool Sphere::isOccluded(Ray& ray) const {
     Ray r = Ray(_worldToLocal.transformPoint(ray.origin()),
                 _worldToLocal.transformVector(ray.direction()),
-                constant::RAY_EPSILON, std::numeric_limits<real>::max());
+                constant::RAY_EPSILON, 
+                std::numeric_limits<real>::max());
 
     int32 isOutside = r.origin().lengthSquared() > _radius * _radius;
     real t = r.direction().dot(-r.origin());
@@ -85,20 +85,20 @@ bool Sphere::isOccluded(Ray &ray) const {
     return true;
 }
 
-void Sphere::evaluateGeometryDetail(const PrimitiveInfo primitiveInfo, SurfaceGeometryInfo &geometryInfo) const {
+void Sphere::evaluateGeometryDetail(const PrimitiveInfo& primitiveInfo, SurfaceGeometryInfo& geometryInfo) const {
     Vector3R normal = (geometryInfo.point() - _center).normalize();
     geometryInfo.setNormal(normal);
 }
 
-void Sphere::evaluteShadingDetail(SurfaceShadingInfo &shadingInfo) const {
+void Sphere::evaluteShadingDetail(SurfaceShadingInfo& shadingInfo) const {
 
 }
 
-void Sphere::sampleSurface(const SurfaceGeometryInfo inSurface, SurfaceGeometryInfo &outSurface) const {
+void Sphere::sampleSurface(const SurfaceGeometryInfo& inSurface, SurfaceGeometryInfo& outSurface) const {
 
 }
 
-real Sphere::samplePdfA(const Vector3R position) const {
+real Sphere::samplePdfA(const Vector3R& position) const {
     assert(area() > 0.0_r);
 
     return 1.0_r / area();

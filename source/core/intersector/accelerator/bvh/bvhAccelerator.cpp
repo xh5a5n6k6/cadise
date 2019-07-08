@@ -7,7 +7,7 @@
 
 namespace cadise {
 
-BVHAccelerator::BVHAccelerator(const std::vector<std::shared_ptr<Intersector> > intersectors) {
+BVHAccelerator::BVHAccelerator(const std::vector<std::shared_ptr<Intersector>>& intersectors) {
     if (intersectors.empty()) {
         exit(1);
     }
@@ -33,7 +33,7 @@ AABB3R BVHAccelerator::bound() const {
     return _nodes[0].bound();
 }
 
-bool BVHAccelerator::isIntersecting(Ray &ray, PrimitiveInfo &primitiveInfo) const {
+bool BVHAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
     bool result = false;
 
     Vector3R origin = ray.origin();
@@ -86,7 +86,7 @@ bool BVHAccelerator::isIntersecting(Ray &ray, PrimitiveInfo &primitiveInfo) cons
     return result;
 }
 
-bool BVHAccelerator::isOccluded(Ray &ray) const {
+bool BVHAccelerator::isOccluded(Ray& ray) const {
     bool result = false;
 
     Vector3R origin = ray.origin();

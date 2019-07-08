@@ -8,7 +8,7 @@ namespace cadise {
 
 namespace sample {
 
-Vector3R uniformHemisphere(const Vector2R randomNumber) {
+Vector3R uniformHemisphere(const Vector2R& randomNumber) {
     real theta = std::acos(randomNumber.x());
     real phi = constant::TWO_PI * randomNumber.y();
 
@@ -19,7 +19,7 @@ Vector3R uniformHemisphere(const Vector2R randomNumber) {
                     randomNumber.x());
 }
 
-Vector3R cosineWeightedHemisphere(const Vector2R randomNumber) {
+Vector3R cosineWeightedHemisphere(const Vector2R& randomNumber) {
     real theta = std::acos(1.0_r - 2 * randomNumber.x()) / 2.0_r;
     real phi = constant::TWO_PI * randomNumber.y();
 

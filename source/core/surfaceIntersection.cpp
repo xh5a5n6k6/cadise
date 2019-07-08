@@ -3,10 +3,15 @@
 namespace cadise {
 
 SurfaceIntersection::SurfaceIntersection() :
-    _primitiveInfo(), _geometryInfo(), _shadingInfo(), _wi(), _wo(), _pdf(0.0_r) {
+    _primitiveInfo(), 
+    _geometryInfo(), 
+    _shadingInfo(), 
+    _wi(), 
+    _wo(), 
+    _pdf(0.0_r) {
 }
 
-PrimitiveInfo& SurfaceIntersection::primitiveInfo() {
+PrimitiveInfo SurfaceIntersection::primitiveInfo() const {
     return _primitiveInfo;
 }
 
@@ -30,19 +35,23 @@ real SurfaceIntersection::pdf() const {
     return _pdf;
 }
 
-void SurfaceIntersection::setSurfaceGeometryInfo(const SurfaceGeometryInfo geometryInfo) {
+void SurfaceIntersection::setPrimitiveInfo(const PrimitiveInfo& primitiveInfo) {
+    _primitiveInfo = primitiveInfo;
+}
+
+void SurfaceIntersection::setSurfaceGeometryInfo(const SurfaceGeometryInfo& geometryInfo) {
     _geometryInfo = geometryInfo;
 }
 
-void SurfaceIntersection::setSurfaceShadingInfo(const SurfaceShadingInfo shadingInfo) {
+void SurfaceIntersection::setSurfaceShadingInfo(const SurfaceShadingInfo& shadingInfo) {
     _shadingInfo = shadingInfo;
 }
 
-void SurfaceIntersection::setWi(const Vector3R wi) {
+void SurfaceIntersection::setWi(const Vector3R& wi) {
     _wi = wi;
 }
 
-void SurfaceIntersection::setWo(const Vector3R wo) {
+void SurfaceIntersection::setWo(const Vector3R& wo) {
     _wo = wo;
 }
 

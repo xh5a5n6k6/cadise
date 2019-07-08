@@ -9,15 +9,20 @@
 
 namespace cadise {
 
-Scene::Scene(const std::shared_ptr<Accelerator> accelerator,
-             const std::vector<std::shared_ptr<Light> > lights,
-             const std::shared_ptr<Camera> camera) :
-    _accelerator(std::move(accelerator)), _lights(std::move(lights)), _camera(std::move(camera)) {
+Scene::Scene(const std::shared_ptr<Accelerator>& accelerator,
+             const std::vector<std::shared_ptr<Light>>& lights,
+             const std::shared_ptr<Camera>& camera) :
+    _accelerator(std::move(accelerator)),
+    _lights(std::move(lights)), 
+    _camera(std::move(camera)) {
 }
 
-bool Scene::isIntersecting(Ray &ray, SurfaceIntersection &surfaceIntersection) const {
-    bool result = _accelerator->isIntersecting(ray, surfaceIntersection.primitiveInfo());
+bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) const {
+    PrimitiveInfo primitiveInfo;
+    bool result = _accelerator->isIntersecting(ray, primitiveInfo);
     if (result) {
+        surfaceIntersection.setPrimitiveInfo(primitiveInfo);
+
         // calculate intersection geometry details
         SurfaceGeometryInfo geometryInfo;
         geometryInfo.setPoint(ray.at(ray.maxT()));
@@ -27,16 +32,17 @@ bool Scene::isIntersecting(Ray &ray, SurfaceIntersection &surfaceIntersection) c
         // calculate intersection shading details
         SurfaceShadingInfo shadingInfo;
         surfaceIntersection.primitiveInfo().primitive()->evaluteShadingDetail(shadingInfo);
+        surfaceIntersection.setSurfaceShadingInfo(shadingInfo);
     }
     
     return result;
 }
 
-bool Scene::isOccluded(Ray &ray) const {
+bool Scene::isOccluded(Ray& ray) const {
     return _accelerator->isOccluded(ray);
 }
 
-std::vector<std::shared_ptr<Light> > Scene::lights() const {
+std::vector<std::shared_ptr<Light>> Scene::lights() const {
     return _lights;
 }
 

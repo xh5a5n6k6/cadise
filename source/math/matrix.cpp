@@ -20,7 +20,7 @@ Matrix4::Matrix4(const real n00, const real n01, const real n02, const real n03,
     _n[3][0] = n30; _n[3][1] = n31; _n[3][2] = n32; _n[3][3] = n33;
 }
 
-Matrix4& Matrix4::operator=(const Matrix4 mat) {
+Matrix4& Matrix4::operator=(const Matrix4& mat) {
     for (int32 row = 0; row < 4; row++) {
         for (int32 col = 0; col < 4; col++) {
             _n[row][col] = mat._n[row][col];
@@ -76,13 +76,13 @@ Matrix4 Matrix4::inverse() const {
     return inv;
 }
 
-Vector3R Matrix4::transformPoint(const Vector3R v) const {
+Vector3R Matrix4::transformPoint(const Vector3R& v) const {
     return Vector3R(_n[0][0] * v.x() + _n[0][1] * v.y() + _n[0][2] * v.z() + _n[0][3],
                     _n[1][0] * v.x() + _n[1][1] * v.y() + _n[1][2] * v.z() + _n[1][3],
                     _n[2][0] * v.x() + _n[2][1] * v.y() + _n[2][2] * v.z() + _n[2][3]);
 }
 
-Vector3R Matrix4::transformVector(const Vector3R v) const {
+Vector3R Matrix4::transformVector(const Vector3R& v) const {
     return Vector3R(_n[0][0] * v.x() + _n[1][0] * v.y() + _n[2][0] * v.z(),
                     _n[0][1] * v.x() + _n[1][1] * v.y() + _n[2][1] * v.z(),
                     _n[0][2] * v.x() + _n[1][2] * v.y() + _n[2][2] * v.z());
@@ -114,7 +114,7 @@ Matrix4 Matrix4::translate(const real tx, const real ty, const real tz) {
 }
 
 // Return cameraToWorld matrix
-Matrix4 Matrix4::lookAt(const Vector3R pos, const Vector3R tar, const Vector3R up) {
+Matrix4 Matrix4::lookAt(const Vector3R& pos, const Vector3R& tar, const Vector3R& up) {
     Vector3R newZ = (pos - tar).normalize();
     Vector3R newX = up.cross(newZ).normalize();
     Vector3R newY = newZ.cross(newX);

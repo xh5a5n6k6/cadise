@@ -6,7 +6,7 @@ namespace cadise {
 
 namespace math {
 
-void buildCoordinateSystem(const Vector3R &z, Vector3R &x, Vector3R &y);
+void buildCoordinateSystem(const Vector3R& zAxis, Vector3R& xAxis, Vector3R& yAxis);
 
 } // namespace math
 

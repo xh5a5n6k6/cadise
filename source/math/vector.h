@@ -23,22 +23,22 @@ public:
 
     Vector operator-() const;
     Vector operator+(const T s) const;
-    Vector operator+(const Vector v) const;
+    Vector operator+(const Vector& v) const;
     Vector operator-(const T s) const;
-    Vector operator-(const Vector v) const;
+    Vector operator-(const Vector& v) const;
     Vector operator*(const T s) const;
-    Vector operator*(const Vector v) const;
+    Vector operator*(const Vector& v) const;
     Vector operator/(const T s) const;
-    Vector operator/(const Vector v) const;
+    Vector operator/(const Vector& v) const;
     Vector& operator+=(const T s);
-    Vector& operator+=(const Vector v);
+    Vector& operator+=(const Vector& v);
     Vector& operator-=(const T s);
-    Vector& operator-=(const Vector v);
+    Vector& operator-=(const Vector& v);
     Vector& operator*=(const T s);
-    Vector& operator*=(const Vector v);
+    Vector& operator*=(const Vector& v);
     Vector& operator/=(const T s);
-    Vector& operator/=(const Vector v);
-    Vector& operator=(const Vector v);
+    Vector& operator/=(const Vector& v);
+    Vector& operator=(const Vector& v);
     T& operator[](const uint32 index);
 
     bool isZero() const;
@@ -49,30 +49,30 @@ public:
     Vector clamp(const T min, const T max) const;
     uint32 maxDimension() const;
 
-    void swap(Vector &v);
-    T dot(const Vector v) const;
-    T absDot(const Vector v) const;
-    Vector cross(const Vector v) const;
-    Vector reflect(const Vector normal) const;
+    void swap(Vector& v);
+    T dot(const Vector& v) const;
+    T absDot(const Vector& v) const;
+    Vector cross(const Vector& v) const;
+    Vector reflect(const Vector& normal) const;
 
     T x() const;
     T y() const;
     T z() const;
 
-    static Vector min(const Vector v1, const Vector v2);
-    static Vector max(const Vector v1, const Vector v2);
+    static Vector min(const Vector& v1, const Vector& v2);
+    static Vector max(const Vector& v1, const Vector& v2);
 
 private:
     std::array<T, Size> _v;
 };
 
 template<typename T, uint32 Size>
-inline Vector<T, Size> operator+(const T s, const Vector<T, Size> v) {
+inline Vector<T, Size> operator+(const T s, const Vector<T, Size>& v) {
     return v + s;
 }
 
 template<typename T, uint32 Size>
-inline Vector<T, Size> operator*(const T s, const Vector<T, Size> v) {
+inline Vector<T, Size> operator*(const T s, const Vector<T, Size>& v) {
     return v * s;
 }
 

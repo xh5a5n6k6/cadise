@@ -19,7 +19,7 @@ namespace cadise {
 RenderOption::RenderOption() {
 }
 
-void RenderOption::setupData(const std::vector<std::string> data) {
+void RenderOption::setupData(const std::vector<std::string>& data) {
     std::string type = data[0];
 
     if (!type.compare("LookAt")) {
@@ -38,10 +38,9 @@ void RenderOption::setupData(const std::vector<std::string> data) {
     }
     else if (!type.compare("Output")) {
         _option.filename = data[1];
-        _option.camera = std::make_shared<PerspectiveCamera>(_option.cameraToWorld, 
-                                                             _option.fov,
-                                                             Path(_option.filename),
-                                                             _option.rx, _option.ry);
+        _option.camera = std::make_shared<PerspectiveCamera>(Film(_option.filename, _option.rx, _option.ry),
+                                                             _option.fov, 
+                                                             _option.cameraToWorld);
     }
     else if (!type.compare("Sphere")) {
         std::shared_ptr<Primitive> primitive = nullptr;
