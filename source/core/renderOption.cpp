@@ -1,20 +1,18 @@
 #include "core/renderOption.h"
 
+#include "core/bsdf/blinnPhong.h"
+#include "core/bsdf/lambertianDiffuse.h"
+#include "core/bsdf/specularReflection.h"
 #include "core/camera/perspectiveCamera.h"
 #include "core/intersector/accelerator/bruteForceAccelerator.h"
 #include "core/intersector/accelerator/bvh/bvhAccelerator.h"
-#include "core/intersector/emitter.h"
-#include "core/intersector/primitive.h"
+#include "core/intersector/primitive/rectangle.h"
+#include "core/intersector/primitive/sphere.h"
+#include "core/intersector/primitive/triangle.h"
 #include "core/light/areaLight.h"
 #include "core/light/pointLight.h"
-#include "core/material/matte.h"
-#include "core/material/mirror.h"
-#include "core/material/plastic.h"
 #include "core/renderer/whittedRenderer.h"
 #include "core/scene.h"
-#include "core/shape/rectangle.h"
-#include "core/shape/sphere.h"
-#include "core/shape/triangle.h"
 
 namespace cadise {
 
@@ -46,56 +44,56 @@ void RenderOption::setupData(const std::vector<std::string> data) {
                                                              _option.rx, _option.ry);
     }
     else if (!type.compare("Sphere")) {
-        std::shared_ptr<Shape> shape = nullptr;
+        std::shared_ptr<Primitive> primitive = nullptr;
         Vector3R center = Vector3R(std::stof(data[1]), std::stof(data[2]), std::stof(data[3]));
         real radius = std::stof(data[4]);
-        shape = std::make_shared<Sphere>(center, radius);
+        primitive = std::make_shared<Sphere>(_option.bsdf, center, radius);
 
-        _option.shape = shape;
+        _option.primitive = primitive;
     }
     else if (!type.compare("Triangle")) {
-        std::shared_ptr<Shape> shape = nullptr;
+        std::shared_ptr<Primitive> primitive = nullptr;
         Vector3R v1 = Vector3R(std::stof(data[1]), std::stof(data[2]), std::stof(data[3]));
         Vector3R v2 = Vector3R(std::stof(data[4]), std::stof(data[5]), std::stof(data[6]));
         Vector3R v3 = Vector3R(std::stof(data[7]), std::stof(data[8]), std::stof(data[9]));
-        shape = std::make_shared<Triangle>(v1, v2, v3);
+        primitive = std::make_shared<Triangle>(_option.bsdf, v1, v2, v3);
 
-        _option.shape = shape;
+        _option.primitive = primitive;
     }
     else if (!type.compare("Rectangle")) {
-        std::shared_ptr<Shape> shape = nullptr;
+        std::shared_ptr<Primitive> primitive = nullptr;
         Vector3R v1 = Vector3R(std::stof(data[1]), std::stof(data[2]), std::stof(data[3]));
         Vector3R v2 = Vector3R(std::stof(data[4]), std::stof(data[5]), std::stof(data[6]));
         Vector3R v3 = Vector3R(std::stof(data[7]), std::stof(data[8]), std::stof(data[9]));
-        shape = std::make_shared<Rectangle>(v1, v2, v3);
+        primitive = std::make_shared<Rectangle>(_option.bsdf, v1, v2, v3);
 
-        _option.shape = shape;
+        _option.primitive = primitive;
     }
     else if (!type.compare("Primitive")) {
-        _option.intersectors.push_back(std::make_shared<Primitive>(_option.shape, _option.material));
+        _option.intersectors.push_back(_option.primitive);
     }
-    else if (!type.compare("Plastic")) {
-        std::shared_ptr<Material> material = nullptr;
-        Vector3R albedo = Vector3R(std::stof(data[1]), std::stof(data[2]), std::stof(data[3]));
-        real exponent = std::stof(data[4]);
-        real diffuseRatio = std::stof(data[5]);
-        material = std::make_shared<Plastic>(albedo, exponent, diffuseRatio);
+    //else if (!type.compare("Plastic")) {
+    //    std::shared_ptr<BSDF> bsdf = nullptr;
+    //    Vector3R albedo = Vector3R(std::stof(data[1]), std::stof(data[2]), std::stof(data[3]));
+    //    real exponent = std::stof(data[4]);
+    //    real diffuseRatio = std::stof(data[5]);
+    //    bsdf = std::make_shared<BlinnPhong>(albedo, exponent, diffuseRatio);
 
-        _option.material = material;
-    }
+    //    _option.bsdf = bsdf;
+    //}
     else if (!type.compare("Matte")) {
-        std::shared_ptr<Material> material = nullptr;
+        std::shared_ptr<BSDF> bsdf = nullptr;
         Vector3R albedo = Vector3R(std::stof(data[1]), std::stof(data[2]), std::stof(data[3]));
-        material = std::make_shared<Matte>(albedo);
+        bsdf = std::make_shared<LambertianDiffuse>(albedo);
 
-        _option.material = material;
+        _option.bsdf = bsdf;
     }
     else if (!type.compare("Mirror")) {
-        std::shared_ptr<Material> material = nullptr;
+        std::shared_ptr<BSDF> bsdf = nullptr;
         Vector3R albedo = Vector3R(std::stof(data[1]), std::stof(data[2]), std::stof(data[3]));
-        material = std::make_shared<Mirror>(albedo);
+        bsdf = std::make_shared<SpecularReflection>(albedo);
 
-        _option.material = material;
+        _option.bsdf = bsdf;
     }
     else if (!type.compare("PointLight")) {
         std::shared_ptr<Light> light = nullptr;
@@ -108,10 +106,13 @@ void RenderOption::setupData(const std::vector<std::string> data) {
     else if (!type.compare("AreaLight")) {
         std::shared_ptr<AreaLight> light = nullptr;
         Vector3R albedo = Vector3R(std::stof(data[1]), std::stof(data[2]), std::stof(data[3]));
-        light = std::make_shared<AreaLight>(_option.shape, albedo);
+        light = std::make_shared<AreaLight>(albedo);
+
+        _option.primitive->setAreaLight(light);
+        light->setPrimitive(_option.primitive);
 
         _option.lights.push_back(light);
-        _option.intersectors.push_back(std::make_shared<Emitter>(*light, _option.material));
+        _option.intersectors.push_back(_option.primitive);
     }
     else if (!type.compare("Accelerator")) {
         _option.accelerator = data[1];

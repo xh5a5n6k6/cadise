@@ -1,7 +1,8 @@
-#include "core/shape/triangle.h"
+#include "core/intersector/primitive/triangle.h"
 
+#include "core/primitiveInfo.h"
 #include "core/ray.h"
-#include "core/surfaceInfo.h"
+#include "core/surfaceGeometryInfo.h"
 
 #include "math/constant.h"
 
@@ -10,8 +11,8 @@
 
 namespace cadise {
 
-Triangle::Triangle(Vector3R v1, Vector3R v2, Vector3R v3) :
-    _v1(v1), _v2(v2), _v3(v3) {
+Triangle::Triangle(const std::shared_ptr<BSDF> bsdf, const Vector3R v1, const Vector3R v2, const Vector3R v3) :
+    Primitive(bsdf), _v1(v1), _v2(v2), _v3(v3) {
     _e1 = _v2 - _v1;
     _e2 = _v3 - _v1;
 }
@@ -20,12 +21,14 @@ AABB3R Triangle::bound() const {
     return AABB3R(_v1).unionWith(_v2).unionWith(_v3).expand(0.0001_r);
 }
 
-bool Triangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) const {
+bool Triangle::isIntersecting(Ray &ray, PrimitiveInfo &primitiveInfo) const {
     Vector3R D = ray.direction();
     Vector3R e1 = _e1;
     Vector3R e2 = _e2;
+    bool isBackSide = false;
     if (D.dot(e1.cross(e2)) > 0.0_r) {
         e1.swap(e2);
+        isBackSide = true;
     }
     Vector3R T = ray.origin() - _v1;
     Vector3R Q = T.cross(e1);
@@ -50,12 +53,12 @@ bool Triangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) const {
     }
 
     ray.setMaxT(t);
-
-    // Calculate surface details
-    Vector3R point = ray.at(t);
-    Vector3R normal = e1.cross(e2).normalize();
-    surfaceInfo.setPoint(point);
-    surfaceInfo.setNormal(normal);
+    primitiveInfo.setPrimitive(this);
+    primitiveInfo.setIsBackSide(isBackSide);
+    //Vector3R point = ray.at(t);
+    //Vector3R normal = e1.cross(e2).normalize();
+    //surfaceGeometryInfo.setPoint(point);
+    //surfaceGeometryInfo.setNormal(normal);
 
     return true;
 }
@@ -94,7 +97,17 @@ bool Triangle::isOccluded(Ray &ray) const {
     return true;
 }
 
-void Triangle::sampleSurface(SurfaceInfo inSurface, SurfaceInfo &outSurface) const {
+void Triangle::evaluateGeometryDetail(const PrimitiveInfo primitiveInfo, SurfaceGeometryInfo &geometryInfo) const {
+    Vector3R normal = (primitiveInfo.isBackSide()) ? _e2.cross(_e1) : _e1.cross(_e2);
+    normal = normal.normalize();
+    geometryInfo.setNormal(normal);
+}
+
+void Triangle::evaluteShadingDetail(SurfaceShadingInfo &shadingInfo) const {
+
+}
+
+void Triangle::sampleSurface(const SurfaceGeometryInfo inSurface, SurfaceGeometryInfo &outSurface) const {
     // TODO
     // improve sample point on triangle
     std::random_device rd;
@@ -122,6 +135,16 @@ void Triangle::sampleSurface(SurfaceInfo inSurface, SurfaceInfo &outSurface) con
 
     outSurface.setPoint(point);
     outSurface.setNormal(normal);
+}
+
+real Triangle::samplePdfA(const Vector3R position) const {
+    assert(area() > 0.0_r);
+
+    return 1.0_r / area();
+}
+
+real Triangle::area() const {
+    return 0.5_r * _e1.cross(_e2).length();
 }
 
 } // namespace cadise

@@ -33,7 +33,7 @@ AABB3R BVHAccelerator::bound() const {
     return _nodes[0].bound();
 }
 
-bool BVHAccelerator::isIntersecting(Ray &ray, Intersection &intersection) const {
+bool BVHAccelerator::isIntersecting(Ray &ray, PrimitiveInfo &primitiveInfo) const {
     bool result = false;
 
     Vector3R origin = ray.origin();
@@ -48,7 +48,7 @@ bool BVHAccelerator::isIntersecting(Ray &ray, Intersection &intersection) const 
         if (currentNode.bound().isIntersectingAABB(origin, invDirection, ray.minT(), ray.maxT())) {
             if (currentNode.isLeaf()) {
                 for (uint64 i = 0; i < currentNode.intersectorCounts(); i++) {
-                    result |= _intersectors[currentNode.intersectorIndex() + i]->isIntersecting(ray, intersection);
+                    result |= _intersectors[currentNode.intersectorIndex() + i]->isIntersecting(ray, primitiveInfo);
                 }
 
                 if (currentStackSize == 0) {

@@ -6,7 +6,7 @@
 
 namespace cadise {
 
-class Intersection;
+class SurfaceIntersection;
 class Ray;
 class RGBColor;
 
@@ -18,8 +18,8 @@ public:
     void render(const Scene scene) const override;
 
 private:
-    RGBColor _luminance(const Scene scene, Ray &ray, Intersection &intersection) const;
-    RGBColor _reflect(const Scene scene, Ray &ray, Intersection &intersection) const;
+    RGBColor _luminance(const Scene scene, Ray &ray, SurfaceIntersection &surfaceIntersection) const;
+    RGBColor _reflect(const Scene scene, Ray &ray, SurfaceIntersection &surfaceIntersection) const;
 
     int32 _maxDepth;
     int32 _sampleNumber;

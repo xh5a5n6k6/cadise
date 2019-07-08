@@ -1,15 +1,16 @@
-#include "core/shape/rectangle.h"
+#include "core/intersector/primitive/rectangle.h"
 
+#include "core/primitiveInfo.h"
 #include "core/ray.h"
-#include "core/surfaceInfo.h"
+#include "core/surfaceGeometryInfo.h"
 
 #include <limits>
 #include <random>
 
 namespace cadise {
 
-Rectangle::Rectangle(const Vector3R v1, const Vector3R v2, const Vector3R v3) :
-    _v1(v1), _v2(v2), _v3(v3) {
+Rectangle::Rectangle(const std::shared_ptr<BSDF> bsdf, const Vector3R v1, const Vector3R v2, const Vector3R v3) :
+    Primitive(bsdf), _v1(v1), _v2(v2), _v3(v3) {
     _e1 = _v1 - _v2;
     _e2 = _v3 - _v2;
 }
@@ -18,14 +19,21 @@ AABB3R Rectangle::bound() const {
     return AABB3R(_v1).unionWith(_v2).unionWith(_v3).unionWith(_v2 + _e1 + _e2).expand(0.0001_r);
 }
 
-bool Rectangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) const {
-    Vector3R normal;
-    if (ray.direction().dot(_e1.cross(_e2)) > 0.0_r) {
-        normal = _e2.cross(_e1).normalize();
+bool Rectangle::isIntersecting(Ray &ray, PrimitiveInfo &primitiveInfo) const {
+    Vector3R e1 = _e1;
+    Vector3R e2 = _e2;
+    bool isBackSide = false;
+    if (ray.direction().dot(e1.cross(e2)) > 0.0_r) {
+        e1.swap(e2);
+        isBackSide = true;
     }
-    else {
-        normal = _e1.cross(_e2).normalize();
-    }
+    Vector3R normal = e1.cross(e2).normalize();
+    //if (ray.direction().dot(_e1.cross(_e2)) > 0.0_r) {
+    //    normal = _e2.cross(_e1).normalize();
+    //}
+    //else {
+    //    normal = _e1.cross(_e2).normalize();
+    //}
     real t = (normal.dot(_v2) - normal.dot(ray.origin())) / normal.dot(ray.direction());
     if (t < 0.0_r || t > ray.maxT()) {
         return false;
@@ -40,10 +48,12 @@ bool Rectangle::isIntersecting(Ray &ray, SurfaceInfo &surfaceInfo) const {
     }
 
     ray.setMaxT(t);
-
-    //  Calculate surface details
-    surfaceInfo.setPoint(ray.at(t));
-    surfaceInfo.setNormal(normal);
+    primitiveInfo.setPrimitive(this);
+    primitiveInfo.setIsBackSide(isBackSide);
+    //primitveInfo.setPrimitive(this);
+    //  Calculate surfaceGeometryInfo
+    //surfaceGeometryInfo.setPoint(ray.at(t));
+    //surfaceGeometryInfo.setNormal(normal);
 
     return true;
 }
@@ -74,7 +84,17 @@ bool Rectangle::isOccluded(Ray &ray) const {
     return true;
 }
 
-void Rectangle::sampleSurface(SurfaceInfo inSurface, SurfaceInfo &outSurface) const {
+void Rectangle::evaluateGeometryDetail(const PrimitiveInfo primitiveInfo, SurfaceGeometryInfo &geometryInfo) const {
+    Vector3R normal = (primitiveInfo.isBackSide()) ? _e2.cross(_e1) : _e1.cross(_e2);
+    normal = normal.normalize();
+    geometryInfo.setNormal(normal);
+}
+
+void Rectangle::evaluteShadingDetail(SurfaceShadingInfo &shadingInfo) const {
+
+}
+
+void Rectangle::sampleSurface(const SurfaceGeometryInfo inSurface, SurfaceGeometryInfo &outSurface) const {
     Vector3R e1 = _e1;
     Vector3R e2 = _e2;
     if (e1.length() < e2.length()) {
@@ -101,19 +121,22 @@ void Rectangle::sampleSurface(SurfaceInfo inSurface, SurfaceInfo &outSurface) co
 
     Vector3R point = _v2 + s * e1 + t * e1.length() * e2.normalize();
     Vector3R direction = point - inSurface.point();
-    Vector3R normal;
     if (direction.dot(e1.cross(e2)) > 0.0_r) {
-        normal = e2.cross(e1).normalize();
+        e1.swap(e2);
     }
-    else {
-        normal = e1.cross(e2).normalize();
-    }
+    Vector3R normal = e1.cross(e2).normalize();
+    //if (direction.dot(e1.cross(e2)) > 0.0_r) {
+    //    normal = e2.cross(e1).normalize();
+    //}
+    //else {
+    //    normal = e1.cross(e2).normalize();
+    //}
 
     outSurface.setPoint(point);
     outSurface.setNormal(normal);
 }
 
-real Rectangle::samplePdfA() const {
+real Rectangle::samplePdfA(const Vector3R position) const {
     assert(area() > 0.0_r);
 
     return 1.0_r / area();

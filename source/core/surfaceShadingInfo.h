@@ -1,8 +1,11 @@
 #pragma once
 
+#include "math/vector.h"
+
 namespace cadise {
 
-class Intersection {
+class SurfaceShadingInfo {
+
 };
 
 } // namespace cadise

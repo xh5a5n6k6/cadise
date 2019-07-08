@@ -4,10 +4,10 @@
 
 namespace cadise {
 
-class SurfaceInfo {
+class SurfaceGeometryInfo {
 public:
-    SurfaceInfo();
-    SurfaceInfo(const Vector3R point, const Vector3R normal);
+    SurfaceGeometryInfo();
+    SurfaceGeometryInfo(const Vector3R point, const Vector3R normal);
 
     Vector3R point() const;
     Vector3R normal() const;
@@ -18,10 +18,6 @@ public:
 private:
     Vector3R _point;
     Vector3R _normal;
-	
-    // TODO
-    // calculate differential geometry
-    // such as dPdu, dPdv, dNdu, dNdv, etc
 };
 
 } // namespace cadise

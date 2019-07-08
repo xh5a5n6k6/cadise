@@ -6,10 +6,10 @@ BruteForceAccelerator::BruteForceAccelerator(const std::vector<std::shared_ptr<I
     _intersectors(std::move(intersectors)) {
 }
 
-bool BruteForceAccelerator::isIntersecting(Ray &ray, Intersection &intersection) const {
+bool BruteForceAccelerator::isIntersecting(Ray &ray, PrimitiveInfo &primitiveInfo) const {
     bool result = false;
     for (uint64 index = 0; index < _intersectors.size(); index++) {
-        result |= _intersectors[index]->isIntersecting(ray, intersection);
+        result |= _intersectors[index]->isIntersecting(ray, primitiveInfo);
     }
 
     return result;

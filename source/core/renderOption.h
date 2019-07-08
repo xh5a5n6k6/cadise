@@ -7,21 +7,21 @@
 
 namespace cadise {
 
+class BSDF;
 class Camera;
 class Intersector;
 class Light;
-class Material;
+class Primitive;
 class Renderer;
 class Scene;
-class Shape;
 
 class RenderOption {
 public:
     struct Option {
         // TODO
         // Adjust parse file syntex
-        std::shared_ptr<Material> material;
-        std::shared_ptr<Shape> shape;
+        std::shared_ptr<BSDF> bsdf;
+        std::shared_ptr<Primitive> primitive;
 
         Matrix4 cameraToWorld;
         real fov;

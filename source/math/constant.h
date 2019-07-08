@@ -15,6 +15,9 @@ inline constexpr real PI
 inline constexpr real TWO_PI
     = 6.2831853071795864_r;
 
+inline constexpr real FOUR_PI
+    = 12.566370614359172_r;
+
 inline constexpr real INV_PI
     = 0.3183098861837906_r;
 

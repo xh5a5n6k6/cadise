@@ -46,7 +46,7 @@ void Parser::_parseEnd() {
     std::unique_ptr<Renderer> renderer = _renderOption->createRenderer();
     renderer->render(*scene);
 
-    _renderOption.release();
+    _renderOption.reset();
 }
 
 } // namespace cadise

@@ -15,7 +15,7 @@ public:
 
     AABB3R bound() const override;
 
-    bool isIntersecting(Ray &ray, Intersection &intersection) const override;
+    bool isIntersecting(Ray &ray, PrimitiveInfo &primitiveInfo) const override;
     bool isOccluded(Ray &ray) const override;
 
 private:

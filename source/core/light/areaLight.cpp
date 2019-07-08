@@ -1,26 +1,27 @@
 #include "core/light/areaLight.h"
 
-#include "core/surfaceInfo.h"
+#include "core/intersector/primitive/primitive.h"
+#include "core/surfaceGeometryInfo.h"
 
 #include "math/constant.h"
 
 namespace cadise {
 
-AreaLight::AreaLight(const std::shared_ptr<Shape> shape, const Vector3R albedo) :
-    _shape(shape), _albedo(albedo) {
+AreaLight::AreaLight(const Vector3R albedo) :
+    _albedo(albedo) {
 }
 
-Vector3R AreaLight::evaluateSampleRadiance(Vector3R &lightDirection, const SurfaceInfo surfaceInfo, real &t, real &pdf) const {
-    Vector3R offsetOrigin = surfaceInfo.point() + constant::RAY_EPSILON * surfaceInfo.normal();
-    SurfaceInfo sampleSurface;
-    _shape->sampleSurface(surfaceInfo, sampleSurface);
+Vector3R AreaLight::evaluateSampleRadiance(Vector3R &lightDirection, const SurfaceGeometryInfo surfaceGeometryInfo, real &t, real &pdf) const {
+    Vector3R offsetOrigin = surfaceGeometryInfo.point() + constant::RAY_EPSILON * surfaceGeometryInfo.normal();
+    SurfaceGeometryInfo sampleSurface;
+    _primitive->sampleSurface(surfaceGeometryInfo, sampleSurface);
 
     Vector3R direction = sampleSurface.point() - offsetOrigin;
     t = direction.length();
     lightDirection = direction.normalize();
 
     // Change delta A to delta w
-    pdf = _shape->samplePdfA();
+    pdf = _primitive->samplePdfA(sampleSurface.point());
     pdf *= direction.lengthSquared() / sampleSurface.normal().dot(-direction.normalize());
 
     return _albedo;
@@ -34,8 +35,12 @@ Vector3R AreaLight::color() const {
     return _albedo;
 }
 
-std::shared_ptr<Shape> AreaLight::shape() const {
-    return _shape;
+std::shared_ptr<Primitive> AreaLight::primitive() const {
+    return _primitive;
+}
+
+void AreaLight::setPrimitive(const std::shared_ptr<Primitive> primitive) {
+    _primitive = primitive;
 }
 
 } // namespace cadise

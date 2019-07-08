@@ -1,8 +1,5 @@
-#pragma once
+#include "core/surfaceShadingInfo.h"
 
 namespace cadise {
-
-class Intersection {
-};
 
 } // namespace cadise
