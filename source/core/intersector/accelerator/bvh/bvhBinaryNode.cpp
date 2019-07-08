@@ -11,7 +11,7 @@ BVHBinaryNode::~BVHBinaryNode() {
     _children[1].release();
 }
 
-void BVHBinaryNode::initializeInternalNode(std::unique_ptr<BVHBinaryNode>& firstChild, std::unique_ptr<BVHBinaryNode>& secondChild, const uint32 splitAxis) {
+void BVHBinaryNode::initializeInternalNode(std::unique_ptr<BVHBinaryNode> firstChild, std::unique_ptr<BVHBinaryNode> secondChild, const uint32 splitAxis) {
     _bound = firstChild->bound().unionWith(secondChild->bound());
     _children[0] = std::move(firstChild);
     _children[1] = std::move(secondChild);

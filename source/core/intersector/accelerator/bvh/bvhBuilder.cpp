@@ -22,7 +22,7 @@ std::unique_ptr<BVHBinaryNode> BVHBuilder::buildBinaryNodes(
     return std::move(root);
 }
 
-void BVHBuilder::buildLinearNodes(std::unique_ptr<BVHBinaryNode>& root, 
+void BVHBuilder::buildLinearNodes(std::unique_ptr<BVHBinaryNode> root, 
                                   std::vector<BVHLinearNode>& linearNodes,
                                   const uint64 totalSize) const {
     std::vector<BVHLinearNode> nodes;
@@ -92,7 +92,7 @@ std::unique_ptr<BVHBinaryNode> BVHBuilder::_buildBinaryNodesRecursively(
     return std::move(node);
 }
 
-void BVHBuilder::_buildLinearNodesRecursively(std::unique_ptr<BVHBinaryNode>& binaryNode, 
+void BVHBuilder::_buildLinearNodesRecursively(std::unique_ptr<BVHBinaryNode> binaryNode, 
                                               std::vector<BVHLinearNode>& linearNodes,
                                               std::shared_ptr<uint64> nodeIndex) const {
     BVHLinearNode linearNode;
