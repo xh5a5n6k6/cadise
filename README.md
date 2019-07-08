@@ -1,8 +1,7 @@
 # Cadise Renderer
 
-<img src="./gallery/cornell-box/20190620.png"><br />
-<i>Cornell Box (mirror sphere) Rendered with Cadise</i>
-
+<img src="./gallery/cornell-box-sphere/20190708.png"><br />
+<p align="center"><i>Cornell Box (mirror sphere) Rendered with Cadise</i></p>
 ## Introduction
 Cadise is a developing ray tracing renderer written in C++17. It now only support some basic features as the cover image shows, and it still has a long way to go.
 
@@ -15,8 +14,8 @@ Cadise is a developing ray tracing renderer written in C++17. It now only suppor
     - BVH
 - ### BSDF
     - Lambertian Diffuse
-    - Perfect Specular
-- ### Shape
+    - Specular Reflection
+- ### Primitive
     - Sphere
     - Triangle
     - Rectangle

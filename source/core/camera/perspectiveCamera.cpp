@@ -3,6 +3,7 @@
 #include "core/ray.h"
 
 #include "math/constant.h"
+#include "math/math.h"
 
 #include <limits>
 
@@ -16,9 +17,14 @@ PerspectiveCamera::PerspectiveCamera(const Film& film, const real fov, const Mat
     _fov(fov), 
     _cameraToWorld(cameraToWorld) {
 
-    real halfScreenLength = std::tan(_fov / 2.0_r * constant::PI / 180.0_r);
-    _pixelWidth = 2.0_r * halfScreenLength / _film.resolution().x();
-    _pixelHeight = 2.0_r * halfScreenLength / _film.resolution().y();
+    int32 rx = _film.resolution().x();
+    int32 ry = _film.resolution().y();
+    real aspectRatio = static_cast<real>(ry) / static_cast<real>(rx);
+
+    real screenWidth  = 2.0_r * std::tan(math::degreeToRadian(_fov / 2.0_r));
+    real screenHeight = screenWidth * aspectRatio;
+    _pixelWidth  = screenWidth  / rx;
+    _pixelHeight = screenHeight / ry;
 }
 
 Ray PerspectiveCamera::createRay(const int32 px, const int32 py) const {
@@ -34,8 +40,15 @@ Ray PerspectiveCamera::createRay(const int32 px, const int32 py) const {
 
     real sampleX = px * _pixelWidth + sx * _pixelWidth;
     real sampleY = py * _pixelHeight + sy * _pixelHeight;
-    real left = -std::tan(_fov / 2.0_r * constant::PI / 180.0_r);
-    real up = std::tan(_fov / 2.0_r * constant::PI / 180.0_r);
+
+    int32 rx = _film.resolution().x();
+    int32 ry = _film.resolution().y();
+    real aspectRatio = static_cast<real>(ry) / static_cast<real>(rx);
+    real halfScreenWidth  = std::tan(math::degreeToRadian(_fov / 2.0_r));
+    real halfScreenHeight = halfScreenWidth * aspectRatio;
+
+    real left = -halfScreenWidth;
+    real up = halfScreenHeight;
     Vector3R samplePoint = Vector3R(left + sampleX, up - sampleY, -1.0_r);
 
     Vector3R origin = _cameraToWorld.transformPoint(Vector3R(0.0_r, 0.0_r, 0.0_r));

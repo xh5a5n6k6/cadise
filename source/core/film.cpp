@@ -2,6 +2,7 @@
 
 #include "file-io/imageIO.h"
 
+#include <algorithm>
 #include <memory>
 
 namespace cadise {
@@ -25,9 +26,9 @@ void Film::save() const {
     for (int32 y = 0; y < _resolution.y(); y++) {
         for (int32 x = 0; x < _resolution.x(); x++) {
             int32 offset = 3 * (x + y * _resolution.x());
-            data[offset]     = static_cast<uint8>(_pixelValue[offset    ]);
-            data[offset + 1] = static_cast<uint8>(_pixelValue[offset + 1]);
-            data[offset + 2] = static_cast<uint8>(_pixelValue[offset + 2]);
+            data[offset]     = static_cast<uint8>(std::clamp(_pixelValue[offset + 0], 0.0_r, 255.0_r));
+            data[offset + 1] = static_cast<uint8>(std::clamp(_pixelValue[offset + 1], 0.0_r, 255.0_r));
+            data[offset + 2] = static_cast<uint8>(std::clamp(_pixelValue[offset + 2], 0.0_r, 255.0_r));
         }
     }
 

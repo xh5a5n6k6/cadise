@@ -1,10 +1,20 @@
 #include "math/math.h"
 
+#include "math/constant.h"
+
 #include <cmath>
 
 namespace cadise {
 
 namespace math {
+
+real degreeToRadian(const real degree) {
+    return degree * constant::RADIAN_PER_DEGREE;
+}
+
+real radianToDegree(const real radian) {
+    return radian * constant::DEGREE_PER_RADIAN;
+}
 
 void buildCoordinateSystem(const Vector3R& zAxis, Vector3R& xAxis, Vector3R& yAxis) {
     if (std::abs(zAxis.x()) > std::abs(zAxis.y())) {
