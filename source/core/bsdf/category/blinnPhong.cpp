@@ -1,4 +1,4 @@
-#include "core/bsdf/blinnPhong.h"
+#include "core/bsdf/category/blinnPhong.h"
 
 #include "core/surfaceIntersection.h"
 

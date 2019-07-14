@@ -1,4 +1,4 @@
-#include "core/light/pointLight.h"
+#include "core/light/category/pointLight.h"
 
 #include "core/surfaceGeometryInfo.h"
 

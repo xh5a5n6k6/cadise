@@ -2,13 +2,11 @@
 
 #include "core/bsdf/bsdf.h"
 #include "core/color.h"
-#include "core/light/areaLight.h"
+#include "core/light/category/areaLight.h"
 
 namespace cadise {
 
-Primitive::Primitive() {
-
-}
+Primitive::Primitive() = default;
 
 Primitive::Primitive(const std::shared_ptr<BSDF>& bsdf) :
     _bsdf(bsdf), 

@@ -2,7 +2,7 @@
 
 #include "core/intersection.h"
 
-#include "core/primitiveInfo.h"
+#include "core/intersector/primitive/primitiveInfo.h"
 #include "core/surfaceGeometryInfo.h"
 #include "core/surfaceShadingInfo.h"
 

@@ -1,6 +1,6 @@
-#include "core/intersector/primitive/sphere.h"
+#include "core/intersector/primitive/category/sphere.h"
 
-#include "core/primitiveInfo.h"
+#include "core/intersector/primitive/primitiveInfo.h"
 #include "core/ray.h"
 #include "core/surfaceGeometryInfo.h"
 

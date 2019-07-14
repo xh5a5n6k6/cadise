@@ -1,4 +1,4 @@
-#include "core/bsdf/perfectDielectric.h"
+#include "core/bsdf/category/perfectDielectric.h"
 
 #include "core/surfaceIntersection.h"
 

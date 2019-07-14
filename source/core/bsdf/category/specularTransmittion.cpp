@@ -1,4 +1,4 @@
-#include "core/bsdf/specularTransmittion.h"
+#include "core/bsdf/category/specularTransmittion.h"
 
 #include "core/surfaceIntersection.h"
 

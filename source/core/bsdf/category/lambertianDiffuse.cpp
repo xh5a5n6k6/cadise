@@ -1,4 +1,4 @@
-#include "core/bsdf/lambertianDiffuse.h"
+#include "core/bsdf/category/lambertianDiffuse.h"
 
 #include "core/sampling/sample.h"
 #include "core/surfaceIntersection.h"

@@ -1,6 +1,6 @@
-#include "core/intersector/primitive/rectangle.h"
+#include "core/intersector/primitive/category/rectangle.h"
 
-#include "core/primitiveInfo.h"
+#include "core/intersector/primitive/primitiveInfo.h"
 #include "core/ray.h"
 #include "core/surfaceGeometryInfo.h"
 

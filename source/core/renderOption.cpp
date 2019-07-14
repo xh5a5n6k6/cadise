@@ -1,25 +1,24 @@
 #include "core/renderOption.h"
 
-#include "core/bsdf/blinnPhong.h"
-#include "core/bsdf/lambertianDiffuse.h"
-#include "core/bsdf/perfectDielectric.h"
-#include "core/bsdf/specularReflection.h"
-#include "core/bsdf/specularTransmittion.h"
+#include "core/bsdf/category/blinnPhong.h"
+#include "core/bsdf/category/lambertianDiffuse.h"
+#include "core/bsdf/category/perfectDielectric.h"
+#include "core/bsdf/category/specularReflection.h"
+#include "core/bsdf/category/specularTransmittion.h"
 #include "core/camera/perspectiveCamera.h"
 #include "core/intersector/accelerator/bruteForceAccelerator.h"
 #include "core/intersector/accelerator/bvh/bvhAccelerator.h"
-#include "core/intersector/primitive/rectangle.h"
-#include "core/intersector/primitive/sphere.h"
-#include "core/intersector/primitive/triangle.h"
-#include "core/light/areaLight.h"
-#include "core/light/pointLight.h"
+#include "core/intersector/primitive/category/rectangle.h"
+#include "core/intersector/primitive/category/sphere.h"
+#include "core/intersector/primitive/category/triangle.h"
+#include "core/light/category/areaLight.h"
+#include "core/light/category/pointLight.h"
 #include "core/renderer/whittedRenderer.h"
 #include "core/scene.h"
 
 namespace cadise {
 
-RenderOption::RenderOption() {
-}
+RenderOption::RenderOption() = default;
 
 void RenderOption::setupData(const std::vector<std::string>& data) {
     std::string type = data[0];
