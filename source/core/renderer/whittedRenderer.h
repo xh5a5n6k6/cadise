@@ -18,8 +18,8 @@ public:
     void render(const Scene& scene) const override;
 
 private:
-    RGBColor _luminance(const Scene& scene, Ray& ray) const;
-    RGBColor _reflect(const Scene& scene, Ray& ray, SurfaceIntersection& surfaceIntersection) const;
+    RGBColor _radiance(const Scene& scene, Ray& ray) const;
+    RGBColor _radianceOnScattering(const Scene& scene, Ray& ray, SurfaceIntersection& surfaceIntersection) const;
 
     int32 _maxDepth;
     int32 _sampleNumber;

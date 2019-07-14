@@ -33,7 +33,7 @@ void WhittedRenderer::render(const Scene& scene) const {
             for (int32 in = 0; in < _sampleNumber; in++) {
                 Ray ray = scene.camera()->createRay(ix, iy);
 
-                RGBColor sampleColor = _luminance(scene, ray);
+                RGBColor sampleColor = _radiance(scene, ray);
                 sampleColor.rgb() *= 255.0_r;
                 sampleColor.rgb() = sampleColor.rgb().clamp(0.0_r, 255.0_r);
 
@@ -51,7 +51,7 @@ void WhittedRenderer::render(const Scene& scene) const {
               << " s" << std::endl;
 }
 
-RGBColor WhittedRenderer::_luminance(const Scene& scene, Ray& ray) const {
+RGBColor WhittedRenderer::_radiance(const Scene& scene, Ray& ray) const {
     RGBColor color = RGBColor(0.0_r, 0.0_r, 0.0_r);
 
     SurfaceIntersection intersection;
@@ -81,7 +81,6 @@ RGBColor WhittedRenderer::_luminance(const Scene& scene, Ray& ray) const {
             }
 
             Vector3R reflectance = bsdf->evaluate(intersection);
-
             if (!reflectance.isZero()) {
                 real LdotN = lightDir.absDot(hitNormal);
                 color.rgb() += reflectance * radiance * LdotN / pdf;
@@ -89,32 +88,36 @@ RGBColor WhittedRenderer::_luminance(const Scene& scene, Ray& ray) const {
         }
 
         if (ray.depth() + 1 < _maxDepth) {
-            color.rgb() += _reflect(scene, ray, intersection).rgb();
+            color.rgb() += _radianceOnScattering(scene, ray, intersection).rgb();
         }
+    }
+    else {
+        // TODO : add environment map influence
     }
 
     return color;
 }
 
-RGBColor WhittedRenderer::_reflect(const Scene& scene, Ray& ray, SurfaceIntersection& intersection) const {
+RGBColor WhittedRenderer::_radianceOnScattering(const Scene& scene, Ray& ray, SurfaceIntersection& intersection) const {
     RGBColor color = RGBColor(0.0_r, 0.0_r, 0.0_r);
 
     const Primitive* primitive = intersection.primitiveInfo().primitive();
     std::shared_ptr<BSDF> bsdf = primitive->bsdf();
 
     intersection.setWi(-ray.direction());
-    Vector3R reflectance = bsdf->evaluateSample(intersection);
 
+    Vector3R reflectance = bsdf->evaluateSample(intersection);
     if (!reflectance.isZero()) {
         Vector3R hitPoint = intersection.surfaceGeometryInfo().point();
         Vector3R hitNormal = intersection.surfaceGeometryInfo().normal();
-        Ray r = Ray(hitPoint + constant::RAY_EPSILON * hitNormal,
+        real sign = (intersection.wo().dot(hitNormal) < 0.0_r) ? -1.0_r : 1.0_r;
+        Ray r = Ray(hitPoint + constant::RAY_EPSILON * hitNormal * sign,
                     intersection.wo(),
-                    constant::RAY_EPSILON, 
+                    constant::RAY_EPSILON,
                     std::numeric_limits<real>::max(),
                     ray.depth() + 1);
         real LdotN = intersection.wo().absDot(hitNormal);
-        color.rgb() = reflectance * _luminance(scene, r).rgb() * LdotN / intersection.pdf();
+        color.rgb() = reflectance * _radiance(scene, r).rgb() * LdotN / intersection.pdf();
     }
 
     return color;

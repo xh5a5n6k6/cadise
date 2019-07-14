@@ -50,6 +50,7 @@ bool Sphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
 
     ray.setMaxT(t);
     primitiveInfo.setPrimitive(this);
+    primitiveInfo.setIsBackSide(isOutside == 1);
 
     return true;
 }

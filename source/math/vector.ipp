@@ -320,6 +320,35 @@ inline Vector<T, Size> Vector<T, Size>::reflect(const Vector<T, Size>& normal) c
 }
 
 template<typename T, uint32 Size>
+inline Vector<T, Size> Vector<T, Size>::refract(const Vector<T, Size>& normal, const real iorOuter, const real iorInner) const {
+    real cosI = dot(normal);
+    real etaI = iorOuter;
+    real etaT = iorInner;
+    real signFactor = 1.0_r;
+
+    // check if incident ray is from inner to outer
+    if (cosI < 0.0_r) {
+        std::swap(etaI, etaT);
+        signFactor = -1.0_r;
+    }
+
+    real etaRatio = etaI / etaT;
+    real sin2_T = etaRatio * etaRatio * (1.0_r - cosI * cosI);
+
+    // handle TIR condition
+    if (sin2_T > 1.0_r) {
+        return Vector<T, Size>(static_cast<T>(0));
+    }
+
+    real cosT = std::sqrt(1.0_r - sin2_T);
+    Vector<T, Size> refractDirection = -etaRatio * *this;
+    refractDirection += (etaRatio * signFactor * cosI - cosT) * signFactor * normal;
+    refractDirection = refractDirection.normalize();
+
+    return refractDirection;
+}
+
+template<typename T, uint32 Size>
 inline T Vector<T, Size>::x() const {
     return _v[0];
 }

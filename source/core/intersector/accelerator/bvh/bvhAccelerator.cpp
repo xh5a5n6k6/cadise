@@ -15,7 +15,7 @@ BVHAccelerator::BVHAccelerator(const std::vector<std::shared_ptr<Intersector>>& 
     _intersectors.reserve(intersectors.size());
 
     // select spiltter
-    BVHSplitter splitter = BVHSplitter::EQUAL;
+    BVH_Splitter splitter = BVH_Splitter::EQUAL;
 
     BVHBuilder builder = BVHBuilder(splitter);
 

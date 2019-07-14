@@ -13,7 +13,7 @@ class Intersector;
 
 class BVHBuilder {
 public:
-    BVHBuilder(const BVHSplitter& splitter);
+    BVHBuilder(const BVH_Splitter& splitter);
 
     std::unique_ptr<BVHBinaryNode> buildBinaryNodes(
         const std::vector<std::shared_ptr<Intersector>>& intersectors, 
@@ -40,7 +40,7 @@ private:
                           std::vector<std::shared_ptr<Intersector>>& subIntersectors1,
                           std::vector<std::shared_ptr<Intersector>>& subIntersectors2) const;
 
-    BVHSplitter _splitter;
+    BVH_Splitter _splitter;
 
     static const uint64 MAX_INTERSECTOR_SIZE = 1;
 };

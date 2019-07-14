@@ -7,7 +7,7 @@
 
 namespace cadise {
 
-BVHBuilder::BVHBuilder(const BVHSplitter& splitter) :
+BVHBuilder::BVHBuilder(const BVH_Splitter& splitter) :
     _splitter(splitter) {
 }
 
@@ -60,7 +60,7 @@ std::unique_ptr<BVHBinaryNode> BVHBuilder::_buildBinaryNodesRecursively(
         std::vector<std::shared_ptr<Intersector> > subIntersectors2;
 
         switch (_splitter) {
-            case BVHSplitter::EQUAL:
+            case BVH_Splitter::EQUAL:
                 _splitWith_EQUAL(intersectors,
                                  splitAxis,
                                  subIntersectors1, 

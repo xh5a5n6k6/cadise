@@ -8,6 +8,7 @@
 namespace cadise {
 
 BlinnPhong::BlinnPhong(const real exponent) :
+    BSDF(BSDFType(BxDF_Type::GLOSSY_REFLECTION)),
     _exponent(exponent) {
 }
 

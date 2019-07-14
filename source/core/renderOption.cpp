@@ -2,7 +2,9 @@
 
 #include "core/bsdf/blinnPhong.h"
 #include "core/bsdf/lambertianDiffuse.h"
+#include "core/bsdf/perfectDielectric.h"
 #include "core/bsdf/specularReflection.h"
+#include "core/bsdf/specularTransmittion.h"
 #include "core/camera/perspectiveCamera.h"
 #include "core/intersector/accelerator/bruteForceAccelerator.h"
 #include "core/intersector/accelerator/bvh/bvhAccelerator.h"
@@ -91,6 +93,20 @@ void RenderOption::setupData(const std::vector<std::string>& data) {
         std::shared_ptr<BSDF> bsdf = nullptr;
         Vector3R albedo = Vector3R(std::stof(data[1]), std::stof(data[2]), std::stof(data[3]));
         bsdf = std::make_shared<SpecularReflection>(albedo);
+
+        _option.bsdf = bsdf;
+    }
+    else if (!type.compare("Glass")) {
+        std::shared_ptr<BSDF> bsdf = nullptr;
+        Vector3R albedo = Vector3R(std::stof(data[1]), std::stof(data[2]), std::stof(data[3]));
+        bsdf = std::make_shared<SpecularTransmittion>(albedo, 1.0_r, 1.5_r);
+
+        _option.bsdf = bsdf;
+    }
+    else if (!type.compare("Dielectric")) {
+        std::shared_ptr<BSDF> bsdf = nullptr;
+        Vector3R albedo = Vector3R(std::stof(data[1]), std::stof(data[2]), std::stof(data[3]));
+        bsdf = std::make_shared<PerfectDielectric>(albedo, 1.0_r, 1.5_r);
 
         _option.bsdf = bsdf;
     }

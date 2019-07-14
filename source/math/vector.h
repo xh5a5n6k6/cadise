@@ -54,6 +54,7 @@ public:
     T absDot(const Vector& v) const;
     Vector cross(const Vector& v) const;
     Vector reflect(const Vector& normal) const;
+    Vector refract(const Vector& normal, const real iorOuter, const real iorInner) const;
 
     T x() const;
     T y() const;

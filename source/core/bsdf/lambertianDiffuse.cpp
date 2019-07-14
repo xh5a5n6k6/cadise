@@ -10,6 +10,7 @@
 namespace cadise {
 
 LambertianDiffuse::LambertianDiffuse(const Vector3R& albedo) :
+    BSDF(BSDFType(BxDF_Type::DIFFUSE_REFLECTION)),
     _albedo(albedo) {
 }
 
@@ -18,18 +19,18 @@ Vector3R LambertianDiffuse::evaluate(const SurfaceIntersection& surfaceIntersect
 }
 
 Vector3R LambertianDiffuse::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
-    Vector3R x;
-    Vector3R y;
-    Vector3R z(surfaceIntersection.surfaceGeometryInfo().normal());
-    math::buildCoordinateSystem(z, x, y);
+    Vector3R xAxis;
+    Vector3R yAxis;
+    Vector3R zAxis(surfaceIntersection.surfaceGeometryInfo().normal());
+    math::buildCoordinateSystem(zAxis, xAxis, yAxis);
     
     //Vector3R sampleDir = sample::uniformHemisphere(random::get2D());
     Vector3R sampleDir = sample::cosineWeightedHemisphere(random::get2D());
-    Vector3R outDirection = x * sampleDir.x() + y * sampleDir.y() + z * sampleDir.z();
+    Vector3R outDirection = xAxis * sampleDir.x() + yAxis * sampleDir.y() + zAxis * sampleDir.z();
     outDirection = outDirection.normalize();
 
     //real pdf = constant::INV_TWO_PI;
-    real pdf = outDirection.absDot(z) * constant::INV_PI;
+    real pdf = outDirection.absDot(zAxis) * constant::INV_PI;
 
     surfaceIntersection.setWo(outDirection);
     surfaceIntersection.setPdf(pdf);
