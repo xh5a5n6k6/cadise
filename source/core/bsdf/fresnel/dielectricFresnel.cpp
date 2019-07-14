@@ -1,6 +1,7 @@
 #include "core/bsdf/fresnel/dielectricFresnel.h"
 
 #include <algorithm>
+#include <cmath>
 
 namespace cadise {
 
