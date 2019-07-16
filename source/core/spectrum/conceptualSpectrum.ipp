@@ -22,7 +22,7 @@ inline ConceptualSpectrum<Size>::ConceptualSpectrum(const ConceptualSpectrum<Siz
 template<uint32 Size>
 inline ConceptualSpectrum<Size> ConceptualSpectrum<Size>::operator-() const {
     ConceptualSpectrum<Size> result;
-    result._values = -cs._values;
+    result._values = -_values;
 
     return result;
 }
