@@ -2,7 +2,7 @@
 
 #include "core/bsdf/bsdfType.h"
 
-#include "math/vector.h"
+#include "core/spectrum/spectrum.h"
 
 namespace cadise {
 
@@ -12,8 +12,8 @@ class BSDF {
 public:
     BSDF(const BSDFType& type);
 
-    virtual Vector3R evaluate(const SurfaceIntersection& surfaceIntersection) const = 0;
-    virtual Vector3R evaluateSample(SurfaceIntersection& surfaceIntersection) const = 0;
+    virtual Spectrum evaluate(const SurfaceIntersection& surfaceIntersection) const = 0;
+    virtual Spectrum evaluateSample(SurfaceIntersection& surfaceIntersection) const = 0;
 
 protected:
     BSDFType _type;

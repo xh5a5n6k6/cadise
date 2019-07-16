@@ -6,13 +6,13 @@ namespace cadise {
 
 class SpecularReflection : public BSDF {
 public:
-    SpecularReflection(const Vector3R& albedo);
+    SpecularReflection(const Spectrum& albedo);
 
-    Vector3R evaluate(const SurfaceIntersection& surfaceIntersection) const override;
-    Vector3R evaluateSample(SurfaceIntersection& surfaceIntersection) const override;
+    Spectrum evaluate(const SurfaceIntersection& surfaceIntersection) const override;
+    Spectrum evaluateSample(SurfaceIntersection& surfaceIntersection) const override;
 
 private:
-    Vector3R _albedo;
+    Spectrum _albedo;
 };
 
 } // namespace cadise

@@ -23,25 +23,27 @@ public:
 
     Vector operator-() const;
     Vector operator+(const T s) const;
-    Vector operator+(const Vector& v) const;
     Vector operator-(const T s) const;
-    Vector operator-(const Vector& v) const;
     Vector operator*(const T s) const;
-    Vector operator*(const Vector& v) const;
     Vector operator/(const T s) const;
+    Vector operator+(const Vector& v) const;
+    Vector operator-(const Vector& v) const;
+    Vector operator*(const Vector& v) const;
     Vector operator/(const Vector& v) const;
     Vector& operator+=(const T s);
-    Vector& operator+=(const Vector& v);
     Vector& operator-=(const T s);
-    Vector& operator-=(const Vector& v);
     Vector& operator*=(const T s);
-    Vector& operator*=(const Vector& v);
     Vector& operator/=(const T s);
+    Vector& operator+=(const Vector& v);
+    Vector& operator-=(const Vector& v);
+    Vector& operator*=(const Vector& v);
     Vector& operator/=(const Vector& v);
     Vector& operator=(const Vector& v);
     T& operator[](const uint32 index);
 
     bool isZero() const;
+    T sum() const;
+    T average() const;
     T length() const;
     T lengthSquared() const;
     Vector normalize() const;

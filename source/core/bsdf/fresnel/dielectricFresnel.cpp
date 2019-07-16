@@ -10,7 +10,7 @@ DielectricFresnel::DielectricFresnel(const real iorOuter, const real iorInner) :
     _iorInner(iorInner) {
 }
 
-real DielectricFresnel::evaluateReflectance(const real cosThetaI) const {
+Spectrum DielectricFresnel::evaluateReflectance(const real cosThetaI) const {
     real etaI = _iorOuter;
     real etaT = _iorInner;
     real cosI = cosThetaI;
@@ -32,7 +32,7 @@ real DielectricFresnel::evaluateReflectance(const real cosThetaI) const {
     real rPerpendicular = (etaI * cosI - etaT * cosT) / (etaI * cosI + etaT * cosT);
     real rTotal = 0.5_r * (rParallel * rParallel + rPerpendicular * rPerpendicular);
 
-    return rTotal;
+    return Spectrum(rTotal);
 }
 
 real DielectricFresnel::iorOuter() const {

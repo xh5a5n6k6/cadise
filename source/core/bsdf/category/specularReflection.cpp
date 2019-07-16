@@ -6,16 +6,16 @@
 
 namespace cadise {
 
-SpecularReflection::SpecularReflection(const Vector3R& albedo) :
+SpecularReflection::SpecularReflection(const Spectrum& albedo) :
     BSDF(BSDFType(BxDF_Type::SPECULAR_REFLECTION)),
     _albedo(albedo) {
 }
 
-Vector3R SpecularReflection::evaluate(const SurfaceIntersection& surfaceIntersection) const {
-    return Vector3R(0.0_r);
+Spectrum SpecularReflection::evaluate(const SurfaceIntersection& surfaceIntersection) const {
+    return Spectrum(0.0_r);
 }
 
-Vector3R SpecularReflection::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
+Spectrum SpecularReflection::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
     Vector3R normal = surfaceIntersection.surfaceGeometryInfo().normal();
     Vector3R outDirection = surfaceIntersection.wi().reflect(normal);
     real LdotN = outDirection.absDot(normal);

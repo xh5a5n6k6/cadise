@@ -9,13 +9,13 @@ namespace cadise {
 class SpecularTransmittion : public BSDF {
 public:
     SpecularTransmittion();
-    SpecularTransmittion(const Vector3R& albedo, const real iorOuter, const real iorInner);
+    SpecularTransmittion(const Spectrum& albedo, const real iorOuter, const real iorInner);
 
-    Vector3R evaluate(const SurfaceIntersection& surfaceIntersection) const override;
-    Vector3R evaluateSample(SurfaceIntersection& surfaceIntersection) const override;
+    Spectrum evaluate(const SurfaceIntersection& surfaceIntersection) const override;
+    Spectrum evaluateSample(SurfaceIntersection& surfaceIntersection) const override;
 
 private:
-    Vector3R _albedo;
+    Spectrum _albedo;
     DielectricFresnel _fresnel;
 };
 

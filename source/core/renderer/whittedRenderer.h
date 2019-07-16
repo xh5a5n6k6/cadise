@@ -2,13 +2,12 @@
 
 #include "core/renderer/renderer.h"
 
-#include "math/type.h"
+#include "core/spectrum/spectrum.h"
 
 namespace cadise {
 
 class SurfaceIntersection;
 class Ray;
-class RGBColor;
 
 // WhittedRenderer is Whitted-style ray tracing renderer
 class WhittedRenderer : public Renderer {
@@ -18,8 +17,8 @@ public:
     void render(const Scene& scene) const override;
 
 private:
-    RGBColor _radiance(const Scene& scene, Ray& ray) const;
-    RGBColor _radianceOnScattering(const Scene& scene, Ray& ray, SurfaceIntersection& surfaceIntersection) const;
+    Spectrum _radiance(const Scene& scene, Ray& ray) const;
+    Spectrum _radianceOnScattering(const Scene& scene, Ray& ray, SurfaceIntersection& surfaceIntersection) const;
 
     int32 _maxDepth;
     int32 _sampleNumber;

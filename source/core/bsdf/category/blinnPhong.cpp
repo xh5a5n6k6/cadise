@@ -14,7 +14,7 @@ BlinnPhong::BlinnPhong(const real exponent) :
 
 // inDirection  : eye direction
 // outDirection : light direction
-Vector3R BlinnPhong::evaluate(const SurfaceIntersection& surfaceIntersection) const {
+Spectrum BlinnPhong::evaluate(const SurfaceIntersection& surfaceIntersection) const {
     real brdfFactor = std::max(surfaceIntersection.surfaceGeometryInfo().normal().dot(surfaceIntersection.wi()), 0.0_r);
 
     // H : half vector
@@ -22,11 +22,11 @@ Vector3R BlinnPhong::evaluate(const SurfaceIntersection& surfaceIntersection) co
     real NdotH = std::max(H.dot(surfaceIntersection.surfaceGeometryInfo().normal()), 0.0_r);
     real specular = std::pow(NdotH, _exponent) * brdfFactor;
 	
-    return Vector3R(specular, specular, specular);
+    return Spectrum(specular);
 }
 
-Vector3R BlinnPhong::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
-    return Vector3R(0.0_r);
+Spectrum BlinnPhong::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
+    return Spectrum(0.0_r);
 }
 
 } // namespace cadise

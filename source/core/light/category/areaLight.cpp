@@ -7,11 +7,11 @@
 
 namespace cadise {
 
-AreaLight::AreaLight(const Vector3R& albedo) :
+AreaLight::AreaLight(const Spectrum& albedo) :
     _albedo(albedo) {
 }
 
-Vector3R AreaLight::evaluateSampleRadiance(Vector3R& lightDirection, const SurfaceGeometryInfo& surfaceGeometryInfo, real& t, real& pdf) const {
+Spectrum AreaLight::evaluateSampleRadiance(Vector3R& lightDirection, const SurfaceGeometryInfo& surfaceGeometryInfo, real& t, real& pdf) const {
     Vector3R offsetOrigin = surfaceGeometryInfo.point() + constant::RAY_EPSILON * surfaceGeometryInfo.normal();
     SurfaceGeometryInfo sampleSurface;
     std::shared_ptr<Primitive> primitive = _primitive.lock();
@@ -28,11 +28,7 @@ Vector3R AreaLight::evaluateSampleRadiance(Vector3R& lightDirection, const Surfa
     return _albedo;
 }
 
-Vector3R AreaLight::position() const {
-    return Vector3R(0.0_r, 0.0_r, 0.0_r);
-}
-
-Vector3R AreaLight::color() const {
+Spectrum AreaLight::color() const {
     return _albedo;
 }
 

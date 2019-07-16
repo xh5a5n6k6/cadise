@@ -9,20 +9,20 @@
 namespace cadise {
 
 PerfectDielectric::PerfectDielectric() :
-    PerfectDielectric(Vector3R(), 1.0_r, 1.5_r) {
+    PerfectDielectric(Spectrum(0.0_r), 1.0_r, 1.5_r) {
 }
 
-PerfectDielectric::PerfectDielectric(const Vector3R& albedo, const real iorOuter, const real iorInner) :
+PerfectDielectric::PerfectDielectric(const Spectrum& albedo, const real iorOuter, const real iorInner) :
     BSDF(BSDFType(BxDF_Type::SPECULAR_REFLECTION) | BSDFType(BxDF_Type::SPECULAR_TRANSMITTION)),
     _albedo(albedo),
     _fresnel(iorOuter, iorInner) {
 }
 
-Vector3R PerfectDielectric::evaluate(const SurfaceIntersection& surfaceIntersection) const {
-    return Vector3R(0.0_r);
+Spectrum PerfectDielectric::evaluate(const SurfaceIntersection& surfaceIntersection) const {
+    return Spectrum(0.0_r);
 }
 
-Vector3R PerfectDielectric::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
+Spectrum PerfectDielectric::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
     Vector3R normal = surfaceIntersection.surfaceGeometryInfo().normal();
     real etaI = _fresnel.iorOuter();
     real etaT = _fresnel.iorInner();
@@ -30,7 +30,8 @@ Vector3R PerfectDielectric::evaluateSample(SurfaceIntersection& surfaceIntersect
     bool isReflection = false;
     bool isRefraction = false;
     real IdotN = surfaceIntersection.wi().dot(normal);
-    real reflectionProbability = _fresnel.evaluateReflectance(IdotN);
+    Spectrum reflectance = _fresnel.evaluateReflectance(IdotN);
+    real reflectionProbability = reflectance.average();
     real sampleProbability = random::get1D();
     if (sampleProbability <= reflectionProbability) {
         isReflection = true;
@@ -39,12 +40,11 @@ Vector3R PerfectDielectric::evaluateSample(SurfaceIntersection& surfaceIntersect
         isRefraction = true;
     }
 
-    Vector3R result;
+    Spectrum result(0.0_r);
     if (isReflection) {
         real nFactor = (IdotN < 0.0_r) ? -1.0_r : 1.0_r;
         Vector3R reflectDirection = surfaceIntersection.wi().reflect(normal * nFactor);
 
-        real reflectance = reflectionProbability;
         real pdf = reflectionProbability;
 
         surfaceIntersection.setWo(reflectDirection);
@@ -57,11 +57,11 @@ Vector3R PerfectDielectric::evaluateSample(SurfaceIntersection& surfaceIntersect
     else if (isRefraction) {
         Vector3R refractDirection = surfaceIntersection.wi().refract(normal, etaI, etaT);
         if (refractDirection.isZero()) {
-            return Vector3R(0.0_r);
+            return Spectrum(0.0_r);
         }
 
         real cosThetaI = refractDirection.dot(normal);
-        real transmittance = 1.0_r - _fresnel.evaluateReflectance(cosThetaI);
+        Spectrum transmittance = Spectrum(1.0_r) - _fresnel.evaluateReflectance(cosThetaI);
         if (cosThetaI < 0.0_r) {
             std::swap(etaI, etaT);
         }

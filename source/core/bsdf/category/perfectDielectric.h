@@ -9,13 +9,13 @@ namespace cadise {
 class PerfectDielectric : public BSDF {
 public:
     PerfectDielectric();
-    PerfectDielectric(const Vector3R& albedo, const real iorOuter, const real iorInner);
+    PerfectDielectric(const Spectrum& albedo, const real iorOuter, const real iorInner);
 
-    Vector3R evaluate(const SurfaceIntersection& surfaceIntersection) const override;
-    Vector3R evaluateSample(SurfaceIntersection& surfaceIntersection) const override;
+    Spectrum evaluate(const SurfaceIntersection& surfaceIntersection) const override;
+    Spectrum evaluateSample(SurfaceIntersection& surfaceIntersection) const override;
 
 private:
-    Vector3R _albedo;
+    Spectrum _albedo;
     DielectricFresnel _fresnel;
 };
 

@@ -8,7 +8,7 @@ class DielectricFresnel : public Fresnel {
 public:
     DielectricFresnel(const real iorOuter, const real iorInner);
 
-    real evaluateReflectance(const real cosThetaI) const override;
+    Spectrum evaluateReflectance(const real cosThetaI) const override;
 
     real iorOuter() const;
     real iorInner() const;

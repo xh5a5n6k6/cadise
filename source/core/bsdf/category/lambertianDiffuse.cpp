@@ -9,16 +9,16 @@
 
 namespace cadise {
 
-LambertianDiffuse::LambertianDiffuse(const Vector3R& albedo) :
+LambertianDiffuse::LambertianDiffuse(const Spectrum& albedo) :
     BSDF(BSDFType(BxDF_Type::DIFFUSE_REFLECTION)),
     _albedo(albedo) {
 }
 
-Vector3R LambertianDiffuse::evaluate(const SurfaceIntersection& surfaceIntersection) const {
+Spectrum LambertianDiffuse::evaluate(const SurfaceIntersection& surfaceIntersection) const {
     return _albedo * constant::INV_PI;
 }
 
-Vector3R LambertianDiffuse::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
+Spectrum LambertianDiffuse::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
     Vector3R xAxis;
     Vector3R yAxis;
     Vector3R zAxis(surfaceIntersection.surfaceGeometryInfo().normal());

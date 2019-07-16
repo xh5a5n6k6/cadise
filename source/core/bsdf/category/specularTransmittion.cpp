@@ -7,31 +7,31 @@
 namespace cadise {
 
 SpecularTransmittion::SpecularTransmittion() :
-    SpecularTransmittion(Vector3R(), 1.0_r, 1.5_r) {
+    SpecularTransmittion(Spectrum(0.0_r), 1.0_r, 1.5_r) {
 }
 
-SpecularTransmittion::SpecularTransmittion(const Vector3R& albedo, const real iorOuter, const real iorInner) :
+SpecularTransmittion::SpecularTransmittion(const Spectrum& albedo, const real iorOuter, const real iorInner) :
     BSDF(BSDFType(BxDF_Type::SPECULAR_TRANSMITTION)),
     _albedo(albedo),
     _fresnel(iorOuter, iorInner) {
 }
 
-Vector3R SpecularTransmittion::evaluate(const SurfaceIntersection& surfaceIntersection) const {
-    return Vector3R(0.0_r);
+Spectrum SpecularTransmittion::evaluate(const SurfaceIntersection& surfaceIntersection) const {
+    return Spectrum(0.0_r);
 }
 
-Vector3R SpecularTransmittion::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
+Spectrum SpecularTransmittion::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
     Vector3R normal = surfaceIntersection.surfaceGeometryInfo().normal();
     real etaI = _fresnel.iorOuter();
     real etaT = _fresnel.iorInner();
 
     Vector3R refractDirection = surfaceIntersection.wi().refract(normal, etaI, etaT);
     if (refractDirection.isZero()) {
-        return Vector3R(0.0_r);
+        return Spectrum(0.0_r);
     }
 
     real cosThetaI = refractDirection.dot(normal);
-    real transmittance = 1.0_r - _fresnel.evaluateReflectance(cosThetaI);
+    Spectrum transmittance = Spectrum(1.0_r) - _fresnel.evaluateReflectance(cosThetaI);
     if (cosThetaI < 0.0_r) {
         std::swap(etaI, etaT);
     }

@@ -2,13 +2,14 @@
 
 #include "core/intersector/intersector.h"
 
+#include "core/spectrum/spectrum.h"
+
 #include <memory>
 
 namespace cadise {
 
 class AreaLight;
 class BSDF;
-class RGBColor;
 class SurfaceGeometryInfo;
 class SurfaceShadingInfo;
 
@@ -30,7 +31,7 @@ public:
     virtual real area() const = 0;
 
     std::shared_ptr<BSDF> bsdf() const;
-    RGBColor emittance(const Vector3R& outDirection) const;
+    Spectrum emittance(const Vector3R& outDirection) const;
 
     void setAreaLight(const std::shared_ptr<AreaLight>& areaLight);
 

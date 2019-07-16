@@ -84,28 +84,28 @@ void RenderOption::setupData(const std::vector<std::string>& data) {
     else if (!type.compare("Matte")) {
         std::shared_ptr<BSDF> bsdf = nullptr;
         Vector3R albedo = Vector3R(std::stof(data[1]), std::stof(data[2]), std::stof(data[3]));
-        bsdf = std::make_shared<LambertianDiffuse>(albedo);
+        bsdf = std::make_shared<LambertianDiffuse>(Spectrum(albedo));
 
         _option.bsdf = bsdf;
     }
     else if (!type.compare("Mirror")) {
         std::shared_ptr<BSDF> bsdf = nullptr;
         Vector3R albedo = Vector3R(std::stof(data[1]), std::stof(data[2]), std::stof(data[3]));
-        bsdf = std::make_shared<SpecularReflection>(albedo);
+        bsdf = std::make_shared<SpecularReflection>(Spectrum(albedo));
 
         _option.bsdf = bsdf;
     }
     else if (!type.compare("Glass")) {
         std::shared_ptr<BSDF> bsdf = nullptr;
         Vector3R albedo = Vector3R(std::stof(data[1]), std::stof(data[2]), std::stof(data[3]));
-        bsdf = std::make_shared<SpecularTransmittion>(albedo, 1.0_r, 1.5_r);
+        bsdf = std::make_shared<SpecularTransmittion>(Spectrum(albedo), 1.0_r, 1.5_r);
 
         _option.bsdf = bsdf;
     }
     else if (!type.compare("Dielectric")) {
         std::shared_ptr<BSDF> bsdf = nullptr;
         Vector3R albedo = Vector3R(std::stof(data[1]), std::stof(data[2]), std::stof(data[3]));
-        bsdf = std::make_shared<PerfectDielectric>(albedo, 1.0_r, 1.5_r);
+        bsdf = std::make_shared<PerfectDielectric>(Spectrum(albedo), 1.0_r, 1.5_r);
 
         _option.bsdf = bsdf;
     }
@@ -113,14 +113,14 @@ void RenderOption::setupData(const std::vector<std::string>& data) {
         std::shared_ptr<Light> light = nullptr;
         Vector3R position = Vector3R(std::stof(data[1]), std::stof(data[2]), std::stof(data[3]));
         Vector3R color = Vector3R(std::stof(data[4]), std::stof(data[5]), std::stof(data[6]));
-        light = std::make_shared<PointLight>(position, color);
+        light = std::make_shared<PointLight>(position, Spectrum(color));
 
         _option.lights.push_back(light);
     }
     else if (!type.compare("AreaLight")) {
         std::shared_ptr<AreaLight> light = nullptr;
         Vector3R albedo = Vector3R(std::stof(data[1]), std::stof(data[2]), std::stof(data[3]));
-        light = std::make_shared<AreaLight>(albedo);
+        light = std::make_shared<AreaLight>(Spectrum(albedo));
 
         _option.primitive->setAreaLight(light);
         light->setPrimitive(_option.primitive);

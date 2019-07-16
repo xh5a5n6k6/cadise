@@ -16,10 +16,7 @@ real get1D() {
 }
 
 Vector2R get2D() {
-    std::uniform_real_distribution<real> disX(0.0_r, 1.0_r);
-    std::uniform_real_distribution<real> disY(0.0_r, 1.0_r);
-
-    return Vector2R(disX(gen), disY(gen));
+    return Vector2R(get1D(), get1D());
 }
 
 } // namespace random
