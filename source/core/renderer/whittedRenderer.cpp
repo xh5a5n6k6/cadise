@@ -75,9 +75,9 @@ Spectrum WhittedRenderer::_radiance(const Scene& scene, Ray& ray) const {
             Ray r = Ray(hitPoint + constant::RAY_EPSILON * hitNormal,
                         lightDir,
                         constant::RAY_EPSILON, 
-                        t);
+                        t - constant::RAY_EPSILON);
 
-            if (scene.isOccluded(r) && r.maxT() < t - constant::RAY_EPSILON) {
+            if (scene.isOccluded(r)) {
                 continue;
             }
 

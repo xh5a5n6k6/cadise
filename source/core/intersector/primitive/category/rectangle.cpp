@@ -74,8 +74,6 @@ bool Rectangle::isOccluded(Ray& ray) const {
         return false;
     }
 
-    ray.setMaxT(t);
-
     return true;
 }
 

@@ -16,12 +16,13 @@ bool BruteForceAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInf
 }
 
 bool BruteForceAccelerator::isOccluded(Ray& ray) const {
-    bool result = false;
     for (uint64 index = 0; index < _intersectors.size(); index++) {
-        result |= _intersectors[index]->isOccluded(ray);
+        if (_intersectors[index]->isOccluded(ray)) {
+            return true;
+        }
     }
 
-    return result;
+    return false;
 }
 
 } // namespace cadise

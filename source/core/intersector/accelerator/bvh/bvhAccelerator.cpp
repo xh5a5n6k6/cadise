@@ -87,8 +87,6 @@ bool BVHAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) cons
 }
 
 bool BVHAccelerator::isOccluded(Ray& ray) const {
-    bool result = false;
-
     Vector3R origin = ray.origin();
     Vector3R invDirection = ray.direction().reciprocal();
     int32 dirIsNegative[3] = { invDirection.x() < 0.0_r, invDirection.y() < 0.0_r, invDirection.z() < 0.0_r };
@@ -101,7 +99,9 @@ bool BVHAccelerator::isOccluded(Ray& ray) const {
         if (currentNode.bound().isIntersectingAABB(origin, invDirection, ray.minT(), ray.maxT())) {
             if (currentNode.isLeaf()) {
                 for (uint64 i = 0; i < currentNode.intersectorCounts(); i++) {
-                    result |= _intersectors[currentNode.intersectorIndex() + i]->isOccluded(ray);
+                    if (_intersectors[currentNode.intersectorIndex() + i]->isOccluded(ray)) {
+                        return true;
+                    }
                 }
 
                 if (currentStackSize == 0) {
@@ -136,7 +136,7 @@ bool BVHAccelerator::isOccluded(Ray& ray) const {
         }
     }
 
-    return result;
+    return false;
 }
 
 } // namespace cadise

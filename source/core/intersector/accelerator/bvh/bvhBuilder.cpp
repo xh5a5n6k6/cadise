@@ -56,8 +56,8 @@ std::unique_ptr<BVHBinaryNode> BVHBuilder::_buildBinaryNodesRecursively(
             internalNodeBound.unionWith(intersectors[i]->bound());
         }
         uint32 splitAxis = internalNodeBound.maxAxis();
-        std::vector<std::shared_ptr<Intersector> > subIntersectors1;
-        std::vector<std::shared_ptr<Intersector> > subIntersectors2;
+        std::vector<std::shared_ptr<Intersector>> subIntersectors1;
+        std::vector<std::shared_ptr<Intersector>> subIntersectors2;
 
         switch (_splitter) {
             case BVH_Splitter::EQUAL:
@@ -128,7 +128,7 @@ bool BVHBuilder::_splitWith_EQUAL(const std::vector<std::shared_ptr<Intersector>
     subIntersectors1.reserve(size);
     subIntersectors2.reserve(size);
 
-    std::vector<std::shared_ptr<Intersector> > sortedIntersectors(intersectors);
+    std::vector<std::shared_ptr<Intersector>> sortedIntersectors(intersectors);
     std::nth_element(sortedIntersectors.begin(),
                      sortedIntersectors.begin() + size,
                      sortedIntersectors.end(),
