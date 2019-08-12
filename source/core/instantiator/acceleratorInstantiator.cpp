@@ -21,7 +21,7 @@ static std::shared_ptr<Accelerator> createBvh(
     const std::shared_ptr<SdData>& data,
     const std::vector<std::shared_ptr<Intersector>> _intersectors) {
 
-    return std::make_shared<BVHAccelerator>(std::move(_intersectors));
+    return std::make_shared<BvhAccelerator>(std::move(_intersectors));
 }
 
 std::shared_ptr<Accelerator> makeAccelerator(

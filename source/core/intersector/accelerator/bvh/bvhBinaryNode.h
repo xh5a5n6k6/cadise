@@ -6,18 +6,18 @@
 
 namespace cadise {
 
-class BVHBinaryNode {
+class BvhBinaryNode {
 public:
-    BVHBinaryNode();
-    ~BVHBinaryNode();
+    BvhBinaryNode();
+    ~BvhBinaryNode();
 
-    void initializeInternalNode(std::unique_ptr<BVHBinaryNode> firstChild, std::unique_ptr<BVHBinaryNode> secondChild, const uint32 splitAxis);
+    void initializeInternalNode(std::unique_ptr<BvhBinaryNode> firstChild, std::unique_ptr<BvhBinaryNode> secondChild, const uint32 splitAxis);
     void initializeLeafNode(const AABB3R& bound, const uint64 intersectorIndex, const uint64 intersectorCounts);
 
     AABB3R bound() const;
     uint64 intersectorIndex() const;
-    std::unique_ptr<BVHBinaryNode> firstChild();
-    std::unique_ptr<BVHBinaryNode> secondChild();
+    std::unique_ptr<BvhBinaryNode> firstChild();
+    std::unique_ptr<BvhBinaryNode> secondChild();
     uint64 intersectorCounts() const;
     uint32 splitAxis() const;
     bool isLeaf() const;
@@ -29,7 +29,7 @@ private:
         // for leaf node
         uint64 _intersectorIndex;
         // for internal node
-        std::unique_ptr<BVHBinaryNode> _children[2];
+        std::unique_ptr<BvhBinaryNode> _children[2];
     };
 
     union {

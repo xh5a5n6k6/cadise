@@ -11,7 +11,7 @@ namespace cadise {
 template<typename T>
 class Texture;
 
-class SpecularTransmission : public BSDF {
+class SpecularTransmission : public Bsdf {
 public:
     SpecularTransmission(const std::shared_ptr<Texture<Spectrum>>& albedo, 
                          const real iorOuter, const real iorInner);

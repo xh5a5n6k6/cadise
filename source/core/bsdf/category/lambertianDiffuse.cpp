@@ -11,7 +11,7 @@
 namespace cadise {
 
 LambertianDiffuse::LambertianDiffuse(const std::shared_ptr<Texture<Spectrum>>& albedo) :
-    BSDF(BSDFType(BxDF_Type::DIFFUSE_REFLECTION)),
+    Bsdf(BsdfType(BxdfType::DIFFUSE_REFLECTION)),
     _albedo(albedo) {
 }
 

@@ -4,10 +4,10 @@
 
 namespace cadise {
 
-class BVHLinearNode {
+class BvhLinearNode {
 public:
-    BVHLinearNode();
-    ~BVHLinearNode();
+    BvhLinearNode();
+    ~BvhLinearNode();
 
     void initializeInternalNode(const AABB3R& bound, const uint64 secondChildIndex, const uint32 splitAxis);
     void initializeLeafNode(const AABB3R& bound, const uint64 intersectorIndex, const uint64 intersectorCounts);

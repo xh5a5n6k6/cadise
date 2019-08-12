@@ -9,7 +9,7 @@ namespace cadise {
 template<typename T>
 class Texture;
 
-class SpecularReflection : public BSDF {
+class SpecularReflection : public Bsdf {
 public:
     SpecularReflection(const std::shared_ptr<Texture<Spectrum>>& albedo);
 

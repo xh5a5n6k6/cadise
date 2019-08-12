@@ -15,7 +15,7 @@ namespace cadise {
 
 namespace instantiator {
 
-static std::shared_ptr<BSDF> createLambertianDiffuse(
+static std::shared_ptr<Bsdf> createLambertianDiffuse(
     const std::shared_ptr<SdData>& data,
     const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
     const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
@@ -25,7 +25,7 @@ static std::shared_ptr<BSDF> createLambertianDiffuse(
     return std::make_shared<LambertianDiffuse>(albedo);
 }
 
-static std::shared_ptr<BSDF> createSpecularReflection(
+static std::shared_ptr<Bsdf> createSpecularReflection(
     const std::shared_ptr<SdData>& data,
     const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
     const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
@@ -35,7 +35,7 @@ static std::shared_ptr<BSDF> createSpecularReflection(
     return std::make_shared<SpecularReflection>(albedo);
 }
 
-static std::shared_ptr<BSDF> createSpecularTransmission(
+static std::shared_ptr<Bsdf> createSpecularTransmission(
     const std::shared_ptr<SdData>& data,
     const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
     const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
@@ -47,7 +47,7 @@ static std::shared_ptr<BSDF> createSpecularTransmission(
     return std::make_shared<SpecularTransmission>(albedo, iorOuter, iorInner);
 }
 
-static std::shared_ptr<BSDF> createPerfectDielectric(
+static std::shared_ptr<Bsdf> createPerfectDielectric(
     const std::shared_ptr<SdData>& data,
     const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
     const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
@@ -59,12 +59,12 @@ static std::shared_ptr<BSDF> createPerfectDielectric(
     return std::make_shared<PerfectDielectric>(albedo, iorOuter, iorInner);
 }
 
-std::shared_ptr<BSDF> makeBsdf(
+std::shared_ptr<Bsdf> makeBsdf(
     const std::shared_ptr<SdData>& data,
     const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
     const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
 
-    std::shared_ptr<BSDF> bsdf = nullptr;
+    std::shared_ptr<Bsdf> bsdf = nullptr;
     std::string_view type = data->findString("type");
     if (!type.compare("matte-lambertian")) {
         bsdf = createLambertianDiffuse(data, realTextures, spectrumTextures);

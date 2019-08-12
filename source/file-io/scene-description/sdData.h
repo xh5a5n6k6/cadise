@@ -49,7 +49,7 @@ public:
         const std::string_view& name, const real&     defaultValue = 0.0_r     ) const;
     int32    findInt32(
         const std::string_view& name, const int32&    defaultValue = 0         ) const;
-    Vector3R findVector3R(
+    Vector3R findVector3r(
         const std::string_view& name, const Vector3R& defaultValue = Vector3R()) const;
     std::string_view findString(
         const std::string_view& name, const std::string_view& defaultValue = "") const;
@@ -60,7 +60,7 @@ public:
 
     const real*     findRealArray(
         const std::string_view& name) const;
-    const Vector3R* findVector3RArray(
+    const Vector3R* findVector3rArray(
         const std::string_view& name) const;
 
     std::shared_ptr<Texture<real>> getRealTexture(

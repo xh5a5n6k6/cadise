@@ -8,7 +8,7 @@ namespace cadise {
 
 SpecularTransmission::SpecularTransmission(const std::shared_ptr<Texture<Spectrum>>& albedo,
                                            const real iorOuter, const real iorInner) :
-    BSDF(BSDFType(BxDF_Type::SPECULAR_TRANSMITTION)),
+    Bsdf(BsdfType(BxdfType::SPECULAR_TRANSMITTION)),
     _albedo(albedo),
     _fresnel(iorOuter, iorInner) {
 }

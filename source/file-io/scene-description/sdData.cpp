@@ -74,7 +74,7 @@ int32 SdData::findInt32(
     return _findData(name, defaultValue, _int32s);
 }
 
-Vector3R SdData::findVector3R(
+Vector3R SdData::findVector3r(
     const std::string_view& name, const Vector3R& defaultValue) const {
 
     return _findData(name, defaultValue, _vector3rs);
@@ -104,7 +104,7 @@ const real* SdData::findRealArray(
     return _findDataArray(name, _reals);
 }
 
-const Vector3R* SdData::findVector3RArray(
+const Vector3R* SdData::findVector3rArray(
     const std::string_view& name) const {
 
     return _findDataArray(name, _vector3rs);
@@ -142,7 +142,7 @@ std::shared_ptr<Texture<Spectrum>> SdData::getSpectrumTexture(
     }
     else {
         // it now only support rgb spectrum
-        const Vector3R rgb = findVector3R(name);
+        const Vector3R rgb = findVector3r(name);
         spectrumTexture = std::make_shared<ConstantTexture<Spectrum>>(rgb);
     }
 

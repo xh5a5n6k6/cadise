@@ -11,7 +11,7 @@
 
 namespace cadise {
 
-Sphere::Sphere(const std::shared_ptr<BSDF>& bsdf, const Vector3R& center, const real radius) :
+Sphere::Sphere(const std::shared_ptr<Bsdf>& bsdf, const Vector3R& center, const real radius) :
     Primitive(bsdf), 
     _center(center),
     _radius(radius) {

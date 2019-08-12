@@ -2,47 +2,47 @@
 
 namespace cadise {
 
-BVHLinearNode::BVHLinearNode() :
+BvhLinearNode::BvhLinearNode() :
     _bound() {
 }
 
-BVHLinearNode::~BVHLinearNode() = default;
+BvhLinearNode::~BvhLinearNode() = default;
 
-void BVHLinearNode::initializeInternalNode(const AABB3R& bound, const uint64 secondChildIndex, const uint32 splitAxis) {
+void BvhLinearNode::initializeInternalNode(const AABB3R& bound, const uint64 secondChildIndex, const uint32 splitAxis) {
     _bound = bound;
     _secondChildIndex = secondChildIndex;
     _splitAxis = splitAxis;
     _isLeaf = false;
 }
 
-void BVHLinearNode::initializeLeafNode(const AABB3R& bound, const uint64 intersectorIndex, const uint64 intersectorCounts) {
+void BvhLinearNode::initializeLeafNode(const AABB3R& bound, const uint64 intersectorIndex, const uint64 intersectorCounts) {
     _bound = bound;
     _intersectorIndex = intersectorIndex;
     _intersectorCounts = intersectorCounts;
     _isLeaf = true;
 }
 
-AABB3R BVHLinearNode::bound() const {
+AABB3R BvhLinearNode::bound() const {
     return _bound;
 }
 
-uint64 BVHLinearNode::intersectorIndex() const {
+uint64 BvhLinearNode::intersectorIndex() const {
     return _intersectorIndex;
 }
 
-uint64 BVHLinearNode::secondChildIndex() const {
+uint64 BvhLinearNode::secondChildIndex() const {
     return _secondChildIndex;
 }
 
-uint64 BVHLinearNode::intersectorCounts() const {
+uint64 BvhLinearNode::intersectorCounts() const {
     return _intersectorCounts;
 }
 
-uint32 BVHLinearNode::splitAxis() const {
+uint32 BvhLinearNode::splitAxis() const {
     return _splitAxis;
 }
 
-bool BVHLinearNode::isLeaf() const {
+bool BvhLinearNode::isLeaf() const {
     return _isLeaf;
 }
 

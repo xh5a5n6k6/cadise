@@ -4,7 +4,7 @@
 
 namespace cadise {
 
-class BlinnPhong : public BSDF {
+class BlinnPhong : public Bsdf {
 public:
     BlinnPhong(const real exponent = 32.0_r);
 

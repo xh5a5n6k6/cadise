@@ -6,7 +6,7 @@ namespace cadise {
 
 class Rectangle : public Primitive {
 public:
-    Rectangle(const std::shared_ptr<BSDF>& bsdf, const Vector3R& v1, const Vector3R& v2, const Vector3R& v3);
+    Rectangle(const std::shared_ptr<Bsdf>& bsdf, const Vector3R& v1, const Vector3R& v2, const Vector3R& v3);
 
     AABB3R bound() const override;
 

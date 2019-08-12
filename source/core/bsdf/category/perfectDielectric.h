@@ -11,7 +11,7 @@ namespace cadise {
 template<typename T>
 class Texture;
 
-class PerfectDielectric : public BSDF {
+class PerfectDielectric : public Bsdf {
 public:
     PerfectDielectric(const std::shared_ptr<Texture<Spectrum>>& albedo, 
                       const real iorOuter, const real iorInner);

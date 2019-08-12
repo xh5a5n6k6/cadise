@@ -2,18 +2,18 @@
 
 namespace cadise {
 
-BSDFType::BSDFType() = default;
+BsdfType::BsdfType() = default;
 
-BSDFType::BSDFType(const BxDF_Type& type) :
+BsdfType::BsdfType(const BxdfType& type) :
     _type(static_cast<uint32>(type)) {
 }
 
-BSDFType::BSDFType(const uint32 type) {
+BsdfType::BsdfType(const uint32 type) {
     _type = type;
 }
 
-BSDFType BSDFType::operator|(const BSDFType& type) {
-    BSDFType result;
+BsdfType BsdfType::operator|(const BsdfType& type) {
+    BsdfType result;
     result._type = _type | type._type;
 
     return result;

@@ -2,7 +2,7 @@
 
 namespace cadise {
 
-BSDF::BSDF(const BSDFType& type) :
+Bsdf::Bsdf(const BsdfType& type) :
     _type(type) {
 }
 

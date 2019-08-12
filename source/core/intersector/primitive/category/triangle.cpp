@@ -12,7 +12,7 @@
 
 namespace cadise {
 
-Triangle::Triangle(const std::shared_ptr<BSDF>& bsdf, const Vector3R& v1, const Vector3R& v2, const Vector3R& v3) :
+Triangle::Triangle(const std::shared_ptr<Bsdf>& bsdf, const Vector3R& v1, const Vector3R& v2, const Vector3R& v3) :
     Primitive(bsdf), 
     _v1(v1),
     _v2(v2), 

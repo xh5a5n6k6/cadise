@@ -7,13 +7,13 @@ namespace cadise {
 
 Primitive::Primitive() = default;
 
-Primitive::Primitive(const std::shared_ptr<BSDF>& bsdf) :
+Primitive::Primitive(const std::shared_ptr<Bsdf>& bsdf) :
     _bsdf(bsdf),
     _textureMapper(nullptr),
     _areaLight() {
 }
 
-std::shared_ptr<BSDF> Primitive::bsdf() const {
+std::shared_ptr<Bsdf> Primitive::bsdf() const {
     return _bsdf;
 }
 

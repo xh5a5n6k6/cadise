@@ -2,9 +2,11 @@
 
 namespace cadise {
 
-enum class BVH_Splitter {
+enum class BvhSplitter {
     EQUAL,
-    SAH,
+
+    // TODO
+    // SAH,
 };
 
 } // namespace cadise

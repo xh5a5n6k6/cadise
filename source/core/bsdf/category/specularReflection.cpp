@@ -6,7 +6,7 @@
 namespace cadise {
 
 SpecularReflection::SpecularReflection(const std::shared_ptr<Texture<Spectrum>>& albedo) :
-    BSDF(BSDFType(BxDF_Type::SPECULAR_REFLECTION)),
+    Bsdf(BsdfType(BxdfType::SPECULAR_REFLECTION)),
     _albedo(albedo) {
 }
 

@@ -9,7 +9,7 @@ namespace cadise {
 template<typename T>
 class Texture;
 
-class LambertianDiffuse : public BSDF {
+class LambertianDiffuse : public Bsdf {
 public:
     LambertianDiffuse(const std::shared_ptr<Texture<Spectrum>>& albedo);
 

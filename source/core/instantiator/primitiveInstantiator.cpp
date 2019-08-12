@@ -13,9 +13,9 @@ namespace instantiator {
 
 static std::shared_ptr<Primitive> createSphere(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<BSDF>, std::less<>>& bsdfs) {
+    const std::map<std::string, std::shared_ptr<Bsdf>, std::less<>>& bsdfs) {
 
-    const Vector3R         center       = data->findVector3R("center");
+    const Vector3R         center       = data->findVector3r("center");
     const real             radius       = data->findReal("radius");
     const std::string_view bsdfName     = data->findBsdfName("bsdf");
 
@@ -26,11 +26,11 @@ static std::shared_ptr<Primitive> createSphere(
 
 static std::shared_ptr<Primitive> createTriangle(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<BSDF>, std::less<>>& bsdfs) {
+    const std::map<std::string, std::shared_ptr<Bsdf>, std::less<>>& bsdfs) {
 
-    const Vector3R         v1       = data->findVector3R("v1");
-    const Vector3R         v2       = data->findVector3R("v2");
-    const Vector3R         v3       = data->findVector3R("v3");
+    const Vector3R         v1       = data->findVector3r("v1");
+    const Vector3R         v2       = data->findVector3r("v2");
+    const Vector3R         v3       = data->findVector3r("v3");
     const std::string_view bsdfName = data->findBsdfName("bsdf");
 
     const auto&& bsdf = bsdfs.find(bsdfName);
@@ -40,11 +40,11 @@ static std::shared_ptr<Primitive> createTriangle(
 
 static std::shared_ptr<Primitive> createRectangle(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<BSDF>, std::less<>>& bsdfs) {
+    const std::map<std::string, std::shared_ptr<Bsdf>, std::less<>>& bsdfs) {
 
-    const Vector3R         v1       = data->findVector3R("v1");
-    const Vector3R         v2       = data->findVector3R("v2");
-    const Vector3R         v3       = data->findVector3R("v3");
+    const Vector3R         v1       = data->findVector3r("v1");
+    const Vector3R         v2       = data->findVector3r("v2");
+    const Vector3R         v3       = data->findVector3r("v3");
     const std::string_view bsdfName = data->findBsdfName("bsdf");
 
     const auto&& bsdf = bsdfs.find(bsdfName);
@@ -54,7 +54,7 @@ static std::shared_ptr<Primitive> createRectangle(
 
 std::shared_ptr<Primitive> makePrimitive(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<BSDF>, std::less<>>& bsdfs) {
+    const std::map<std::string, std::shared_ptr<Bsdf>, std::less<>>& bsdfs) {
 
     std::shared_ptr<Primitive> primitive = nullptr;
     std::string_view type = data->findString("type");

@@ -13,7 +13,7 @@ static std::shared_ptr<Camera> createPerspective(const std::shared_ptr<SdData>& 
     const std::string_view output = data->findString("output", "cadise.jpg");
     const int32            width  = data->findInt32("width", 1280);
     const int32            height = data->findInt32("height", 720);
-    const Vector3R*        lookAt = data->findVector3RArray("look-at");
+    const Vector3R*        lookAt = data->findVector3rArray("look-at");
     const real             fov    = data->findReal("fov");
 
     const Film film(std::string(output), width, height);

@@ -4,13 +4,13 @@
 
 namespace cadise {
 
-class BSDFType {
+class BsdfType {
 public:
-    BSDFType();
-    BSDFType(const BxDF_Type& type);
-    BSDFType(const uint32 type);
+    BsdfType();
+    BsdfType(const BxdfType& type);
+    BsdfType(const uint32 type);
 
-    BSDFType operator|(const BSDFType& type);
+    BsdfType operator|(const BsdfType& type);
 
 private:
     uint32 _type;

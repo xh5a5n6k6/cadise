@@ -8,7 +8,7 @@ namespace cadise {
 
 class Sphere : public Primitive {
 public:
-    Sphere(const std::shared_ptr<BSDF>& bsdf, const Vector3R& center, const real radius);
+    Sphere(const std::shared_ptr<Bsdf>& bsdf, const Vector3R& center, const real radius);
 
     AABB3R bound() const override;
 

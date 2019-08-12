@@ -17,8 +17,8 @@ static std::shared_ptr<Light> createPoint(
     const std::shared_ptr<SdData>& data,
     const std::map<std::string, std::shared_ptr<Primitive>, std::less<>>& primitives) {
 
-    const Vector3R position = data->findVector3R("position");
-    const Vector3R color    = data->findVector3R("color");
+    const Vector3R position = data->findVector3r("position");
+    const Vector3R color    = data->findVector3r("color");
 
     return std::make_shared<PointLight>(position, color);
 }
@@ -27,7 +27,7 @@ static std::shared_ptr<Light> createArea(
     const std::shared_ptr<SdData>& data,
     const std::map<std::string, std::shared_ptr<Primitive>, std::less<>>& primitives) {
 
-    const Vector3R albedo = data->findVector3R("albedo");
+    const Vector3R albedo = data->findVector3r("albedo");
     
     std::shared_ptr<AreaLight> areaLight = std::make_shared<AreaLight>(albedo);
 

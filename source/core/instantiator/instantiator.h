@@ -9,7 +9,7 @@
 namespace cadise {
 
 class Accelerator;
-class BSDF;
+class Bsdf;
 class Camera;
 class Intersector;
 class Light;
@@ -44,7 +44,7 @@ std::shared_ptr<Texture<Spectrum>> makeSpectrumTexture(
     const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures);
 
 // implement in core/instantiator/bsdfInstantiator.cpp
-std::shared_ptr<BSDF> makeBsdf(
+std::shared_ptr<Bsdf> makeBsdf(
     const std::shared_ptr<SdData>& data,
     const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
     const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures);
@@ -57,7 +57,7 @@ std::shared_ptr<Light> makeLight(
 // implement in core/instantiator/primitiveInstantiator.cpp
 std::shared_ptr<Primitive> makePrimitive(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<BSDF>, std::less<>>& bsdfs);
+    const std::map<std::string, std::shared_ptr<Bsdf>, std::less<>>& bsdfs);
 
 } // namespace instantiator
 

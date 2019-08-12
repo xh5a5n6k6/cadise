@@ -42,7 +42,7 @@ static std::shared_ptr<Texture<Spectrum>> createSpectrumConstant(
     const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
 
     // it now only support rgb spectrum
-    const Vector3R value = data->findVector3R("value");
+    const Vector3R value = data->findVector3r("value");
 
     return std::make_shared<ConstantTexture<Spectrum>>(value);
 }

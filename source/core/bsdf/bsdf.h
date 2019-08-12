@@ -8,15 +8,15 @@ namespace cadise {
 
 class SurfaceIntersection;
 
-class BSDF {
+class Bsdf {
 public:
-    BSDF(const BSDFType& type);
+    Bsdf(const BsdfType& type);
 
     virtual Spectrum evaluate(const SurfaceIntersection& surfaceIntersection) const = 0;
     virtual Spectrum evaluateSample(SurfaceIntersection& surfaceIntersection) const = 0;
 
 protected:
-    BSDFType _type;
+    BsdfType _type;
 };
 
 } // namespace cadise

@@ -58,7 +58,7 @@ Spectrum WhittedRenderer::_radiance(const Scene& scene, Ray& ray) const {
     SurfaceIntersection intersection;
     if (scene.isIntersecting(ray, intersection)) {
         const Primitive*            hitPrimitive = intersection.primitiveInfo().primitive();
-        const std::shared_ptr<BSDF> hitBsdf      = hitPrimitive->bsdf();
+        const std::shared_ptr<Bsdf> hitBsdf      = hitPrimitive->bsdf();
         
         const Vector3R hitPoint  = intersection.surfaceInfo().point();
         const Vector3R hitNormal = intersection.surfaceInfo().geometryNormal();
@@ -104,7 +104,7 @@ Spectrum WhittedRenderer::_radianceOnScattering(const Scene& scene, Ray& ray, Su
     Spectrum result(0.0_r);
 
     const Primitive*            primitive = intersection.primitiveInfo().primitive();
-    const std::shared_ptr<BSDF> bsdf      = primitive->bsdf();
+    const std::shared_ptr<Bsdf> bsdf      = primitive->bsdf();
 
     intersection.setWi(-ray.direction());
 

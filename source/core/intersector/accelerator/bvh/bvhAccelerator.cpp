@@ -7,7 +7,7 @@
 
 namespace cadise {
 
-BVHAccelerator::BVHAccelerator(const std::vector<std::shared_ptr<Intersector>>& intersectors) {
+BvhAccelerator::BvhAccelerator(const std::vector<std::shared_ptr<Intersector>>& intersectors) {
     if (intersectors.empty()) {
         exit(1);
     }
@@ -15,13 +15,13 @@ BVHAccelerator::BVHAccelerator(const std::vector<std::shared_ptr<Intersector>>& 
     _intersectors.reserve(intersectors.size());
 
     // select spiltter
-    BVH_Splitter splitter = BVH_Splitter::EQUAL;
+    BvhSplitter splitter = BvhSplitter::EQUAL;
 
-    BVHBuilder builder = BVHBuilder(splitter);
+    BvhBuilder builder = BvhBuilder(splitter);
 
     uint64 totalSize = 0;
     // build binary node tree recursively
-    std::unique_ptr<BVHBinaryNode> root = builder.buildBinaryNodes(std::move(intersectors), _intersectors, totalSize);
+    std::unique_ptr<BvhBinaryNode> root = builder.buildBinaryNodes(std::move(intersectors), _intersectors, totalSize);
 
     // flatten the binary tree and use BVHLinearNode to store the informations
     _nodes.clear();
@@ -29,11 +29,11 @@ BVHAccelerator::BVHAccelerator(const std::vector<std::shared_ptr<Intersector>>& 
     builder.buildLinearNodes(std::move(root), _nodes, totalSize);
 }
 
-AABB3R BVHAccelerator::bound() const {
+AABB3R BvhAccelerator::bound() const {
     return _nodes[0].bound();
 }
 
-bool BVHAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
+bool BvhAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
     bool result = false;
 
     Vector3R origin = ray.origin();
@@ -44,7 +44,7 @@ bool BVHAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) cons
     uint64 nodeStack[MAX_STACK_SIZE];
 
     while (true) {
-        BVHLinearNode currentNode = _nodes[currentNodeIndex];
+        BvhLinearNode currentNode = _nodes[currentNodeIndex];
         if (currentNode.bound().isIntersectingAABB(origin, invDirection, ray.minT(), ray.maxT())) {
             if (currentNode.isLeaf()) {
                 for (uint64 i = 0; i < currentNode.intersectorCounts(); i++) {
@@ -86,7 +86,7 @@ bool BVHAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) cons
     return result;
 }
 
-bool BVHAccelerator::isOccluded(Ray& ray) const {
+bool BvhAccelerator::isOccluded(Ray& ray) const {
     Vector3R origin = ray.origin();
     Vector3R invDirection = ray.direction().reciprocal();
     int32 dirIsNegative[3] = { invDirection.x() < 0.0_r, invDirection.y() < 0.0_r, invDirection.z() < 0.0_r };
@@ -95,7 +95,7 @@ bool BVHAccelerator::isOccluded(Ray& ray) const {
     uint64 nodeStack[MAX_STACK_SIZE];
 
     while (true) {
-        BVHLinearNode currentNode = _nodes[currentNodeIndex];
+        BvhLinearNode currentNode = _nodes[currentNodeIndex];
         if (currentNode.bound().isIntersectingAABB(origin, invDirection, ray.minT(), ray.maxT())) {
             if (currentNode.isLeaf()) {
                 for (uint64 i = 0; i < currentNode.intersectorCounts(); i++) {

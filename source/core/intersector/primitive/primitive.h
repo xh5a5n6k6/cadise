@@ -9,14 +9,14 @@
 namespace cadise {
 
 class AreaLight;
-class BSDF;
+class Bsdf;
 class SurfaceInfo;
 class TextureMapper;
 
 class Primitive : public Intersector {
 public:
     Primitive();
-    Primitive(const std::shared_ptr<BSDF>& bsdf);
+    Primitive(const std::shared_ptr<Bsdf>& bsdf);
 	
     virtual AABB3R bound() const override = 0;
 
@@ -29,13 +29,13 @@ public:
     virtual real samplePdfA(const Vector3R& position) const = 0;
     virtual real area() const = 0;
 
-    std::shared_ptr<BSDF> bsdf() const;
+    std::shared_ptr<Bsdf> bsdf() const;
     Spectrum emittance(const Vector3R& outDirection) const;
 
     void setAreaLight(const std::shared_ptr<AreaLight>& areaLight);
 
 protected:
-    std::shared_ptr<BSDF> _bsdf;
+    std::shared_ptr<Bsdf> _bsdf;
     std::shared_ptr<TextureMapper> _textureMapper;
 
     std::weak_ptr<AreaLight> _areaLight;

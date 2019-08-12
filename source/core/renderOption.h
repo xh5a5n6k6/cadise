@@ -10,7 +10,7 @@
 
 namespace cadise {
 
-class BSDF;
+class Bsdf;
 class Intersector;
 class Light;
 class Primitive;
@@ -46,7 +46,7 @@ private:
     std::vector<std::shared_ptr<Intersector>> _intersectors;
     std::vector<std::shared_ptr<Light>>       _lights;
 
-    std::map<std::string, std::shared_ptr<BSDF>, std::less<>>              _bsdfs;
+    std::map<std::string, std::shared_ptr<Bsdf>, std::less<>>              _bsdfs;
     std::map<std::string, std::shared_ptr<Primitive>, std::less<>>         _primitives; // for area lights
     std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>     _realTextures;
     std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>> _spectrumTextures;
