@@ -57,19 +57,20 @@ Spectrum WhittedRenderer::_radiance(const Scene& scene, Ray& ray) const {
 
     SurfaceIntersection intersection;
     if (scene.isIntersecting(ray, intersection)) {
-        const Primitive* hitPrimitive = intersection.primitiveInfo().primitive();
-        std::shared_ptr<BSDF> bsdf = hitPrimitive->bsdf();
-
+        const Primitive*            hitPrimitive = intersection.primitiveInfo().primitive();
+        const std::shared_ptr<BSDF> hitBsdf      = hitPrimitive->bsdf();
+        
+        const Vector3R hitPoint  = intersection.surfaceInfo().point();
+        const Vector3R hitNormal = intersection.surfaceInfo().geometryNormal();
+        
         // add radiance if hitting area light
         result += hitPrimitive->emittance(-ray.direction());
-        
-        Vector3R hitPoint = intersection.surfaceGeometryInfo().point();
-        Vector3R hitNormal = intersection.surfaceGeometryInfo().normal();
+
         for (uint64 index = 0; index < scene.lights().size(); index++) {
             Vector3R lightDir;
             real t;
             real pdf;
-            Spectrum radiance = scene.lights()[index]->evaluateSampleRadiance(lightDir, intersection.surfaceGeometryInfo(), t, pdf);
+            Spectrum radiance = scene.lights()[index]->evaluateSampleRadiance(lightDir, intersection.surfaceInfo(), t, pdf);
             
             // generate shadow ray to do occluded test
             Ray r = Ray(hitPoint + constant::RAY_EPSILON * hitNormal,
@@ -81,7 +82,7 @@ Spectrum WhittedRenderer::_radiance(const Scene& scene, Ray& ray) const {
                 continue;
             }
 
-            Spectrum reflectance = bsdf->evaluate(intersection);
+            Spectrum reflectance = hitBsdf->evaluate(intersection);
             if (!reflectance.isZero()) {
                 real LdotN = lightDir.absDot(hitNormal);
                 result += reflectance * radiance * LdotN / pdf;
@@ -102,15 +103,15 @@ Spectrum WhittedRenderer::_radiance(const Scene& scene, Ray& ray) const {
 Spectrum WhittedRenderer::_radianceOnScattering(const Scene& scene, Ray& ray, SurfaceIntersection& intersection) const {
     Spectrum result(0.0_r);
 
-    const Primitive* primitive = intersection.primitiveInfo().primitive();
-    std::shared_ptr<BSDF> bsdf = primitive->bsdf();
+    const Primitive*            primitive = intersection.primitiveInfo().primitive();
+    const std::shared_ptr<BSDF> bsdf      = primitive->bsdf();
 
     intersection.setWi(-ray.direction());
 
     Spectrum reflectance = bsdf->evaluateSample(intersection);
     if (!reflectance.isZero()) {
-        Vector3R hitPoint = intersection.surfaceGeometryInfo().point();
-        Vector3R hitNormal = intersection.surfaceGeometryInfo().normal();
+        Vector3R hitPoint = intersection.surfaceInfo().point();
+        Vector3R hitNormal = intersection.surfaceInfo().geometryNormal();
         real sign = (intersection.wo().dot(hitNormal) < 0.0_r) ? -1.0_r : 1.0_r;
         Ray r = Ray(hitPoint + constant::RAY_EPSILON * hitNormal * sign,
                     intersection.wo(),

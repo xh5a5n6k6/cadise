@@ -1,18 +1,14 @@
 #include "core/bsdf/category/perfectDielectric.h"
 
 #include "core/surfaceIntersection.h"
+#include "core/texture/texture.h"
 
 #include "math/random.h"
 
-#include <algorithm>
-
 namespace cadise {
 
-PerfectDielectric::PerfectDielectric() :
-    PerfectDielectric(Spectrum(0.0_r), 1.0_r, 1.5_r) {
-}
-
-PerfectDielectric::PerfectDielectric(const Spectrum& albedo, const real iorOuter, const real iorInner) :
+PerfectDielectric::PerfectDielectric(const std::shared_ptr<Texture<Spectrum>>& albedo, 
+                                     const real iorOuter, const real iorInner) :
     BSDF(BSDFType(BxDF_Type::SPECULAR_REFLECTION) | BSDFType(BxDF_Type::SPECULAR_TRANSMITTION)),
     _albedo(albedo),
     _fresnel(iorOuter, iorInner) {
@@ -23,7 +19,7 @@ Spectrum PerfectDielectric::evaluate(const SurfaceIntersection& surfaceIntersect
 }
 
 Spectrum PerfectDielectric::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
-    Vector3R normal = surfaceIntersection.surfaceGeometryInfo().normal();
+    Vector3R normal = surfaceIntersection.surfaceInfo().shadingNormal();
     real etaI = _fresnel.iorOuter();
     real etaT = _fresnel.iorInner();
 
@@ -52,7 +48,8 @@ Spectrum PerfectDielectric::evaluateSample(SurfaceIntersection& surfaceIntersect
 
         real LdotN = reflectDirection.absDot(normal);
 
-        result = _albedo * reflectance / LdotN;
+        Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
+        result = _albedo->evaluate(uvw) * reflectance / LdotN;
     }
     else if (isRefraction) {
         Vector3R refractDirection = surfaceIntersection.wi().refract(normal, etaI, etaT);
@@ -73,7 +70,8 @@ Spectrum PerfectDielectric::evaluateSample(SurfaceIntersection& surfaceIntersect
 
         real LdotN = refractDirection.absDot(normal);
 
-        result = _albedo * transmittance * btdfFactor / LdotN;
+        Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
+        result = _albedo->evaluate(uvw) * transmittance * btdfFactor / LdotN;
     }
 
     return result;

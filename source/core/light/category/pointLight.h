@@ -8,7 +8,7 @@ class PointLight : public Light {
 public:
     PointLight(const Vector3R& position, const Spectrum& color);
 
-    Spectrum evaluateSampleRadiance(Vector3R& lightDirection, const SurfaceGeometryInfo& surfaceGeometryInfo, real& t, real& pdf) const override;
+    Spectrum evaluateSampleRadiance(Vector3R& lightDirection, const SurfaceInfo& surfaceInfo, real& t, real& pdf) const override;
     Spectrum color() const override;
 
 private:

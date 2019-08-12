@@ -2,17 +2,22 @@
 
 #include "core/bsdf/bsdf.h"
 
+#include <memory>
+
 namespace cadise {
+
+template<typename T>
+class Texture;
 
 class SpecularReflection : public BSDF {
 public:
-    SpecularReflection(const Spectrum& albedo);
+    SpecularReflection(const std::shared_ptr<Texture<Spectrum>>& albedo);
 
     Spectrum evaluate(const SurfaceIntersection& surfaceIntersection) const override;
     Spectrum evaluateSample(SurfaceIntersection& surfaceIntersection) const override;
 
 private:
-    Spectrum _albedo;
+    std::shared_ptr<Texture<Spectrum>> _albedo;
 };
 
 } // namespace cadise

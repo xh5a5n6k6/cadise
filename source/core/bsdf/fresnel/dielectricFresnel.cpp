@@ -24,7 +24,7 @@ Spectrum DielectricFresnel::evaluateReflectance(const real cosThetaI) const {
 
     // handle TIR condition
     if (sin2_T >= 1.0_r) {
-        return 1.0_r;
+        return Spectrum(1.0_r);
     }
     real cosT = std::sqrt(1.0_r - sin2_T);
 

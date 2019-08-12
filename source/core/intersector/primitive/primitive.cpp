@@ -8,7 +8,8 @@ namespace cadise {
 Primitive::Primitive() = default;
 
 Primitive::Primitive(const std::shared_ptr<BSDF>& bsdf) :
-    _bsdf(bsdf), 
+    _bsdf(bsdf),
+    _textureMapper(nullptr),
     _areaLight() {
 }
 

@@ -10,8 +10,8 @@ namespace cadise {
 
 class AreaLight;
 class BSDF;
-class SurfaceGeometryInfo;
-class SurfaceShadingInfo;
+class SurfaceInfo;
+class TextureMapper;
 
 class Primitive : public Intersector {
 public:
@@ -23,10 +23,9 @@ public:
     virtual bool isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const override = 0;
     virtual bool isOccluded(Ray& ray) const override = 0;
 
-    virtual void evaluateGeometryDetail(const PrimitiveInfo& primitiveInfo, SurfaceGeometryInfo& geometryInfo) const = 0;
-    virtual void evaluteShadingDetail(SurfaceShadingInfo& shadingInfo) const = 0;
+    virtual void evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const = 0;
 
-    virtual void sampleSurface(const SurfaceGeometryInfo& inSurface, SurfaceGeometryInfo& outSurface) const = 0;
+    virtual void sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurface) const = 0;
     virtual real samplePdfA(const Vector3R& position) const = 0;
     virtual real area() const = 0;
 
@@ -37,6 +36,8 @@ public:
 
 protected:
     std::shared_ptr<BSDF> _bsdf;
+    std::shared_ptr<TextureMapper> _textureMapper;
+
     std::weak_ptr<AreaLight> _areaLight;
 };
 

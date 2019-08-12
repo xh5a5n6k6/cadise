@@ -2,7 +2,8 @@
 
 #include "core/intersector/primitive/primitiveInfo.h"
 #include "core/ray.h"
-#include "core/surfaceGeometryInfo.h"
+#include "core/surfaceInfo.h"
+#include "core/texture/mapper/textureMapper.h"
 
 #include <limits>
 #include <random>
@@ -17,6 +18,13 @@ Rectangle::Rectangle(const std::shared_ptr<BSDF>& bsdf, const Vector3R& v1, cons
     
     _e1 = _v1 - _v2;
     _e2 = _v3 - _v2;
+
+    _v4 = _v2 + _e1 + _e2;
+    
+    _uvw1 = Vector3R(1.0_r, 0.0_r, 0.0_r);
+    _uvw2 = Vector3R(0.0_r, 0.0_r, 0.0_r);
+    _uvw3 = Vector3R(0.0_r, 1.0_r, 0.0_r);
+    _uvw4 = Vector3R(1.0_r, 1.0_r, 0.0_r);
 }
 
 AABB3R Rectangle::bound() const {
@@ -77,17 +85,31 @@ bool Rectangle::isOccluded(Ray& ray) const {
     return true;
 }
 
-void Rectangle::evaluateGeometryDetail(const PrimitiveInfo& primitiveInfo, SurfaceGeometryInfo& geometryInfo) const {
+void Rectangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const {
     Vector3R normal = (primitiveInfo.isBackSide()) ? _e2.cross(_e1) : _e1.cross(_e2);
     normal = normal.normalize();
-    geometryInfo.setNormal(normal);
+    surfaceInfo.setGeometryNormal(normal);
+    surfaceInfo.setShadingNormal(normal);
+
+    Vector3R uvw;
+    if (_textureMapper != nullptr) {
+        uvw = _textureMapper->mappingToUvw(surfaceInfo);
+        surfaceInfo.setUvw(uvw);
+    }
+    else {
+        Vector3R point = surfaceInfo.point();
+        Vector3R vectorOnPlane = point - _v2;
+        real projection1 = vectorOnPlane.dot(_e1.normalize()) / _e1.length();
+        real projection2 = vectorOnPlane.dot(_e2.normalize()) / _e1.length();
+
+        Vector3R xUvwLerp1 = _uvw2.lerp(_uvw3, projection2);
+        Vector3R xUvwLerp2 = _uvw1.lerp(_uvw4, projection2);
+        uvw = xUvwLerp1.lerp(xUvwLerp2, projection1);
+        surfaceInfo.setUvw(uvw);
+    }
 }
 
-void Rectangle::evaluteShadingDetail(SurfaceShadingInfo& shadingInfo) const {
-
-}
-
-void Rectangle::sampleSurface(const SurfaceGeometryInfo& inSurface, SurfaceGeometryInfo& outSurface) const {
+void Rectangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurface) const {
     Vector3R e1 = _e1;
     Vector3R e2 = _e2;
     if (e1.length() < e2.length()) {
@@ -120,7 +142,7 @@ void Rectangle::sampleSurface(const SurfaceGeometryInfo& inSurface, SurfaceGeome
     Vector3R normal = e1.cross(e2).normalize();
 
     outSurface.setPoint(point);
-    outSurface.setNormal(normal);
+    outSurface.setGeometryNormal(normal);
 }
 
 real Rectangle::samplePdfA(const Vector3R& position) const {

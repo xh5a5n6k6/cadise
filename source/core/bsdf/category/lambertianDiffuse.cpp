@@ -2,6 +2,7 @@
 
 #include "core/sampling/sample.h"
 #include "core/surfaceIntersection.h"
+#include "core/texture/texture.h"
 
 #include "math/constant.h"
 #include "math/math.h"
@@ -9,19 +10,20 @@
 
 namespace cadise {
 
-LambertianDiffuse::LambertianDiffuse(const Spectrum& albedo) :
+LambertianDiffuse::LambertianDiffuse(const std::shared_ptr<Texture<Spectrum>>& albedo) :
     BSDF(BSDFType(BxDF_Type::DIFFUSE_REFLECTION)),
     _albedo(albedo) {
 }
 
 Spectrum LambertianDiffuse::evaluate(const SurfaceIntersection& surfaceIntersection) const {
-    return _albedo * constant::INV_PI;
+    Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
+    return _albedo->evaluate(uvw) * constant::INV_PI;
 }
 
 Spectrum LambertianDiffuse::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
     Vector3R xAxis;
     Vector3R yAxis;
-    Vector3R zAxis(surfaceIntersection.surfaceGeometryInfo().normal());
+    Vector3R zAxis(surfaceIntersection.surfaceInfo().shadingNormal());
     math::buildCoordinateSystem(zAxis, xAxis, yAxis);
     
     //Vector3R sampleDir = sample::uniformHemisphere(random::get2D());
@@ -35,7 +37,8 @@ Spectrum LambertianDiffuse::evaluateSample(SurfaceIntersection& surfaceIntersect
     surfaceIntersection.setWo(outDirection);
     surfaceIntersection.setPdf(pdf);
 
-    return _albedo * constant::INV_PI;
+    Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
+    return _albedo->evaluate(uvw) * constant::INV_PI;
 }
 
 } // namespace cadise

@@ -3,8 +3,7 @@
 #include "core/intersection.h"
 
 #include "core/intersector/primitive/primitiveInfo.h"
-#include "core/surfaceGeometryInfo.h"
-#include "core/surfaceShadingInfo.h"
+#include "core/surfaceInfo.h"
 
 namespace cadise {
 
@@ -13,23 +12,20 @@ public:
     SurfaceIntersection();
 
     PrimitiveInfo primitiveInfo() const;
-    SurfaceGeometryInfo surfaceGeometryInfo() const;
-    SurfaceShadingInfo surfaceShadingInfo() const;
+    SurfaceInfo surfaceInfo() const;
     Vector3R wi() const;
     Vector3R wo() const;
     real pdf() const;
 
     void setPrimitiveInfo(const PrimitiveInfo& primitiveInfo);
-    void setSurfaceGeometryInfo(const SurfaceGeometryInfo& geometryInfo);
-    void setSurfaceShadingInfo(const SurfaceShadingInfo& shadingInfo);
+    void setSurfaceInfo(const SurfaceInfo& surfaceInfo);
     void setWi(const Vector3R& wi);
     void setWo(const Vector3R& wo);
     void setPdf(const real pdf);
 
 private:
     PrimitiveInfo _primitiveInfo;
-    SurfaceGeometryInfo _geometryInfo;
-    SurfaceShadingInfo _shadingInfo;
+    SurfaceInfo _surfaceInfo;
     Vector3R _wi;
     Vector3R _wo;
 

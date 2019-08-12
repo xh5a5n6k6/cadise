@@ -12,6 +12,21 @@
 
 namespace cadise {
 
+PerspectiveCamera::PerspectiveCamera(const Film& film, const real fov, const Vector3R* const lookAt) :
+    _film(film),
+    _fov(fov),
+    _cameraToWorld(Matrix4::lookAt(lookAt[0], lookAt[1], lookAt[2])) {
+
+    int32 rx = _film.resolution().x();
+    int32 ry = _film.resolution().y();
+    real aspectRatio = static_cast<real>(ry) / static_cast<real>(rx);
+
+    real screenWidth = 2.0_r * std::tan(math::degreeToRadian(_fov / 2.0_r));
+    real screenHeight = screenWidth * aspectRatio;
+    _pixelWidth = screenWidth / rx;
+    _pixelHeight = screenHeight / ry;
+}
+
 PerspectiveCamera::PerspectiveCamera(const Film& film, const real fov, const Matrix4& cameraToWorld) :
     _film(film),
     _fov(fov), 

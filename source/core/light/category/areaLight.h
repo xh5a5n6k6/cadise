@@ -12,7 +12,7 @@ class AreaLight : public Light {
 public:
     AreaLight(const Spectrum& albedo);
 
-    Spectrum evaluateSampleRadiance(Vector3R& lightDirection, const SurfaceGeometryInfo& surfaceGeometryInfo, real& t, real& pdf) const override;
+    Spectrum evaluateSampleRadiance(Vector3R& lightDirection, const SurfaceInfo& surfaceInfo, real& t, real& pdf) const override;
     Spectrum color() const override;
 
     void setPrimitive(const std::shared_ptr<Primitive>& primitive);

@@ -2,7 +2,8 @@
 
 #include "core/intersector/primitive/primitiveInfo.h"
 #include "core/ray.h"
-#include "core/surfaceGeometryInfo.h"
+#include "core/surfaceInfo.h"
+#include "core/texture/mapper/textureMapper.h"
 
 #include "math/constant.h"
 
@@ -95,17 +96,23 @@ bool Triangle::isOccluded(Ray& ray) const {
     return true;
 }
 
-void Triangle::evaluateGeometryDetail(const PrimitiveInfo& primitiveInfo, SurfaceGeometryInfo& geometryInfo) const {
+void Triangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const {
     Vector3R normal = (primitiveInfo.isBackSide()) ? _e2.cross(_e1) : _e1.cross(_e2);
     normal = normal.normalize();
-    geometryInfo.setNormal(normal);
+    surfaceInfo.setGeometryNormal(normal);
+    surfaceInfo.setShadingNormal(normal);
+
+    Vector3R uvw;
+    if (_textureMapper != nullptr) {
+        uvw = _textureMapper->mappingToUvw(surfaceInfo);
+        surfaceInfo.setUvw(uvw);
+    }
+    else {
+        
+    }
 }
 
-void Triangle::evaluteShadingDetail(SurfaceShadingInfo& shadingInfo) const {
-
-}
-
-void Triangle::sampleSurface(const SurfaceGeometryInfo& inSurface, SurfaceGeometryInfo& outSurface) const {
+void Triangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurface) const {
     // TODO
     // improve sample point on triangle
     std::random_device rd;
@@ -131,7 +138,7 @@ void Triangle::sampleSurface(const SurfaceGeometryInfo& inSurface, SurfaceGeomet
     Vector3R normal = e1.cross(e2).normalize();
 
     outSurface.setPoint(point);
-    outSurface.setNormal(normal);
+    outSurface.setGeometryNormal(normal);
 }
 
 real Triangle::samplePdfA(const Vector3R& position) const {

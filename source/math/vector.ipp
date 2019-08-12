@@ -320,6 +320,17 @@ inline T Vector<T, Size>::absDot(const Vector<T, Size>& v) const {
 }
 
 template<typename T, uint32 Size>
+inline Vector<T, Size> Vector<T, Size>::lerp(const Vector<T, Size>& rhs, const real ratio) const {
+    Vector<T, Size> result;
+    real ratioComplement = 1.0_r - ratio;
+    for (uint32 index = 0; index < Size; index++) {
+        result._v[index] = ratioComplement * _v[index] + ratio * rhs._v[index];
+    }
+
+    return result;
+}
+
+template<typename T, uint32 Size>
 inline Vector<T, Size> Vector<T, Size>::cross(const Vector<T, Size>& v) const {
     static_assert(Size == 3, "Error in vector's cross, this vector doesn't support cross method\n");
 

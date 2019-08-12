@@ -2,7 +2,8 @@
 
 #include "core/intersector/primitive/primitiveInfo.h"
 #include "core/ray.h"
-#include "core/surfaceGeometryInfo.h"
+#include "core/surfaceInfo.h"
+#include "core/texture/mapper/sphericalMapper.h"
 
 #include "math/constant.h"
 
@@ -16,6 +17,7 @@ Sphere::Sphere(const std::shared_ptr<BSDF>& bsdf, const Vector3R& center, const 
     _radius(radius) {
 
     _worldToLocal = Matrix4::translate(-_center.x(), -_center.y(), -_center.z());
+    _tmptextureMapper = std::make_shared<SphericalMapper>();
 }
 
 AABB3R Sphere::bound() const {
@@ -84,16 +86,23 @@ bool Sphere::isOccluded(Ray& ray) const {
     return true;
 }
 
-void Sphere::evaluateGeometryDetail(const PrimitiveInfo& primitiveInfo, SurfaceGeometryInfo& geometryInfo) const {
-    Vector3R normal = (geometryInfo.point() - _center).normalize();
-    geometryInfo.setNormal(normal);
+void Sphere::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const {
+    Vector3R normal = (surfaceInfo.point() - _center).normalize();
+    surfaceInfo.setGeometryNormal(normal);
+    surfaceInfo.setShadingNormal(normal);
+
+    Vector3R uvw;
+    if (_textureMapper != nullptr) {
+        uvw = _textureMapper->mappingToUvw(surfaceInfo);
+        surfaceInfo.setUvw(uvw);
+    }
+    else {
+        uvw = _tmptextureMapper->mappingToUvw(surfaceInfo);
+        surfaceInfo.setUvw(uvw);
+    }
 }
 
-void Sphere::evaluteShadingDetail(SurfaceShadingInfo& shadingInfo) const {
-
-}
-
-void Sphere::sampleSurface(const SurfaceGeometryInfo& inSurface, SurfaceGeometryInfo& outSurface) const {
+void Sphere::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurface) const {
 
 }
 

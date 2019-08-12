@@ -1,27 +1,24 @@
-#include "core/bsdf/category/specularTransmittion.h"
+#include "core/bsdf/category/specularTransmission.h"
 
 #include "core/surfaceIntersection.h"
-
-#include <algorithm>
+#include "core/texture/texture.h"
 
 namespace cadise {
 
-SpecularTransmittion::SpecularTransmittion() :
-    SpecularTransmittion(Spectrum(0.0_r), 1.0_r, 1.5_r) {
-}
 
-SpecularTransmittion::SpecularTransmittion(const Spectrum& albedo, const real iorOuter, const real iorInner) :
+SpecularTransmission::SpecularTransmission(const std::shared_ptr<Texture<Spectrum>>& albedo,
+                                           const real iorOuter, const real iorInner) :
     BSDF(BSDFType(BxDF_Type::SPECULAR_TRANSMITTION)),
     _albedo(albedo),
     _fresnel(iorOuter, iorInner) {
 }
 
-Spectrum SpecularTransmittion::evaluate(const SurfaceIntersection& surfaceIntersection) const {
+Spectrum SpecularTransmission::evaluate(const SurfaceIntersection& surfaceIntersection) const {
     return Spectrum(0.0_r);
 }
 
-Spectrum SpecularTransmittion::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
-    Vector3R normal = surfaceIntersection.surfaceGeometryInfo().normal();
+Spectrum SpecularTransmission::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
+    Vector3R normal = surfaceIntersection.surfaceInfo().shadingNormal();
     real etaI = _fresnel.iorOuter();
     real etaT = _fresnel.iorInner();
 
@@ -43,7 +40,8 @@ Spectrum SpecularTransmittion::evaluateSample(SurfaceIntersection& surfaceInters
 
     real LdotN = refractDirection.absDot(normal);
 
-    return _albedo * transmittance * btdfFactor / LdotN;
+    Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
+    return _albedo->evaluate(uvw) * transmittance * btdfFactor / LdotN;
 }
 
 } // namespace cadise

@@ -4,18 +4,23 @@
 
 #include "core/bsdf/fresnel/dielectricFresnel.h"
 
+#include <memory>
+
 namespace cadise {
+
+template<typename T>
+class Texture;
 
 class PerfectDielectric : public BSDF {
 public:
-    PerfectDielectric();
-    PerfectDielectric(const Spectrum& albedo, const real iorOuter, const real iorInner);
+    PerfectDielectric(const std::shared_ptr<Texture<Spectrum>>& albedo, 
+                      const real iorOuter, const real iorInner);
 
     Spectrum evaluate(const SurfaceIntersection& surfaceIntersection) const override;
     Spectrum evaluateSample(SurfaceIntersection& surfaceIntersection) const override;
 
 private:
-    Spectrum _albedo;
+    std::shared_ptr<Texture<Spectrum>> _albedo;
     DielectricFresnel _fresnel;
 };
 

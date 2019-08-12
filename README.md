@@ -17,7 +17,7 @@ Cadise is a developing ray tracing renderer written in C++17, taking some render
 - ### BSDF
     - Lambertian Diffuse
     - Specular Reflection
-    - Specular Transmittion
+    - Specular Transmission
     - Perfect Dielectric
 - ### Primitive
     - Sphere

@@ -107,9 +107,9 @@ Matrix4 Matrix4::scale(const real sx, const real sy, const real sz) {
 }
 
 Matrix4 Matrix4::translate(const real tx, const real ty, const real tz) {
-    return Matrix4(1.0_r, 0.0_r, 0.0_r,   tx,
-                   0.0_r, 1.0_r, 0.0_r,   ty,
-                   0.0_r, 0.0_r, 1.0_r,   tz,
+    return Matrix4(1.0_r, 0.0_r, 0.0_r,    tx,
+                   0.0_r, 1.0_r, 0.0_r,    ty,
+                   0.0_r, 0.0_r, 1.0_r,    tz,
                    0.0_r, 0.0_r, 0.0_r, 1.0_r);
 }
 

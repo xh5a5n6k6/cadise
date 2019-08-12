@@ -3,7 +3,8 @@
 namespace cadise {
 
 BVHBinaryNode::BVHBinaryNode() :
-    _bound(), _children{} {
+    _bound(), 
+    _children{} {
 }
 
 BVHBinaryNode::~BVHBinaryNode() {

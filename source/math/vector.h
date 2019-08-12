@@ -54,6 +54,7 @@ public:
     void swap(Vector& v);
     T dot(const Vector& v) const;
     T absDot(const Vector& v) const;
+    Vector lerp(const Vector& rhs, const real ratio) const;
     Vector cross(const Vector& v) const;
     Vector reflect(const Vector& normal) const;
     Vector refract(const Vector& normal, const real iorOuter, const real iorInner) const;
