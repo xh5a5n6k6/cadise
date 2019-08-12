@@ -36,14 +36,6 @@ public:
         const std::string_view& name,
         std::unique_ptr<std::string_view[]> value,
         const int32 valueNumber);
-    void addBsdfName(
-        const std::string_view& name,
-        std::unique_ptr<std::string_view[]> value,
-        const int32 valueNumber);
-    void addTextureName(
-        const std::string_view& name,
-        std::unique_ptr<std::string_view[]> value,
-        const int32 valueNumber);
 
     real     findReal (
         const std::string_view& name, const real&     defaultValue = 0.0_r     ) const;
@@ -52,10 +44,6 @@ public:
     Vector3R findVector3r(
         const std::string_view& name, const Vector3R& defaultValue = Vector3R()) const;
     std::string_view findString(
-        const std::string_view& name, const std::string_view& defaultValue = "") const;
-    std::string_view findBsdfName(
-        const std::string_view& name, const std::string_view& defaultValue = "") const;
-    std::string_view findTextureName(
         const std::string_view& name, const std::string_view& defaultValue = "") const;
 
     const real*     findRealArray(
@@ -93,8 +81,6 @@ private:
     std::vector<std::shared_ptr<SdDataUnit<int32>>>            _int32s;
     std::vector<std::shared_ptr<SdDataUnit<Vector3R>>>         _vector3rs;
     std::vector<std::shared_ptr<SdDataUnit<std::string_view>>> _strings;
-    std::vector<std::shared_ptr<SdDataUnit<std::string_view>>> _bsdfNames;
-    std::vector<std::shared_ptr<SdDataUnit<std::string_view>>> _textureNames;
 };
 
 template<typename T>

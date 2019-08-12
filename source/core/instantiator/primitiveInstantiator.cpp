@@ -17,7 +17,7 @@ static std::shared_ptr<Primitive> createSphere(
 
     const Vector3R         center       = data->findVector3r("center");
     const real             radius       = data->findReal("radius");
-    const std::string_view bsdfName     = data->findBsdfName("bsdf");
+    const std::string_view bsdfName     = data->findString("bsdf");
 
     const auto&& bsdf = bsdfs.find(bsdfName);
 
@@ -31,7 +31,7 @@ static std::shared_ptr<Primitive> createTriangle(
     const Vector3R         v1       = data->findVector3r("v1");
     const Vector3R         v2       = data->findVector3r("v2");
     const Vector3R         v3       = data->findVector3r("v3");
-    const std::string_view bsdfName = data->findBsdfName("bsdf");
+    const std::string_view bsdfName = data->findString("bsdf");
 
     const auto&& bsdf = bsdfs.find(bsdfName);
 
@@ -45,7 +45,7 @@ static std::shared_ptr<Primitive> createRectangle(
     const Vector3R         v1       = data->findVector3r("v1");
     const Vector3R         v2       = data->findVector3r("v2");
     const Vector3R         v3       = data->findVector3r("v3");
-    const std::string_view bsdfName = data->findBsdfName("bsdf");
+    const std::string_view bsdfName = data->findString("bsdf");
 
     const auto&& bsdf = bsdfs.find(bsdfName);
 

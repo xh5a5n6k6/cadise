@@ -83,11 +83,11 @@ void Tokenizer::_parseDataUnit(std::shared_ptr<SdData>& sdData, const std::strin
     }
     else if (!type.compare("material")) {
         std::unique_ptr<std::string_view[]> value = std::move(_parseString(valueString));
-        sdData->addBsdfName(name, std::move(value), 1);
+        sdData->addString(name, std::move(value), 1);
     }
     else if (!type.compare("texture")) {
         std::unique_ptr<std::string_view[]> value = std::move(_parseString(valueString));
-        sdData->addTextureName(name, std::move(value), 1);
+        sdData->addString(name, std::move(value), 1);
     }
     else if (!type.compare("primitive")) {
         std::unique_ptr<std::string_view[]> value = std::move(_parseString(valueString));

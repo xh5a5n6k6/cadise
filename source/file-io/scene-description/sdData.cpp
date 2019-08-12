@@ -44,24 +44,6 @@ void SdData::addString(
         std::make_shared<SdDataUnit<std::string_view>>(name, std::move(value), valueNumber));
 }
 
-void SdData::addBsdfName(
-    const std::string_view& name,
-    std::unique_ptr<std::string_view[]> value,
-    const int32 valueNumber) {
-
-    _bsdfNames.push_back(
-        std::make_shared<SdDataUnit<std::string_view>>(name, std::move(value), valueNumber));
-}
-
-void SdData::addTextureName(
-    const std::string_view& name,
-    std::unique_ptr<std::string_view[]> value,
-    const int32 valueNumber) {
-
-    _textureNames.push_back(
-        std::make_shared<SdDataUnit<std::string_view>>(name, std::move(value), valueNumber));
-}
-
 real SdData::findReal(
     const std::string_view& name, const real& defaultValue) const {
 
@@ -86,18 +68,6 @@ std::string_view SdData::findString(
     return _findData(name, defaultValue, _strings);
 }
 
-std::string_view SdData::findBsdfName(
-    const std::string_view& name, const std::string_view& defaultValue) const {
-
-    return _findData(name, defaultValue, _bsdfNames);
-}
-
-std::string_view SdData::findTextureName(
-    const std::string_view& name, const std::string_view& defaultValue) const {
-
-    return _findData(name, defaultValue, _textureNames);
-}
-
 const real* SdData::findRealArray(
     const std::string_view& name) const {
 
@@ -116,7 +86,7 @@ std::shared_ptr<Texture<real>> SdData::getRealTexture(
 
     std::shared_ptr<Texture<real>> realTexture = nullptr;
 
-    const std::string_view textureName = findTextureName(name);
+    const std::string_view textureName = findString(name);
     if (textureName != "") {
         auto&& texture = realTextures.find(textureName);
         realTexture = texture->second;
@@ -135,7 +105,7 @@ std::shared_ptr<Texture<Spectrum>> SdData::getSpectrumTexture(
 
     std::shared_ptr<Texture<Spectrum>> spectrumTexture = nullptr;
 
-    const std::string_view textureName = findTextureName(name);
+    const std::string_view textureName = findString(name);
     if (textureName != "") {
         auto&& texture = spectrumTextures.find(textureName);
         spectrumTexture = texture->second;
