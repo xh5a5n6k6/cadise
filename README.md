@@ -1,8 +1,8 @@
 # Cadise Renderer
 
-<img src="./gallery/cornell-box-sphere/20190711.png"><br />
+<img src="./gallery/cornell-box-sphere/20190812.png"><br />
 
-<p align="center"><i>Cornell Box (mirror and glass spheres) Rendered with Cadise</i></p>
+<p align="center"><i>Cornell Box (with spheres) Rendered with Cadise</i></p>
 
 ## Introduction
 Cadise is a developing ray tracing renderer written in C++17, taking some renderers ([PBRT-v3](https://github.com/mmp/pbrt-v3), [Photon-v2](https://github.com/TzuChieh/Photon-v2), [Tungsten](https://github.com/tunabrain/tungsten), etc) as references. It now only support some basic features as the cover image shows, and it still has a long way to go.
@@ -26,6 +26,9 @@ Cadise is a developing ray tracing renderer written in C++17, taking some render
 - ### Light
     - Point Light
     - Area Light (rectangle)
+- ### Texture
+    - Constant
+    - Checkerboard
 
 ## License
 Cadise is under the <a href="https://opensource.org/licenses/MIT">MIT</a> license. 
