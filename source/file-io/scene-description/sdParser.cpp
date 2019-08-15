@@ -1,8 +1,6 @@
 #include "file-io/scene-description/sdParser.h"
 
-#include "core/renderer/renderer.h"
 #include "core/renderOption.h"
-#include "core/scene.h"
 
 #include "file-io/scene-description/tokenizer.h"
 
@@ -66,9 +64,8 @@ std::string SdParser::_parseSdToString(const std::string& filename) const {
 }
 
 void SdParser::_parseEnd() {
-    std::unique_ptr<Scene>    scene    = _renderOption->makeScene();
-    std::unique_ptr<Renderer> renderer = _renderOption->makeRenderer();
-    renderer->render(*scene);
+    _renderOption->prepareRender();
+    _renderOption->startRender();
 
     _tokenizer.reset();
     _renderOption.reset();

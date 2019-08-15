@@ -26,8 +26,8 @@ public:
 
     void setUpData(const std::shared_ptr<SdData>& data);
 
-    std::unique_ptr<Scene> makeScene() const;
-    std::unique_ptr<Renderer> makeRenderer() const;
+    void prepareRender();
+    void startRender() const;
 
 private:
     void _setUpCamera(const std::shared_ptr<SdData>& data);
@@ -42,6 +42,9 @@ private:
     std::shared_ptr<SdData> _cameraData;
     std::shared_ptr<SdData> _rendererData;
     std::shared_ptr<SdData> _acceleratorData;
+
+    std::shared_ptr<Scene>    _scene;
+    std::shared_ptr<Renderer> _renderer;
 
     std::vector<std::shared_ptr<Intersector>> _intersectors;
     std::vector<std::shared_ptr<Light>>       _lights;

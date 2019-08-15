@@ -10,7 +10,7 @@ Cadise is a developing ray tracing renderer written in C++17, taking some render
 [![Build Status](https://travis-ci.com/xh5a5n6k6/cadise.svg?branch=master)](https://travis-ci.com/xh5a5n6k6/cadise)
 
 ## Feature Lists
-- ### Renderer
+- ### Rendering Technique
     - Whitted Ray Tracing
 - ### Accelerator
     - BVH

@@ -1,7 +1,7 @@
 #include "core/instantiator/instantiator.h"
 
 // renderer type
-#include "core/renderer/whittedRenderer.h"
+#include "core/renderer/sampleRenderer.h"
 
 #include "file-io/scene-description/sdData.h"
 
@@ -9,28 +9,28 @@ namespace cadise {
 
 namespace instantiator {
 
-static std::unique_ptr<Renderer> createWhitted(
+static std::shared_ptr<Renderer> createSample(
     const std::shared_ptr<SdData>& data) {
 
-    const int32 maxDepth     = data->findInt32("max-depth", 10);
-    const int32 sampleNumber = data->findInt32("sample-number", 4);
+    const std::shared_ptr<Integrator> integrator   = makeIntegrator(data);
+    const int32                       sampleNumber = data->findInt32("sample-number", 4);
 
-    return std::make_unique<WhittedRenderer>(maxDepth, sampleNumber);
+    return std::make_shared<SampleRenderer>(std::move(integrator), sampleNumber);
 }
 
-std::unique_ptr<Renderer> makeRenderer(
+std::shared_ptr<Renderer> makeRenderer(
     const std::shared_ptr<SdData>& data) {
 
-    std::unique_ptr<Renderer> renderer = nullptr;
+    std::shared_ptr<Renderer> renderer = nullptr;
     std::string_view type = data->findString("type");
-    if (!type.compare("whitted")) {
-        renderer = createWhitted(data);
+    if (!type.compare("sample")) {
+        renderer = createSample(data);
     }
     else {
         // don't support renderer type
     }
 
-    return std::move(renderer);
+    return renderer;
 }
 
 } // namespace instantiator

@@ -15,9 +15,9 @@ static std::shared_ptr<Primitive> createSphere(
     const std::shared_ptr<SdData>& data,
     const std::map<std::string, std::shared_ptr<Bsdf>, std::less<>>& bsdfs) {
 
-    const Vector3R         center       = data->findVector3r("center");
-    const real             radius       = data->findReal("radius");
-    const std::string_view bsdfName     = data->findString("bsdf");
+    const Vector3R         center   = data->findVector3r("center");
+    const real             radius   = data->findReal("radius");
+    const std::string_view bsdfName = data->findString("bsdf");
 
     const auto&& bsdf = bsdfs.find(bsdfName);
 

@@ -1,8 +1,6 @@
-#include "core/renderer/whittedRenderer.h"
+#include "core/integrator/whittedIntegrator.h"
 
 #include "core/bsdf/bsdf.h"
-#include "core/camera/camera.h"
-#include "core/film.h"
 #include "core/intersector/primitive/primitive.h"
 #include "core/light/light.h"
 #include "core/ray.h"
@@ -11,49 +9,14 @@
 
 #include "math/constant.h"
 
-#include <chrono>
-#include <iostream>
-
 namespace cadise {
 
-WhittedRenderer::WhittedRenderer(const int32 maxDepth, const int32 sampleNumber) :
-    _maxDepth(maxDepth), 
-    _sampleNumber(sampleNumber) {
+WhittedIntegrator::WhittedIntegrator(const int32 maxDepth) :
+    _maxDepth(maxDepth) {
 }
 
-void WhittedRenderer::render(const Scene& scene) const {
-    std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
-
-    int32 rx = scene.camera()->film().resolution().x();
-    int32 ry = scene.camera()->film().resolution().y();
-
-    for (int32 iy = 0; iy < ry; iy++) {
-        for (int32 ix = 0; ix < rx; ix++) { 
-            for (int32 in = 0; in < _sampleNumber; in++) {
-                Ray ray = scene.camera()->createRay(ix, iy);
-
-                Spectrum sampleSpectrum = _radiance(scene, ray);
-                Vector3R sampleRGB;
-                sampleSpectrum.transformIntoRGB(sampleRGB);
-                sampleRGB *= 255.0_r;
-                sampleRGB = sampleRGB.clamp(0.0_r, 255.0_r);
-
-                Vector3R color = sampleRGB / static_cast<real>(_sampleNumber);
-                scene.camera()->film().addSample(ix, iy, color);
-            }
-        }
-    }
-
-    scene.camera()->film().save();
-
-    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-    std::cout << "Rendering time : "
-              << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() / 1000.0_r
-              << " s" << std::endl;
-}
-
-Spectrum WhittedRenderer::_radiance(const Scene& scene, Ray& ray) const {
-    Spectrum result(0.0_r);
+Spectrum WhittedIntegrator::traceRadiance(const Scene& scene, Ray& ray) const {
+    Spectrum totalRadiance(0.0_r);
 
     SurfaceIntersection intersection;
     if (scene.isIntersecting(ray, intersection)) {
@@ -64,7 +27,7 @@ Spectrum WhittedRenderer::_radiance(const Scene& scene, Ray& ray) const {
         const Vector3R hitNormal = intersection.surfaceInfo().geometryNormal();
         
         // add radiance if hitting area light
-        result += hitPrimitive->emittance(-ray.direction());
+        totalRadiance += hitPrimitive->emittance(-ray.direction());
 
         for (uint64 index = 0; index < scene.lights().size(); index++) {
             Vector3R lightDir;
@@ -85,23 +48,23 @@ Spectrum WhittedRenderer::_radiance(const Scene& scene, Ray& ray) const {
             Spectrum reflectance = hitBsdf->evaluate(intersection);
             if (!reflectance.isZero()) {
                 real LdotN = lightDir.absDot(hitNormal);
-                result += reflectance * radiance * LdotN / pdf;
+                totalRadiance += reflectance * radiance * LdotN / pdf;
             }
         }
 
         if (ray.depth() + 1 < _maxDepth) {
-            result += _radianceOnScattering(scene, ray, intersection);
+            totalRadiance += _radianceOnScattering(scene, ray, intersection);
         }
     }
     else {
         // TODO : add environment map influence
     }
 
-    return result;
+    return totalRadiance;
 }
 
-Spectrum WhittedRenderer::_radianceOnScattering(const Scene& scene, Ray& ray, SurfaceIntersection& intersection) const {
-    Spectrum result(0.0_r);
+Spectrum WhittedIntegrator::_radianceOnScattering(const Scene& scene, Ray& ray, SurfaceIntersection& intersection) const {
+    Spectrum sampleRadiance(0.0_r);
 
     const Primitive*            primitive = intersection.primitiveInfo().primitive();
     const std::shared_ptr<Bsdf> bsdf      = primitive->bsdf();
@@ -119,10 +82,10 @@ Spectrum WhittedRenderer::_radianceOnScattering(const Scene& scene, Ray& ray, Su
                     std::numeric_limits<real>::max(),
                     ray.depth() + 1);
         real LdotN = intersection.wo().absDot(hitNormal);
-        result = reflectance * _radiance(scene, r) * LdotN / intersection.pdf();
+        sampleRadiance = reflectance * traceRadiance(scene, r) * LdotN / intersection.pdf();
     }
 
-    return result;
+    return sampleRadiance;
 }
 
 } // namespace cadise

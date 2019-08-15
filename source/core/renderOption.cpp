@@ -15,7 +15,9 @@ namespace cadise {
 RenderOption::RenderOption() :
     _cameraData(nullptr),
     _rendererData(nullptr),
-    _acceleratorData(nullptr) {
+    _acceleratorData(nullptr),
+    _scene(nullptr),
+    _renderer(nullptr) {
 }
 
 void RenderOption::setUpData(const std::shared_ptr<SdData>& data) {
@@ -49,14 +51,20 @@ void RenderOption::setUpData(const std::shared_ptr<SdData>& data) {
     }
 }
 
-std::unique_ptr<Scene> RenderOption::makeScene() const {
-    return std::make_unique<Scene>(std::move(instantiator::makeAccelerator(_acceleratorData, _intersectors)),
-                                   _lights,
-                                   std::move(instantiator::makeCamera(_cameraData)));
+void RenderOption::prepareRender() {
+    _bsdfs.clear();
+    _primitives.clear();
+    _realTextures.clear();
+    _spectrumTextures.clear();
+
+    std::shared_ptr<Accelerator> accelerator = instantiator::makeAccelerator(_acceleratorData, _intersectors);
+    std::shared_ptr<Camera> camera = instantiator::makeCamera(_cameraData);
+    _scene = std::make_shared<Scene>(std::move(accelerator), _lights, std::move(camera));
+    _renderer = std::move(instantiator::makeRenderer(_rendererData));
 }
 
-std::unique_ptr<Renderer> RenderOption::makeRenderer() const {
-    return std::move(instantiator::makeRenderer(_rendererData));
+void RenderOption::startRender() const {
+    _renderer->render(*_scene);
 }
 
 void RenderOption::_setUpCamera(const std::shared_ptr<SdData>& data) {
