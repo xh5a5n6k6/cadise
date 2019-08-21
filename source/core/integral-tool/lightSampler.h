@@ -1,12 +1,11 @@
 #pragma once
 
 #include "core/integral-tool/lightSamplePolicy.h"
+#include "core/scene.h"
 
 #include "math/random.h"
 
 namespace cadise {
-
-class Scene;
 
 class LightSampler {
 public:
