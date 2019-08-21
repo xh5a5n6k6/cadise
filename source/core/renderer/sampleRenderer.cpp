@@ -22,6 +22,7 @@ void SampleRenderer::render(const Scene& scene) const {
     int32 rx = scene.camera()->film().resolution().x();
     int32 ry = scene.camera()->film().resolution().y();
 
+    real sampleWeight = 1.0_r / static_cast<real>(_sampleNumber);
     for (int32 iy = 0; iy < ry; iy++) {
         for (int32 ix = 0; ix < rx; ix++) {
             for (int32 in = 0; in < _sampleNumber; in++) {
@@ -30,11 +31,9 @@ void SampleRenderer::render(const Scene& scene) const {
                 Spectrum sampleSpectrum = _integrator->traceRadiance(scene, ray);
                 Vector3R sampleRGB;
                 sampleSpectrum.transformIntoRGB(sampleRGB);
-                sampleRGB *= 255.0_r;
-                sampleRGB = sampleRGB.clamp(0.0_r, 255.0_r);
+                sampleRGB *= 255.0_r * sampleWeight;
 
-                Vector3R color = sampleRGB / static_cast<real>(_sampleNumber);
-                scene.camera()->film().addSample(ix, iy, color);
+                scene.camera()->film().addSample(ix, iy, sampleRGB);
             }
         }
     }

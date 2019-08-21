@@ -8,7 +8,7 @@ namespace cadise {
 
 SpecularTransmission::SpecularTransmission(const std::shared_ptr<Texture<Spectrum>>& albedo,
                                            const real iorOuter, const real iorInner) :
-    Bsdf(BsdfType(BxdfType::SPECULAR_TRANSMITTION)),
+    Bsdf(BsdfType(BxdfType::SPECULAR_TRANSMISSION)),
     _albedo(albedo),
     _fresnel(iorOuter, iorInner) {
 }
@@ -18,7 +18,7 @@ Spectrum SpecularTransmission::evaluate(const SurfaceIntersection& surfaceInters
 }
 
 Spectrum SpecularTransmission::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
-    Vector3R normal = surfaceIntersection.surfaceInfo().shadingNormal();
+    Vector3R normal = surfaceIntersection.surfaceInfo().frontNormal();
     real etaI = _fresnel.iorOuter();
     real etaT = _fresnel.iorInner();
 
@@ -42,6 +42,10 @@ Spectrum SpecularTransmission::evaluateSample(SurfaceIntersection& surfaceInters
 
     Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
     return _albedo->evaluate(uvw) * transmittance * btdfFactor / LdotN;
+}
+
+real SpecularTransmission::evaluatePdfW(const SurfaceIntersection& surfaceIntersection) const {
+    return 0.0_r;
 }
 
 } // namespace cadise

@@ -46,7 +46,9 @@ public:
     T average() const;
     T length() const;
     T lengthSquared() const;
+    T maxComponent() const;
     Vector normalize() const;
+    Vector composite() const;
     Vector reciprocal() const;
     Vector clamp(const T min, const T max) const;
     uint32 maxDimension() const;
@@ -69,6 +71,8 @@ public:
 private:
     std::array<T, Size> _v;
 };
+
+// template header implementation
 
 template<typename T, uint32 Size>
 inline Vector<T, Size> operator+(const T s, const Vector<T, Size>& v) {

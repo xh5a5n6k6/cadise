@@ -254,11 +254,21 @@ inline T Vector<T, Size>::lengthSquared() const {
 }
 
 template<typename T, uint32 Size>
+inline T Vector<T, Size>::maxComponent() const {
+    return _v[maxDimension()];
+}
+
+template<typename T, uint32 Size>
 inline Vector<T, Size> Vector<T, Size>::normalize() const {
     assert(length() > static_cast<T>(0));
 
     T invLength = static_cast<T>(1) / length();
     return *this * invLength;
+}
+
+template<typename T, uint32 Size>
+inline Vector<T, Size> Vector<T, Size>::composite() const {
+    return -*this;
 }
 
 template<typename T, uint32 Size>

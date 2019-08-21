@@ -9,7 +9,7 @@ namespace cadise {
 
 PerfectDielectric::PerfectDielectric(const std::shared_ptr<Texture<Spectrum>>& albedo, 
                                      const real iorOuter, const real iorInner) :
-    Bsdf(BsdfType(BxdfType::SPECULAR_REFLECTION) | BsdfType(BxdfType::SPECULAR_TRANSMITTION)),
+    Bsdf(BsdfType(BxdfType::SPECULAR_REFLECTION) | BsdfType(BxdfType::SPECULAR_TRANSMISSION)),
     _albedo(albedo),
     _fresnel(iorOuter, iorInner) {
 }
@@ -19,7 +19,7 @@ Spectrum PerfectDielectric::evaluate(const SurfaceIntersection& surfaceIntersect
 }
 
 Spectrum PerfectDielectric::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
-    Vector3R normal = surfaceIntersection.surfaceInfo().shadingNormal();
+    Vector3R normal = surfaceIntersection.surfaceInfo().frontNormal();
     real etaI = _fresnel.iorOuter();
     real etaT = _fresnel.iorInner();
 
@@ -39,7 +39,8 @@ Spectrum PerfectDielectric::evaluateSample(SurfaceIntersection& surfaceIntersect
     Spectrum result(0.0_r);
     if (isReflection) {
         real nFactor = (IdotN < 0.0_r) ? -1.0_r : 1.0_r;
-        Vector3R reflectDirection = surfaceIntersection.wi().reflect(normal * nFactor);
+        Vector3R shadingNormal = surfaceIntersection.surfaceInfo().shadingNormal();
+        Vector3R reflectDirection = surfaceIntersection.wi().reflect(shadingNormal * nFactor);
 
         real pdf = reflectionProbability;
 
@@ -75,6 +76,10 @@ Spectrum PerfectDielectric::evaluateSample(SurfaceIntersection& surfaceIntersect
     }
 
     return result;
+}
+
+real PerfectDielectric::evaluatePdfW(const SurfaceIntersection& surfaceIntersection) const {
+    return 0.0_r;
 }
 
 } // namespace cadise

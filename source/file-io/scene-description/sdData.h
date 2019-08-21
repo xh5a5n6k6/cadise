@@ -20,6 +20,10 @@ class SdData {
 public:
     SdData();
 
+    void addBool(
+        const std::string_view& name,
+        std::unique_ptr<bool[]> value,
+        const int32 valueNumber);
     void addReal(
         const std::string_view& name, 
         std::unique_ptr<real[]> value,
@@ -37,10 +41,12 @@ public:
         std::unique_ptr<std::string_view[]> value,
         const int32 valueNumber);
 
+    bool     findBool(
+        const std::string_view& name, const bool      defaultValue = false     ) const;
     real     findReal (
-        const std::string_view& name, const real&     defaultValue = 0.0_r     ) const;
+        const std::string_view& name, const real      defaultValue = 0.0_r     ) const;
     int32    findInt32(
-        const std::string_view& name, const int32&    defaultValue = 0         ) const;
+        const std::string_view& name, const int32     defaultValue = 0         ) const;
     Vector3R findVector3r(
         const std::string_view& name, const Vector3R& defaultValue = Vector3R()) const;
     std::string_view findString(
@@ -77,11 +83,14 @@ private:
 
     SdClassType _classType;
 
+    std::vector<std::shared_ptr<SdDataUnit<bool>>>             _bools;
     std::vector<std::shared_ptr<SdDataUnit<real>>>             _reals;
     std::vector<std::shared_ptr<SdDataUnit<int32>>>            _int32s;
     std::vector<std::shared_ptr<SdDataUnit<Vector3R>>>         _vector3rs;
     std::vector<std::shared_ptr<SdDataUnit<std::string_view>>> _strings;
 };
+
+// template header implementation
 
 template<typename T>
 inline T SdData::_findData(

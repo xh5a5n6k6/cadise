@@ -21,6 +21,7 @@ bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) c
     PrimitiveInfo primitiveInfo;
     bool result = _accelerator->isIntersecting(ray, primitiveInfo);
     if (result) {
+        surfaceIntersection.setWi(ray.direction().composite());
         surfaceIntersection.setPrimitiveInfo(primitiveInfo);
 
         // calculate intersection surface details

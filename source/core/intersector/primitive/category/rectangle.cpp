@@ -86,8 +86,10 @@ bool Rectangle::isOccluded(Ray& ray) const {
 }
 
 void Rectangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const {
-    Vector3R normal = (primitiveInfo.isBackSide()) ? _e2.cross(_e1) : _e1.cross(_e2);
-    normal = normal.normalize();
+    Vector3R normal = _e1.cross(_e2).normalize();
+    surfaceInfo.setFrontNormal(normal);
+
+    normal = (primitiveInfo.isBackSide()) ? normal.composite() : normal;
     surfaceInfo.setGeometryNormal(normal);
     surfaceInfo.setShadingNormal(normal);
 
@@ -112,6 +114,8 @@ void Rectangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, Surfac
 void Rectangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurface) const {
     Vector3R e1 = _e1;
     Vector3R e2 = _e2;
+    outSurface.setFrontNormal(e1.cross(e2).normalize());
+
     if (e1.length() < e2.length()) {
         e1.swap(e2);
     }

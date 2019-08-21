@@ -30,7 +30,8 @@ public:
     virtual real area() const = 0;
 
     std::shared_ptr<Bsdf> bsdf() const;
-    Spectrum emittance(const Vector3R& outDirection) const;
+    bool isEmissive() const;
+    Spectrum emittance(const Vector3R& emitDirection, const SurfaceInfo& emitSurface) const;
 
     void setAreaLight(const std::shared_ptr<AreaLight>& areaLight);
 

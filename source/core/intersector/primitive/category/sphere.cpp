@@ -52,7 +52,7 @@ bool Sphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
 
     ray.setMaxT(t);
     primitiveInfo.setPrimitive(this);
-    primitiveInfo.setIsBackSide(isOutside == 1);
+    primitiveInfo.setIsBackSide(isOutside == 0);
 
     return true;
 }
@@ -88,6 +88,9 @@ bool Sphere::isOccluded(Ray& ray) const {
 
 void Sphere::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const {
     Vector3R normal = (surfaceInfo.point() - _center).normalize();
+    surfaceInfo.setFrontNormal(normal);
+
+    normal = (primitiveInfo.isBackSide()) ? normal.composite() : normal;
     surfaceInfo.setGeometryNormal(normal);
     surfaceInfo.setShadingNormal(normal);
 

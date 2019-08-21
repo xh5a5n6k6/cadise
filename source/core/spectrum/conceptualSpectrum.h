@@ -33,12 +33,25 @@ public:
     bool isZero() const;
     real sum() const;
     real average() const;
+    real maxComponent() const;
 
 protected:
     using SpectralArray = Vector<real, Size>;
     
     SpectralArray _values;
 };
+
+// template header implementation
+
+template<uint32 Size>
+inline ConceptualSpectrum<Size> operator+(const real s, const ConceptualSpectrum<Size>& cs) {
+    return cs + s;
+}
+
+template<uint32 Size>
+inline ConceptualSpectrum<Size> operator*(const real s, const ConceptualSpectrum<Size>& cs) {
+    return cs * s;
+}
 
 } // namespace cadise
 

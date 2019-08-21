@@ -10,6 +10,7 @@ namespace cadise {
 class SurfaceIntersection : public Intersection {
 public:
     SurfaceIntersection();
+    SurfaceIntersection(const SurfaceIntersection& surfaceIntersection);
 
     PrimitiveInfo primitiveInfo() const;
     SurfaceInfo surfaceInfo() const;

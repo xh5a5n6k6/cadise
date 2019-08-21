@@ -19,6 +19,12 @@ Vector2R get2D() {
     return Vector2R(get1D(), get1D());
 }
 
+int32 get1DInt32(const int32 minNumber, const int32 maxNumber) {
+    std::uniform_int_distribution<int32> dis(minNumber, maxNumber);
+
+    return dis(gen);
+}
+
 } // namespace random
 
 } // namespace cadise

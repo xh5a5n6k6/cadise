@@ -169,4 +169,9 @@ inline real ConceptualSpectrum<Size>::average() const {
     return _values.average();
 }
 
+template<uint32 Size>
+inline real ConceptualSpectrum<Size>::maxComponent() const {
+    return _values.maxComponent();
+}
+
 } // namespace cadise

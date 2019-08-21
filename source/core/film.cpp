@@ -30,9 +30,9 @@ void Film::save() const {
     for (int32 iy = 0; iy < _resolution.y(); iy++) {
         for (int32 ix = 0; ix < _resolution.x(); ix++) {
             int32 offset = 3 * (ix + iy * _resolution.x());
-            data[offset + 0] = static_cast<uint8>(_pixelValue[offset + 0]);
-            data[offset + 1] = static_cast<uint8>(_pixelValue[offset + 1]);
-            data[offset + 2] = static_cast<uint8>(_pixelValue[offset + 2]);
+            data[offset + 0] = static_cast<uint8>(std::clamp(_pixelValue[offset + 0], 0.0_r, 255.0_r));
+            data[offset + 1] = static_cast<uint8>(std::clamp(_pixelValue[offset + 1], 0.0_r, 255.0_r));
+            data[offset + 2] = static_cast<uint8>(std::clamp(_pixelValue[offset + 2], 0.0_r, 255.0_r));
         }
     }
 

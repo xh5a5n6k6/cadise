@@ -14,7 +14,7 @@ SphericalMapper::SphericalMapper() = default;
 Vector3R SphericalMapper::mappingToUvw(const SurfaceInfo& surfaceInfo) const {
     //Vector3R hitPoint = intersection.surfaceGeometryInfo().point();
     //Vector3R vector = intersection.surfaceGeometryInfo().normal();
-    Vector3R vector = surfaceInfo.shadingNormal();
+    Vector3R vector = surfaceInfo.frontNormal();
 
     real theta = std::acos(std::clamp(vector.y(), -1.0_r, 1.0_r));
     real phi = std::atan2(vector.x(), vector.z());

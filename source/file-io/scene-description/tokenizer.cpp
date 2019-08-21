@@ -61,7 +61,11 @@ void Tokenizer::_parseDataUnit(std::shared_ptr<SdData>& sdData, const std::strin
     std::string_view valueString = dataUnitString.substr(startPosition + 1, endPosition - startPosition - 1);
 
     // parse value string to corresponding type
-    if (!type.compare("real")) {
+    if (!type.compare("bool")) {
+        std::unique_ptr<bool[]> value = std::move(_parseBool(valueString));
+        sdData->addBool(name, std::move(value), 1);
+    }
+    else if (!type.compare("real")) {
         std::unique_ptr<real[]> value = std::move(_parseReal(valueString));
         sdData->addReal(name, std::move(value), 1);
     }
@@ -106,6 +110,22 @@ void Tokenizer::_parseDataUnit(std::shared_ptr<SdData>& sdData, const std::strin
     else {
         // unknown type
     }
+}
+
+std::unique_ptr<bool[]> Tokenizer::_parseBool(const std::string_view& value) const {
+    std::unique_ptr<bool[]> result(new bool);
+
+    if (!value.compare("true")) {
+        result[0] = true;
+    }
+    else if (!value.compare("false")) {
+        result[0] = false;
+    }
+    else {
+        // go wrong
+    }
+
+    return std::move(result);
 }
 
 std::unique_ptr<real[]> Tokenizer::_parseReal(const std::string_view& value) const {

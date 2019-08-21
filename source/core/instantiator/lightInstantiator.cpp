@@ -27,9 +27,10 @@ static std::shared_ptr<Light> createArea(
     const std::shared_ptr<SdData>& data,
     const std::map<std::string, std::shared_ptr<Primitive>, std::less<>>& primitives) {
 
-    const Vector3R albedo = data->findVector3r("albedo");
-    
-    std::shared_ptr<AreaLight> areaLight = std::make_shared<AreaLight>(albedo);
+    const Vector3R albedo         = data->findVector3r("albedo");
+    const bool     isBackFaceEmit = data->findBool("is-back-face-emit");
+
+    std::shared_ptr<AreaLight> areaLight = std::make_shared<AreaLight>(albedo, isBackFaceEmit);
 
     std::string_view primitiveName = data->findString("primitive");
     auto&& primitive = primitives.find(primitiveName);

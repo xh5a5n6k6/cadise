@@ -17,9 +17,14 @@ std::shared_ptr<Bsdf> Primitive::bsdf() const {
     return _bsdf;
 }
 
-Spectrum Primitive::emittance(const Vector3R& outDirection) const {
+bool Primitive::isEmissive() const {
     std::shared_ptr<AreaLight> areaLight = _areaLight.lock();
-    return (areaLight == nullptr) ? Spectrum(0.0_r) : areaLight->color();
+    return areaLight != nullptr;
+}
+
+Spectrum Primitive::emittance(const Vector3R& emitDirection, const SurfaceInfo& emitSurface) const {
+    std::shared_ptr<AreaLight> areaLight = _areaLight.lock();
+    return areaLight->emittance(emitDirection, emitSurface);
 }
 
 void Primitive::setAreaLight(const std::shared_ptr<AreaLight>& areaLight) {

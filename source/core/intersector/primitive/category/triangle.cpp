@@ -97,8 +97,10 @@ bool Triangle::isOccluded(Ray& ray) const {
 }
 
 void Triangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const {
-    Vector3R normal = (primitiveInfo.isBackSide()) ? _e2.cross(_e1) : _e1.cross(_e2);
-    normal = normal.normalize();
+    Vector3R normal = _e1.cross(_e2).normalize();
+    surfaceInfo.setFrontNormal(normal);
+
+    normal = (primitiveInfo.isBackSide()) ? normal.composite() : normal;
     surfaceInfo.setGeometryNormal(normal);
     surfaceInfo.setShadingNormal(normal);
 

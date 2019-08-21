@@ -41,4 +41,11 @@ Spectrum LambertianDiffuse::evaluateSample(SurfaceIntersection& surfaceIntersect
     return _albedo->evaluate(uvw) * constant::INV_PI;
 }
 
+real LambertianDiffuse::evaluatePdfW(const SurfaceIntersection& surfaceIntersection) const {
+    const Vector3R normal = surfaceIntersection.surfaceInfo().shadingNormal();
+    const Vector3R direction = surfaceIntersection.wo();
+
+    return direction.absDot(normal) * constant::INV_PI;
+}
+
 } // namespace cadise

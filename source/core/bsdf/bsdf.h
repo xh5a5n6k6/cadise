@@ -15,6 +15,10 @@ public:
     virtual Spectrum evaluate(const SurfaceIntersection& surfaceIntersection) const = 0;
     virtual Spectrum evaluateSample(SurfaceIntersection& surfaceIntersection) const = 0;
 
+    virtual real evaluatePdfW(const SurfaceIntersection& surfaceIntersection) const = 0;
+
+    BsdfType type() const;
+
 protected:
     BsdfType _type;
 };

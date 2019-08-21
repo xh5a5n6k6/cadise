@@ -1,17 +1,21 @@
 # Cadise Renderer
 
-<img src="./gallery/cornell-box-sphere/20190812.png"><br />
+<img src="./gallery/cornell-box-sphere/20190821.png"><br />
 
 <p align="center"><i>Cornell Box (with spheres) Rendered with Cadise</i></p>
 
 ## Introduction
-Cadise is a developing ray tracing renderer written in C++17, taking some renderers ([PBRT-v3](https://github.com/mmp/pbrt-v3), [Photon-v2](https://github.com/TzuChieh/Photon-v2), [Tungsten](https://github.com/tunabrain/tungsten), etc) as references. It now only support some basic features as the cover image shows, and it still has a long way to go.
+Cadise is a physically based renderer written in C++17, taking some other renderers ([PBRT-v3](https://github.com/mmp/pbrt-v3), [Photon-v2](https://github.com/TzuChieh/Photon-v2), [Tungsten](https://github.com/tunabrain/tungsten), etc) as references. The main purpose of a renderer is to solve the integral problem described in [rendering equation](https://en.wikipedia.org/wiki/Rendering_equation), which is more often known as light transport simulation.
+
+Cadise is still been developing and more features are expected to come.
 
 [![Build Status](https://travis-ci.com/xh5a5n6k6/cadise.svg?branch=master)](https://travis-ci.com/xh5a5n6k6/cadise)
 
 ## Feature Lists
 - ### Rendering Technique
     - Whitted Ray Tracing
+    - Unidirectional Path Tracing
+    - Unidirectional Path Tracing with Next Event Estimation
 - ### Accelerator
     - BVH
 - ### BSDF

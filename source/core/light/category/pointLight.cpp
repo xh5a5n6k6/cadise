@@ -11,6 +11,10 @@ PointLight::PointLight(const Vector3R& position, const Spectrum& color) :
     _color(color) {
 }
 
+Spectrum PointLight::emittance(const Vector3R& emitDirection, const SurfaceInfo& emitSurface) const {
+    return _color;
+}
+
 Spectrum PointLight::evaluateSampleRadiance(Vector3R& lightDirection, const SurfaceInfo& surfaceInfo, real& t, real& pdf) const {
     Vector3R offsetOrigin = surfaceInfo.point() + constant::RAY_EPSILON * surfaceInfo.geometryNormal();
     Vector3R direction = _position - offsetOrigin;
@@ -21,8 +25,12 @@ Spectrum PointLight::evaluateSampleRadiance(Vector3R& lightDirection, const Surf
     return _color / direction.lengthSquared();
 }
 
-Spectrum PointLight::color() const {
-    return _color;
+real PointLight::evaluatePdfW(const SurfaceIntersection& surfaceIntersection, const real distance) const {
+    return 0.0_r;
+}
+
+bool PointLight::isDeltaLight() const {
+    return true;
 }
 
 } // namespace cadise

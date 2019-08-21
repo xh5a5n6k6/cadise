@@ -27,4 +27,8 @@ Spectrum SpecularReflection::evaluateSample(SurfaceIntersection& surfaceIntersec
     return _albedo->evaluate(uvw) / LdotN;
 }
 
+real SpecularReflection::evaluatePdfW(const SurfaceIntersection& surfaceIntersection) const {
+    return 0.0_r;
+}
+
 } // namespace cadise

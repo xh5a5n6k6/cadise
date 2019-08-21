@@ -18,6 +18,7 @@ public:
 private:
     void _parseDataUnit(std::shared_ptr<SdData>& sdData, const std::string_view& dataUnitString) const;
 
+    std::unique_ptr<bool[]>             _parseBool(const std::string_view& value) const;
     std::unique_ptr<real[]>             _parseReal(const std::string_view& value) const;
     std::unique_ptr<int32[]>            _parseInt32(const std::string_view& value) const;
     std::unique_ptr<Vector3R[]>         _parseVector3R(const std::string_view& value) const;

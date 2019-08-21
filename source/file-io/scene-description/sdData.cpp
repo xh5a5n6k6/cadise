@@ -8,6 +8,15 @@ SdData::SdData() :
     _classType(SdClassType::NONE) {
 }
 
+void SdData::addBool(
+    const std::string_view& name, 
+    std::unique_ptr<bool[]> value, 
+    const int32 valueNumber) {
+
+    _bools.push_back(
+        std::make_shared<SdDataUnit<bool>>(name, std::move(value), valueNumber));
+}
+
 void SdData::addReal(
     const std::string_view& name, 
     std::unique_ptr<real[]> value, 
@@ -44,14 +53,20 @@ void SdData::addString(
         std::make_shared<SdDataUnit<std::string_view>>(name, std::move(value), valueNumber));
 }
 
+bool SdData::findBool(
+    const std::string_view& name, const bool defaultValue) const {
+
+    return _findData(name, defaultValue, _bools);
+}
+
 real SdData::findReal(
-    const std::string_view& name, const real& defaultValue) const {
+    const std::string_view& name, const real defaultValue) const {
 
     return _findData(name, defaultValue, _reals);
 }
 
 int32 SdData::findInt32(
-    const std::string_view& name, const int32& defaultValue) const {
+    const std::string_view& name, const int32 defaultValue) const {
 
     return _findData(name, defaultValue, _int32s);
 }
