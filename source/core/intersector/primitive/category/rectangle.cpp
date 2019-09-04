@@ -5,8 +5,11 @@
 #include "core/surfaceInfo.h"
 #include "core/texture/mapper/textureMapper.h"
 
+#include "fundamental/assertion.h"
+
+#include "math/random.h"
+
 #include <limits>
-#include <random>
 
 namespace cadise {
 
@@ -125,17 +128,13 @@ void Rectangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurf
 
     // TODO
     // improve sample point on rectangle
-    std::random_device rd;
-    std::default_random_engine gen = std::default_random_engine(rd());
-    std::uniform_real_distribution<real> disS(0.0_r, 1.0_r);
-    std::uniform_real_distribution<real> disT(0.0_r, 1.0_r);
     real s;
     real t;
 
     // use rejection method
     do {
-        s = disS(gen);
-        t = disT(gen);
+        s = random::get1D();
+        t = random::get1D();
     } while (t > shortWidth / longWidth);
 
     Vector3R point = _v2 + s * e1 + t * e1.length() * e2.normalize();
@@ -150,7 +149,7 @@ void Rectangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurf
 }
 
 real Rectangle::samplePdfA(const Vector3R& position) const {
-    assert(area() > 0.0_r);
+    CADISE_ASSERT(area() > 0.0_r);
 
     return 1.0_r / area();
 }

@@ -19,20 +19,21 @@ Scene::Scene(const std::shared_ptr<Accelerator>& accelerator,
 
 bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) const {
     PrimitiveInfo primitiveInfo;
-    bool result = _accelerator->isIntersecting(ray, primitiveInfo);
-    if (result) {
+    bool isHit = _accelerator->isIntersecting(ray, primitiveInfo);
+    if (isHit) {
         surfaceIntersection.setWi(ray.direction().composite());
         surfaceIntersection.setPrimitiveInfo(primitiveInfo);
 
         // calculate intersection surface details
         SurfaceInfo surfaceInfo;
         surfaceInfo.setPoint(ray.at(ray.maxT()));
+
         const Primitive* hitPrimitive = surfaceIntersection.primitiveInfo().primitive();
         hitPrimitive->evaluateSurfaceDetail(primitiveInfo, surfaceInfo);
         surfaceIntersection.setSurfaceInfo(surfaceInfo);
     }
     
-    return result;
+    return isHit;
 }
 
 bool Scene::isOccluded(Ray& ray) const {

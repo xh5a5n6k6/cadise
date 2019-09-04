@@ -8,7 +8,7 @@ namespace cadise {
 
 class Film {
 public:
-    Film(const Path& filename, const int32 rx, const int32 ry);
+    Film(const Path& filename, const Vector2I& resolution);
 
     void addSample(const int32 px, const int32 py, const Vector3R& value);
     void save() const;

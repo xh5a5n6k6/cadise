@@ -67,13 +67,13 @@ Spectrum WhittedIntegrator::traceRadiance(const Scene& scene, Ray& ray) const {
 
     // only recursive trace at specular surface
     if (isSpecular && ray.depth() + 1 < _maxDepth) {
-        totalRadiance += _radianceOnScattering(scene, ray, intersection);
+        totalRadiance += _radianceAtSpecularSurface(scene, ray, intersection);
     }
 
     return totalRadiance;
 }
 
-Spectrum WhittedIntegrator::_radianceOnScattering(const Scene& scene, Ray& ray, SurfaceIntersection& intersection) const {
+Spectrum WhittedIntegrator::_radianceAtSpecularSurface(const Scene& scene, Ray& ray, SurfaceIntersection& intersection) const {
     Spectrum sampleRadiance(0.0_r);
 
     const Primitive* primitive = intersection.primitiveInfo().primitive();

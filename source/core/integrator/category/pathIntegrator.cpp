@@ -88,11 +88,11 @@ Spectrum PathIntegrator::traceRadiance(const Scene& scene, Ray& ray) const {
         if (sampleRay.depth() > 2) {
             pathWeight = russianRoulette::weightOnNextPath(pathWeight);
 
-            if (pathWeight.isZero()) {
-                break;
+            if (!pathWeight.isZero()) {
+                traceRay = sampleRay;
             }
             else {
-                traceRay = sampleRay;
+                break;
             }
         }
         else {

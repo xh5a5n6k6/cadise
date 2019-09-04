@@ -8,7 +8,7 @@ namespace cadise {
 //
 // Jacco Bikker has a great tutorial about variance reduction at his lecture 
 // such as NEE and MIS used in PathIntegrator.
-// Reference : http://www.cs.uu.nl/docs/vakken/magr/portfolio/INFOMAGR/lecture8.pdf
+// Reference Note: http://www.cs.uu.nl/docs/vakken/magr/portfolio/INFOMAGR/lecture8.pdf
 //
 class PathIntegrator : public Integrator {
 public:

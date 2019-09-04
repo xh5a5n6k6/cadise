@@ -79,7 +79,7 @@ std::shared_ptr<Bsdf> makeBsdf(
         bsdf = createPerfectDielectric(data, realTextures, spectrumTextures);
     }
     else {
-        // don't support primitive type
+        // don't support bsdf type
     }
 
     return bsdf;

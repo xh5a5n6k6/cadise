@@ -5,6 +5,8 @@
 #include "core/surfaceInfo.h"
 #include "core/texture/mapper/sphericalMapper.h"
 
+#include "fundamental/assertion.h"
+
 #include "math/constant.h"
 
 #include <limits>
@@ -110,7 +112,7 @@ void Sphere::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurface
 }
 
 real Sphere::samplePdfA(const Vector3R& position) const {
-    assert(area() > 0.0_r);
+    CADISE_ASSERT(area() > 0.0_r);
 
     return 1.0_r / area();
 }

@@ -2,8 +2,9 @@
 
 #include "math/vector.h"
 
+#include "fundamental/assertion.h"
+
 #include <algorithm>
-#include <cassert>
 #include <cmath>
 
 namespace cadise {
@@ -70,7 +71,7 @@ inline Vector<T, Size> Vector<T, Size>::operator*(const T s) const {
 
 template<typename T, uint32 Size>
 inline Vector<T, Size> Vector<T, Size>::operator/(const T s) const {
-    assert(s != static_cast<T>(0));
+    CADISE_ASSERT(s != static_cast<T>(0));
 
     T invS = static_cast<T>(1) / s;
     Vector<T, Size> result;
@@ -115,7 +116,7 @@ template<typename T, uint32 Size>
 inline Vector<T, Size> Vector<T, Size>::operator/(const Vector<T, Size>& v) const {
     Vector<T, Size> result;
     for (uint32 index = 0; index < Size; index++) {
-        assert(v._v[index] != static_cast<T>(0));
+        CADISE_ASSERT(v._v[index] != static_cast<T>(0));
 
         result._v[index] = _v[index] / v._v[index];
     }
@@ -152,7 +153,7 @@ inline Vector<T, Size>& Vector<T, Size>::operator*=(const T s) {
 
 template<typename T, uint32 Size>
 inline Vector<T, Size>& Vector<T, Size>::operator/=(const T s) {
-    assert(s != static_cast<T>(0));
+    CADISE_ASSERT(s != static_cast<T>(0));
 
     for (uint32 index = 0; index < Size; index++) {
         _v[index] /= s;
@@ -191,7 +192,7 @@ inline Vector<T, Size>& Vector<T, Size>::operator*=(const Vector<T, Size>& v) {
 template<typename T, uint32 Size>
 inline Vector<T, Size>& Vector<T, Size>::operator/=(const Vector<T, Size>& v) {
     for (uint32 index = 0; index < Size; index++) {
-        assert(v._v[index] != static_cast<T>(0));
+        CADISE_ASSERT(v._v[index] != static_cast<T>(0));
 
         _v[index] /= v._v[index];
     }
@@ -260,7 +261,7 @@ inline T Vector<T, Size>::maxComponent() const {
 
 template<typename T, uint32 Size>
 inline Vector<T, Size> Vector<T, Size>::normalize() const {
-    assert(length() > static_cast<T>(0));
+    CADISE_ASSERT(length() > static_cast<T>(0));
 
     T invLength = static_cast<T>(1) / length();
     return *this * invLength;
@@ -275,7 +276,7 @@ template<typename T, uint32 Size>
 inline Vector<T, Size> Vector<T, Size>::reciprocal() const {
     Vector<T, Size> result;
     for (uint32 index = 0; index < Size; index++) {
-        assert(_v[index] != static_cast<T>(0));
+        CADISE_ASSERT(_v[index] != static_cast<T>(0));
 
         result._v[index] = static_cast<T>(1) / _v[index];
     }

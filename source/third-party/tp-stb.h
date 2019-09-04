@@ -1,5 +1,9 @@
 #pragma once
 
+#include "fundamental/compiler.h"
+
+///////////////////////////////////////////////////////////
+
 // Include third-party/stb/stb_image.h 
 
 // STBI_FAILURE_USERMSG 
@@ -18,7 +22,7 @@
 
 // STBI_MSC_SECURE_CRT
 // for MSVC, to avoid non-safe versions of CRT calls
-#if defined(_MSC_VER)
+#if defined(CADISE_COMPILER_MSVC)
     #define STBI_MSC_SECURE_CRT
 #endif
 

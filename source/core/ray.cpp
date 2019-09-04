@@ -2,14 +2,6 @@
 
 namespace cadise {
 
-Ray::Ray(const Ray& ray) :
-    _origin(ray._origin),
-    _direction(ray._direction),
-    _minT(ray._minT),
-    _maxT(ray._maxT),
-    _depth(ray._depth) {
-}
-
 Ray::Ray(const Vector3R& origin, const Vector3R& direction, const real minT, const real maxT, const int32 depth) : 
     _origin(origin), 
     _direction(direction.normalize()), 

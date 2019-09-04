@@ -19,7 +19,7 @@ public:
     Spectrum traceRadiance(const Scene& scene, Ray& ray) const override;
 
 private:
-    Spectrum _radianceOnScattering(const Scene& scene, Ray& ray, SurfaceIntersection& surfaceIntersection) const;
+    Spectrum _radianceAtSpecularSurface(const Scene& scene, Ray& ray, SurfaceIntersection& surfaceIntersection) const;
 
     int32 _maxDepth;
 };

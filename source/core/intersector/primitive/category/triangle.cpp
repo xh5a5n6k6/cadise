@@ -5,10 +5,12 @@
 #include "core/surfaceInfo.h"
 #include "core/texture/mapper/textureMapper.h"
 
+#include "fundamental/assertion.h"
+
 #include "math/constant.h"
+#include "math/random.h"
 
 #include <limits>
-#include <random>
 
 namespace cadise {
 
@@ -117,17 +119,13 @@ void Triangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, Surface
 void Triangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurface) const {
     // TODO
     // improve sample point on triangle
-    std::random_device rd;
-    std::default_random_engine gen = std::default_random_engine(rd());
-    std::uniform_real_distribution<real> disS(0.0_r, 1.0_r);
-    std::uniform_real_distribution<real> disT(0.0_r, 1.0_r);
     real s;
     real t;
 
     // Use rejection method
     do {
-        s = disS(gen);
-        t = disT(gen);
+        s = random::get1D();
+        t = random::get1D();
     } while (s + t >= 1.0_r);
 
     Vector3R e1 = _e1;
@@ -144,7 +142,7 @@ void Triangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurfa
 }
 
 real Triangle::samplePdfA(const Vector3R& position) const {
-    assert(area() > 0.0_r);
+    CADISE_ASSERT(area() > 0.0_r);
 
     return 1.0_r / area();
 }

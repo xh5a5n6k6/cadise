@@ -18,20 +18,20 @@ public:
 template<LightSamplePolicy policy>
 inline int32 LightSampler::sampleOneLight(const Scene& scene, real* const lightPdf) {
     uint64 lightNumber = scene.lights().size();
-    if (policy == LightSamplePolicy::UNIFORM) {
+    if constexpr (policy == LightSamplePolicy::UNIFORM) {
         int32 sampleIndex = random::get1DInt32(0, static_cast<int32>(lightNumber) - 1);
 
         *lightPdf = 1.0_r / static_cast<real>(lightNumber);
 
         return sampleIndex;
     }
-    else if (policy == LightSamplePolicy::IMPORTANCE) {
+    
+    if constexpr (policy == LightSamplePolicy::IMPORTANCE) {
         // TODO
     }
-    else {
-        // go wrong
-        return -1;
-    }
+
+    // go wrong
+    return -1;
 }
 
 } // namespace cadise

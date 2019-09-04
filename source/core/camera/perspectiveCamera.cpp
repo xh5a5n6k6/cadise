@@ -4,11 +4,9 @@
 
 #include "math/constant.h"
 #include "math/math.h"
+#include "math/random.h"
 
 #include <limits>
-
-// Tmp
-#include <random>
 
 namespace cadise {
 
@@ -27,31 +25,9 @@ PerspectiveCamera::PerspectiveCamera(const Film& film, const real fov, const Vec
     _pixelHeight = screenHeight / ry;
 }
 
-PerspectiveCamera::PerspectiveCamera(const Film& film, const real fov, const Matrix4& cameraToWorld) :
-    _film(film),
-    _fov(fov), 
-    _cameraToWorld(cameraToWorld) {
-
-    int32 rx = _film.resolution().x();
-    int32 ry = _film.resolution().y();
-    real aspectRatio = static_cast<real>(ry) / static_cast<real>(rx);
-
-    real screenWidth  = 2.0_r * std::tan(math::degreeToRadian(_fov / 2.0_r));
-    real screenHeight = screenWidth * aspectRatio;
-    _pixelWidth  = screenWidth  / rx;
-    _pixelHeight = screenHeight / ry;
-}
-
 Ray PerspectiveCamera::createRay(const int32 px, const int32 py) const {
-    // TODO
-    // improve sample point calculation
-    std::random_device rd;
-    std::default_random_engine gen = std::default_random_engine(rd());
-    std::uniform_real_distribution<real> disX(0.0_r, 1.0_r);
-    std::uniform_real_distribution<real> disY(0.0_r, 1.0_r);
-    real sx = disX(gen);
-    real sy = disY(gen);
-
+    real sx = random::get1D();
+    real sy = random::get1D();
 
     real sampleX = px * _pixelWidth + sx * _pixelWidth;
     real sampleY = py * _pixelHeight + sy * _pixelHeight;

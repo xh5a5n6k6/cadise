@@ -7,9 +7,9 @@
 
 namespace cadise {
 
-Film::Film(const Path& filename, const int32 rx, const int32 ry) :
+Film::Film(const Path& filename, const Vector2I& resolution) :
     _filename(filename), 
-    _resolution(rx, ry) {
+    _resolution(resolution) {
 
     int32 totalValue = 3 * _resolution.x() * _resolution.y();
     _pixelValue = new real[totalValue];
