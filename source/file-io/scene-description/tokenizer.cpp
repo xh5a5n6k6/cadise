@@ -186,7 +186,10 @@ std::unique_ptr<real[]> Tokenizer::_parseRealArray(
     const std::string_view& value, int32* const valueNumber) const {
 
     std::vector<real> realVector;
-    // while real loop
+    uint64 startPosition = 0;
+    uint64 endPosition = 0;
+
+    // TODO : while real loop
 
     std::unique_ptr<real[]> result(new real[realVector.size()]);
     for (uint64 index = 0; index < realVector.size(); index++) {
@@ -200,8 +203,7 @@ std::unique_ptr<real[]> Tokenizer::_parseRealArray(
 std::unique_ptr<Vector3R[]> Tokenizer::_parseVector3RArray(
     const std::string_view& value, int32* const valueNumber) const {
 
-    std::vector<Vector3R> vector3RVector;
-
+    std::vector<Vector3R> vector3rVector;
     uint64 startPosition = 0;
     uint64 endPosition   = 0;
 
@@ -226,19 +228,19 @@ std::unique_ptr<Vector3R[]> Tokenizer::_parseVector3RArray(
         startPosition = value.find_first_not_of(' ', tmpPosition + 1);
         z = value.substr(startPosition, endPosition - startPosition);
 
-        vector3RVector.push_back(Vector3R(static_cast<real>(std::stold(x)),
+        vector3rVector.push_back(Vector3R(static_cast<real>(std::stold(x)),
                                           static_cast<real>(std::stold(y)),
                                           static_cast<real>(std::stold(z))));
 
         startPosition = endPosition + 1;
     }
 
-    std::unique_ptr<Vector3R[]> result(new Vector3R[vector3RVector.size()]);
-    for (uint64 index = 0; index < vector3RVector.size(); index++) {
-        result[index] = vector3RVector[index];
+    std::unique_ptr<Vector3R[]> result(new Vector3R[vector3rVector.size()]);
+    for (uint64 index = 0; index < vector3rVector.size(); index++) {
+        result[index] = vector3rVector[index];
     }
 
-    *valueNumber = static_cast<int32>(vector3RVector.size());
+    *valueNumber = static_cast<int32>(vector3rVector.size());
     return std::move(result);
 }
 

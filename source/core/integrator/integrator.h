@@ -9,7 +9,7 @@ class Scene;
 
 class Integrator {
 public:
-    virtual Spectrum traceRadiance(const Scene& scene, Ray& ray) const = 0;
+    virtual Spectrum traceRadiance(const Scene& scene, const Ray& ray) const = 0;
 };
 
 } // namespace cadise

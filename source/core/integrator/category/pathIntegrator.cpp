@@ -17,12 +17,12 @@ PathIntegrator::PathIntegrator(const int32 maxDepth) :
     _maxDepth(maxDepth) {
 }
 
-Spectrum PathIntegrator::traceRadiance(const Scene& scene, Ray& ray) const {
+Spectrum PathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const {
     Spectrum totalRadiance(0.0_r);
     Spectrum pathWeight(1.0_r);
     bool isPreviousHitSpecular = false;
 
-    Ray traceRay(ray);
+    Ray traceRay = Ray(ray);
     while (traceRay.depth() < _maxDepth) {
         bool isCountForEmittance = traceRay.depth() == 0 || isPreviousHitSpecular;
         SurfaceIntersection intersection;

@@ -16,10 +16,10 @@ class WhittedIntegrator : public Integrator {
 public:
     WhittedIntegrator(int32 maxDepth);
 
-    Spectrum traceRadiance(const Scene& scene, Ray& ray) const override;
+    Spectrum traceRadiance(const Scene& scene, const Ray& ray) const override;
 
 private:
-    Spectrum _radianceAtSpecularSurface(const Scene& scene, Ray& ray, SurfaceIntersection& surfaceIntersection) const;
+    Spectrum _radianceAtSpecularSurface(const Scene& scene, const Ray& ray, SurfaceIntersection& surfaceIntersection) const;
 
     int32 _maxDepth;
 };

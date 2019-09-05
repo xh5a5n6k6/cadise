@@ -25,7 +25,7 @@ PerspectiveCamera::PerspectiveCamera(const Film& film, const real fov, const Vec
     _pixelHeight = screenHeight / ry;
 }
 
-Ray PerspectiveCamera::createRay(const int32 px, const int32 py) const {
+Ray PerspectiveCamera::spawnPrimaryRay(const int32 px, const int32 py) const {
     real sx = random::get1D();
     real sy = random::get1D();
 

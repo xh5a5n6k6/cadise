@@ -9,7 +9,7 @@ class Ray;
 
 class Camera {
 public:
-    virtual Ray createRay(const int32 px, const int32 py) const = 0;
+    virtual Ray spawnPrimaryRay(const int32 px, const int32 py) const = 0;
 
     virtual Film film() const = 0;
 };

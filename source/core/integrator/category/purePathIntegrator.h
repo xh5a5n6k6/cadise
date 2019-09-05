@@ -13,7 +13,7 @@ class PurePathIntegrator : public Integrator {
 public:
     PurePathIntegrator(const int32 maxDepth);
 
-    Spectrum traceRadiance(const Scene& scene, Ray& ray) const;
+    Spectrum traceRadiance(const Scene& scene, const Ray& ray) const override;
 
 private:
     int32 _maxDepth;

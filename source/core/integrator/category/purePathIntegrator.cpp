@@ -15,11 +15,11 @@ PurePathIntegrator::PurePathIntegrator(const int32 maxDepth) :
     _maxDepth(maxDepth) {
 }
 
-Spectrum PurePathIntegrator::traceRadiance(const Scene& scene, Ray& ray) const {
+Spectrum PurePathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const {
     Spectrum totalRadiance(0.0_r);
     Spectrum pathWeight(1.0_r);
 
-    Ray traceRay(ray);
+    Ray traceRay = Ray(ray);
     while (traceRay.depth() < _maxDepth) {
         SurfaceIntersection intersection;
         if (!scene.isIntersecting(traceRay, intersection)) {

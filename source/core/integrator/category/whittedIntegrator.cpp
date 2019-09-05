@@ -15,11 +15,12 @@ WhittedIntegrator::WhittedIntegrator(const int32 maxDepth) :
     _maxDepth(maxDepth) {
 }
 
-Spectrum WhittedIntegrator::traceRadiance(const Scene& scene, Ray& ray) const {
+Spectrum WhittedIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const {
     Spectrum totalRadiance(0.0_r);
 
+    Ray traceRay = Ray(ray);
     SurfaceIntersection intersection;
-    if (!scene.isIntersecting(ray, intersection)) {
+    if (!scene.isIntersecting(traceRay, intersection)) {
         // TODO : add environment light influence
 
         return totalRadiance;
@@ -36,7 +37,7 @@ Spectrum WhittedIntegrator::traceRadiance(const Scene& scene, Ray& ray) const {
 
     // add radiance if hitting area light
     if (hitPrimitive->isEmissive()) {
-        totalRadiance += hitPrimitive->emittance(ray.direction().composite(), intersection.surfaceInfo());
+        totalRadiance += hitPrimitive->emittance(traceRay.direction().composite(), intersection.surfaceInfo());
     }
     
     // add direct light only at non-specular surface
@@ -66,14 +67,14 @@ Spectrum WhittedIntegrator::traceRadiance(const Scene& scene, Ray& ray) const {
     }
 
     // only recursive trace at specular surface
-    if (isSpecular && ray.depth() + 1 < _maxDepth) {
-        totalRadiance += _radianceAtSpecularSurface(scene, ray, intersection);
+    if (isSpecular && traceRay.depth() + 1 < _maxDepth) {
+        totalRadiance += _radianceAtSpecularSurface(scene, traceRay, intersection);
     }
 
     return totalRadiance;
 }
 
-Spectrum WhittedIntegrator::_radianceAtSpecularSurface(const Scene& scene, Ray& ray, SurfaceIntersection& intersection) const {
+Spectrum WhittedIntegrator::_radianceAtSpecularSurface(const Scene& scene, const Ray& ray, SurfaceIntersection& intersection) const {
     Spectrum sampleRadiance(0.0_r);
 
     const Primitive* primitive = intersection.primitiveInfo().primitive();

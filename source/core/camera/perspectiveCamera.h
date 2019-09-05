@@ -12,7 +12,7 @@ class PerspectiveCamera : public Camera {
 public:
     PerspectiveCamera(const Film& film, const real fov, const Vector3R* const lookAt);
 
-    Ray createRay(const int32 px, const int32 py) const override;
+    Ray spawnPrimaryRay(const int32 px, const int32 py) const override;
 
     Film film() const override;
 

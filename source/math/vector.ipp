@@ -276,8 +276,6 @@ template<typename T, uint32 Size>
 inline Vector<T, Size> Vector<T, Size>::reciprocal() const {
     Vector<T, Size> result;
     for (uint32 index = 0; index < Size; index++) {
-        CADISE_ASSERT(_v[index] != static_cast<T>(0));
-
         result._v[index] = static_cast<T>(1) / _v[index];
     }
 

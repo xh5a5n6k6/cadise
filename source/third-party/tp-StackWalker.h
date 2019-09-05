@@ -3,7 +3,6 @@
 #include "fundamental/os.h"
 
 #if defined(CADISE_OS_WINDOWS)
-    #include <Windows.h>
     #include "third-party/StackWalker/StackWalker.h"
 
     #include <iostream>

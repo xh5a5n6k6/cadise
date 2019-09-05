@@ -163,6 +163,9 @@ void SdData::setClassType(const std::string_view& classType) {
     else if (!classType.compare("primitive")) {
         setClassType(SdClassType::PRIMITIVE);
     }
+    else {
+        // unknown sd class type
+    }
 }
 
 void SdData::setClassType(const SdClassType& classType) {
