@@ -21,9 +21,11 @@ Spectrum LambertianDiffuse::evaluate(const SurfaceIntersection& surfaceIntersect
 }
 
 Spectrum LambertianDiffuse::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
+    const Vector3R normal = surfaceIntersection.surfaceInfo().shadingNormal();
+
     Vector3R xAxis;
     Vector3R yAxis;
-    Vector3R zAxis(surfaceIntersection.surfaceInfo().shadingNormal());
+    Vector3R zAxis(normal);
     math::buildCoordinateSystem(zAxis, xAxis, yAxis);
     
     //Vector3R sampleDir = sample::uniformHemisphere(random::get2D());

@@ -18,11 +18,14 @@ Cadise is still been developing and more features will be implemented.
     - Unidirectional Path Tracing with Next Event Estimation
 - ### Accelerator
     - BVH
+- ### Camera
+    - Pinhole Perspective
 - ### BSDF
     - Lambertian Diffuse
     - Specular Reflection
     - Specular Transmission
     - Perfect Dielectric
+    - Blinn-Phong
 - ### Primitive
     - Sphere
     - Triangle

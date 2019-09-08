@@ -3,6 +3,7 @@
 // bsdf type
 #include "core/bsdf/category/blinnPhong.h"
 #include "core/bsdf/category/lambertianDiffuse.h"
+#include "core/bsdf/category/mixedBsdf.h"
 #include "core/bsdf/category/perfectDielectric.h"
 #include "core/bsdf/category/specularReflection.h"
 #include "core/bsdf/category/specularTransmission.h"
@@ -59,6 +60,31 @@ static std::shared_ptr<Bsdf> createPerfectDielectric(
     return std::make_shared<PerfectDielectric>(albedo, iorOuter, iorInner);
 }
 
+static std::shared_ptr<Bsdf> createBlinnPhong(
+    const std::shared_ptr<SdData>& data,
+    const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
+    const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
+
+    const real exponent = data->findReal("exponent", 32.0_r);
+
+    return std::make_shared<BlinnPhong>(exponent);
+}
+
+static std::shared_ptr<Bsdf> createPlastic(
+    const std::shared_ptr<SdData>& data,
+    const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
+    const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
+
+    const std::shared_ptr<Texture<Spectrum>> diffuseAlbedo
+        = data->getSpectrumTexture("diffuse-albedo", spectrumTextures);
+    const real specularExponent = data->findReal("specular-exponent", 32.0_r);
+    const real diffuseRatio     = data->findReal("diffuse-ratio", 0.7_r);
+
+    return std::make_shared<MixedBsdf>(std::make_shared<LambertianDiffuse>(diffuseAlbedo),
+                                       std::make_shared<BlinnPhong>(specularExponent),
+                                       diffuseRatio);
+}
+
 std::shared_ptr<Bsdf> makeBsdf(
     const std::shared_ptr<SdData>& data,
     const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
@@ -77,6 +103,12 @@ std::shared_ptr<Bsdf> makeBsdf(
     }
     else if (!type.compare("glass")) {
         bsdf = createPerfectDielectric(data, realTextures, spectrumTextures);
+    }
+    else if (!type.compare("blinnPhong")) {
+        bsdf = createBlinnPhong(data, realTextures, spectrumTextures);
+    }
+    else if (!type.compare("plastic")) {
+        bsdf = createPlastic(data, realTextures, spectrumTextures);
     }
     else {
         // don't support bsdf type

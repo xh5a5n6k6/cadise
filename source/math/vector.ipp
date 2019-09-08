@@ -71,8 +71,6 @@ inline Vector<T, Size> Vector<T, Size>::operator*(const T s) const {
 
 template<typename T, uint32 Size>
 inline Vector<T, Size> Vector<T, Size>::operator/(const T s) const {
-    CADISE_ASSERT(s != static_cast<T>(0));
-
     T invS = static_cast<T>(1) / s;
     Vector<T, Size> result;
     for (uint32 index = 0; index < Size; index++) {
@@ -116,8 +114,6 @@ template<typename T, uint32 Size>
 inline Vector<T, Size> Vector<T, Size>::operator/(const Vector<T, Size>& v) const {
     Vector<T, Size> result;
     for (uint32 index = 0; index < Size; index++) {
-        CADISE_ASSERT(v._v[index] != static_cast<T>(0));
-
         result._v[index] = _v[index] / v._v[index];
     }
 
@@ -153,8 +149,6 @@ inline Vector<T, Size>& Vector<T, Size>::operator*=(const T s) {
 
 template<typename T, uint32 Size>
 inline Vector<T, Size>& Vector<T, Size>::operator/=(const T s) {
-    CADISE_ASSERT(s != static_cast<T>(0));
-
     for (uint32 index = 0; index < Size; index++) {
         _v[index] /= s;
     }
@@ -192,8 +186,6 @@ inline Vector<T, Size>& Vector<T, Size>::operator*=(const Vector<T, Size>& v) {
 template<typename T, uint32 Size>
 inline Vector<T, Size>& Vector<T, Size>::operator/=(const Vector<T, Size>& v) {
     for (uint32 index = 0; index < Size; index++) {
-        CADISE_ASSERT(v._v[index] != static_cast<T>(0));
-
         _v[index] /= v._v[index];
     }
 

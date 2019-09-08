@@ -12,7 +12,8 @@ template<typename T>
 inline CheckerboardTexture<T>::CheckerboardTexture(const real oddTextureNumber, const real evenTextureNumber,
                                                    const std::shared_ptr<Texture<T>>& oddTexture, 
                                                    const std::shared_ptr<Texture<T>>& evenTexture) :
-    _oddTexture(oddTexture), _evenTexture(evenTexture) {
+    _oddTexture(oddTexture), 
+    _evenTexture(evenTexture) {
 
     _oddTextureSize  = 1.0_r / oddTextureNumber;
     _evenTextureSize = 1.0_r / evenTextureNumber;
