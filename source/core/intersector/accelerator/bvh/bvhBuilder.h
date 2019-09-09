@@ -37,8 +37,8 @@ private:
 
     bool _splitWith_EQUAL(const std::vector<std::shared_ptr<Intersector>>& intersectors,
                           const uint32 splitAxis,
-                          std::vector<std::shared_ptr<Intersector>>& subIntersectors1,
-                          std::vector<std::shared_ptr<Intersector>>& subIntersectors2) const;
+                          std::vector<std::shared_ptr<Intersector>>& subIntersectorsA,
+                          std::vector<std::shared_ptr<Intersector>>& subIntersectorsB) const;
 
     BvhSplitter _splitter;
 

@@ -6,7 +6,7 @@ namespace cadise {
 
 class Triangle : public Primitive {
 public:
-    Triangle(const std::shared_ptr<Bsdf>& bsdf, const Vector3R& v1, const Vector3R& v2, const Vector3R& v3);
+    Triangle(const std::shared_ptr<Bsdf>& bsdf, const Vector3R& vA, const Vector3R& vB, const Vector3R& vC);
 
     AABB3R bound() const override;
 
@@ -19,13 +19,21 @@ public:
     real samplePdfA(const Vector3R& position) const override;
     real area() const override;
 
-private:
-    Vector3R _v1;
-    Vector3R _v2;
-    Vector3R _v3;
+    void setUvwA(const Vector3R& uvwA);
+    void setUvwB(const Vector3R& uvwB);
+    void setUvwC(const Vector3R& uvwC);
 
-    Vector3R _e1;
-    Vector3R _e2;
+private:
+    Vector3R _vA;
+    Vector3R _vB;
+    Vector3R _vC;
+
+    Vector3R _uvwA;
+    Vector3R _uvwB;
+    Vector3R _uvwC;
+
+    Vector3R _eA;
+    Vector3R _eB;
 };
 
 } // namespace cadise

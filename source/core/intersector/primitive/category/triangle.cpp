@@ -10,44 +10,49 @@
 #include "math/constant.h"
 #include "math/random.h"
 
+#include <cmath>
 #include <limits>
 
 namespace cadise {
 
-Triangle::Triangle(const std::shared_ptr<Bsdf>& bsdf, const Vector3R& v1, const Vector3R& v2, const Vector3R& v3) :
+Triangle::Triangle(const std::shared_ptr<Bsdf>& bsdf, const Vector3R& vA, const Vector3R& vB, const Vector3R& vC) :
     Primitive(bsdf), 
-    _v1(v1),
-    _v2(v2), 
-    _v3(v3) {
+    _vA(vA),
+    _vB(vB), 
+    _vC(vC) {
     
-    _e1 = _v2 - _v1;
-    _e2 = _v3 - _v1;
+    _eA = _vB - _vA;
+    _eB = _vC - _vA;
+
+    _uvwA = Vector3R(0.0_r, 0.0_r, 0.0_r);
+    _uvwB = Vector3R(1.0_r, 0.0_r, 0.0_r);
+    _uvwC = Vector3R(1.0_r, 1.0_r, 0.0_r);
 }
 
 AABB3R Triangle::bound() const {
-    return AABB3R(_v1).unionWith(_v2).unionWith(_v3).expand(0.0001_r);
+    return AABB3R(_vA).unionWith(_vB).unionWith(_vC).expand(0.0001_r);
 }
 
 bool Triangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
     Vector3R D = ray.direction();
-    Vector3R e1 = _e1;
-    Vector3R e2 = _e2;
+    Vector3R eA = _eA;
+    Vector3R eB = _eB;
     bool isBackSide = false;
-    if (D.dot(e1.cross(e2)) > 0.0_r) {
-        e1.swap(e2);
+    if (D.dot(eA.cross(eB)) > 0.0_r) {
+        eA.swap(eB);
         isBackSide = true;
     }
-    Vector3R T = ray.origin() - _v1;
-    Vector3R Q = T.cross(e1);
-    Vector3R P = D.cross(e2);
+    Vector3R T = ray.origin() - _vA;
+    Vector3R Q = T.cross(eA);
+    Vector3R P = D.cross(eB);
 
-    real denominator = P.dot(e1);
+    real denominator = P.dot(eA);
     if (denominator - 0.0_r < std::numeric_limits<real>::epsilon()) {
         return false;
     }
 
     real invDenominator = 1.0_r / denominator;
-    real t = Q.dot(e2) * invDenominator;
+    real t = Q.dot(eB) * invDenominator;
     real u = P.dot(T) * invDenominator;
     real v = Q.dot(D) * invDenominator;
 
@@ -68,22 +73,22 @@ bool Triangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
 
 bool Triangle::isOccluded(Ray& ray) const {
     Vector3R D = ray.direction();
-    Vector3R e1 = _e1;
-    Vector3R e2 = _e2;
-    if (D.dot(e1.cross(e2)) > 0.0_r) {
-        e1.swap(e2);
+    Vector3R eA = _eA;
+    Vector3R eB = _eB;
+    if (D.dot(eA.cross(eB)) > 0.0_r) {
+        eA.swap(eB);
     }
-    Vector3R T = ray.origin() - _v1;
-    Vector3R Q = T.cross(e1);
-    Vector3R P = D.cross(e2);
+    Vector3R T = ray.origin() - _vA;
+    Vector3R Q = T.cross(eA);
+    Vector3R P = D.cross(eB);
 
-    real denominator = P.dot(e1);
+    real denominator = P.dot(eA);
     if (denominator - 0.0_r < std::numeric_limits<real>::epsilon()) {
         return false;
     }
 
     real invDenominator = 1.0_r / denominator;
-    real t = Q.dot(e2) * invDenominator;
+    real t = Q.dot(eB) * invDenominator;
     real u = P.dot(T) * invDenominator;
     real v = Q.dot(D) * invDenominator;
 
@@ -99,7 +104,7 @@ bool Triangle::isOccluded(Ray& ray) const {
 }
 
 void Triangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const {
-    Vector3R normal = _e1.cross(_e2).normalize();
+    Vector3R normal = _eA.cross(_eB).normalize();
     surfaceInfo.setFrontNormal(normal);
 
     normal = (primitiveInfo.isBackSide()) ? normal.composite() : normal;
@@ -107,12 +112,28 @@ void Triangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, Surface
     surfaceInfo.setShadingNormal(normal);
 
     Vector3R uvw;
-    if (_textureMapper != nullptr) {
+    if (_textureMapper) {
         uvw = _textureMapper->mappingToUvw(surfaceInfo);
         surfaceInfo.setUvw(uvw);
     }
     else {
+        // TODO : integrate with intersecting/occluded 
+        //        barycentric coordinate calculation
+        const Vector3R P = surfaceInfo.point();
+        const Vector3R AP = P - _vA;
+        const Vector3R AB = _eA;
+        const Vector3R AC = _eB;
         
+        real invDenominator = 1.0_r / AB.cross(AC).length();
+
+        CADISE_ASSERT(std::isfinite(invDenominator));
+
+        real u = AP.cross(AC).length() * invDenominator;
+        real v = AP.cross(AB).length() * invDenominator;
+        uvw = (1.0_r - u - v) * _uvwA +
+              u * _uvwB +
+              v * _uvwC;
+        surfaceInfo.setUvw(uvw);
     }
 }
 
@@ -128,14 +149,14 @@ void Triangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurfa
         t = random::get1D();
     } while (s + t >= 1.0_r);
 
-    Vector3R e1 = _e1;
-    Vector3R e2 = _e2;
-    Vector3R point = _v1 + s * e1 + t * e2;
+    Vector3R eA = _eA;
+    Vector3R eB = _eB;
+    Vector3R point = _vA + s * eA + t * eB;
     Vector3R direction = point - inSurface.point();
-    if (direction.dot(e1.cross(e2)) > 0.0_r) {
-        e1.swap(e2);
+    if (direction.dot(eA.cross(eB)) > 0.0_r) {
+        eA.swap(eB);
     }
-    Vector3R normal = e1.cross(e2).normalize();
+    Vector3R normal = eA.cross(eB).normalize();
 
     outSurface.setPoint(point);
     outSurface.setGeometryNormal(normal);
@@ -148,7 +169,19 @@ real Triangle::samplePdfA(const Vector3R& position) const {
 }
 
 real Triangle::area() const {
-    return 0.5_r * _e1.cross(_e2).length();
+    return 0.5_r * _eA.cross(_eB).length();
+}
+
+void Triangle::setUvwA(const Vector3R& uvwA) {
+    _uvwA = uvwA;
+}
+
+void Triangle::setUvwB(const Vector3R& uvwB) {
+    _uvwB = uvwB;
+}
+
+void Triangle::setUvwC(const Vector3R& uvwC) {
+    _uvwC = uvwC;
 }
 
 } // namespace cadise

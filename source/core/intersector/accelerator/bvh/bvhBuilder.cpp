@@ -56,15 +56,15 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
             internalNodeBound.unionWith(intersectors[i]->bound());
         }
         uint32 splitAxis = internalNodeBound.maxAxis();
-        std::vector<std::shared_ptr<Intersector>> subIntersectors1;
-        std::vector<std::shared_ptr<Intersector>> subIntersectors2;
+        std::vector<std::shared_ptr<Intersector>> subIntersectorsA;
+        std::vector<std::shared_ptr<Intersector>> subIntersectorsB;
 
         switch (_splitter) {
             case BvhSplitter::EQUAL:
                 _splitWith_EQUAL(intersectors,
                                  splitAxis,
-                                 subIntersectors1, 
-                                 subIntersectors2);
+                                 subIntersectorsA, 
+                                 subIntersectorsB);
                 break;
 
             default:
@@ -72,15 +72,15 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
         }
 
         std::unique_ptr<BvhBinaryNode> firstChild = nullptr;
-        firstChild = _buildBinaryNodesRecursively(subIntersectors1,
+        firstChild = _buildBinaryNodesRecursively(subIntersectorsA,
                                                   orderedIntersectors,
                                                   startIndex,
                                                   totalSize);
 
         std::unique_ptr<BvhBinaryNode> secondChild = nullptr;
-        secondChild = _buildBinaryNodesRecursively(subIntersectors2,
+        secondChild = _buildBinaryNodesRecursively(subIntersectorsB,
                                                    orderedIntersectors,
-                                                   startIndex + subIntersectors1.size(),
+                                                   startIndex + subIntersectorsA.size(),
                                                    totalSize);
 
         node->initializeInternalNode(std::move(firstChild),
@@ -122,25 +122,25 @@ void BvhBuilder::_buildLinearNodesRecursively(std::unique_ptr<BvhBinaryNode> bin
 
 bool BvhBuilder::_splitWith_EQUAL(const std::vector<std::shared_ptr<Intersector>>& intersectors,
                                   const uint32 splitAxis,
-                                  std::vector<std::shared_ptr<Intersector>>& subIntersectors1,
-                                  std::vector<std::shared_ptr<Intersector>>& subIntersectors2) const {
+                                  std::vector<std::shared_ptr<Intersector>>& subIntersectorsA,
+                                  std::vector<std::shared_ptr<Intersector>>& subIntersectorsB) const {
     uint64 size = (intersectors.size() + 1) / 2;
-    subIntersectors1.reserve(size);
-    subIntersectors2.reserve(size);
+    subIntersectorsA.reserve(size);
+    subIntersectorsB.reserve(size);
 
     std::vector<std::shared_ptr<Intersector>> sortedIntersectors(intersectors);
     std::nth_element(sortedIntersectors.begin(),
                      sortedIntersectors.begin() + size,
                      sortedIntersectors.end(),
-                     [splitAxis](std::shared_ptr<Intersector> i1, std::shared_ptr<Intersector> i2) {
-                         return i1->bound().centroid()[splitAxis] < i2->bound().centroid()[splitAxis];
+                     [splitAxis](std::shared_ptr<Intersector> iA, std::shared_ptr<Intersector> iB) {
+                         return iA->bound().centroid()[splitAxis] < iB->bound().centroid()[splitAxis];
                      });
 
-    subIntersectors1.insert(subIntersectors1.end(),
+    subIntersectorsA.insert(subIntersectorsA.end(),
                             sortedIntersectors.begin(),
                             sortedIntersectors.begin() + size);
 
-    subIntersectors2.insert(subIntersectors2.end(),
+    subIntersectorsB.insert(subIntersectorsB.end(),
                             sortedIntersectors.begin() + size,
                             sortedIntersectors.end());
     return true;

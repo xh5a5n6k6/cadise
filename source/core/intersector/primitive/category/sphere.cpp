@@ -97,7 +97,7 @@ void Sphere::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceIn
     surfaceInfo.setShadingNormal(normal);
 
     Vector3R uvw;
-    if (_textureMapper != nullptr) {
+    if (_textureMapper) {
         uvw = _textureMapper->mappingToUvw(surfaceInfo);
         surfaceInfo.setUvw(uvw);
     }

@@ -13,47 +13,47 @@
 
 namespace cadise {
 
-Rectangle::Rectangle(const std::shared_ptr<Bsdf>& bsdf, const Vector3R& v1, const Vector3R& v2, const Vector3R& v3) :
+Rectangle::Rectangle(const std::shared_ptr<Bsdf>& bsdf, const Vector3R& vA, const Vector3R& vB, const Vector3R& vC) :
     Primitive(bsdf),
-    _v1(v1),
-    _v2(v2),
-    _v3(v3) {
+    _vA(vA),
+    _vB(vB),
+    _vC(vC) {
     
-    _e1 = _v1 - _v2;
-    _e2 = _v3 - _v2;
+    _eA = _vA - _vB;
+    _eB = _vC - _vB;
 
-    _v4 = _v2 + _e1 + _e2;
+    _vD = _vB + _eA + _eB;
     
-    _uvw1 = Vector3R(1.0_r, 0.0_r, 0.0_r);
-    _uvw2 = Vector3R(0.0_r, 0.0_r, 0.0_r);
-    _uvw3 = Vector3R(0.0_r, 1.0_r, 0.0_r);
-    _uvw4 = Vector3R(1.0_r, 1.0_r, 0.0_r);
+    _uvwA = Vector3R(1.0_r, 0.0_r, 0.0_r);
+    _uvwB = Vector3R(0.0_r, 0.0_r, 0.0_r);
+    _uvwC = Vector3R(0.0_r, 1.0_r, 0.0_r);
+    _uvwD = Vector3R(1.0_r, 1.0_r, 0.0_r);
 }
 
 AABB3R Rectangle::bound() const {
-    return AABB3R(_v1).unionWith(_v2).unionWith(_v3).unionWith(_v2 + _e1 + _e2).expand(0.0001_r);
+    return AABB3R(_vA).unionWith(_vB).unionWith(_vC).unionWith(_vD).expand(0.0001_r);
 }
 
 bool Rectangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
-    Vector3R e1 = _e1;
-    Vector3R e2 = _e2;
+    Vector3R eA = _eA;
+    Vector3R eB = _eB;
     bool isBackSide = false;
-    if (ray.direction().dot(e1.cross(e2)) > 0.0_r) {
-        e1.swap(e2);
+    if (ray.direction().dot(eA.cross(eB)) > 0.0_r) {
+        eA.swap(eB);
         isBackSide = true;
     }
-    Vector3R normal = e1.cross(e2).normalize();
+    Vector3R normal = eA.cross(eB).normalize();
 
-    real t = (normal.dot(_v2) - normal.dot(ray.origin())) / normal.dot(ray.direction());
+    real t = (normal.dot(_vB) - normal.dot(ray.origin())) / normal.dot(ray.direction());
     if (t < 0.0_r || t > ray.maxT()) {
         return false;
     }
 
-    Vector3R vectorOnPlane = ray.at(t) - _v2;
-    real projection1 = vectorOnPlane.dot(_e1.normalize());
-    real projection2 = vectorOnPlane.dot(_e2.normalize());
-    if (projection1 < 0.0_r || projection1 > _e1.length() ||
-        projection2 < 0.0_r || projection2 > _e2.length()) {
+    Vector3R vectorOnPlane = ray.at(t) - _vB;
+    real projection1 = vectorOnPlane.dot(_eA.normalize());
+    real projection2 = vectorOnPlane.dot(_eB.normalize());
+    if (projection1 < 0.0_r || projection1 > _eA.length() ||
+        projection2 < 0.0_r || projection2 > _eB.length()) {
         return false;
     }
 
@@ -65,23 +65,23 @@ bool Rectangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
 }
 
 bool Rectangle::isOccluded(Ray& ray) const {
-    Vector3R e1 = _e1;
-    Vector3R e2 = _e2;
-    if (ray.direction().dot(e1.cross(e2)) > 0.0_r) {
-        e1.swap(e2);
+    Vector3R eA = _eA;
+    Vector3R eB = _eB;
+    if (ray.direction().dot(eA.cross(eB)) > 0.0_r) {
+        eA.swap(eB);
     }
-    Vector3R normal = e1.cross(e2).normalize();
+    Vector3R normal = eA.cross(eB).normalize();
 
-    real t = (normal.dot(_v2) - normal.dot(ray.origin())) / normal.dot(ray.direction());
+    real t = (normal.dot(_vB) - normal.dot(ray.origin())) / normal.dot(ray.direction());
     if (t < 0.0_r || t > ray.maxT()) {
         return false;
     }
 
-    Vector3R vectorOnPlane = ray.at(t) - _v2;
-    real projection1 = vectorOnPlane.dot(_e1.normalize());
-    real projection2 = vectorOnPlane.dot(_e2.normalize());
-    if (projection1 < 0.0_r || projection1 > _e1.length() ||
-        projection2 < 0.0_r || projection2 > _e2.length()) {
+    Vector3R vectorOnPlane = ray.at(t) - _vB;
+    real projection1 = vectorOnPlane.dot(_eA.normalize());
+    real projection2 = vectorOnPlane.dot(_eB.normalize());
+    if (projection1 < 0.0_r || projection1 > _eA.length() ||
+        projection2 < 0.0_r || projection2 > _eB.length()) {
         return false;
     }
 
@@ -89,7 +89,7 @@ bool Rectangle::isOccluded(Ray& ray) const {
 }
 
 void Rectangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const {
-    Vector3R normal = _e1.cross(_e2).normalize();
+    Vector3R normal = _eA.cross(_eB).normalize();
     surfaceInfo.setFrontNormal(normal);
 
     normal = (primitiveInfo.isBackSide()) ? normal.composite() : normal;
@@ -97,34 +97,34 @@ void Rectangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, Surfac
     surfaceInfo.setShadingNormal(normal);
 
     Vector3R uvw;
-    if (_textureMapper != nullptr) {
+    if (_textureMapper) {
         uvw = _textureMapper->mappingToUvw(surfaceInfo);
         surfaceInfo.setUvw(uvw);
     }
     else {
         Vector3R point = surfaceInfo.point();
-        Vector3R vectorOnPlane = point - _v2;
-        real projection1 = vectorOnPlane.dot(_e1.normalize()) / _e1.length();
-        real projection2 = vectorOnPlane.dot(_e2.normalize()) / _e1.length();
+        Vector3R vectorOnPlane = point - _vB;
+        real projection1 = vectorOnPlane.dot(_eA.normalize()) / _eA.length();
+        real projection2 = vectorOnPlane.dot(_eB.normalize()) / _eA.length();
 
-        Vector3R xUvwLerp1 = _uvw2.lerp(_uvw3, projection2);
-        Vector3R xUvwLerp2 = _uvw1.lerp(_uvw4, projection2);
+        Vector3R xUvwLerp1 = _uvwB.lerp(_uvwC, projection2);
+        Vector3R xUvwLerp2 = _uvwA.lerp(_uvwD, projection2);
         uvw = xUvwLerp1.lerp(xUvwLerp2, projection1);
         surfaceInfo.setUvw(uvw);
     }
 }
 
 void Rectangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurface) const {
-    Vector3R e1 = _e1;
-    Vector3R e2 = _e2;
-    outSurface.setFrontNormal(e1.cross(e2).normalize());
+    Vector3R eA = _eA;
+    Vector3R eB = _eB;
+    outSurface.setFrontNormal(eA.cross(eB).normalize());
 
-    if (e1.length() < e2.length()) {
-        e1.swap(e2);
+    if (eA.length() < eB.length()) {
+        eA.swap(eB);
     }
 
-    real longWidth = e1.length();
-    real shortWidth = e2.length();
+    real longWidth = eA.length();
+    real shortWidth = eB.length();
 
     // TODO
     // improve sample point on rectangle
@@ -137,12 +137,12 @@ void Rectangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurf
         t = random::get1D();
     } while (t > shortWidth / longWidth);
 
-    Vector3R point = _v2 + s * e1 + t * e1.length() * e2.normalize();
+    Vector3R point = _vB + s * eA + t * eA.length() * eB.normalize();
     Vector3R direction = point - inSurface.point();
-    if (direction.dot(e1.cross(e2)) > 0.0_r) {
-        e1.swap(e2);
+    if (direction.dot(eA.cross(eB)) > 0.0_r) {
+        eA.swap(eB);
     }
-    Vector3R normal = e1.cross(e2).normalize();
+    Vector3R normal = eA.cross(eB).normalize();
 
     outSurface.setPoint(point);
     outSurface.setGeometryNormal(normal);
@@ -155,7 +155,23 @@ real Rectangle::samplePdfA(const Vector3R& position) const {
 }
 
 real Rectangle::area() const {
-    return _e1.length() * _e2.length();
+    return _eA.length() * _eB.length();
+}
+
+void Rectangle::setUvwA(const Vector3R& uvwA) {
+    _uvwA = uvwA;
+}
+
+void Rectangle::setUvwB(const Vector3R& uvwB) {
+    _uvwB = uvwB;
+}
+
+void Rectangle::setUvwC(const Vector3R& uvwC) {
+    _uvwC = uvwC;
+}
+
+void Rectangle::setUvwD(const Vector3R& uvwD) {
+    _uvwD = uvwD;
 }
 
 } // namespace cadise
