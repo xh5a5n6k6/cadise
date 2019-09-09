@@ -5,8 +5,6 @@
 #include "file-io/scene-description/sdClassType.h"
 #include "file-io/scene-description/sdDataUnit.h"
 
-#include "math/vector.h"
-
 #include <functional>
 #include <map>
 #include <vector>
@@ -98,9 +96,9 @@ inline T SdData::_findData(
     const T& defaultValue,
     const std::vector<std::shared_ptr<SdDataUnit<T>>>& dataset) const {
 
-    for (uint64 index = 0; index < dataset.size(); index++) {
-        if (!dataset[index]->variableName().compare(name)) {
-            return dataset[index]->value()[0];
+    for (std::size_t i = 0; i < dataset.size(); i++) {
+        if (!dataset[i]->variableName().compare(name)) {
+            return dataset[i]->value()[0];
         }
     }
 
@@ -112,9 +110,9 @@ inline const T* SdData::_findDataArray(
     const std::string_view& name,
     const std::vector<std::shared_ptr<SdDataUnit<T>>>& dataset) const {
 
-    for (uint64 index = 0; index < dataset.size(); index++) {
-        if (!dataset[index]->variableName().compare(name)) {
-            return dataset[index]->value().get();
+    for (std::size_t i = 0; i < dataset.size(); i++) {
+        if (!dataset[i]->variableName().compare(name)) {
+            return dataset[i]->value().get();
         }
     }
 

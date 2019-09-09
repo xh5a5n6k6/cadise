@@ -9,7 +9,7 @@ namespace cadise {
 
 ClParser::ClParser() = default;
 
-void ClParser::parse(int argc, const char* argv[]) const {
+void ClParser::parse(int32 argc, const char* argv[]) const {
     if (argc < 2) {
         std::cerr << "Please type \"Cadise --help\" for further information."
                   << std::endl;
@@ -19,13 +19,13 @@ void ClParser::parse(int argc, const char* argv[]) const {
     // TODO : add some argument commands
 
     std::vector<std::string> args;
-    for (int index = 1; index < argc; index++) {
-        args.push_back(argv[index]);
+    for (int32 i = 1; i < argc; i++) {
+        args.push_back(argv[i]);
     }
 
     SdParser parser;
-    for (int index = 0; index < args.size(); index++) {
-        parser.parseSd(args[index]);
+    for (std::size_t i = 0; i < args.size(); i++) {
+        parser.parseSd(args[i]);
     }
 }
 

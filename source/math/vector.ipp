@@ -4,7 +4,8 @@
 
 #include "fundamental/assertion.h"
 
-#include <algorithm>
+#include "math/math.h"
+
 #include <cmath>
 
 namespace cadise {
@@ -265,6 +266,12 @@ inline Vector<T, Size> Vector<T, Size>::composite() const {
 }
 
 template<typename T, uint32 Size>
+inline Vector<T, Size> Vector<T, Size>::complement() const {
+    Vector<T, Size> oneVector(static_cast<T>(1));
+    return oneVector - *this;
+}
+
+template<typename T, uint32 Size>
 inline Vector<T, Size> Vector<T, Size>::reciprocal() const {
     Vector<T, Size> result;
     for (uint32 index = 0; index < Size; index++) {
@@ -278,7 +285,7 @@ template<typename T, uint32 Size>
 inline Vector<T, Size> Vector<T, Size>::clamp(const T min, const T max) const {
     Vector<T, Size> result;
     for (uint32 index = 0; index < Size; index++) {
-        result._v[index] = std::clamp(_v[index], min, max);
+        result._v[index] = math::clamp(_v[index], min, max);
     }
 
     return result;
@@ -301,7 +308,7 @@ inline uint32 Vector<T, Size>::maxDimension() const {
 template<typename T, uint32 Size>
 inline void Vector<T, Size>::swap(Vector<T, Size>& v) {
     for (uint32 index = 0; index < Size; index++) {
-        std::swap(_v[index], v._v[index]);
+        math::swap(_v[index], v._v[index]);
     }
 }
 
@@ -355,7 +362,7 @@ inline Vector<T, Size> Vector<T, Size>::refract(const Vector<T, Size>& normal, c
 
     // check if incident ray is from inner to outer
     if (cosI < 0.0_r) {
-        std::swap(etaI, etaT);
+        math::swap(etaI, etaT);
         signFactor = -1.0_r;
     }
 

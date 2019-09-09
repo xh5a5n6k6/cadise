@@ -8,14 +8,14 @@ BvhLinearNode::BvhLinearNode() :
 
 BvhLinearNode::~BvhLinearNode() = default;
 
-void BvhLinearNode::initializeInternalNode(const AABB3R& bound, const uint64 secondChildIndex, const uint32 splitAxis) {
+void BvhLinearNode::initializeInternalNode(const AABB3R& bound, const std::size_t secondChildIndex, const uint32 splitAxis) {
     _bound = bound;
     _secondChildIndex = secondChildIndex;
     _splitAxis = splitAxis;
     _isLeaf = false;
 }
 
-void BvhLinearNode::initializeLeafNode(const AABB3R& bound, const uint64 intersectorIndex, const uint64 intersectorCounts) {
+void BvhLinearNode::initializeLeafNode(const AABB3R& bound, const std::size_t intersectorIndex, const std::size_t intersectorCounts) {
     _bound = bound;
     _intersectorIndex = intersectorIndex;
     _intersectorCounts = intersectorCounts;
@@ -26,15 +26,15 @@ AABB3R BvhLinearNode::bound() const {
     return _bound;
 }
 
-uint64 BvhLinearNode::intersectorIndex() const {
+std::size_t BvhLinearNode::intersectorIndex() const {
     return _intersectorIndex;
 }
 
-uint64 BvhLinearNode::secondChildIndex() const {
+std::size_t BvhLinearNode::secondChildIndex() const {
     return _secondChildIndex;
 }
 
-uint64 BvhLinearNode::intersectorCounts() const {
+std::size_t BvhLinearNode::intersectorCounts() const {
     return _intersectorCounts;
 }
 

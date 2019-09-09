@@ -6,6 +6,7 @@
 #include "math/math.h"
 #include "math/random.h"
 
+#include <cmath>
 #include <limits>
 
 namespace cadise {
@@ -26,8 +27,8 @@ PerspectiveCamera::PerspectiveCamera(const Film& film, const real fov, const Vec
 }
 
 Ray PerspectiveCamera::spawnPrimaryRay(const int32 px, const int32 py) const {
-    real sx = random::get1D();
-    real sy = random::get1D();
+    real sx = random::nextReal();
+    real sy = random::nextReal();
 
     real sampleX = px * _pixelWidth + sx * _pixelWidth;
     real sampleY = py * _pixelHeight + sy * _pixelHeight;

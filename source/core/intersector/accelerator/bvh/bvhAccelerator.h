@@ -16,13 +16,13 @@ public:
     AABB3R bound() const override;
 
     bool isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const override;
-    bool isOccluded(Ray& ray) const override;
+    bool isOccluded(const Ray& ray) const override;
 
 private:
     std::vector<std::shared_ptr<Intersector>> _intersectors;
     std::vector<BvhLinearNode> _nodes;
 
-    static const uint64 MAX_STACK_SIZE = 64;
+    static const std::size_t MAX_STACK_SIZE = 64;
 };
 
 } // namespace cadise

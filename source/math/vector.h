@@ -1,17 +1,10 @@
 #pragma once
 
-#include "math/type.h"
+#include "math/fundamentalType.h"
 
 #include <array>
 
 namespace cadise {
-
-template<typename T, uint32 Size>
-class Vector;
-
-using Vector2I = Vector<int32, 2>;
-using Vector2R = Vector<real, 2>;
-using Vector3R = Vector<real, 3>;
 
 template<typename T, uint32 Size>
 class Vector {
@@ -49,6 +42,7 @@ public:
     T maxComponent() const;
     Vector normalize() const;
     Vector composite() const;
+    Vector complement() const;
     Vector reciprocal() const;
     Vector clamp(const T min, const T max) const;
     uint32 maxDimension() const;

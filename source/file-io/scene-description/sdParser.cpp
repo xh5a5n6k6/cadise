@@ -4,8 +4,6 @@
 
 #include "file-io/scene-description/tokenizer.h"
 
-#include "math/type.h"
-
 #include <cstdio>
 #include <cstring>
 #include <iostream>
@@ -23,10 +21,10 @@ void SdParser::parseSd(const std::string& filename) {
     std::string fileString = _parseSdToString(filename);
     std::string_view fileStringView(fileString);
 
-    uint64 startPosition = 0;
-    uint64 endPosition   = 0;
+    std::size_t startPosition = 0;
+    std::size_t endPosition   = 0;
     while ((endPosition = fileStringView.find_first_of('}', startPosition)) != std::string_view::npos) {
-        uint64 stringCount = endPosition - startPosition + 1;
+        std::size_t stringCount = endPosition - startPosition + 1;
         std::string_view subStringView = fileStringView.substr(startPosition, stringCount);
         std::shared_ptr<SdData> data = _tokenizer->tokenize(subStringView);
         _renderOption->setUpData(data);

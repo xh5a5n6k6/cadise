@@ -1,7 +1,7 @@
 #include "core/intersector/primitive/primitive.h"
 
 #include "core/bsdf/bsdf.h"
-#include "core/light/category/areaLight.h"
+#include "core/light/areaLight.h"
 
 namespace cadise {
 

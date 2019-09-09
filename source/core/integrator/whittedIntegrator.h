@@ -2,8 +2,6 @@
 
 #include "core/integrator/integrator.h"
 
-#include "core/spectrum/spectrum.h"
-
 namespace cadise {
 
 class SurfaceIntersection;

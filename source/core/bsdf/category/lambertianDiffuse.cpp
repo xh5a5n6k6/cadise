@@ -1,6 +1,6 @@
 #include "core/bsdf/category/lambertianDiffuse.h"
 
-#include "core/sampling/sample.h"
+#include "core/integral-tool/hemisphere.h"
 #include "core/surfaceIntersection.h"
 #include "core/texture/texture.h"
 
@@ -28,8 +28,9 @@ Spectrum LambertianDiffuse::evaluateSample(SurfaceIntersection& surfaceIntersect
     Vector3R zAxis(normal);
     math::buildCoordinateSystem(zAxis, xAxis, yAxis);
     
-    //Vector3R sampleDir = sample::uniformHemisphere(random::get2D());
-    Vector3R sampleDir = sample::cosineWeightedHemisphere(random::get2D());
+    //Vector3R sampleDir = hemisphere::uniformSampling(random::get2D());
+    Vector2R uniformSample = Vector2R(random::nextReal(), random::nextReal());
+    Vector3R sampleDir = hemisphere::cosineWeightedSampling(uniformSample);
     Vector3R outDirection = xAxis * sampleDir.x() + yAxis * sampleDir.y() + zAxis * sampleDir.z();
     outDirection = outDirection.normalize();
 

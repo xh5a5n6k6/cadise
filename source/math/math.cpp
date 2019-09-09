@@ -1,6 +1,7 @@
 #include "math/math.h"
 
 #include "math/constant.h"
+#include "math/vector.h"
 
 #include <cmath>
 

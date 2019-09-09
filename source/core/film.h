@@ -2,6 +2,7 @@
 
 #include "file-io/path.h"
 
+#include "math/mathType.h"
 #include "math/vector.h"
 
 namespace cadise {

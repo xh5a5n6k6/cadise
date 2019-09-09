@@ -1,14 +1,15 @@
-#include "core/sampling/sample.h"
+#include "core/integral-tool/hemisphere.h"
 
 #include "math/constant.h"
+#include "math/vector.h"
 
 #include <cmath>
 
 namespace cadise {
 
-namespace sample {
+namespace hemisphere {
 
-Vector3R uniformHemisphere(const Vector2R& randomNumber) {
+Vector3R uniformSampling(const Vector2R& randomNumber) {
     real theta = std::acos(randomNumber.x());
     real phi = constant::TWO_PI * randomNumber.y();
 
@@ -19,7 +20,7 @@ Vector3R uniformHemisphere(const Vector2R& randomNumber) {
                     randomNumber.x());
 }
 
-Vector3R cosineWeightedHemisphere(const Vector2R& randomNumber) {
+Vector3R cosineWeightedSampling(const Vector2R& randomNumber) {
     real theta = std::acos(1.0_r - 2 * randomNumber.x()) / 2.0_r;
     real phi = constant::TWO_PI * randomNumber.y();
 
@@ -31,6 +32,6 @@ Vector3R cosineWeightedHemisphere(const Vector2R& randomNumber) {
                     cosTheta);
 }
 
-} // namespace sample
+} // namespace hemisphere
 
 } // namespace cadise

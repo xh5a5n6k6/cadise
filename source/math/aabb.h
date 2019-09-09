@@ -4,12 +4,6 @@
 
 namespace cadise {
 
-template<typename T, uint32 Size>
-class AABB;
-
-using AABB2I = AABB<int32, 2>;
-using AABB3R = AABB<real, 3>;
-
 // AABB is for axis-aligned bounding box
 template<typename T, uint32 Size>
 class AABB {

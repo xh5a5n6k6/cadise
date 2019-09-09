@@ -2,8 +2,6 @@
 
 #include "core/texture/category/checkerboardTexture.h"
 
-#include "core/texture/category/constantTexture.h"
-
 #include <cmath>
 
 namespace cadise {

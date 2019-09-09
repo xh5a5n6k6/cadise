@@ -3,6 +3,8 @@
 #include "core/surfaceIntersection.h"
 #include "core/texture/texture.h"
 
+#include "math/math.h"
+
 namespace cadise {
 
 
@@ -28,9 +30,9 @@ Spectrum SpecularTransmission::evaluateSample(SurfaceIntersection& surfaceInters
     }
 
     real cosThetaI = refractDirection.dot(normal);
-    Spectrum transmittance = Spectrum(1.0_r) - _fresnel.evaluateReflectance(cosThetaI);
+    Spectrum transmittance = _fresnel.evaluateReflectance(cosThetaI).complement();
     if (cosThetaI < 0.0_r) {
-        std::swap(etaI, etaT);
+        math::swap(etaI, etaT);
     }
     real btdfFactor = (etaT * etaT) / (etaI * etaI);
     real pdf = 1.0_r;

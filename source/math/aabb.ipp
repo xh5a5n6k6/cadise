@@ -3,7 +3,6 @@
 #include "math/aabb.h"
 
 #include <limits>
-#include <typeinfo>
 
 namespace cadise {
 

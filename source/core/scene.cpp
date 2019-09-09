@@ -36,7 +36,7 @@ bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) c
     return isHit;
 }
 
-bool Scene::isOccluded(Ray& ray) const {
+bool Scene::isOccluded(const Ray& ray) const {
     return _accelerator->isOccluded(ray);
 }
 

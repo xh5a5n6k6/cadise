@@ -1,4 +1,4 @@
-#include "core/intersector/primitive/primitiveInfo.h"
+#include "core/intersector/primitiveInfo.h"
 
 namespace cadise {
 

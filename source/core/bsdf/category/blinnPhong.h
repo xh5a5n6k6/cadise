@@ -6,9 +6,6 @@
 
 namespace cadise {
 
-template<typename T>
-class Texture;
-
 class BlinnPhong : public Bsdf {
 public:
     BlinnPhong(const real exponent);

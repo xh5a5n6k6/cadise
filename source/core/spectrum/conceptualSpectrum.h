@@ -6,9 +6,13 @@ namespace cadise {
 
 template<uint32 Size>
 class ConceptualSpectrum {
+protected:
+    using SpectralArray = Vector<real, Size>;
+
 public:
     ConceptualSpectrum();
     ConceptualSpectrum(const real v);
+    ConceptualSpectrum(const SpectralArray& sa);
     ConceptualSpectrum(const ConceptualSpectrum& cs);
 
     ConceptualSpectrum operator-() const;
@@ -35,9 +39,9 @@ public:
     real average() const;
     real maxComponent() const;
 
+    ConceptualSpectrum complement() const;
+
 protected:
-    using SpectralArray = Vector<real, Size>;
-    
     SpectralArray _values;
 };
 

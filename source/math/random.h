@@ -1,16 +1,14 @@
 #pragma once
 
-#include "math/vector.h"
+#include "math/fundamentalType.h"
 
 namespace cadise {
 
 namespace random {
 
-real get1D();
+real nextReal();
 
-Vector2R get2D();
-
-int32 get1DInt32(const int32 minNumber, const int32 maxNumber);
+std::size_t nextIndex(const std::size_t minIndex, const std::size_t maxIndex);
 
 } // namespace random
 

@@ -3,6 +3,7 @@
 #include "core/surfaceIntersection.h"
 #include "core/texture/texture.h"
 
+#include "math/math.h"
 #include "math/random.h"
 
 namespace cadise {
@@ -28,7 +29,7 @@ Spectrum PerfectDielectric::evaluateSample(SurfaceIntersection& surfaceIntersect
     real IdotN = surfaceIntersection.wi().dot(normal);
     Spectrum reflectance = _fresnel.evaluateReflectance(IdotN);
     real reflectionProbability = reflectance.average();
-    real sampleProbability = random::get1D();
+    real sampleProbability = random::nextReal();
     if (sampleProbability <= reflectionProbability) {
         isReflection = true;
     }
@@ -59,9 +60,9 @@ Spectrum PerfectDielectric::evaluateSample(SurfaceIntersection& surfaceIntersect
         }
 
         real cosThetaI = refractDirection.dot(normal);
-        Spectrum transmittance = Spectrum(1.0_r) - _fresnel.evaluateReflectance(cosThetaI);
+        Spectrum transmittance = _fresnel.evaluateReflectance(cosThetaI).complement();
         if (cosThetaI < 0.0_r) {
-            std::swap(etaI, etaT);
+            math::swap(etaI, etaT);
         }
         real btdfFactor = (etaT * etaT) / (etaI * etaI);
         real pdf = 1.0_r - reflectionProbability;

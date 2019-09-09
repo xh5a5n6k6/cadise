@@ -18,22 +18,22 @@ public:
     std::unique_ptr<BvhBinaryNode> buildBinaryNodes(
         const std::vector<std::shared_ptr<Intersector>>& intersectors, 
         std::vector<std::shared_ptr<Intersector>>& orderedIntersectors,
-        uint64& totalSize) const;
+        std::size_t& totalSize) const;
 
     void buildLinearNodes(std::unique_ptr<BvhBinaryNode> root, 
                           std::vector<BvhLinearNode>& linearNodes,
-                          const uint64 totalSize) const;
+                          const std::size_t totalSize) const;
 
 private:
     std::unique_ptr<BvhBinaryNode> _buildBinaryNodesRecursively(
         const std::vector<std::shared_ptr<Intersector>>& intersectors,
         std::vector<std::shared_ptr<Intersector>>& orderedIntersectors,
-        const uint64 startIndex,
-        uint64& totalSize) const;
+        const std::size_t startIndex,
+        std::size_t& totalSize) const;
 
     void _buildLinearNodesRecursively(std::unique_ptr<BvhBinaryNode> binaryNode, 
                                       std::vector<BvhLinearNode>& linearNodes,
-                                      std::shared_ptr<uint64> nodeIndex) const;
+                                      std::size_t* const nodeIndex) const;
 
     bool _splitWith_EQUAL(const std::vector<std::shared_ptr<Intersector>>& intersectors,
                           const uint32 splitAxis,
@@ -42,7 +42,7 @@ private:
 
     BvhSplitter _splitter;
 
-    static const uint64 MAX_INTERSECTOR_SIZE = 1;
+    static const std::size_t MAX_INTERSECTOR_SIZE = 1;
 };
 
 } // namespace cadise

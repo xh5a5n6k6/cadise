@@ -1,13 +1,15 @@
-#include "core/intersector/primitive/category/sphere.h"
+#include "core/intersector/primitive/sphere.h"
 
-#include "core/intersector/primitive/primitiveInfo.h"
+#include "core/intersector/primitiveInfo.h"
 #include "core/ray.h"
 #include "core/surfaceInfo.h"
 #include "core/texture/mapper/sphericalMapper.h"
 
 #include "fundamental/assertion.h"
 
+#include "math/aabb.h"
 #include "math/constant.h"
+#include "math/random.h"
 
 #include <limits>
 
@@ -59,7 +61,7 @@ bool Sphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
     return true;
 }
 
-bool Sphere::isOccluded(Ray& ray) const {
+bool Sphere::isOccluded(const Ray& ray) const {
     Ray r = Ray(_worldToLocal.transformPoint(ray.origin()),
                 _worldToLocal.transformVector(ray.direction()),
                 constant::RAY_EPSILON, 

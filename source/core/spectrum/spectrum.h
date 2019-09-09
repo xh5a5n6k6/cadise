@@ -1,9 +1,9 @@
 #pragma once
 
-#include "core/spectrum/category/rgbSpectrum.h"
+#include "core/spectrum/rgbSpectrum.h"
 
 namespace cadise {
 
-using Spectrum = RGBSpectrum;
+using Spectrum = RgbSpectrum;
 
 } // namespace cadise

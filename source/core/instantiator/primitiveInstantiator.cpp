@@ -1,9 +1,9 @@
 #include "core/instantiator/instantiator.h"
 
 // primitive type
-#include "core/intersector/primitive/category/rectangle.h"
-#include "core/intersector/primitive/category/sphere.h"
-#include "core/intersector/primitive/category/triangle.h"
+#include "core/intersector/primitive/rectangle.h"
+#include "core/intersector/primitive/sphere.h"
+#include "core/intersector/primitive/triangle.h"
 
 #include "file-io/scene-description/sdData.h"
 

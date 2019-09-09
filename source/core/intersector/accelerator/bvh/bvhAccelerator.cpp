@@ -19,7 +19,7 @@ BvhAccelerator::BvhAccelerator(const std::vector<std::shared_ptr<Intersector>>& 
 
     BvhBuilder builder = BvhBuilder(splitter);
 
-    uint64 totalSize = 0;
+    std::size_t totalSize = 0;
     // build binary node tree recursively
     std::unique_ptr<BvhBinaryNode> root = builder.buildBinaryNodes(std::move(intersectors), _intersectors, totalSize);
 
@@ -39,15 +39,15 @@ bool BvhAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) cons
     Vector3R origin = ray.origin();
     Vector3R invDirection = ray.direction().reciprocal();
     int32 dirIsNegative[3] = { invDirection.x() < 0.0_r, invDirection.y() < 0.0_r, invDirection.z() < 0.0_r };
-    uint64 currentNodeIndex = 0;
-    uint64 currentStackSize = 0;
-    uint64 nodeStack[MAX_STACK_SIZE];
+    std::size_t currentNodeIndex = 0;
+    std::size_t currentStackSize = 0;
+    std::size_t nodeStack[MAX_STACK_SIZE];
 
     while (true) {
         BvhLinearNode currentNode = _nodes[currentNodeIndex];
         if (currentNode.bound().isIntersectingAABB(origin, invDirection, ray.minT(), ray.maxT())) {
             if (currentNode.isLeaf()) {
-                for (uint64 i = 0; i < currentNode.intersectorCounts(); i++) {
+                for (std::size_t i = 0; i < currentNode.intersectorCounts(); i++) {
                     result |= _intersectors[currentNode.intersectorIndex() + i]->isIntersecting(ray, primitiveInfo);
                 }
 
@@ -86,19 +86,19 @@ bool BvhAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) cons
     return result;
 }
 
-bool BvhAccelerator::isOccluded(Ray& ray) const {
+bool BvhAccelerator::isOccluded(const Ray& ray) const {
     Vector3R origin = ray.origin();
     Vector3R invDirection = ray.direction().reciprocal();
     int32 dirIsNegative[3] = { invDirection.x() < 0.0_r, invDirection.y() < 0.0_r, invDirection.z() < 0.0_r };
-    uint64 currentNodeIndex = 0;
-    uint64 currentStackSize = 0;
-    uint64 nodeStack[MAX_STACK_SIZE];
+    std::size_t currentNodeIndex = 0;
+    std::size_t currentStackSize = 0;
+    std::size_t nodeStack[MAX_STACK_SIZE];
 
     while (true) {
         BvhLinearNode currentNode = _nodes[currentNodeIndex];
         if (currentNode.bound().isIntersectingAABB(origin, invDirection, ray.minT(), ray.maxT())) {
             if (currentNode.isLeaf()) {
-                for (uint64 i = 0; i < currentNode.intersectorCounts(); i++) {
+                for (std::size_t i = 0; i < currentNode.intersectorCounts(); i++) {
                     if (_intersectors[currentNode.intersectorIndex() + i]->isOccluded(ray)) {
                         return true;
                     }

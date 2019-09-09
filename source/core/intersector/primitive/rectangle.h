@@ -11,7 +11,7 @@ public:
     AABB3R bound() const override;
 
     bool isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const override;
-    bool isOccluded(Ray& ray) const override;
+    bool isOccluded(const Ray& ray) const override;
 
     void evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const override;
 

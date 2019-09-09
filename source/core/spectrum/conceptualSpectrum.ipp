@@ -15,6 +15,11 @@ inline ConceptualSpectrum<Size>::ConceptualSpectrum(const real v) :
 }
 
 template<uint32 Size>
+inline ConceptualSpectrum<Size>::ConceptualSpectrum(const SpectralArray& as) :
+    _values(as) {
+}
+
+template<uint32 Size>
 inline ConceptualSpectrum<Size>::ConceptualSpectrum(const ConceptualSpectrum<Size>& cs) :
     _values(cs._values) {
 }
@@ -172,6 +177,11 @@ inline real ConceptualSpectrum<Size>::average() const {
 template<uint32 Size>
 inline real ConceptualSpectrum<Size>::maxComponent() const {
     return _values.maxComponent();
+}
+
+template<uint32 Size>
+inline ConceptualSpectrum<Size> ConceptualSpectrum<Size>::complement() const {
+    return ConceptualSpectrum<Size>(_values.complement());
 }
 
 } // namespace cadise

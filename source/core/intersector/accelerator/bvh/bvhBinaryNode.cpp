@@ -20,7 +20,7 @@ void BvhBinaryNode::initializeInternalNode(std::unique_ptr<BvhBinaryNode> firstC
     _isLeaf = false;
 }
 
-void BvhBinaryNode::initializeLeafNode(const AABB3R& bound, const uint64 intersectorIndex, const uint64 intersectorCounts) {
+void BvhBinaryNode::initializeLeafNode(const AABB3R& bound, const std::size_t intersectorIndex, const std::size_t intersectorCounts) {
     _bound = bound;
     _intersectorIndex = intersectorIndex;
     _intersectorCounts = intersectorCounts;
@@ -31,7 +31,7 @@ AABB3R BvhBinaryNode::bound() const {
     return _bound;
 }
 
-uint64 BvhBinaryNode::intersectorIndex() const {
+std::size_t BvhBinaryNode::intersectorIndex() const {
     return _intersectorIndex;
 }
 std::unique_ptr<BvhBinaryNode> BvhBinaryNode::firstChild() {
@@ -42,7 +42,7 @@ std::unique_ptr<BvhBinaryNode> BvhBinaryNode::secondChild() {
     return std::move(_children[1]);
 }
 
-uint64 BvhBinaryNode::intersectorCounts() const {
+std::size_t BvhBinaryNode::intersectorCounts() const {
     return _intersectorCounts;
 }
 

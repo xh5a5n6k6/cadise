@@ -1,5 +1,8 @@
 #include "math/matrix.h"
 
+#include "math/math.h"
+#include "math/vector.h"
+
 namespace cadise {
 
 Matrix4::Matrix4() {
@@ -127,7 +130,7 @@ Matrix4 Matrix4::lookAt(const Vector3R& pos, const Vector3R& tar, const Vector3R
 
 void Matrix4::_swapRows(const int32 r1, const int32 r2) {
     for (int32 col = 0; col < 4; col++) {
-        std::swap(_n[r1][col], _n[r2][col]);
+        math::swap(_n[r1][col], _n[r2][col]);
     }
 }
 

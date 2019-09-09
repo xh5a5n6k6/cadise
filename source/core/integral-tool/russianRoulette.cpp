@@ -1,16 +1,15 @@
 #include "core/integral-tool/russianRoulette.h"
 
+#include "math/math.h"
 #include "math/random.h"
-
-#include <algorithm>
 
 namespace cadise {
 
 namespace russianRoulette {
 
 Spectrum weightOnNextPath(const Spectrum& weight) {
-    real q = std::clamp(1.0_r - weight.maxComponent(), 0.05_r, 1.0_r);
-    real randomNumber = random::get1D();
+    real q = math::clamp(1.0_r - weight.maxComponent(), 0.05_r, 1.0_r);
+    real randomNumber = random::nextReal();
 
     // roulette survive
     if (randomNumber > q) {

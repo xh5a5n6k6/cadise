@@ -1,8 +1,8 @@
 #include "core/instantiator/instantiator.h"
 
 // light type
-#include "core/light/category/areaLight.h"
-#include "core/light/category/pointLight.h"
+#include "core/light/areaLight.h"
+#include "core/light/pointLight.h"
 
 // for area light
 #include "core/intersector/primitive/primitive.h"

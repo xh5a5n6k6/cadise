@@ -1,16 +1,16 @@
-#include "core/intersector/primitive/category/triangle.h"
+#include "core/intersector/primitive/triangle.h"
 
-#include "core/intersector/primitive/primitiveInfo.h"
+#include "core/intersector/primitiveInfo.h"
 #include "core/ray.h"
 #include "core/surfaceInfo.h"
 #include "core/texture/mapper/textureMapper.h"
 
 #include "fundamental/assertion.h"
 
+#include "math/aabb.h"
 #include "math/constant.h"
 #include "math/random.h"
 
-#include <cmath>
 #include <limits>
 
 namespace cadise {
@@ -71,7 +71,7 @@ bool Triangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
     return true;
 }
 
-bool Triangle::isOccluded(Ray& ray) const {
+bool Triangle::isOccluded(const Ray& ray) const {
     Vector3R D = ray.direction();
     Vector3R eA = _eA;
     Vector3R eB = _eB;
@@ -145,8 +145,8 @@ void Triangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurfa
 
     // Use rejection method
     do {
-        s = random::get1D();
-        t = random::get1D();
+        s = random::nextReal();
+        t = random::nextReal();
     } while (s + t >= 1.0_r);
 
     Vector3R eA = _eA;

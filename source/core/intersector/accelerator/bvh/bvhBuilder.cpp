@@ -14,7 +14,7 @@ BvhBuilder::BvhBuilder(const BvhSplitter& splitter) :
 std::unique_ptr<BvhBinaryNode> BvhBuilder::buildBinaryNodes(
     const std::vector<std::shared_ptr<Intersector>>& intersectors, 
     std::vector<std::shared_ptr<Intersector>>& orderedIntersectors,
-    uint64& totalSize) const {
+    std::size_t& totalSize) const {
 
     std::unique_ptr<BvhBinaryNode> root = nullptr;
     root = _buildBinaryNodesRecursively(intersectors, orderedIntersectors, 0, totalSize);
@@ -24,7 +24,7 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::buildBinaryNodes(
 
 void BvhBuilder::buildLinearNodes(std::unique_ptr<BvhBinaryNode> root, 
                                   std::vector<BvhLinearNode>& linearNodes,
-                                  const uint64 totalSize) const {
+                                  const std::size_t totalSize) const {
     std::vector<BvhLinearNode> nodes;
     nodes.reserve(totalSize);
 
@@ -36,14 +36,14 @@ void BvhBuilder::buildLinearNodes(std::unique_ptr<BvhBinaryNode> root,
 std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
     const std::vector<std::shared_ptr<Intersector>>& intersectors, 
     std::vector<std::shared_ptr<Intersector>>& orderedIntersectors,
-    const uint64 startIndex,
-    uint64& totalSize) const {
+    const std::size_t startIndex,
+    std::size_t& totalSize) const {
 
     std::unique_ptr<BvhBinaryNode> node = std::make_unique<BvhBinaryNode>();
 
     if (intersectors.size() <= MAX_INTERSECTOR_SIZE) {
         AABB3R leafNodeBound;
-        for (uint64 i = 0; i < intersectors.size(); i++) {
+        for (std::size_t i = 0; i < intersectors.size(); i++) {
             orderedIntersectors.push_back(intersectors[i]);
             leafNodeBound.unionWith(intersectors[i]->bound());
         }
@@ -52,7 +52,7 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
     }
     else {
         AABB3R internalNodeBound;
-        for (uint64 i = 0; i < intersectors.size(); i++) {
+        for (std::size_t i = 0; i < intersectors.size(); i++) {
             internalNodeBound.unionWith(intersectors[i]->bound());
         }
         uint32 splitAxis = internalNodeBound.maxAxis();
@@ -94,9 +94,9 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
 
 void BvhBuilder::_buildLinearNodesRecursively(std::unique_ptr<BvhBinaryNode> binaryNode, 
                                               std::vector<BvhLinearNode>& linearNodes,
-                                              std::shared_ptr<uint64> nodeIndex) const {
+                                              std::size_t* const nodeIndex) const {
     BvhLinearNode linearNode;
-    uint64 index = linearNodes.size();
+    std::size_t index = linearNodes.size();
     if (nodeIndex) {
         *nodeIndex = index;
     }
@@ -111,12 +111,12 @@ void BvhBuilder::_buildLinearNodesRecursively(std::unique_ptr<BvhBinaryNode> bin
         linearNodes.push_back(linearNode);
         AABB3R internalNodeBound = binaryNode->bound();
         uint32 internalNodeSplitAxis = binaryNode->splitAxis();
-        std::shared_ptr<uint64> secondChildIndex = std::make_shared<uint64>(0);
+        std::size_t secondChildIndex;
 
         _buildLinearNodesRecursively(std::move(binaryNode->firstChild()), linearNodes, nullptr);
-        _buildLinearNodesRecursively(std::move(binaryNode->secondChild()), linearNodes, secondChildIndex);
+        _buildLinearNodesRecursively(std::move(binaryNode->secondChild()), linearNodes, &secondChildIndex);
 
-        linearNodes[index].initializeInternalNode(internalNodeBound, *secondChildIndex, internalNodeSplitAxis);
+        linearNodes[index].initializeInternalNode(internalNodeBound, secondChildIndex, internalNodeSplitAxis);
     }
 }
 
@@ -124,7 +124,7 @@ bool BvhBuilder::_splitWith_EQUAL(const std::vector<std::shared_ptr<Intersector>
                                   const uint32 splitAxis,
                                   std::vector<std::shared_ptr<Intersector>>& subIntersectorsA,
                                   std::vector<std::shared_ptr<Intersector>>& subIntersectorsB) const {
-    uint64 size = (intersectors.size() + 1) / 2;
+    std::size_t size = (intersectors.size() + 1) / 2;
     subIntersectorsA.reserve(size);
     subIntersectorsB.reserve(size);
 

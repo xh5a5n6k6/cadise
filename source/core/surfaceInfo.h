@@ -1,5 +1,6 @@
 #pragma once
 
+#include "math/mathType.h"
 #include "math/vector.h"
 
 namespace cadise {

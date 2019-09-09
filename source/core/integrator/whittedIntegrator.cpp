@@ -1,4 +1,4 @@
-#include "core/integrator/category/whittedIntegrator.h"
+#include "core/integrator/whittedIntegrator.h"
 
 #include "core/bsdf/bsdf.h"
 #include "core/intersector/primitive/primitive.h"
@@ -42,11 +42,11 @@ Spectrum WhittedIntegrator::traceRadiance(const Scene& scene, const Ray& ray) co
     
     // add direct light only at non-specular surface
     if (!isSpecular) {
-        for (uint64 index = 0; index < scene.lights().size(); index++) {
+        for (std::size_t i = 0; i < scene.lights().size(); i++) {
             Vector3R lightDir;
             real t;
             real pdf;
-            Spectrum radiance = scene.lights()[index]->evaluateSampleRadiance(lightDir, intersection.surfaceInfo(), t, pdf);
+            Spectrum radiance = scene.lights()[i]->evaluateSampleRadiance(lightDir, intersection.surfaceInfo(), t, pdf);
 
             // generate shadow ray to do occluded test
             Ray shadowRay = Ray(hitPoint + constant::RAY_EPSILON * hitNormal,

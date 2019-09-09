@@ -1,28 +1,27 @@
 #include "math/random.h"
 
+#include "math/math.h"
+
 #include <random>
 
 namespace cadise {
 
 namespace random {
 
-static std::random_device rd;
-static std::default_random_engine gen = std::default_random_engine(rd());
+static std::random_device randomDevice;
+static std::default_random_engine generator = std::default_random_engine(randomDevice());
 
-real get1D() {
-    std::uniform_real_distribution<real> dis(0.0_r, 1.0_r);
+real nextReal() {
+    std::uniform_real_distribution<real> distribution(0.0_r, 1.0_r);
 
-    return dis(gen);
+    return distribution(generator);
 }
 
-Vector2R get2D() {
-    return Vector2R(get1D(), get1D());
-}
+std::size_t nextIndex(const std::size_t minIndex, const std::size_t maxIndex) {
+    std::size_t interval = maxIndex - minIndex;
+    std::size_t sampleIndex = static_cast<std::size_t>(minIndex + nextReal() * maxIndex);
 
-int32 get1DInt32(const int32 minNumber, const int32 maxNumber) {
-    std::uniform_int_distribution<int32> dis(minNumber, maxNumber);
-
-    return dis(gen);
+    return math::clamp(sampleIndex, minIndex, maxIndex);
 }
 
 } // namespace random

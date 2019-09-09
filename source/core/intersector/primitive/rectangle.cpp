@@ -1,12 +1,13 @@
-#include "core/intersector/primitive/category/rectangle.h"
+#include "core/intersector/primitive/rectangle.h"
 
-#include "core/intersector/primitive/primitiveInfo.h"
+#include "core/intersector/primitiveInfo.h"
 #include "core/ray.h"
 #include "core/surfaceInfo.h"
 #include "core/texture/mapper/textureMapper.h"
 
 #include "fundamental/assertion.h"
 
+#include "math/aabb.h"
 #include "math/random.h"
 
 #include <limits>
@@ -64,7 +65,7 @@ bool Rectangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
     return true;
 }
 
-bool Rectangle::isOccluded(Ray& ray) const {
+bool Rectangle::isOccluded(const Ray& ray) const {
     Vector3R eA = _eA;
     Vector3R eB = _eB;
     if (ray.direction().dot(eA.cross(eB)) > 0.0_r) {
@@ -133,8 +134,8 @@ void Rectangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurf
 
     // use rejection method
     do {
-        s = random::get1D();
-        t = random::get1D();
+        s = random::nextReal();
+        t = random::nextReal();
     } while (t > shortWidth / longWidth);
 
     Vector3R point = _vB + s * eA + t * eA.length() * eB.normalize();

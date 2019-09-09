@@ -12,8 +12,8 @@ Tokenizer::Tokenizer() = default;
 std::shared_ptr<SdData> Tokenizer::tokenize(const std::string_view& data) const {
     std::shared_ptr<SdData> sdData = std::make_shared<SdData>();
 
-    uint64 startPosition = 0;
-    uint64 endPosition   = 0;
+    std::size_t startPosition = 0;
+    std::size_t endPosition   = 0;
 
     // tokenize sdClassType, which is string before '{'
     while (!std::isalpha(data[startPosition])) {
@@ -29,7 +29,7 @@ std::shared_ptr<SdData> Tokenizer::tokenize(const std::string_view& data) const 
     // tokenize each SdDataUnit, which is string enclosed by '[' and ']'
     while ((startPosition = data.find_first_of('[', endPosition)) != std::string_view::npos) {
         endPosition = data.find_first_of(']', startPosition);
-        uint64 dataUnitLength = endPosition - startPosition - 1;
+        std::size_t dataUnitLength = endPosition - startPosition - 1;
 
         // dataUnitString doesn't include '[' and ']'
         std::string_view dataUnitString = data.substr(startPosition + 1, dataUnitLength);
@@ -42,8 +42,8 @@ std::shared_ptr<SdData> Tokenizer::tokenize(const std::string_view& data) const 
 }
 
 void Tokenizer::_parseDataUnit(std::shared_ptr<SdData>& sdData, const std::string_view& dataUnitString) const {
-    uint64 startPosition = 0;
-    uint64 endPosition   = 0;
+    std::size_t startPosition = 0;
+    std::size_t endPosition   = 0;
     
     // parse variable name
     startPosition = dataUnitString.find_first_not_of(' ', endPosition);
@@ -149,8 +149,8 @@ std::unique_ptr<int32[]> Tokenizer::_parseInt32(const std::string_view& value) c
 std::unique_ptr<Vector3R[]> Tokenizer::_parseVector3R(const std::string_view& value) const {
     std::unique_ptr<Vector3R[]> result(new Vector3R);
 
-    uint64 startPosition = 0;
-    uint64 endPosition   = 0;
+    std::size_t startPosition = 0;
+    std::size_t endPosition   = 0;
     std::string x;
     std::string y;
     std::string z;
@@ -186,14 +186,14 @@ std::unique_ptr<real[]> Tokenizer::_parseRealArray(
     const std::string_view& value, int32* const valueNumber) const {
 
     std::vector<real> realVector;
-    uint64 startPosition = 0;
-    uint64 endPosition = 0;
+    std::size_t startPosition = 0;
+    std::size_t endPosition = 0;
 
     // TODO : while real loop
 
     std::unique_ptr<real[]> result(new real[realVector.size()]);
-    for (uint64 index = 0; index < realVector.size(); index++) {
-        result[index] = realVector[index];
+    for (std::size_t i = 0; i < realVector.size(); i++) {
+        result[i] = realVector[i];
     }
 
     *valueNumber = static_cast<int32>(realVector.size());
@@ -204,8 +204,8 @@ std::unique_ptr<Vector3R[]> Tokenizer::_parseVector3RArray(
     const std::string_view& value, int32* const valueNumber) const {
 
     std::vector<Vector3R> vector3rVector;
-    uint64 startPosition = 0;
-    uint64 endPosition   = 0;
+    std::size_t startPosition = 0;
+    std::size_t endPosition   = 0;
 
     // while vector3r loop
     while ((startPosition = value.find_first_not_of(' ', startPosition)) != std::string_view::npos) {
@@ -218,7 +218,7 @@ std::unique_ptr<Vector3R[]> Tokenizer::_parseVector3RArray(
         std::string y;
         std::string z;
 
-        uint64 tmpPosition = value.find_first_of(' ', startPosition);
+        std::size_t tmpPosition = value.find_first_of(' ', startPosition);
         x = value.substr(startPosition, tmpPosition - startPosition);
 
         startPosition = value.find_first_not_of(' ', tmpPosition + 1);
@@ -236,8 +236,8 @@ std::unique_ptr<Vector3R[]> Tokenizer::_parseVector3RArray(
     }
 
     std::unique_ptr<Vector3R[]> result(new Vector3R[vector3rVector.size()]);
-    for (uint64 index = 0; index < vector3rVector.size(); index++) {
-        result[index] = vector3rVector[index];
+    for (std::size_t i = 0; i < vector3rVector.size(); i++) {
+        result[i] = vector3rVector[i];
     }
 
     *valueNumber = static_cast<int32>(vector3rVector.size());

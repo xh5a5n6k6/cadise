@@ -2,13 +2,14 @@
 
 #include "core/renderer/renderer.h"
 
-#include "math/type.h"
+#include "math/fundamentalType.h"
 
 #include <memory>
 
 namespace cadise {
 
 class Integrator;
+class Sampler;
 
 class SamplingRenderer : public Renderer {
 public:
@@ -18,6 +19,7 @@ public:
 
 private:
     std::shared_ptr<Integrator> _integrator;
+    //std::shared_ptr<Sampler> _sampler;
 
     int32 _sampleNumber;
 };

@@ -18,7 +18,7 @@ public:
           const std::shared_ptr<Camera>& camera);
 
     bool isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) const;
-    bool isOccluded(Ray& ray) const;
+    bool isOccluded(const Ray& ray) const;
     
     std::vector<std::shared_ptr<Light>> lights() const;
     std::shared_ptr<Camera> camera() const;

@@ -21,7 +21,7 @@ public:
     virtual AABB3R bound() const override = 0;
 
     virtual bool isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const override = 0;
-    virtual bool isOccluded(Ray& ray) const override = 0;
+    virtual bool isOccluded(const Ray& ray) const override = 0;
 
     virtual void evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const = 0;
 
