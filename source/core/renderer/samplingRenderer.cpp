@@ -1,4 +1,4 @@
-#include "core/renderer/sampleRenderer.h"
+#include "core/renderer/samplingRenderer.h"
 
 #include "core/camera/camera.h"
 #include "core/film.h"
@@ -11,12 +11,12 @@
 
 namespace cadise {
 
-SampleRenderer::SampleRenderer(const std::shared_ptr<Integrator>& integrator, const int32 sampleNumber) :
+SamplingRenderer::SamplingRenderer(const std::shared_ptr<Integrator>& integrator, const int32 sampleNumber) :
     _integrator(integrator),
     _sampleNumber(sampleNumber) {
 }
 
-void SampleRenderer::render(const Scene& scene) const {
+void SamplingRenderer::render(const Scene& scene) const {
     std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 
     int32 rx = scene.camera()->film().resolution().x();

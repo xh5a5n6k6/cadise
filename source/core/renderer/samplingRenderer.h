@@ -10,9 +10,9 @@ namespace cadise {
 
 class Integrator;
 
-class SampleRenderer : public Renderer {
+class SamplingRenderer : public Renderer {
 public:
-    SampleRenderer(const std::shared_ptr<Integrator>& integrator, const int32 sampleNumber);
+    SamplingRenderer(const std::shared_ptr<Integrator>& integrator, const int32 sampleNumber);
 
     void render(const Scene& scene) const override;
 
