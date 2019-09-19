@@ -17,6 +17,20 @@ real radianToDegree(const real radian) {
     return radian * constant::DEGREE_PER_RADIAN;
 }
 
+std::size_t nearestLowerSquareNumber(const std::size_t number) {
+    std::size_t lowerSqrtNumber
+        = static_cast<std::size_t>(std::floor(std::sqrt(static_cast<real>(number))));
+
+    return lowerSqrtNumber * lowerSqrtNumber;
+}
+
+std::size_t nearestUpperSquareNumber(const std::size_t number) {
+    std::size_t upperSqrtNumber
+        = static_cast<std::size_t>(std::ceil(std::sqrt(static_cast<real>(number))));
+
+    return upperSqrtNumber * upperSqrtNumber;
+}
+
 void buildCoordinateSystem(const Vector3R& zAxis, Vector3R& xAxis, Vector3R& yAxis) {
     if (std::abs(zAxis.x()) > std::abs(zAxis.y())) {
         xAxis = Vector3R(-zAxis.z(), 0.0_r, zAxis.x()) / std::sqrt(zAxis.x() * zAxis.x() + zAxis.z() * zAxis.z());

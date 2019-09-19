@@ -13,9 +13,9 @@ static std::shared_ptr<Renderer> createSampling(
     const std::shared_ptr<SdData>& data) {
 
     const std::shared_ptr<Integrator> integrator   = makeIntegrator(data);
-    const int32                       sampleNumber = data->findInt32("sample-number", 4);
+    const std::shared_ptr<Sampler>    sampler      = makeSampler(data);
 
-    return std::make_shared<SamplingRenderer>(std::move(integrator), sampleNumber);
+    return std::make_shared<SamplingRenderer>(std::move(integrator), std::move(sampler));
 }
 
 std::shared_ptr<Renderer> makeRenderer(

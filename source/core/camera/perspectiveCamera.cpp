@@ -16,38 +16,34 @@ PerspectiveCamera::PerspectiveCamera(const Film& film, const real fov, const Vec
     _fov(fov),
     _cameraToWorld(Matrix4::lookAt(lookAt[0], lookAt[1], lookAt[2])) {
 
-    int32 rx = _film.resolution().x();
-    int32 ry = _film.resolution().y();
-    real aspectRatio = static_cast<real>(ry) / static_cast<real>(rx);
+    const real rx = static_cast<real>(_film.resolution().x());
+    const real ry = static_cast<real>(_film.resolution().y());
+    const real aspectRatio = ry / rx;
 
-    real screenWidth = 2.0_r * std::tan(math::degreeToRadian(_fov / 2.0_r));
-    real screenHeight = screenWidth * aspectRatio;
-    _pixelWidth = screenWidth / rx;
+    const real screenWidth  = 2.0_r * std::tan(math::degreeToRadian(_fov / 2.0_r));
+    const real screenHeight = screenWidth * aspectRatio;
+
+    _pixelWidth  = screenWidth / rx;
     _pixelHeight = screenHeight / ry;
+    _leftUpFilmPosition = Vector2R(-0.5_r * screenWidth, 0.5_r * screenHeight);
 }
 
-Ray PerspectiveCamera::spawnPrimaryRay(const int32 px, const int32 py) const {
-    real sx = random::nextReal();
-    real sy = random::nextReal();
+Ray PerspectiveCamera::spawnPrimaryRay(const Vector2I& pixelIndex, const Vector2R& sample) const {
+    const real x = _leftUpFilmPosition.x();
+    const real y = _leftUpFilmPosition.y();
 
-    real sampleX = px * _pixelWidth + sx * _pixelWidth;
-    real sampleY = py * _pixelHeight + sy * _pixelHeight;
+    Vector3R samplePoint = Vector3R(x + (static_cast<real>(pixelIndex.x()) + sample.x()) * _pixelWidth, 
+                                    y - (static_cast<real>(pixelIndex.y()) + sample.y()) * _pixelHeight,
+                                    -1.0_r);
 
-    int32 rx = _film.resolution().x();
-    int32 ry = _film.resolution().y();
-    real aspectRatio = static_cast<real>(ry) / static_cast<real>(rx);
-    real halfScreenWidth  = std::tan(math::degreeToRadian(_fov / 2.0_r));
-    real halfScreenHeight = halfScreenWidth * aspectRatio;
+    Vector3R origin    = _cameraToWorld.transformPoint(Vector3R(0.0_r, 0.0_r, 0.0_r));
+    Vector3R direction = _cameraToWorld.transformVector(samplePoint);
 
-    real left = -halfScreenWidth;
-    real up = halfScreenHeight;
-    Vector3R samplePoint = Vector3R(left + sampleX, up - sampleY, -1.0_r);
-
-    Vector3R origin = _cameraToWorld.transformPoint(Vector3R(0.0_r, 0.0_r, 0.0_r));
-    Vector3R dir = _cameraToWorld.transformVector(samplePoint);
-
-    // create ray in world space
-    return Ray(origin, dir, constant::RAY_EPSILON, std::numeric_limits<real>::max());
+    // generate ray in world space
+    return Ray(origin, 
+               direction, 
+               constant::RAY_EPSILON, 
+               std::numeric_limits<real>::max());
 }
 
 Film PerspectiveCamera::film() const {

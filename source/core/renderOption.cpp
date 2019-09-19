@@ -59,8 +59,11 @@ void RenderOption::prepareRender() {
 
     std::shared_ptr<Accelerator> accelerator = instantiator::makeAccelerator(_acceleratorData, _intersectors);
     std::shared_ptr<Camera> camera = instantiator::makeCamera(_cameraData);
-    _scene = std::make_shared<Scene>(std::move(accelerator), _lights, std::move(camera));
+
+    _scene = std::make_shared<Scene>(std::move(accelerator), std::move(_lights));
     _renderer = std::move(instantiator::makeRenderer(_rendererData));
+    
+    _renderer->setCamera(std::move(camera));
 }
 
 void RenderOption::startRender() const {

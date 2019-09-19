@@ -11,7 +11,7 @@ namespace cadise {
 
 namespace instantiator {
 
-static const int32 PATH_MAX_DEPTH = 10000;
+static constexpr int32 PATH_MAX_DEPTH = 10000;
 
 static std::shared_ptr<Integrator> createWhitted(
     const std::shared_ptr<SdData>& data) {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/fundamentalType.h"
+#include "math/mathType.h"
 
 namespace cadise {
 
@@ -9,7 +9,7 @@ class Ray;
 
 class Camera {
 public:
-    virtual Ray spawnPrimaryRay(const int32 px, const int32 py) const = 0;
+    virtual Ray spawnPrimaryRay(const Vector2I& pixelIndex, const Vector2R& sample) const = 0;
 
     virtual Film film() const = 0;
 };

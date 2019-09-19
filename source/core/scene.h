@@ -6,7 +6,6 @@
 namespace cadise {
 
 class Accelerator;
-class Camera;
 class SurfaceIntersection;
 class Light;
 class Ray;
@@ -14,19 +13,16 @@ class Ray;
 class Scene {
 public:
     Scene(const std::shared_ptr<Accelerator>& accelerator,
-          const std::vector<std::shared_ptr<Light>>& lights,
-          const std::shared_ptr<Camera>& camera);
+          const std::vector<std::shared_ptr<Light>>& lights);
 
     bool isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) const;
     bool isOccluded(const Ray& ray) const;
     
     std::vector<std::shared_ptr<Light>> lights() const;
-    std::shared_ptr<Camera> camera() const;
 
 private:
-    std::shared_ptr<Accelerator> _accelerator;
+    std::shared_ptr<Accelerator> _topAccelerator;
     std::vector<std::shared_ptr<Light>> _lights;
-    std::shared_ptr<Camera> _camera;
 };
 
 } // namespace cadise

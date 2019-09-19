@@ -1,6 +1,6 @@
 # Cadise Renderer
 
-<img src="./gallery/cornell-box-sphere/20190821.png"><br />
+<img src="./gallery/cornell-box-sphere/20190910.jpg"><br />
 
 <p align="center"><i>Cornell Box (with spheres) Rendered with Cadise</i></p>
 
@@ -17,9 +17,7 @@ Cadise is still been developing and more features will be implemented.
     - Unidirectional Path Tracing
     - Unidirectional Path Tracing with Next Event Estimation
 - ### Accelerator
-    - BVH
-- ### Camera
-    - Pinhole Perspective
+    - BVH (equal)
 - ### BSDF
     - Lambertian Diffuse
     - Specular Reflection
@@ -36,6 +34,11 @@ Cadise is still been developing and more features will be implemented.
 - ### Texture
     - Constant
     - Checkerboard
+- ### Camera
+    - Pinhole Perspective
+- ### Sampling
+    - Random
+    - Stratified
 
 ## License
 Cadise is under the [MIT](https://opensource.org/licenses/MIT) license. 

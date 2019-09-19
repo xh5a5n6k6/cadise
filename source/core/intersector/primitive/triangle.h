@@ -32,8 +32,8 @@ private:
     Vector3R _uvwB;
     Vector3R _uvwC;
 
-    Vector3R _eA;
-    Vector3R _eB;
+    Vector3R _eAB;
+    Vector3R _eAC;
 };
 
 } // namespace cadise

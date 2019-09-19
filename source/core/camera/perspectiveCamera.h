@@ -12,7 +12,7 @@ class PerspectiveCamera : public Camera {
 public:
     PerspectiveCamera(const Film& film, const real fov, const Vector3R* const lookAt);
 
-    Ray spawnPrimaryRay(const int32 px, const int32 py) const override;
+    Ray spawnPrimaryRay(const Vector2I& pixelIndex, const Vector2R& sample) const override;
 
     Film film() const override;
 
@@ -23,6 +23,7 @@ private:
 
     real _pixelWidth;
     real _pixelHeight;
+    Vector2R _leftUpFilmPosition;
 };
 
 } // namespace cadise

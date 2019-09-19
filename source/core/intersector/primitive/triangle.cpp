@@ -21,12 +21,12 @@ Triangle::Triangle(const std::shared_ptr<Bsdf>& bsdf, const Vector3R& vA, const 
     _vB(vB), 
     _vC(vC) {
     
-    _eA = _vB - _vA;
-    _eB = _vC - _vA;
+    _eAB = _vB - _vA;
+    _eAC = _vC - _vA;
 
     _uvwA = Vector3R(0.0_r, 0.0_r, 0.0_r);
     _uvwB = Vector3R(1.0_r, 0.0_r, 0.0_r);
-    _uvwC = Vector3R(1.0_r, 1.0_r, 0.0_r);
+    _uvwC = Vector3R(0.0_r, 1.0_r, 0.0_r);
 }
 
 AABB3R Triangle::bound() const {
@@ -35,24 +35,24 @@ AABB3R Triangle::bound() const {
 
 bool Triangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
     Vector3R D = ray.direction();
-    Vector3R eA = _eA;
-    Vector3R eB = _eB;
+    Vector3R eAB = _eAB;
+    Vector3R eAC = _eAC;
     bool isBackSide = false;
-    if (D.dot(eA.cross(eB)) > 0.0_r) {
-        eA.swap(eB);
+    if (D.dot(eAB.cross(eAC)) > 0.0_r) {
+        eAB.swap(eAC);
         isBackSide = true;
     }
     Vector3R T = ray.origin() - _vA;
-    Vector3R Q = T.cross(eA);
-    Vector3R P = D.cross(eB);
+    Vector3R Q = T.cross(eAB);
+    Vector3R P = D.cross(eAC);
 
-    real denominator = P.dot(eA);
-    if (denominator - 0.0_r < std::numeric_limits<real>::epsilon()) {
+    real denominator = P.dot(eAB);
+    if (denominator == 0.0_r) {
         return false;
     }
 
     real invDenominator = 1.0_r / denominator;
-    real t = Q.dot(eB) * invDenominator;
+    real t = Q.dot(eAC) * invDenominator;
     real u = P.dot(T) * invDenominator;
     real v = Q.dot(D) * invDenominator;
 
@@ -73,22 +73,22 @@ bool Triangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
 
 bool Triangle::isOccluded(const Ray& ray) const {
     Vector3R D = ray.direction();
-    Vector3R eA = _eA;
-    Vector3R eB = _eB;
-    if (D.dot(eA.cross(eB)) > 0.0_r) {
-        eA.swap(eB);
+    Vector3R eAB = _eAB;
+    Vector3R eAC = _eAC;
+    if (D.dot(eAB.cross(eAC)) > 0.0_r) {
+        eAB.swap(eAC);
     }
     Vector3R T = ray.origin() - _vA;
-    Vector3R Q = T.cross(eA);
-    Vector3R P = D.cross(eB);
+    Vector3R Q = T.cross(eAB);
+    Vector3R P = D.cross(eAC);
 
-    real denominator = P.dot(eA);
-    if (denominator - 0.0_r < std::numeric_limits<real>::epsilon()) {
+    real denominator = P.dot(eAB);
+    if (denominator == 0.0_r) {
         return false;
     }
 
     real invDenominator = 1.0_r / denominator;
-    real t = Q.dot(eB) * invDenominator;
+    real t = Q.dot(eAC) * invDenominator;
     real u = P.dot(T) * invDenominator;
     real v = Q.dot(D) * invDenominator;
 
@@ -104,7 +104,7 @@ bool Triangle::isOccluded(const Ray& ray) const {
 }
 
 void Triangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const {
-    Vector3R normal = _eA.cross(_eB).normalize();
+    Vector3R normal = _eAB.cross(_eAC).normalize();
     surfaceInfo.setFrontNormal(normal);
 
     normal = (primitiveInfo.isBackSide()) ? normal.composite() : normal;
@@ -119,20 +119,27 @@ void Triangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, Surface
     else {
         // TODO : integrate with intersecting/occluded 
         //        barycentric coordinate calculation
-        const Vector3R P = surfaceInfo.point();
-        const Vector3R AP = P - _vA;
-        const Vector3R AB = _eA;
-        const Vector3R AC = _eB;
-        
-        real invDenominator = 1.0_r / AB.cross(AC).length();
+        Vector3R v0 = _vB - _vA;
+        Vector3R v1 = _vC - _vA;
+        Vector3R v2 = surfaceInfo.point() - _vA;
+        real d00 = v0.dot(v0);
+        real d01 = v0.dot(v1);
+        real d11 = v1.dot(v1);
+        real d20 = v2.dot(v0);
+        real d21 = v2.dot(v1);
+        real denominator = d00 * d11 - d01 * d01;
+        if (denominator == 0.0_r) {
+            uvw = Vector3R(0.0_r, 0.0_r, 0.0_r);
+        }
+        else {
+            real invDenominator = 1.0_r / denominator;
+            real u = (d11 * d20 - d01 * d21) * invDenominator;
+            real v = (d00 * d21 - d01 * d20) * invDenominator;
 
-        CADISE_ASSERT(std::isfinite(invDenominator));
-
-        real u = AP.cross(AC).length() * invDenominator;
-        real v = AP.cross(AB).length() * invDenominator;
-        uvw = (1.0_r - u - v) * _uvwA +
-              u * _uvwB +
-              v * _uvwC;
+            uvw = (1.0_r - u - v) * _uvwA +
+                  u * _uvwB +
+                  v * _uvwC;
+        }
         surfaceInfo.setUvw(uvw);
     }
 }
@@ -149,14 +156,14 @@ void Triangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurfa
         t = random::nextReal();
     } while (s + t >= 1.0_r);
 
-    Vector3R eA = _eA;
-    Vector3R eB = _eB;
-    Vector3R point = _vA + s * eA + t * eB;
+    Vector3R eAB = _eAB;
+    Vector3R eAC = _eAC;
+    Vector3R point = _vA + s * eAB + t * eAC;
     Vector3R direction = point - inSurface.point();
-    if (direction.dot(eA.cross(eB)) > 0.0_r) {
-        eA.swap(eB);
+    if (direction.dot(eAB.cross(eAC)) > 0.0_r) {
+        eAB.swap(eAC);
     }
-    Vector3R normal = eA.cross(eB).normalize();
+    Vector3R normal = eAB.cross(eAC).normalize();
 
     outSurface.setPoint(point);
     outSurface.setGeometryNormal(normal);
@@ -169,7 +176,7 @@ real Triangle::samplePdfA(const Vector3R& position) const {
 }
 
 real Triangle::area() const {
-    return 0.5_r * _eA.cross(_eB).length();
+    return 0.5_r * _eAB.cross(_eAC).length();
 }
 
 void Triangle::setUvwA(const Vector3R& uvwA) {

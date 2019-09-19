@@ -4,11 +4,23 @@
 
 namespace cadise {
 
+// some math utilities here
+//
 namespace math {
 
 real degreeToRadian(const real degree);
 
 real radianToDegree(const real radian);
+
+// find the nearest perfect square number which is not greater than
+// input number
+//
+std::size_t nearestLowerSquareNumber(const std::size_t number);
+
+// find the nearest perfect square number which is not less than
+// input number
+//
+std::size_t nearestUpperSquareNumber(const std::size_t number);
 
 void buildCoordinateSystem(const Vector3R& zAxis, Vector3R& xAxis, Vector3R& yAxis);
 

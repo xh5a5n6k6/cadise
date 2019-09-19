@@ -1,6 +1,5 @@
 #include "core/scene.h"
 
-#include "core/camera/camera.h"
 #include "core/intersector/accelerator/accelerator.h"
 #include "core/intersector/primitive/primitive.h"
 #include "core/light/light.h"
@@ -10,16 +9,14 @@
 namespace cadise {
 
 Scene::Scene(const std::shared_ptr<Accelerator>& accelerator,
-             const std::vector<std::shared_ptr<Light>>& lights,
-             const std::shared_ptr<Camera>& camera) :
-    _accelerator(std::move(accelerator)),
-    _lights(std::move(lights)), 
-    _camera(std::move(camera)) {
+             const std::vector<std::shared_ptr<Light>>& lights) :
+    _topAccelerator(std::move(accelerator)),
+    _lights(std::move(lights)) {
 }
 
 bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) const {
     PrimitiveInfo primitiveInfo;
-    bool isHit = _accelerator->isIntersecting(ray, primitiveInfo);
+    bool isHit = _topAccelerator->isIntersecting(ray, primitiveInfo);
     if (isHit) {
         surfaceIntersection.setWi(ray.direction().composite());
         surfaceIntersection.setPrimitiveInfo(primitiveInfo);
@@ -37,15 +34,11 @@ bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) c
 }
 
 bool Scene::isOccluded(const Ray& ray) const {
-    return _accelerator->isOccluded(ray);
+    return _topAccelerator->isOccluded(ray);
 }
 
 std::vector<std::shared_ptr<Light>> Scene::lights() const {
     return _lights;
-}
-
-std::shared_ptr<Camera> Scene::camera() const {
-    return _camera;
 }
 
 } // namespace cadise

@@ -1,7 +1,6 @@
 #include "fundamental/assertion.h"
 
 #ifdef CADISE_DEBUG
-
     #ifdef CADISE_ASSERT_STACK_TRACE
         #include "fundamental/stackTracer.h"
     #endif
@@ -26,5 +25,4 @@
     }
 
     } // namespace cadise
-
 #endif
