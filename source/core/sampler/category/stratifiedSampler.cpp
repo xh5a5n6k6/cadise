@@ -6,6 +6,8 @@
 #include "math/math.h"
 #include "math/random.h"
 
+#include <cmath>
+
 namespace cadise {
 
 StratifiedSampler::StratifiedSampler(const std::size_t sampleNumber) :
