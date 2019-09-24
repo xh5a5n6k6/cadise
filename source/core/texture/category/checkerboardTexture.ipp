@@ -19,8 +19,8 @@ inline CheckerboardTexture<T>::CheckerboardTexture(const real oddTextureNumber, 
 
 template<typename T>
 inline T CheckerboardTexture<T>::evaluate(const Vector3R& uvw) const {
-    int32 uCast = static_cast<int32>(std::floor(uvw.x() / _oddTextureSize));
-    int32 vCast = static_cast<int32>(std::floor(uvw.y() / _evenTextureSize));
+    const int32 uCast = static_cast<int32>(std::floor(uvw.x() / _oddTextureSize));
+    const int32 vCast = static_cast<int32>(std::floor(uvw.y() / _evenTextureSize));
     
     if ((uCast + vCast) % 2 == 0) {
         return _evenTexture->evaluate(uvw);

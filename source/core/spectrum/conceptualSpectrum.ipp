@@ -165,6 +165,16 @@ inline bool ConceptualSpectrum<Size>::isZero() const {
 }
 
 template<uint32 Size>
+inline bool ConceptualSpectrum<Size>::hasNaN() const {
+    return _values.hasNaN();
+}
+
+template<uint32 Size>
+inline bool ConceptualSpectrum<Size>::hasInfinite() const {
+    return _values.hasInfinite();
+}
+
+template<uint32 Size>
 inline real ConceptualSpectrum<Size>::sum() const {
     return _values.sum();
 }

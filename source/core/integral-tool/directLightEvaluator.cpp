@@ -48,8 +48,8 @@ Spectrum DirectLightEvaluator::evaluate(const Scene& scene, const SurfaceInterse
                 // calculate bsdf's pdf
                 real bsdfPdf = bsdf->evaluatePdfW(intersection);
 
-                directLightRadiance += mis::powerHeuristic(lightPdf, bsdfPdf) *
-                                       directLightFactor * radiance / lightPdf;
+                directLightRadiance += mis::powerHeuristic(lightPdf, bsdfPdf)
+                                       * directLightFactor * radiance / lightPdf;
             }
         }
     } // mis using light sampling
@@ -77,8 +77,8 @@ Spectrum DirectLightEvaluator::evaluate(const Scene& scene, const SurfaceInterse
                     // calcualte emitter's pdf
                     real lightPdf = light->evaluatePdfW(intersection, sampleRay.maxT());
 
-                    directLightRadiance += mis::powerHeuristic(bsdfPdf, lightPdf) *
-                                           directLightFactor * radiance / bsdfPdf;
+                    directLightRadiance += mis::powerHeuristic(bsdfPdf, lightPdf)
+                                           * directLightFactor * radiance / bsdfPdf;
                 }
             }
         }

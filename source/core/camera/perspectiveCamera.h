@@ -2,7 +2,7 @@
 
 #include "core/camera/camera.h"
 
-#include "core/film.h"
+#include "core/film/film.h"
 
 #include "math/matrix.h"
 
@@ -12,7 +12,7 @@ class PerspectiveCamera : public Camera {
 public:
     PerspectiveCamera(const Film& film, const real fov, const Vector3R* const lookAt);
 
-    Ray spawnPrimaryRay(const Vector2I& pixelIndex, const Vector2R& sample) const override;
+    Ray spawnPrimaryRay(const Vector2R& pixePosition) const override;
 
     Film film() const override;
 

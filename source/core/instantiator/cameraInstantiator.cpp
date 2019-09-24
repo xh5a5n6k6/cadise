@@ -5,23 +5,32 @@
 
 #include "file-io/scene-description/sdData.h"
 
+#include "fundamental/assertion.h"
+
 namespace cadise {
 
 namespace instantiator {
 
-static std::shared_ptr<Camera> createPerspective(const std::shared_ptr<SdData>& data) {
+static std::shared_ptr<Camera> createPerspective(
+    const std::shared_ptr<SdData>& data) {
+
     const std::string_view output = data->findString("output-filename", "cadise.jpg");
     const int32            width  = data->findInt32("image-width", 1024);
     const int32            height = data->findInt32("image-height", 768);
     const Vector3R*        lookAt = data->findVector3rArray("look-at");
     const real             fov    = data->findReal("fov");
 
-    const Film film(std::string(output), Vector2I(width, height));
+    const std::shared_ptr<Filter> filter = makeFilter(data);
+    const Film film(width, height, std::string(output), filter);
+
+    CADISE_ASSERT(lookAt);
 
     return std::make_shared<PerspectiveCamera>(film, fov, lookAt);
 }
 
-std::shared_ptr<Camera> makeCamera(const std::shared_ptr<SdData>& data) {
+std::shared_ptr<Camera> makeCamera(
+    const std::shared_ptr<SdData>& data) {
+
     std::shared_ptr<Camera> camera = nullptr;
     std::string_view type = data->findString("type");
     if (!type.compare("perspective")) {

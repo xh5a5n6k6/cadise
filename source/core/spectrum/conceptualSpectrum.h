@@ -35,6 +35,8 @@ public:
     ConceptualSpectrum& operator=(const ConceptualSpectrum& cs);
 
     bool isZero() const;
+    bool hasNaN() const;
+    bool hasInfinite() const;
     real sum() const;
     real average() const;
     real maxComponent() const;

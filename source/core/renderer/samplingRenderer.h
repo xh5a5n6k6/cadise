@@ -12,7 +12,7 @@ class Sampler;
 class SamplingRenderer : public Renderer {
 public:
     SamplingRenderer(const std::shared_ptr<Integrator>& integrator,
-                     const std::shared_ptr<Sampler> sampler);
+                     const std::shared_ptr<Sampler>& sampler);
 
     void render(const Scene& scene) const override;
 

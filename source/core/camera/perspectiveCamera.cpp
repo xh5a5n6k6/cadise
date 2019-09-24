@@ -28,16 +28,16 @@ PerspectiveCamera::PerspectiveCamera(const Film& film, const real fov, const Vec
     _leftUpFilmPosition = Vector2R(-0.5_r * screenWidth, 0.5_r * screenHeight);
 }
 
-Ray PerspectiveCamera::spawnPrimaryRay(const Vector2I& pixelIndex, const Vector2R& sample) const {
+Ray PerspectiveCamera::spawnPrimaryRay(const Vector2R& pixelPosition) const {
     const real x = _leftUpFilmPosition.x();
     const real y = _leftUpFilmPosition.y();
 
-    Vector3R samplePoint = Vector3R(x + (static_cast<real>(pixelIndex.x()) + sample.x()) * _pixelWidth, 
-                                    y - (static_cast<real>(pixelIndex.y()) + sample.y()) * _pixelHeight,
-                                    -1.0_r);
+    const Vector3R samplePoint = Vector3R(x + pixelPosition.x() * _pixelWidth, 
+                                          y - pixelPosition.y() * _pixelHeight,
+                                          -1.0_r);
 
-    Vector3R origin    = _cameraToWorld.transformPoint(Vector3R(0.0_r, 0.0_r, 0.0_r));
-    Vector3R direction = _cameraToWorld.transformVector(samplePoint);
+    const Vector3R origin    = _cameraToWorld.transformPoint(Vector3R(0.0_r, 0.0_r, 0.0_r));
+    const Vector3R direction = _cameraToWorld.transformVector(samplePoint);
 
     // generate ray in world space
     return Ray(origin, 

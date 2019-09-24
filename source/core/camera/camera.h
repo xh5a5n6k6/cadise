@@ -9,7 +9,7 @@ class Ray;
 
 class Camera {
 public:
-    virtual Ray spawnPrimaryRay(const Vector2I& pixelIndex, const Vector2R& sample) const = 0;
+    virtual Ray spawnPrimaryRay(const Vector2R& pixelPosition) const = 0;
 
     virtual Film film() const = 0;
 };

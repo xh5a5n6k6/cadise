@@ -16,7 +16,7 @@ public:
     virtual std::unique_ptr<SampleRecord1D> requestSample1D() const = 0;
     virtual std::unique_ptr<SampleRecord2D> requestSample2D() const = 0;
 
-    std::size_t sampleCount() const;
+    std::size_t sampleNumber() const;
 
 protected:
     std::size_t _sampleNumber;

@@ -11,6 +11,7 @@ namespace cadise {
 class Accelerator;
 class Bsdf;
 class Camera;
+class Filter;
 class Integrator;
 class Intersector;
 class Light;
@@ -35,6 +36,10 @@ std::shared_ptr<Renderer> makeRenderer(const std::shared_ptr<SdData>& data);
 // implement in core/instantiator/integratorInstantiator.cpp
 //
 std::shared_ptr<Integrator> makeIntegrator(const std::shared_ptr<SdData>& data);
+
+// implement in core/instantiator/filterInstantiator.cpp
+//
+std::shared_ptr<Filter> makeFilter(const std::shared_ptr<SdData>& data);
 
 // implement in core/instantiator/samplerInstantiator.cpp
 //

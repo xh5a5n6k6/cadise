@@ -35,6 +35,8 @@ public:
     T& operator[](const uint32 index);
 
     bool isZero() const;
+    bool hasNaN() const;
+    bool hasInfinite() const;
     T sum() const;
     T average() const;
     T length() const;

@@ -6,7 +6,7 @@ Sampler::Sampler(const std::size_t sampleNumber) :
     _sampleNumber(sampleNumber) {
 }
 
-std::size_t Sampler::sampleCount() const {
+std::size_t Sampler::sampleNumber() const {
     return _sampleNumber;
 }
 

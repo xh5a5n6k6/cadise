@@ -218,6 +218,28 @@ inline bool Vector<T, Size>::isZero() const {
 }
 
 template<typename T, uint32 Size>
+inline bool Vector<T, Size>::hasNaN() const {
+    for (uint32 index = 0; index < Size; index++) {
+        if (std::isnan(_v[index])) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+template<typename T, uint32 Size>
+inline bool Vector<T, Size>::hasInfinite() const {
+    for (uint32 index = 0; index < Size; index++) {
+        if (!std::isfinite(_v[index])) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+template<typename T, uint32 Size>
 inline T Vector<T, Size>::sum() const {
     T result = static_cast<T>(0);
     for (uint32 index = 0; index < Size; index++) {

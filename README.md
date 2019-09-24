@@ -39,6 +39,11 @@ Cadise is still been developing and more features will be implemented.
 - ### Sampling
     - Random
     - Stratified
+- ### Reconstruction Filter
+    - Box
+    - Cone
+    - Gaussian
+    - Mitchell
 
 ## License
 Cadise is under the [MIT](https://opensource.org/licenses/MIT) license. 

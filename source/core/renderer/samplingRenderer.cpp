@@ -1,7 +1,7 @@
 #include "core/renderer/samplingRenderer.h"
 
 #include "core/camera/camera.h"
-#include "core/film.h"
+#include "core/film/film.h"
 #include "core/integrator/integrator.h"
 #include "core/ray.h"
 #include "core/sampler/sampler.h"
@@ -14,7 +14,7 @@
 namespace cadise {
 
 SamplingRenderer::SamplingRenderer(const std::shared_ptr<Integrator>& integrator, 
-                                   const std::shared_ptr<Sampler> sampler) :
+                                   const std::shared_ptr<Sampler>& sampler) :
     _integrator(integrator),
     _sampler(sampler) {
 }
@@ -22,26 +22,26 @@ SamplingRenderer::SamplingRenderer(const std::shared_ptr<Integrator>& integrator
 void SamplingRenderer::render(const Scene& scene) const {
     std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 
-    int32 rx = _camera->film().resolution().x();
-    int32 ry = _camera->film().resolution().y();
+    const int32 rx = _camera->film().resolution().x();
+    const int32 ry = _camera->film().resolution().y();
 
-    real sampleWeight = 1.0_r / static_cast<real>(_sampler->sampleCount());
+    real sampleWeight = 1.0_r / static_cast<real>(_sampler->sampleNumber());
     for (int32 iy = 0; iy < ry; iy++) {
         for (int32 ix = 0; ix < rx; ix++) {
-            Vector2I currentPixel = Vector2I(ix, iy);
+            const Vector2R pixelPosition = Vector2R(static_cast<real>(ix), static_cast<real>(iy));
 
             // for each pixel, prepare sampler setup
-            std::unique_ptr<Sampler> sampleSampler = _sampler->clone(_sampler->sampleCount());
+            //
+            std::unique_ptr<Sampler> sampleSampler = _sampler->clone(_sampler->sampleNumber());
             std::unique_ptr<SampleRecord2D> sample2D = sampleSampler->requestSample2D();
 
-            for (std::size_t in = 0; in < sampleSampler->sampleCount(); in++) {
-                Ray primaryRay = _camera->spawnPrimaryRay(currentPixel, sample2D->nextSample());
-                
-                Spectrum sampleSpectrum = _integrator->traceRadiance(scene, primaryRay);
-                Vector3R sampleRGB = sampleSpectrum.transformToRgb();
-                sampleRGB *= 255.0_r * sampleWeight;
+            for (std::size_t in = 0; in < sampleSampler->sampleNumber(); in++) {  
+                const Vector2R pixelJitterPosition = pixelPosition + sample2D->nextSample();
 
-                _camera->film().addSample(ix, iy, sampleRGB);
+                Ray primaryRay = _camera->spawnPrimaryRay(pixelJitterPosition);
+                Spectrum sampleSpectrum = _integrator->traceRadiance(scene, primaryRay);
+                
+                _camera->film().addSample(pixelJitterPosition, sampleSpectrum);
             }
 
             sampleSampler.reset();
