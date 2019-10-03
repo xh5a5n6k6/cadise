@@ -14,18 +14,13 @@ namespace instantiator {
 static std::shared_ptr<Camera> createPerspective(
     const std::shared_ptr<SdData>& data) {
 
-    const std::string_view output = data->findString("output-filename", "cadise.jpg");
-    const int32            width  = data->findInt32("image-width", 1024);
-    const int32            height = data->findInt32("image-height", 768);
-    const Vector3R*        lookAt = data->findVector3rArray("look-at");
-    const real             fov    = data->findReal("fov");
 
-    const std::shared_ptr<Filter> filter = makeFilter(data);
-    const Film film(width, height, std::string(output), filter);
+    const Vector3R position  = data->findVector3r("position");
+    const Vector3R direction = data->findVector3r("direction");
+    const Vector3R up        = data->findVector3r("up");
+    const real     fov       = data->findReal("fov");
 
-    CADISE_ASSERT(lookAt);
-
-    return std::make_shared<PerspectiveCamera>(film, fov, lookAt);
+    return std::make_shared<PerspectiveCamera>(position, direction, up, fov);
 }
 
 std::shared_ptr<Camera> makeCamera(

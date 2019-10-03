@@ -11,6 +11,26 @@
 namespace cadise {
 
 template<typename T, uint32 Size>
+inline Vector<T, Size> Vector<T, Size>::min(const Vector<T, Size>& v1, const Vector<T, Size>& v2) {
+    Vector<T, Size> result;
+    for (uint32 index = 0; index < Size; index++) {
+        result._v[index] = std::min(v1._v[index], v2._v[index]);
+    }
+
+    return result;
+}
+
+template<typename T, uint32 Size>
+inline Vector<T, Size> Vector<T, Size>::max(const Vector<T, Size>& v1, const Vector<T, Size>& v2) {
+    Vector<T, Size> result;
+    for (uint32 index = 0; index < Size; index++) {
+        result._v[index] = std::max(v1._v[index], v2._v[index]);
+    }
+
+    return result;
+}
+
+template<typename T, uint32 Size>
 inline Vector<T, Size>::Vector() {
     for (uint32 index = 0; index < Size; index++) {
         _v[index] = static_cast<T>(0);
@@ -419,26 +439,6 @@ inline T Vector<T, Size>::z() const {
     static_assert(Size > 2, "Error in vector's z, this vector doesn't support z value\n");
 
     return _v[2];
-}
-
-template<typename T, uint32 Size>
-inline Vector<T, Size> Vector<T, Size>::min(const Vector<T, Size>& v1, const Vector<T, Size>& v2) {
-    Vector<T, Size> result;
-    for (uint32 index = 0; index < Size; index++) {
-        result._v[index] = std::min(v1._v[index], v2._v[index]);
-    }
-
-    return result;
-}
-
-template<typename T, uint32 Size>
-inline Vector<T, Size> Vector<T, Size>::max(const Vector<T, Size>& v1, const Vector<T, Size>& v2) {
-    Vector<T, Size> result;
-    for (uint32 index = 0; index < Size; index++) {
-        result._v[index] = std::max(v1._v[index], v2._v[index]);
-    }
-
-    return result;
 }
 
 } // namespace cadise

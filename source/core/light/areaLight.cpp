@@ -7,15 +7,17 @@
 
 namespace cadise {
 
-AreaLight::AreaLight(const Spectrum& albedo, const bool isBackFaceEmit) :
-    _albedo(albedo),
+AreaLight::AreaLight(const Spectrum& color, const real watt, const bool isBackFaceEmit) :
     _primitive(),
+    _emitRadiance(0.0_r),
+    _color(color),
+    _watt(watt),
     _isBackFaceEmit(isBackFaceEmit) {
 }
 
 Spectrum AreaLight::emittance(const Vector3R& emitDirection, const SurfaceInfo& emitSurface) const {
     if (_isBackFaceEmit) {
-        return _albedo;
+        return _emitRadiance;
     }
 
     // check if direction is at the front face 
@@ -24,7 +26,7 @@ Spectrum AreaLight::emittance(const Vector3R& emitDirection, const SurfaceInfo& 
         return Spectrum(0.0_r);
     }
     else {
-        return _albedo;
+        return _emitRadiance;
     }
 }
 
@@ -48,7 +50,7 @@ Spectrum AreaLight::evaluateSampleRadiance(Vector3R& lightDirection, const Surfa
     pdf = primitive->samplePdfA(sampleSurface.point());
     pdf *= direction.lengthSquared() / sampleSurface.geometryNormal().absDot(-direction.normalize());
 
-    return _albedo;
+    return _emitRadiance;
 }
 
 real AreaLight::evaluatePdfW(const SurfaceIntersection& surfaceIntersection, const real distance) const {
@@ -71,8 +73,20 @@ bool AreaLight::isDeltaLight() const {
     return false;
 }
 
+void AreaLight::calculateEmitRadiance() {
+    const Spectrum unitWattColor = _color / _color.sum();
+    const Spectrum totalWattColor = unitWattColor * _watt;
+
+    std::shared_ptr<Primitive> primitive = _primitive.lock();
+    _emitRadiance = totalWattColor / primitive->area() * constant::INV_PI;
+}
+
 void AreaLight::setPrimitive(const std::shared_ptr<Primitive>& primitive) {
     _primitive = primitive;
+}
+
+void AreaLight::setIsBackFaceEmit(const bool isBackFaceEmit) {
+    _isBackFaceEmit = isBackFaceEmit;
 }
 
 } // namespace cadise

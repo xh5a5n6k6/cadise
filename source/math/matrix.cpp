@@ -5,6 +5,39 @@
 
 namespace cadise {
 
+Matrix4 Matrix4::identity() {
+    return Matrix4(1.0_r, 0.0_r, 0.0_r, 0.0_r,
+                   0.0_r, 1.0_r, 0.0_r, 0.0_r,
+                   0.0_r, 0.0_r, 1.0_r, 0.0_r,
+                   0.0_r, 0.0_r, 0.0_r, 1.0_r);
+}
+
+Matrix4 Matrix4::scale(const real sx, const real sy, const real sz) {
+    return Matrix4(   sx, 0.0_r, 0.0_r, 0.0_r,
+                   0.0_r,    sy, 0.0_r, 0.0_r,
+                   0.0_r, 0.0_r,    sz, 0.0_r,
+                   0.0_r, 0.0_r, 0.0_r, 1.0_r);
+}
+
+Matrix4 Matrix4::translate(const real tx, const real ty, const real tz) {
+    return Matrix4(1.0_r, 0.0_r, 0.0_r,    tx,
+                   0.0_r, 1.0_r, 0.0_r,    ty,
+                   0.0_r, 0.0_r, 1.0_r,    tz,
+                   0.0_r, 0.0_r, 0.0_r, 1.0_r);
+}
+
+// Return cameraToWorld matrix
+Matrix4 Matrix4::lookAt(const Vector3R& position, const Vector3R& direction, const Vector3R& up) {
+    Vector3R newZ = direction.composite().normalize();
+    Vector3R newX = up.cross(newZ).normalize();
+    Vector3R newY = newZ.cross(newX);
+
+    return Matrix4(newX.x(), newY.x(), newZ.x(), position.x(),
+                   newX.y(), newY.y(), newZ.y(), position.y(),
+                   newX.z(), newY.z(), newZ.z(), position.z(),
+                      0.0_r,    0.0_r,    0.0_r,        1.0_r);
+}
+
 Matrix4::Matrix4() {
     for (int32 row = 0; row < 4; row++) {
         for (int32 col = 0; col < 4; col++) {
@@ -21,6 +54,33 @@ Matrix4::Matrix4(const real n00, const real n01, const real n02, const real n03,
     _n[1][0] = n10; _n[1][1] = n11; _n[1][2] = n12; _n[1][3] = n13;
     _n[2][0] = n20; _n[2][1] = n21; _n[2][2] = n22; _n[2][3] = n23;
     _n[3][0] = n30; _n[3][1] = n31; _n[3][2] = n32; _n[3][3] = n33;
+}
+
+Matrix4 Matrix4::operator*(const Matrix4& rhs) const {
+    Matrix4 result;
+    for (int32 row = 0; row < 4; row++) {
+        for (int32 col = 0; col < 4; col++) {
+            for (int32 in = 0; in < 4; in++) {
+                result._n[row][col] += _n[row][in] * rhs._n[in][col];
+            }
+        }
+    }
+
+    return result;
+}
+
+Matrix4& Matrix4::operator*=(const Matrix4& rhs) {
+    Matrix4 tmp;
+    for (int32 row = 0; row < 4; row++) {
+        for (int32 col = 0; col < 4; col++) {
+            for (int32 in = 0; in < 4; in++) {
+                tmp._n[row][col] += _n[row][in] * rhs._n[in][col];
+            }
+        }
+    }
+
+    *this = std::move(tmp);
+    return *this;
 }
 
 Matrix4& Matrix4::operator=(const Matrix4& mat) {
@@ -93,39 +153,6 @@ Vector3R Matrix4::transformVector(const Vector3R& v) const {
 
 real Matrix4::n(const int32 row, const int32 col) const {
     return _n[row][col];
-}
-
-Matrix4 Matrix4::identity() {
-    return Matrix4(1.0_r, 0.0_r, 0.0_r, 0.0_r,
-                   0.0_r, 1.0_r, 0.0_r, 0.0_r,
-                   0.0_r, 0.0_r, 1.0_r, 0.0_r,
-                   0.0_r, 0.0_r, 0.0_r, 1.0_r);
-}
-
-Matrix4 Matrix4::scale(const real sx, const real sy, const real sz) {
-    return Matrix4(   sx, 0.0_r, 0.0_r, 0.0_r,
-                   0.0_r,    sy, 0.0_r, 0.0_r,
-                   0.0_r, 0.0_r,    sz, 0.0_r,
-                   0.0_r, 0.0_r, 0.0_r, 1.0_r);
-}
-
-Matrix4 Matrix4::translate(const real tx, const real ty, const real tz) {
-    return Matrix4(1.0_r, 0.0_r, 0.0_r,    tx,
-                   0.0_r, 1.0_r, 0.0_r,    ty,
-                   0.0_r, 0.0_r, 1.0_r,    tz,
-                   0.0_r, 0.0_r, 0.0_r, 1.0_r);
-}
-
-// Return cameraToWorld matrix
-Matrix4 Matrix4::lookAt(const Vector3R& pos, const Vector3R& tar, const Vector3R& up) {
-    Vector3R newZ = (pos - tar).normalize();
-    Vector3R newX = up.cross(newZ).normalize();
-    Vector3R newY = newZ.cross(newX);
-
-    return Matrix4(newX.x(), newY.x(), newZ.x(), pos.x(),
-                   newX.y(), newY.y(), newZ.y(), pos.y(),
-                   newX.z(), newY.z(), newZ.z(), pos.z(),
-                      0.0_r,    0.0_r,    0.0_r,   1.0_r);
 }
 
 void Matrix4::_swapRows(const int32 r1, const int32 r2) {

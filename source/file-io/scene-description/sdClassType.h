@@ -6,6 +6,7 @@ enum class SdClassType {
     NONE,
 
     // global setting
+    FILM,
     CAMERA,
     RENDERER,
     ACCELERATOR,

@@ -30,6 +30,7 @@ public:
     void startRender() const;
 
 private:
+    void _setUpFilm(const std::shared_ptr<SdData>& data);
     void _setUpCamera(const std::shared_ptr<SdData>& data);
     void _setUpRenderer(const std::shared_ptr<SdData>& data);
     void _setUpAccelerator(const std::shared_ptr<SdData>& data);
@@ -39,6 +40,7 @@ private:
     void _setUpLight(const std::shared_ptr<SdData>& data);
     void _setUpPrimitive(const std::shared_ptr<SdData>& data);
 
+    std::shared_ptr<SdData> _filmData;
     std::shared_ptr<SdData> _cameraData;
     std::shared_ptr<SdData> _rendererData;
     std::shared_ptr<SdData> _acceleratorData;

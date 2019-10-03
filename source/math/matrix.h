@@ -6,13 +6,21 @@ namespace cadise {
 
 class Matrix4 {
 public:
+    static Matrix4 identity();
+    static Matrix4 scale(const real sx, const real sy, const real sz);
+    static Matrix4 translate(const real tx, const real ty, const real tz);
+    static Matrix4 lookAt(const Vector3R& position, const Vector3R& direction, const Vector3R& up);
+
+public:
     Matrix4();
     Matrix4(const real n00, const real n01, const real n02, const real n03,
             const real n10, const real n11, const real n12, const real n13,
             const real n20, const real n21, const real n22, const real n23,
             const real n30, const real n31, const real n32, const real n33);
 
-    Matrix4& operator=(const Matrix4& mat);
+    Matrix4 operator*(const Matrix4& rhs) const;
+    Matrix4& operator*=(const Matrix4& rhs);
+    Matrix4& operator=(const Matrix4& rhs);
 
     Matrix4 transpose() const;
     Matrix4 inverse() const;
@@ -21,11 +29,6 @@ public:
     Vector3R transformVector(const Vector3R& v) const;
 
     real n(const int32 row, const int32 col) const;
-
-    static Matrix4 identity();
-    static Matrix4 scale(const real sx, const real sy, const real sz);
-    static Matrix4 translate(const real tx, const real ty, const real tz);
-    static Matrix4 lookAt(const Vector3R& pos, const Vector3R& tar, const Vector3R& up);
 
 private:
     // swap two rows

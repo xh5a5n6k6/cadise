@@ -1,6 +1,8 @@
 #include "core/renderOption.h"
 
 #include "core/bsdf/bsdf.h"
+#include "core/camera/camera.h"
+#include "core/film/film.h"
 #include "core/instantiator/instantiator.h"
 #include "core/intersector/primitive/primitive.h"
 #include "core/light/light.h"
@@ -13,6 +15,7 @@
 namespace cadise {
 
 RenderOption::RenderOption() :
+    _filmData(nullptr),
     _cameraData(nullptr),
     _rendererData(nullptr),
     _acceleratorData(nullptr),
@@ -22,6 +25,9 @@ RenderOption::RenderOption() :
 
 void RenderOption::setUpData(const std::shared_ptr<SdData>& data) {
     switch (data->classType()) {
+        case SdClassType::FILM:
+            _setUpFilm(data);
+            break;
         case SdClassType::CAMERA:
             _setUpCamera(data);
             break;
@@ -57,17 +63,28 @@ void RenderOption::prepareRender() {
     _realTextures.clear();
     _spectrumTextures.clear();
 
-    std::shared_ptr<Accelerator> accelerator = instantiator::makeAccelerator(_acceleratorData, _intersectors);
+    std::shared_ptr<Film> film = instantiator::makeFilm(_filmData);
     std::shared_ptr<Camera> camera = instantiator::makeCamera(_cameraData);
+    std::shared_ptr<Accelerator> accelerator = instantiator::makeAccelerator(_acceleratorData, _intersectors);
 
     _scene = std::make_shared<Scene>(std::move(accelerator), std::move(_lights));
     _renderer = std::move(instantiator::makeRenderer(_rendererData));
     
+    const real rx = static_cast<real>(film->resolution().x());
+    const real ry = static_cast<real>(film->resolution().y());
+    camera->setAspectRatio(rx / ry);
+    camera->updateTransform();
+
     _renderer->setCamera(std::move(camera));
+    _renderer->setFilm(std::move(film));
 }
 
 void RenderOption::startRender() const {
     _renderer->render(*_scene);
+}
+
+void RenderOption::_setUpFilm(const std::shared_ptr<SdData>& data) {
+    _filmData = std::move(data);
 }
 
 void RenderOption::_setUpCamera(const std::shared_ptr<SdData>& data) {

@@ -1,17 +1,23 @@
 #pragma once
 
-#include "math/mathType.h"
+#include "math/vector.h"
 
 namespace cadise {
 
-class Film;
 class Ray;
 
 class Camera {
 public:
-    virtual Ray spawnPrimaryRay(const Vector2R& pixelPosition) const = 0;
+    Camera(const Vector3R& position);
 
-    virtual Film film() const = 0;
+    virtual void updateTransform() = 0;
+    virtual Ray spawnPrimaryRay(const Vector2R& filmNdcPosition) const = 0;
+
+    void setAspectRatio(const real aspectRatio);
+
+protected:
+    Vector3R _position;
+    real _aspectRatio;
 };
 
 } // namespace cadise

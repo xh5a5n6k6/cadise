@@ -27,16 +27,19 @@ static std::shared_ptr<Light> createArea(
     const std::shared_ptr<SdData>& data,
     const std::map<std::string, std::shared_ptr<Primitive>, std::less<>>& primitives) {
 
-    const Vector3R albedo         = data->findVector3r("albedo");
+    const Vector3R color          = data->findVector3r("color");
+    const real     watt           = data->findReal("watt");
     const bool     isBackFaceEmit = data->findBool("is-back-face-emit");
 
-    std::shared_ptr<AreaLight> areaLight = std::make_shared<AreaLight>(albedo, isBackFaceEmit);
+    std::shared_ptr<AreaLight> areaLight = std::make_shared<AreaLight>(color, watt, isBackFaceEmit);
 
     std::string_view primitiveName = data->findString("primitive");
     auto&& primitive = primitives.find(primitiveName);
 
     areaLight->setPrimitive(primitive->second);
     primitive->second->setAreaLight(areaLight);
+
+    areaLight->calculateEmitRadiance();
 
     return areaLight;
 }

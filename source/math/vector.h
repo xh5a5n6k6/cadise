@@ -9,6 +9,10 @@ namespace cadise {
 template<typename T, uint32 Size>
 class Vector {
 public:
+    static Vector min(const Vector& v1, const Vector& v2);
+    static Vector max(const Vector& v1, const Vector& v2);
+
+public:
     Vector();
     Vector(const T v);
     template<typename... Ts>
@@ -60,9 +64,6 @@ public:
     T x() const;
     T y() const;
     T z() const;
-
-    static Vector min(const Vector& v1, const Vector& v2);
-    static Vector max(const Vector& v1, const Vector& v2);
 
 private:
     std::array<T, Size> _v;

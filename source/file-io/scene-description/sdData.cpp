@@ -139,7 +139,10 @@ SdClassType SdData::classType() const {
 }
 
 void SdData::setClassType(const std::string_view& classType) {
-    if (!classType.compare("camera")) {
+    if (!classType.compare("film")) {
+        setClassType(SdClassType::FILM);
+    }
+    else if (!classType.compare("camera")) {
         setClassType(SdClassType::CAMERA);
     }
     else if (!classType.compare("renderer")) {

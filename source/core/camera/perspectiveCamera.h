@@ -2,28 +2,31 @@
 
 #include "core/camera/camera.h"
 
-#include "core/film/film.h"
-
-#include "math/matrix.h"
+#include <memory>
 
 namespace cadise {
 
+class Transform;
+
 class PerspectiveCamera : public Camera {
 public:
-    PerspectiveCamera(const Film& film, const real fov, const Vector3R* const lookAt);
+    PerspectiveCamera(const Vector3R& position, const Vector3R& direction, 
+                      const Vector3R& up, const real fov);
 
-    Ray spawnPrimaryRay(const Vector2R& pixePosition) const override;
-
-    Film film() const override;
+    void updateTransform() override;
+    Ray spawnPrimaryRay(const Vector2R& filmNdcPosition) const override;
 
 private:
-    Film _film;
-    real _fov;
-    Matrix4 _cameraToWorld;
+    std::shared_ptr<Transform> _cameraToWorld;
 
-    real _pixelWidth;
-    real _pixelHeight;
-    Vector2R _leftUpFilmPosition;
+    // transform from film NDC(instead raster) to camera
+    std::shared_ptr<Transform> _filmToCamera;
+
+    real _fov;
+    real _sensorWidthMM;
+    //real _pixelWidth;
+    //real _pixelHeight;
+    //Vector2R _leftUpFilmPosition;
 };
 
 } // namespace cadise
