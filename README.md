@@ -1,8 +1,8 @@
 # Cadise Renderer
 
-<img src="./gallery/cornell-box-sphere/20190910.jpg"><br />
+<img src="./gallery/cover-image/lowpoly_Snowman.png"><br />
 
-<p align="center"><i>Cornell Box (with spheres) Rendered with Cadise</i></p>
+<p align="center"><i>Snowman Scene Rendered with Cadise (based on Lowpoly Snowman scene by sumo12 from BlendSwap)</i></p>
 
 ## Introduction
 Cadise is a physically based renderer written in C++17, taking some other renderers ([PBRT-v3](https://github.com/mmp/pbrt-v3), [Photon-v2](https://github.com/TzuChieh/Photon-v2), [Tungsten](https://github.com/tunabrain/tungsten), etc) as references. The main purpose of a renderer is to solve the integral problem described in [rendering equation](https://en.wikipedia.org/wiki/Rendering_equation), which is more often known as light transport simulation.
