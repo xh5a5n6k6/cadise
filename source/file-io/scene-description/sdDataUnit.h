@@ -11,16 +11,16 @@ template<typename T>
 class SdDataUnit {
 public:
     SdDataUnit();
-    SdDataUnit(const std::string_view& name, std::unique_ptr<T[]> value, const int32 valueNumber);
+    SdDataUnit(const std::string_view& name, std::unique_ptr<T[]> value, const std::size_t valueNumber);
 
     std::string_view variableName() const;
     std::unique_ptr<T[]> value();
-    int32 valueNumber() const;
+    std::size_t valueNumber() const;
 
 private:
     std::string_view _variableName;
     std::unique_ptr<T[]> _value;
-    int32 _valueNumber;
+    std::size_t _valueNumber;
 };
 
 } // namespace cadise

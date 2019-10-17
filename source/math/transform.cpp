@@ -4,10 +4,6 @@
 
 namespace cadise {
 
-//Transform::Transform() :
-//    Transform(Matrix4::identity(), Matrix4::identity()) {
-//}
-
 Transform::Transform(const Matrix4& matrix) :
     Transform(matrix, matrix.inverse()) {
 }

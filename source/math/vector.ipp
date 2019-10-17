@@ -51,6 +51,14 @@ inline Vector<T, Size>::Vector(const T v1, const T v2, const Ts... ts) :
 }
 
 template<typename T, uint32 Size>
+template<typename U>
+inline Vector<T, Size>::Vector(const Vector<U, Size>& v) {
+    for (uint32 i = 0; i < Size; i++) {
+        _v[i] = static_cast<T>(v[i]);
+    }
+}
+
+template<typename T, uint32 Size>
 inline Vector<T, Size> Vector<T, Size>::operator-() const {
     Vector<T, Size> result;
     for (uint32 index = 0; index < Size; index++) {
@@ -224,6 +232,11 @@ inline Vector<T, Size>& Vector<T, Size>::operator=(const Vector<T, Size>& v) {
 
 template<typename T, uint32 Size>
 inline T& Vector<T, Size>::operator[](const uint32 index) {
+    return _v[index];
+}
+
+template<typename T, uint32 Size>
+inline const T& Vector<T, Size>::operator[](const uint32 index) const {
     return _v[index];
 }
 

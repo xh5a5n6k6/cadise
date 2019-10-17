@@ -1,7 +1,5 @@
 # Cadise Renderer
-
-<img src="./gallery/cover-image/lowpoly_Snowman.png"><br />
-
+<img src="./gallery/cover-image/lowpoly_Snowman.png">
 <p align="center"><i>Snowman Scene Rendered with Cadise (based on Lowpoly Snowman scene by sumo12 from BlendSwap)</i></p>
 
 ## Introduction
@@ -44,6 +42,10 @@ Cadise is still been developing and more features will be implemented.
     - Cone
     - Gaussian
     - Mitchell
+
+## Cadise Renderer Scene Description
+Cadise Renderer Scene Description (CRSD) developed by Chia-Yu Chou is a scene description and readable by Cadise renderer. To generate a CRSD file, you can find some example scenes in the `./scene/` folder for reference, or export scenes from other 3D softwares (it currently only supports Blender exporter, please see the following repository for further information).
+- [**Cadise for Blender**](https://github.com/xh5a5n6k6/cadise-blender)
 
 ## License
 Cadise is under the [MIT](https://opensource.org/licenses/MIT) license. 

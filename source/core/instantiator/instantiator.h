@@ -71,9 +71,11 @@ std::shared_ptr<Light> makeLight(
     const std::map<std::string, std::shared_ptr<Primitive>, std::less<>>& primitives);
 
 // implement in core/instantiator/primitiveInstantiator.cpp
-std::shared_ptr<Primitive> makePrimitive(
+void makePrimitive(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Bsdf>, std::less<>>& bsdfs);
+    const std::map<std::string, std::shared_ptr<Bsdf>, std::less<>>& bsdfs,
+    std::vector<std::shared_ptr<Intersector>>& out_intersectors,
+    std::map<std::string, std::shared_ptr<Primitive>, std::less<>>& out_primitives);
 
 } // namespace instantiator
 

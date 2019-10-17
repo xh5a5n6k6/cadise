@@ -10,7 +10,7 @@ inline SdDataUnit<T>::SdDataUnit() :
 }
 
 template<typename T>
-inline SdDataUnit<T>::SdDataUnit(const std::string_view& name, std::unique_ptr<T[]> value, const int32 valueNumber) :
+inline SdDataUnit<T>::SdDataUnit(const std::string_view& name, std::unique_ptr<T[]> value, const std::size_t valueNumber) :
     _variableName(name),
     _value(std::move(value)),
     _valueNumber(valueNumber) {
@@ -27,7 +27,7 @@ inline std::unique_ptr<T[]> SdDataUnit<T>::value() {
 }
 
 template<typename T>
-inline int32 SdDataUnit<T>::valueNumber() const {
+inline std::size_t SdDataUnit<T>::valueNumber() const {
     return _valueNumber;
 }
 

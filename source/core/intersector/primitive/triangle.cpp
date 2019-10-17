@@ -20,7 +20,7 @@ Triangle::Triangle(const std::shared_ptr<Bsdf>& bsdf, const Vector3R& vA, const 
     _vA(vA),
     _vB(vB), 
     _vC(vC) {
-    
+
     _eAB = _vB - _vA;
     _eAC = _vC - _vA;
 

@@ -18,9 +18,10 @@ PurePathIntegrator::PurePathIntegrator(const int32 maxDepth) :
 Spectrum PurePathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const {
     Spectrum totalRadiance(0.0_r);
     Spectrum pathWeight(1.0_r);
+    int32 bounceTimes = 0;
 
     Ray traceRay = Ray(ray);
-    while (traceRay.depth() < _maxDepth) {
+    while (bounceTimes < _maxDepth) {
         SurfaceIntersection intersection;
         if (!scene.isIntersecting(traceRay, intersection)) {
             // TODO : add environment light
@@ -49,14 +50,14 @@ Spectrum PurePathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) c
             break;
         }
 
+        bounceTimes += 1;
         Ray sampleRay = Ray(hitPoint + constant::RAY_EPSILON * hitNormal * sign,
                             intersection.wo(),
                             constant::RAY_EPSILON,
-                            std::numeric_limits<real>::max(),
-                            traceRay.depth() + 1);
+                            std::numeric_limits<real>::max());
 
         // use russian roulette to decide if the ray needs to be kept tracking
-        if(sampleRay.depth() > 2) {
+        if(bounceTimes > 2) {
             pathWeight = russianRoulette::weightOnNextPath(pathWeight);
 
             if (!pathWeight.isZero()) {

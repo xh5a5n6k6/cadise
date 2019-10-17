@@ -37,9 +37,8 @@ static std::shared_ptr<Light> createArea(
     auto&& primitive = primitives.find(primitiveName);
 
     areaLight->setPrimitive(primitive->second);
-    primitive->second->setAreaLight(areaLight);
-
     areaLight->calculateEmitRadiance();
+    primitive->second->setAreaLight(areaLight);
 
     return areaLight;
 }

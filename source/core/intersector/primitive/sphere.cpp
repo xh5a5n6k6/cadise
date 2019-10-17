@@ -10,6 +10,7 @@
 #include "math/aabb.h"
 #include "math/constant.h"
 #include "math/random.h"
+#include "math/transform.h"
 
 #include <limits>
 
@@ -20,7 +21,7 @@ Sphere::Sphere(const std::shared_ptr<Bsdf>& bsdf, const Vector3R& center, const 
     _center(center),
     _radius(radius) {
 
-    _worldToLocal = Matrix4::translate(-_center.x(), -_center.y(), -_center.z());
+    _worldToLocal = std::make_shared<Transform>(Matrix4::translate(center.composite()));
     _tmptextureMapper = std::make_shared<SphericalMapper>();
 }
 
@@ -29,8 +30,8 @@ AABB3R Sphere::bound() const {
 }
 
 bool Sphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
-    Ray r = Ray(_worldToLocal.transformPoint(ray.origin()),
-                _worldToLocal.transformVector(ray.direction()),
+    Ray r = Ray(_worldToLocal->transformPoint(ray.origin()),
+                _worldToLocal->transformVector(ray.direction()),
                 constant::RAY_EPSILON, 
                 std::numeric_limits<real>::max());
 
@@ -62,8 +63,8 @@ bool Sphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
 }
 
 bool Sphere::isOccluded(const Ray& ray) const {
-    Ray r = Ray(_worldToLocal.transformPoint(ray.origin()),
-                _worldToLocal.transformVector(ray.direction()),
+    Ray r = Ray(_worldToLocal->transformPoint(ray.origin()),
+                _worldToLocal->transformVector(ray.direction()),
                 constant::RAY_EPSILON, 
                 std::numeric_limits<real>::max());
 

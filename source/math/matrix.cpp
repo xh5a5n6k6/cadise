@@ -12,11 +12,19 @@ Matrix4 Matrix4::identity() {
                    0.0_r, 0.0_r, 0.0_r, 1.0_r);
 }
 
+Matrix4 Matrix4::scale(const Vector3R& scaleVector) {
+    return scale(scaleVector.x(), scaleVector.y(), scaleVector.z());
+}
+
 Matrix4 Matrix4::scale(const real sx, const real sy, const real sz) {
     return Matrix4(   sx, 0.0_r, 0.0_r, 0.0_r,
                    0.0_r,    sy, 0.0_r, 0.0_r,
                    0.0_r, 0.0_r,    sz, 0.0_r,
                    0.0_r, 0.0_r, 0.0_r, 1.0_r);
+}
+
+Matrix4 Matrix4::translate(const Vector3R& translateVector) {
+    return translate(translateVector.x(), translateVector.y(), translateVector.z());
 }
 
 Matrix4 Matrix4::translate(const real tx, const real ty, const real tz) {
@@ -146,9 +154,9 @@ Vector3R Matrix4::transformPoint(const Vector3R& v) const {
 }
 
 Vector3R Matrix4::transformVector(const Vector3R& v) const {
-    return Vector3R(_n[0][0] * v.x() + _n[1][0] * v.y() + _n[2][0] * v.z(),
-                    _n[0][1] * v.x() + _n[1][1] * v.y() + _n[2][1] * v.z(),
-                    _n[0][2] * v.x() + _n[1][2] * v.y() + _n[2][2] * v.z());
+    return Vector3R(_n[0][0] * v.x() + _n[0][1] * v.y() + _n[0][2] * v.z(),
+                    _n[1][0] * v.x() + _n[1][1] * v.y() + _n[1][2] * v.z(),
+                    _n[2][0] * v.x() + _n[2][1] * v.y() + _n[2][2] * v.z());
 }
 
 real Matrix4::n(const int32 row, const int32 col) const {

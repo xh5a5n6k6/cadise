@@ -23,6 +23,8 @@ std::size_t nearestUpperSquareNumber(const std::size_t number);
 
 void buildCoordinateSystem(const Vector3R& zAxis, Vector3R& xAxis, Vector3R& yAxis);
 
+real gammaCorrection(const real value);
+
 template<typename T>
 inline T min(const T& a, const T& b);
 

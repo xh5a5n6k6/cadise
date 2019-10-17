@@ -11,6 +11,8 @@ class Texture;
 
 class LambertianDiffuse : public Bsdf {
 public:
+    // Hack
+    LambertianDiffuse();
     LambertianDiffuse(const std::shared_ptr<Texture<Spectrum>>& albedo);
 
     Spectrum evaluate(const SurfaceIntersection& surfaceIntersection) const override;

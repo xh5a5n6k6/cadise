@@ -50,9 +50,9 @@ public:
     std::string_view findString(
         const std::string_view& name, const std::string_view& defaultValue = "") const;
 
-    const real*     findRealArray(
+    const std::vector<real>     findRealArray(
         const std::string_view& name) const;
-    const Vector3R* findVector3rArray(
+    const std::vector<Vector3R> findVector3rArray(
         const std::string_view& name) const;
 
     std::shared_ptr<Texture<real>> getRealTexture(
@@ -75,7 +75,7 @@ private:
         const std::vector<std::shared_ptr<SdDataUnit<T>>>& dataset) const;
 
     template<typename T>
-    const T* _findDataArray(
+    decltype(auto) _findDataArray(
         const std::string_view& name,
         const std::vector<std::shared_ptr<SdDataUnit<T>>>& dataset) const;
 
@@ -106,17 +106,29 @@ inline T SdData::_findData(
 }
 
 template<typename T>
-inline const T* SdData::_findDataArray(
+inline decltype(auto) SdData::_findDataArray(
     const std::string_view& name,
     const std::vector<std::shared_ptr<SdDataUnit<T>>>& dataset) const {
 
+    std::vector<T> dataArray;
+    std::shared_ptr<SdDataUnit<T>> dataUnit = nullptr;
+
     for (std::size_t i = 0; i < dataset.size(); i++) {
         if (!dataset[i]->variableName().compare(name)) {
-            return dataset[i]->value().get();
+            dataUnit = dataset[i];
+            break;
         }
     }
 
-    return nullptr;
+    if (dataUnit) {
+        dataArray.reserve(dataUnit->valueNumber());
+        auto values = std::move(dataUnit->value());
+        for (std::size_t i = 0; i < dataUnit->valueNumber(); i++) {
+            dataArray.push_back(values[i]);
+        }
+    }
+
+    return dataArray;
 }
 
 } // namespace cadise

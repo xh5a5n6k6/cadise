@@ -18,6 +18,9 @@ public:
     template<typename... Ts>
     Vector(const T v1, const T v2, const Ts... ts);
 
+    template<typename U>
+    explicit Vector(const Vector<U, Size>& v);
+
     Vector operator-() const;
     Vector operator+(const T s) const;
     Vector operator-(const T s) const;
@@ -37,6 +40,7 @@ public:
     Vector& operator/=(const Vector& v);
     Vector& operator=(const Vector& v);
     T& operator[](const uint32 index);
+    const T& operator[](const uint32 index) const;
 
     bool isZero() const;
     bool hasNaN() const;

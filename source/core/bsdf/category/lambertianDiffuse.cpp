@@ -3,12 +3,18 @@
 #include "core/integral-tool/hemisphere.h"
 #include "core/surfaceIntersection.h"
 #include "core/texture/texture.h"
+#include "core/texture/category/constantTexture.h"
 
 #include "math/constant.h"
 #include "math/math.h"
 #include "math/random.h"
 
 namespace cadise {
+
+// Hack
+LambertianDiffuse::LambertianDiffuse() :
+    LambertianDiffuse(std::make_shared<ConstantTexture<Spectrum>>(0.5_r)) {
+}
 
 LambertianDiffuse::LambertianDiffuse(const std::shared_ptr<Texture<Spectrum>>& albedo) :
     Bsdf(BsdfType(BxdfType::DIFFUSE_REFLECTION)),

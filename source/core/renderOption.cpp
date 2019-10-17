@@ -12,6 +12,8 @@
 
 #include "file-io/scene-description/sdData.h"
 
+#include "fundamental/assertion.h"
+
 namespace cadise {
 
 RenderOption::RenderOption() :
@@ -131,16 +133,7 @@ void RenderOption::_setUpLight(const std::shared_ptr<SdData>& data) {
 }
 
 void RenderOption::_setUpPrimitive(const std::shared_ptr<SdData>& data) {
-    std::shared_ptr<Primitive> primitive = instantiator::makePrimitive(data, _bsdfs);
-    std::string_view primitiveName = data->findString("name");
-
-    if (primitiveName != "") {
-        _primitives.insert(std::pair<std::string, std::shared_ptr<Primitive>>(primitiveName, primitive));
-        _intersectors.push_back(primitive);
-    }
-    else {
-        _intersectors.push_back(primitive);
-    }
+    instantiator::makePrimitive(data, _bsdfs, _intersectors, _primitives);
 }
 
 } // namespace cadise

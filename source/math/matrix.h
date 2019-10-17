@@ -7,7 +7,9 @@ namespace cadise {
 class Matrix4 {
 public:
     static Matrix4 identity();
-    static Matrix4 scale(const real sx, const real sy, const real sz);
+    static Matrix4 scale(const Vector3R& scaleVector);
+    static Matrix4 scale(const real sx, const real sy, const real sz);  
+    static Matrix4 translate(const Vector3R& translateVector);
     static Matrix4 translate(const real tx, const real ty, const real tz);
     static Matrix4 lookAt(const Vector3R& position, const Vector3R& direction, const Vector3R& up);
 

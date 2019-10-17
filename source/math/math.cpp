@@ -42,6 +42,14 @@ void buildCoordinateSystem(const Vector3R& zAxis, Vector3R& xAxis, Vector3R& yAx
     yAxis = zAxis.cross(xAxis);
 }
 
+real gammaCorrection(real value) {
+    if (value <= 0.0031308_r) {
+        return 12.92_r * value;
+    }
+
+    return 1.055_r * std::pow(value, 1._r / 2.4_r) - 0.055_r;
+}
+
 } // namespace math
 
 } // namespace cadise

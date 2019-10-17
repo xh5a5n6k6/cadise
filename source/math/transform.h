@@ -6,7 +6,6 @@ namespace cadise {
 
 class Transform {
 public:
-    //Transform();
     Transform(const Matrix4& matrix);
     Transform(const Matrix4& matrix, const Matrix4& inverseMatrix);
 

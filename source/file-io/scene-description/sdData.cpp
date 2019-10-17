@@ -83,13 +83,13 @@ std::string_view SdData::findString(
     return _findData(name, defaultValue, _strings);
 }
 
-const real* SdData::findRealArray(
+const std::vector<real> SdData::findRealArray(
     const std::string_view& name) const {
 
     return _findDataArray(name, _reals);
 }
 
-const Vector3R* SdData::findVector3rArray(
+const std::vector<Vector3R> SdData::findVector3rArray(
     const std::string_view& name) const {
 
     return _findDataArray(name, _vector3rs);

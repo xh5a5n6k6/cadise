@@ -31,7 +31,6 @@ void PerspectiveCamera::updateTransform() {
     //
     // translate needs to be multiplication last, it means
     // we need to multiply it first (it will be the leftmost part).
-    //
     Matrix4 filmToCameraMatrix = Matrix4::identity();
     filmToCameraMatrix *= Matrix4::translate(-(sensorWidth / 2.0_r), sensorHeight / 2.0_r, -sensorOffset);
     filmToCameraMatrix *= Matrix4::scale(sensorWidth, -sensorHeight, 1.0_r);
@@ -45,7 +44,7 @@ Ray PerspectiveCamera::spawnPrimaryRay(const Vector2R& filmNdcPosition) const {
 
     // calculate parameter in camera space
     Vector3R origin = _position;
-    Vector3R direction = _cameraToWorld->transformVector(sampleCameraPosition);
+    Vector3R direction = _cameraToWorld->transformVector(sampleCameraPosition).normalize();
 
     // generate ray in world space
     return Ray(origin, 

@@ -5,6 +5,7 @@
 #include "core/spectrum/spectrum.h"
 
 #include <memory>
+#include <vector>
 
 namespace cadise {
 
@@ -38,7 +39,7 @@ public:
 protected:
     std::shared_ptr<Bsdf> _bsdf;
     std::shared_ptr<TextureMapper> _textureMapper;
-
+    
     std::weak_ptr<AreaLight> _areaLight;
 };
 

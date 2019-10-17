@@ -2,9 +2,9 @@
 
 #include "core/intersector/primitive/primitive.h"
 
-#include "math/matrix.h"
-
 namespace cadise {
+
+class Transform;
 
 class Sphere : public Primitive {
 public:
@@ -22,7 +22,7 @@ public:
     real area() const override;
 
 private:
-    Matrix4 _worldToLocal;
+    std::shared_ptr<Transform> _worldToLocal;
     Vector3R _center;
     real _radius;
 

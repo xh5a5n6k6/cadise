@@ -22,19 +22,19 @@ Film::Film(const int32 widthPx, const int32 heightPx,
     _pixels = new Pixel[pixelNumber];
 }
 
-void Film::addSample(const Vector2R& filmPosition, const Spectrum& value) {
-    if (value.hasNaN() || value.hasInfinite()) {
+void Film::addSample(const Vector2R& filmPosition, const Spectrum& sampleSpectrum) {
+    if (sampleSpectrum.hasNaN() || sampleSpectrum.hasInfinite()) {
         return;
     }
 
-    const Vector3R sampleRgb = value.transformToRgb();
+    const Vector3R sampleRgb = sampleSpectrum.transformToRgb();
 
     // calculate filter bound for given film position
     Vector2R filmMinPosition = filmPosition - _filter->filterHalfSize();
     Vector2R filmMaxPosition = filmPosition + _filter->filterHalfSize();
 
     filmMinPosition = Vector2R::max(filmMinPosition, Vector2R(0.0_r));
-    filmMaxPosition = Vector2R::min(filmMaxPosition, Vector2R(_resolution.x() - 1.0_r, _resolution.y() - 1.0_r));
+    filmMaxPosition = Vector2R::min(filmMaxPosition, Vector2R(_resolution));
 
     const int32 xMinIndex = static_cast<int32>(std::ceil(filmMinPosition.x() - 0.5_r));
     const int32 yMinIndex = static_cast<int32>(std::ceil(filmMinPosition.y() - 0.5_r));
@@ -50,7 +50,7 @@ void Film::addSample(const Vector2R& filmPosition, const Spectrum& value) {
 
             const real filterWeight = _filter->evaluate(x, y);
 
-            _pixels[indexOffset].addValue(255.0_r * sampleRgb * filterWeight);
+            _pixels[indexOffset].addValue(sampleRgb * filterWeight);
             _pixels[indexOffset].addWeight(filterWeight);
         }
     }
@@ -64,9 +64,17 @@ void Film::save() const {
             const int32 dataOffset  = 3 * pixelOffset;
             const Pixel* pixel = &_pixels[pixelOffset];
             
-            data[dataOffset + 0] = static_cast<uint8>(math::clamp(pixel->r() / pixel->weight(), 0.0_r, 255.0_r));
-            data[dataOffset + 1] = static_cast<uint8>(math::clamp(pixel->g() / pixel->weight(), 0.0_r, 255.0_r));
-            data[dataOffset + 2] = static_cast<uint8>(math::clamp(pixel->b() / pixel->weight(), 0.0_r, 255.0_r));
+            real r = math::max(0.0_r, pixel->r() / pixel->weight());
+            real g = math::max(0.0_r, pixel->g() / pixel->weight());
+            real b = math::max(0.0_r, pixel->b() / pixel->weight());
+
+            r = math::gammaCorrection(r);
+            g = math::gammaCorrection(g);
+            b = math::gammaCorrection(b);
+
+            data[dataOffset + 0] = static_cast<uint8>(math::clamp(255.0_r * r + 0.5_r, 0.0_r, 255.0_r));
+            data[dataOffset + 1] = static_cast<uint8>(math::clamp(255.0_r * g + 0.5_r, 0.0_r, 255.0_r));
+            data[dataOffset + 2] = static_cast<uint8>(math::clamp(255.0_r * b + 0.5_r, 0.0_r, 255.0_r));
         }
     }
 

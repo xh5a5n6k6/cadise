@@ -14,7 +14,6 @@ namespace instantiator {
 static std::shared_ptr<Camera> createPerspective(
     const std::shared_ptr<SdData>& data) {
 
-
     const Vector3R position  = data->findVector3r("position");
     const Vector3R direction = data->findVector3r("direction");
     const Vector3R up        = data->findVector3r("up");
