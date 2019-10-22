@@ -6,97 +6,96 @@
 
 namespace cadise {
 
-template<typename T, uint32 Size>
-inline cadise::AABB<T, Size>::AABB() :
-    _minVertex(std::numeric_limits<T>::max()),
-    _maxVertex(std::numeric_limits<T>::min()) {
+template<typename T, std::size_t N>
+inline cadise::AABB<T, N>::AABB() :
+    AABB(Vector<T, N>(std::numeric_limits<T>::max()), 
+         Vector<T, N>(std::numeric_limits<T>::min())) {
 }
 
-template<typename T, uint32 Size>
-inline cadise::AABB<T, Size>::AABB(const Vector<T, Size>& vertex) :
-    _minVertex(vertex),
-    _maxVertex(vertex) {
+template<typename T, std::size_t N>
+inline cadise::AABB<T, N>::AABB(const Vector<T, N>& vertex) :
+    AABB(vertex, vertex) {
 }
 
-template<typename T, uint32 Size>
-inline cadise::AABB<T, Size>::AABB(const Vector<T, Size>& minVertex, const Vector<T, Size>& maxVertex) :
+template<typename T, std::size_t N>
+inline cadise::AABB<T, N>::AABB(const Vector<T, N>& minVertex, const Vector<T, N>& maxVertex) :
     _minVertex(minVertex),
     _maxVertex(maxVertex) { 
 }
 
-template<typename T, uint32 Size>
-inline bool AABB<T, Size>::isIntersectingAABB(const Vector<T, Size>& origin, const Vector<T, Size>& invDirection, real tmin, real tmax) const {
-    static_assert(Size == 3, "Not support isIntersecting with this kind of AABB");
+template<typename T, std::size_t N>
+inline bool AABB<T, N>::isIntersectingAABB(const Vector<T, N>& origin, const Vector<T, N>& inverseDirection, real minT, real maxT) const {
+    static_assert(N == 3, "Not support isIntersecting with this kind of AABB");
     
-    Vector<T, Size> tnear = (_minVertex - origin) * invDirection;
-    Vector<T, Size> tfar  = (_maxVertex - origin) * invDirection;
+    Vector<T, N> nearT = (_minVertex - origin) * inverseDirection;
+    Vector<T, N> farT  = (_maxVertex - origin) * inverseDirection;
     
     // calculate x-slab interval
-    if (invDirection.x() > 0.0_r) {
-        tmin = std::max(tmin, tnear.x());
-        tmax = std::min(tmax,  tfar.x());
+    if (inverseDirection.x() > 0.0_r) {
+        minT = std::max(minT, nearT.x());
+        maxT = std::min(maxT,  farT.x());
     }
     else {
-        tmin = std::max(tmin,  tfar.x());
-        tmax = std::min(tmax, tnear.x());
+        minT = std::max(minT,  farT.x());
+        maxT = std::min(maxT, nearT.x());
     }
 
     // calculate y-slab interval
-    if (invDirection.y() > 0.0_r) {
-        tmin = std::max(tmin, tnear.y());
-        tmax = std::min(tmax,  tfar.y());
+    if (inverseDirection.y() > 0.0_r) {
+        minT = std::max(minT, nearT.y());
+        maxT = std::min(maxT,  farT.y());
     }
     else {
-        tmin = std::max(tmin,  tfar.y());
-        tmax = std::min(tmax, tnear.y());
+        minT = std::max(minT,  farT.y());
+        maxT = std::min(maxT, nearT.y());
     }
 
     // calculate z-slab interval
-    if (invDirection.z() > 0.0_r) {
-        tmin = std::max(tmin, tnear.z());
-        tmax = std::min(tmax,  tfar.z());
+    if (inverseDirection.z() > 0.0_r) {
+        minT = std::max(minT, nearT.z());
+        maxT = std::min(maxT,  farT.z());
     }
     else {
-        tmin = std::max(tmin,  tfar.z());
-        tmax = std::min(tmax, tnear.z());
+        minT = std::max(minT,  farT.z());
+        maxT = std::min(maxT, nearT.z());
     }
 
     // check if intersection exists
-    if (tmin > tmax) {
+    if (minT > maxT) {
         return false;
     }
 
     return true;
 }
 
-template<typename T, uint32 Size>
-inline Vector<T, Size> AABB<T, Size>::centroid() const {
+template<typename T, std::size_t N>
+inline Vector<T, N> AABB<T, N>::centroid() const {
     return (_minVertex + _maxVertex) / static_cast<T>(2);
 }
 
-template<typename T, uint32 Size>
-inline uint32 AABB<T, Size>::maxAxis() const {
+template<typename T, std::size_t N>
+inline std::size_t AABB<T, N>::maxAxis() const {
     return (_maxVertex - _minVertex).maxDimension();
 }
 
-template<typename T, uint32 Size>
-inline AABB<T, Size>& AABB<T, Size>::unionWith(const Vector<T, Size>& vertex) {
-    _minVertex = Vector<T, Size>::min(_minVertex, vertex);
-    _maxVertex = Vector<T, Size>::max(_maxVertex, vertex);
+template<typename T, std::size_t N>
+inline AABB<T, N>& AABB<T, N>::unionWith(const Vector<T, N>& vertex) {
+    _minVertex = Vector<T, N>::min(_minVertex, vertex);
+    _maxVertex = Vector<T, N>::max(_maxVertex, vertex);
     
     return *this;
 }
 
-template<typename T, uint32 Size>
-inline AABB<T, Size>& AABB<T, Size>::unionWith(const AABB<T, Size>& aabb) {
-    _minVertex = Vector<T, Size>::min(_minVertex, aabb._minVertex);
-    _maxVertex = Vector<T, Size>::max(_maxVertex, aabb._maxVertex);
+template<typename T, std::size_t N>
+inline AABB<T, N>& AABB<T, N>::unionWith(const AABB<T, N>& aabb) {
+    _minVertex = Vector<T, N>::min(_minVertex, aabb._minVertex);
+    _maxVertex = Vector<T, N>::max(_maxVertex, aabb._maxVertex);
 
     return *this;
 }
 
-template<typename T, uint32 Size>
-inline AABB<T, Size>& AABB<T, Size>::expand(const T scalar) {
+template<typename T, std::size_t N>
+inline AABB<T, N>& AABB<T, N>::expand(const T scalar) {
     _minVertex -= scalar;
     _maxVertex += scalar;
 

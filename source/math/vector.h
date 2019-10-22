@@ -6,7 +6,7 @@
 
 namespace cadise {
 
-template<typename T, uint32 Size>
+template<typename T, std::size_t N>
 class Vector {
 public:
     static Vector min(const Vector& v1, const Vector& v2);
@@ -19,7 +19,7 @@ public:
     Vector(const T v1, const T v2, const Ts... ts);
 
     template<typename U>
-    explicit Vector(const Vector<U, Size>& v);
+    explicit Vector(const Vector<U, N>& v);
 
     Vector operator-() const;
     Vector operator+(const T s) const;
@@ -39,8 +39,8 @@ public:
     Vector& operator*=(const Vector& v);
     Vector& operator/=(const Vector& v);
     Vector& operator=(const Vector& v);
-    T& operator[](const uint32 index);
-    const T& operator[](const uint32 index) const;
+    T& operator[](const std::size_t index);
+    const T& operator[](const std::size_t index) const;
 
     bool isZero() const;
     bool hasNaN() const;
@@ -55,7 +55,7 @@ public:
     Vector complement() const;
     Vector reciprocal() const;
     Vector clamp(const T min, const T max) const;
-    uint32 maxDimension() const;
+    std::size_t maxDimension() const;
 
     void swap(Vector& v);
     T dot(const Vector& v) const;
@@ -70,18 +70,18 @@ public:
     T z() const;
 
 private:
-    std::array<T, Size> _v;
+    std::array<T, N> _v;
 };
 
 // template header implementation
 
-template<typename T, uint32 Size>
-inline Vector<T, Size> operator+(const T s, const Vector<T, Size>& v) {
+template<typename T, std::size_t N>
+inline Vector<T, N> operator+(const T s, const Vector<T, N>& v) {
     return v + s;
 }
 
-template<typename T, uint32 Size>
-inline Vector<T, Size> operator*(const T s, const Vector<T, Size>& v) {
+template<typename T, std::size_t N>
+inline Vector<T, N> operator*(const T s, const Vector<T, N>& v) {
     return v * s;
 }
 

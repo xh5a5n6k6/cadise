@@ -6,7 +6,7 @@ namespace cadise {
 
 // arbitrary dimension vector
 //
-template<typename T, uint32 Size>
+template<typename T, std::size_t N>
 class Vector;
 
 using Vector2I = Vector<int32, 2>;
@@ -15,7 +15,7 @@ using Vector3R = Vector<real, 3>;
 
 // arbitrary dimension axis-aligned bounding box
 //
-template<typename T, uint32 Size>
+template<typename T, std::size_t N>
 class AABB;
 
 using AABB2I = AABB<int32, 2>;

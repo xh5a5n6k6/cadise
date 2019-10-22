@@ -51,4 +51,4 @@ Cadise Renderer Scene Description (CRSD) developed by Chia-Yu Chou is a scene de
 ## License
 Cadise is under the [MIT](https://opensource.org/licenses/MIT) license. 
 
-It also includes some third-party libraries in the `./source/third-party` folder with their own licenses, you can see the `LICENSE.txt` for more details.
+It also includes some third-party libraries in the `./source/third-party/` folder with their own licenses, you can see the `LICENSE.txt` for more details.

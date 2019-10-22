@@ -36,7 +36,7 @@ private:
                                       std::size_t* const nodeIndex) const;
 
     bool _splitWith_EQUAL(const std::vector<std::shared_ptr<Intersector>>& intersectors,
-                          const uint32 splitAxis,
+                          const std::size_t splitAxis,
                           std::vector<std::shared_ptr<Intersector>>& subIntersectorsA,
                           std::vector<std::shared_ptr<Intersector>>& subIntersectorsB) const;
 

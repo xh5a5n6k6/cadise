@@ -12,7 +12,7 @@ BvhBinaryNode::~BvhBinaryNode() {
     _children[1].release();
 }
 
-void BvhBinaryNode::initializeInternalNode(std::unique_ptr<BvhBinaryNode> firstChild, std::unique_ptr<BvhBinaryNode> secondChild, const uint32 splitAxis) {
+void BvhBinaryNode::initializeInternalNode(std::unique_ptr<BvhBinaryNode> firstChild, std::unique_ptr<BvhBinaryNode> secondChild, const std::size_t splitAxis) {
     _bound = firstChild->bound().unionWith(secondChild->bound());
     _children[0] = std::move(firstChild);
     _children[1] = std::move(secondChild);
@@ -46,7 +46,7 @@ std::size_t BvhBinaryNode::intersectorCounts() const {
     return _intersectorCounts;
 }
 
-uint32 BvhBinaryNode::splitAxis() const {
+std::size_t BvhBinaryNode::splitAxis() const {
     return _splitAxis;
 }
 

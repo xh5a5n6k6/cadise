@@ -9,14 +9,14 @@ public:
     BvhLinearNode();
     ~BvhLinearNode();
 
-    void initializeInternalNode(const AABB3R& bound, const std::size_t secondChildIndex, const uint32 splitAxis);
+    void initializeInternalNode(const AABB3R& bound, const std::size_t secondChildIndex, const std::size_t splitAxis);
     void initializeLeafNode(const AABB3R& bound, const std::size_t intersectorIndex, const std::size_t intersectorCounts);
 
     AABB3R bound() const;
     std::size_t intersectorIndex() const;
     std::size_t secondChildIndex() const;
     std::size_t intersectorCounts() const;
-    uint32 splitAxis() const;
+    std::size_t splitAxis() const;
     bool isLeaf() const;
 
 private:
@@ -33,7 +33,7 @@ private:
         // for leaf node
         std::size_t _intersectorCounts;
         // for internal node
-        uint32 _splitAxis;
+        std::size_t _splitAxis;
     };
 
     bool _isLeaf;

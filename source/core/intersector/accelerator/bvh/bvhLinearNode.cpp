@@ -8,7 +8,7 @@ BvhLinearNode::BvhLinearNode() :
 
 BvhLinearNode::~BvhLinearNode() = default;
 
-void BvhLinearNode::initializeInternalNode(const AABB3R& bound, const std::size_t secondChildIndex, const uint32 splitAxis) {
+void BvhLinearNode::initializeInternalNode(const AABB3R& bound, const std::size_t secondChildIndex, const std::size_t splitAxis) {
     _bound = bound;
     _secondChildIndex = secondChildIndex;
     _splitAxis = splitAxis;
@@ -38,7 +38,7 @@ std::size_t BvhLinearNode::intersectorCounts() const {
     return _intersectorCounts;
 }
 
-uint32 BvhLinearNode::splitAxis() const {
+std::size_t BvhLinearNode::splitAxis() const {
     return _splitAxis;
 }
 
