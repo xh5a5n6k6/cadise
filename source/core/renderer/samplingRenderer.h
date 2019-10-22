@@ -2,7 +2,7 @@
 
 #include "core/renderer/renderer.h"
 
-#include "math/fundamentalType.h"
+#include "math/type/fundamentalType.h"
 
 namespace cadise {
 

@@ -4,10 +4,10 @@
 
 namespace cadise {
 
-template<uint32 Size>
+template<std::size_t N>
 class ConceptualSpectrum {
 protected:
-    using SpectralArray = Vector<real, Size>;
+    using SpectralArray = Vector<real, N>;
 
 public:
     ConceptualSpectrum();
@@ -49,13 +49,13 @@ protected:
 
 // template header implementation
 
-template<uint32 Size>
-inline ConceptualSpectrum<Size> operator+(const real s, const ConceptualSpectrum<Size>& cs) {
+template<std::size_t N>
+inline ConceptualSpectrum<N> operator+(const real s, const ConceptualSpectrum<N>& cs) {
     return cs + s;
 }
 
-template<uint32 Size>
-inline ConceptualSpectrum<Size> operator*(const real s, const ConceptualSpectrum<Size>& cs) {
+template<std::size_t N>
+inline ConceptualSpectrum<N> operator*(const real s, const ConceptualSpectrum<N>& cs) {
     return cs * s;
 }
 

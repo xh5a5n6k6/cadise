@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/mathType.h"
+#include "math/type/mathType.h"
 
 #include <memory>
 #include <string_view>

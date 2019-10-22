@@ -4,194 +4,194 @@
 
 namespace cadise {
 
-template<uint32 Size>
-inline ConceptualSpectrum<Size>::ConceptualSpectrum() :
+template<std::size_t N>
+inline ConceptualSpectrum<N>::ConceptualSpectrum() :
     _values() {
 }
 
-template<uint32 Size>
-inline ConceptualSpectrum<Size>::ConceptualSpectrum(const real v) :
+template<std::size_t N>
+inline ConceptualSpectrum<N>::ConceptualSpectrum(const real v) :
     _values(v) {
 }
 
-template<uint32 Size>
-inline ConceptualSpectrum<Size>::ConceptualSpectrum(const SpectralArray& as) :
+template<std::size_t N>
+inline ConceptualSpectrum<N>::ConceptualSpectrum(const SpectralArray& as) :
     _values(as) {
 }
 
-template<uint32 Size>
-inline ConceptualSpectrum<Size>::ConceptualSpectrum(const ConceptualSpectrum<Size>& cs) :
+template<std::size_t N>
+inline ConceptualSpectrum<N>::ConceptualSpectrum(const ConceptualSpectrum<N>& cs) :
     _values(cs._values) {
 }
 
-template<uint32 Size>
-inline ConceptualSpectrum<Size> ConceptualSpectrum<Size>::operator-() const {
-    ConceptualSpectrum<Size> result;
+template<std::size_t N>
+inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator-() const {
+    ConceptualSpectrum<N> result;
     result._values = -_values;
 
     return result;
 }
 
-template<uint32 Size>
-inline ConceptualSpectrum<Size> ConceptualSpectrum<Size>::operator+(const real s) const {
-    ConceptualSpectrum<Size> result;
+template<std::size_t N>
+inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator+(const real s) const {
+    ConceptualSpectrum<N> result;
     result._values = _values + s;
 
     return result;
 }
 
-template<uint32 Size>
-inline ConceptualSpectrum<Size> ConceptualSpectrum<Size>::operator-(const real s) const {
-    ConceptualSpectrum<Size> result;
+template<std::size_t N>
+inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator-(const real s) const {
+    ConceptualSpectrum<N> result;
     result._values = _values - s;
 
     return result;
 }
 
-template<uint32 Size>
-inline ConceptualSpectrum<Size> ConceptualSpectrum<Size>::operator*(const real s) const {
-    ConceptualSpectrum<Size> result;
+template<std::size_t N>
+inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator*(const real s) const {
+    ConceptualSpectrum<N> result;
     result._values = _values * s;
 
     return result;
 }
 
-template<uint32 Size>
-inline ConceptualSpectrum<Size> ConceptualSpectrum<Size>::operator/(const real s) const {
-    ConceptualSpectrum<Size> result;
+template<std::size_t N>
+inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator/(const real s) const {
+    ConceptualSpectrum<N> result;
     result._values = _values / s;
 
     return result;
 }
 
-template<uint32 Size>
-inline ConceptualSpectrum<Size> ConceptualSpectrum<Size>::operator+(const ConceptualSpectrum<Size>& cs) const {
-    ConceptualSpectrum<Size> result;
+template<std::size_t N>
+inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator+(const ConceptualSpectrum<N>& cs) const {
+    ConceptualSpectrum<N> result;
     result._values = _values + cs._values;
 
     return result;
 }
 
-template<uint32 Size>
-inline ConceptualSpectrum<Size> ConceptualSpectrum<Size>::operator-(const ConceptualSpectrum<Size>& cs) const {
-    ConceptualSpectrum<Size> result;
+template<std::size_t N>
+inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator-(const ConceptualSpectrum<N>& cs) const {
+    ConceptualSpectrum<N> result;
     result._values = _values - cs._values;
 
     return result;
 }
 
-template<uint32 Size>
-inline ConceptualSpectrum<Size> ConceptualSpectrum<Size>::operator*(const ConceptualSpectrum<Size>& cs) const {
-    ConceptualSpectrum<Size> result;
+template<std::size_t N>
+inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator*(const ConceptualSpectrum<N>& cs) const {
+    ConceptualSpectrum<N> result;
     result._values = _values * cs._values;
 
     return result;
 }
 
-template<uint32 Size>
-inline ConceptualSpectrum<Size> ConceptualSpectrum<Size>::operator/(const ConceptualSpectrum<Size>& cs) const {
-    ConceptualSpectrum<Size> result;
+template<std::size_t N>
+inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator/(const ConceptualSpectrum<N>& cs) const {
+    ConceptualSpectrum<N> result;
     result._values = _values / cs._values;
 
     return result;
 }
 
-template<uint32 Size>
-inline ConceptualSpectrum<Size>& ConceptualSpectrum<Size>::operator+=(const real s) {
+template<std::size_t N>
+inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator+=(const real s) {
     _values += s;
 
     return *this;
 }
 
-template<uint32 Size>
-inline ConceptualSpectrum<Size>& ConceptualSpectrum<Size>::operator-=(const real s) {
+template<std::size_t N>
+inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator-=(const real s) {
     _values -= s;
 
     return *this;
 }
 
-template<uint32 Size>
-inline ConceptualSpectrum<Size>& ConceptualSpectrum<Size>::operator*=(const real s) {
+template<std::size_t N>
+inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator*=(const real s) {
     _values *= s;
 
     return *this;
 }
 
-template<uint32 Size>
-inline ConceptualSpectrum<Size>& ConceptualSpectrum<Size>::operator/=(const real s) {
+template<std::size_t N>
+inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator/=(const real s) {
     _values /= s;
 
     return *this;
 }
 
-template<uint32 Size>
-inline ConceptualSpectrum<Size>& ConceptualSpectrum<Size>::operator+=(const ConceptualSpectrum<Size>& cs) {
+template<std::size_t N>
+inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator+=(const ConceptualSpectrum<N>& cs) {
     _values += cs._values;
 
     return *this;
 }
 
-template<uint32 Size>
-inline ConceptualSpectrum<Size>& ConceptualSpectrum<Size>::operator-=(const ConceptualSpectrum<Size>& cs) {
+template<std::size_t N>
+inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator-=(const ConceptualSpectrum<N>& cs) {
     _values -= cs._values;
 
     return *this;
 }
 
-template<uint32 Size>
-inline ConceptualSpectrum<Size>& ConceptualSpectrum<Size>::operator*=(const ConceptualSpectrum<Size>& cs) {
+template<std::size_t N>
+inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator*=(const ConceptualSpectrum<N>& cs) {
     _values *= cs._values;
 
     return *this;
 }
 
-template<uint32 Size>
-inline ConceptualSpectrum<Size>& ConceptualSpectrum<Size>::operator/=(const ConceptualSpectrum<Size>& cs) {
+template<std::size_t N>
+inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator/=(const ConceptualSpectrum<N>& cs) {
     _values /= cs._values;
 
     return *this;
 }
 
-template<uint32 Size>
-inline ConceptualSpectrum<Size>& ConceptualSpectrum<Size>::operator=(const ConceptualSpectrum<Size>& cs) {
+template<std::size_t N>
+inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator=(const ConceptualSpectrum<N>& cs) {
     _values = cs._values;
 
     return *this;
 }
 
-template<uint32 Size>
-inline bool ConceptualSpectrum<Size>::isZero() const {
+template<std::size_t N>
+inline bool ConceptualSpectrum<N>::isZero() const {
     return _values.isZero();
 }
 
-template<uint32 Size>
-inline bool ConceptualSpectrum<Size>::hasNaN() const {
+template<std::size_t N>
+inline bool ConceptualSpectrum<N>::hasNaN() const {
     return _values.hasNaN();
 }
 
-template<uint32 Size>
-inline bool ConceptualSpectrum<Size>::hasInfinite() const {
+template<std::size_t N>
+inline bool ConceptualSpectrum<N>::hasInfinite() const {
     return _values.hasInfinite();
 }
 
-template<uint32 Size>
-inline real ConceptualSpectrum<Size>::sum() const {
+template<std::size_t N>
+inline real ConceptualSpectrum<N>::sum() const {
     return _values.sum();
 }
 
-template<uint32 Size>
-inline real ConceptualSpectrum<Size>::average() const {
+template<std::size_t N>
+inline real ConceptualSpectrum<N>::average() const {
     return _values.average();
 }
 
-template<uint32 Size>
-inline real ConceptualSpectrum<Size>::maxComponent() const {
+template<std::size_t N>
+inline real ConceptualSpectrum<N>::maxComponent() const {
     return _values.maxComponent();
 }
 
-template<uint32 Size>
-inline ConceptualSpectrum<Size> ConceptualSpectrum<Size>::complement() const {
-    return ConceptualSpectrum<Size>(_values.complement());
+template<std::size_t N>
+inline ConceptualSpectrum<N> ConceptualSpectrum<N>::complement() const {
+    return ConceptualSpectrum<N>(_values.complement());
 }
 
 } // namespace cadise

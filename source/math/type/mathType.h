@@ -1,11 +1,10 @@
 #pragma once
 
-#include "math/fundamentalType.h"
+#include "math/type/fundamentalType.h"
 
 namespace cadise {
 
 // arbitrary dimension vector
-//
 template<typename T, std::size_t N>
 class Vector;
 
@@ -14,7 +13,6 @@ using Vector2R = Vector<real, 2>;
 using Vector3R = Vector<real, 3>;
 
 // arbitrary dimension axis-aligned bounding box
-//
 template<typename T, std::size_t N>
 class AABB;
 

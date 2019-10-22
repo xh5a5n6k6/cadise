@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/fundamentalType.h"
+#include "math/type/fundamentalType.h"
 
 #include <array>
 

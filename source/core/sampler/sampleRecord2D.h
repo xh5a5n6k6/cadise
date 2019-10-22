@@ -2,7 +2,7 @@
 
 #include "core/sampler/sampleRecord.h"
 
-#include "math/mathType.h"
+#include "math/type/mathType.h"
 
 namespace cadise {
 
