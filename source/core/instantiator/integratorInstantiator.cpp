@@ -2,7 +2,7 @@
 
 // integrator type
 #include "core/integrator/pathIntegrator.h"
-#include "core/integrator/purePathIntegrator.h"
+#include "core/integrator/naivePathIntegrator.h"
 #include "core/integrator/whittedIntegrator.h"
 
 #include "file-io/scene-description/sdData.h"
@@ -21,12 +21,12 @@ static std::shared_ptr<Integrator> createWhitted(
     return std::make_shared<WhittedIntegrator>(maxDepth);
 }
 
-static std::shared_ptr<Integrator> createPurePath(
+static std::shared_ptr<Integrator> createNaivePath(
     const std::shared_ptr<SdData>& data) {
 
     const int32 maxDepth = data->findInt32("max-depth", PATH_MAX_DEPTH);
 
-    return std::make_shared<PurePathIntegrator>(maxDepth);
+    return std::make_shared<NaivePathIntegrator>(maxDepth);
 }
 
 static std::shared_ptr<Integrator> createPath(
@@ -45,8 +45,8 @@ std::shared_ptr<Integrator> makeIntegrator(
     if (!type.compare("whitted")) {
         integrator = createWhitted(data);
     }
-    else if (!type.compare("purePath")) {
-        integrator = createPurePath(data);
+    else if (!type.compare("naive-path")) {
+        integrator = createNaivePath(data);
     }
     else if (!type.compare("path")) {
         integrator = createPath(data);

@@ -1,4 +1,4 @@
-#include "core/integrator/purePathIntegrator.h"
+#include "core/integrator/naivePathIntegrator.h"
 
 #include "core/bsdf/bsdf.h"
 #include "core/intersector/primitive/primitive.h"
@@ -11,11 +11,11 @@
 
 namespace cadise {
 
-PurePathIntegrator::PurePathIntegrator(const int32 maxDepth) :
+NaivePathIntegrator::NaivePathIntegrator(const int32 maxDepth) :
     _maxDepth(maxDepth) {
 }
 
-Spectrum PurePathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const {
+Spectrum NaivePathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const {
     Spectrum totalRadiance(0.0_r);
     Spectrum pathWeight(1.0_r);
     int32 bounceTimes = 0;
