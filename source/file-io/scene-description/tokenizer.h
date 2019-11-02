@@ -27,9 +27,9 @@ private:
     std::unique_ptr<std::string_view[]> _parseString(const std::string_view& value) const;
 
     std::unique_ptr<real[]>     _parseRealArray(
-        const std::string_view& value, int32* const valueNumber) const;
+        const std::string_view& value, int32* const out_valueNumber) const;
     std::unique_ptr<Vector3R[]> _parseVector3rArray(
-        const std::string_view& value, int32* const valueNumber) const;
+        const std::string_view& value, int32* const out_valueNumber) const;
 };
 
 } // namespace cadise

@@ -18,8 +18,8 @@ real nextReal() {
 }
 
 std::size_t nextIndex(const std::size_t minIndex, const std::size_t maxIndex) {
-    std::size_t interval = maxIndex - minIndex;
-    std::size_t sampleIndex = static_cast<std::size_t>(minIndex + nextReal() * maxIndex);
+    const std::size_t interval = maxIndex - minIndex;
+    const std::size_t sampleIndex = static_cast<std::size_t>(minIndex + nextReal() * interval);
 
     return math::clamp(sampleIndex, minIndex, maxIndex);
 }

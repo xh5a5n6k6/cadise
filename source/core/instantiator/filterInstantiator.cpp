@@ -59,17 +59,18 @@ std::shared_ptr<Filter> makeFilter(
     const std::shared_ptr<SdData>& data) {
 
     std::shared_ptr<Filter> filter = nullptr;
-    std::string_view type = data->findString("filter");
-    if (!type.compare("box")) {
+
+    const std::string_view type = data->findString("filter");
+    if (type == "box") {
         filter = createBox(data);
     }
-    else if (!type.compare("cone")) {
+    else if (type == "cone") {
         filter = createCone(data);
     }
-    else if (!type.compare("gaussian")) {
+    else if (type == "gaussian") {
         filter = createGaussian(data);
     }
-    else if (!type.compare("mitchell")) {
+    else if (type == "mitchell") {
         filter = createMitchell(data);
     }
     else {

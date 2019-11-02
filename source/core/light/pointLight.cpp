@@ -16,8 +16,9 @@ Spectrum PointLight::emittance(const Vector3R& emitDirection, const SurfaceInfo&
 }
 
 Spectrum PointLight::evaluateSampleRadiance(Vector3R& lightDirection, const SurfaceInfo& surfaceInfo, real& t, real& pdf) const {
-    Vector3R offsetOrigin = surfaceInfo.point() + constant::RAY_EPSILON * surfaceInfo.geometryNormal();
-    Vector3R direction = _position - offsetOrigin;
+    const Vector3R offsetOrigin = surfaceInfo.point() + constant::RAY_EPSILON * surfaceInfo.geometryNormal();
+    const Vector3R direction = _position - offsetOrigin;
+    
     t = direction.length();
     lightDirection = direction.normalize();
     pdf = 1.0_r;

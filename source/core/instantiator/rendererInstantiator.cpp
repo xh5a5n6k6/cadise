@@ -22,8 +22,9 @@ std::shared_ptr<Renderer> makeRenderer(
     const std::shared_ptr<SdData>& data) {
 
     std::shared_ptr<Renderer> renderer = nullptr;
-    std::string_view type = data->findString("type");
-    if (!type.compare("sampling")) {
+    
+    const std::string_view type = data->findString("type");
+    if (type == "sampling") {
         renderer = createSampling(data);
     }
     else {

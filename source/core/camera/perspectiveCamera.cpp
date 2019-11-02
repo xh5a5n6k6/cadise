@@ -39,12 +39,12 @@ void PerspectiveCamera::updateTransform() {
 }
 
 Ray PerspectiveCamera::spawnPrimaryRay(const Vector2R& filmNdcPosition) const {
-    Vector3R sampleCameraPosition = _filmToCamera->transformPoint(
-                                        Vector3R(filmNdcPosition.x(), filmNdcPosition.y(), 0.0_r));
+    const Vector3R sampleCameraPosition = 
+        _filmToCamera->transformPoint(Vector3R(filmNdcPosition.x(), filmNdcPosition.y(), 0.0_r));
 
     // calculate parameter in camera space
-    Vector3R origin = _position;
-    Vector3R direction = _cameraToWorld->transformVector(sampleCameraPosition).normalize();
+    const Vector3R origin = _position;
+    const Vector3R direction = _cameraToWorld->transformVector(sampleCameraPosition).normalize();
 
     // generate ray in world space
     return Ray(origin, 

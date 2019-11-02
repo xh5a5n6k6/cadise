@@ -8,8 +8,8 @@ namespace cadise {
 namespace russianRoulette {
 
 Spectrum weightOnNextPath(const Spectrum& weight) {
-    real q = math::clamp(1.0_r - weight.maxComponent(), 0.05_r, 1.0_r);
-    real randomNumber = random::nextReal();
+    const real q = math::clamp(1.0_r - weight.maxComponent(), 0.05_r, 1.0_r);
+    const real randomNumber = random::nextReal();
 
     // roulette survive
     if (randomNumber > q) {

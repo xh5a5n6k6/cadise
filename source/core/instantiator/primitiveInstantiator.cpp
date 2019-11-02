@@ -73,12 +73,12 @@ static std::vector<std::shared_ptr<Primitive>> createTriangleMesh(
     const auto&& bsdf = bsdfs.find(bsdfName);
 
     if (bsdf != bsdfs.end()) {
-        auto triangleMesh = TriangleMesh(bsdf->second, positions, normals, uvws);
+        TriangleMesh triangleMesh(bsdf->second, positions, normals, uvws);
         return triangleMesh.transformToTriangles();
     }
     else {
-        auto triangleMesh = TriangleMesh(std::make_shared<LambertianDiffuse>(), 
-                                         positions, normals, uvws);
+        TriangleMesh triangleMesh(std::make_shared<LambertianDiffuse>(), 
+                                  positions, normals, uvws);
         return triangleMesh.transformToTriangles();
     }
 }
@@ -89,25 +89,25 @@ void makePrimitive(
     std::vector<std::shared_ptr<Intersector>>& out_intersectors,
     std::map<std::string, std::shared_ptr<Primitive>, std::less<>>& out_primitives) {
 
-    std::string_view type = data->findString("type");
-    std::string_view primitiveName = data->findString("name");
-    if (!type.compare("sphere")) {
-        auto sphere = createSphere(data, bsdfs);
+    const std::string_view type = data->findString("type");
+    const std::string_view primitiveName = data->findString("name");
+    if (type == "sphere") {
+        const auto sphere = createSphere(data, bsdfs);
         out_intersectors.push_back(sphere);
         out_primitives.insert(std::pair<std::string, std::shared_ptr<Primitive>>(primitiveName, sphere));
     }
-    else if (!type.compare("triangle")) {
-        auto triangle = createTriangle(data, bsdfs);
+    else if (type == "triangle") {
+        const auto triangle = createTriangle(data, bsdfs);
         out_intersectors.push_back(triangle);
         out_primitives.insert(std::pair<std::string, std::shared_ptr<Primitive>>(primitiveName, triangle));
     }
-    else if (!type.compare("rectangle")) {
-        auto rectangle = createRectangle(data, bsdfs);
+    else if (type == "rectangle") {
+        const auto rectangle = createRectangle(data, bsdfs);
         out_intersectors.push_back(rectangle);
         out_primitives.insert(std::pair<std::string, std::shared_ptr<Primitive>>(primitiveName, rectangle));
     }
-    else if (!type.compare("triangle-mesh")) {
-        auto triangleMesh = createTriangleMesh(data, bsdfs);
+    else if (type == "triangle-mesh") {
+        const auto triangleMesh = createTriangleMesh(data, bsdfs);
         for (auto& triangle : triangleMesh) {
             out_intersectors.push_back(triangle);
             out_primitives.insert(std::pair<std::string, std::shared_ptr<Primitive>>(primitiveName, triangle));

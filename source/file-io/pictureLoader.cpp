@@ -74,7 +74,7 @@ void PictureLoader::loadLdrImage(const Path& path, LdrImage* const out_ldrImage)
                 real linearValue = math::inverseGammaCorrection(value);
                 linearValue = linearValue * 255.0_r + 0.5_r;
                 
-                uint8 ldrLinearValue = static_cast<uint8>(math::clamp(linearValue, 0.0_r, 255.0_r));
+                const uint8 ldrLinearValue = static_cast<uint8>(math::clamp(linearValue, 0.0_r, 255.0_r));
 
                 out_ldrImage->setDataValue(dataIndexOffset + 0, ldrLinearValue);
                 out_ldrImage->setDataValue(dataIndexOffset + 1, ldrLinearValue);
@@ -100,9 +100,9 @@ void PictureLoader::loadLdrImage(const Path& path, LdrImage* const out_ldrImage)
 
                 linearRgb = linearRgb * 255.0_r + 0.5_r;
 
-                uint8 linearR = static_cast<uint8>(math::clamp(linearRgb.x(), 0.0_r, 255.0_r));
-                uint8 linearG = static_cast<uint8>(math::clamp(linearRgb.y(), 0.0_r, 255.0_r));
-                uint8 linearB = static_cast<uint8>(math::clamp(linearRgb.z(), 0.0_r, 255.0_r));
+                const uint8 linearR = static_cast<uint8>(math::clamp(linearRgb.x(), 0.0_r, 255.0_r));
+                const uint8 linearG = static_cast<uint8>(math::clamp(linearRgb.y(), 0.0_r, 255.0_r));
+                const uint8 linearB = static_cast<uint8>(math::clamp(linearRgb.z(), 0.0_r, 255.0_r));
 
                 out_ldrImage->setDataValue(indexOffset + 0, linearR);
                 out_ldrImage->setDataValue(indexOffset + 1, linearG);

@@ -30,28 +30,28 @@ AABB3R Sphere::bound() const {
 }
 
 bool Sphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
-    Ray r = Ray(_worldToLocal->transformPoint(ray.origin()),
-                _worldToLocal->transformVector(ray.direction()),
-                constant::RAY_EPSILON, 
-                std::numeric_limits<real>::max());
+    Ray localRay(_worldToLocal->transformPoint(ray.origin()),
+                 _worldToLocal->transformVector(ray.direction()),
+                 ray.minT(), 
+                 ray.maxT());
 
-    int32 isOutside = r.origin().lengthSquared() > _radius * _radius;
-    real t = r.direction().dot(-r.origin());
+    const int32 isOutside = localRay.origin().lengthSquared() > _radius * _radius;
+    real t = localRay.direction().dot(localRay.origin().composite());
     if (isOutside && t < 0.0_r) {
         return false;
     }
 
-    real d2 = r.origin().lengthSquared() - t * t;
-    real s2 = _radius * _radius - d2;
+    const real d2 = localRay.origin().lengthSquared() - t * t;
+    const real s2 = _radius * _radius - d2;
     if (s2 < 0.0_r) {
         return false;
     }
 
-    real t0 = t - std::sqrt(s2);
-    real t1 = t + std::sqrt(s2);
+    const real t0 = t - std::sqrt(s2);
+    const real t1 = t + std::sqrt(s2);
     t = isOutside * t0 + (1 - isOutside) * t1;
 
-    if (t < r.minT() || t > r.maxT()) {
+    if (t < localRay.minT() || t > localRay.maxT()) {
         return false;
     }
 
@@ -63,28 +63,28 @@ bool Sphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
 }
 
 bool Sphere::isOccluded(const Ray& ray) const {
-    Ray r = Ray(_worldToLocal->transformPoint(ray.origin()),
-                _worldToLocal->transformVector(ray.direction()),
-                constant::RAY_EPSILON, 
-                std::numeric_limits<real>::max());
+    Ray localRay(_worldToLocal->transformPoint(ray.origin()),
+                 _worldToLocal->transformVector(ray.direction()),
+                 ray.minT(),
+                 ray.maxT());
 
-    int32 isOutside = r.origin().lengthSquared() > _radius * _radius;
-    real t = r.direction().dot(-r.origin());
+    const int32 isOutside = localRay.origin().lengthSquared() > _radius * _radius;
+    real t = localRay.direction().dot(localRay.origin().composite());
     if (isOutside && t < 0.0_r) {
         return false;
     }
 
-    real d2 = r.origin().lengthSquared() - t * t;
-    real s2 = _radius * _radius - d2;
+    const real d2 = localRay.origin().lengthSquared() - t * t;
+    const real s2 = _radius * _radius - d2;
     if (s2 < 0.0_r) {
         return false;
     }
 
-    real t0 = t - std::sqrt(s2);
-    real t1 = t + std::sqrt(s2);
+    const real t0 = t - std::sqrt(s2);
+    const real t1 = t + std::sqrt(s2);
     t = isOutside * t0 + (1 - isOutside) * t1;
 
-    if (t < r.minT() || t > r.maxT()) {
+    if (t < localRay.minT() || t > localRay.maxT()) {
         return false;
     }
 
@@ -115,7 +115,7 @@ void Sphere::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurface
 }
 
 real Sphere::samplePdfA(const Vector3R& position) const {
-    CADISE_ASSERT(area() > 0.0_r);
+    CADISE_ASSERT_GT(area(), 0.0_r);
 
     return 1.0_r / area();
 }

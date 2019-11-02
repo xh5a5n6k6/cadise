@@ -2,6 +2,7 @@
 
 #include "file-io/scene-description/sdParser.h"
 
+#include <cstdlib>
 #include <iostream>
 #include <vector>
 
@@ -9,11 +10,12 @@ namespace cadise {
 
 ClParser::ClParser() = default;
 
-void ClParser::parse(int32 argc, const char* argv[]) const {
+int32 ClParser::parse(int32 argc, char* argv[]) const {
     if (argc < 2) {
-        std::cerr << "Please type \"Cadise --help\" for further information."
+        std::cerr << "Please type \"cadise --help\" for further information."
                   << std::endl;
-        exit(0);
+
+        return EXIT_SUCCESS;
     }
 
     // TODO : add some argument commands
@@ -27,6 +29,8 @@ void ClParser::parse(int32 argc, const char* argv[]) const {
     for (std::size_t i = 0; i < args.size(); ++i) {
         parser.parseSd(args[i]);
     }
+
+    return EXIT_SUCCESS;
 }
 
 } // namespace cadise

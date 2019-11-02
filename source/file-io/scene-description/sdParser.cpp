@@ -18,15 +18,15 @@ SdParser::SdParser() :
 SdParser::~SdParser() = default;
 
 void SdParser::parseSd(const std::string& filename) {
-    std::string fileString = _parseSdToString(filename);
-    std::string_view fileStringView(fileString);
+    const std::string fileString = _parseSdToString(filename);
+    const std::string_view fileStringView(fileString);
 
     std::size_t startPosition = 0;
     std::size_t endPosition   = 0;
     while ((endPosition = fileStringView.find_first_of('}', startPosition)) != std::string_view::npos) {
-        std::size_t stringCount = endPosition - startPosition + 1;
-        std::string_view subStringView = fileStringView.substr(startPosition, stringCount);
-        std::shared_ptr<SdData> data = _tokenizer->tokenize(subStringView);
+        const std::size_t stringCount = endPosition - startPosition + 1;
+        const std::string_view subStringView = fileStringView.substr(startPosition, stringCount);
+        const std::shared_ptr<SdData> data = _tokenizer->tokenize(subStringView);
         _renderOption->setUpData(data);
 
         startPosition = endPosition + 1;
@@ -43,7 +43,7 @@ std::string SdParser::_parseSdToString(const std::string& filename) const {
     }
 
     std::string fileString("");
-    int ch;
+    int32 ch;
     while ((ch = fgetc(f)) != EOF) {
         // # means single-line comment message
         if (ch == '#') {

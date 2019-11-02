@@ -98,10 +98,10 @@ inline Vector<T, N> Vector<T, N>::operator*(const T s) const {
 
 template<typename T, std::size_t N>
 inline Vector<T, N> Vector<T, N>::operator/(const T s) const {
-    T invS = static_cast<T>(1) / s;
+    const T inverseS = static_cast<T>(1) / s;
     Vector<T, N> result;
     for (std::size_t i = 0; i < N; ++i) {
-        result._v[i] = _v[i] * invS;
+        result._v[i] = _v[i] * inverseS;
     }
 
     return result;
@@ -176,8 +176,9 @@ inline Vector<T, N>& Vector<T, N>::operator*=(const T s) {
 
 template<typename T, std::size_t N>
 inline Vector<T, N>& Vector<T, N>::operator/=(const T s) {
+    const T inverseS = static_cast<T>(1) / s;
     for (std::size_t i = 0; i < N; ++i) {
-        _v[i] /= s;
+        _v[i] *= inverseS;
     }
 
     return *this;
@@ -309,7 +310,7 @@ template<typename T, std::size_t N>
 inline Vector<T, N> Vector<T, N>::normalize() const {
     CADISE_ASSERT(length() > static_cast<T>(0));
 
-    T invLength = static_cast<T>(1) / length();
+    const T invLength = static_cast<T>(1) / length();
     return *this * invLength;
 }
 
@@ -320,7 +321,7 @@ inline Vector<T, N> Vector<T, N>::composite() const {
 
 template<typename T, std::size_t N>
 inline Vector<T, N> Vector<T, N>::complement() const {
-    Vector<T, N> oneVector(static_cast<T>(1));
+    const Vector<T, N> oneVector(static_cast<T>(1));
     return oneVector - *this;
 }
 
@@ -383,7 +384,7 @@ inline T Vector<T, N>::absDot(const Vector<T, N>& v) const {
 template<typename T, std::size_t N>
 inline Vector<T, N> Vector<T, N>::lerp(const Vector<T, N>& rhs, const real ratio) const {
     Vector<T, N> result;
-    real ratioComplement = 1.0_r - ratio;
+    const real ratioComplement = 1.0_r - ratio;
     for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = ratioComplement * _v[i] + ratio * rhs._v[i];
     }
@@ -402,16 +403,17 @@ inline Vector<T, N> Vector<T, N>::cross(const Vector<T, N>& v) const {
 
 template<typename T, std::size_t N>
 inline Vector<T, N> Vector<T, N>::reflect(const Vector<T, N>& normal) const {
-    Vector<T, N> result = static_cast<T>(2) * absDot(normal) * normal;
+    const Vector<T, N> result = static_cast<T>(2) * absDot(normal) * normal;
     return result - *this;
 }
 
 template<typename T, std::size_t N>
 inline Vector<T, N> Vector<T, N>::refract(const Vector<T, N>& normal, const real iorOuter, const real iorInner) const {
-    real cosI = dot(normal);
     real etaI = iorOuter;
     real etaT = iorInner;
     real signFactor = 1.0_r;
+
+    const real cosI = dot(normal);
 
     // check if incident ray is from inner to outer
     if (cosI < 0.0_r) {
@@ -419,15 +421,15 @@ inline Vector<T, N> Vector<T, N>::refract(const Vector<T, N>& normal, const real
         signFactor = -1.0_r;
     }
 
-    real etaRatio = etaI / etaT;
-    real sin2_T = etaRatio * etaRatio * (1.0_r - cosI * cosI);
+    const real etaRatio = etaI / etaT;
+    const real sin2_T = etaRatio * etaRatio * (1.0_r - cosI * cosI);
 
     // handle TIR condition
     if (sin2_T > 1.0_r) {
         return Vector<T, N>(static_cast<T>(0));
     }
 
-    real cosT = std::sqrt(1.0_r - sin2_T);
+    const real cosT = std::sqrt(1.0_r - sin2_T);
     Vector<T, N> refractDirection = -etaRatio * *this;
     refractDirection += (etaRatio * signFactor * cosI - cosT) * signFactor * normal;
     refractDirection = refractDirection.normalize();

@@ -65,9 +65,9 @@ void RenderOption::prepareRender() {
     _realTextures.clear();
     _spectrumTextures.clear();
 
-    std::shared_ptr<Film> film = instantiator::makeFilm(_filmData);
-    std::shared_ptr<Camera> camera = instantiator::makeCamera(_cameraData);
-    std::shared_ptr<Accelerator> accelerator = instantiator::makeAccelerator(_acceleratorData, _intersectors);
+    const std::shared_ptr<Film> film = instantiator::makeFilm(_filmData);
+    const std::shared_ptr<Camera> camera = instantiator::makeCamera(_cameraData);
+    const std::shared_ptr<Accelerator> accelerator = instantiator::makeAccelerator(_acceleratorData, _intersectors);
 
     _scene = std::make_shared<Scene>(std::move(accelerator), std::move(_lights));
     _renderer = std::move(instantiator::makeRenderer(_rendererData));
@@ -111,23 +111,23 @@ void RenderOption::_setUpRealTexture(const std::shared_ptr<SdData>& data) {
 }
 
 void RenderOption::_setUpSpectrumTexture(const std::shared_ptr<SdData>& data) {
-    std::shared_ptr<Texture<Spectrum>> texture
+    const std::shared_ptr<Texture<Spectrum>> texture
         = instantiator::makeSpectrumTexture(data, _realTextures, _spectrumTextures);
-    std::string_view textureName = data->findString("name");
+    const std::string_view textureName = data->findString("name");
 
     _spectrumTextures.insert(
         std::pair<std::string, std::shared_ptr<Texture<Spectrum>>>(textureName, texture));
 }
 
 void RenderOption::_setUpBsdf(const std::shared_ptr<SdData>& data) {
-    std::shared_ptr<Bsdf> bsdf = instantiator::makeBsdf(data, _realTextures, _spectrumTextures);
-    std::string_view bsdfName = data->findString("name");
+    const std::shared_ptr<Bsdf> bsdf = instantiator::makeBsdf(data, _realTextures, _spectrumTextures);
+    const std::string_view bsdfName = data->findString("name");
 
     _bsdfs.insert(std::pair<std::string, std::shared_ptr<Bsdf>>(bsdfName, bsdf));
 }
 
 void RenderOption::_setUpLight(const std::shared_ptr<SdData>& data) {
-    std::shared_ptr<Light> light = instantiator::makeLight(data, _primitives);
+    const std::shared_ptr<Light> light = instantiator::makeLight(data, _primitives);
     
     _lights.push_back(light);
 }

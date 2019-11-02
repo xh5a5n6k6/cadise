@@ -26,8 +26,9 @@ std::shared_ptr<Camera> makeCamera(
     const std::shared_ptr<SdData>& data) {
 
     std::shared_ptr<Camera> camera = nullptr;
-    std::string_view type = data->findString("type");
-    if (!type.compare("perspective")) {
+
+    const std::string_view type = data->findString("type");
+    if (type == "perspective") {
         camera = createPerspective(data);
     }
     else {

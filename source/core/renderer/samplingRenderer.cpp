@@ -25,7 +25,7 @@ SamplingRenderer::SamplingRenderer(const std::shared_ptr<Integrator>& integrator
 }
 
 void SamplingRenderer::render(const Scene& scene) const {
-    std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+    const std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
     
     const Vector2R realResolution(_film->resolution());
     const Vector2I tileNumber((_film->resolution().x() + CADISE_FILMTILE_SIZE - 1) / CADISE_FILMTILE_SIZE,
@@ -50,8 +50,8 @@ void SamplingRenderer::render(const Scene& scene) const {
                         const Vector2R filmJitterPosition = filmPosition + sample2D->nextSample();
                         const Vector2R filmNdcPosition = filmJitterPosition / realResolution;
 
-                        Ray primaryRay = _camera->spawnPrimaryRay(filmNdcPosition);
-                        Spectrum sampleSpectrum = _integrator->traceRadiance(scene, primaryRay);
+                        const Ray primaryRay = _camera->spawnPrimaryRay(filmNdcPosition);
+                        const Spectrum sampleSpectrum = _integrator->traceRadiance(scene, primaryRay);
 
                         filmTile->addSample(filmJitterPosition, sampleSpectrum);
                     }
@@ -68,7 +68,7 @@ void SamplingRenderer::render(const Scene& scene) const {
 
     _film->save();
 
-    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    const std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
     std::cout << "Rendering time : "
               << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() / 1000.0_r
               << " s" << std::endl;

@@ -91,23 +91,24 @@ std::shared_ptr<Bsdf> makeBsdf(
     const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
 
     std::shared_ptr<Bsdf> bsdf = nullptr;
-    std::string_view type = data->findString("type");
-    if (!type.compare("matte-lambertian")) {
+
+    const std::string_view type = data->findString("type");
+    if (type == "matte-lambertian") {
         bsdf = createLambertianDiffuse(data, realTextures, spectrumTextures);
     }
-    else if (!type.compare("mirror")) {
+    else if (type == "mirror") {
         bsdf = createSpecularReflection(data, realTextures, spectrumTextures);
     }
-    else if (!type.compare("transmission")) {
+    else if (type == "transmission") {
         bsdf = createSpecularTransmission(data, realTextures, spectrumTextures);
     }
-    else if (!type.compare("glass")) {
+    else if (type == "glass") {
         bsdf = createPerfectDielectric(data, realTextures, spectrumTextures);
     }
-    else if (!type.compare("blinnPhong")) {
+    else if (type == "blinnPhong") {
         bsdf = createBlinnPhong(data, realTextures, spectrumTextures);
     }
-    else if (!type.compare("plastic")) {
+    else if (type == "plastic") {
         bsdf = createPlastic(data, realTextures, spectrumTextures);
     }
     else {

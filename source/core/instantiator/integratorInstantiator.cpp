@@ -41,14 +41,15 @@ std::shared_ptr<Integrator> makeIntegrator(
     const std::shared_ptr<SdData>& data) {
 
     std::shared_ptr<Integrator> integrator = nullptr;
-    std::string_view type = data->findString("integrator");
-    if (!type.compare("whitted")) {
+
+    const std::string_view type = data->findString("integrator");
+    if (type == "whitted") {
         integrator = createWhitted(data);
     }
-    else if (!type.compare("naive-path")) {
+    else if (type == "naive-path") {
         integrator = createNaivePath(data);
     }
-    else if (!type.compare("path")) {
+    else if (type == "path") {
         integrator = createPath(data);
     }
     else {

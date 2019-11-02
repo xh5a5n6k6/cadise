@@ -20,29 +20,31 @@ Spectrum SpecularTransmission::evaluate(const SurfaceIntersection& surfaceInters
 }
 
 Spectrum SpecularTransmission::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
-    Vector3R normal = surfaceIntersection.surfaceInfo().frontNormal();
+    const Vector3R normal = surfaceIntersection.surfaceInfo().frontNormal();
+    
     real etaI = _fresnel.iorOuter();
     real etaT = _fresnel.iorInner();
 
-    Vector3R refractDirection = surfaceIntersection.wi().refract(normal, etaI, etaT);
+    const Vector3R refractDirection = surfaceIntersection.wi().refract(normal, etaI, etaT);
     if (refractDirection.isZero()) {
         return Spectrum(0.0_r);
     }
 
     real cosThetaI = refractDirection.dot(normal);
-    Spectrum transmittance = _fresnel.evaluateReflectance(cosThetaI).complement();
     if (cosThetaI < 0.0_r) {
         math::swap(etaI, etaT);
     }
-    real btdfFactor = (etaT * etaT) / (etaI * etaI);
-    real pdf = 1.0_r;
+
+    const Spectrum transmittance = _fresnel.evaluateReflectance(cosThetaI).complement();
+    const real btdfFactor = (etaT * etaT) / (etaI * etaI);
+    const real pdf = 1.0_r;
 
     surfaceIntersection.setWo(refractDirection);
     surfaceIntersection.setPdf(pdf);
 
-    real LdotN = refractDirection.absDot(normal);
+    const real LdotN = refractDirection.absDot(normal);
 
-    Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
+    const Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
     Spectrum sampleSpectrum;
     _albedo->evaluate(uvw, &sampleSpectrum);
 

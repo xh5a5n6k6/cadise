@@ -13,7 +13,7 @@ namespace cadise {
 StratifiedSampler::StratifiedSampler(const std::size_t sampleNumber) :
     Sampler(sampleNumber) {
 
-    std::size_t nearestSquareNumber = math::nearestLowerSquareNumber(sampleNumber);
+    const std::size_t nearestSquareNumber = math::nearestLowerSquareNumber(sampleNumber);
     _baseNumber = static_cast<std::size_t>(std::sqrt(nearestSquareNumber));
 }
 

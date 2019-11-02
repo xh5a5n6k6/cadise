@@ -34,27 +34,28 @@ AABB3R Triangle::bound() const {
 }
 
 bool Triangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
-    Vector3R D = ray.direction();
     Vector3R eAB = _eAB;
     Vector3R eAC = _eAC;
     bool isBackSide = false;
+
+    const Vector3R D = ray.direction();
     if (D.dot(eAB.cross(eAC)) > 0.0_r) {
         eAB.swap(eAC);
         isBackSide = true;
     }
-    Vector3R T = ray.origin() - _vA;
-    Vector3R Q = T.cross(eAB);
-    Vector3R P = D.cross(eAC);
+    const Vector3R T = ray.origin() - _vA;
+    const Vector3R Q = T.cross(eAB);
+    const Vector3R P = D.cross(eAC);
 
-    real denominator = P.dot(eAB);
+    const real denominator = P.dot(eAB);
     if (denominator == 0.0_r) {
         return false;
     }
 
-    real invDenominator = 1.0_r / denominator;
-    real t = Q.dot(eAC) * invDenominator;
-    real u = P.dot(T) * invDenominator;
-    real v = Q.dot(D) * invDenominator;
+    const real invDenominator = 1.0_r / denominator;
+    const real t = Q.dot(eAC) * invDenominator;
+    const real u = P.dot(T) * invDenominator;
+    const real v = Q.dot(D) * invDenominator;
 
     if (u < 0.0_r || v < 0.0_r || u + v > 1.0_r) {
         return false;
@@ -72,25 +73,28 @@ bool Triangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
 }
 
 bool Triangle::isOccluded(const Ray& ray) const {
-    Vector3R D = ray.direction();
     Vector3R eAB = _eAB;
     Vector3R eAC = _eAC;
+    bool isBackSide = false;
+
+    const Vector3R D = ray.direction();
     if (D.dot(eAB.cross(eAC)) > 0.0_r) {
         eAB.swap(eAC);
+        isBackSide = true;
     }
-    Vector3R T = ray.origin() - _vA;
-    Vector3R Q = T.cross(eAB);
-    Vector3R P = D.cross(eAC);
+    const Vector3R T = ray.origin() - _vA;
+    const Vector3R Q = T.cross(eAB);
+    const Vector3R P = D.cross(eAC);
 
-    real denominator = P.dot(eAB);
+    const real denominator = P.dot(eAB);
     if (denominator == 0.0_r) {
         return false;
     }
 
-    real invDenominator = 1.0_r / denominator;
-    real t = Q.dot(eAC) * invDenominator;
-    real u = P.dot(T) * invDenominator;
-    real v = Q.dot(D) * invDenominator;
+    const real invDenominator = 1.0_r / denominator;
+    const real t = Q.dot(eAC) * invDenominator;
+    const real u = P.dot(T) * invDenominator;
+    const real v = Q.dot(D) * invDenominator;
 
     if (u < 0.0_r || v < 0.0_r || u + v > 1.0_r) {
         return false;
@@ -119,22 +123,22 @@ void Triangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, Surface
     else {
         // TODO : integrate with intersecting/occluded 
         //        barycentric coordinate calculation
-        Vector3R v0 = _vB - _vA;
-        Vector3R v1 = _vC - _vA;
-        Vector3R v2 = surfaceInfo.point() - _vA;
-        real d00 = v0.dot(v0);
-        real d01 = v0.dot(v1);
-        real d11 = v1.dot(v1);
-        real d20 = v2.dot(v0);
-        real d21 = v2.dot(v1);
-        real denominator = d00 * d11 - d01 * d01;
+        const Vector3R v0 = _vB - _vA;
+        const Vector3R v1 = _vC - _vA;
+        const Vector3R v2 = surfaceInfo.point() - _vA;
+        const real d00 = v0.dot(v0);
+        const real d01 = v0.dot(v1);
+        const real d11 = v1.dot(v1);
+        const real d20 = v2.dot(v0);
+        const real d21 = v2.dot(v1);
+        const real denominator = d00 * d11 - d01 * d01;
         if (denominator == 0.0_r) {
             uvw = Vector3R(0.0_r, 0.0_r, 0.0_r);
         }
         else {
-            real invDenominator = 1.0_r / denominator;
-            real u = (d11 * d20 - d01 * d21) * invDenominator;
-            real v = (d00 * d21 - d01 * d20) * invDenominator;
+            const real inverseDenominator = 1.0_r / denominator;
+            const real u = (d11 * d20 - d01 * d21) * inverseDenominator;
+            const real v = (d00 * d21 - d01 * d20) * inverseDenominator;
 
             uvw = (1.0_r - u - v) * _uvwA +
                   u * _uvwB +
@@ -158,19 +162,21 @@ void Triangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurfa
 
     Vector3R eAB = _eAB;
     Vector3R eAC = _eAC;
-    Vector3R point = _vA + s * eAB + t * eAC;
-    Vector3R direction = point - inSurface.point();
+
+    const Vector3R point = _vA + s * eAB + t * eAC;
+    const Vector3R direction = point - inSurface.point();
     if (direction.dot(eAB.cross(eAC)) > 0.0_r) {
         eAB.swap(eAC);
     }
-    Vector3R normal = eAB.cross(eAC).normalize();
+
+    const Vector3R normal = eAB.cross(eAC).normalize();
 
     outSurface.setPoint(point);
     outSurface.setGeometryNormal(normal);
 }
 
 real Triangle::samplePdfA(const Vector3R& position) const {
-    CADISE_ASSERT(area() > 0.0_r);
+    CADISE_ASSERT_GT(area(), 0.0_r);
 
     return 1.0_r / area();
 }

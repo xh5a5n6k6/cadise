@@ -21,8 +21,8 @@ GaussianFilter::GaussianFilter(const real filterWidth, const real filterHeight,
 }
 
 real GaussianFilter::evaluate(const real locationX, const real locationY) const {
-    real value = _amplitude * std::exp(_expX * locationX * locationX
-                                       + _expY * locationY * locationY);
+    const real value = _amplitude * std::exp(_expX * locationX * locationX
+                                             + _expY * locationY * locationY);
 
     return math::max(0.0_r, value - _edgeValue);
 }

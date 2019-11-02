@@ -16,13 +16,13 @@ BvhAccelerator::BvhAccelerator(const std::vector<std::shared_ptr<Intersector>>& 
     _intersectors.reserve(intersectors.size());
 
     // select spiltter
-    BvhSplitter splitter = BvhSplitter::EQUAL;
+    const BvhSplitter splitter = BvhSplitter::EQUAL;
 
-    BvhBuilder builder = BvhBuilder(splitter);
+    const BvhBuilder builder(splitter);
 
     std::size_t totalSize = 0;
     // build binary node tree recursively
-    std::unique_ptr<BvhBinaryNode> root = builder.buildBinaryNodes(std::move(intersectors), _intersectors, totalSize);
+    std::unique_ptr<BvhBinaryNode> root = builder.buildBinaryNodes(std::move(intersectors), _intersectors, &totalSize);
 
     // flatten the binary tree and use BVHLinearNode to store the informations
     _nodes.clear();
@@ -37,16 +37,20 @@ AABB3R BvhAccelerator::bound() const {
 bool BvhAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
     bool result = false;
 
-    Vector3R origin = ray.origin();
-    Vector3R invDirection = ray.direction().reciprocal();
-    int32 dirIsNegative[3] = { invDirection.x() < 0.0_r, invDirection.y() < 0.0_r, invDirection.z() < 0.0_r };
+    const Vector3R origin           = ray.origin();
+    const Vector3R inverseDirection = ray.direction().reciprocal();
+    const int32 directionIsNegative[3] = { inverseDirection.x() < 0.0_r, 
+                                           inverseDirection.y() < 0.0_r, 
+                                           inverseDirection.z() < 0.0_r };
+    
     std::size_t currentNodeIndex = 0;
     std::size_t currentStackSize = 0;
     std::size_t nodeStack[MAX_STACK_SIZE];
 
     while (true) {
-        BvhLinearNode currentNode = _nodes[currentNodeIndex];
-        if (currentNode.bound().isIntersectingAABB(origin, invDirection, ray.minT(), ray.maxT())) {
+        const BvhLinearNode currentNode = _nodes[currentNodeIndex];
+
+        if (currentNode.bound().isIntersectingAABB(origin, inverseDirection, ray.minT(), ray.maxT())) {
             if (currentNode.isLeaf()) {
                 for (std::size_t i = 0; i < currentNode.intersectorCounts(); ++i) {
                     result |= _intersectors[currentNode.intersectorIndex() + i]->isIntersecting(ray, primitiveInfo);
@@ -61,7 +65,7 @@ bool BvhAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) cons
                 }
             }
             else {
-                if (dirIsNegative[currentNode.splitAxis()]) {
+                if (directionIsNegative[currentNode.splitAxis()]) {
                     nodeStack[currentStackSize] = currentNodeIndex + 1;
                     currentStackSize += 1;
                     currentNodeIndex = currentNode.secondChildIndex();
@@ -88,16 +92,22 @@ bool BvhAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) cons
 }
 
 bool BvhAccelerator::isOccluded(const Ray& ray) const {
-    Vector3R origin = ray.origin();
-    Vector3R invDirection = ray.direction().reciprocal();
-    int32 dirIsNegative[3] = { invDirection.x() < 0.0_r, invDirection.y() < 0.0_r, invDirection.z() < 0.0_r };
+    bool result = false;
+
+    const Vector3R origin = ray.origin();
+    const Vector3R inverseDirection = ray.direction().reciprocal();
+    const int32 directionIsNegative[3] = { inverseDirection.x() < 0.0_r,
+                                           inverseDirection.y() < 0.0_r,
+                                           inverseDirection.z() < 0.0_r };
+
     std::size_t currentNodeIndex = 0;
     std::size_t currentStackSize = 0;
     std::size_t nodeStack[MAX_STACK_SIZE];
 
     while (true) {
-        BvhLinearNode currentNode = _nodes[currentNodeIndex];
-        if (currentNode.bound().isIntersectingAABB(origin, invDirection, ray.minT(), ray.maxT())) {
+        const BvhLinearNode currentNode = _nodes[currentNodeIndex];
+
+        if (currentNode.bound().isIntersectingAABB(origin, inverseDirection, ray.minT(), ray.maxT())) {
             if (currentNode.isLeaf()) {
                 for (std::size_t i = 0; i < currentNode.intersectorCounts(); ++i) {
                     if (_intersectors[currentNode.intersectorIndex() + i]->isOccluded(ray)) {
@@ -114,7 +124,7 @@ bool BvhAccelerator::isOccluded(const Ray& ray) const {
                 }
             }
             else {
-                if (dirIsNegative[currentNode.splitAxis()]) {
+                if (directionIsNegative[currentNode.splitAxis()]) {
                     nodeStack[currentStackSize] = currentNodeIndex + 1;
                     currentStackSize += 1;
                     currentNodeIndex = currentNode.secondChildIndex();

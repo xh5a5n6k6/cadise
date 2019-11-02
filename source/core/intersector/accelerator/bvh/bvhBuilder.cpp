@@ -3,6 +3,8 @@
 #include "core/intersector/accelerator/bvh/bvhBinaryNode.h"
 #include "core/intersector/intersector.h"
 
+#include "fundamental/assertion.h"
+
 #include <algorithm>
 
 namespace cadise {
@@ -14,10 +16,12 @@ BvhBuilder::BvhBuilder(const BvhSplitter& splitter) :
 std::unique_ptr<BvhBinaryNode> BvhBuilder::buildBinaryNodes(
     const std::vector<std::shared_ptr<Intersector>>& intersectors, 
     std::vector<std::shared_ptr<Intersector>>& orderedIntersectors,
-    std::size_t& totalSize) const {
+    std::size_t* const out_totalSize) const {
+
+    CADISE_ASSERT(out_totalSize);
 
     std::unique_ptr<BvhBinaryNode> root = nullptr;
-    root = _buildBinaryNodesRecursively(intersectors, orderedIntersectors, 0, totalSize);
+    root = _buildBinaryNodesRecursively(intersectors, orderedIntersectors, 0, out_totalSize);
 
     return std::move(root);
 }
@@ -37,7 +41,9 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
     const std::vector<std::shared_ptr<Intersector>>& intersectors, 
     std::vector<std::shared_ptr<Intersector>>& orderedIntersectors,
     const std::size_t startIndex,
-    std::size_t& totalSize) const {
+    std::size_t* out_totalSize) const {
+
+    CADISE_ASSERT(out_totalSize);
 
     std::unique_ptr<BvhBinaryNode> node = std::make_unique<BvhBinaryNode>();
 
@@ -55,7 +61,7 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
         for (std::size_t i = 0; i < intersectors.size(); ++i) {
             internalNodeBound.unionWith(intersectors[i]->bound());
         }
-        std::size_t splitAxis = internalNodeBound.maxAxis();
+        const std::size_t splitAxis = internalNodeBound.maxAxis();
         std::vector<std::shared_ptr<Intersector>> subIntersectorsA;
         std::vector<std::shared_ptr<Intersector>> subIntersectorsB;
 
@@ -63,8 +69,8 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
             case BvhSplitter::EQUAL:
                 _splitWith_EQUAL(intersectors,
                                  splitAxis,
-                                 subIntersectorsA, 
-                                 subIntersectorsB);
+                                 &subIntersectorsA, 
+                                 &subIntersectorsB);
                 break;
 
             default:
@@ -75,30 +81,30 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
         firstChild = _buildBinaryNodesRecursively(subIntersectorsA,
                                                   orderedIntersectors,
                                                   startIndex,
-                                                  totalSize);
+                                                  out_totalSize);
 
         std::unique_ptr<BvhBinaryNode> secondChild = nullptr;
         secondChild = _buildBinaryNodesRecursively(subIntersectorsB,
                                                    orderedIntersectors,
                                                    startIndex + subIntersectorsA.size(),
-                                                   totalSize);
+                                                   out_totalSize);
 
         node->initializeInternalNode(std::move(firstChild),
                                      std::move(secondChild),
                                      splitAxis);
     }
 
-    totalSize += 1;
+    *out_totalSize += 1;
     return std::move(node);
 }
 
 void BvhBuilder::_buildLinearNodesRecursively(std::unique_ptr<BvhBinaryNode> binaryNode, 
                                               std::vector<BvhLinearNode>& linearNodes,
-                                              std::size_t* const nodeIndex) const {
+                                              std::size_t* const out_nodeIndex) const {
     BvhLinearNode linearNode;
-    std::size_t index = linearNodes.size();
-    if (nodeIndex) {
-        *nodeIndex = index;
+    const std::size_t index = linearNodes.size();
+    if (out_nodeIndex) {
+        *out_nodeIndex = index;
     }
 
     if (binaryNode->isLeaf()) {
@@ -109,8 +115,9 @@ void BvhBuilder::_buildLinearNodesRecursively(std::unique_ptr<BvhBinaryNode> bin
     }
     else {
         linearNodes.push_back(linearNode);
-        AABB3R internalNodeBound = binaryNode->bound();
-        std::size_t internalNodeSplitAxis = binaryNode->splitAxis();
+        
+        const AABB3R internalNodeBound = binaryNode->bound();
+        const std::size_t internalNodeSplitAxis = binaryNode->splitAxis();
         std::size_t secondChildIndex;
 
         _buildLinearNodesRecursively(std::move(binaryNode->firstChild()), linearNodes, nullptr);
@@ -122,11 +129,14 @@ void BvhBuilder::_buildLinearNodesRecursively(std::unique_ptr<BvhBinaryNode> bin
 
 bool BvhBuilder::_splitWith_EQUAL(const std::vector<std::shared_ptr<Intersector>>& intersectors,
                                   const std::size_t splitAxis,
-                                  std::vector<std::shared_ptr<Intersector>>& subIntersectorsA,
-                                  std::vector<std::shared_ptr<Intersector>>& subIntersectorsB) const {
-    std::size_t size = (intersectors.size() + 1) / 2;
-    subIntersectorsA.reserve(size);
-    subIntersectorsB.reserve(size);
+                                  std::vector<std::shared_ptr<Intersector>>* const out_subIntersectorsA,
+                                  std::vector<std::shared_ptr<Intersector>>* const out_subIntersectorsB) const {
+    CADISE_ASSERT(out_subIntersectorsA);
+    CADISE_ASSERT(out_subIntersectorsB);
+
+    const std::size_t size = (intersectors.size() + 1) / 2;
+    out_subIntersectorsA->reserve(size);
+    out_subIntersectorsB->reserve(size);
 
     std::vector<std::shared_ptr<Intersector>> sortedIntersectors(intersectors);
     std::nth_element(sortedIntersectors.begin(),
@@ -136,13 +146,13 @@ bool BvhBuilder::_splitWith_EQUAL(const std::vector<std::shared_ptr<Intersector>
                          return iA->bound().centroid()[splitAxis] < iB->bound().centroid()[splitAxis];
                      });
 
-    subIntersectorsA.insert(subIntersectorsA.end(),
-                            sortedIntersectors.begin(),
-                            sortedIntersectors.begin() + size);
+    out_subIntersectorsA->insert(out_subIntersectorsA->end(),
+                                 sortedIntersectors.begin(),
+                                 sortedIntersectors.begin() + size);
 
-    subIntersectorsB.insert(subIntersectorsB.end(),
-                            sortedIntersectors.begin() + size,
-                            sortedIntersectors.end());
+    out_subIntersectorsB->insert(out_subIntersectorsB->end(),
+                                 sortedIntersectors.begin() + size,
+                                 sortedIntersectors.end());
     return true;
 }
 

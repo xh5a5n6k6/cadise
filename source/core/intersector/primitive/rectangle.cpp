@@ -43,16 +43,16 @@ bool Rectangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
         eA.swap(eB);
         isBackSide = true;
     }
-    Vector3R normal = eA.cross(eB).normalize();
 
-    real t = (normal.dot(_vB) - normal.dot(ray.origin())) / normal.dot(ray.direction());
+    const Vector3R normal = eA.cross(eB).normalize();
+    const real t = (normal.dot(_vB) - normal.dot(ray.origin())) / normal.dot(ray.direction());
     if (t < 0.0_r || t > ray.maxT()) {
         return false;
     }
 
-    Vector3R vectorOnPlane = ray.at(t) - _vB;
-    real projection1 = vectorOnPlane.dot(_eA.normalize());
-    real projection2 = vectorOnPlane.dot(_eB.normalize());
+    const Vector3R vectorOnPlane = ray.at(t) - _vB;
+    const real projection1 = vectorOnPlane.dot(_eA.normalize());
+    const real projection2 = vectorOnPlane.dot(_eB.normalize());
     if (projection1 < 0.0_r || projection1 > _eA.length() ||
         projection2 < 0.0_r || projection2 > _eB.length()) {
         return false;
@@ -71,16 +71,16 @@ bool Rectangle::isOccluded(const Ray& ray) const {
     if (ray.direction().dot(eA.cross(eB)) > 0.0_r) {
         eA.swap(eB);
     }
-    Vector3R normal = eA.cross(eB).normalize();
 
-    real t = (normal.dot(_vB) - normal.dot(ray.origin())) / normal.dot(ray.direction());
+    const Vector3R normal = eA.cross(eB).normalize();
+    const real t = (normal.dot(_vB) - normal.dot(ray.origin())) / normal.dot(ray.direction());
     if (t < 0.0_r || t > ray.maxT()) {
         return false;
     }
 
-    Vector3R vectorOnPlane = ray.at(t) - _vB;
-    real projection1 = vectorOnPlane.dot(_eA.normalize());
-    real projection2 = vectorOnPlane.dot(_eB.normalize());
+    const Vector3R vectorOnPlane = ray.at(t) - _vB;
+    const real projection1 = vectorOnPlane.dot(_eA.normalize());
+    const real projection2 = vectorOnPlane.dot(_eB.normalize());
     if (projection1 < 0.0_r || projection1 > _eA.length() ||
         projection2 < 0.0_r || projection2 > _eB.length()) {
         return false;
@@ -103,13 +103,13 @@ void Rectangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, Surfac
         surfaceInfo.setUvw(uvw);
     }
     else {
-        Vector3R point = surfaceInfo.point();
-        Vector3R vectorOnPlane = point - _vB;
-        real projection1 = vectorOnPlane.dot(_eA.normalize()) / _eA.length();
-        real projection2 = vectorOnPlane.dot(_eB.normalize()) / _eA.length();
+        const Vector3R point = surfaceInfo.point();
+        const Vector3R vectorOnPlane = point - _vB;
+        const real projection1 = vectorOnPlane.dot(_eA.normalize()) / _eA.length();
+        const real projection2 = vectorOnPlane.dot(_eB.normalize()) / _eA.length();
 
-        Vector3R xUvwLerp1 = _uvwB.lerp(_uvwC, projection2);
-        Vector3R xUvwLerp2 = _uvwA.lerp(_uvwD, projection2);
+        const Vector3R xUvwLerp1 = _uvwB.lerp(_uvwC, projection2);
+        const Vector3R xUvwLerp2 = _uvwA.lerp(_uvwD, projection2);
         uvw = xUvwLerp1.lerp(xUvwLerp2, projection1);
         surfaceInfo.setUvw(uvw);
     }
@@ -124,8 +124,8 @@ void Rectangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurf
         eA.swap(eB);
     }
 
-    real longWidth = eA.length();
-    real shortWidth = eB.length();
+    const real longWidth = eA.length();
+    const real shortWidth = eB.length();
 
     // TODO
     // improve sample point on rectangle
@@ -138,19 +138,19 @@ void Rectangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurf
         t = random::nextReal();
     } while (t > shortWidth / longWidth);
 
-    Vector3R point = _vB + s * eA + t * eA.length() * eB.normalize();
-    Vector3R direction = point - inSurface.point();
+    const Vector3R point = _vB + s * eA + t * eA.length() * eB.normalize();
+    const Vector3R direction = point - inSurface.point();
     if (direction.dot(eA.cross(eB)) > 0.0_r) {
         eA.swap(eB);
     }
-    Vector3R normal = eA.cross(eB).normalize();
 
+    const Vector3R normal = eA.cross(eB).normalize();
     outSurface.setPoint(point);
     outSurface.setGeometryNormal(normal);
 }
 
 real Rectangle::samplePdfA(const Vector3R& position) const {
-    CADISE_ASSERT(area() > 0.0_r);
+    CADISE_ASSERT_GT(area(), 0.0_r);
 
     return 1.0_r / area();
 }

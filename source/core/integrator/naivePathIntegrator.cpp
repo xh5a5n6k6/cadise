@@ -20,7 +20,7 @@ Spectrum NaivePathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) 
     Spectrum pathWeight(1.0_r);
     int32 bounceTimes = 0;
 
-    Ray traceRay = Ray(ray);
+    Ray traceRay(ray);
     while (bounceTimes < _maxDepth) {
         SurfaceIntersection intersection;
         if (!scene.isIntersecting(traceRay, intersection)) {
@@ -36,14 +36,14 @@ Spectrum NaivePathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) 
         const Vector3R hitNormal = intersection.surfaceInfo().shadingNormal();
 
         if (hitPrimitive->isEmissive()) {
-            Spectrum emittance = hitPrimitive->emittance(traceRay.direction().composite(), intersection.surfaceInfo());
+            const Spectrum emittance = hitPrimitive->emittance(traceRay.direction().composite(), intersection.surfaceInfo());
             totalRadiance += pathWeight * emittance;
         }
 
-        Spectrum reflectance = hitBsdf->evaluateSample(intersection);
-        real sign = (intersection.wo().dot(hitNormal) < 0.0_r) ? -1.0_r : 1.0_r;
+        const Spectrum reflectance = hitBsdf->evaluateSample(intersection);
+        const real sign = (intersection.wo().dot(hitNormal) < 0.0_r) ? -1.0_r : 1.0_r;
 
-        real LdotN = intersection.wo().absDot(hitNormal);
+        const real LdotN = intersection.wo().absDot(hitNormal);
         pathWeight *= reflectance * LdotN / intersection.pdf();
 
         if (pathWeight.isZero()) {
@@ -51,10 +51,10 @@ Spectrum NaivePathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) 
         }
 
         bounceTimes += 1;
-        Ray sampleRay = Ray(hitPoint + constant::RAY_EPSILON * hitNormal * sign,
-                            intersection.wo(),
-                            constant::RAY_EPSILON,
-                            std::numeric_limits<real>::max());
+        Ray sampleRay(hitPoint + constant::RAY_EPSILON * hitNormal * sign,
+                      intersection.wo(),
+                      constant::RAY_EPSILON,
+                      std::numeric_limits<real>::max());
 
         // use russian roulette to decide if the ray needs to be kept tracking
         if(bounceTimes > 2) {

@@ -110,18 +110,19 @@ std::shared_ptr<Texture<real>> makeRealTexture(
     const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
 
     std::shared_ptr<Texture<real>> realTexture = nullptr;
-    std::string_view type = data->findString("type");
-    if (!type.compare("constant")) {
+
+    const std::string_view type = data->findString("type");
+    if (type == "constant") {
         realTexture = createRealConstant(data, realTextures, spectrumTextures);
     }
-    else if (!type.compare("checkerboard")) {
+    else if (type == "checkerboard") {
         realTexture = createRealCheckerboard(data, realTextures, spectrumTextures);
     }
-    else if (!type.compare("image")) {
+    else if (type == "image") {
         // TODO: add image texture
         //realTexture = createRealImage(data, realTextures, spectrumTextures);
     }
-    else if (!type.compare("alpha-image")) {
+    else if (type == "alpha-image") {
         // TODO: add alpha image texture
         //realTexture = createRealAlphaImage(data, realTextures, spectrumTextures);
     }
@@ -138,17 +139,18 @@ std::shared_ptr<Texture<Spectrum>> makeSpectrumTexture(
     const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
 
     std::shared_ptr<Texture<Spectrum>> spectrumTexture = nullptr;
-    std::string_view type = data->findString("type");
-    if (!type.compare("constant")) {
+
+    const std::string_view type = data->findString("type");
+    if (type == "constant") {
         spectrumTexture = createSpectrumConstant(data, realTextures, spectrumTextures);
     }
-    else if (!type.compare("checkerboard")) {
+    else if (type == "checkerboard") {
         spectrumTexture = createSpectrumCheckerboard(data, realTextures, spectrumTextures);
     }
-    else if (!type.compare("image")) {
+    else if (type == "image") {
         spectrumTexture = createSpectrumImage(data, realTextures, spectrumTextures);
     }
-    else if (!type.compare("alpha-image")) {
+    else if (type == "alpha-image") {
         // TODO: add alpha image texture
         //spectrumTexture = createSpectrumAlphaImage(data, realTextures, spectrumTextures);
     }

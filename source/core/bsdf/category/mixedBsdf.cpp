@@ -23,7 +23,7 @@ MixedBsdf::MixedBsdf(const std::shared_ptr<Bsdf>& bsdfA,
 }
 
 Spectrum MixedBsdf::evaluate(const SurfaceIntersection& surfaceIntersection) const {
-    Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
+    const Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
     Spectrum sampleRatio;
     _ratio->evaluate(uvw, &sampleRatio);
 
@@ -34,34 +34,34 @@ Spectrum MixedBsdf::evaluate(const SurfaceIntersection& surfaceIntersection) con
 Spectrum MixedBsdf::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
     Spectrum result(0.0_r);
 
-    Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
+    const Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
     Spectrum sampleRatio;
     _ratio->evaluate(uvw, &sampleRatio);
 
     // sample out direction with bsdfA
     if (random::nextReal() < sampleRatio.average()) {
-        Spectrum fBsdfA = _bsdfA->evaluateSample(surfaceIntersection);
-        Spectrum fBsdfB = _bsdfB->evaluate(surfaceIntersection);
+        const Spectrum fBsdfA = _bsdfA->evaluateSample(surfaceIntersection);
+        const Spectrum fBsdfB = _bsdfB->evaluate(surfaceIntersection);
         result = sampleRatio * fBsdfA + sampleRatio.complement() * fBsdfB;
 
-        real pdfBsdfA = surfaceIntersection.pdf();
-        real pdfBsdfB = _bsdfB->evaluatePdfW(surfaceIntersection);
-        real averageRatio = sampleRatio.average();
+        const real pdfBsdfA = surfaceIntersection.pdf();
+        const real pdfBsdfB = _bsdfB->evaluatePdfW(surfaceIntersection);
+        const real averageRatio = sampleRatio.average();
 
-        real totalPdf = averageRatio * pdfBsdfA + (1.0_r - averageRatio) * pdfBsdfB;
+        const real totalPdf = averageRatio * pdfBsdfA + (1.0_r - averageRatio) * pdfBsdfB;
         surfaceIntersection.setPdf(totalPdf);
     }
     // sample out direction with bsdfB
     else {
-        Spectrum fBsdfB = _bsdfB->evaluateSample(surfaceIntersection);
-        Spectrum fBsdfA = _bsdfA->evaluate(surfaceIntersection);
+        const Spectrum fBsdfB = _bsdfB->evaluateSample(surfaceIntersection);
+        const Spectrum fBsdfA = _bsdfA->evaluate(surfaceIntersection);
         result = sampleRatio * fBsdfB + sampleRatio.complement() * fBsdfA;
 
-        real pdfBsdfB = surfaceIntersection.pdf();
-        real pdfBsdfA = _bsdfA->evaluatePdfW(surfaceIntersection);
-        real averageRatio = sampleRatio.average();
+        const real pdfBsdfB = surfaceIntersection.pdf();
+        const real pdfBsdfA = _bsdfA->evaluatePdfW(surfaceIntersection);
+        const real averageRatio = sampleRatio.average();
 
-        real totalPdf = averageRatio * pdfBsdfB + (1.0_r - averageRatio) * pdfBsdfA;
+        const real totalPdf = averageRatio * pdfBsdfB + (1.0_r - averageRatio) * pdfBsdfA;
         surfaceIntersection.setPdf(totalPdf);
     }
 
@@ -69,11 +69,11 @@ Spectrum MixedBsdf::evaluateSample(SurfaceIntersection& surfaceIntersection) con
 }
 
 real MixedBsdf::evaluatePdfW(const SurfaceIntersection& surfaceIntersection) const {
-    Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
+    const Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
     Spectrum sampleRatio;
     _ratio->evaluate(uvw, &sampleRatio);
     
-    real averageRatio = sampleRatio.average();
+    const real averageRatio = sampleRatio.average();
 
     return averageRatio * _bsdfA->evaluatePdfW(surfaceIntersection) +
            (1.0_r - averageRatio) * _bsdfB->evaluatePdfW(surfaceIntersection);

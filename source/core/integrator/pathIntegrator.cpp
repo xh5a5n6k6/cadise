@@ -25,7 +25,7 @@ Spectrum PathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const
 
     Ray traceRay = Ray(ray);
     while (bounceTimes < _maxDepth) {
-        bool isCountForEmittance = bounceTimes == 0 || isPreviousHitSpecular;
+        const bool isCountForEmittance = bounceTimes == 0 || isPreviousHitSpecular;
         SurfaceIntersection intersection;
         if (!scene.isIntersecting(traceRay, intersection)) {
             // TODO : add environment light
@@ -42,7 +42,7 @@ Spectrum PathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const
         // add emitter's emittance only at first hit-point (0 bounce)
         // or previous hit surface is specular
         if (hitPrimitive->isEmissive() && isCountForEmittance) {
-            Spectrum emittance = hitPrimitive->emittance(traceRay.direction().composite(), intersection.surfaceInfo());
+            const Spectrum emittance = hitPrimitive->emittance(traceRay.direction().composite(), intersection.surfaceInfo());
             totalRadiance += pathWeight * emittance;
         }
 
@@ -57,7 +57,7 @@ Spectrum PathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const
             std::size_t lightIndex = LightSampler::sampleOneLight<LightSamplePolicy::UNIFORM>(scene, &lightPdf);
             const Light* sampleLight = scene.lights()[lightIndex].get();
 
-            Spectrum directLightRadiance = DirectLightEvaluator::evaluate(scene, intersection,
+            const Spectrum directLightRadiance = DirectLightEvaluator::evaluate(scene, intersection,
                                                                           hitBsdf, sampleLight) / lightPdf;
             totalRadiance += pathWeight * directLightRadiance;
         }
@@ -66,10 +66,10 @@ Spectrum PathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const
         }
 
         // estimate indirect light with bsdf sampling
-        Spectrum reflectance = hitBsdf->evaluateSample(intersection);
-        real sign = (intersection.wo().dot(hitNormal) < 0.0_r) ? -1.0_r : 1.0_r;
+        const Spectrum reflectance = hitBsdf->evaluateSample(intersection);
+        const real sign = (intersection.wo().dot(hitNormal) < 0.0_r) ? -1.0_r : 1.0_r;
 
-        real LdotN = intersection.wo().absDot(hitNormal);
+        const real LdotN = intersection.wo().absDot(hitNormal);
         pathWeight *= reflectance * LdotN / intersection.pdf();
 
         if (pathWeight.isZero()) {
@@ -77,10 +77,10 @@ Spectrum PathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const
         }
 
         bounceTimes += 1;
-        Ray sampleRay = Ray(hitPoint + constant::RAY_EPSILON * hitNormal * sign,
-                            intersection.wo(),
-                            constant::RAY_EPSILON,
-                            std::numeric_limits<real>::max());
+        Ray sampleRay(hitPoint + constant::RAY_EPSILON * hitNormal * sign,
+                      intersection.wo(),
+                      constant::RAY_EPSILON,
+                      std::numeric_limits<real>::max());
 
         // use russian roulette to decide if the ray needs to be kept tracking
         if (bounceTimes > 2) {

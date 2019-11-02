@@ -30,15 +30,15 @@ Spectrum DirectLightEvaluator::evaluate(const Scene& scene, const SurfaceInterse
         intersection.setWo(lightDir);
 
         // generate shadow ray to do occluded test
-        Ray shadowRay = Ray(hitPoint + constant::RAY_EPSILON * hitNormal,
-                            lightDir,
-                            constant::RAY_EPSILON,
-                            t - constant::RAY_EPSILON);
+        Ray shadowRay(hitPoint + constant::RAY_EPSILON * hitNormal,
+                      lightDir,
+                      constant::RAY_EPSILON,
+                      t - constant::RAY_EPSILON);
 
         if (!radiance.isZero() && !scene.isOccluded(shadowRay)) {
-            Spectrum reflectance = bsdf->evaluate(intersection);
-            real LdotN = lightDir.absDot(hitNormal);
-            Spectrum directLightFactor = reflectance * LdotN;
+            const Spectrum reflectance = bsdf->evaluate(intersection);
+            const real LdotN = lightDir.absDot(hitNormal);
+            const Spectrum directLightFactor = reflectance * LdotN;
 
             // if light is delta light, not using mis technique
             if (light->isDeltaLight()) {
@@ -46,7 +46,7 @@ Spectrum DirectLightEvaluator::evaluate(const Scene& scene, const SurfaceInterse
             }
             else {
                 // calculate bsdf's pdf
-                real bsdfPdf = bsdf->evaluatePdfW(intersection);
+                const real bsdfPdf = bsdf->evaluatePdfW(intersection);
 
                 directLightRadiance += mis::powerHeuristic(lightPdf, bsdfPdf)
                                        * directLightFactor * radiance / lightPdf;
@@ -57,25 +57,25 @@ Spectrum DirectLightEvaluator::evaluate(const Scene& scene, const SurfaceInterse
     // mis using bsdf sampling
     {
         if (!light->isDeltaLight()) {
-            Spectrum reflectance = bsdf->evaluateSample(intersection);
-            real sign = (intersection.wo().dot(hitNormal) < 0.0_r) ? -1.0_r : 1.0_r;
+            const Spectrum reflectance = bsdf->evaluateSample(intersection);
+            const real sign = (intersection.wo().dot(hitNormal) < 0.0_r) ? -1.0_r : 1.0_r;
 
-            real LdotN = intersection.wo().absDot(hitNormal);
-            Spectrum directLightFactor = reflectance * LdotN;
+            const real LdotN = intersection.wo().absDot(hitNormal);
+            const Spectrum directLightFactor = reflectance * LdotN;
 
-            Ray sampleRay = Ray(hitPoint + constant::RAY_EPSILON * hitNormal * sign,
-                                intersection.wo(),
-                                constant::RAY_EPSILON,
-                                std::numeric_limits<real>::max());
+            Ray sampleRay(hitPoint + constant::RAY_EPSILON * hitNormal * sign,
+                          intersection.wo(),
+                          constant::RAY_EPSILON,
+                          std::numeric_limits<real>::max());
 
             if (scene.isIntersecting(sampleRay, intersection)) {
                 const Primitive* hitPrimitive = intersection.primitiveInfo().primitive();
                 if (hitPrimitive->isEmissive()) {
-                    real bsdfPdf = intersection.pdf();
-                    Spectrum radiance = hitPrimitive->emittance(sampleRay.direction().composite(), intersection.surfaceInfo());
+                    const real bsdfPdf = intersection.pdf();
+                    const Spectrum radiance = hitPrimitive->emittance(sampleRay.direction().composite(), intersection.surfaceInfo());
 
                     // calcualte emitter's pdf
-                    real lightPdf = light->evaluatePdfW(intersection, sampleRay.maxT());
+                    const real lightPdf = light->evaluatePdfW(intersection, sampleRay.maxT());
 
                     directLightRadiance += mis::powerHeuristic(bsdfPdf, lightPdf)
                                            * directLightFactor * radiance / bsdfPdf;

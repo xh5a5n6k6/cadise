@@ -9,6 +9,8 @@
 
 #include "file-io/scene-description/sdData.h"
 
+#include "fundamental/assertion.h"
+
 namespace cadise {
 
 namespace instantiator {
@@ -33,8 +35,10 @@ static std::shared_ptr<Light> createArea(
 
     std::shared_ptr<AreaLight> areaLight = std::make_shared<AreaLight>(color, watt, isBackFaceEmit);
 
-    std::string_view primitiveName = data->findString("primitive");
+    const std::string_view primitiveName = data->findString("primitive");
     auto&& primitive = primitives.find(primitiveName);
+
+    CADISE_ASSERT(primitive != primitives.end());
 
     areaLight->setPrimitive(primitive->second);
     areaLight->calculateEmitRadiance();
@@ -48,11 +52,11 @@ std::shared_ptr<Light> makeLight(
     const std::map<std::string, std::shared_ptr<Primitive>, std::less<>>& primitives) {
 
     std::shared_ptr<Light> light = nullptr;
-    std::string_view type = data->findString("type");
-    if (!type.compare("point")) {
+    const std::string_view type = data->findString("type");
+    if (type == "point") {
         light = createPoint(data, primitives);
     }
-    else if (!type.compare("area")) {
+    else if (type == "area") {
         light = createArea(data, primitives);
     }
     else {

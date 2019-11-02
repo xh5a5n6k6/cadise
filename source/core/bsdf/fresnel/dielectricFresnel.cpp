@@ -19,18 +19,19 @@ Spectrum DielectricFresnel::evaluateReflectance(const real cosThetaI) const {
         cosI *= -1.0_r;
     }
 
-    real etaRatio = etaI / etaT;
-    real sin2_T = etaRatio * etaRatio * (1.0_r - cosI * cosI);
+    const real etaRatio = etaI / etaT;
+    const real sin2_T = etaRatio * etaRatio * (1.0_r - cosI * cosI);
 
     // handle TIR condition
     if (sin2_T >= 1.0_r) {
         return Spectrum(1.0_r);
     }
-    real cosT = std::sqrt(1.0_r - sin2_T);
 
-    real rParallel      = (etaT * cosI - etaI * cosT) / (etaT * cosI + etaI * cosT);
-    real rPerpendicular = (etaI * cosI - etaT * cosT) / (etaI * cosI + etaT * cosT);
-    real rTotal = 0.5_r * (rParallel * rParallel + rPerpendicular * rPerpendicular);
+    const real cosT = std::sqrt(1.0_r - sin2_T);
+
+    const real rParallel      = (etaT * cosI - etaI * cosT) / (etaT * cosI + etaI * cosT);
+    const real rPerpendicular = (etaI * cosI - etaT * cosT) / (etaI * cosI + etaT * cosT);
+    const real rTotal = 0.5_r * (rParallel * rParallel + rPerpendicular * rPerpendicular);
 
     return Spectrum(rTotal);
 }

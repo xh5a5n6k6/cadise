@@ -15,15 +15,15 @@ Spectrum SpecularReflection::evaluate(const SurfaceIntersection& surfaceIntersec
 }
 
 Spectrum SpecularReflection::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
-    Vector3R normal = surfaceIntersection.surfaceInfo().shadingNormal();
-    Vector3R outDirection = surfaceIntersection.wi().reflect(normal);
-    real LdotN = outDirection.absDot(normal);
-    real pdf = 1.0_r;
+    const Vector3R normal = surfaceIntersection.surfaceInfo().shadingNormal();
+    const Vector3R outDirection = surfaceIntersection.wi().reflect(normal);
+    const real LdotN = outDirection.absDot(normal);
+    const real pdf = 1.0_r;
 
     surfaceIntersection.setWo(outDirection);
     surfaceIntersection.setPdf(pdf);
 
-    Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
+    const Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
     Spectrum sampleSpectrum;
     _albedo->evaluate(uvw, &sampleSpectrum);
 

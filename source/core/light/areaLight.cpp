@@ -31,16 +31,17 @@ Spectrum AreaLight::emittance(const Vector3R& emitDirection, const SurfaceInfo& 
 }
 
 Spectrum AreaLight::evaluateSampleRadiance(Vector3R& lightDirection, const SurfaceInfo& surfaceInfo, real& t, real& pdf) const {
-    Vector3R offsetOrigin = surfaceInfo.point() + constant::RAY_EPSILON * surfaceInfo.geometryNormal();
+    const Vector3R offsetOrigin = surfaceInfo.point() + constant::RAY_EPSILON * surfaceInfo.geometryNormal();
+    const std::shared_ptr<Primitive> primitive = _primitive.lock();
+
     SurfaceInfo sampleSurface;
-    std::shared_ptr<Primitive> primitive = _primitive.lock();
     primitive->sampleSurface(surfaceInfo, sampleSurface);
 
-    Vector3R direction = sampleSurface.point() - offsetOrigin;
+    const Vector3R direction = sampleSurface.point() - offsetOrigin;
     t = direction.length();
     lightDirection = direction.normalize();
 
-    Vector3R frontNormal = sampleSurface.frontNormal();
+    const Vector3R frontNormal = sampleSurface.frontNormal();
     if (lightDirection.composite().dot(frontNormal) < 0.0_r && !_isBackFaceEmit) {
         pdf = 0.0_r;
         return Spectrum(0.0_r);
@@ -63,8 +64,8 @@ real AreaLight::evaluatePdfW(const SurfaceIntersection& surfaceIntersection, con
         return 0.0_r;
     }
 
-    std::shared_ptr<Primitive> primitive = _primitive.lock();
-    real pdfA = primitive->samplePdfA(emitPosition);
+    const std::shared_ptr<Primitive> primitive = _primitive.lock();
+    const real pdfA = primitive->samplePdfA(emitPosition);
 
     return pdfA * distance * distance / emitDirection.absDot(emitNormal);
 }
@@ -77,7 +78,7 @@ void AreaLight::calculateEmitRadiance() {
     const Spectrum unitWattColor = _color / _color.sum();
     const Spectrum totalWattColor = unitWattColor * _watt;
 
-    std::shared_ptr<Primitive> primitive = _primitive.lock();
+    const std::shared_ptr<Primitive> primitive = _primitive.lock();
     _emitRadiance = totalWattColor / primitive->area() * constant::INV_PI;
 }
 

@@ -16,7 +16,7 @@ Scene::Scene(const std::shared_ptr<Accelerator>& accelerator,
 
 bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) const {
     PrimitiveInfo primitiveInfo;
-    bool isHit = _topAccelerator->isIntersecting(ray, primitiveInfo);
+    const bool isHit = _topAccelerator->isIntersecting(ray, primitiveInfo);
     if (isHit) {
         surfaceIntersection.setWi(ray.direction().composite());
         surfaceIntersection.setPrimitiveInfo(primitiveInfo);

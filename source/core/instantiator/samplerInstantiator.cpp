@@ -30,11 +30,12 @@ std::shared_ptr<Sampler> makeSampler(
     const std::shared_ptr<SdData>& data) {
 
     std::shared_ptr<Sampler> sampler = nullptr;
-    std::string_view type = data->findString("sampler");
-    if (!type.compare("random")) {
+    
+    const std::string_view type = data->findString("sampler");
+    if (type == "random") {
         sampler = createRandom(data);
     }
-    else if (!type.compare("stratified")) {
+    else if (type == "stratified") {
         sampler = createStratified(data);
     }
     else {

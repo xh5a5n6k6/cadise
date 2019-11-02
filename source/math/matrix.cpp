@@ -36,9 +36,9 @@ Matrix4 Matrix4::translate(const real tx, const real ty, const real tz) {
 
 // Return cameraToWorld matrix
 Matrix4 Matrix4::lookAt(const Vector3R& position, const Vector3R& direction, const Vector3R& up) {
-    Vector3R newZ = direction.composite().normalize();
-    Vector3R newX = up.cross(newZ).normalize();
-    Vector3R newY = newZ.cross(newX);
+    const Vector3R newZ = direction.composite().normalize();
+    const Vector3R newX = up.cross(newZ).normalize();
+    const Vector3R newY = newZ.cross(newX);
 
     return Matrix4(newX.x(), newY.x(), newZ.x(), position.x(),
                    newX.y(), newY.y(), newZ.y(), position.y(),
@@ -124,7 +124,8 @@ Matrix4 Matrix4::inverse() const {
         }
 
         if (head == -1) {
-            exit(-1);
+            // TODO: logging
+            return identity();
         }
 
         // swap two rows, let pivot be diagonal 

@@ -53,23 +53,23 @@ void PictureSaver::saveHdrImage(const Path& path, const HdrImage& hdrImage) {
 }
 
 bool PictureSaver::savePNG(const Path& path, const LdrImage& ldrImage) {
-    int32 result = stbi_write_png(path.path().c_str(), 
-                                  ldrImage.width(), 
-                                  ldrImage.height(),
-                                  3,
-                                  ldrImage.rawData(),
-                                  0);
+    const int32 result = stbi_write_png(path.path().c_str(), 
+                                        ldrImage.width(), 
+                                        ldrImage.height(),
+                                        3,
+                                        ldrImage.rawData(),
+                                        0);
 
     return result != 0;
 }
 
 bool PictureSaver::saveJPG(const Path& path, const LdrImage& ldrImage) {
-    int32 result = stbi_write_jpg(path.path().c_str(), 
-                                  ldrImage.width(), 
-                                  ldrImage.height(), 
-                                  3, 
-                                  ldrImage.rawData(), 
-                                  92);
+    const int32 result = stbi_write_jpg(path.path().c_str(), 
+                                        ldrImage.width(), 
+                                        ldrImage.height(), 
+                                        3, 
+                                        ldrImage.rawData(), 
+                                        92);
 
     return result != 0;
 }

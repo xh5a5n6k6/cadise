@@ -32,8 +32,8 @@ inline bool AABB<T, N>::isIntersectingAABB(
 
     static_assert(N == 3, "Not support isIntersecting with this kind of AABB");
     
-    Vector<T, N> nearT = (_minVertex - origin) * inverseDirection;
-    Vector<T, N> farT  = (_maxVertex - origin) * inverseDirection;
+    const Vector<T, N> nearT = (_minVertex - origin) * inverseDirection;
+    const Vector<T, N> farT  = (_maxVertex - origin) * inverseDirection;
     
     // calculate x-slab interval
     if (inverseDirection.x() > 0.0_r) {

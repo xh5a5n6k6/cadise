@@ -1,10 +1,10 @@
 #include "file-io/clParser.h"
 
-using namespace cadise;
+#include <cstdlib>
 
-int main(int argc, const char* argv[]) {
-    ClParser parser;
-    parser.parse(argc, argv);
+int main(int argc, char* argv[]) {
+    cadise::ClParser parser;
+    int exitSituation = parser.parse(argc, argv);
 
-    return 0;
+    return exitSituation;
 }

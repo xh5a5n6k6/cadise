@@ -8,7 +8,7 @@ class ClParser {
 public:
     ClParser();
 
-    void parse(int32 argc, const char* argv[]) const;
+    int32 parse(int32 argc, char* argv[]) const;
 
 private:
 };
