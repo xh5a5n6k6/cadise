@@ -23,7 +23,7 @@ private:
 
 template<typename... BsdfTypes>
 inline bool BsdfType::isAtLeastOne(const BsdfType& type, const BsdfTypes&... types) const {
-    BsdfType checkTypes[]{ type, types... };
+    const BsdfType checkTypes[]{ type, types... };
     for (auto& checkType : checkTypes) {
         if (_type & checkType._type) {
             return true;

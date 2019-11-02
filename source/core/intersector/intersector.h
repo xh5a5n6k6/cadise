@@ -7,9 +7,10 @@ namespace cadise {
 class Ray;
 class PrimitiveInfo;
 
-// Intersector represents an object that is intersectable, 
-// and it includes primitive, accelerator and transformedIntersector.
-//
+/*
+    Intersector represents an object that is intersectable, 
+    and it includes primitive, accelerator and transformedIntersector.
+*/
 class Intersector {
 public:
     virtual AABB3R bound() const = 0;

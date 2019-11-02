@@ -24,8 +24,8 @@ void StackTracer::trace() const {
     int32 traceDepth = backtrace(traceBuffer, MAX_STACK_TRACE_DEPTH);
     char** traceMessages = backtrace_symbols(traceBuffer, traceDepth);
 
-    for (int32 index = 0; index < traceDepth; index++) {
-        std::cerr << traceMessages[index] << std::endl;
+    for (int32 i = 0; i < traceDepth; ++i) {
+        std::cerr << traceMessages[i] << std::endl;
     }
 
 #endif

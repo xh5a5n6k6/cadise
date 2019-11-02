@@ -13,7 +13,7 @@ namespace cadise {
 template<typename T, std::size_t N>
 inline Vector<T, N> Vector<T, N>::min(const Vector<T, N>& v1, const Vector<T, N>& v2) {
     Vector<T, N> result;
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = std::min(v1._v[i], v2._v[i]);
     }
 
@@ -23,7 +23,7 @@ inline Vector<T, N> Vector<T, N>::min(const Vector<T, N>& v1, const Vector<T, N>
 template<typename T, std::size_t N>
 inline Vector<T, N> Vector<T, N>::max(const Vector<T, N>& v1, const Vector<T, N>& v2) {
     Vector<T, N> result;
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = std::max(v1._v[i], v2._v[i]);
     }
 
@@ -37,7 +37,7 @@ inline Vector<T, N>::Vector() :
 
 template<typename T, std::size_t N>
 inline Vector<T, N>::Vector(const T v) {
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         _v[i] = v;
     }
 }
@@ -51,7 +51,7 @@ inline Vector<T, N>::Vector(const T v1, const T v2, const Ts... ts) :
 template<typename T, std::size_t N>
 template<typename U>
 inline Vector<T, N>::Vector(const Vector<U, N>& v) {
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         _v[i] = static_cast<T>(v[i]);
     }
 }
@@ -59,7 +59,7 @@ inline Vector<T, N>::Vector(const Vector<U, N>& v) {
 template<typename T, std::size_t N>
 inline Vector<T, N> Vector<T, N>::operator-() const {
     Vector<T, N> result;
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = -_v[i];
     }
 
@@ -69,7 +69,7 @@ inline Vector<T, N> Vector<T, N>::operator-() const {
 template<typename T, std::size_t N>
 inline Vector<T, N> Vector<T, N>::operator+(const T s) const {
     Vector<T, N> result;
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = _v[i] + s;
     }
 
@@ -79,7 +79,7 @@ inline Vector<T, N> Vector<T, N>::operator+(const T s) const {
 template<typename T, std::size_t N>
 inline Vector<T, N> Vector<T, N>::operator-(const T s) const {
     Vector<T, N> result;
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = _v[i] - s;
     }
 
@@ -89,7 +89,7 @@ inline Vector<T, N> Vector<T, N>::operator-(const T s) const {
 template<typename T, std::size_t N>
 inline Vector<T, N> Vector<T, N>::operator*(const T s) const {
     Vector<T, N> result;
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = _v[i] * s;
     }
 
@@ -100,7 +100,7 @@ template<typename T, std::size_t N>
 inline Vector<T, N> Vector<T, N>::operator/(const T s) const {
     T invS = static_cast<T>(1) / s;
     Vector<T, N> result;
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = _v[i] * invS;
     }
 
@@ -110,7 +110,7 @@ inline Vector<T, N> Vector<T, N>::operator/(const T s) const {
 template<typename T, std::size_t N>
 inline Vector<T, N> Vector<T, N>::operator+(const Vector<T, N>& v) const {
     Vector<T, N> result;
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = _v[i] + v._v[i];
     }
 
@@ -120,7 +120,7 @@ inline Vector<T, N> Vector<T, N>::operator+(const Vector<T, N>& v) const {
 template<typename T, std::size_t N>
 inline Vector<T, N> Vector<T, N>::operator-(const Vector<T, N>& v) const {
     Vector<T, N> result;
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = _v[i] - v._v[i];
     }
 
@@ -130,7 +130,7 @@ inline Vector<T, N> Vector<T, N>::operator-(const Vector<T, N>& v) const {
 template<typename T, std::size_t N>
 inline Vector<T, N> Vector<T, N>::operator*(const Vector<T, N>& v) const {
     Vector<T, N> result;
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = _v[i] * v._v[i];
     }
 
@@ -140,7 +140,7 @@ inline Vector<T, N> Vector<T, N>::operator*(const Vector<T, N>& v) const {
 template<typename T, std::size_t N>
 inline Vector<T, N> Vector<T, N>::operator/(const Vector<T, N>& v) const {
     Vector<T, N> result;
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = _v[i] / v._v[i];
     }
 
@@ -149,7 +149,7 @@ inline Vector<T, N> Vector<T, N>::operator/(const Vector<T, N>& v) const {
 
 template<typename T, std::size_t N>
 inline Vector<T, N>& Vector<T, N>::operator+=(const T s) {
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         _v[i] += s;
     }
 
@@ -158,7 +158,7 @@ inline Vector<T, N>& Vector<T, N>::operator+=(const T s) {
 
 template<typename T, std::size_t N>
 inline Vector<T, N>& Vector<T, N>::operator-=(const T s) {
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         _v[i] -= s;
     }
 
@@ -167,7 +167,7 @@ inline Vector<T, N>& Vector<T, N>::operator-=(const T s) {
 
 template<typename T, std::size_t N>
 inline Vector<T, N>& Vector<T, N>::operator*=(const T s) {
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         _v[i] *= s;
     }
 
@@ -176,7 +176,7 @@ inline Vector<T, N>& Vector<T, N>::operator*=(const T s) {
 
 template<typename T, std::size_t N>
 inline Vector<T, N>& Vector<T, N>::operator/=(const T s) {
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         _v[i] /= s;
     }
 
@@ -185,7 +185,7 @@ inline Vector<T, N>& Vector<T, N>::operator/=(const T s) {
 
 template<typename T, std::size_t N>
 inline Vector<T, N>& Vector<T, N>::operator+=(const Vector<T, N>& v) {
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         _v[i] += v._v[i];
     }
 
@@ -194,7 +194,7 @@ inline Vector<T, N>& Vector<T, N>::operator+=(const Vector<T, N>& v) {
 
 template<typename T, std::size_t N>
 inline Vector<T, N>& Vector<T, N>::operator-=(const Vector<T, N>& v) {
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         _v[i] -= v._v[i];
     }
 
@@ -203,7 +203,7 @@ inline Vector<T, N>& Vector<T, N>::operator-=(const Vector<T, N>& v) {
 
 template<typename T, std::size_t N>
 inline Vector<T, N>& Vector<T, N>::operator*=(const Vector<T, N>& v) {
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         _v[i] *= v._v[i];
     }
 
@@ -212,7 +212,7 @@ inline Vector<T, N>& Vector<T, N>::operator*=(const Vector<T, N>& v) {
 
 template<typename T, std::size_t N>
 inline Vector<T, N>& Vector<T, N>::operator/=(const Vector<T, N>& v) {
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         _v[i] /= v._v[i];
     }
 
@@ -221,7 +221,7 @@ inline Vector<T, N>& Vector<T, N>::operator/=(const Vector<T, N>& v) {
 
 template<typename T, std::size_t N>
 inline Vector<T, N>& Vector<T, N>::operator=(const Vector<T, N>& v) {
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         _v[i] = v._v[i];
     }
 
@@ -241,7 +241,7 @@ inline const T& Vector<T, N>::operator[](const std::size_t i) const {
 template<typename T, std::size_t N>
 inline bool Vector<T, N>::isZero() const {
     bool result = true;
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         result &= _v[i] == static_cast<T>(0);
     }
 
@@ -250,7 +250,7 @@ inline bool Vector<T, N>::isZero() const {
 
 template<typename T, std::size_t N>
 inline bool Vector<T, N>::hasNaN() const {
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         if (std::isnan(_v[i])) {
             return true;
         }
@@ -261,7 +261,7 @@ inline bool Vector<T, N>::hasNaN() const {
 
 template<typename T, std::size_t N>
 inline bool Vector<T, N>::hasInfinite() const {
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         if (!std::isfinite(_v[i])) {
             return true;
         }
@@ -273,7 +273,7 @@ inline bool Vector<T, N>::hasInfinite() const {
 template<typename T, std::size_t N>
 inline T Vector<T, N>::sum() const {
     T result = static_cast<T>(0);
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         result += _v[i];
     }
 
@@ -293,7 +293,7 @@ inline T Vector<T, N>::length() const {
 template<typename T, std::size_t N>
 inline T Vector<T, N>::lengthSquared() const {
     T result = static_cast<T>(0);
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         result += _v[i] * _v[i];
     }
 
@@ -327,7 +327,7 @@ inline Vector<T, N> Vector<T, N>::complement() const {
 template<typename T, std::size_t N>
 inline Vector<T, N> Vector<T, N>::reciprocal() const {
     Vector<T, N> result;
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = static_cast<T>(1) / _v[i];
     }
 
@@ -337,7 +337,7 @@ inline Vector<T, N> Vector<T, N>::reciprocal() const {
 template<typename T, std::size_t N>
 inline Vector<T, N> Vector<T, N>::clamp(const T min, const T max) const {
     Vector<T, N> result;
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = math::clamp(_v[i], min, max);
     }
 
@@ -348,7 +348,7 @@ template<typename T, std::size_t N>
 inline std::size_t Vector<T, N>::maxDimension() const {
     T max = _v[0];
     std::size_t maxD = 0;
-    for (std::size_t i = 1; i < N; i++) {
+    for (std::size_t i = 1; i < N; ++i) {
         if (_v[i] > max) {
             max = _v[i];
             maxD = i;
@@ -360,7 +360,7 @@ inline std::size_t Vector<T, N>::maxDimension() const {
 
 template<typename T, std::size_t N>
 inline void Vector<T, N>::swap(Vector<T, N>& v) {
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         math::swap(_v[i], v._v[i]);
     }
 }
@@ -368,7 +368,7 @@ inline void Vector<T, N>::swap(Vector<T, N>& v) {
 template<typename T, std::size_t N>
 inline T Vector<T, N>::dot(const Vector<T, N>& v) const {
     T result = static_cast<T>(0);
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         result += _v[i] * v._v[i];
     }
 
@@ -384,7 +384,7 @@ template<typename T, std::size_t N>
 inline Vector<T, N> Vector<T, N>::lerp(const Vector<T, N>& rhs, const real ratio) const {
     Vector<T, N> result;
     real ratioComplement = 1.0_r - ratio;
-    for (std::size_t i = 0; i < N; i++) {
+    for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = ratioComplement * _v[i] + ratio * rhs._v[i];
     }
 
@@ -396,8 +396,8 @@ inline Vector<T, N> Vector<T, N>::cross(const Vector<T, N>& v) const {
     static_assert(N == 3, "Error in vector's cross, this vector doesn't support cross method\n");
 
     return Vector<T, N>(_v[1] * v._v[2] - _v[2] * v._v[1],
-                           _v[2] * v._v[0] - _v[0] * v._v[2],
-                           _v[0] * v._v[1] - _v[1] * v._v[0]);
+                        _v[2] * v._v[0] - _v[0] * v._v[2],
+                        _v[0] * v._v[1] - _v[1] * v._v[0]);
 }
 
 template<typename T, std::size_t N>

@@ -26,7 +26,7 @@ std::unique_ptr<SampleRecord1D> StratifiedSampler::requestSample1D() const {
 
     const real dx = 1.0_r / static_cast<real>(_sampleNumber);
 
-    for (std::size_t i = 0; i < _sampleNumber; i++) {
+    for (std::size_t i = 0; i < _sampleNumber; ++i) {
         const real jitter = random::nextReal();
 
         sample1D->setData(i, (static_cast<real>(i) + jitter) * dx);
@@ -44,8 +44,8 @@ std::unique_ptr<SampleRecord2D> StratifiedSampler::requestSample2D() const {
     const real dx = 1.0_r / static_cast<real>(_baseNumber);
     const real dy = 1.0_r / static_cast<real>(_baseNumber);
     
-    for (std::size_t iy = 0; iy < _baseNumber; iy++) {
-        for (std::size_t ix = 0; ix < _baseNumber; ix++) {
+    for (std::size_t iy = 0; iy < _baseNumber; ++iy) {
+        for (std::size_t ix = 0; ix < _baseNumber; ++ix) {
             const std::size_t indexOffset = 2 * index;
             const real jitterX = random::nextReal();
             const real jitterY = random::nextReal();
@@ -59,7 +59,7 @@ std::unique_ptr<SampleRecord2D> StratifiedSampler::requestSample2D() const {
 
     std::size_t remainSample = _sampleNumber - strataNumber;
     if (remainSample > 0) {
-        for (std::size_t i = 0; i < remainSample; i++) {
+        for (std::size_t i = 0; i < remainSample; ++i) {
             const std::size_t indexOffset = 2 * index;
 
             sample2D->setData(indexOffset, random::nextReal());

@@ -43,7 +43,7 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
 
     if (intersectors.size() <= MAX_INTERSECTOR_SIZE) {
         AABB3R leafNodeBound;
-        for (std::size_t i = 0; i < intersectors.size(); i++) {
+        for (std::size_t i = 0; i < intersectors.size(); ++i) {
             orderedIntersectors.push_back(intersectors[i]);
             leafNodeBound.unionWith(intersectors[i]->bound());
         }
@@ -52,7 +52,7 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
     }
     else {
         AABB3R internalNodeBound;
-        for (std::size_t i = 0; i < intersectors.size(); i++) {
+        for (std::size_t i = 0; i < intersectors.size(); ++i) {
             internalNodeBound.unionWith(intersectors[i]->bound());
         }
         std::size_t splitAxis = internalNodeBound.maxAxis();

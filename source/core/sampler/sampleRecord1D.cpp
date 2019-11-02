@@ -14,7 +14,7 @@ SampleRecord1D::SampleRecord1D(const std::size_t sampleNumber) :
 }
 
 void SampleRecord1D::shuffle() {
-    for (std::size_t i = 0; i < _sampleNumber; i++) {
+    for (std::size_t i = 0; i < _sampleNumber; ++i) {
         const std::size_t randomIndex = random::nextIndex(i, _sampleNumber - 1);
         math::swap(_data[i], _data[randomIndex]);
     }

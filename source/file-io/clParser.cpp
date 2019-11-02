@@ -19,12 +19,12 @@ void ClParser::parse(int32 argc, const char* argv[]) const {
     // TODO : add some argument commands
 
     std::vector<std::string> args;
-    for (int32 i = 1; i < argc; i++) {
+    for (int32 i = 1; i < argc; ++i) {
         args.push_back(argv[i]);
     }
 
     SdParser parser;
-    for (std::size_t i = 0; i < args.size(); i++) {
+    for (std::size_t i = 0; i < args.size(); ++i) {
         parser.parseSd(args[i]);
     }
 }

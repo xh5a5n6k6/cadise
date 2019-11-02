@@ -36,14 +36,12 @@ Spectrum LambertianDiffuse::evaluateSample(SurfaceIntersection& surfaceIntersect
     Vector3R yAxis;
     Vector3R zAxis(normal);
     math::buildCoordinateSystem(zAxis, xAxis, yAxis);
-    
-    //Vector3R sampleDir = hemisphere::uniformSampling(random::get2D());
+
     Vector2R uniformSample = Vector2R(random::nextReal(), random::nextReal());
     Vector3R sampleDir = hemisphere::cosineWeightedSampling(uniformSample);
     Vector3R outDirection = xAxis * sampleDir.x() + yAxis * sampleDir.y() + zAxis * sampleDir.z();
     outDirection = outDirection.normalize();
 
-    //real pdf = constant::INV_TWO_PI;
     real pdf = outDirection.absDot(zAxis) * constant::INV_PI;
 
     surfaceIntersection.setWo(outDirection);

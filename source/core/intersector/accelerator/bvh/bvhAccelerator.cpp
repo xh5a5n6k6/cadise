@@ -8,6 +8,7 @@
 namespace cadise {
 
 BvhAccelerator::BvhAccelerator(const std::vector<std::shared_ptr<Intersector>>& intersectors) {
+    // TODO: just create a empty node tree
     if (intersectors.empty()) {
         exit(1);
     }
@@ -47,7 +48,7 @@ bool BvhAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) cons
         BvhLinearNode currentNode = _nodes[currentNodeIndex];
         if (currentNode.bound().isIntersectingAABB(origin, invDirection, ray.minT(), ray.maxT())) {
             if (currentNode.isLeaf()) {
-                for (std::size_t i = 0; i < currentNode.intersectorCounts(); i++) {
+                for (std::size_t i = 0; i < currentNode.intersectorCounts(); ++i) {
                     result |= _intersectors[currentNode.intersectorIndex() + i]->isIntersecting(ray, primitiveInfo);
                 }
 
@@ -98,7 +99,7 @@ bool BvhAccelerator::isOccluded(const Ray& ray) const {
         BvhLinearNode currentNode = _nodes[currentNodeIndex];
         if (currentNode.bound().isIntersectingAABB(origin, invDirection, ray.minT(), ray.maxT())) {
             if (currentNode.isLeaf()) {
-                for (std::size_t i = 0; i < currentNode.intersectorCounts(); i++) {
+                for (std::size_t i = 0; i < currentNode.intersectorCounts(); ++i) {
                     if (_intersectors[currentNode.intersectorIndex() + i]->isOccluded(ray)) {
                         return true;
                     }

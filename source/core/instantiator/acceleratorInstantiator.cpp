@@ -29,11 +29,12 @@ std::shared_ptr<Accelerator> makeAccelerator(
     const std::vector<std::shared_ptr<Intersector>> intersectors) {
 
     std::shared_ptr<Accelerator> accelerator = nullptr;
-    std::string_view type = data->findString("type");
-    if (!type.compare("bruteForce")) {
+    
+    const std::string_view type = data->findString("type");
+    if (type == "bruteForce") {
         accelerator = createBruteForce(data, intersectors);
     }
-    else if (!type.compare("bvh")) {
+    else if (type == "bvh") {
         accelerator = createBvh(data, intersectors);
     }
     else {

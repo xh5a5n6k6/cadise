@@ -63,8 +63,8 @@ void PictureLoader::loadLdrImage(const Path& path, LdrImage* const out_ldrImage)
 
     // gray image, we still store 3 components each pixel with same value
     if (componentNumber == 1) {
-        for (int32 iy = 0; iy < height; iy++) {
-            for (int32 ix = 0; ix < width; ix++) {
+        for (int32 iy = 0; iy < height; ++iy) {
+            for (int32 ix = 0; ix < width; ++ix) {
                 const std::size_t indexOffset     = static_cast<std::size_t>(ix + iy * width);
                 const std::size_t dataIndexOffset = indexOffset * 3;
 
@@ -84,8 +84,8 @@ void PictureLoader::loadLdrImage(const Path& path, LdrImage* const out_ldrImage)
     }
     // rgb image
     else if (componentNumber == 3) {
-        for (int32 iy = 0; iy < height; iy++) {
-            for (int32 ix = 0; ix < width; ix++) {
+        for (int32 iy = 0; iy < height; ++iy) {
+            for (int32 ix = 0; ix < width; ++ix) {
                 const std::size_t indexOffset = static_cast<std::size_t>((ix + iy * width) * 3);
 
                 // TODO: transform input sRGB to linear-sRGB as a function

@@ -42,7 +42,7 @@ Spectrum WhittedIntegrator::traceRadiance(const Scene& scene, const Ray& ray) co
     
     // add direct light only at non-specular surface
     if (!isSpecular) {
-        for (std::size_t i = 0; i < scene.lights().size(); i++) {
+        for (std::size_t i = 0; i < scene.lights().size(); ++i) {
             Vector3R lightDir;
             real t;
             real pdf;

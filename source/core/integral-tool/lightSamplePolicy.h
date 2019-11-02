@@ -4,7 +4,9 @@ namespace cadise {
 
 enum class LightSamplePolicy {
     UNIFORM,
-    IMPORTANCE,
+    
+    // TODO:
+    // IMPORTANCE,
 };
 
 } // namespace cadise

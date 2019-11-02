@@ -10,7 +10,7 @@ BruteForceAccelerator::BruteForceAccelerator(const std::vector<std::shared_ptr<I
 
 AABB3R BruteForceAccelerator::bound() const {
     AABB3R result;
-    for (std::size_t i = 0; i < _intersectors.size(); i++) {
+    for (std::size_t i = 0; i < _intersectors.size(); ++i) {
         result.unionWith(_intersectors[i]->bound());
     }
 
@@ -19,7 +19,7 @@ AABB3R BruteForceAccelerator::bound() const {
 
 bool BruteForceAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
     bool result = false;
-    for (std::size_t i = 0; i < _intersectors.size(); i++) {
+    for (std::size_t i = 0; i < _intersectors.size(); ++i) {
         result |= _intersectors[i]->isIntersecting(ray, primitiveInfo);
     }
 
@@ -27,7 +27,7 @@ bool BruteForceAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInf
 }
 
 bool BruteForceAccelerator::isOccluded(const Ray& ray) const {
-    for (std::size_t i = 0; i < _intersectors.size(); i++) {
+    for (std::size_t i = 0; i < _intersectors.size(); ++i) {
         if (_intersectors[i]->isOccluded(ray)) {
             return true;
         }

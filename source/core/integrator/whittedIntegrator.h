@@ -18,6 +18,8 @@ public:
     Spectrum traceRadiance(const Scene& scene, const Ray& ray) const override;
 
 private:
+    // TODO: refactor here, use for loop rather than this function
+    //       to let ray doesn't need to store depth information
     Spectrum _radianceAtSpecularSurface(const Scene& scene, const Ray& ray, SurfaceIntersection& surfaceIntersection) const;
 
     int32 _maxDepth;

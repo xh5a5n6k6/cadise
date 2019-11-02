@@ -74,11 +74,11 @@ void Tokenizer::_parseDataUnit(std::shared_ptr<SdData>& sdData, const std::strin
         sdData->addInt32(name, std::move(value), 1);
     }
     else if (!type.compare("rgb")) {
-        std::unique_ptr<Vector3R[]> value = std::move(_parseVector3R(valueString));
+        std::unique_ptr<Vector3R[]> value = std::move(_parseVector3r(valueString));
         sdData->addVector3R(name, std::move(value), 1);
     }
     else if (!type.compare("vector3r")) {
-        std::unique_ptr<Vector3R[]> value = std::move(_parseVector3R(valueString));
+        std::unique_ptr<Vector3R[]> value = std::move(_parseVector3r(valueString));
         sdData->addVector3R(name, std::move(value), 1);
     }
     else if (!type.compare("string")) {
@@ -104,7 +104,7 @@ void Tokenizer::_parseDataUnit(std::shared_ptr<SdData>& sdData, const std::strin
     }
     else if (!type.compare("vector3r-array")) {
         int32 valueNumber = 0;
-        std::unique_ptr<Vector3R[]> value = std::move(_parseVector3RArray(valueString, &valueNumber));
+        std::unique_ptr<Vector3R[]> value = std::move(_parseVector3rArray(valueString, &valueNumber));
         sdData->addVector3R(name, std::move(value), valueNumber);
     }
     else {
@@ -146,7 +146,7 @@ std::unique_ptr<int32[]> Tokenizer::_parseInt32(const std::string_view& value) c
     return std::move(result);
 }
 
-std::unique_ptr<Vector3R[]> Tokenizer::_parseVector3R(const std::string_view& value) const {
+std::unique_ptr<Vector3R[]> Tokenizer::_parseVector3r(const std::string_view& value) const {
     std::unique_ptr<Vector3R[]> result(new Vector3R);
 
     std::size_t startPosition = 0;
@@ -192,7 +192,7 @@ std::unique_ptr<real[]> Tokenizer::_parseRealArray(
     // TODO : while real loop
 
     std::unique_ptr<real[]> result(new real[realVector.size()]);
-    for (std::size_t i = 0; i < realVector.size(); i++) {
+    for (std::size_t i = 0; i < realVector.size(); ++i) {
         result[i] = realVector[i];
     }
 
@@ -200,7 +200,7 @@ std::unique_ptr<real[]> Tokenizer::_parseRealArray(
     return std::move(result);
 }
 
-std::unique_ptr<Vector3R[]> Tokenizer::_parseVector3RArray(
+std::unique_ptr<Vector3R[]> Tokenizer::_parseVector3rArray(
     const std::string_view& value, int32* const valueNumber) const {
 
     std::vector<Vector3R> vector3rVector;
@@ -236,7 +236,7 @@ std::unique_ptr<Vector3R[]> Tokenizer::_parseVector3RArray(
     }
 
     std::unique_ptr<Vector3R[]> result(new Vector3R[vector3rVector.size()]);
-    for (std::size_t i = 0; i < vector3rVector.size(); i++) {
+    for (std::size_t i = 0; i < vector3rVector.size(); ++i) {
         result[i] = vector3rVector[i];
     }
 

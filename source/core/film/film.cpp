@@ -47,8 +47,8 @@ void Film::mergeWithFilmTile(std::unique_ptr<FilmTile> filmTile) {
     const Vector2I x1y1 = tileBound.maxVertex();
 
     // add each pixel value recording in filmTile
-    for (int32 iy = x0y0.y(); iy < x1y1.y(); iy++) {
-        for (int32 ix = x0y0.x(); ix < x1y1.x(); ix++) {
+    for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy) {
+        for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix) {
             const FilmSensor& sensor = filmTile->getSensor(ix - x0y0.x(),
                                                            iy - x0y0.y());
             const std::size_t pixelIndexOffset = _pixelIndexOffset(ix, iy);
@@ -64,8 +64,8 @@ void Film::save() {
     // TODO: refactor here
     HdrImage hdrImage(_resolution);
 
-    for (int32 iy = 0; iy < _resolution.y(); iy++) {
-        for (int32 ix = 0; ix < _resolution.x(); ix++) {
+    for (int32 iy = 0; iy < _resolution.y(); ++iy) {
+        for (int32 ix = 0; ix < _resolution.x(); ++ix) {
             const std::size_t pixelOffset = _pixelIndexOffset(ix, iy);
 
             const FilmPixel& pixel = _pixels[pixelOffset];

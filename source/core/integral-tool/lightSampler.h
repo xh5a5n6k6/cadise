@@ -26,9 +26,10 @@ inline std::size_t LightSampler::sampleOneLight(const Scene& scene, real* const 
         return sampleIndex;
     }
     
-    if constexpr (policy == LightSamplePolicy::IMPORTANCE) {
-        // TODO
-    }
+    // TODO: 
+    //if constexpr (policy == LightSamplePolicy::IMPORTANCE) {
+    //    
+    //}
 
     // go wrong
     return -1;

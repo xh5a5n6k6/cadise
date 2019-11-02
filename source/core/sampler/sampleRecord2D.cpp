@@ -15,13 +15,13 @@ SampleRecord2D::SampleRecord2D(const std::size_t sampleNumber) :
 }
 
 void SampleRecord2D::shuffle() {
-    for (std::size_t i = 0; i < _sampleNumber; i++) {
+    for (std::size_t i = 0; i < _sampleNumber; ++i) {
         const std::size_t randomIndex = random::nextIndex(i, _sampleNumber - 1);
         
         const std::size_t indexOffset       = 2 * i;
         const std::size_t randomIndexOffset = 2 * randomIndex;
 
-        for (std::size_t id = 0; id < 2; id++) {
+        for (std::size_t id = 0; id < 2; ++id) {
             math::swap(_data[indexOffset + id], _data[randomIndexOffset + id]);
         }
     }

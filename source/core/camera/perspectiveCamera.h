@@ -24,9 +24,6 @@ private:
 
     real _fov;
     real _sensorWidthMM;
-    //real _pixelWidth;
-    //real _pixelHeight;
-    //Vector2R _leftUpFilmPosition;
 };
 
 } // namespace cadise

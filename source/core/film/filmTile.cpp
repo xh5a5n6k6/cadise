@@ -19,6 +19,7 @@ FilmTile::FilmTile(const AABB2I& tileBound, const Filter* const filter) :
 }
 
 void FilmTile::addSample(const Vector2R& filmPosition, const Spectrum& sampleSpectrum) {
+    // TODO: do this check
     //CADISE_ASSERT(sampleSpectrum.hasNaN());
     //CADISE_ASSERT(sampleSpectrum.hasInfinite());
 
@@ -45,8 +46,8 @@ void FilmTile::addSample(const Vector2R& filmPosition, const Vector3R& sampleRgb
                         static_cast<int32>(std::floor(filmMaxPosition.y() - 0.5_r) + 1));
 
     // for each effective pixel, accumulate its weight
-    for (int32 iy = x0y0.y(); iy < x1y1.y(); iy++) {
-        for (int32 ix = x0y0.x(); ix < x1y1.x(); ix++) {
+    for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy) {
+        for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix) {
             const std::size_t sensorIndexOffset = _sensorIndexOffset(ix - _tileBound.minVertex().x(), 
                                                                      iy - _tileBound.minVertex().y());
 
