@@ -24,7 +24,10 @@ Spectrum SpecularReflection::evaluateSample(SurfaceIntersection& surfaceIntersec
     surfaceIntersection.setPdf(pdf);
 
     Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
-    return _albedo->evaluate(uvw) / LdotN;
+    Spectrum sampleSpectrum;
+    _albedo->evaluate(uvw, &sampleSpectrum);
+
+    return sampleSpectrum / LdotN;
 }
 
 real SpecularReflection::evaluatePdfW(const SurfaceIntersection& surfaceIntersection) const {

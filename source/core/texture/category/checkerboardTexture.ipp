@@ -7,7 +7,8 @@
 namespace cadise {
 
 template<typename T>
-inline CheckerboardTexture<T>::CheckerboardTexture(const real oddTextureNumber, const real evenTextureNumber,
+inline CheckerboardTexture<T>::CheckerboardTexture(const real oddTextureNumber, 
+                                                   const real evenTextureNumber,
                                                    const std::shared_ptr<Texture<T>>& oddTexture, 
                                                    const std::shared_ptr<Texture<T>>& evenTexture) :
     _oddTexture(oddTexture), 
@@ -18,15 +19,15 @@ inline CheckerboardTexture<T>::CheckerboardTexture(const real oddTextureNumber, 
 }
 
 template<typename T>
-inline T CheckerboardTexture<T>::evaluate(const Vector3R& uvw) const {
+inline void CheckerboardTexture<T>::evaluate(const Vector3R& uvw, T* const out_value) const {
     const int32 uCast = static_cast<int32>(std::floor(uvw.x() / _oddTextureSize));
     const int32 vCast = static_cast<int32>(std::floor(uvw.y() / _evenTextureSize));
     
     if ((uCast + vCast) % 2 == 0) {
-        return _evenTexture->evaluate(uvw);
+        _evenTexture->evaluate(uvw, out_value);
     }
     else {
-        return _oddTexture->evaluate(uvw);
+        _oddTexture->evaluate(uvw, out_value);
     }
 }
 

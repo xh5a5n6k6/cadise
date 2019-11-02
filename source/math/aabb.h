@@ -12,13 +12,22 @@ public:
     AABB(const Vector<T, N>& vertex);
     AABB(const Vector<T, N>& minVertex, const Vector<T, N>& maxVertex);
 
-    bool isIntersectingAABB(const Vector<T, N>& origin, const Vector<T, N>& inverseDirection, real minT, real maxT) const;
+    bool isIntersectingAABB(
+        const Vector<T, N>& origin, 
+        const Vector<T, N>& inverseDirection, 
+        real minT, 
+        real maxT) const;
+
+    Vector<T, N> extent() const;
     Vector<T, N> centroid() const;
     std::size_t maxAxis() const;
 
     AABB& unionWith(const Vector<T, N>& vertex);
     AABB& unionWith(const AABB& aabb);
     AABB& expand(const T scalar);
+
+    Vector<T, N> minVertex() const;
+    Vector<T, N> maxVertex() const;
 
 private:
     Vector<T, N> _minVertex;

@@ -13,7 +13,7 @@ public:
     RgbSpectrum(const Vector3R& v);
     RgbSpectrum(const ConceptualSpectrum<3>& cs);
 
-    Vector3R transformToRgb() const;
+    void transformToRgb(Vector3R* const out_rgb) const;
 };
 
 } // namespace cadise

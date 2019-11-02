@@ -1,90 +1,94 @@
 #include "core/film/film.h"
 
+#include "core/film/filmTile.h"
 #include "core/film/filter/filter.h"
-#include "core/film/pixel.h"
+#include "core/imaging/image.h"
 
-#include "file-io/imageIO.h"
+#include "file-io/pictureSaver.h"
+
+#include "fundamental/assertion.h"
 
 #include "math/math.h"
+#include "math/type/imageType.h"
 
 #include <cmath>
 
 namespace cadise {
 
-Film::Film(const int32 widthPx, const int32 heightPx, 
+Film::Film(const int32 widthPx, 
+           const int32 heightPx, 
            const Path& filename,
            const std::shared_ptr<Filter>& filter) :
-    _filename(filename), 
     _resolution(widthPx, heightPx),
-    _filter(filter) {
+    _filename(filename),
+    _filter(filter),
+    _pixels() {
 
-    const int32 pixelNumber = _resolution.x() * _resolution.y();
-    _pixels = new Pixel[pixelNumber];
+    const std::size_t pixelNumber = static_cast<std::size_t>(_resolution.x() * _resolution.y());
+    _pixels.resize(pixelNumber);
 }
 
-void Film::addSample(const Vector2R& filmPosition, const Spectrum& sampleSpectrum) {
-    if (sampleSpectrum.hasNaN() || sampleSpectrum.hasInfinite()) {
-        return;
-    }
+std::unique_ptr<FilmTile> Film::generateFilmTile(const int32 tileX, const int32 tileY) const {
+    const int32 minIndexX = tileX * CADISE_FILMTILE_SIZE;
+    const int32 minIndexY = tileY * CADISE_FILMTILE_SIZE;
 
-    const Vector3R sampleRgb = sampleSpectrum.transformToRgb();
+    const int32 maxIndexX = math::min(minIndexX + CADISE_FILMTILE_SIZE, _resolution.x());
+    const int32 maxIndexY = math::min(minIndexY + CADISE_FILMTILE_SIZE, _resolution.y());
 
-    // calculate filter bound for given film position
-    Vector2R filmMinPosition = filmPosition - _filter->filterHalfSize();
-    Vector2R filmMaxPosition = filmPosition + _filter->filterHalfSize();
+    return std::make_unique<FilmTile>(AABB2I(Vector2I(minIndexX, minIndexY),
+                                             Vector2I(maxIndexX, maxIndexY)), 
+                                      _filter.get());
+}
 
-    filmMinPosition = Vector2R::max(filmMinPosition, Vector2R(0.0_r));
-    filmMaxPosition = Vector2R::min(filmMaxPosition, Vector2R(_resolution));
+void Film::mergeWithFilmTile(std::unique_ptr<FilmTile> filmTile) {
+    const AABB2I tileBound = filmTile->tileBound();
 
-    const int32 xMinIndex = static_cast<int32>(std::ceil(filmMinPosition.x() - 0.5_r));
-    const int32 yMinIndex = static_cast<int32>(std::ceil(filmMinPosition.y() - 0.5_r));
-    const int32 xMaxIndex = static_cast<int32>(std::floor(filmMaxPosition.x() - 0.5_r));
-    const int32 yMaxIndex = static_cast<int32>(std::floor(filmMaxPosition.y() - 0.5_r));
+    const Vector2I x0y0 = tileBound.minVertex();
+    const Vector2I x1y1 = tileBound.maxVertex();
 
-    // for each effective pixel, accumulate its weight
-    for (int32 iy = yMinIndex; iy <= yMaxIndex; iy++) {
-        for (int32 ix = xMinIndex; ix <= xMaxIndex; ix++) {
-            const int32 indexOffset = ix + iy * _resolution.x();
-            const real x = ix - (filmPosition.x() - 0.5_r);
-            const real y = iy - (filmPosition.y() - 0.5_r);
+    // add each pixel value recording in filmTile
+    for (int32 iy = x0y0.y(); iy < x1y1.y(); iy++) {
+        for (int32 ix = x0y0.x(); ix < x1y1.x(); ix++) {
+            const FilmSensor& sensor = filmTile->getSensor(ix - x0y0.x(),
+                                                           iy - x0y0.y());
+            const std::size_t pixelIndexOffset = _pixelIndexOffset(ix, iy);
+            const Vector3R totalRadiance(sensor.r(), sensor.g(), sensor.b());
+            const real inverseWeight = 1.0_r / sensor.weight();
 
-            const real filterWeight = _filter->evaluate(x, y);
-
-            _pixels[indexOffset].addValue(sampleRgb * filterWeight);
-            _pixels[indexOffset].addWeight(filterWeight);
+            _pixels[pixelIndexOffset] = totalRadiance * inverseWeight;
         }
     }
 }
 
-void Film::save() const {
-    std::unique_ptr<uint8[]> data(new uint8[3 * _resolution.x() * _resolution.y()]);
+void Film::save() {
+    // TODO: refactor here
+    HdrImage hdrImage(_resolution);
+
     for (int32 iy = 0; iy < _resolution.y(); iy++) {
         for (int32 ix = 0; ix < _resolution.x(); ix++) {
-            const int32 pixelOffset = ix + iy * _resolution.x();
-            const int32 dataOffset  = 3 * pixelOffset;
-            const Pixel* pixel = &_pixels[pixelOffset];
-            
-            real r = math::max(0.0_r, pixel->r() / pixel->weight());
-            real g = math::max(0.0_r, pixel->g() / pixel->weight());
-            real b = math::max(0.0_r, pixel->b() / pixel->weight());
+            const std::size_t pixelOffset = _pixelIndexOffset(ix, iy);
 
-            r = math::gammaCorrection(r);
-            g = math::gammaCorrection(g);
-            b = math::gammaCorrection(b);
+            const FilmPixel& pixel = _pixels[pixelOffset];
 
-            data[dataOffset + 0] = static_cast<uint8>(math::clamp(255.0_r * r + 0.5_r, 0.0_r, 255.0_r));
-            data[dataOffset + 1] = static_cast<uint8>(math::clamp(255.0_r * g + 0.5_r, 0.0_r, 255.0_r));
-            data[dataOffset + 2] = static_cast<uint8>(math::clamp(255.0_r * b + 0.5_r, 0.0_r, 255.0_r));
+            const real r = math::gammaCorrection(pixel.x());
+            const real g = math::gammaCorrection(pixel.y());
+            const real b = math::gammaCorrection(pixel.z());
+
+            hdrImage.setPixelValue(ix, iy, Vector3R(r, g, b));
         }
     }
 
-    imageIO::save(_filename, _resolution.x(), _resolution.y(), data.get());
-    data.reset();
-    delete[] _pixels;
+    PictureSaver::save(_filename, hdrImage);
+    _pixels.clear();
+    _pixels.shrink_to_fit();
 }
 
 Vector2I Film::resolution() const {
     return _resolution;
+}
+
+std::size_t Film::_pixelIndexOffset(const int32 x, const int32 y) const {
+    return static_cast<std::size_t>(x + y * _resolution.x());
 }
 
 } // namespace cadise

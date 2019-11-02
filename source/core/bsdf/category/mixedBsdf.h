@@ -13,9 +13,11 @@ class Texture;
 
 class MixedBsdf : public Bsdf {
 public:
-    MixedBsdf(const std::shared_ptr<Bsdf>& bsdfA, const std::shared_ptr<Bsdf>& bsdfB,
+    MixedBsdf(const std::shared_ptr<Bsdf>& bsdfA, 
+              const std::shared_ptr<Bsdf>& bsdfB,
               const real ratio);
-    MixedBsdf(const std::shared_ptr<Bsdf>& bsdfA, const std::shared_ptr<Bsdf>& bsdfB,
+    MixedBsdf(const std::shared_ptr<Bsdf>& bsdfA, 
+              const std::shared_ptr<Bsdf>& bsdfB,
               const std::shared_ptr<Texture<Spectrum>>& ratio);
 
     Spectrum evaluate(const SurfaceIntersection& surfaceIntersection) const override;

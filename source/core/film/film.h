@@ -5,29 +5,38 @@
 #include "file-io/path.h"
 
 #include <memory>
+#include <vector>
 
 namespace cadise {
 
+class FilmTile;
 class Filter;
-class Pixel;
 
 class Film {
+private:
+    using FilmPixel = Vector3R;
+
 public:
-    Film(const int32 widthPx, const int32 heightPx,
+    Film(const int32 widthPx, 
+         const int32 heightPx,
          const Path& filename,
          const std::shared_ptr<Filter>& filter);
 
-    void addSample(const Vector2R& filmPosition, const Spectrum& value);
-    void save() const;
+    std::unique_ptr<FilmTile> generateFilmTile(const int32 tileX, const int32 tileY) const;
+    void mergeWithFilmTile(std::unique_ptr<FilmTile> filmTile);
+
+    void save();
 
     Vector2I resolution() const;
 
 private:
+    std::size_t _pixelIndexOffset(const int32 x, const int32 y) const;
+
     Vector2I                _resolution;
     Path                    _filename;
     std::shared_ptr<Filter> _filter;
 
-    Pixel* _pixels;
+    std::vector<FilmPixel> _pixels;
 };
 
 } // namespace cadise

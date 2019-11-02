@@ -2,11 +2,16 @@
 
 #include "core/camera/camera.h"
 #include "core/film/film.h"
+#include "core/film/filmTile.h"
 #include "core/integrator/integrator.h"
 #include "core/ray.h"
 #include "core/sampler/sampler.h"
 #include "core/sampler/sampleRecord2D.h"
 #include "core/scene.h"
+
+#include "fundamental/assertion.h"
+
+#include "utility/parallel.h"
 
 #include <chrono>
 #include <iostream>
@@ -21,31 +26,43 @@ SamplingRenderer::SamplingRenderer(const std::shared_ptr<Integrator>& integrator
 
 void SamplingRenderer::render(const Scene& scene) const {
     std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+    
+    const Vector2R realResolution(_film->resolution());
+    const Vector2I tileNumber((_film->resolution().x() + CADISE_FILMTILE_SIZE - 1) / CADISE_FILMTILE_SIZE,
+                              (_film->resolution().y() + CADISE_FILMTILE_SIZE - 1) / CADISE_FILMTILE_SIZE);
 
-    const real rx = static_cast<real>(_film->resolution().x());
-    const real ry = static_cast<real>(_film->resolution().y());
+    for (int32 tileY = 0; tileY < tileNumber.y(); tileY++) {
+        for (int32 tileX = 0; tileX < tileNumber.x(); tileX++) {
+            std::unique_ptr<FilmTile> filmTile = _film->generateFilmTile(tileX, tileY);
 
-    for (int32 iy = 0; iy < _film->resolution().y(); iy++) {
-        for (int32 ix = 0; ix < _film->resolution().x(); ix++) {
-            const Vector2R filmPosition = Vector2R(static_cast<real>(ix), static_cast<real>(iy));
+            const Vector2I x0y0 = filmTile->tileBound().minVertex();
+            const Vector2I x1y1 = filmTile->tileBound().maxVertex();
 
-            // for each pixel, prepare sampler setup
-            std::unique_ptr<Sampler> sampleSampler = _sampler->clone(_sampler->sampleNumber());
-            std::unique_ptr<SampleRecord2D> sample2D = sampleSampler->requestSample2D();
+            for (int32 iy = x0y0.y(); iy < x1y1.y(); iy++) {
+                for (int32 ix = x0y0.x(); ix < x1y1.x(); ix++) {
+                    const Vector2R filmPosition = Vector2R(static_cast<real>(ix), static_cast<real>(iy));
 
-            for (std::size_t in = 0; in < sampleSampler->sampleNumber(); in++) {  
-                const Vector2R filmJitterPosition = filmPosition + sample2D->nextSample();
-                const Vector2R filmNdcPosition = filmJitterPosition / Vector2R(rx, ry);
+                    // for each pixel, prepare sampler setup
+                    std::unique_ptr<Sampler> sampleSampler = _sampler->clone(_sampler->sampleNumber());
+                    std::unique_ptr<SampleRecord2D> sample2D = sampleSampler->requestSample2D();
 
-                Ray primaryRay = _camera->spawnPrimaryRay(filmNdcPosition);
-                Spectrum sampleSpectrum = _integrator->traceRadiance(scene, primaryRay);
+                    for (std::size_t in = 0; in < sampleSampler->sampleNumber(); in++) {
+                        const Vector2R filmJitterPosition = filmPosition + sample2D->nextSample();
+                        const Vector2R filmNdcPosition = filmJitterPosition / realResolution;
 
-                _film->addSample(filmJitterPosition, sampleSpectrum);
+                        Ray primaryRay = _camera->spawnPrimaryRay(filmNdcPosition);
+                        Spectrum sampleSpectrum = _integrator->traceRadiance(scene, primaryRay);
+
+                        filmTile->addSample(filmJitterPosition, sampleSpectrum);
+                    }
+
+                    sampleSampler.reset();
+                    sample2D->clear();
+                    sample2D.reset();
+                }
             }
 
-            sampleSampler.reset();
-            sample2D->clear();
-            sample2D.reset();
+            _film->mergeWithFilmTile(std::move(filmTile));
         }
     }
 

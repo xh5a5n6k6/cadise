@@ -24,7 +24,12 @@ inline cadise::AABB<T, N>::AABB(const Vector<T, N>& minVertex, const Vector<T, N
 }
 
 template<typename T, std::size_t N>
-inline bool AABB<T, N>::isIntersectingAABB(const Vector<T, N>& origin, const Vector<T, N>& inverseDirection, real minT, real maxT) const {
+inline bool AABB<T, N>::isIntersectingAABB(
+    const Vector<T, N>& origin, 
+    const Vector<T, N>& inverseDirection, 
+    real minT, 
+    real maxT) const {
+
     static_assert(N == 3, "Not support isIntersecting with this kind of AABB");
     
     Vector<T, N> nearT = (_minVertex - origin) * inverseDirection;
@@ -69,13 +74,18 @@ inline bool AABB<T, N>::isIntersectingAABB(const Vector<T, N>& origin, const Vec
 }
 
 template<typename T, std::size_t N>
+inline Vector<T, N> AABB<T, N>::extent() const {
+    return _maxVertex - _minVertex;
+}
+
+template<typename T, std::size_t N>
 inline Vector<T, N> AABB<T, N>::centroid() const {
     return (_minVertex + _maxVertex) / static_cast<T>(2);
 }
 
 template<typename T, std::size_t N>
 inline std::size_t AABB<T, N>::maxAxis() const {
-    return (_maxVertex - _minVertex).maxDimension();
+    return extent().maxDimension();
 }
 
 template<typename T, std::size_t N>
@@ -100,6 +110,16 @@ inline AABB<T, N>& AABB<T, N>::expand(const T scalar) {
     _maxVertex += scalar;
 
     return *this;
+}
+
+template<typename T, std::size_t N>
+inline Vector<T, N> AABB<T, N>::minVertex() const {
+    return _minVertex;
+}
+
+template<typename T, std::size_t N>
+inline Vector<T, N> AABB<T, N>::maxVertex() const {
+    return _maxVertex;
 }
 
 } // namespace cadise

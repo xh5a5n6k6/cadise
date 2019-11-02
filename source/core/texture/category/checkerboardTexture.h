@@ -9,11 +9,12 @@ namespace cadise {
 template<typename T>
 class CheckerboardTexture : public Texture<T> {
 public:
-    CheckerboardTexture(const real oddTextureNumber, const real evenTextureNumber, 
+    CheckerboardTexture(const real oddTextureNumber, 
+                        const real evenTextureNumber, 
                         const std::shared_ptr<Texture<T>>& oddTexture,
                         const std::shared_ptr<Texture<T>>& evenTexture);
 
-    T evaluate(const Vector3R& uvw) const override;
+    void evaluate(const Vector3R& uvw, T* const out_value) const override;
 
 private:
     std::shared_ptr<Texture<T>> _oddTexture;

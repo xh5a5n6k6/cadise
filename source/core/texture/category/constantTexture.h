@@ -9,7 +9,7 @@ class ConstantTexture : public Texture<T> {
 public:
     ConstantTexture(const T& value);
 
-    T evaluate(const Vector3R& uvw) const override;
+    void evaluate(const Vector3R& uvw, T* const out_value) const override;
 
 private:
     T _value;

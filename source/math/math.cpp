@@ -42,12 +42,20 @@ void buildCoordinateSystem(const Vector3R& zAxis, Vector3R& xAxis, Vector3R& yAx
     yAxis = zAxis.cross(xAxis);
 }
 
-real gammaCorrection(real value) {
+real gammaCorrection(const real value) {
     if (value <= 0.0031308_r) {
         return 12.92_r * value;
     }
 
-    return 1.055_r * std::pow(value, 1._r / 2.4_r) - 0.055_r;
+    return 1.055_r * std::pow(value, 1.0_r / 2.4_r) - 0.055_r;
+}
+
+real inverseGammaCorrection(const real value) {
+    if (value <= 0.04045_r) {
+        return value * 1.0_r / 12.92_r;
+    }
+
+    return std::pow((value + 0.055_r) / 1.055_r, 2.4_r);
 }
 
 } // namespace math

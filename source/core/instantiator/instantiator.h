@@ -13,6 +13,8 @@ class Bsdf;
 class Camera;
 class Film;
 class Filter;
+template<typename T, std::size_t N>
+class Image;
 class Integrator;
 class Intersector;
 class Light;

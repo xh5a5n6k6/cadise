@@ -20,8 +20,8 @@ RgbSpectrum::RgbSpectrum(const ConceptualSpectrum<3>& cs) :
     ConceptualSpectrum<3>(cs) {
 }
 
-Vector3R RgbSpectrum::transformToRgb() const {
-    return Vector3R(_values.x(), _values.y(), _values.z());
+void RgbSpectrum::transformToRgb(Vector3R* const out_rgb) const {
+    *out_rgb = Vector3R(_values.x(), _values.y(), _values.z());
 }
 
 } // namespace cadise

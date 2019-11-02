@@ -10,8 +10,8 @@ inline ConstantTexture<T>::ConstantTexture(const T& value) :
 }
 
 template<typename T>
-inline T ConstantTexture<T>::evaluate(const Vector3R& uvw) const {
-    return _value;
+inline void ConstantTexture<T>::evaluate(const Vector3R& uvw, T* const out_value) const {
+    *out_value = _value;
 }
 
 } // namespace cadise

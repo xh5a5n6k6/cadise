@@ -37,6 +37,9 @@ Cadise Renderer Scene Description (CRSD) developed by Chia-Yu Chou is a scene de
 - ### Texture
     - Constant
     - Checkerboard
+    - Image
+        - sampling: nearest
+        - supported channel: gray, rgb
 - ### Camera
     - Pinhole Perspective
 - ### Sampling
@@ -52,3 +55,9 @@ Cadise Renderer Scene Description (CRSD) developed by Chia-Yu Chou is a scene de
 Cadise is under the [MIT](https://opensource.org/licenses/MIT) license. 
 
 It also includes some third-party libraries in the `./source/third-party/` folder with their own licenses, you can see the `LICENSE.txt` for more details.
+
+## Gallery
+Here are some images rendered with Cadise.
+
+<img src="./gallery/image/pear.png">
+<p align="center"><i>Pear Scene (based on Pear scene by MZiemys from BlendSwap)</i></p>

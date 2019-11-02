@@ -23,7 +23,10 @@ LambertianDiffuse::LambertianDiffuse(const std::shared_ptr<Texture<Spectrum>>& a
 
 Spectrum LambertianDiffuse::evaluate(const SurfaceIntersection& surfaceIntersection) const {
     Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
-    return _albedo->evaluate(uvw) * constant::INV_PI;
+    Spectrum sampleSpectrum;
+    _albedo->evaluate(uvw, &sampleSpectrum);
+
+    return sampleSpectrum * constant::INV_PI;
 }
 
 Spectrum LambertianDiffuse::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
@@ -47,7 +50,10 @@ Spectrum LambertianDiffuse::evaluateSample(SurfaceIntersection& surfaceIntersect
     surfaceIntersection.setPdf(pdf);
 
     Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
-    return _albedo->evaluate(uvw) * constant::INV_PI;
+    Spectrum sampleSpectrum;
+    _albedo->evaluate(uvw, &sampleSpectrum);
+
+    return sampleSpectrum * constant::INV_PI;
 }
 
 real LambertianDiffuse::evaluatePdfW(const SurfaceIntersection& surfaceIntersection) const {

@@ -2,13 +2,16 @@
 
 #include "fundamental/setting.h"
 
-// this is simple custom assert macro
-// Reference Note: http://cnicholson.net/2009/02/stupid-c-tricks-adventures-in-assert/
-//
-// T.C. Chang also has a great implementation for stack trace
-// when assertion fails.
-// Reference Code: https://github.com/TzuChieh/Photon-v2/blob/master/Engine/Source/Common/assertion.h
-//
+/*
+    this is simple custom assert macro
+    Reference Note: 
+    http://cnicholson.net/2009/02/stupid-c-tricks-adventures-in-assert/
+
+    T.C. Chang also has a great implementation for stack trace
+    when assertion fails.
+    Reference Code: 
+    https://github.com/TzuChieh/Photon-v2/blob/master/Engine/Source/Common/assertion.h
+*/
 #ifdef CADISE_DEBUG
     #include <iostream>
 

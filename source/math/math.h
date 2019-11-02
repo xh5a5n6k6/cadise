@@ -25,6 +25,8 @@ void buildCoordinateSystem(const Vector3R& zAxis, Vector3R& xAxis, Vector3R& yAx
 
 real gammaCorrection(const real value);
 
+real inverseGammaCorrection(const real value);
+
 template<typename T>
 inline T min(const T& a, const T& b);
 

@@ -7,12 +7,14 @@
 
 namespace cadise {
 
-MixedBsdf::MixedBsdf(const std::shared_ptr<Bsdf>& bsdfA, const std::shared_ptr<Bsdf>& bsdfB,
+MixedBsdf::MixedBsdf(const std::shared_ptr<Bsdf>& bsdfA, 
+                     const std::shared_ptr<Bsdf>& bsdfB,
                      const real ratio) :
     MixedBsdf(bsdfA, bsdfB, std::make_shared<ConstantTexture<Spectrum>>(ratio)) {
 }
 
-MixedBsdf::MixedBsdf(const std::shared_ptr<Bsdf>& bsdfA, const std::shared_ptr<Bsdf>& bsdfB,
+MixedBsdf::MixedBsdf(const std::shared_ptr<Bsdf>& bsdfA, 
+                     const std::shared_ptr<Bsdf>& bsdfB,
                      const std::shared_ptr<Texture<Spectrum>>& ratio) :
     Bsdf(bsdfA->type() | bsdfB->type()),
     _bsdfA(bsdfA),
@@ -22,7 +24,8 @@ MixedBsdf::MixedBsdf(const std::shared_ptr<Bsdf>& bsdfA, const std::shared_ptr<B
 
 Spectrum MixedBsdf::evaluate(const SurfaceIntersection& surfaceIntersection) const {
     Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
-    Spectrum sampleRatio = _ratio->evaluate(uvw);
+    Spectrum sampleRatio;
+    _ratio->evaluate(uvw, &sampleRatio);
 
     return sampleRatio * _bsdfA->evaluate(surfaceIntersection) +
            sampleRatio.complement() * _bsdfB->evaluate(surfaceIntersection);
@@ -32,7 +35,8 @@ Spectrum MixedBsdf::evaluateSample(SurfaceIntersection& surfaceIntersection) con
     Spectrum result(0.0_r);
 
     Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
-    Spectrum sampleRatio = _ratio->evaluate(uvw);
+    Spectrum sampleRatio;
+    _ratio->evaluate(uvw, &sampleRatio);
 
     // sample out direction with bsdfA
     if (random::nextReal() < sampleRatio.average()) {
@@ -66,7 +70,9 @@ Spectrum MixedBsdf::evaluateSample(SurfaceIntersection& surfaceIntersection) con
 
 real MixedBsdf::evaluatePdfW(const SurfaceIntersection& surfaceIntersection) const {
     Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
-    Spectrum sampleRatio = _ratio->evaluate(uvw);
+    Spectrum sampleRatio;
+    _ratio->evaluate(uvw, &sampleRatio);
+    
     real averageRatio = sampleRatio.average();
 
     return averageRatio * _bsdfA->evaluatePdfW(surfaceIntersection) +

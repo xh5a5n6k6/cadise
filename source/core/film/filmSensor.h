@@ -1,14 +1,16 @@
 #pragma once
 
-#include "math/vector.h"
+#include "math/type/mathType.h"
 
 namespace cadise {
 
-class Pixel {
+class FilmSensor {
 public:
-    Pixel();
+    FilmSensor();
 
     void addValue(const Vector3R& value);
+    void addValue(const real r, const real g, const real b);
+
     void addWeight(const real weight);
 
     real r() const;
@@ -17,8 +19,10 @@ public:
     real weight() const;
 
 private:
-    Vector3R _value;
-    real _totalWeight;
+    real _r;
+    real _g;
+    real _b;
+    real _weight;
 };
 
 } // namespace cadise

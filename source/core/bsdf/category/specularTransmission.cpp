@@ -43,7 +43,10 @@ Spectrum SpecularTransmission::evaluateSample(SurfaceIntersection& surfaceInters
     real LdotN = refractDirection.absDot(normal);
 
     Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
-    return _albedo->evaluate(uvw) * transmittance * btdfFactor / LdotN;
+    Spectrum sampleSpectrum;
+    _albedo->evaluate(uvw, &sampleSpectrum);
+
+    return sampleSpectrum * transmittance * btdfFactor / LdotN;
 }
 
 real SpecularTransmission::evaluatePdfW(const SurfaceIntersection& surfaceIntersection) const {

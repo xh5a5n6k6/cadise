@@ -51,7 +51,10 @@ Spectrum PerfectDielectric::evaluateSample(SurfaceIntersection& surfaceIntersect
         real LdotN = reflectDirection.absDot(normal);
 
         Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
-        result = _albedo->evaluate(uvw) * reflectance / LdotN;
+        Spectrum sampleSpectrum;
+        _albedo->evaluate(uvw, &sampleSpectrum);
+
+        result = sampleSpectrum * reflectance / LdotN;
     }
     else if (isRefraction) {
         Vector3R refractDirection = surfaceIntersection.wi().refract(normal, etaI, etaT);
@@ -73,7 +76,10 @@ Spectrum PerfectDielectric::evaluateSample(SurfaceIntersection& surfaceIntersect
         real LdotN = refractDirection.absDot(normal);
 
         Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
-        result = _albedo->evaluate(uvw) * transmittance * btdfFactor / LdotN;
+        Spectrum sampleSpectrum;
+        _albedo->evaluate(uvw, &sampleSpectrum);
+
+        result = sampleSpectrum * transmittance * btdfFactor / LdotN;
     }
 
     return result;
