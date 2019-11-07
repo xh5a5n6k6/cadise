@@ -97,7 +97,7 @@ inline T SdData::_findData(
     const std::vector<std::shared_ptr<SdDataUnit<T>>>& dataset) const {
 
     for (std::size_t i = 0; i < dataset.size(); ++i) {
-        if (!dataset[i]->variableName().compare(name)) {
+        if (dataset[i]->variableName() == name) {
             return dataset[i]->value()[0];
         }
     }
@@ -114,7 +114,7 @@ inline decltype(auto) SdData::_findDataArray(
     std::shared_ptr<SdDataUnit<T>> dataUnit = nullptr;
 
     for (std::size_t i = 0; i < dataset.size(); ++i) {
-        if (!dataset[i]->variableName().compare(name)) {
+        if (dataset[i]->variableName() == name) {
             dataUnit = dataset[i];
             break;
         }
