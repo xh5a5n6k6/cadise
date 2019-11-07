@@ -17,84 +17,91 @@ WhittedIntegrator::WhittedIntegrator(const int32 maxDepth) :
 
 Spectrum WhittedIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const {
     Spectrum totalRadiance(0.0_r);
+    Spectrum pathWeight(1.0_r);
+    int32 bounceTimes = 0;
 
     Ray traceRay(ray);
-    SurfaceIntersection intersection;
-    if (!scene.isIntersecting(traceRay, intersection)) {
-        // TODO : add environment light influence
+    while (bounceTimes < _maxDepth) {
+        SurfaceIntersection intersection;
+        if (!scene.isIntersecting(traceRay, intersection)) {
+            // TODO : add environment light influence
 
-        return totalRadiance;
-    }
+            break;
+        }
 
-    const Primitive* hitPrimitive = intersection.primitiveInfo().primitive();
-    const Bsdf*      hitBsdf      = hitPrimitive->bsdf().get();
-        
-    const Vector3R hitPoint  = intersection.surfaceInfo().point();
-    const Vector3R hitNormal = intersection.surfaceInfo().shadingNormal();
-     
-    const bool isSpecular = hitBsdf->type().isAtLeastOne(BsdfType(BxdfType::SPECULAR_REFLECTION),
-                                                         BsdfType(BxdfType::SPECULAR_TRANSMISSION));
+        const Primitive* hitPrimitive = intersection.primitiveInfo().primitive();
+        const Bsdf*      hitBsdf      = hitPrimitive->bsdf().get();
 
-    // add radiance if hitting area light
-    if (hitPrimitive->isEmissive()) {
-        totalRadiance += hitPrimitive->emittance(traceRay.direction().reverse(), intersection.surfaceInfo());
-    }
-    
-    // add direct light only at non-specular surface
-    if (!isSpecular) {
-        for (std::size_t i = 0; i < scene.lights().size(); ++i) {
-            Vector3R lightDir;
-            real t;
-            real pdf;
-            const Spectrum radiance = scene.lights()[i]->evaluateSampleRadiance(lightDir, intersection.surfaceInfo(), t, pdf);
+        const Vector3R hitPoint  = intersection.surfaceInfo().point();
+        const Vector3R hitNormal = intersection.surfaceInfo().shadingNormal();
 
-            // generate shadow ray to do occluded test
-            Ray shadowRay(hitPoint + constant::RAY_EPSILON * hitNormal,
-                          lightDir,
-                          constant::RAY_EPSILON,
-                          t - constant::RAY_EPSILON);
+        const bool isSpecular = hitBsdf->type().isAtLeastOne(BsdfType(BxdfType::SPECULAR_REFLECTION),
+                                                             BsdfType(BxdfType::SPECULAR_TRANSMISSION));
 
-            if (scene.isOccluded(shadowRay)) {
-                continue;
+        // add radiance if hitting area light
+        if (hitPrimitive->isEmissive()) {
+            totalRadiance += hitPrimitive->emittance(traceRay.direction().reverse(), intersection.surfaceInfo());
+        }
+
+        // add direct light only at non-specular surface
+        if (!isSpecular) {
+            const std::vector<std::shared_ptr<Light>>& lights = scene.lights();
+            for (std::size_t i = 0; i < lights.size(); ++i) {
+                Vector3R lightDir;
+                real t;
+                real pdf;
+                const Spectrum emitRadiance = lights[i]->evaluateSampleRadiance(lightDir, intersection.surfaceInfo(), t, pdf);
+
+                // generate shadow ray to do occluded test
+                const Ray shadowRay(hitPoint + constant::RAY_EPSILON * hitNormal,
+                                    lightDir,
+                                    constant::RAY_EPSILON,
+                                    t - constant::RAY_EPSILON);
+
+                if (scene.isOccluded(shadowRay)) {
+                    continue;
+                }
+
+                const Spectrum reflectance = hitBsdf->evaluate(intersection);
+                if (!reflectance.isZero() && pdf > 0.0_r) {
+                    const real LdotN = lightDir.absDot(hitNormal);
+                    const Spectrum directLightRadiance = reflectance * emitRadiance * LdotN / pdf;
+
+                    totalRadiance += pathWeight * directLightRadiance;
+                }
             }
 
-            const Spectrum reflectance = hitBsdf->evaluate(intersection);
-            if (!reflectance.isZero() && pdf > 0.0_r) {
-                const real LdotN = lightDir.absDot(hitNormal);
-                totalRadiance += reflectance * radiance * LdotN / pdf;
+            // once hitting non-specular surface, we only
+            // calculate direct lighting and then exit
+            break;
+        }
+
+        // only trace next ray at specular surface
+        // according to bsdf sampling
+        else {
+            const Spectrum reflectance = hitBsdf->evaluateSample(intersection);
+            if (!reflectance.isZero()) {
+                const real sign  = (intersection.wo().dot(hitNormal) < 0.0_r) ? -1.0_r : 1.0_r;
+                const real LdotN = intersection.wo().absDot(hitNormal);
+                const Ray sampleRay(hitPoint + constant::RAY_EPSILON * hitNormal * sign,
+                                    intersection.wo(),
+                                    constant::RAY_EPSILON,
+                                    std::numeric_limits<real>::max());
+                
+                pathWeight *= reflectance * LdotN / intersection.pdf();
+                if (!pathWeight.isZero()) {
+                    traceRay = sampleRay;
+                }
+                else {
+                    break;
+                }
             }
         }
-    }
 
-    // only recursive trace at specular surface
-    if (isSpecular && traceRay.depth() + 1 < _maxDepth) {
-        totalRadiance += _radianceAtSpecularSurface(scene, traceRay, intersection);
+        bounceTimes += 1;
     }
 
     return totalRadiance;
-}
-
-Spectrum WhittedIntegrator::_radianceAtSpecularSurface(const Scene& scene, const Ray& ray, SurfaceIntersection& intersection) const {
-    Spectrum sampleRadiance(0.0_r);
-
-    const Primitive* primitive = intersection.primitiveInfo().primitive();
-    const Bsdf*      bsdf      = primitive->bsdf().get();
-
-    const Spectrum reflectance = bsdf->evaluateSample(intersection);
-    if (!reflectance.isZero()) {
-        const Vector3R hitPoint  = intersection.surfaceInfo().point();
-        const Vector3R hitNormal = intersection.surfaceInfo().shadingNormal();
-        const real sign = (intersection.wo().dot(hitNormal) < 0.0_r) ? -1.0_r : 1.0_r;
-        Ray sampleRay(hitPoint + constant::RAY_EPSILON * hitNormal * sign,
-                      intersection.wo(),
-                      constant::RAY_EPSILON,
-                      std::numeric_limits<real>::max(),
-                      ray.depth() + 1);
-        const real LdotN = intersection.wo().absDot(hitNormal);
-        sampleRadiance = reflectance * traceRadiance(scene, sampleRay) * LdotN / intersection.pdf();
-    }
-
-    return sampleRadiance;
 }
 
 } // namespace cadise
