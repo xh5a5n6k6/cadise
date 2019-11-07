@@ -93,7 +93,7 @@ void Rectangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, Surfac
     Vector3R normal = _eA.cross(_eB).normalize();
     surfaceInfo.setFrontNormal(normal);
 
-    normal = (primitiveInfo.isBackSide()) ? normal.composite() : normal;
+    normal = (primitiveInfo.isBackSide()) ? normal.reverse() : normal;
     surfaceInfo.setGeometryNormal(normal);
     surfaceInfo.setShadingNormal(normal);
 

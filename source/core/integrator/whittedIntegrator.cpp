@@ -37,7 +37,7 @@ Spectrum WhittedIntegrator::traceRadiance(const Scene& scene, const Ray& ray) co
 
     // add radiance if hitting area light
     if (hitPrimitive->isEmissive()) {
-        totalRadiance += hitPrimitive->emittance(traceRay.direction().composite(), intersection.surfaceInfo());
+        totalRadiance += hitPrimitive->emittance(traceRay.direction().reverse(), intersection.surfaceInfo());
     }
     
     // add direct light only at non-specular surface

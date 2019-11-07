@@ -20,8 +20,8 @@ namespace instantiator {
 
 static std::shared_ptr<Texture<real>> createRealConstant(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
-    const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
+    const StringKeyMap<Texture<real>>& realTextures,
+    const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
     const real value = data->findReal("value");
 
@@ -30,8 +30,8 @@ static std::shared_ptr<Texture<real>> createRealConstant(
 
 static std::shared_ptr<Texture<real>> createRealCheckerboard(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
-    const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
+    const StringKeyMap<Texture<real>>& realTextures,
+    const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
     const real oddNumber  = data->findReal("odd-number");
     const real evenNumber = data->findReal("even-number");
@@ -46,8 +46,8 @@ static std::shared_ptr<Texture<real>> createRealCheckerboard(
 
 static std::shared_ptr<Texture<Spectrum>> createSpectrumConstant(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
-    const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
+    const StringKeyMap<Texture<real>>& realTextures,
+    const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
     // it now only support rgb spectrum
     const Vector3R value = data->findVector3r("value");
@@ -57,8 +57,8 @@ static std::shared_ptr<Texture<Spectrum>> createSpectrumConstant(
 
 static std::shared_ptr<Texture<Spectrum>> createSpectrumCheckerboard(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
-    const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
+    const StringKeyMap<Texture<real>>& realTextures,
+    const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
     const real oddNumber  = data->findReal("odd-number");
     const real evenNumber = data->findReal("even-number");
@@ -73,8 +73,8 @@ static std::shared_ptr<Texture<Spectrum>> createSpectrumCheckerboard(
 
 static std::shared_ptr<Texture<Spectrum>> createSpectrumImage(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
-    const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
+    const StringKeyMap<Texture<real>>& realTextures,
+    const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
     const std::string_view filename = data->findString("filename");
     const std::string_view samplingMode = data->findString("sampling-mode");
@@ -94,8 +94,8 @@ static std::shared_ptr<Texture<Spectrum>> createSpectrumImage(
 
 //static std::shared_ptr<Texture<Spectrum>> createSpectrumAlphaImage(
 //    const std::shared_ptr<SdData>& data,
-//    const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
-//    const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
+//    const StringKeyMap<Texture<real>>& realTextures,
+//    const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 //
 //    const std::string_view filename = data->findString("filename");
 //
@@ -106,8 +106,8 @@ static std::shared_ptr<Texture<Spectrum>> createSpectrumImage(
 
 std::shared_ptr<Texture<real>> makeRealTexture(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
-    const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
+    const StringKeyMap<Texture<real>>& realTextures,
+    const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
     std::shared_ptr<Texture<real>> realTexture = nullptr;
 
@@ -135,8 +135,8 @@ std::shared_ptr<Texture<real>> makeRealTexture(
 
 std::shared_ptr<Texture<Spectrum>> makeSpectrumTexture(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
-    const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
+    const StringKeyMap<Texture<real>>& realTextures,
+    const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
     std::shared_ptr<Texture<Spectrum>> spectrumTexture = nullptr;
 

@@ -2,10 +2,9 @@
 
 #include "core/spectrum/spectrum.h"
 
-#include <functional>
-#include <map>
+#include "math/type/mapType.h"
+
 #include <memory>
-#include <string>
 #include <vector>
 
 namespace cadise {
@@ -51,10 +50,10 @@ private:
     std::vector<std::shared_ptr<Intersector>> _intersectors;
     std::vector<std::shared_ptr<Light>>       _lights;
 
-    std::map<std::string, std::shared_ptr<Bsdf>, std::less<>>              _bsdfs;
-    std::map<std::string, std::shared_ptr<Primitive>, std::less<>>         _primitives; // for area lights
-    std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>     _realTextures;
-    std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>> _spectrumTextures;
+    StringKeyMap<Bsdf>              _bsdfs;
+    StringKeyMap<Primitive>         _primitives; // for area light
+    StringKeyMap<Texture<real>>     _realTextures;
+    StringKeyMap<Texture<Spectrum>> _spectrumTextures;
 };
 
 } // namespace cadise

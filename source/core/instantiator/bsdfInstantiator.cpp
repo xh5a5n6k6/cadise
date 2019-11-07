@@ -18,8 +18,8 @@ namespace instantiator {
 
 static std::shared_ptr<Bsdf> createLambertianDiffuse(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
-    const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
+    const StringKeyMap<Texture<real>>& realTextures,
+    const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
     const std::shared_ptr<Texture<Spectrum>> albedo = data->getSpectrumTexture("albedo", spectrumTextures);
 
@@ -28,8 +28,8 @@ static std::shared_ptr<Bsdf> createLambertianDiffuse(
 
 static std::shared_ptr<Bsdf> createSpecularReflection(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
-    const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
+    const StringKeyMap<Texture<real>>& realTextures,
+    const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
     const std::shared_ptr<Texture<Spectrum>> albedo = data->getSpectrumTexture("albedo", spectrumTextures);
 
@@ -38,8 +38,8 @@ static std::shared_ptr<Bsdf> createSpecularReflection(
 
 static std::shared_ptr<Bsdf> createSpecularTransmission(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
-    const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
+    const StringKeyMap<Texture<real>>& realTextures,
+    const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
     const std::shared_ptr<Texture<Spectrum>> albedo   = data->getSpectrumTexture("albedo", spectrumTextures);
     const real                               iorOuter = data->findReal("ior-outer", 1.0_r);
@@ -50,8 +50,8 @@ static std::shared_ptr<Bsdf> createSpecularTransmission(
 
 static std::shared_ptr<Bsdf> createPerfectDielectric(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
-    const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
+    const StringKeyMap<Texture<real>>& realTextures,
+    const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
     const std::shared_ptr<Texture<Spectrum>> albedo   = data->getSpectrumTexture("albedo", spectrumTextures);
     const real                               iorOuter = data->findReal("ior-outer", 1.0_r);
@@ -72,8 +72,8 @@ static std::shared_ptr<Bsdf> createBlinnPhong(
 
 static std::shared_ptr<Bsdf> createPlastic(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
-    const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
+    const StringKeyMap<Texture<real>>& realTextures,
+    const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
     const std::shared_ptr<Texture<Spectrum>> diffuseAlbedo
         = data->getSpectrumTexture("diffuse-albedo", spectrumTextures);
@@ -87,8 +87,8 @@ static std::shared_ptr<Bsdf> createPlastic(
 
 std::shared_ptr<Bsdf> makeBsdf(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
-    const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
+    const StringKeyMap<Texture<real>>& realTextures,
+    const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
     std::shared_ptr<Bsdf> bsdf = nullptr;
 

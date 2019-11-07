@@ -51,7 +51,7 @@ public:
     T lengthSquared() const;
     T maxComponent() const;
     Vector normalize() const;
-    Vector composite() const;
+    Vector reverse() const;
     Vector complement() const;
     Vector reciprocal() const;
     Vector clamp(const T min, const T max) const;

@@ -111,7 +111,7 @@ void Triangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, Surface
     Vector3R normal = _eAB.cross(_eAC).normalize();
     surfaceInfo.setFrontNormal(normal);
 
-    normal = (primitiveInfo.isBackSide()) ? normal.composite() : normal;
+    normal = (primitiveInfo.isBackSide()) ? normal.reverse() : normal;
     surfaceInfo.setGeometryNormal(normal);
     surfaceInfo.setShadingNormal(normal);
 

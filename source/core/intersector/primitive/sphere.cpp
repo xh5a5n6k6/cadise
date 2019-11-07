@@ -21,7 +21,7 @@ Sphere::Sphere(const std::shared_ptr<Bsdf>& bsdf, const Vector3R& center, const 
     _center(center),
     _radius(radius) {
 
-    _worldToLocal = std::make_shared<Transform>(Matrix4::translate(center.composite()));
+    _worldToLocal = std::make_shared<Transform>(Matrix4::translate(center.reverse()));
     _tmptextureMapper = std::make_shared<SphericalMapper>();
 }
 
@@ -36,7 +36,7 @@ bool Sphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
                  ray.maxT());
 
     const int32 isOutside = localRay.origin().lengthSquared() > _radius * _radius;
-    real t = localRay.direction().dot(localRay.origin().composite());
+    real t = localRay.direction().dot(localRay.origin().reverse());
     if (isOutside && t < 0.0_r) {
         return false;
     }
@@ -69,7 +69,7 @@ bool Sphere::isOccluded(const Ray& ray) const {
                  ray.maxT());
 
     const int32 isOutside = localRay.origin().lengthSquared() > _radius * _radius;
-    real t = localRay.direction().dot(localRay.origin().composite());
+    real t = localRay.direction().dot(localRay.origin().reverse());
     if (isOutside && t < 0.0_r) {
         return false;
     }
@@ -95,7 +95,7 @@ void Sphere::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceIn
     Vector3R normal = (surfaceInfo.point() - _center).normalize();
     surfaceInfo.setFrontNormal(normal);
 
-    normal = (primitiveInfo.isBackSide()) ? normal.composite() : normal;
+    normal = (primitiveInfo.isBackSide()) ? normal.reverse() : normal;
     surfaceInfo.setGeometryNormal(normal);
     surfaceInfo.setShadingNormal(normal);
 

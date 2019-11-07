@@ -36,7 +36,7 @@ Spectrum NaivePathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) 
         const Vector3R hitNormal = intersection.surfaceInfo().shadingNormal();
 
         if (hitPrimitive->isEmissive()) {
-            const Spectrum emittance = hitPrimitive->emittance(traceRay.direction().composite(), intersection.surfaceInfo());
+            const Spectrum emittance = hitPrimitive->emittance(traceRay.direction().reverse(), intersection.surfaceInfo());
             totalRadiance += pathWeight * emittance;
         }
 

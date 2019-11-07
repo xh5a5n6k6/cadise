@@ -315,7 +315,7 @@ inline Vector<T, N> Vector<T, N>::normalize() const {
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N> Vector<T, N>::composite() const {
+inline Vector<T, N> Vector<T, N>::reverse() const {
     return -*this;
 }
 

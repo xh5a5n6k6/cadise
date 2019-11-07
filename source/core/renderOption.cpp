@@ -69,7 +69,7 @@ void RenderOption::prepareRender() {
     const std::shared_ptr<Camera> camera = instantiator::makeCamera(_cameraData);
     const std::shared_ptr<Accelerator> accelerator = instantiator::makeAccelerator(_acceleratorData, _intersectors);
 
-    _scene = std::make_shared<Scene>(std::move(accelerator), std::move(_lights));
+    _scene = std::make_shared<Scene>(accelerator, _lights);
     _renderer = std::move(instantiator::makeRenderer(_rendererData));
     
     const real rx = static_cast<real>(film->resolution().x());
@@ -77,8 +77,8 @@ void RenderOption::prepareRender() {
     camera->setAspectRatio(rx / ry);
     camera->updateTransform();
 
-    _renderer->setCamera(std::move(camera));
-    _renderer->setFilm(std::move(film));
+    _renderer->setCamera(camera);
+    _renderer->setFilm(film);
 }
 
 void RenderOption::startRender() const {
@@ -102,9 +102,9 @@ void RenderOption::_setUpAccelerator(const std::shared_ptr<SdData>& data) {
 }
 
 void RenderOption::_setUpRealTexture(const std::shared_ptr<SdData>& data) {
-    std::shared_ptr<Texture<real>> texture
+    const std::shared_ptr<Texture<real>> texture
         = instantiator::makeRealTexture(data, _realTextures, _spectrumTextures);
-    std::string_view textureName = data->findString("name");
+    const std::string_view textureName = data->findString("name");
 
     _realTextures.insert(
         std::pair<std::string, std::shared_ptr<Texture<real>>>(textureName, texture));
@@ -133,7 +133,7 @@ void RenderOption::_setUpLight(const std::shared_ptr<SdData>& data) {
 }
 
 void RenderOption::_setUpPrimitive(const std::shared_ptr<SdData>& data) {
-    instantiator::makePrimitive(data, _bsdfs, _intersectors, _primitives);
+    instantiator::makePrimitive(data, _bsdfs, &_intersectors, &_primitives);
 }
 
 } // namespace cadise

@@ -72,7 +72,7 @@ Spectrum DirectLightEvaluator::evaluate(const Scene& scene, const SurfaceInterse
                 const Primitive* hitPrimitive = intersection.primitiveInfo().primitive();
                 if (hitPrimitive->isEmissive()) {
                     const real bsdfPdf = intersection.pdf();
-                    const Spectrum radiance = hitPrimitive->emittance(sampleRay.direction().composite(), intersection.surfaceInfo());
+                    const Spectrum radiance = hitPrimitive->emittance(sampleRay.direction().reverse(), intersection.surfaceInfo());
 
                     // calcualte emitter's pdf
                     const real lightPdf = light->evaluatePdfW(intersection, sampleRay.maxT());

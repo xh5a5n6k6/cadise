@@ -2,9 +2,7 @@
 
 #include "core/spectrum/spectrum.h"
 
-#include <functional>
-#include <map>
-#include <memory>
+#include "math/type/mapType.h"
 
 namespace cadise {
 
@@ -13,8 +11,6 @@ class Bsdf;
 class Camera;
 class Film;
 class Filter;
-template<typename T, std::size_t N>
-class Image;
 class Integrator;
 class Intersector;
 class Light;
@@ -54,30 +50,30 @@ std::shared_ptr<Accelerator> makeAccelerator(
 // implement in core/instantiator/textureInstantiator.cpp
 std::shared_ptr<Texture<real>> makeRealTexture(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
-    const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures);
+    const StringKeyMap<Texture<real>>& realTextures,
+    const StringKeyMap<Texture<Spectrum>>& spectrumTextures);
 std::shared_ptr<Texture<Spectrum>> makeSpectrumTexture(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
-    const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures);
+    const StringKeyMap<Texture<real>>& realTextures,
+    const StringKeyMap<Texture<Spectrum>>& spectrumTextures);
 
 // implement in core/instantiator/bsdfInstantiator.cpp
 std::shared_ptr<Bsdf> makeBsdf(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
-    const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures);
+    const StringKeyMap<Texture<real>>& realTextures,
+    const StringKeyMap<Texture<Spectrum>>& spectrumTextures);
 
 // implement in core/instantiator/lightInstantiator.cpp
 std::shared_ptr<Light> makeLight(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Primitive>, std::less<>>& primitives);
+    const StringKeyMap<Primitive>& primitives);
 
 // implement in core/instantiator/primitiveInstantiator.cpp
 void makePrimitive(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Bsdf>, std::less<>>& bsdfs,
-    std::vector<std::shared_ptr<Intersector>>& out_intersectors,
-    std::map<std::string, std::shared_ptr<Primitive>, std::less<>>& out_primitives);
+    const StringKeyMap<Bsdf>& bsdfs,
+    std::vector<std::shared_ptr<Intersector>>* const out_intersectors,
+    StringKeyMap<Primitive>* const out_primitives);
 
 } // namespace instantiator
 

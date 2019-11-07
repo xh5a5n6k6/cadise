@@ -17,7 +17,7 @@ namespace instantiator {
 
 static std::shared_ptr<Light> createPoint(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Primitive>, std::less<>>& primitives) {
+    const StringKeyMap<Primitive>& primitives) {
 
     const Vector3R position = data->findVector3r("position");
     const Vector3R color    = data->findVector3r("color");
@@ -27,7 +27,7 @@ static std::shared_ptr<Light> createPoint(
 
 static std::shared_ptr<Light> createArea(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Primitive>, std::less<>>& primitives) {
+    const StringKeyMap<Primitive>& primitives) {
 
     const Vector3R color          = data->findVector3r("color");
     const real     watt           = data->findReal("watt");
@@ -49,7 +49,7 @@ static std::shared_ptr<Light> createArea(
 
 std::shared_ptr<Light> makeLight(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Primitive>, std::less<>>& primitives) {
+    const StringKeyMap<Primitive>& primitives) {
 
     std::shared_ptr<Light> light = nullptr;
     const std::string_view type = data->findString("type");

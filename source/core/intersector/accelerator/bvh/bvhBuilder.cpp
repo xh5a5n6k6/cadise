@@ -41,7 +41,7 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
     const std::vector<std::shared_ptr<Intersector>>& intersectors, 
     std::vector<std::shared_ptr<Intersector>>& orderedIntersectors,
     const std::size_t startIndex,
-    std::size_t* out_totalSize) const {
+    std::size_t* const out_totalSize) const {
 
     CADISE_ASSERT(out_totalSize);
 

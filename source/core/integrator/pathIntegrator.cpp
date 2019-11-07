@@ -42,7 +42,7 @@ Spectrum PathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const
         // add emitter's emittance only at first hit-point (0 bounce)
         // or previous hit surface is specular
         if (hitPrimitive->isEmissive() && isCountForEmittance) {
-            const Spectrum emittance = hitPrimitive->emittance(traceRay.direction().composite(), intersection.surfaceInfo());
+            const Spectrum emittance = hitPrimitive->emittance(traceRay.direction().reverse(), intersection.surfaceInfo());
             totalRadiance += pathWeight * emittance;
         }
 

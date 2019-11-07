@@ -18,7 +18,7 @@ bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) c
     PrimitiveInfo primitiveInfo;
     const bool isHit = _topAccelerator->isIntersecting(ray, primitiveInfo);
     if (isHit) {
-        surfaceIntersection.setWi(ray.direction().composite());
+        surfaceIntersection.setWi(ray.direction().reverse());
         surfaceIntersection.setPrimitiveInfo(primitiveInfo);
 
         // calculate intersection surface details
@@ -37,7 +37,7 @@ bool Scene::isOccluded(const Ray& ray) const {
     return _topAccelerator->isOccluded(ray);
 }
 
-std::vector<std::shared_ptr<Light>> Scene::lights() const {
+const std::vector<std::shared_ptr<Light>>& Scene::lights() const {
     return _lights;
 }
 

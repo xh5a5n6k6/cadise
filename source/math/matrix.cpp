@@ -36,7 +36,7 @@ Matrix4 Matrix4::translate(const real tx, const real ty, const real tz) {
 
 // Return cameraToWorld matrix
 Matrix4 Matrix4::lookAt(const Vector3R& position, const Vector3R& direction, const Vector3R& up) {
-    const Vector3R newZ = direction.composite().normalize();
+    const Vector3R newZ = direction.reverse().normalize();
     const Vector3R newX = up.cross(newZ).normalize();
     const Vector3R newY = newZ.cross(newX);
 

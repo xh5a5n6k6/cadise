@@ -18,7 +18,7 @@ public:
     bool isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) const;
     bool isOccluded(const Ray& ray) const;
     
-    std::vector<std::shared_ptr<Light>> lights() const;
+    const std::vector<std::shared_ptr<Light>>& lights() const;
 
 private:
     std::shared_ptr<Accelerator> _topAccelerator;

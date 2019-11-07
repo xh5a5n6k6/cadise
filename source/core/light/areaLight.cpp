@@ -42,7 +42,7 @@ Spectrum AreaLight::evaluateSampleRadiance(Vector3R& lightDirection, const Surfa
     lightDirection = direction.normalize();
 
     const Vector3R frontNormal = sampleSurface.frontNormal();
-    if (lightDirection.composite().dot(frontNormal) < 0.0_r && !_isBackFaceEmit) {
+    if (lightDirection.reverse().dot(frontNormal) < 0.0_r && !_isBackFaceEmit) {
         pdf = 0.0_r;
         return Spectrum(0.0_r);
     }

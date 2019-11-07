@@ -16,7 +16,7 @@ namespace instantiator {
 
 static std::shared_ptr<Primitive> createSphere(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Bsdf>, std::less<>>& bsdfs) {
+    const StringKeyMap<Bsdf>& bsdfs) {
 
     const Vector3R         center   = data->findVector3r("center");
     const real             radius   = data->findReal("radius");
@@ -43,7 +43,7 @@ static std::shared_ptr<Primitive> createTriangle(
 
 static std::shared_ptr<Primitive> createRectangle(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Bsdf>, std::less<>>& bsdfs) {
+    const StringKeyMap<Bsdf>& bsdfs) {
 
     const Vector3R         v1       = data->findVector3r("v1");
     const Vector3R         v2       = data->findVector3r("v2");
@@ -63,7 +63,7 @@ static std::shared_ptr<Primitive> createRectangle(
 
 static std::vector<std::shared_ptr<Primitive>> createTriangleMesh(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Bsdf>, std::less<>>& bsdfs) {
+    const StringKeyMap<Bsdf>& bsdfs) {
 
     const std::vector<Vector3R> positions = data->findVector3rArray("positions");
     const std::vector<Vector3R> normals   = data->findVector3rArray("normals");
@@ -85,32 +85,32 @@ static std::vector<std::shared_ptr<Primitive>> createTriangleMesh(
 
 void makePrimitive(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Bsdf>, std::less<>>& bsdfs,
-    std::vector<std::shared_ptr<Intersector>>& out_intersectors,
-    std::map<std::string, std::shared_ptr<Primitive>, std::less<>>& out_primitives) {
+    const StringKeyMap<Bsdf>& bsdfs,
+    std::vector<std::shared_ptr<Intersector>>* const out_intersectors,
+    StringKeyMap<Primitive>* const out_primitives) {
 
     const std::string_view type = data->findString("type");
     const std::string_view primitiveName = data->findString("name");
     if (type == "sphere") {
         const auto sphere = createSphere(data, bsdfs);
-        out_intersectors.push_back(sphere);
-        out_primitives.insert(std::pair<std::string, std::shared_ptr<Primitive>>(primitiveName, sphere));
+        out_intersectors->push_back(sphere);
+        out_primitives->insert(std::pair<std::string, std::shared_ptr<Primitive>>(primitiveName, sphere));
     }
     else if (type == "triangle") {
         const auto triangle = createTriangle(data, bsdfs);
-        out_intersectors.push_back(triangle);
-        out_primitives.insert(std::pair<std::string, std::shared_ptr<Primitive>>(primitiveName, triangle));
+        out_intersectors->push_back(triangle);
+        out_primitives->insert(std::pair<std::string, std::shared_ptr<Primitive>>(primitiveName, triangle));
     }
     else if (type == "rectangle") {
         const auto rectangle = createRectangle(data, bsdfs);
-        out_intersectors.push_back(rectangle);
-        out_primitives.insert(std::pair<std::string, std::shared_ptr<Primitive>>(primitiveName, rectangle));
+        out_intersectors->push_back(rectangle);
+        out_primitives->insert(std::pair<std::string, std::shared_ptr<Primitive>>(primitiveName, rectangle));
     }
     else if (type == "triangle-mesh") {
         const auto triangleMesh = createTriangleMesh(data, bsdfs);
         for (auto& triangle : triangleMesh) {
-            out_intersectors.push_back(triangle);
-            out_primitives.insert(std::pair<std::string, std::shared_ptr<Primitive>>(primitiveName, triangle));
+            out_intersectors->push_back(triangle);
+            out_primitives->insert(std::pair<std::string, std::shared_ptr<Primitive>>(primitiveName, triangle));
         }
     }
     else {

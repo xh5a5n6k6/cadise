@@ -29,7 +29,7 @@ private:
         const std::vector<std::shared_ptr<Intersector>>& intersectors,
         std::vector<std::shared_ptr<Intersector>>& orderedIntersectors,
         const std::size_t startIndex,
-        std::size_t* out_totalSize) const;
+        std::size_t* const out_totalSize) const;
 
     void _buildLinearNodesRecursively(std::unique_ptr<BvhBinaryNode> binaryNode, 
                                       std::vector<BvhLinearNode>& linearNodes,

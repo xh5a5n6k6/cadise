@@ -5,8 +5,8 @@
 #include "file-io/scene-description/sdClassType.h"
 #include "file-io/scene-description/sdDataUnit.h"
 
-#include <functional>
-#include <map>
+#include "math/type/mapType.h"
+
 #include <vector>
 
 namespace cadise {
@@ -57,10 +57,10 @@ public:
 
     std::shared_ptr<Texture<real>> getRealTexture(
         const std::string_view& name, 
-        const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures) const;
+        const StringKeyMap<Texture<real>>& realTextures) const;
     std::shared_ptr<Texture<Spectrum>> getSpectrumTexture(
         const std::string_view& name,
-        const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) const;
+        const StringKeyMap<Texture<Spectrum>>& spectrumTextures) const;
 
     SdClassType classType() const;
 
