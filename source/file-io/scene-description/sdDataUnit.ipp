@@ -17,7 +17,7 @@ inline SdDataUnit<T>::SdDataUnit(const std::string_view& name, std::unique_ptr<T
 }
 
 template<typename T>
-inline std::string_view SdDataUnit<T>::variableName() const {
+inline const std::string_view& SdDataUnit<T>::variableName() const {
     return _variableName;
 }
 

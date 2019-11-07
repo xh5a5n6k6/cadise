@@ -53,9 +53,11 @@ Spectrum PathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const
 
             isPreviousHitSpecular = false;
 
+            const std::vector<std::shared_ptr<Light>>& lights = scene.lights();
+
             real lightPdf;
-            std::size_t lightIndex = LightSampler::sampleOneLight<LightSamplePolicy::UNIFORM>(scene, &lightPdf);
-            const Light* sampleLight = scene.lights()[lightIndex].get();
+            std::size_t lightIndex = LightSampler::sampleOneLight<LightSamplePolicy::UNIFORM>(lights, &lightPdf);
+            const Light* sampleLight = lights[lightIndex].get();
 
             const Spectrum directLightRadiance = DirectLightEvaluator::evaluate(scene, intersection,
                                                                           hitBsdf, sampleLight) / lightPdf;

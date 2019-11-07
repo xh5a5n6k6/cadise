@@ -10,18 +10,23 @@ namespace cadise {
 class LightSampler {
 public:
     template<LightSamplePolicy policy>
-    static std::size_t sampleOneLight(const Scene& scene, real* const lightPdf);
+    static std::size_t sampleOneLight(
+        const std::vector<std::shared_ptr<Light>>& lights, 
+        real* const out_lightPdf);
 };
 
 // template header implementation
 
 template<LightSamplePolicy policy>
-inline std::size_t LightSampler::sampleOneLight(const Scene& scene, real* const lightPdf) {
-    std::size_t lightNumber = scene.lights().size();
+inline std::size_t LightSampler::sampleOneLight(
+    const std::vector<std::shared_ptr<Light>>& lights, 
+    real* const out_lightPdf) {
+
+    std::size_t lightNumber = lights.size();
     if constexpr (policy == LightSamplePolicy::UNIFORM) {
         std::size_t sampleIndex = random::nextIndex(0, lightNumber - 1);
 
-        *lightPdf = 1.0_r / static_cast<real>(lightNumber);
+        *out_lightPdf = 1.0_r / static_cast<real>(lightNumber);
 
         return sampleIndex;
     }

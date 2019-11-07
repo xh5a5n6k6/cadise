@@ -21,11 +21,11 @@ Vector3R Transform::transformVector(const Vector3R& vector) const {
     return _matrix.transformVector(vector);
 }
 
-Matrix4 Transform::matrix() const {
+const Matrix4& Transform::matrix() const {
     return _matrix;
 }
 
-Matrix4 Transform::inverseMatrix() const {
+const Matrix4& Transform::inverseMatrix() const {
     return _inverseMatrix;
 }
 

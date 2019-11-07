@@ -14,7 +14,7 @@ public:
     void initializeInternalNode(std::unique_ptr<BvhBinaryNode> firstChild, std::unique_ptr<BvhBinaryNode> secondChild, const std::size_t splitAxis);
     void initializeLeafNode(const AABB3R& bound, const std::size_t intersectorIndex, const std::size_t intersectorCounts);
 
-    AABB3R bound() const;
+    const AABB3R& bound() const;
     std::size_t intersectorIndex() const;
     std::unique_ptr<BvhBinaryNode> firstChild();
     std::unique_ptr<BvhBinaryNode> secondChild();

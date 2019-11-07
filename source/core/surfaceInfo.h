@@ -8,11 +8,11 @@ class SurfaceInfo {
 public:
     SurfaceInfo();
 
-    Vector3R point() const;
-    Vector3R geometryNormal() const;
-    Vector3R shadingNormal() const;
-    Vector3R frontNormal() const;
-    Vector3R uvw() const;
+    const Vector3R& point() const;
+    const Vector3R& geometryNormal() const;
+    const Vector3R& shadingNormal() const;
+    const Vector3R& frontNormal() const;
+    const Vector3R& uvw() const;
 
     void setPoint(const Vector3R& point);
     void setGeometryNormal(const Vector3R& geometryNormal);

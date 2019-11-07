@@ -15,31 +15,31 @@ BvhBuilder::BvhBuilder(const BvhSplitter& splitter) :
 
 std::unique_ptr<BvhBinaryNode> BvhBuilder::buildBinaryNodes(
     const std::vector<std::shared_ptr<Intersector>>& intersectors, 
-    std::vector<std::shared_ptr<Intersector>>& orderedIntersectors,
+    std::vector<std::shared_ptr<Intersector>>* const out_orderedIntersectors,
     std::size_t* const out_totalSize) const {
 
     CADISE_ASSERT(out_totalSize);
 
     std::unique_ptr<BvhBinaryNode> root = nullptr;
-    root = _buildBinaryNodesRecursively(intersectors, orderedIntersectors, 0, out_totalSize);
+    root = _buildBinaryNodesRecursively(intersectors, out_orderedIntersectors, 0, out_totalSize);
 
     return std::move(root);
 }
 
 void BvhBuilder::buildLinearNodes(std::unique_ptr<BvhBinaryNode> root, 
-                                  std::vector<BvhLinearNode>& linearNodes,
+                                  std::vector<BvhLinearNode>* const out_linearNodes,
                                   const std::size_t totalSize) const {
     std::vector<BvhLinearNode> nodes;
     nodes.reserve(totalSize);
 
-    _buildLinearNodesRecursively(std::move(root), nodes, nullptr);
+    _buildLinearNodesRecursively(std::move(root), &nodes, nullptr);
 
-    linearNodes.swap(nodes);
+    out_linearNodes->swap(nodes);
 }
 
 std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
     const std::vector<std::shared_ptr<Intersector>>& intersectors, 
-    std::vector<std::shared_ptr<Intersector>>& orderedIntersectors,
+    std::vector<std::shared_ptr<Intersector>>* const out_orderedIntersectors,
     const std::size_t startIndex,
     std::size_t* const out_totalSize) const {
 
@@ -50,7 +50,7 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
     if (intersectors.size() <= MAX_INTERSECTOR_SIZE) {
         AABB3R leafNodeBound;
         for (std::size_t i = 0; i < intersectors.size(); ++i) {
-            orderedIntersectors.push_back(intersectors[i]);
+            out_orderedIntersectors->push_back(intersectors[i]);
             leafNodeBound.unionWith(intersectors[i]->bound());
         }
 
@@ -79,13 +79,13 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
 
         std::unique_ptr<BvhBinaryNode> firstChild = nullptr;
         firstChild = _buildBinaryNodesRecursively(subIntersectorsA,
-                                                  orderedIntersectors,
+                                                  out_orderedIntersectors,
                                                   startIndex,
                                                   out_totalSize);
 
         std::unique_ptr<BvhBinaryNode> secondChild = nullptr;
         secondChild = _buildBinaryNodesRecursively(subIntersectorsB,
-                                                   orderedIntersectors,
+                                                   out_orderedIntersectors,
                                                    startIndex + subIntersectorsA.size(),
                                                    out_totalSize);
 
@@ -99,10 +99,10 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
 }
 
 void BvhBuilder::_buildLinearNodesRecursively(std::unique_ptr<BvhBinaryNode> binaryNode, 
-                                              std::vector<BvhLinearNode>& linearNodes,
+                                              std::vector<BvhLinearNode>* const out_linearNodes,
                                               std::size_t* const out_nodeIndex) const {
     BvhLinearNode linearNode;
-    const std::size_t index = linearNodes.size();
+    const std::size_t index = out_linearNodes->size();
     if (out_nodeIndex) {
         *out_nodeIndex = index;
     }
@@ -111,19 +111,19 @@ void BvhBuilder::_buildLinearNodesRecursively(std::unique_ptr<BvhBinaryNode> bin
         linearNode.initializeLeafNode(binaryNode->bound(), 
                                       binaryNode->intersectorIndex(), 
                                       binaryNode->intersectorCounts());
-        linearNodes.push_back(linearNode);
+        out_linearNodes->push_back(linearNode);
     }
     else {
-        linearNodes.push_back(linearNode);
+        out_linearNodes->push_back(linearNode);
         
         const AABB3R internalNodeBound = binaryNode->bound();
         const std::size_t internalNodeSplitAxis = binaryNode->splitAxis();
         std::size_t secondChildIndex;
 
-        _buildLinearNodesRecursively(std::move(binaryNode->firstChild()), linearNodes, nullptr);
-        _buildLinearNodesRecursively(std::move(binaryNode->secondChild()), linearNodes, &secondChildIndex);
+        _buildLinearNodesRecursively(std::move(binaryNode->firstChild()), out_linearNodes, nullptr);
+        _buildLinearNodesRecursively(std::move(binaryNode->secondChild()), out_linearNodes, &secondChildIndex);
 
-        linearNodes[index].initializeInternalNode(internalNodeBound, secondChildIndex, internalNodeSplitAxis);
+        (*out_linearNodes)[index].initializeInternalNode(internalNodeBound, secondChildIndex, internalNodeSplitAxis);
     }
 }
 

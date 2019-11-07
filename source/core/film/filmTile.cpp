@@ -62,7 +62,7 @@ void FilmTile::addSample(const Vector2R& filmPosition, const Vector3R& sampleRgb
     }
 }
 
-AABB2I FilmTile::tileBound() const {
+const AABB2I& FilmTile::tileBound() const {
     return _tileBound;
 }
 

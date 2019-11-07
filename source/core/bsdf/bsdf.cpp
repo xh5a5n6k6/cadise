@@ -6,7 +6,7 @@ Bsdf::Bsdf(const BsdfType& type) :
     _type(type) {
 }
 
-BsdfType Bsdf::type() const {
+const BsdfType& Bsdf::type() const {
     return _type;
 }
 

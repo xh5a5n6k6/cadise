@@ -12,7 +12,7 @@ BsdfType::BsdfType(const uint32 type) {
     _type = type;
 }
 
-BsdfType BsdfType::operator|(const BsdfType& type) {
+BsdfType BsdfType::operator|(const BsdfType& type) const {
     BsdfType result;
     result._type = _type | type._type;
 

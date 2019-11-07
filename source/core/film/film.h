@@ -27,7 +27,7 @@ public:
 
     void save();
 
-    Vector2I resolution() const;
+    const Vector2I& resolution() const;
 
 private:
     std::size_t _pixelIndexOffset(const int32 x, const int32 y) const;

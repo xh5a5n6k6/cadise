@@ -11,10 +11,10 @@ class SurfaceIntersection : public Intersection {
 public:
     SurfaceIntersection();
 
-    PrimitiveInfo primitiveInfo() const;
-    SurfaceInfo surfaceInfo() const;
-    Vector3R wi() const;
-    Vector3R wo() const;
+    const PrimitiveInfo& primitiveInfo() const;
+    const SurfaceInfo& surfaceInfo() const;
+    const Vector3R& wi() const;
+    const Vector3R& wo() const;
     real pdf() const;
 
     void setPrimitiveInfo(const PrimitiveInfo& primitiveInfo);

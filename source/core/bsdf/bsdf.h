@@ -17,7 +17,7 @@ public:
 
     virtual real evaluatePdfW(const SurfaceIntersection& surfaceIntersection) const = 0;
 
-    BsdfType type() const;
+    const BsdfType& type() const;
 
 protected:
     BsdfType _type;

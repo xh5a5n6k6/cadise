@@ -12,7 +12,7 @@ public:
 
     bool isExtendedWith(const std::string& extension) const;
 
-    std::string path() const;
+    const std::string& path() const;
 
 private:
     std::string _path;

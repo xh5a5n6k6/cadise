@@ -13,7 +13,7 @@ BvhBinaryNode::~BvhBinaryNode() {
 }
 
 void BvhBinaryNode::initializeInternalNode(std::unique_ptr<BvhBinaryNode> firstChild, std::unique_ptr<BvhBinaryNode> secondChild, const std::size_t splitAxis) {
-    _bound = firstChild->bound().unionWith(secondChild->bound());
+    _bound.unionWith(firstChild->bound()).unionWith(secondChild->bound());
     _children[0] = std::move(firstChild);
     _children[1] = std::move(secondChild);
     _splitAxis = splitAxis;
@@ -27,7 +27,7 @@ void BvhBinaryNode::initializeLeafNode(const AABB3R& bound, const std::size_t in
     _isLeaf = true;
 }
 
-AABB3R BvhBinaryNode::bound() const {
+const AABB3R& BvhBinaryNode::bound() const {
     return _bound;
 }
 

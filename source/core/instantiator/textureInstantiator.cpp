@@ -8,7 +8,7 @@
 #include "core/texture/category/realImageTexture.h"
 #include "core/texture/category/rgbaImageTexture.h"
 #include "core/texture/category/rgbImageTexture.h"
-#include "core/texture/textureSamplingMode.h"
+#include "core/texture/textureSampleMode.h"
 
 #include "file-io/path.h"
 #include "file-io/pictureLoader.h"
@@ -81,12 +81,12 @@ static std::shared_ptr<Texture<Spectrum>> createSpectrumImage(
 
     const HdrImage hdrImage = PictureLoader::loadRgbImage(Path(filename));
 
-    TextureSamplingMode mode;
-    if (!samplingMode.compare("nearest")) {
-        mode = TextureSamplingMode::NEAREST;
+    TextureSampleMode mode;
+    if (samplingMode == "nearest") {
+        mode = TextureSampleMode::NEAREST;
     }
     else {
-        mode = TextureSamplingMode::NEAREST;
+        mode = TextureSampleMode::NEAREST;
     }
 
     return std::make_shared<RgbImageTexture>(hdrImage, mode);

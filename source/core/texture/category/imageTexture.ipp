@@ -8,11 +8,11 @@ namespace cadise {
 
 template<typename T, typename ImageType, std::size_t N>
 ImageTexture<T, ImageType, N>::ImageTexture(const Image<ImageType, N>& image,
-                                            const TextureSamplingMode& mode) :
+                                            const TextureSampleMode& mode) :
     _image(image) {
 
     switch (mode) {
-        case TextureSamplingMode::NEAREST:
+        case TextureSampleMode::NEAREST:
             _pixelSampler = std::make_unique<NearestPixelSampler<ImageType, N>>();
             break;
         default:

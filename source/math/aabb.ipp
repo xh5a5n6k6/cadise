@@ -2,7 +2,10 @@
 
 #include "math/aabb.h"
 
+#include "math/math.h"
+
 #include <limits>
+#include <type_traits>
 
 namespace cadise {
 
@@ -37,32 +40,32 @@ inline bool AABB<T, N>::isIntersectingAABB(
     
     // calculate x-slab interval
     if (inverseDirection.x() > 0.0_r) {
-        minT = std::max(minT, nearT.x());
-        maxT = std::min(maxT,  farT.x());
+        minT = math::max(minT, nearT.x());
+        maxT = math::min(maxT,  farT.x());
     }
     else {
-        minT = std::max(minT,  farT.x());
-        maxT = std::min(maxT, nearT.x());
+        minT = math::max(minT,  farT.x());
+        maxT = math::min(maxT, nearT.x());
     }
 
     // calculate y-slab interval
     if (inverseDirection.y() > 0.0_r) {
-        minT = std::max(minT, nearT.y());
-        maxT = std::min(maxT,  farT.y());
+        minT = math::max(minT, nearT.y());
+        maxT = math::min(maxT,  farT.y());
     }
     else {
-        minT = std::max(minT,  farT.y());
-        maxT = std::min(maxT, nearT.y());
+        minT = math::max(minT,  farT.y());
+        maxT = math::min(maxT, nearT.y());
     }
 
     // calculate z-slab interval
     if (inverseDirection.z() > 0.0_r) {
-        minT = std::max(minT, nearT.z());
-        maxT = std::min(maxT,  farT.z());
+        minT = math::max(minT, nearT.z());
+        maxT = math::min(maxT,  farT.z());
     }
     else {
-        minT = std::max(minT,  farT.z());
-        maxT = std::min(maxT, nearT.z());
+        minT = math::max(minT,  farT.z());
+        maxT = math::min(maxT, nearT.z());
     }
 
     // check if intersection exists
@@ -80,7 +83,12 @@ inline Vector<T, N> AABB<T, N>::extent() const {
 
 template<typename T, std::size_t N>
 inline Vector<T, N> AABB<T, N>::centroid() const {
-    return (_minVertex + _maxVertex) / static_cast<T>(2);
+    if constexpr (std::is_integral_v<T>) {
+        return (_minVertex + _maxVertex) / static_cast<T>(2);
+    }
+    else { 
+        return (_minVertex + _maxVertex) * static_cast<T>(0.5_r); 
+    }
 }
 
 template<typename T, std::size_t N>
@@ -113,12 +121,12 @@ inline AABB<T, N>& AABB<T, N>::expand(const T scalar) {
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N> AABB<T, N>::minVertex() const {
+inline const Vector<T, N>& AABB<T, N>::minVertex() const {
     return _minVertex;
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N> AABB<T, N>::maxVertex() const {
+inline const Vector<T, N>& AABB<T, N>::maxVertex() const {
     return _maxVertex;
 }
 

@@ -18,7 +18,7 @@ public:
     void addSample(const Vector2R& filmPosition, const Spectrum& sampleSpectrum);
     void addSample(const Vector2R& filmPosition, const Vector3R& sampleRgb);
 
-    AABB2I tileBound() const;
+    const AABB2I& tileBound() const;
 
     const FilmSensor& getSensor(const int32 x, const int32 y) const;
 

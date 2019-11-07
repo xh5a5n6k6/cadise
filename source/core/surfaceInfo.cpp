@@ -10,23 +10,23 @@ SurfaceInfo::SurfaceInfo() :
     _uvw(0.0_r) {
 }
 
-Vector3R SurfaceInfo::point() const {
+const Vector3R& SurfaceInfo::point() const {
     return _point;
 }
 
-Vector3R SurfaceInfo::geometryNormal() const {
+const Vector3R& SurfaceInfo::geometryNormal() const {
     return _geometryNormal;
 }
 
-Vector3R SurfaceInfo::shadingNormal() const {
+const Vector3R& SurfaceInfo::shadingNormal() const {
     return _shadingNormal;
 }
 
-Vector3R SurfaceInfo::frontNormal() const {
+const Vector3R& SurfaceInfo::frontNormal() const {
     return _frontNormal;
 }
 
-Vector3R SurfaceInfo::uvw() const {
+const Vector3R& SurfaceInfo::uvw() const {
     return _uvw;
 }
 

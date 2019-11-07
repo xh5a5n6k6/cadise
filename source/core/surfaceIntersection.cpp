@@ -10,19 +10,19 @@ SurfaceIntersection::SurfaceIntersection() :
     _pdf(0.0_r) {
 }
 
-PrimitiveInfo SurfaceIntersection::primitiveInfo() const {
+const PrimitiveInfo& SurfaceIntersection::primitiveInfo() const {
     return _primitiveInfo;
 }
 
-SurfaceInfo SurfaceIntersection::surfaceInfo() const {
+const SurfaceInfo& SurfaceIntersection::surfaceInfo() const {
     return _surfaceInfo;
 }
 
-Vector3R SurfaceIntersection::wi() const {
+const Vector3R& SurfaceIntersection::wi() const {
     return _wi;
 }
 
-Vector3R SurfaceIntersection::wo() const {
+const Vector3R& SurfaceIntersection::wo() const {
     return _wo;
 }
 

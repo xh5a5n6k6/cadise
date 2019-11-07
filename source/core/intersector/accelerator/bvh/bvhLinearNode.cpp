@@ -22,7 +22,7 @@ void BvhLinearNode::initializeLeafNode(const AABB3R& bound, const std::size_t in
     _isLeaf = true;
 }
 
-AABB3R BvhLinearNode::bound() const {
+const AABB3R& BvhLinearNode::bound() const {
     return _bound;
 }
 

@@ -10,7 +10,7 @@ public:
     BsdfType(const BxdfType& type);
     BsdfType(const uint32 type);
 
-    BsdfType operator|(const BsdfType& type);
+    BsdfType operator|(const BsdfType& type) const;
 
     template<typename... BsdfTypes>
     bool isAtLeastOne(const BsdfType& type, const BsdfTypes&... types) const;

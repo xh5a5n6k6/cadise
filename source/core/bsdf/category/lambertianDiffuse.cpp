@@ -32,6 +32,7 @@ Spectrum LambertianDiffuse::evaluate(const SurfaceIntersection& surfaceIntersect
 Spectrum LambertianDiffuse::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
     const Vector3R normal = surfaceIntersection.surfaceInfo().shadingNormal();
 
+    // build N's coordinate system
     const Vector3R zAxis(normal);
     Vector3R xAxis;
     Vector3R yAxis;
@@ -40,6 +41,7 @@ Spectrum LambertianDiffuse::evaluateSample(SurfaceIntersection& surfaceIntersect
     Vector3R sampleDirection;
     hemisphere::cosineWeightedSampling({random::nextReal(), random::nextReal()}, &sampleDirection);
 
+    // transform local space to N's space
     Vector3R outDirection = xAxis * sampleDirection.x() + 
                             yAxis * sampleDirection.y() + 
                             zAxis * sampleDirection.z();
@@ -58,7 +60,7 @@ Spectrum LambertianDiffuse::evaluateSample(SurfaceIntersection& surfaceIntersect
 }
 
 real LambertianDiffuse::evaluatePdfW(const SurfaceIntersection& surfaceIntersection) const {
-    const Vector3R normal = surfaceIntersection.surfaceInfo().shadingNormal();
+    const Vector3R normal    = surfaceIntersection.surfaceInfo().shadingNormal();
     const Vector3R direction = surfaceIntersection.wo();
 
     return direction.absDot(normal) * constant::INV_PI;

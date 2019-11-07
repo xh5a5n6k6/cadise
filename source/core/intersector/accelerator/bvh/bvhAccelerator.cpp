@@ -22,12 +22,12 @@ BvhAccelerator::BvhAccelerator(const std::vector<std::shared_ptr<Intersector>>& 
 
     std::size_t totalSize = 0;
     // build binary node tree recursively
-    std::unique_ptr<BvhBinaryNode> root = builder.buildBinaryNodes(std::move(intersectors), _intersectors, &totalSize);
+    std::unique_ptr<BvhBinaryNode> root = builder.buildBinaryNodes(std::move(intersectors), &_intersectors, &totalSize);
 
     // flatten the binary tree and use BVHLinearNode to store the informations
     _nodes.clear();
     _nodes.shrink_to_fit();
-    builder.buildLinearNodes(std::move(root), _nodes, totalSize);
+    builder.buildLinearNodes(std::move(root), &_nodes, totalSize);
 }
 
 AABB3R BvhAccelerator::bound() const {

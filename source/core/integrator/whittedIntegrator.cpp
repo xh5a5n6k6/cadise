@@ -96,6 +96,9 @@ Spectrum WhittedIntegrator::traceRadiance(const Scene& scene, const Ray& ray) co
                     break;
                 }
             }
+            else {
+                break;
+            }
         }
 
         bounceTimes += 1;

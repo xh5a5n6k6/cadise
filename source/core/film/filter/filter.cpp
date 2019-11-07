@@ -6,7 +6,7 @@ Filter::Filter(const real filterWidth, const real filterHeight) :
     _filterSize(filterWidth, filterHeight) {
 }
 
-Vector2R Filter::filterSize() const {
+const Vector2R& Filter::filterSize() const {
     return _filterSize;
 }
 

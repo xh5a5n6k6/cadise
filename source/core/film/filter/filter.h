@@ -10,7 +10,7 @@ public:
 
     virtual real evaluate(const real locationX, const real locationY) const = 0;
 
-    Vector2R filterSize() const;
+    const Vector2R& filterSize() const;
     Vector2R filterHalfSize() const;
 
 protected:

@@ -109,10 +109,11 @@ Matrix4 Matrix4::transpose() const {
 }
 
 Matrix4 Matrix4::inverse() const {
-    // Use Gauss-Jordan elimination method
-    // First, for each column find a non-zero value to be the diagonal value
     Matrix4 mat = *this;
     Matrix4 inv = identity();
+
+    // use Gauss-Jordan elimination method
+    // for each column find a non-zero value to be the diagonal value
     for (int32 col = 0; col < 4; ++col) {
         // find non-zero row in column col, and assign it as pivot
         int32 head = -1;

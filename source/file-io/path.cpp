@@ -18,7 +18,7 @@ bool Path::isExtendedWith(const std::string& extension) const {
     return _path.substr(_path.length() - extension.length()).compare(extension) == 0;
 }
 
-std::string Path::path() const {
+const std::string& Path::path() const {
     return _path;
 }
 

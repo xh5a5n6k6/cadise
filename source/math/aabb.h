@@ -26,8 +26,8 @@ public:
     AABB& unionWith(const AABB& aabb);
     AABB& expand(const T scalar);
 
-    Vector<T, N> minVertex() const;
-    Vector<T, N> maxVertex() const;
+    const Vector<T, N>& minVertex() const;
+    const Vector<T, N>& maxVertex() const;
 
 private:
     Vector<T, N> _minVertex;
