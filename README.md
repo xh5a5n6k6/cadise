@@ -7,7 +7,9 @@ Cadise is a physically based renderer written in C++17, taking some other render
 
 Cadise is still been developing and more features will be implemented.
 
-[![Build Status](https://travis-ci.com/xh5a5n6k6/cadise.svg?branch=master)](https://travis-ci.com/xh5a5n6k6/cadise)
+| Master branch | Develop branch |
+|     :---:     |      :---:     |
+| [![Build Status](https://travis-ci.com/xh5a5n6k6/cadise.svg?branch=master)](https://travis-ci.com/xh5a5n6k6/cadise)| [![Build Status](https://travis-ci.com/xh5a5n6k6/cadise.svg?branch=develop)](https://travis-ci.com/xh5a5n6k6/cadise) |
 
 ## Scene Description
 Cadise Renderer Scene Description (CRSD) developed by Chia-Yu Chou is a scene description and readable by Cadise renderer. To generate a CRSD file, you can find some example scenes in the `./scene/` folder for reference, or export scenes from other 3D softwares (it currently only supports Blender exporter, please see the following repository for further information).
