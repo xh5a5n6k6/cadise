@@ -37,9 +37,12 @@ Spectrum LambertianDiffuse::evaluateSample(SurfaceIntersection& surfaceIntersect
     Vector3R yAxis;
     math::buildCoordinateSystem(zAxis, &xAxis, &yAxis);
 
-    const Vector2R uniformSample = Vector2R(random::nextReal(), random::nextReal());
-    const Vector3R sampleDir = hemisphere::cosineWeightedSampling(uniformSample);
-    Vector3R outDirection = xAxis * sampleDir.x() + yAxis * sampleDir.y() + zAxis * sampleDir.z();
+    Vector3R sampleDirection;
+    hemisphere::cosineWeightedSampling({random::nextReal(), random::nextReal()}, &sampleDirection);
+
+    Vector3R outDirection = xAxis * sampleDirection.x() + 
+                            yAxis * sampleDirection.y() + 
+                            zAxis * sampleDirection.z();
     outDirection = outDirection.normalize();
 
     const real pdf = outDirection.absDot(zAxis) * constant::INV_PI;

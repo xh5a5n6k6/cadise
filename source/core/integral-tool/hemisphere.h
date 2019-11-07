@@ -6,9 +6,9 @@ namespace cadise {
 
 namespace hemisphere {
 
-Vector3R uniformSampling(const Vector2R& randomNumber);
+void uniformSampling(const Vector2R& randomNumber, Vector3R* const out_direction);
 
-Vector3R cosineWeightedSampling(const Vector2R& randomNumber);
+void cosineWeightedSampling(const Vector2R& randomNumber, Vector3R* const out_direction);
 
 } // namespace hemisphere
 
