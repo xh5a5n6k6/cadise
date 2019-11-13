@@ -5,7 +5,6 @@
 #include "core/spectrum/spectrum.h"
 
 #include <memory>
-#include <vector>
 
 namespace cadise {
 
@@ -19,10 +18,10 @@ public:
     Primitive();
     Primitive(const std::shared_ptr<Bsdf>& bsdf);
 	
-    virtual AABB3R bound() const override = 0;
+    AABB3R bound() const override = 0;
 
-    virtual bool isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const override = 0;
-    virtual bool isOccluded(const Ray& ray) const override = 0;
+    bool isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const override = 0;
+    bool isOccluded(const Ray& ray) const override = 0;
 
     virtual void evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const = 0;
 
@@ -30,17 +29,15 @@ public:
     virtual real samplePdfA(const Vector3R& position) const = 0;
     virtual real area() const = 0;
 
-    std::shared_ptr<Bsdf> bsdf() const;
-    bool isEmissive() const;
-    Spectrum emittance(const Vector3R& emitDirection, const SurfaceInfo& emitSurface) const;
-
-    void setAreaLight(const std::shared_ptr<AreaLight>& areaLight);
+    const Bsdf* bsdf() const;
+    const AreaLight* areaLight() const;
+    void setAreaLight(const AreaLight* const areaLight);
 
 protected:
     std::shared_ptr<Bsdf> _bsdf;
     std::shared_ptr<TextureMapper> _textureMapper;
     
-    std::weak_ptr<AreaLight> _areaLight;
+    const AreaLight* _areaLight;
 };
 
 } // namespace cadise

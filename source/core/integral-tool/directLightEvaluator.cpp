@@ -1,7 +1,7 @@
 #include "core/integral-tool/directLightEvaluator.h"
 
 #include "core/bsdf/bsdf.h"
-#include "core/light/light.h"
+#include "core/light/areaLight.h"
 #include "core/integral-tool/mis.h"
 #include "core/intersector/primitive/primitive.h"
 #include "core/ray.h"
@@ -69,10 +69,10 @@ Spectrum DirectLightEvaluator::evaluate(const Scene& scene, const SurfaceInterse
                           std::numeric_limits<real>::max());
 
             if (scene.isIntersecting(sampleRay, intersection)) {
-                const Primitive* hitPrimitive = intersection.primitiveInfo().primitive();
-                if (hitPrimitive->isEmissive()) {
+                const AreaLight* areaLight = intersection.primitiveInfo().primitive()->areaLight();
+                if (areaLight) {
                     const real bsdfPdf = intersection.pdf();
-                    const Spectrum radiance = hitPrimitive->emittance(sampleRay.direction().reverse(), intersection.surfaceInfo());
+                    const Spectrum radiance = areaLight->emittance(sampleRay.direction().reverse(), intersection.surfaceInfo());
 
                     // calcualte emitter's pdf
                     const real lightPdf = light->evaluatePdfW(intersection, sampleRay.maxT());

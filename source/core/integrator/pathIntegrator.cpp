@@ -4,6 +4,7 @@
 #include "core/integral-tool/directLightEvaluator.h"
 #include "core/integral-tool/lightSampler.h"
 #include "core/intersector/primitive/primitive.h"
+#include "core/light/areaLight.h"
 #include "core/ray.h"
 #include "core/integral-tool/russianRoulette.h"
 #include "core/scene.h"
@@ -20,12 +21,15 @@ PathIntegrator::PathIntegrator(const int32 maxDepth) :
 Spectrum PathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const {
     Spectrum totalRadiance(0.0_r);
     Spectrum pathWeight(1.0_r);
-    bool isPreviousHitSpecular = false;
     int32 bounceTimes = 0;
+
+    // set this flag true at 0 bounce,
+    // and update it at each intersection
+    // (specular surface for true, non-specular surface for false)
+    bool isCountForEmittance = true;
 
     Ray traceRay = Ray(ray);
     while (bounceTimes < _maxDepth) {
-        const bool isCountForEmittance = bounceTimes == 0 || isPreviousHitSpecular;
         SurfaceIntersection intersection;
         if (!scene.isIntersecting(traceRay, intersection)) {
             // TODO : add environment light
@@ -34,15 +38,16 @@ Spectrum PathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const
         }
 
         const Primitive* hitPrimitive = intersection.primitiveInfo().primitive();
-        const Bsdf*      hitBsdf      = hitPrimitive->bsdf().get();
+        const Bsdf*      hitBsdf      = hitPrimitive->bsdf();
 
         const Vector3R hitPoint  = intersection.surfaceInfo().point();
         const Vector3R hitNormal = intersection.surfaceInfo().shadingNormal();
 
         // add emitter's emittance only at first hit-point (0 bounce)
         // or previous hit surface is specular
-        if (hitPrimitive->isEmissive() && isCountForEmittance) {
-            const Spectrum emittance = hitPrimitive->emittance(traceRay.direction().reverse(), intersection.surfaceInfo());
+        const AreaLight* areaLight = hitPrimitive->areaLight();
+        if (areaLight && isCountForEmittance) {
+            const Spectrum emittance = areaLight->emittance(traceRay.direction().reverse(), intersection.surfaceInfo());
             totalRadiance += pathWeight * emittance;
         }
 
@@ -51,7 +56,7 @@ Spectrum PathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const
         if (!hitBsdf->type().isAtLeastOne(BsdfType(BxdfType::SPECULAR_REFLECTION),
                                           BsdfType(BxdfType::SPECULAR_TRANSMISSION))) {
 
-            isPreviousHitSpecular = false;
+            isCountForEmittance = false;
 
             const std::vector<std::shared_ptr<Light>>& lights = scene.lights();
 
@@ -64,7 +69,7 @@ Spectrum PathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const
             totalRadiance += pathWeight * directLightRadiance;
         }
         else {
-            isPreviousHitSpecular = true;
+            isCountForEmittance = true;
         }
 
         // estimate indirect light with bsdf sampling

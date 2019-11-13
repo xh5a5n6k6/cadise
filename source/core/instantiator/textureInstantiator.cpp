@@ -77,14 +77,15 @@ static std::shared_ptr<Texture<Spectrum>> createSpectrumImage(
     const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
     const std::string_view filename = data->findString("filename");
-    const std::string_view samplingMode = data->findString("sampling-mode");
+    const std::string_view sampleMode = data->findString("sample-mode");
 
     const HdrImage hdrImage = PictureLoader::loadRgbImage(Path(filename));
 
     TextureSampleMode mode;
-    if (samplingMode == "nearest") {
+    if (sampleMode == "nearest") {
         mode = TextureSampleMode::NEAREST;
     }
+    // TODO: add bilinear sample mode
     else {
         mode = TextureSampleMode::NEAREST;
     }

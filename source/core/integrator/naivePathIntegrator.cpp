@@ -2,8 +2,9 @@
 
 #include "core/bsdf/bsdf.h"
 #include "core/intersector/primitive/primitive.h"
-#include "core/ray.h"
+#include "core/light/areaLight.h"
 #include "core/integral-tool/russianRoulette.h"
+#include "core/ray.h"
 #include "core/scene.h"
 #include "core/surfaceIntersection.h"
 
@@ -30,13 +31,14 @@ Spectrum NaivePathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) 
         }
 
         const Primitive* hitPrimitive = intersection.primitiveInfo().primitive();
-        const Bsdf*      hitBsdf      = hitPrimitive->bsdf().get();
+        const Bsdf*      hitBsdf      = hitPrimitive->bsdf();
 
         const Vector3R hitPoint  = intersection.surfaceInfo().point();
         const Vector3R hitNormal = intersection.surfaceInfo().shadingNormal();
 
-        if (hitPrimitive->isEmissive()) {
-            const Spectrum emittance = hitPrimitive->emittance(traceRay.direction().reverse(), intersection.surfaceInfo());
+        const AreaLight* areaLight = hitPrimitive->areaLight();
+        if (areaLight) {
+            const Spectrum emittance = areaLight->emittance(traceRay.direction().reverse(), intersection.surfaceInfo());
             totalRadiance += pathWeight * emittance;
         }
 

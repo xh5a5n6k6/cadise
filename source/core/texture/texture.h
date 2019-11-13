@@ -11,5 +11,3 @@ public:
 };
 
 } // namespace cadise
-
-#include "core/texture/texture.ipp"

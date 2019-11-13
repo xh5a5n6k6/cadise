@@ -2,7 +2,7 @@
 
 #include "core/bsdf/bsdf.h"
 #include "core/intersector/primitive/primitive.h"
-#include "core/light/light.h"
+#include "core/light/areaLight.h"
 #include "core/ray.h"
 #include "core/scene.h"
 #include "core/surfaceIntersection.h"
@@ -30,7 +30,7 @@ Spectrum WhittedIntegrator::traceRadiance(const Scene& scene, const Ray& ray) co
         }
 
         const Primitive* hitPrimitive = intersection.primitiveInfo().primitive();
-        const Bsdf*      hitBsdf      = hitPrimitive->bsdf().get();
+        const Bsdf*      hitBsdf      = hitPrimitive->bsdf();
 
         const Vector3R hitPoint  = intersection.surfaceInfo().point();
         const Vector3R hitNormal = intersection.surfaceInfo().shadingNormal();
@@ -39,8 +39,9 @@ Spectrum WhittedIntegrator::traceRadiance(const Scene& scene, const Ray& ray) co
                                                              BsdfType(BxdfType::SPECULAR_TRANSMISSION));
 
         // add radiance if hitting area light
-        if (hitPrimitive->isEmissive()) {
-            totalRadiance += hitPrimitive->emittance(traceRay.direction().reverse(), intersection.surfaceInfo());
+        const AreaLight* areaLight = hitPrimitive->areaLight();
+        if (areaLight) {
+            totalRadiance += areaLight->emittance(traceRay.direction().reverse(), intersection.surfaceInfo());
         }
 
         // add direct light only at non-specular surface
@@ -71,7 +72,7 @@ Spectrum WhittedIntegrator::traceRadiance(const Scene& scene, const Ray& ray) co
                 }
             }
 
-            // once hitting non-specular surface, we only
+            // once hitting non-specular surface, we
             // calculate direct lighting and then exit
             break;
         }

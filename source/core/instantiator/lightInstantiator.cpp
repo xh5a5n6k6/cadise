@@ -1,7 +1,7 @@
 #include "core/instantiator/instantiator.h"
 
 // light type
-#include "core/light/areaLight.h"
+#include "core/light/singleAreaLight.h"
 #include "core/light/pointLight.h"
 
 // for area light
@@ -25,24 +25,22 @@ static std::shared_ptr<Light> createPoint(
     return std::make_shared<PointLight>(position, color);
 }
 
-static std::shared_ptr<Light> createArea(
+static std::shared_ptr<Light> createSingleArea(
     const std::shared_ptr<SdData>& data,
     const StringKeyMap<Primitive>& primitives) {
 
     const Vector3R color          = data->findVector3r("color");
     const real     watt           = data->findReal("watt");
     const bool     isBackFaceEmit = data->findBool("is-back-face-emit");
-
-    std::shared_ptr<AreaLight> areaLight = std::make_shared<AreaLight>(color, watt, isBackFaceEmit);
-
     const std::string_view primitiveName = data->findString("primitive");
     auto&& primitive = primitives.find(primitiveName);
 
-    CADISE_ASSERT(primitive != primitives.end());
+    CADISE_ASSERT_NE(primitive, primitives.end());
 
-    areaLight->setPrimitive(primitive->second);
-    areaLight->calculateEmitRadiance();
-    primitive->second->setAreaLight(areaLight);
+    std::shared_ptr<SingleAreaLight> areaLight = std::make_shared<SingleAreaLight>(
+                                                     primitive->second.get(), color, watt, isBackFaceEmit);
+
+    primitive->second->setAreaLight(areaLight.get());
 
     return areaLight;
 }
@@ -56,8 +54,8 @@ std::shared_ptr<Light> makeLight(
     if (type == "point") {
         light = createPoint(data, primitives);
     }
-    else if (type == "area") {
-        light = createArea(data, primitives);
+    else if (type == "single-area") {
+        light = createSingleArea(data, primitives);
     }
     else {
         // don't support light type
