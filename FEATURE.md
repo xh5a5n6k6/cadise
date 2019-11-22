@@ -1,0 +1,36 @@
+## Feature Lists
+- ### Rendering Technique
+    - Whitted Ray Tracing
+    - Unidirectional Path Tracing
+    - Unidirectional Path Tracing with Next Event Estimation
+- ### Accelerator
+    - BVH (equal)
+- ### BSDF
+    - Lambertian Diffuse
+    - Specular Reflection
+    - Specular Transmission
+    - Perfect Dielectric
+    - Blinn-Phong
+- ### Primitive
+    - Sphere
+    - Triangle
+    - Rectangle
+- ### Light
+    - Point Light
+    - Area Light (rectangle)
+- ### Texture
+    - Constant
+    - Checkerboard
+    - Image
+        - sample mode: nearest
+        - supported type: gray, rgb
+- ### Camera
+    - Pinhole Perspective
+- ### Sampling
+    - Random
+    - Stratified
+- ### Reconstruction Filter
+    - Box
+    - Cone
+    - Gaussian
+    - Mitchell
