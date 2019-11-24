@@ -99,7 +99,7 @@ void Rectangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, Surfac
 
     Vector3R uvw;
     if (_textureMapper) {
-        uvw = _textureMapper->mappingToUvw(surfaceInfo);
+        _textureMapper->mappingToUvw(surfaceInfo.frontNormal(), &uvw);
         surfaceInfo.setUvw(uvw);
     }
     else {
@@ -150,8 +150,6 @@ void Rectangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurf
 }
 
 real Rectangle::samplePdfA(const Vector3R& position) const {
-    CADISE_ASSERT_GT(area(), 0.0_r);
-
     return 1.0_r / area();
 }
 

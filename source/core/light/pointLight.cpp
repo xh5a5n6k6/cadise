@@ -11,7 +11,7 @@ PointLight::PointLight(const Vector3R& position, const Spectrum& color) :
     _color(color) {
 }
 
-Spectrum PointLight::emittance(const Vector3R& emitDirection, const SurfaceInfo& emitSurface) const {
+Spectrum PointLight::emittance(const Vector3R& emitDirection, const SurfaceIntersection& emitSurface) const {
     return _color;
 }
 

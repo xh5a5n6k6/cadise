@@ -66,7 +66,8 @@ std::shared_ptr<Bsdf> makeBsdf(
 // implement in core/instantiator/lightInstantiator.cpp
 std::shared_ptr<Light> makeLight(
     const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Primitive>& primitives);
+    const StringKeyMap<Primitive>& primitives,
+    std::shared_ptr<Primitive>& out_infiniteSphere);
 
 // implement in core/instantiator/primitiveInstantiator.cpp
 void makePrimitive(

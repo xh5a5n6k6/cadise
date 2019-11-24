@@ -25,7 +25,7 @@ HdrImage PictureLoader::loadRgbImage(const Path& path) {
         utility::image::ldrToHdr(ldrImage, &hdrImage);
     }
     else if (path.isExtendedWith(".hdr") || path.isExtendedWith(".HDR")) {
-        // unsupported now
+        loadHdrImage(path, &hdrImage);
     }
 
     return hdrImage;
@@ -119,9 +119,69 @@ void PictureLoader::loadLdrImage(const Path& path, LdrImage* const out_ldrImage)
     else {
         // Something goes wrong
     }
+
+    stbi_image_free(imageData);
+}
+
+void PictureLoader::loadHdrImage(const Path& path, HdrImage* const out_hdrImage) {
+    int32 width;
+    int32 height;
+    int32 componentNumber;
+
+    // stbi's origin is at left-up corner, but image's uv is
+    // starting from left-down corner, so we need to do
+    // this operation to fit the situation.
+    stbi_set_flip_vertically_on_load(true);
+
+    float* imageData = stbi_loadf(path.path().c_str(),
+                                  &width,
+                                  &height,
+                                  &componentNumber,
+                                  0);
+
+    if (imageData == NULL) {
+        return;
+    }
+
+    out_hdrImage->setImageSize(width, height);
+
+    // gray image, we still store 3 components each pixel with same value
+    if (componentNumber == 1) {
+        for (int32 iy = 0; iy < height; ++iy) {
+            for (int32 ix = 0; ix < width; ++ix) {
+                const std::size_t indexOffset = static_cast<std::size_t>(ix + iy * width);
+
+                const Vector3R pixelValue(imageData[indexOffset]);
+                out_hdrImage->setPixelValue(ix, iy, pixelValue);
+            }
+        }
+    }
+    // rgb image
+    else if (componentNumber == 3) {
+        for (int32 iy = 0; iy < height; ++iy) {
+            for (int32 ix = 0; ix < width; ++ix) {
+                const std::size_t indexOffset = static_cast<std::size_t>((ix + iy * width) * 3);
+
+                const Vector3R pixelValue(static_cast<real>(imageData[indexOffset + 0]),
+                                          static_cast<real>(imageData[indexOffset + 1]),
+                                          static_cast<real>(imageData[indexOffset + 2]));
+
+                out_hdrImage->setPixelValue(ix, iy, pixelValue);
+            }
+        }
+    }
+    else {
+
+    }
+
+    stbi_image_free(imageData);
 }
 
 void PictureLoader::loadLdrAlphaImage(const Path& path, LdrAlphaImage* const out_ldrAlphaImage) {
+    // TODO: implement here
+}
+
+void PictureLoader::loadHdrAlphaImage(const Path& path, HdrAlphaImage* const out_hdrAlphaImage) {
     // TODO: implement here
 }
 

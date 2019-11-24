@@ -8,6 +8,8 @@
 #include "core/scene.h"
 #include "core/surfaceIntersection.h"
 
+#include "fundamental/assertion.h"
+
 #include "math/constant.h"
 
 namespace cadise {
@@ -15,11 +17,18 @@ namespace cadise {
 Spectrum DirectLightEvaluator::evaluate(const Scene& scene, const SurfaceIntersection& surfaceIntersection,
                                         const Bsdf* bsdf, const Light* light) {
 
+    CADISE_ASSERT(bsdf);
+    CADISE_ASSERT(light);
+
     SurfaceIntersection intersection(surfaceIntersection);
     Spectrum directLightRadiance(0.0_r);
 
     const Vector3R hitPoint  = intersection.surfaceInfo().point();
     const Vector3R hitNormal = intersection.surfaceInfo().shadingNormal();
+
+    if (bsdf->type().isAtLeastOne(BxdfType::NONE)) {
+        return directLightRadiance;
+    }
 
     // mis using light sampling
     {
@@ -64,18 +73,18 @@ Spectrum DirectLightEvaluator::evaluate(const Scene& scene, const SurfaceInterse
             const Spectrum directLightFactor = reflectance * LdotN;
 
             Ray sampleRay(hitPoint + constant::RAY_EPSILON * hitNormal * sign,
-                          intersection.wo(),
-                          constant::RAY_EPSILON,
-                          std::numeric_limits<real>::max());
+                          intersection.wo());
 
-            if (scene.isIntersecting(sampleRay, intersection)) {
+            if (!reflectance.isZero() && 
+                scene.isIntersecting(sampleRay, intersection)) {
+                
                 const AreaLight* areaLight = intersection.primitiveInfo().primitive()->areaLight();
-                if (areaLight) {
+                if (areaLight == light) {
                     const real bsdfPdf = intersection.pdf();
-                    const Spectrum radiance = areaLight->emittance(sampleRay.direction().reverse(), intersection.surfaceInfo());
+                    const Spectrum radiance = areaLight->emittance(sampleRay.direction().reverse(), intersection);
 
                     // calcualte emitter's pdf
-                    const real lightPdf = light->evaluatePdfW(intersection, sampleRay.maxT());
+                    const real lightPdf = areaLight->evaluatePdfW(intersection, sampleRay.maxT());
 
                     directLightRadiance += mis::powerHeuristic(bsdfPdf, lightPdf)
                                            * directLightFactor * radiance / bsdfPdf;

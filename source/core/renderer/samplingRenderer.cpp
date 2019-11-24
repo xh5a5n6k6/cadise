@@ -40,7 +40,7 @@ void SamplingRenderer::render(const Scene& scene) const {
 
             for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy) {
                 for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix) {
-                    const Vector2R filmPosition = Vector2R(static_cast<real>(ix), static_cast<real>(iy));
+                    const Vector2R filmPosition(static_cast<real>(ix), static_cast<real>(iy));
 
                     // for each pixel, prepare sampler setup
                     std::unique_ptr<Sampler> sampleSampler = _sampler->clone(_sampler->sampleNumber());

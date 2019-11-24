@@ -1,28 +1,27 @@
 #include "core/texture/mapper/sphericalMapper.h"
 
-#include "core/surfaceInfo.h"
-
 #include "math/constant.h"
+#include "math/math.h"
+#include "math/vector.h"
 
-#include <algorithm>
 #include <cmath>
 
 namespace cadise {
 
 SphericalMapper::SphericalMapper() = default;
 
-Vector3R SphericalMapper::mappingToUvw(const SurfaceInfo& surfaceInfo) const {
-    //Vector3R hitPoint = intersection.surfaceGeometryInfo().point();
-    //Vector3R vector = intersection.surfaceGeometryInfo().normal();
-    const Vector3R vector = surfaceInfo.frontNormal();
+void SphericalMapper::mappingToUvw(const Vector3R& direction, Vector3R* const out_uvw) const {
+    const Vector3R unitVector = direction.normalize();
 
-    const real theta = std::acos(std::clamp(vector.y(), -1.0_r, 1.0_r));
-    real phi = std::atan2(vector.x(), vector.z());
+    const real theta = std::acos(math::clamp(unitVector.y(), -1.0_r, 1.0_r));
+    real phi = std::atan2(unitVector.x(), unitVector.z());
     if (phi < 0.0_r) {
-        phi += 2.0_r * constant::PI;
+        phi += constant::TWO_PI;
     }
 
-    return Vector3R(theta * constant::INV_PI, phi * constant::INV_TWO_PI, 0.0_r);
+    *out_uvw =  Vector3R(phi * constant::INV_TWO_PI,
+                         (constant::PI - theta) * constant::INV_PI,
+                         0.0_r);
 }
 
 } // namespace cadise

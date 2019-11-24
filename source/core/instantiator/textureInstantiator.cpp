@@ -79,7 +79,7 @@ static std::shared_ptr<Texture<Spectrum>> createSpectrumImage(
     const std::string_view filename = data->findString("filename");
     const std::string_view sampleMode = data->findString("sample-mode");
 
-    const HdrImage hdrImage = PictureLoader::loadRgbImage(Path(filename));
+    HdrImage hdrImage = PictureLoader::loadRgbImage(Path(filename));
 
     TextureSampleMode mode;
     if (sampleMode == "nearest") {

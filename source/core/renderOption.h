@@ -50,6 +50,9 @@ private:
     std::vector<std::shared_ptr<Intersector>> _intersectors;
     std::vector<std::shared_ptr<Light>>       _lights;
 
+    // HACK
+    std::shared_ptr<Primitive> _infiniteSphere;
+
     StringKeyMap<Bsdf>              _bsdfs;
     StringKeyMap<Primitive>         _primitives; // for area light
     StringKeyMap<Texture<real>>     _realTextures;

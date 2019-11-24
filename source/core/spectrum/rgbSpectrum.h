@@ -14,6 +14,9 @@ public:
     RgbSpectrum(const ConceptualSpectrum<3>& cs);
 
     void transformToRgb(Vector3R* const out_rgb) const;
+
+    // TODO: refactor here
+    real luminance() const;
 };
 
 } // namespace cadise

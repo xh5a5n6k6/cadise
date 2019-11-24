@@ -22,6 +22,9 @@ public:
     Image();
     Image(const Vector2I& resolution);
     Image(const int32 width, const int32 height);
+    Image(const Image& img);
+
+    void flipHorizontal();
 
     void setImageSize(const Vector2I& resolution);
     void setImageSize(const int32 width, const int32 height);
@@ -34,6 +37,7 @@ public:
 
     int32 width() const;
     int32 height() const;
+    Vector2S resolution() const;
     std::size_t dataSize() const;
     const T* rawData() const;
 

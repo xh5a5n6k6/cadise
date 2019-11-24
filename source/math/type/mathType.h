@@ -10,6 +10,7 @@ class Vector;
 
 using Vector2I = Vector<int32, 2>;
 using Vector2R = Vector<real, 2>;
+using Vector2S = Vector<std::size_t, 2>;
 using Vector3R = Vector<real, 3>;
 
 // arbitrary dimension axis-aligned bounding box

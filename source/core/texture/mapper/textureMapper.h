@@ -1,14 +1,12 @@
 #pragma once
 
-#include "math/vector.h"
+#include "math/type/mathType.h"
 
 namespace cadise {
 
-class SurfaceInfo;
-
 class TextureMapper {
 public:
-    virtual Vector3R mappingToUvw(const SurfaceInfo& surfaceInfo) const = 0;
+    virtual void mappingToUvw(const Vector3R& direction, Vector3R* const out_uvw) const = 0;
 };
 
 } // namespace cadise

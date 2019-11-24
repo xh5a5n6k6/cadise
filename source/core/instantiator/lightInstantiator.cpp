@@ -1,12 +1,22 @@
 #include "core/instantiator/instantiator.h"
 
+#include "core/imaging/image.h"
+
 // light type
+#include "core/light/environmentLight.h"
 #include "core/light/singleAreaLight.h"
 #include "core/light/pointLight.h"
+
+// HACK
+#include "core/intersector/primitive/infiniteSphere.h"
 
 // for area light
 #include "core/intersector/primitive/primitive.h"
 
+#include "core/texture/category/rgbImageTexture.h"
+
+#include "file-io/path.h"
+#include "file-io/pictureLoader.h"
 #include "file-io/scene-description/sdData.h"
 
 #include "fundamental/assertion.h"
@@ -45,17 +55,48 @@ static std::shared_ptr<Light> createSingleArea(
     return areaLight;
 }
 
+static std::shared_ptr<Light> createEnvironment(
+    const std::shared_ptr<SdData>& data,
+    const StringKeyMap<Primitive>& primitives,
+    std::shared_ptr<Primitive>& out_infiniteSphere) {
+    
+    const std::string_view hdrFilename = data->findString("hdr-filename");
+
+    CADISE_ASSERT_NE(hdrFilename, "");
+
+    HdrImage hdrImage = PictureLoader::loadRgbImage(Path(hdrFilename));
+    hdrImage.flipHorizontal();
+
+    const TextureSampleMode mode = TextureSampleMode::NEAREST;
+    const std::shared_ptr<Texture<Spectrum>> radiance
+        = std::make_shared<RgbImageTexture>(hdrImage, mode);
+
+    out_infiniteSphere = std::make_shared<InfiniteSphere>();
+    std::shared_ptr<EnvironmentLight> environmentLight
+        = std::make_shared<EnvironmentLight>(out_infiniteSphere.get(), 
+                                             radiance, 
+                                             hdrImage.resolution());
+
+    out_infiniteSphere->setAreaLight(environmentLight.get());
+
+    return environmentLight;
+}
+
 std::shared_ptr<Light> makeLight(
     const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Primitive>& primitives) {
+    const StringKeyMap<Primitive>& primitives,
+    std::shared_ptr<Primitive>& out_infiniteSphere) {
 
     std::shared_ptr<Light> light = nullptr;
     const std::string_view type = data->findString("type");
     if (type == "point") {
         light = createPoint(data, primitives);
     }
-    else if (type == "single-area") {
+    else if (type == "area") {
         light = createSingleArea(data, primitives);
+    }
+    else if (type == "environment") {
+        light = createEnvironment(data, primitives, out_infiniteSphere);
     }
     else {
         // don't support light type

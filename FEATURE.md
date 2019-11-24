@@ -9,6 +9,7 @@
     - Lambertian Diffuse
     - Specular Reflection
     - Specular Transmission
+    - Perfect Absorber
     - Perfect Dielectric
     - Blinn-Phong
 - ### Primitive
@@ -18,6 +19,7 @@
 - ### Light
     - Point Light
     - Area Light (rectangle)
+    - Environment Light (with importance sampling)
 - ### Texture
     - Constant
     - Checkerboard

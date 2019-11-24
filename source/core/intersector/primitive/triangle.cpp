@@ -11,11 +11,12 @@
 #include "math/constant.h"
 #include "math/random.h"
 
-#include <limits>
-
 namespace cadise {
 
-Triangle::Triangle(const std::shared_ptr<Bsdf>& bsdf, const Vector3R& vA, const Vector3R& vB, const Vector3R& vC) :
+Triangle::Triangle(const std::shared_ptr<Bsdf>& bsdf, 
+                   const Vector3R& vA, 
+                   const Vector3R& vB, 
+                   const Vector3R& vC) :
     Primitive(bsdf), 
     _vA(vA),
     _vB(vB), 
@@ -117,7 +118,7 @@ void Triangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, Surface
 
     Vector3R uvw;
     if (_textureMapper) {
-        uvw = _textureMapper->mappingToUvw(surfaceInfo);
+        _textureMapper->mappingToUvw(surfaceInfo.frontNormal(), &uvw);
         surfaceInfo.setUvw(uvw);
     }
     else {
@@ -176,8 +177,6 @@ void Triangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurfa
 }
 
 real Triangle::samplePdfA(const Vector3R& position) const {
-    CADISE_ASSERT_GT(area(), 0.0_r);
-
     return 1.0_r / area();
 }
 

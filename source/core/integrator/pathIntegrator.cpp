@@ -32,8 +32,6 @@ Spectrum PathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const
     while (bounceTimes < _maxDepth) {
         SurfaceIntersection intersection;
         if (!scene.isIntersecting(traceRay, intersection)) {
-            // TODO : add environment light
-
             break;
         }
 
@@ -47,14 +45,15 @@ Spectrum PathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const
         // or previous hit surface is specular
         const AreaLight* areaLight = hitPrimitive->areaLight();
         if (areaLight && isCountForEmittance) {
-            const Spectrum emittance = areaLight->emittance(traceRay.direction().reverse(), intersection.surfaceInfo());
+            const Spectrum emittance = areaLight->emittance(traceRay.direction().reverse(), intersection);
             totalRadiance += pathWeight * emittance;
         }
 
+
         // estimate direct light using MIS technique 
         // (but only at non-specular surface)
-        if (!hitBsdf->type().isAtLeastOne(BsdfType(BxdfType::SPECULAR_REFLECTION),
-                                          BsdfType(BxdfType::SPECULAR_TRANSMISSION))) {
+        if (!hitBsdf->type().isAtLeastOne(BxdfType::SPECULAR_REFLECTION,
+                                          BxdfType::SPECULAR_TRANSMISSION)) {
 
             isCountForEmittance = false;
 
@@ -79,15 +78,16 @@ Spectrum PathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const
         const real LdotN = intersection.wo().absDot(hitNormal);
         pathWeight *= reflectance * LdotN / intersection.pdf();
 
+        if (reflectance.isZero() || intersection.pdf() == 0.0_r) {
+            pathWeight = Spectrum(0.0_r);
+        }
         if (pathWeight.isZero()) {
             break;
         }
 
         bounceTimes += 1;
         Ray sampleRay(hitPoint + constant::RAY_EPSILON * hitNormal * sign,
-                      intersection.wo(),
-                      constant::RAY_EPSILON,
-                      std::numeric_limits<real>::max());
+                      intersection.wo());
 
         // use russian roulette to decide if the ray needs to be kept tracking
         if (bounceTimes > 2) {

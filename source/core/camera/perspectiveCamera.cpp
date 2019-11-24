@@ -29,7 +29,7 @@ void PerspectiveCamera::updateTransform() {
     // matrix multiplication is right-hand-side, so we
     // need to initialize matrix first.
     //
-    // translate needs to be multiplication last, it means
+    // translate needs to be multiplicated last, it means
     // we need to multiply it first (it will be the leftmost part).
     Matrix4 filmToCameraMatrix = Matrix4::identity();
     filmToCameraMatrix *= Matrix4::translate(-(sensorWidth / 2.0_r), sensorHeight / 2.0_r, -sensorOffset);
@@ -40,17 +40,14 @@ void PerspectiveCamera::updateTransform() {
 
 Ray PerspectiveCamera::spawnPrimaryRay(const Vector2R& filmNdcPosition) const {
     const Vector3R sampleCameraPosition = 
-        _filmToCamera->transformPoint(Vector3R(filmNdcPosition.x(), filmNdcPosition.y(), 0.0_r));
+        _filmToCamera->transformPoint({filmNdcPosition.x(), filmNdcPosition.y(), 0.0_r});
 
     // calculate parameter in camera space
     const Vector3R origin = _position;
     const Vector3R direction = _cameraToWorld->transformVector(sampleCameraPosition).normalize();
 
     // generate ray in world space
-    return Ray(origin, 
-               direction, 
-               constant::RAY_EPSILON, 
-               std::numeric_limits<real>::max());
+    return Ray(origin, direction);
 }
 
 } // namespace cadise

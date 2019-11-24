@@ -101,22 +101,20 @@ void Sphere::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceIn
 
     Vector3R uvw;
     if (_textureMapper) {
-        uvw = _textureMapper->mappingToUvw(surfaceInfo);
+        _textureMapper->mappingToUvw(surfaceInfo.frontNormal(), &uvw);
         surfaceInfo.setUvw(uvw);
     }
     else {
-        uvw = _tmptextureMapper->mappingToUvw(surfaceInfo);
+        _tmptextureMapper->mappingToUvw(surfaceInfo.frontNormal(), &uvw);
         surfaceInfo.setUvw(uvw);
     }
 }
 
 void Sphere::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurface) const {
-
+    // TODO: implement here
 }
 
 real Sphere::samplePdfA(const Vector3R& position) const {
-    CADISE_ASSERT_GT(area(), 0.0_r);
-
     return 1.0_r / area();
 }
 

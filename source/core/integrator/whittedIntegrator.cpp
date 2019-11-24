@@ -24,8 +24,6 @@ Spectrum WhittedIntegrator::traceRadiance(const Scene& scene, const Ray& ray) co
     while (bounceTimes < _maxDepth) {
         SurfaceIntersection intersection;
         if (!scene.isIntersecting(traceRay, intersection)) {
-            // TODO : add environment light influence
-
             break;
         }
 
@@ -35,13 +33,13 @@ Spectrum WhittedIntegrator::traceRadiance(const Scene& scene, const Ray& ray) co
         const Vector3R hitPoint  = intersection.surfaceInfo().point();
         const Vector3R hitNormal = intersection.surfaceInfo().shadingNormal();
 
-        const bool isSpecular = hitBsdf->type().isAtLeastOne(BsdfType(BxdfType::SPECULAR_REFLECTION),
-                                                             BsdfType(BxdfType::SPECULAR_TRANSMISSION));
+        const bool isSpecular = hitBsdf->type().isAtLeastOne(BxdfType::SPECULAR_REFLECTION,
+                                                             BxdfType::SPECULAR_TRANSMISSION);
 
         // add radiance if hitting area light
         const AreaLight* areaLight = hitPrimitive->areaLight();
         if (areaLight) {
-            totalRadiance += areaLight->emittance(traceRay.direction().reverse(), intersection.surfaceInfo());
+            totalRadiance += areaLight->emittance(traceRay.direction().reverse(), intersection);
         }
 
         // add direct light only at non-specular surface
@@ -85,9 +83,7 @@ Spectrum WhittedIntegrator::traceRadiance(const Scene& scene, const Ray& ray) co
                 const real sign  = (intersection.wo().dot(hitNormal) < 0.0_r) ? -1.0_r : 1.0_r;
                 const real LdotN = intersection.wo().absDot(hitNormal);
                 const Ray sampleRay(hitPoint + constant::RAY_EPSILON * hitNormal * sign,
-                                    intersection.wo(),
-                                    constant::RAY_EPSILON,
-                                    std::numeric_limits<real>::max());
+                                    intersection.wo());
                 
                 pathWeight *= reflectance * LdotN / intersection.pdf();
                 if (!pathWeight.isZero()) {

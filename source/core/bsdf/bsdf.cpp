@@ -2,6 +2,8 @@
 
 namespace cadise {
 
+Bsdf::Bsdf() = default;
+
 Bsdf::Bsdf(const BsdfType& type) :
     _type(type) {
 }

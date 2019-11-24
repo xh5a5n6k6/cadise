@@ -14,6 +14,8 @@
 
 #include "fundamental/assertion.h"
 
+#include <iostream>
+
 namespace cadise {
 
 RenderOption::RenderOption() :
@@ -22,7 +24,8 @@ RenderOption::RenderOption() :
     _rendererData(nullptr),
     _acceleratorData(nullptr),
     _scene(nullptr),
-    _renderer(nullptr) {
+    _renderer(nullptr),
+    _infiniteSphere(nullptr) {
 }
 
 void RenderOption::setUpData(const std::shared_ptr<SdData>& data) {
@@ -54,8 +57,8 @@ void RenderOption::setUpData(const std::shared_ptr<SdData>& data) {
         case SdClassType::PRIMITIVE:
             _setUpPrimitive(data);
             break;
-        default:
-            break;
+        default: 
+            break;    
     }
 }
 
@@ -65,6 +68,9 @@ void RenderOption::prepareRender() {
     _realTextures.clear();
     _spectrumTextures.clear();
 
+    // TODO: add logger
+    std::cout << "Total primitives: " << _intersectors.size() << std::endl;
+
     const std::shared_ptr<Film> film = instantiator::makeFilm(_filmData);
     const std::shared_ptr<Camera> camera = instantiator::makeCamera(_cameraData);
     const std::shared_ptr<Accelerator> accelerator = instantiator::makeAccelerator(_acceleratorData, _intersectors);
@@ -72,6 +78,10 @@ void RenderOption::prepareRender() {
     _scene = std::make_shared<Scene>(accelerator, _lights);
     _renderer = std::move(instantiator::makeRenderer(_rendererData));
     
+    if (_infiniteSphere) {
+        _scene->setEnvironmentSphere(_infiniteSphere.get());
+    }
+
     const real rx = static_cast<real>(film->resolution().x());
     const real ry = static_cast<real>(film->resolution().y());
     camera->setAspectRatio(rx / ry);
@@ -127,7 +137,7 @@ void RenderOption::_setUpBsdf(const std::shared_ptr<SdData>& data) {
 }
 
 void RenderOption::_setUpLight(const std::shared_ptr<SdData>& data) {
-    const std::shared_ptr<Light> light = instantiator::makeLight(data, _primitives);
+    const std::shared_ptr<Light> light = instantiator::makeLight(data, _primitives, _infiniteSphere);
     
     _lights.push_back(light);
 }

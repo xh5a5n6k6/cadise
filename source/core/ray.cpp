@@ -1,6 +1,14 @@
 #include "core/ray.h"
 
+#include "math/constant.h"
+
+#include <limits>
+
 namespace cadise {
+
+Ray::Ray(const Vector3R& origin, const Vector3R& direction) :
+    Ray(origin, direction, constant::RAY_EPSILON, std::numeric_limits<real>::max()) {
+}
 
 Ray::Ray(const Vector3R& origin, const Vector3R& direction, const real minT, const real maxT) : 
     _origin(origin), 

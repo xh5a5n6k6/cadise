@@ -25,8 +25,6 @@ Spectrum NaivePathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) 
     while (bounceTimes < _maxDepth) {
         SurfaceIntersection intersection;
         if (!scene.isIntersecting(traceRay, intersection)) {
-            // TODO : add environment light
-
             break;
         }
 
@@ -38,7 +36,7 @@ Spectrum NaivePathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) 
 
         const AreaLight* areaLight = hitPrimitive->areaLight();
         if (areaLight) {
-            const Spectrum emittance = areaLight->emittance(traceRay.direction().reverse(), intersection.surfaceInfo());
+            const Spectrum emittance = areaLight->emittance(traceRay.direction().reverse(), intersection);
             totalRadiance += pathWeight * emittance;
         }
 
@@ -54,9 +52,7 @@ Spectrum NaivePathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) 
 
         bounceTimes += 1;
         Ray sampleRay(hitPoint + constant::RAY_EPSILON * hitNormal * sign,
-                      intersection.wo(),
-                      constant::RAY_EPSILON,
-                      std::numeric_limits<real>::max());
+                      intersection.wo());
 
         // use russian roulette to decide if the ray needs to be kept tracking
         if(bounceTimes > 2) {

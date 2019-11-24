@@ -12,8 +12,8 @@ public:
 
     BsdfType operator|(const BsdfType& type) const;
 
-    template<typename... BsdfTypes>
-    bool isAtLeastOne(const BsdfType& type, const BsdfTypes&... types) const;
+    template<typename... BxdfTypes>
+    bool isAtLeastOne(const BxdfType& type, const BxdfTypes&... types) const;
 
 private:
     uint32 _type;
@@ -21,11 +21,11 @@ private:
 
 // template header implementation
 
-template<typename... BsdfTypes>
-inline bool BsdfType::isAtLeastOne(const BsdfType& type, const BsdfTypes&... types) const {
-    const BsdfType checkTypes[]{ type, types... };
+template<typename... BxdfTypes>
+inline bool BsdfType::isAtLeastOne(const BxdfType& type, const BxdfTypes&... types) const {
+    const BxdfType checkTypes[]{type, types...};
     for (auto& checkType : checkTypes) {
-        if (_type & checkType._type) {
+        if (_type & static_cast<uint32>(checkType)) {
             return true;
         }
     }

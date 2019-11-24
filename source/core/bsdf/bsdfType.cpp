@@ -2,7 +2,9 @@
 
 namespace cadise {
 
-BsdfType::BsdfType() = default;
+BsdfType::BsdfType() :
+    BsdfType(BxdfType::NONE) {
+}
 
 BsdfType::BsdfType(const BxdfType& type) :
     _type(static_cast<uint32>(type)) {

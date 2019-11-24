@@ -8,10 +8,7 @@ class SphericalMapper : public TextureMapper {
 public:
     SphericalMapper();
 
-    Vector3R mappingToUvw(const SurfaceInfo& surfaceInfo) const override;
-
-private:
-
+    void mappingToUvw(const Vector3R& direction, Vector3R* const out_uvw) const override;
 };
 
 } // namespace cadise

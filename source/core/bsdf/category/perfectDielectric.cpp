@@ -85,6 +85,9 @@ Spectrum PerfectDielectric::evaluateSample(SurfaceIntersection& surfaceIntersect
 
         result = sampleSpectrum * transmittance * btdfFactor / LdotN;
     }
+    else {
+        // something wrong
+    }
 
     return result;
 }

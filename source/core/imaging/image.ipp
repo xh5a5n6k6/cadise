@@ -2,6 +2,7 @@
 
 #include "core/imaging/image.h"
 
+#include "math/math.h"
 #include "math/vector.h"
 
 namespace cadise {
@@ -27,6 +28,29 @@ inline Image<T, N>::Image(const int32 width, const int32 height) :
 }
 
 template<typename T, std::size_t N>
+inline Image<T, N>::Image(const Image<T, N>& img) :
+    _width(img._width),
+    _height(img._height),
+    _data(img._data) {
+}
+
+template<typename T, std::size_t N>
+inline void Image<T, N>::flipHorizontal() {
+    const int32 halfWidth = _width / 2;
+
+    for (int32 iy = 0; iy < _height; ++iy) {
+        for (int32 ix = 0; ix < halfWidth; ++ix) {
+            const std::size_t leftIndex  = _pixelDataOffset(ix, iy);
+            const std::size_t rightIndex = _pixelDataOffset(_width - 1 - ix, iy);
+
+            for (std::size_t i = 0; i < N; ++i) {
+                math::swap(_data[leftIndex + i], _data[rightIndex + i]);
+            }
+        }
+    }
+}
+
+template<typename T, std::size_t N>
 inline void Image<T, N>::setImageSize(const Vector2I& resolution) {
     setImageSize(resolution.x(), resolution.y());
 }
@@ -49,19 +73,8 @@ template<typename T, std::size_t N>
 inline void Image<T, N>::setPixelValue(const int32 x, const int32 y, const Vector<T, N>& pixelValue) {
     const std::size_t dataIndexOffset = _pixelDataOffset(x, y);
 
-    if constexpr (N == 3) {
-        _data[dataIndexOffset + 0] = pixelValue[0];
-        _data[dataIndexOffset + 1] = pixelValue[1];
-        _data[dataIndexOffset + 2] = pixelValue[2];
-    }
-    else if constexpr (N == 4) {
-        _data[dataIndexOffset + 0] = pixelValue[0];
-        _data[dataIndexOffset + 1] = pixelValue[1];
-        _data[dataIndexOffset + 2] = pixelValue[2];
-        _data[dataIndexOffset + 3] = pixelValue[3];
-    }
-    else {
-        // something wrong
+    for (std::size_t i = 0; i < N; ++i) {
+        _data[dataIndexOffset + i] = pixelValue[i];
     }
 }
 
@@ -73,20 +86,9 @@ inline void Image<T, N>::setDataValue(const std::size_t index, const T value) {
 template<typename T, std::size_t N>
 inline void Image<T, N>::getImagePixel(const int32 x, const int32 y, Vector<T, N>* const out_pixel) const {
     const std::size_t dataIndexOffset = _pixelDataOffset(x, y);
-    
-    if constexpr (N == 3) {
-        *out_pixel = Vector<T, N>(_data[dataIndexOffset + 0],
-                                  _data[dataIndexOffset + 1],
-                                  _data[dataIndexOffset + 2]);
-    }
-    else if constexpr (N == 4) {
-        *out_pixel = Vector<T, N>(_data[dataIndexOffset + 0],
-                                  _data[dataIndexOffset + 1],
-                                  _data[dataIndexOffset + 2],
-                                  _data[dataIndexOffset + 3]);
-    }
-    else {
-        // something wrong
+
+    for (std::size_t i = 0; i < N; ++i) {
+        (*out_pixel)[i] = _data[dataIndexOffset + i];
     }
 }
 
@@ -98,6 +100,11 @@ inline int32 Image<T, N>::width() const {
 template<typename T, std::size_t N>
 inline int32 Image<T, N>::height() const {
     return _height;
+}
+
+template<typename T, std::size_t N>
+inline Vector2S Image<T, N>::resolution() const {
+    return Vector2S(_width, _height);
 }
 
 template<typename T, std::size_t N>

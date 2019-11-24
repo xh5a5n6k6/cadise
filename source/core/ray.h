@@ -6,6 +6,7 @@ namespace cadise {
 
 class Ray {
 public:
+    Ray(const Vector3R& origin, const Vector3R& direction);
     Ray(const Vector3R& origin, const Vector3R& direction, const real minT, const real maxT);
 
     Vector3R at(const real t) const;

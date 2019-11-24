@@ -62,7 +62,7 @@ public:
         const std::string_view& name,
         const StringKeyMap<Texture<Spectrum>>& spectrumTextures) const;
 
-    SdClassType classType() const;
+    const SdClassType& classType() const;
 
     void setClassType(const std::string_view& classType);
     void setClassType(const SdClassType& classType);

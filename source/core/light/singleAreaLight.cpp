@@ -26,15 +26,15 @@ SingleAreaLight::SingleAreaLight(const Primitive* const primitive,
                         totalWattColor / primitive->area() * constant::INV_PI);
 }
 
-Spectrum SingleAreaLight::emittance(const Vector3R& emitDirection, const SurfaceInfo& emitSurface) const {
+Spectrum SingleAreaLight::emittance(const Vector3R& emitDirection, const SurfaceIntersection& emitSurface) const {
     // check if direction is at the front face 
-    const Vector3R frontNormal = emitSurface.frontNormal();
+    const Vector3R frontNormal = emitSurface.surfaceInfo().frontNormal();
     if (emitDirection.dot(frontNormal) < 0.0_r && !_isBackFaceEmit) {
         return Spectrum(0.0_r);
     }
     else {
         // TODO: fix here
-        const Vector3R uvw;
+        const Vector3R uvw = emitSurface.surfaceInfo().uvw();
         Spectrum sampleRadiance;
         _emitRadiance->evaluate(uvw, &sampleRadiance);
 
@@ -63,7 +63,7 @@ Spectrum SingleAreaLight::evaluateSampleRadiance(Vector3R& lightDirection, const
     pdf *= direction.lengthSquared() / sampleSurface.geometryNormal().absDot(-direction.normalize());
 
     // TODO: fix here
-    const Vector3R uvw;
+    const Vector3R uvw = sampleSurface.uvw();
     Spectrum sampleRadiance;
     _emitRadiance->evaluate(uvw, &sampleRadiance);
 

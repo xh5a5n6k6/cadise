@@ -134,40 +134,40 @@ std::shared_ptr<Texture<Spectrum>> SdData::getSpectrumTexture(
     return spectrumTexture;
 }
 
-SdClassType SdData::classType() const {
+const SdClassType& SdData::classType() const {
     return _classType;
 }
 
 void SdData::setClassType(const std::string_view& classType) {
-    if (!classType.compare("film")) {
+    if (classType == "film") {
         setClassType(SdClassType::FILM);
     }
-    else if (!classType.compare("camera")) {
+    else if (classType == "camera") {
         setClassType(SdClassType::CAMERA);
     }
-    else if (!classType.compare("renderer")) {
+    else if (classType == "renderer") {
         setClassType(SdClassType::RENDERER);
     }
-    else if (!classType.compare("accelerator")) {
+    else if (classType == "accelerator") {
         setClassType(SdClassType::ACCELERATOR);
     }
-    else if (!classType.compare("texture-real")) {
+    else if (classType == "texture-real") {
         setClassType(SdClassType::TEXTURE_REAL);
     }
-    else if (!classType.compare("texture-spectrum")) {
+    else if (classType == "texture-spectrum") {
         setClassType(SdClassType::TEXTURE_SPECTRUM);
     }
-    else if (!classType.compare("material")) {
+    else if (classType == "material") {
         setClassType(SdClassType::MATERIAL);
     }
-    else if (!classType.compare("light")) {
+    else if (classType == "light") {
         setClassType(SdClassType::LIGHT);
     }
-    else if (!classType.compare("primitive")) {
+    else if (classType == "primitive") {
         setClassType(SdClassType::PRIMITIVE);
     }
     else {
-        // unknown sd class type
+        // unsupported type
     }
 }
 

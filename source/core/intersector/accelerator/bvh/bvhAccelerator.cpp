@@ -8,11 +8,6 @@
 namespace cadise {
 
 BvhAccelerator::BvhAccelerator(const std::vector<std::shared_ptr<Intersector>>& intersectors) {
-    // TODO: just create a empty node tree
-    if (intersectors.empty()) {
-        exit(1);
-    }
-
     _intersectors.reserve(intersectors.size());
 
     // select spiltter

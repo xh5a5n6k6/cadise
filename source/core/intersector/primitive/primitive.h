@@ -25,9 +25,11 @@ public:
 
     virtual void evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const = 0;
 
-    virtual void sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurface) const = 0;
-    virtual real samplePdfA(const Vector3R& position) const = 0;
-    virtual real area() const = 0;
+    virtual void sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurface) const;
+    virtual real samplePdfA(const Vector3R& position) const;
+    virtual real area() const;
+
+    virtual void uvwToPosition(const Vector3R& uvw, Vector3R* const out_position) const;
 
     const Bsdf* bsdf() const;
     const AreaLight* areaLight() const;

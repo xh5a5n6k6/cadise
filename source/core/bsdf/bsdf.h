@@ -10,6 +10,7 @@ class SurfaceIntersection;
 
 class Bsdf {
 public:
+    Bsdf();
     Bsdf(const BsdfType& type);
 
     virtual Spectrum evaluate(const SurfaceIntersection& surfaceIntersection) const = 0;
