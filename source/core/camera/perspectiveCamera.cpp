@@ -29,7 +29,7 @@ void PerspectiveCamera::updateTransform() {
     // matrix multiplication is right-hand-side, so we
     // need to initialize matrix first.
     //
-    // translate needs to be multiplicated last, it means
+    // translate needs to be multiplied last, it means
     // we need to multiply it first (it will be the leftmost part).
     Matrix4 filmToCameraMatrix = Matrix4::identity();
     filmToCameraMatrix *= Matrix4::translate(-(sensorWidth / 2.0_r), sensorHeight / 2.0_r, -sensorOffset);

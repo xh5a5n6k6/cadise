@@ -6,7 +6,7 @@
 Cadise is a physically based renderer written in C++17, taking some other renderers ([PBRT-v3](https://github.com/mmp/pbrt-v3), [Photon-v2](https://github.com/TzuChieh/Photon-v2), [Tungsten](https://github.com/tunabrain/tungsten), etc) as references. The main purpose of a renderer is to solve the integral problem described in [rendering equation](https://en.wikipedia.org/wiki/Rendering_equation), which is more often known as light transport simulation.
 
 Cadise is still been developing and more features will be implemented.
-(an overview of features is in the `FEATURE.md`)
+(an overview of features is in the `FEATURE.md`.)
 
 | Master branch | Develop branch |
 |     :---:     |      :---:     |
@@ -25,7 +25,9 @@ It also includes some third-party libraries in the `./source/third-party/` folde
 ## Gallery
 Here are some images rendered with Cadise.
 
+<img src="./gallery/image/chess.png">
+<p align="center"><i>Chess Scene (based on <a href="https://www.blendswap.com/blend/18589">Standard Chess Set</a> scene by MiriamAHoyt; HDRI is <a href="https://hdrihaven.com/hdri/?c=artificial%20light&h=colorful_studio">Colorful Studio</a> by Sergej Majboroda)</i></p>
 <img src="./gallery/image/pear.png">
-<p align="center"><i>Pear Scene (based on Pear scene by MZiemys from BlendSwap)</i></p>
+<p align="center"><i>Pear Scene (based on <a href="https://www.blendswap.com/blend/18747">Pear</a> scene by MZiemys)</i></p>
 <img src="./gallery/image/cornell-box.png">
-<p align="center"><i>Cornell Box Scene</i></p>
+<p align="center"><i>Cornell Box Scene (based on original <a href="https://www.graphics.cornell.edu/online/box/data.html">Cornell Box Data</a>)</i></p>
