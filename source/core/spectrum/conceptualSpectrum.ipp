@@ -190,6 +190,11 @@ inline real ConceptualSpectrum<N>::maxComponent() const {
 }
 
 template<std::size_t N>
+inline ConceptualSpectrum<N> ConceptualSpectrum<N>::square() const {
+    return ConceptualSpectrum<N>(_values.square());
+}
+
+template<std::size_t N>
 inline ConceptualSpectrum<N> ConceptualSpectrum<N>::complement() const {
     return ConceptualSpectrum<N>(_values.complement());
 }

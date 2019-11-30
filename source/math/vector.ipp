@@ -320,6 +320,16 @@ inline Vector<T, N> Vector<T, N>::reverse() const {
 }
 
 template<typename T, std::size_t N>
+inline Vector<T, N> Vector<T, N>::square() const {
+    Vector<T, N> result;
+    for (std::size_t i = 0; i < N; ++i) {
+        result._v[i] = _v[i] * _v[i];
+    }
+
+    return result;
+}
+
+template<typename T, std::size_t N>
 inline Vector<T, N> Vector<T, N>::complement() const {
     const Vector<T, N> oneVector(static_cast<T>(1));
     return oneVector - *this;

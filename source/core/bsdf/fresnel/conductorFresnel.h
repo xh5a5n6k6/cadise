@@ -4,19 +4,17 @@
 
 namespace cadise {
 
-class DielectricFresnel : public Fresnel {
+class ConductorFresnel : public Fresnel {
 public:
-    DielectricFresnel(const real iorOuter, const real iorInner);
+    ConductorFresnel(const real iorOuter, const Spectrum& eta, const Spectrum& k);
 
     void evaluateReflectance(const real cosThetaI,
                              Spectrum* const out_reflectance) const override = 0;
 
-    real iorOuter() const;
-    real iorInner() const;
-
 private:
     real _iorOuter;
-    real _iorInner;
+    Spectrum _eta;
+    Spectrum _k;
 };
 
 } // namespace cadise

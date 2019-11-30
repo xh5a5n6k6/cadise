@@ -76,7 +76,7 @@ static std::shared_ptr<Texture<Spectrum>> createSpectrumImage(
     const StringKeyMap<Texture<real>>& realTextures,
     const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
-    const std::string_view filename = data->findString("filename");
+    const std::string_view filename   = data->findString("filename");
     const std::string_view sampleMode = data->findString("sample-mode");
 
     HdrImage hdrImage = PictureLoader::loadRgbImage(Path(filename));

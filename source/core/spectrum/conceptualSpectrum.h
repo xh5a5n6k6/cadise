@@ -41,6 +41,7 @@ public:
     real average() const;
     real maxComponent() const;
 
+    ConceptualSpectrum square() const;
     ConceptualSpectrum complement() const;
 
 protected:

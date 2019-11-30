@@ -1,6 +1,6 @@
 #include "core/intersector/primitive/infiniteSphere.h"
 
-#include "core/bsdf/category/perfectAbsorber.h"
+#include "core/bsdf/category/absorberBsdf.h"
 #include "core/intersector/primitiveInfo.h"
 #include "core/ray.h"
 #include "core/surfaceInfo.h"
@@ -20,7 +20,7 @@ InfiniteSphere::InfiniteSphere() :
 }
 
 InfiniteSphere::InfiniteSphere(const real radius) :
-    Primitive(std::make_shared<PerfectAbsorber>()),
+    Primitive(std::make_shared<AbsorberBsdf>()),
     _radius(radius) {
 }
 
@@ -56,9 +56,9 @@ void InfiniteSphere::uvwToPosition(const Vector3R& uvw, Vector3R* const out_posi
     const real cosTheta = std::cos(theta);
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
 
-    Vector3R direction(std::cos(phi) * sinTheta,
-                       std::sin(phi) * sinTheta,
-                       cosTheta);
+    const Vector3R direction(std::cos(phi) * sinTheta,
+                             std::sin(phi) * sinTheta,
+                             cosTheta);
 
     *out_position = direction.normalize() * _radius;
 }

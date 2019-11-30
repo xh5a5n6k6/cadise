@@ -1,39 +1,10 @@
 #include "core/bsdf/fresnel/dielectricFresnel.h"
 
-#include <algorithm>
-#include <cmath>
-
 namespace cadise {
 
 DielectricFresnel::DielectricFresnel(const real iorOuter, const real iorInner) :
     _iorOuter(iorOuter),
     _iorInner(iorInner) {
-}
-
-Spectrum DielectricFresnel::evaluateReflectance(const real cosThetaI) const {
-    real etaI = _iorOuter;
-    real etaT = _iorInner;
-    real cosI = cosThetaI;
-    if (cosI < 0.0_r) {
-        std::swap(etaI, etaT);
-        cosI *= -1.0_r;
-    }
-
-    const real etaRatio = etaI / etaT;
-    const real sin2_T = etaRatio * etaRatio * (1.0_r - cosI * cosI);
-
-    // handle TIR condition
-    if (sin2_T >= 1.0_r) {
-        return Spectrum(1.0_r);
-    }
-
-    const real cosT = std::sqrt(1.0_r - sin2_T);
-
-    const real rParallel      = (etaT * cosI - etaI * cosT) / (etaT * cosI + etaI * cosT);
-    const real rPerpendicular = (etaI * cosI - etaT * cosT) / (etaI * cosI + etaT * cosT);
-    const real rTotal = 0.5_r * (rParallel * rParallel + rPerpendicular * rPerpendicular);
-
-    return Spectrum(rTotal);
 }
 
 real DielectricFresnel::iorOuter() const {

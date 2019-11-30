@@ -6,12 +6,14 @@
 
 namespace cadise {
 
+class DielectricFresnel;
 template<typename T>
 class Texture;
 
 class SpecularReflection : public Bsdf {
 public:
-    SpecularReflection(const std::shared_ptr<Texture<Spectrum>>& albedo);
+    SpecularReflection(const std::shared_ptr<Texture<Spectrum>>& albedo,
+                       const std::shared_ptr<DielectricFresnel>& fresnel);
 
     Spectrum evaluate(const SurfaceIntersection& surfaceIntersection) const override;
     Spectrum evaluateSample(SurfaceIntersection& surfaceIntersection) const override;
@@ -20,6 +22,7 @@ public:
 
 private:
     std::shared_ptr<Texture<Spectrum>> _albedo;
+    std::shared_ptr<DielectricFresnel> _fresnel;
 };
 
 } // namespace cadise

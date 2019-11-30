@@ -6,7 +6,8 @@ namespace cadise {
 
 class Fresnel {
 public:
-    virtual Spectrum evaluateReflectance(const real cosThetaI) const = 0;
+    virtual void evaluateReflectance(const real cosThetaI,
+                                     Spectrum* const out_reflectance) const = 0;
 };
 
 } // namespace cadise

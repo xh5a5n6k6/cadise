@@ -4,9 +4,9 @@
 
 namespace cadise {
 
-class PerfectAbsorber : public Bsdf {
+class AbsorberBsdf : public Bsdf {
 public:
-    PerfectAbsorber();
+    AbsorberBsdf();
 
     Spectrum evaluate(const SurfaceIntersection& surfaceIntersection) const override;
     Spectrum evaluateSample(SurfaceIntersection& surfaceIntersection) const override;

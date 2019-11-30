@@ -4,10 +4,11 @@
 #include "core/bsdf/category/blinnPhong.h"
 #include "core/bsdf/category/lambertianDiffuse.h"
 #include "core/bsdf/category/mixedBsdf.h"
-#include "core/bsdf/category/perfectDielectric.h"
+#include "core/bsdf/category/specularDielectric.h"
 #include "core/bsdf/category/specularReflection.h"
 #include "core/bsdf/category/specularTransmission.h"
 
+#include "core/bsdf/fresnel/vanillaDielectricFresnel.h"
 #include "core/texture/texture.h"
 
 #include "file-io/scene-description/sdData.h"
@@ -32,8 +33,11 @@ static std::shared_ptr<Bsdf> createSpecularReflection(
     const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
     const std::shared_ptr<Texture<Spectrum>> albedo = data->getSpectrumTexture("albedo", spectrumTextures);
+    const real                               iorOuter = data->findReal("ior-outer", 1.0_r);
+    const real                               iorInner = data->findReal("ior-inner", 1.0_r);
 
-    return std::make_shared<SpecularReflection>(albedo);
+    return std::make_shared<SpecularReflection>(albedo,
+                                                std::make_shared<VanillaDielectricFresnel>(iorOuter, iorInner));
 }
 
 static std::shared_ptr<Bsdf> createSpecularTransmission(
@@ -43,12 +47,13 @@ static std::shared_ptr<Bsdf> createSpecularTransmission(
 
     const std::shared_ptr<Texture<Spectrum>> albedo   = data->getSpectrumTexture("albedo", spectrumTextures);
     const real                               iorOuter = data->findReal("ior-outer", 1.0_r);
-    const real                               iorInner = data->findReal("ior-inner", 1.5_r);
+    const real                               iorInner = data->findReal("ior-inner", 1.0_r);
 
-    return std::make_shared<SpecularTransmission>(albedo, iorOuter, iorInner);
+    return std::make_shared<SpecularTransmission>(albedo,
+                                                  std::make_shared<VanillaDielectricFresnel>(iorOuter, iorInner));
 }
 
-static std::shared_ptr<Bsdf> createPerfectDielectric(
+static std::shared_ptr<Bsdf> createSpecularDielectric(
     const std::shared_ptr<SdData>& data,
     const StringKeyMap<Texture<real>>& realTextures,
     const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
@@ -57,7 +62,8 @@ static std::shared_ptr<Bsdf> createPerfectDielectric(
     const real                               iorOuter = data->findReal("ior-outer", 1.0_r);
     const real                               iorInner = data->findReal("ior-inner", 1.5_r);
 
-    return std::make_shared<PerfectDielectric>(albedo, iorOuter, iorInner);
+    return std::make_shared<SpecularDielectric>(albedo,
+                                                std::make_shared<VanillaDielectricFresnel>(iorOuter, iorInner));
 }
 
 static std::shared_ptr<Bsdf> createBlinnPhong(
@@ -103,7 +109,7 @@ std::shared_ptr<Bsdf> makeBsdf(
         bsdf = createSpecularTransmission(data, realTextures, spectrumTextures);
     }
     else if (type == "glass") {
-        bsdf = createPerfectDielectric(data, realTextures, spectrumTextures);
+        bsdf = createSpecularDielectric(data, realTextures, spectrumTextures);
     }
     else if (type == "blinnPhong") {
         bsdf = createBlinnPhong(data, realTextures, spectrumTextures);
