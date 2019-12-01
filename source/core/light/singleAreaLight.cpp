@@ -3,9 +3,7 @@
 #include "core/intersector/primitive/primitive.h"
 #include "core/surfaceIntersection.h"
 #include "core/texture/category/constantTexture.h"
-
 #include "fundamental/assertion.h"
-
 #include "math/constant.h"
 
 namespace cadise {

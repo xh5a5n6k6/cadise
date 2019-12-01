@@ -6,11 +6,11 @@
 - ### Accelerator
     - BVH (equal)
 - ### BSDF
+    - Absorber
     - Lambertian Diffuse
     - Specular Reflection
     - Specular Transmission
-    - Perfect Absorber
-    - Perfect Dielectric
+    - Specular Dielectric
     - Blinn-Phong
 - ### Primitive
     - Sphere

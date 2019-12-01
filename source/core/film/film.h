@@ -1,7 +1,6 @@
 #pragma once
 
 #include "core/spectrum/spectrum.h"
-
 #include "file-io/path.h"
 
 #include <memory>

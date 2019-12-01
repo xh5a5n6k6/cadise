@@ -2,15 +2,14 @@
 
 #include "core/intersector/accelerator/bvh/bvhBinaryNode.h"
 #include "core/intersector/intersector.h"
-
 #include "fundamental/assertion.h"
 
 #include <algorithm>
 
 namespace cadise {
 
-BvhBuilder::BvhBuilder(const BvhSplitter& splitter) :
-    _splitter(splitter) {
+BvhBuilder::BvhBuilder(const BvhSplitMode& splitMode) :
+    _splitMode(splitMode) {
 }
 
 std::unique_ptr<BvhBinaryNode> BvhBuilder::buildBinaryNodes(
@@ -29,6 +28,9 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::buildBinaryNodes(
 void BvhBuilder::buildLinearNodes(std::unique_ptr<BvhBinaryNode> root, 
                                   std::vector<BvhLinearNode>* const out_linearNodes,
                                   const std::size_t totalSize) const {
+    
+    CADISE_ASSERT(out_linearNodes);
+    
     std::vector<BvhLinearNode> nodes;
     nodes.reserve(totalSize);
 
@@ -43,6 +45,7 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
     const std::size_t startIndex,
     std::size_t* const out_totalSize) const {
 
+    CADISE_ASSERT(out_orderedIntersectors);
     CADISE_ASSERT(out_totalSize);
 
     std::unique_ptr<BvhBinaryNode> node = std::make_unique<BvhBinaryNode>();
@@ -65,8 +68,8 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
         std::vector<std::shared_ptr<Intersector>> subIntersectorsA;
         std::vector<std::shared_ptr<Intersector>> subIntersectorsB;
 
-        switch (_splitter) {
-            case BvhSplitter::EQUAL:
+        switch (_splitMode) {
+            case BvhSplitMode::EQUAL:
                 _splitWith_EQUAL(intersectors,
                                  splitAxis,
                                  &subIntersectorsA, 
@@ -101,6 +104,8 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
 void BvhBuilder::_buildLinearNodesRecursively(std::unique_ptr<BvhBinaryNode> binaryNode, 
                                               std::vector<BvhLinearNode>* const out_linearNodes,
                                               std::size_t* const out_nodeIndex) const {
+    CADISE_ASSERT(out_linearNodes);
+    
     BvhLinearNode linearNode;
     const std::size_t index = out_linearNodes->size();
     if (out_nodeIndex) {
@@ -131,6 +136,7 @@ bool BvhBuilder::_splitWith_EQUAL(const std::vector<std::shared_ptr<Intersector>
                                   const std::size_t splitAxis,
                                   std::vector<std::shared_ptr<Intersector>>* const out_subIntersectorsA,
                                   std::vector<std::shared_ptr<Intersector>>* const out_subIntersectorsB) const {
+    
     CADISE_ASSERT(out_subIntersectorsA);
     CADISE_ASSERT(out_subIntersectorsB);
 

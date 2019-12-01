@@ -1,7 +1,6 @@
 #include "file-io/scene-description/sdParser.h"
 
 #include "core/renderOption.h"
-
 #include "file-io/scene-description/tokenizer.h"
 
 #include <cstdio>

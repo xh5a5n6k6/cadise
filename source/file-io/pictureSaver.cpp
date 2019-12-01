@@ -1,11 +1,8 @@
 #include "file-io/pictureSaver.h"
 
 #include "core/imaging/image.h"
-
 #include "file-io/path.h"
-
 #include "third-party/tp-stb-write.h"
-
 #include "utility/imageUtils.h"
 
 #include <cstdio>

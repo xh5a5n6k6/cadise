@@ -1,8 +1,10 @@
 #include "core/instantiator/instantiator.h"
 
+// film type
 #include "core/film/film.h"
 
 #include "file-io/scene-description/sdData.h"
+#include "fundamental/assertion.h"
 
 namespace cadise {
 
@@ -10,6 +12,8 @@ namespace instantiator {
 
 std::shared_ptr<Film> makeFilm(
     const std::shared_ptr<SdData>& data) {
+
+    CADISE_ASSERT(data);
 
     std::shared_ptr<Film> film = nullptr;
 

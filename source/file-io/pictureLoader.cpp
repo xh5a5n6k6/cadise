@@ -1,13 +1,10 @@
 #include "file-io/pictureLoader.h"
 
 #include "core/imaging/image.h"
-
 #include "file-io/path.h"
-
+#include "fundamental/assertion.h"
 #include "math/math.h"
-
 #include "third-party/tp-stb-load.h"
-
 #include "utility/imageUtils.h"
 
 #include <iostream>
@@ -40,6 +37,8 @@ HdrAlphaImage PictureLoader::loadRgbaImage(const Path& path) {
 }
 
 void PictureLoader::loadLdrImage(const Path& path, LdrImage* const out_ldrImage) {
+    CADISE_ASSERT(out_ldrImage);
+
     int32 width;
     int32 height;
     int32 componentNumber;
@@ -124,6 +123,8 @@ void PictureLoader::loadLdrImage(const Path& path, LdrImage* const out_ldrImage)
 }
 
 void PictureLoader::loadHdrImage(const Path& path, HdrImage* const out_hdrImage) {
+    CADISE_ASSERT(out_hdrImage);
+
     int32 width;
     int32 height;
     int32 componentNumber;
@@ -178,10 +179,12 @@ void PictureLoader::loadHdrImage(const Path& path, HdrImage* const out_hdrImage)
 }
 
 void PictureLoader::loadLdrAlphaImage(const Path& path, LdrAlphaImage* const out_ldrAlphaImage) {
+    CADISE_ASSERT(out_ldrAlphaImage);
     // TODO: implement here
 }
 
 void PictureLoader::loadHdrAlphaImage(const Path& path, HdrAlphaImage* const out_hdrAlphaImage) {
+    CADISE_ASSERT(out_hdrAlphaImage);
     // TODO: implement here
 }
 

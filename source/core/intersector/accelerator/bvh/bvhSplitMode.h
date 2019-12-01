@@ -2,7 +2,7 @@
 
 namespace cadise {
 
-enum class BvhSplitter {
+enum class BvhSplitMode {
     EQUAL,
 
     // TODO

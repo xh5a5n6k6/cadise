@@ -1,7 +1,6 @@
 #pragma once
 
 #include "core/bsdf/bsdfType.h"
-
 #include "core/spectrum/spectrum.h"
 
 namespace cadise {

@@ -4,9 +4,7 @@
 #include "core/ray.h"
 #include "core/surfaceInfo.h"
 #include "core/texture/mapper/textureMapper.h"
-
 #include "fundamental/assertion.h"
-
 #include "math/aabb.h"
 #include "math/constant.h"
 #include "math/random.h"
@@ -22,8 +20,15 @@ Triangle::Triangle(const std::shared_ptr<Bsdf>& bsdf,
     _vB(vB), 
     _vC(vC) {
 
+    CADISE_ASSERT(bsdf);
+
     _eAB = _vB - _vA;
     _eAC = _vC - _vA;
+
+    const Vector3R faceNormal = _eAB.cross(_eAC).normalize();
+    _nA = faceNormal;
+    _nB = faceNormal;
+    _nC = faceNormal;
 
     _uvwA = Vector3R(0.0_r, 0.0_r, 0.0_r);
     _uvwB = Vector3R(1.0_r, 0.0_r, 0.0_r);
@@ -112,6 +117,7 @@ void Triangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, Surface
     Vector3R normal = _eAB.cross(_eAC).normalize();
     surfaceInfo.setFrontNormal(normal);
 
+    // TODO: interpolate normal in the triangle
     normal = (primitiveInfo.isBackSide()) ? normal.reverse() : normal;
     surfaceInfo.setGeometryNormal(normal);
     surfaceInfo.setShadingNormal(normal);
@@ -182,6 +188,18 @@ real Triangle::samplePdfA(const Vector3R& position) const {
 
 real Triangle::area() const {
     return 0.5_r * _eAB.cross(_eAC).length();
+}
+
+void Triangle::setNormalA(const Vector3R& nA) {
+    _nA = nA;
+}
+
+void Triangle::setNormalB(const Vector3R& nB) {
+    _nB = nB;
+}
+
+void Triangle::setNormalC(const Vector3R& nC) {
+    _nC = nC;
 }
 
 void Triangle::setUvwA(const Vector3R& uvwA) {

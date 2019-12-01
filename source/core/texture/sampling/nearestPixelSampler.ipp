@@ -3,7 +3,7 @@
 #include "core/texture/sampling/nearestPixelSampler.h"
 
 #include "core/imaging/image.h"
-
+#include "fundamental/assertion.h"
 #include "math/math.h"
 #include "math/vector.h"
 
@@ -14,6 +14,8 @@ inline void NearestPixelSampler<T, N>::sample(
     const Vector3R& uvw,
     const Image<T, N>& image,
     Vector<T, N>* const out_value) const {
+
+    CADISE_ASSERT(out_value);
 
     // clamp uv to [0.0, 1.0]
     const real u = math::clamp(uvw.x(), 0.0_r, 1.0_r);

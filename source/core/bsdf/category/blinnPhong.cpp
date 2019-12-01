@@ -1,7 +1,6 @@
 #include "core/bsdf/category/blinnPhong.h"
 
 #include "core/surfaceIntersection.h"
-
 #include "math/constant.h"
 #include "math/math.h"
 #include "math/random.h"

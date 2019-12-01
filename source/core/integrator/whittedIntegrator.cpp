@@ -6,7 +6,6 @@
 #include "core/ray.h"
 #include "core/scene.h"
 #include "core/surfaceIntersection.h"
-
 #include "math/constant.h"
 
 namespace cadise {

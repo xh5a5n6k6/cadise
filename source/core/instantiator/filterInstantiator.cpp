@@ -7,6 +7,7 @@
 #include "core/film/filter/coneFilter.h"
 
 #include "file-io/scene-description/sdData.h"
+#include "fundamental/assertion.h"
 
 namespace cadise {
 
@@ -57,6 +58,8 @@ static std::shared_ptr<Filter> createMitchell(
 
 std::shared_ptr<Filter> makeFilter(
     const std::shared_ptr<SdData>& data) {
+
+    CADISE_ASSERT(data);
 
     std::shared_ptr<Filter> filter = nullptr;
 

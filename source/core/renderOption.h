@@ -1,7 +1,6 @@
 #pragma once
 
 #include "core/spectrum/spectrum.h"
-
 #include "math/type/mapType.h"
 
 #include <memory>

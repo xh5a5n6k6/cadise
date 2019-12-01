@@ -1,5 +1,7 @@
 #include "core/intersector/primitiveInfo.h"
 
+#include "fundamental/assertion.h"
+
 namespace cadise {
 
 PrimitiveInfo::PrimitiveInfo() :
@@ -16,6 +18,8 @@ bool PrimitiveInfo::isBackSide() const {
 }
 
 void PrimitiveInfo::setPrimitive(const Primitive* const primitive) {
+    CADISE_ASSERT(primitive);
+
     _primitive = primitive;
 }
 

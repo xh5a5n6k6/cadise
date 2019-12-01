@@ -1,7 +1,6 @@
 #include "core/sampler/sampleRecord1D.h"
 
 #include "fundamental/assertion.h"
-
 #include "math/math.h"
 #include "math/random.h"
 

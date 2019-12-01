@@ -5,7 +5,7 @@
 #include "core/ray.h"
 #include "core/surfaceInfo.h"
 #include "core/texture/mapper/sphericalMapper.h"
-
+#include "fundamental/assertion.h"
 #include "math/aabb.h"
 #include "math/constant.h"
 
@@ -50,6 +50,8 @@ void InfiniteSphere::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, S
 }
 
 void InfiniteSphere::uvwToPosition(const Vector3R& uvw, Vector3R* const out_position) const {
+    CADISE_ASSERT(out_position);
+
     const real theta = (1.0_r - uvw.y()) * constant::PI;
     const real phi   = uvw.x() * constant::TWO_PI;
 

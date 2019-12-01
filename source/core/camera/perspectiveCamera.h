@@ -10,8 +10,10 @@ class Transform;
 
 class PerspectiveCamera : public Camera {
 public:
-    PerspectiveCamera(const Vector3R& position, const Vector3R& direction, 
-                      const Vector3R& up, const real fov);
+    PerspectiveCamera(const Vector3R& position, 
+                      const Vector3R& direction, 
+                      const Vector3R& up, 
+                      const real      fov);
 
     void updateTransform() override;
     Ray spawnPrimaryRay(const Vector2R& filmNdcPosition) const override;

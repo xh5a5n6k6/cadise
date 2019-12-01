@@ -9,9 +9,7 @@
 #include "core/renderer/renderer.h"
 #include "core/scene.h"
 #include "core/texture/texture.h"
-
 #include "file-io/scene-description/sdData.h"
-
 #include "fundamental/assertion.h"
 
 #include <iostream>
@@ -29,6 +27,8 @@ RenderOption::RenderOption() :
 }
 
 void RenderOption::setUpData(const std::shared_ptr<SdData>& data) {
+    CADISE_ASSERT(data);
+
     switch (data->classType()) {
         case SdClassType::FILM:
             _setUpFilm(data);

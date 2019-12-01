@@ -1,7 +1,6 @@
 #pragma once
 
 #include "math/distribution/distribution1D.h"
-
 #include "math/type/mathType.h"
 
 namespace cadise {

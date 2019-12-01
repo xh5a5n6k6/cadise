@@ -6,6 +6,7 @@
 #include "core/integrator/whittedIntegrator.h"
 
 #include "file-io/scene-description/sdData.h"
+#include "fundamental/assertion.h"
 
 namespace cadise {
 
@@ -39,6 +40,8 @@ static std::shared_ptr<Integrator> createPath(
 
 std::shared_ptr<Integrator> makeIntegrator(
     const std::shared_ptr<SdData>& data) {
+
+    CADISE_ASSERT(data);
 
     std::shared_ptr<Integrator> integrator = nullptr;
 

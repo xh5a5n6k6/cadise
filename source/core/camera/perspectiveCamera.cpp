@@ -1,7 +1,6 @@
 #include "core/camera/perspectiveCamera.h"
 
 #include "core/ray.h"
-
 #include "math/constant.h"
 #include "math/transform.h"
 
@@ -10,8 +9,10 @@
 
 namespace cadise {
 
-PerspectiveCamera::PerspectiveCamera(const Vector3R& position, const Vector3R& direction, 
-                                     const Vector3R& up, const real fov) :
+PerspectiveCamera::PerspectiveCamera(const Vector3R& position, 
+                                     const Vector3R& direction, 
+                                     const Vector3R& up, 
+                                     const real      fov) :
     Camera(position),
     _cameraToWorld(nullptr),
     _filmToCamera(nullptr),

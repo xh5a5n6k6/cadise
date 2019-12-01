@@ -8,9 +8,7 @@
 #include "core/sampler/sampler.h"
 #include "core/sampler/sampleRecord2D.h"
 #include "core/scene.h"
-
 #include "fundamental/assertion.h"
-
 #include "utility/parallel.h"
 
 #include <chrono>
@@ -22,6 +20,9 @@ SamplingRenderer::SamplingRenderer(const std::shared_ptr<Integrator>& integrator
                                    const std::shared_ptr<Sampler>& sampler) :
     _integrator(integrator),
     _sampler(sampler) {
+
+    CADISE_ASSERT(integrator);
+    CADISE_ASSERT(sampler);
 }
 
 void SamplingRenderer::render(const Scene& scene) const {

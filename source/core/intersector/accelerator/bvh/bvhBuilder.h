@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/intersector/accelerator/bvh/bvhSplitter.h"
+#include "core/intersector/accelerator/bvh/bvhSplitMode.h"
 #include "core/intersector/accelerator/bvh/bvhLinearNode.h"
 
 #include <memory>
@@ -13,7 +13,7 @@ class Intersector;
 
 class BvhBuilder {
 public:
-    BvhBuilder(const BvhSplitter& splitter);
+    BvhBuilder(const BvhSplitMode& splitMode);
 
     std::unique_ptr<BvhBinaryNode> buildBinaryNodes(
         const std::vector<std::shared_ptr<Intersector>>& intersectors, 
@@ -40,7 +40,7 @@ private:
                           std::vector<std::shared_ptr<Intersector>>* const out_subIntersectorsA,
                           std::vector<std::shared_ptr<Intersector>>* const out_subIntersectorsB) const;
 
-    BvhSplitter _splitter;
+    BvhSplitMode _splitMode;
 
     static const std::size_t MAX_INTERSECTOR_SIZE = 1;
 };

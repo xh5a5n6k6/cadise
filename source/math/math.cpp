@@ -1,5 +1,6 @@
 #include "math/math.h"
 
+#include "fundamental/assertion.h"
 #include "math/constant.h"
 #include "math/vector.h"
 
@@ -34,6 +35,9 @@ std::size_t nearestUpperSquareNumber(const std::size_t number) {
 void buildCoordinateSystem(const Vector3R& zAxis, 
                            Vector3R* const out_xAxis, 
                            Vector3R* const out_yAxis) {
+    
+    CADISE_ASSERT(out_xAxis);
+    CADISE_ASSERT(out_yAxis);
 
     if (std::abs(zAxis.x()) > std::abs(zAxis.y())) {
         Vector3R xAxis(-zAxis.z(), 0.0_r, zAxis.x());

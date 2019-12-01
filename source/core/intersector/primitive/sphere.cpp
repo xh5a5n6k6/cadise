@@ -4,9 +4,7 @@
 #include "core/ray.h"
 #include "core/surfaceInfo.h"
 #include "core/texture/mapper/sphericalMapper.h"
-
 #include "fundamental/assertion.h"
-
 #include "math/aabb.h"
 #include "math/constant.h"
 #include "math/random.h"
@@ -20,6 +18,8 @@ Sphere::Sphere(const std::shared_ptr<Bsdf>& bsdf, const Vector3R& center, const 
     Primitive(bsdf), 
     _center(center),
     _radius(radius) {
+
+    CADISE_ASSERT(bsdf);
 
     _worldToLocal = std::make_shared<Transform>(Matrix4::translate(center.reverse()));
     _tmptextureMapper = std::make_shared<SphericalMapper>();

@@ -3,7 +3,6 @@
 #include "math/vector.h"
 
 #include "fundamental/assertion.h"
-
 #include "math/math.h"
 
 #include <cmath>

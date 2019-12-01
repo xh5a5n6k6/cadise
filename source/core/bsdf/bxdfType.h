@@ -5,7 +5,7 @@
 namespace cadise {
 
 enum class BxdfType : uint32 {
-    NONE                  = 1 << 0,
+    ABSORB                = 1 << 0,
     DIFFUSE_REFLECTION    = 1 << 1,
     SPECULAR_REFLECTION   = 1 << 2,
     GLOSSY_REFLECTION     = 1 << 3,

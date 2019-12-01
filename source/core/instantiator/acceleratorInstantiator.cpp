@@ -5,6 +5,7 @@
 #include "core/intersector/accelerator/bvh/bvhAccelerator.h"
 
 #include "file-io/scene-description/sdData.h"
+#include "fundamental/assertion.h"
 
 namespace cadise {
 
@@ -27,6 +28,8 @@ static std::shared_ptr<Accelerator> createBvh(
 std::shared_ptr<Accelerator> makeAccelerator(
     const std::shared_ptr<SdData>& data,
     const std::vector<std::shared_ptr<Intersector>> intersectors) {
+
+    CADISE_ASSERT(data);
 
     std::shared_ptr<Accelerator> accelerator = nullptr;
     

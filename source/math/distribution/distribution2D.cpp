@@ -1,7 +1,6 @@
 #include "math/distribution/distribution2D.h"
 
 #include "fundamental/assertion.h"
-
 #include "math/vector.h"
 
 namespace cadise {
@@ -10,6 +9,8 @@ Distribution2D::Distribution2D() = default;
 
 Distribution2D::Distribution2D(const real* const value, const Vector2S& resolution) :
     _conditionalX(resolution.y()) {
+
+    CADISE_ASSERT(value);
 
     std::vector<real> rowValues(resolution.y());
     for (std::size_t iy = 0; iy < resolution.y(); ++iy) {

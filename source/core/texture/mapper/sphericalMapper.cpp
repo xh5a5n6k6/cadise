@@ -1,5 +1,6 @@
 #include "core/texture/mapper/sphericalMapper.h"
 
+#include "fundamental/assertion.h"
 #include "math/constant.h"
 #include "math/math.h"
 #include "math/vector.h"
@@ -11,6 +12,8 @@ namespace cadise {
 SphericalMapper::SphericalMapper() = default;
 
 void SphericalMapper::mappingToUvw(const Vector3R& direction, Vector3R* const out_uvw) const {
+    CADISE_ASSERT(out_uvw);
+
     const Vector3R unitVector = direction.normalize();
 
     const real theta = std::acos(math::clamp(unitVector.y(), -1.0_r, 1.0_r));

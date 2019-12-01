@@ -2,7 +2,7 @@
 
 #include "core/surfaceIntersection.h"
 #include "core/texture/category/constantTexture.h"
-
+#include "fundamental/assertion.h"
 #include "math/random.h"
 
 namespace cadise {
@@ -20,6 +20,10 @@ MixedBsdf::MixedBsdf(const std::shared_ptr<Bsdf>& bsdfA,
     _bsdfA(bsdfA),
     _bsdfB(bsdfB),
     _ratio(ratio) {
+
+    CADISE_ASSERT(bsdfA);
+    CADISE_ASSERT(bsdfB);
+    CADISE_ASSERT(ratio);
 }
 
 Spectrum MixedBsdf::evaluate(const SurfaceIntersection& surfaceIntersection) const {

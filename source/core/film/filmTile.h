@@ -2,7 +2,6 @@
 
 #include "core/film/filmSensor.h"
 #include "core/spectrum/spectrum.h"
-
 #include "math/aabb.h"
 
 #include <vector>

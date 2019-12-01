@@ -1,5 +1,7 @@
 #include "core/bsdf/fresnel/schlickConductorFresnel.h"
 
+#include "fundamental/assertion.h"
+
 #include <cmath>
 
 namespace cadise {
@@ -23,7 +25,8 @@ SchlickConductorFresnel::SchlickConductorFresnel(const Spectrum& f0) :
 
 void SchlickConductorFresnel::evaluateReflectance(const real cosThetaI,
                                                   Spectrum* const out_reflectance) const {
-    
+    CADISE_ASSERT(out_reflectance);
+
     const real     absCosThetaI   = std::abs(cosThetaI);
     const real     cosIComplement = 1.0_r - absCosThetaI;
     const Spectrum f0Complement   = _f0.complement();

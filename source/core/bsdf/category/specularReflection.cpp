@@ -3,6 +3,7 @@
 #include "core/bsdf/fresnel/dielectricFresnel.h"
 #include "core/surfaceIntersection.h"
 #include "core/texture/texture.h"
+#include "fundamental/assertion.h"
 
 #include <cmath>
 
@@ -13,6 +14,9 @@ SpecularReflection::SpecularReflection(const std::shared_ptr<Texture<Spectrum>>&
     Bsdf(BsdfType(BxdfType::SPECULAR_REFLECTION)),
     _albedo(albedo),
     _fresnel(fresnel) {
+
+    CADISE_ASSERT(albedo);
+    CADISE_ASSERT(fresnel);
 }
 
 Spectrum SpecularReflection::evaluate(const SurfaceIntersection& surfaceIntersection) const {

@@ -10,8 +10,8 @@
 
 #include "core/bsdf/fresnel/vanillaDielectricFresnel.h"
 #include "core/texture/texture.h"
-
 #include "file-io/scene-description/sdData.h"
+#include "fundamental/assertion.h"
 
 namespace cadise {
 
@@ -95,6 +95,8 @@ std::shared_ptr<Bsdf> makeBsdf(
     const std::shared_ptr<SdData>& data,
     const StringKeyMap<Texture<real>>& realTextures,
     const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
+
+    CADISE_ASSERT(data);
 
     std::shared_ptr<Bsdf> bsdf = nullptr;
 

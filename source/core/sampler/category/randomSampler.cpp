@@ -2,7 +2,6 @@
 
 #include "core/sampler/sampleRecord1D.h"
 #include "core/sampler/sampleRecord2D.h"
-
 #include "math/random.h"
 
 namespace cadise {

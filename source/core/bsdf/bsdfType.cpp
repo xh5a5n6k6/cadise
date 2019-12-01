@@ -3,7 +3,7 @@
 namespace cadise {
 
 BsdfType::BsdfType() :
-    BsdfType(BxdfType::NONE) {
+    BsdfType(BxdfType::ABSORB) {
 }
 
 BsdfType::BsdfType(const BxdfType& type) :
@@ -19,6 +19,10 @@ BsdfType BsdfType::operator|(const BsdfType& type) const {
     result._type = _type | type._type;
 
     return result;
+}
+
+bool BsdfType::isExactOne(const BxdfType& type)const {
+    return _type & static_cast<uint32>(type);
 }
 
 } // namespace cadise

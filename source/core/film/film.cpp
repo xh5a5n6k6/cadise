@@ -3,11 +3,8 @@
 #include "core/film/filmTile.h"
 #include "core/film/filter/filter.h"
 #include "core/imaging/image.h"
-
 #include "file-io/pictureSaver.h"
-
 #include "fundamental/assertion.h"
-
 #include "math/math.h"
 #include "math/type/imageType.h"
 
@@ -23,6 +20,8 @@ Film::Film(const int32 widthPx,
     _filename(filename),
     _filter(filter),
     _pixels() {
+
+    CADISE_ASSERT(filter);
 
     const std::size_t pixelNumber = static_cast<std::size_t>(_resolution.x() * _resolution.y());
     _pixels.resize(pixelNumber);

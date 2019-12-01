@@ -1,13 +1,12 @@
 #include "core/integrator/naivePathIntegrator.h"
 
 #include "core/bsdf/bsdf.h"
+#include "core/integral-tool/russianRoulette.h"
 #include "core/intersector/primitive/primitive.h"
 #include "core/light/areaLight.h"
-#include "core/integral-tool/russianRoulette.h"
 #include "core/ray.h"
 #include "core/scene.h"
 #include "core/surfaceIntersection.h"
-
 #include "math/constant.h"
 
 namespace cadise {

@@ -7,8 +7,8 @@
 #include "core/intersector/primitive/triangleMesh.h"
 
 #include "core/bsdf/category/lambertianDiffuse.h"
-
 #include "file-io/scene-description/sdData.h"
+#include "fundamental/assertion.h"
 
 namespace cadise {
 
@@ -72,15 +72,21 @@ static std::vector<std::shared_ptr<Primitive>> createTriangleMesh(
 
     const auto&& bsdf = bsdfs.find(bsdfName);
 
+    const std::size_t triangleNumber = positions.size() / 3;
+    std::vector<std::shared_ptr<Primitive>> triangles;
+    triangles.reserve(triangleNumber);
+
     if (bsdf != bsdfs.end()) {
         TriangleMesh triangleMesh(bsdf->second, positions, normals, uvws);
-        return triangleMesh.transformToTriangles();
+        triangleMesh.transformToTriangles(&triangles);
     }
     else {
         TriangleMesh triangleMesh(std::make_shared<LambertianDiffuse>(), 
                                   positions, normals, uvws);
-        return triangleMesh.transformToTriangles();
+        triangleMesh.transformToTriangles(&triangles);
     }
+
+    return triangles;
 }
 
 void makePrimitive(
@@ -88,6 +94,10 @@ void makePrimitive(
     const StringKeyMap<Bsdf>& bsdfs,
     std::vector<std::shared_ptr<Intersector>>* const out_intersectors,
     StringKeyMap<Primitive>* const out_primitives) {
+
+    CADISE_ASSERT(data);
+    CADISE_ASSERT(out_intersectors);
+    CADISE_ASSERT(out_primitives);
 
     const std::string_view type = data->findString("type");
     const std::string_view primitiveName = data->findString("name");

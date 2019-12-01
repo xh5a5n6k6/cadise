@@ -12,6 +12,7 @@ public:
 
     BsdfType operator|(const BsdfType& type) const;
 
+    bool isExactOne(const BxdfType& type) const;
     template<typename... BxdfTypes>
     bool isAtLeastOne(const BxdfType& type, const BxdfTypes&... types) const;
 

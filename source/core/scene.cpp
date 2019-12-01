@@ -5,16 +5,18 @@
 #include "core/light/light.h"
 #include "core/ray.h"
 #include "core/surfaceIntersection.h"
-
 #include "fundamental/assertion.h"
 
 namespace cadise {
 
 Scene::Scene(const std::shared_ptr<Accelerator>& topAccelerator,
              const std::vector<std::shared_ptr<Light>>& lights) :
-    _topAccelerator(std::move(topAccelerator)),
+    
+    _topAccelerator(topAccelerator),
     _lights(std::move(lights)),
     _environmentSphere(nullptr) {
+
+    CADISE_ASSERT(topAccelerator);
 }
 
 bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) const {

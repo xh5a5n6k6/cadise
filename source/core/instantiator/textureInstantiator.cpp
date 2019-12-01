@@ -1,18 +1,18 @@
 #include "core/instantiator/instantiator.h"
 
-#include "core/imaging/image.h"
-
 // texture type
 #include "core/texture/category/constantTexture.h"
 #include "core/texture/category/checkerboardTexture.h"
 #include "core/texture/category/realImageTexture.h"
 #include "core/texture/category/rgbaImageTexture.h"
 #include "core/texture/category/rgbImageTexture.h"
-#include "core/texture/textureSampleMode.h"
 
+#include "core/imaging/image.h"
+#include "core/texture/textureSampleMode.h"
 #include "file-io/path.h"
 #include "file-io/pictureLoader.h"
 #include "file-io/scene-description/sdData.h"
+#include "fundamental/assertion.h"
 
 namespace cadise {
 
@@ -110,6 +110,8 @@ std::shared_ptr<Texture<real>> makeRealTexture(
     const StringKeyMap<Texture<real>>& realTextures,
     const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
+    CADISE_ASSERT(data);
+
     std::shared_ptr<Texture<real>> realTexture = nullptr;
 
     const std::string_view type = data->findString("type");
@@ -138,6 +140,8 @@ std::shared_ptr<Texture<Spectrum>> makeSpectrumTexture(
     const std::shared_ptr<SdData>& data,
     const StringKeyMap<Texture<real>>& realTextures,
     const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
+
+    CADISE_ASSERT(data);
 
     std::shared_ptr<Texture<Spectrum>> spectrumTexture = nullptr;
 

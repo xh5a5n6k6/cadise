@@ -22,6 +22,10 @@ public:
     real samplePdfA(const Vector3R& position) const override;
     real area() const override;
 
+    void setNormalA(const Vector3R& nA);
+    void setNormalB(const Vector3R& nB);
+    void setNormalC(const Vector3R& nC);
+
     void setUvwA(const Vector3R& uvwA);
     void setUvwB(const Vector3R& uvwB);
     void setUvwC(const Vector3R& uvwC);
@@ -30,6 +34,10 @@ private:
     Vector3R _vA;
     Vector3R _vB;
     Vector3R _vC;
+
+    Vector3R _nA;
+    Vector3R _nB;
+    Vector3R _nC;
 
     Vector3R _uvwA;
     Vector3R _uvwB;

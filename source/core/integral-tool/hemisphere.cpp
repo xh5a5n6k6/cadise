@@ -1,5 +1,6 @@
 #include "core/integral-tool/hemisphere.h"
 
+#include "fundamental/assertion.h"
 #include "math/constant.h"
 #include "math/vector.h"
 
@@ -10,6 +11,8 @@ namespace cadise {
 namespace hemisphere {
 
 void uniformSampling(const Vector2R& randomNumber, Vector3R* const out_direction) {
+    CADISE_ASSERT(out_direction);
+
     const real theta = std::acos(randomNumber.x());
     const real phi   = constant::TWO_PI * randomNumber.y();
 
@@ -21,6 +24,8 @@ void uniformSampling(const Vector2R& randomNumber, Vector3R* const out_direction
 }
 
 void cosineWeightedSampling(const Vector2R& randomNumber, Vector3R* const out_direction) {
+    CADISE_ASSERT(out_direction);
+
     const real theta = std::acos(1.0_r - 2.0_r * randomNumber.x()) * 0.5_r;
     const real phi   = constant::TWO_PI * randomNumber.y();
 

@@ -4,7 +4,6 @@
 #include "core/camera/perspectiveCamera.h"
 
 #include "file-io/scene-description/sdData.h"
-
 #include "fundamental/assertion.h"
 
 namespace cadise {
@@ -24,6 +23,8 @@ static std::shared_ptr<Camera> createPerspective(
 
 std::shared_ptr<Camera> makeCamera(
     const std::shared_ptr<SdData>& data) {
+
+    CADISE_ASSERT(data);
 
     std::shared_ptr<Camera> camera = nullptr;
 

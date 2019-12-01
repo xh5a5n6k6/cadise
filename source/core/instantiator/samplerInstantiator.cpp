@@ -5,6 +5,7 @@
 #include "core/sampler/category/stratifiedSampler.h"
 
 #include "file-io/scene-description/sdData.h"
+#include "fundamental/assertion.h"
 
 namespace cadise {
 
@@ -28,6 +29,8 @@ static std::shared_ptr<Sampler> createStratified(
 
 std::shared_ptr<Sampler> makeSampler(
     const std::shared_ptr<SdData>& data) {
+
+    CADISE_ASSERT(data);
 
     std::shared_ptr<Sampler> sampler = nullptr;
     

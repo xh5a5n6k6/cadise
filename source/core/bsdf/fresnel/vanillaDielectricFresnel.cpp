@@ -1,5 +1,6 @@
 #include "core/bsdf/fresnel/vanillaDielectricFresnel.h"
 
+#include "fundamental/assertion.h"
 #include "math/math.h"
 
 #include <algorithm>
@@ -12,6 +13,8 @@ VanillaDielectricFresnel::VanillaDielectricFresnel(const real iorOuter, const re
 
 void VanillaDielectricFresnel::evaluateReflectance(const real cosThetaI,
                                                    Spectrum* const out_reflectance) const {
+    CADISE_ASSERT(out_reflectance);
+
     real etaI = iorOuter();
     real etaT = iorInner();
     real cosI = cosThetaI;

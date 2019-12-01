@@ -4,9 +4,7 @@
 #include "core/ray.h"
 #include "core/surfaceInfo.h"
 #include "core/texture/mapper/textureMapper.h"
-
 #include "fundamental/assertion.h"
-
 #include "math/aabb.h"
 #include "math/random.h"
 
@@ -20,6 +18,8 @@ Rectangle::Rectangle(const std::shared_ptr<Bsdf>& bsdf, const Vector3R& vA, cons
     _vB(vB),
     _vC(vC) {
     
+    CADISE_ASSERT(bsdf);
+
     _eA = _vA - _vB;
     _eB = _vC - _vB;
 

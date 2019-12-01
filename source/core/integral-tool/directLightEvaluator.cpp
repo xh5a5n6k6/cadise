@@ -7,9 +7,7 @@
 #include "core/ray.h"
 #include "core/scene.h"
 #include "core/surfaceIntersection.h"
-
 #include "fundamental/assertion.h"
-
 #include "math/constant.h"
 
 namespace cadise {
@@ -26,7 +24,7 @@ Spectrum DirectLightEvaluator::evaluate(const Scene& scene, const SurfaceInterse
     const Vector3R hitPoint  = intersection.surfaceInfo().point();
     const Vector3R hitNormal = intersection.surfaceInfo().shadingNormal();
 
-    if (bsdf->type().isAtLeastOne(BxdfType::NONE)) {
+    if (bsdf->type().isExactOne(BxdfType::ABSORB)) {
         return directLightRadiance;
     }
 

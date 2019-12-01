@@ -1,5 +1,7 @@
 #include "core/spectrum/rgbSpectrum.h"
 
+#include "fundamental/assertion.h"
+
 namespace cadise {
 
 RgbSpectrum::RgbSpectrum() :
@@ -21,6 +23,8 @@ RgbSpectrum::RgbSpectrum(const ConceptualSpectrum<3>& cs) :
 }
 
 void RgbSpectrum::transformToRgb(Vector3R* const out_rgb) const {
+    CADISE_ASSERT(out_rgb);
+
     *out_rgb = Vector3R(_values.x(), _values.y(), _values.z());
 }
 

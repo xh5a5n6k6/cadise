@@ -1,24 +1,17 @@
 #include "core/instantiator/instantiator.h"
 
-#include "core/imaging/image.h"
-
 // light type
 #include "core/light/environmentLight.h"
 #include "core/light/singleAreaLight.h"
 #include "core/light/pointLight.h"
 
-// HACK
+#include "core/imaging/image.h"
 #include "core/intersector/primitive/infiniteSphere.h"
-
-// for area light
 #include "core/intersector/primitive/primitive.h"
-
 #include "core/texture/category/rgbImageTexture.h"
-
 #include "file-io/path.h"
 #include "file-io/pictureLoader.h"
 #include "file-io/scene-description/sdData.h"
-
 #include "fundamental/assertion.h"
 
 namespace cadise {
@@ -86,6 +79,8 @@ std::shared_ptr<Light> makeLight(
     const std::shared_ptr<SdData>& data,
     const StringKeyMap<Primitive>& primitives,
     std::shared_ptr<Primitive>& out_infiniteSphere) {
+
+    CADISE_ASSERT(data);
 
     std::shared_ptr<Light> light = nullptr;
     const std::string_view type = data->findString("type");

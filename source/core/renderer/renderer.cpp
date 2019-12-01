@@ -2,6 +2,7 @@
 
 #include "core/camera/camera.h"
 #include "core/film/film.h"
+#include "fundamental/assertion.h"
 
 namespace cadise {
 
@@ -11,10 +12,14 @@ Renderer::Renderer() :
 }
 
 void Renderer::setCamera(const std::shared_ptr<Camera>& camera) {
+    CADISE_ASSERT(camera);
+
     _camera = camera;
 }
 
 void Renderer::setFilm(const std::shared_ptr<Film>& film) {
+    CADISE_ASSERT(film);
+
     _film = film;
 }
 

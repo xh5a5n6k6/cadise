@@ -2,7 +2,6 @@
 
 #include "core/intersector/accelerator/bvh/bvhBinaryNode.h"
 #include "core/intersector/accelerator/bvh/bvhBuilder.h"
-
 #include "core/ray.h"
 
 namespace cadise {
@@ -11,9 +10,9 @@ BvhAccelerator::BvhAccelerator(const std::vector<std::shared_ptr<Intersector>>& 
     _intersectors.reserve(intersectors.size());
 
     // select spiltter
-    const BvhSplitter splitter = BvhSplitter::EQUAL;
+    const BvhSplitMode splitMode = BvhSplitMode::EQUAL;
 
-    const BvhBuilder builder(splitter);
+    const BvhBuilder builder(splitMode);
 
     std::size_t totalSize = 0;
     // build binary node tree recursively

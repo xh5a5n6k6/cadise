@@ -1,7 +1,7 @@
 #include "utility/imageUtils.h"
 
 #include "core/imaging/image.h"
-
+#include "fundamental/assertion.h"
 #include "math/math.h"
 
 namespace cadise {
@@ -9,6 +9,8 @@ namespace cadise {
 namespace utility::image {
 
 void ldrToHdr(const LdrImage& ldrImage, HdrImage* const out_hdrImage) {
+    CADISE_ASSERT(out_hdrImage);
+
     out_hdrImage->setImageSize(ldrImage.width(), ldrImage.height());
 
     const uint8* datas = ldrImage.rawData();
@@ -19,6 +21,8 @@ void ldrToHdr(const LdrImage& ldrImage, HdrImage* const out_hdrImage) {
 }
 
 void hdrToLdr(const HdrImage& hdrImage, LdrImage* const out_ldrImage) {
+    CADISE_ASSERT(out_ldrImage);
+
     out_ldrImage->setImageSize(hdrImage.width(), hdrImage.height());
 
     const real* datas = hdrImage.rawData();
@@ -30,6 +34,8 @@ void hdrToLdr(const HdrImage& hdrImage, LdrImage* const out_ldrImage) {
 }
 
 void ldrAlphaToHdrAlpha(const LdrAlphaImage& ldrAlphaImage, HdrAlphaImage* const out_hdrAlphaImage) {
+    CADISE_ASSERT(out_hdrAlphaImage);
+
     out_hdrAlphaImage->setImageSize(ldrAlphaImage.width(), ldrAlphaImage.height());
 
     // TODO: implement here

@@ -3,7 +3,7 @@
 namespace cadise {
 
 AbsorberBsdf::AbsorberBsdf() :
-    Bsdf(BsdfType(BxdfType::NONE)) {
+    Bsdf(BsdfType(BxdfType::ABSORB)) {
 }
 
 Spectrum AbsorberBsdf::evaluate(const SurfaceIntersection& surfaceIntersection) const {

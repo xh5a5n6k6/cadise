@@ -3,9 +3,7 @@
 #include "core/intersector/primitive/primitive.h"
 #include "core/surfaceIntersection.h"
 #include "core/texture/texture.h"
-
 #include "fundamental/assertion.h"
-
 #include "math/constant.h"
 #include "math/random.h"
 

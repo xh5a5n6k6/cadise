@@ -2,6 +2,7 @@
 
 #include "core/imaging/image.h"
 
+#include "fundamental/assertion.h"
 #include "math/math.h"
 #include "math/vector.h"
 
@@ -85,6 +86,8 @@ inline void Image<T, N>::setDataValue(const std::size_t index, const T value) {
 
 template<typename T, std::size_t N>
 inline void Image<T, N>::getImagePixel(const int32 x, const int32 y, Vector<T, N>* const out_pixel) const {
+    CADISE_ASSERT(out_pixel);
+
     const std::size_t dataIndexOffset = _pixelDataOffset(x, y);
 
     for (std::size_t i = 0; i < N; ++i) {

@@ -1,9 +1,7 @@
 #include "core/film/filmTile.h"
 
 #include "core/film/filter/filter.h"
-
 #include "fundamental/assertion.h"
-
 #include "math/vector.h"
 
 namespace cadise {
@@ -13,6 +11,8 @@ FilmTile::FilmTile(const AABB2I& tileBound, const Filter* const filter) :
     _tileBound(tileBound),
     _filter(filter),
     _sensors() {
+
+    CADISE_ASSERT(filter);
 
     const std::size_t sensorSize = static_cast<std::size_t>(_resolution.x() * _resolution.y());
     setSensorSize(sensorSize);
