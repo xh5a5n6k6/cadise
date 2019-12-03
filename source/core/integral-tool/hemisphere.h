@@ -4,12 +4,17 @@
 
 namespace cadise {
 
-namespace hemisphere {
+class Hemisphere {
+public:
+    static void uniformSampling(const Vector2R& sample, 
+                                Vector3R* const out_direction);
 
-void uniformSampling(const Vector2R& randomNumber, Vector3R* const out_direction);
+    static void cosineWeightedSampling(const Vector2R& sample, 
+                                       Vector3R* const out_direction);
 
-void cosineWeightedSampling(const Vector2R& randomNumber, Vector3R* const out_direction);
-
-} // namespace hemisphere
+    static void cosineExpWeightedSampling(const real exponent,
+                                          const Vector2R& sample,
+                                          Vector3R* const out_direction);
+};
 
 } // namespace cadise

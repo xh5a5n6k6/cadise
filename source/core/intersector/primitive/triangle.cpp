@@ -25,7 +25,10 @@ Triangle::Triangle(const std::shared_ptr<Bsdf>& bsdf,
     _eAB = _vB - _vA;
     _eAC = _vC - _vA;
 
-    const Vector3R faceNormal = _eAB.cross(_eAC).normalize();
+    // Fix here
+    Vector3R faceNormal = _eAB.cross(_eAC);
+    faceNormal = (faceNormal.isZero()) ? Vector3R(0.0_r, 1.0_r, 0.0_r) : faceNormal.normalize();
+
     _nA = faceNormal;
     _nB = faceNormal;
     _nC = faceNormal;
@@ -128,6 +131,12 @@ void Triangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, Surface
         surfaceInfo.setUvw(uvw);
     }
     else {
+        /*
+             Reference Note:
+             https://gamedev.stackexchange.com/questions/23743/whats-the-most-efficient-way-to-find-barycentric-coordinates
+        
+             which is transcribed from "Real-Time Collision Detection"
+        */
         // TODO : integrate with intersecting/occluded 
         //        barycentric coordinate calculation
         const Vector3R v0 = _vB - _vA;

@@ -32,26 +32,25 @@ Spectrum LambertianDiffuse::evaluate(const SurfaceIntersection& surfaceIntersect
 }
 
 Spectrum LambertianDiffuse::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
-    const Vector3R normal = surfaceIntersection.surfaceInfo().shadingNormal();
+    const Vector3R Ns = surfaceIntersection.surfaceInfo().shadingNormal();
 
     // build N's coordinate system
-    const Vector3R zAxis(normal);
+    const Vector3R zAxis(Ns);
     Vector3R xAxis;
     Vector3R yAxis;
     math::buildCoordinateSystem(zAxis, &xAxis, &yAxis);
 
-    Vector3R sampleDirection;
-    hemisphere::cosineWeightedSampling({random::nextReal(), random::nextReal()}, &sampleDirection);
+    const Vector2R sample(random::nextReal(), random::nextReal());
+    Vector3R L;
+    Hemisphere::cosineWeightedSampling(sample, &L);
 
-    // transform local space to N's space
-    Vector3R outDirection = xAxis * sampleDirection.x() + 
-                            yAxis * sampleDirection.y() + 
-                            zAxis * sampleDirection.z();
-    outDirection = outDirection.normalize();
+    // transform L to world coordinate
+    L = xAxis * L.x() + yAxis * L.y() + zAxis * L.z();
+    L = L.normalize();
 
-    const real pdf = outDirection.absDot(zAxis) * constant::INV_PI;
+    const real pdf = L.absDot(zAxis) * constant::INV_PI;
 
-    surfaceIntersection.setWo(outDirection);
+    surfaceIntersection.setWo(L);
     surfaceIntersection.setPdf(pdf);
 
     const Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
@@ -62,10 +61,10 @@ Spectrum LambertianDiffuse::evaluateSample(SurfaceIntersection& surfaceIntersect
 }
 
 real LambertianDiffuse::evaluatePdfW(const SurfaceIntersection& surfaceIntersection) const {
-    const Vector3R normal    = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R direction = surfaceIntersection.wo();
+    const Vector3R Ns = surfaceIntersection.surfaceInfo().shadingNormal();
+    const Vector3R L  = surfaceIntersection.wo();
 
-    return direction.absDot(normal) * constant::INV_PI;
+    return L.absDot(Ns) * constant::INV_PI;
 }
 
 } // namespace cadise

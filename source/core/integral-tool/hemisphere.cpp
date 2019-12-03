@@ -8,26 +8,27 @@
 
 namespace cadise {
 
-namespace hemisphere {
+void Hemisphere::uniformSampling(const Vector2R& sample, 
+                                 Vector3R* const out_direction) {
 
-void uniformSampling(const Vector2R& randomNumber, Vector3R* const out_direction) {
     CADISE_ASSERT(out_direction);
 
-    const real theta = std::acos(randomNumber.x());
-    const real phi   = constant::TWO_PI * randomNumber.y();
-
-    const real sinTheta = std::sqrt(1.0_r - randomNumber.x() * randomNumber.x());
+    const real phi      = constant::TWO_PI * sample.x();
+    const real cosTheta = sample.y();
+    const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
 
     *out_direction =  Vector3R(std::cos(phi) * sinTheta,
                                std::sin(phi) * sinTheta,
-                               randomNumber.x());
+                               cosTheta);
 }
 
-void cosineWeightedSampling(const Vector2R& randomNumber, Vector3R* const out_direction) {
+void Hemisphere::cosineWeightedSampling(const Vector2R& sample, 
+                                        Vector3R* const out_direction) {
+
     CADISE_ASSERT(out_direction);
 
-    const real theta = std::acos(1.0_r - 2.0_r * randomNumber.x()) * 0.5_r;
-    const real phi   = constant::TWO_PI * randomNumber.y();
+    const real phi   = constant::TWO_PI * sample.x();
+    const real theta = std::acos(1.0_r - 2.0_r * sample.y()) * 0.5_r;
 
     const real cosTheta = std::cos(theta);
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
@@ -37,6 +38,19 @@ void cosineWeightedSampling(const Vector2R& randomNumber, Vector3R* const out_di
                                cosTheta);
 }
 
-} // namespace hemisphere
+void Hemisphere::cosineExpWeightedSampling(const real exponent,
+                                           const Vector2R& sample,
+                                           Vector3R* const out_direction) {
+
+    CADISE_ASSERT(out_direction);
+
+    const real phi      = constant::TWO_PI * sample.x();
+    const real cosTheta = std::pow(sample.y(), 1.0_r / (exponent + 1.0_r));
+    const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
+
+    *out_direction = Vector3R(std::cos(phi) * sinTheta,
+                              std::sin(phi) * sinTheta,
+                              cosTheta);
+}
 
 } // namespace cadise

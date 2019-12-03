@@ -11,7 +11,7 @@
     - Specular Reflection
     - Specular Transmission
     - Specular Dielectric
-    - Blinn-Phong
+    - Phong
 - ### Primitive
     - Sphere
     - Triangle

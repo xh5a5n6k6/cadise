@@ -1,7 +1,7 @@
 #include "core/instantiator/instantiator.h"
 
 // bsdf type
-#include "core/bsdf/category/blinnPhong.h"
+#include "core/bsdf/category/phong.h"
 #include "core/bsdf/category/lambertianDiffuse.h"
 #include "core/bsdf/category/mixedBsdf.h"
 #include "core/bsdf/category/specularDielectric.h"
@@ -12,6 +12,8 @@
 #include "core/texture/texture.h"
 #include "file-io/scene-description/sdData.h"
 #include "fundamental/assertion.h"
+
+#include <iostream>
 
 namespace cadise {
 
@@ -66,14 +68,14 @@ static std::shared_ptr<Bsdf> createSpecularDielectric(
                                                 std::make_shared<VanillaDielectricFresnel>(iorOuter, iorInner));
 }
 
-static std::shared_ptr<Bsdf> createBlinnPhong(
+static std::shared_ptr<Bsdf> createPhong(
     const std::shared_ptr<SdData>& data,
     const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
     const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
 
     const real exponent = data->findReal("exponent", 32.0_r);
 
-    return std::make_shared<BlinnPhong>(exponent);
+    return std::make_shared<Phong>(exponent);
 }
 
 static std::shared_ptr<Bsdf> createPlastic(
@@ -87,7 +89,7 @@ static std::shared_ptr<Bsdf> createPlastic(
     const real diffuseRatio     = data->findReal("diffuse-ratio", 0.7_r);
 
     return std::make_shared<MixedBsdf>(std::make_shared<LambertianDiffuse>(diffuseAlbedo),
-                                       std::make_shared<BlinnPhong>(specularExponent),
+                                       std::make_shared<Phong>(specularExponent),
                                        diffuseRatio);
 }
 
@@ -113,14 +115,15 @@ std::shared_ptr<Bsdf> makeBsdf(
     else if (type == "glass") {
         bsdf = createSpecularDielectric(data, realTextures, spectrumTextures);
     }
-    else if (type == "blinnPhong") {
-        bsdf = createBlinnPhong(data, realTextures, spectrumTextures);
+    else if (type == "phong") {
+        bsdf = createPhong(data, realTextures, spectrumTextures);
     }
     else if (type == "plastic") {
         bsdf = createPlastic(data, realTextures, spectrumTextures);
     }
     else {
         // don't support bsdf type
+        std::cout << "Unsupported bsdf type: " << type << std::endl;
     }
 
     return bsdf;
