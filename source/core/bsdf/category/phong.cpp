@@ -20,11 +20,10 @@ Phong::Phong(const real exponent) :
 
 Spectrum Phong::evaluate(const SurfaceIntersection& surfaceIntersection) const {
     const Vector3R Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    
-    const Vector3R R = surfaceIntersection.wo().reflect(Ns);
-    const Vector3R V = surfaceIntersection.wi();
-    const real RdotV = math::max(R.dot(V), 0.0_r);
-	
+    const Vector3R R  = surfaceIntersection.wo().reflect(Ns);
+    const Vector3R V  = surfaceIntersection.wi();
+
+    const real RdotV         = math::max(R.dot(V), 0.0_r);
     const real specularValue = std::pow(RdotV, _exponent) * _brdfFactor;
 
     return Spectrum(specularValue);
@@ -49,29 +48,27 @@ Spectrum Phong::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
 
     const Vector3R R = L.reflect(Ns);
     const Vector3R V = surfaceIntersection.wi();
-    const real RdotV = math::max(R.dot(V), 0.0_r);
 
-    const real powerTerm = std::pow(RdotV, _exponent);
-    const real pdfW      = powerTerm * _pdfFactor;
+    const real RdotV         = math::max(R.dot(V), 0.0_r);
+    const real powerTerm     = std::pow(RdotV, _exponent);
+    const real pdfL          = powerTerm * _pdfFactor;
+    const real specularValue = powerTerm * _brdfFactor;
 
     surfaceIntersection.setWo(L);
-    surfaceIntersection.setPdf(pdfW);
-
-    const real specularValue = powerTerm * _brdfFactor;
+    surfaceIntersection.setPdf(pdfL);
 
     return Spectrum(specularValue);
 }
 
 real Phong::evaluatePdfW(const SurfaceIntersection& surfaceIntersection) const {
     const Vector3R Ns = surfaceIntersection.surfaceInfo().shadingNormal();
+    const Vector3R R  = surfaceIntersection.wo().reflect(Ns);
+    const Vector3R V  = surfaceIntersection.wi();
 
-    const Vector3R R = surfaceIntersection.wo().reflect(Ns);
-    const Vector3R V = surfaceIntersection.wi();
     const real RdotV = math::max(R.dot(V), 0.0_r);
+    const real pdfL  = std::pow(RdotV, _exponent) * _pdfFactor;
 
-    const real pdfW = std::pow(RdotV, _exponent) * _pdfFactor;
-
-    return pdfW;
+    return pdfL;
 }
 
 } // namespace cadise

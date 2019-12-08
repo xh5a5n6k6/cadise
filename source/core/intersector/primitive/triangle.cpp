@@ -25,7 +25,7 @@ Triangle::Triangle(const std::shared_ptr<Bsdf>& bsdf,
     _eAB = _vB - _vA;
     _eAC = _vC - _vA;
 
-    // Fix here
+    // TODO: refactor here
     Vector3R faceNormal = _eAB.cross(_eAC);
     faceNormal = (faceNormal.isZero()) ? Vector3R(0.0_r, 1.0_r, 0.0_r) : faceNormal.normalize();
 
@@ -117,7 +117,9 @@ bool Triangle::isOccluded(const Ray& ray) const {
 }
 
 void Triangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const {
-    Vector3R normal = _eAB.cross(_eAC).normalize();
+    // TODO: refactor here
+    Vector3R normal = _eAB.cross(_eAC);
+    normal = (normal.isZero()) ? Vector3R(0.0_r, 1.0_r, 0.0_r) : normal.normalize();
     surfaceInfo.setFrontNormal(normal);
 
     // TODO: interpolate normal in the triangle

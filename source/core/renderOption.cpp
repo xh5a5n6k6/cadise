@@ -130,7 +130,7 @@ void RenderOption::_setUpSpectrumTexture(const std::shared_ptr<SdData>& data) {
 }
 
 void RenderOption::_setUpBsdf(const std::shared_ptr<SdData>& data) {
-    const std::shared_ptr<Bsdf> bsdf = instantiator::makeBsdf(data, _realTextures, _spectrumTextures);
+    const std::shared_ptr<Bsdf> bsdf = instantiator::makeBsdf(data, _realTextures, _spectrumTextures, _bsdfs);
     const std::string_view bsdfName = data->findString("name");
 
     _bsdfs.insert(std::pair<std::string, std::shared_ptr<Bsdf>>(bsdfName, bsdf));

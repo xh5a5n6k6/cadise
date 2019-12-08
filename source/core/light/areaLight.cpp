@@ -2,6 +2,10 @@
 
 namespace cadise {
 
+AreaLight::AreaLight() :
+    AreaLight(false) {
+}
+
 AreaLight::AreaLight(const bool isBackFaceEmit) :
     _isBackFaceEmit(isBackFaceEmit) {
 }

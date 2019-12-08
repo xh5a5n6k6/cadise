@@ -60,7 +60,8 @@ std::shared_ptr<Texture<Spectrum>> makeSpectrumTexture(
 std::shared_ptr<Bsdf> makeBsdf(
     const std::shared_ptr<SdData>& data,
     const StringKeyMap<Texture<real>>& realTextures,
-    const StringKeyMap<Texture<Spectrum>>& spectrumTextures);
+    const StringKeyMap<Texture<Spectrum>>& spectrumTextures,
+    const StringKeyMap<Bsdf>& bsdfs);
 
 // implement in core/instantiator/lightInstantiator.cpp
 std::shared_ptr<Light> makeLight(

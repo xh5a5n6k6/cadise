@@ -29,6 +29,13 @@ real gammaCorrection(const real value);
 
 real inverseGammaCorrection(const real value);
 
+/*
+    Reference Note:
+    https://stackoverflow.com/questions/1903954/is-there-a-standard-sign-function-signum-sgn-in-c-c
+*/
+template<typename T>
+inline int32 sign(const T& value);
+
 template<typename T>
 inline T min(const T& a, const T& b);
 
@@ -42,6 +49,11 @@ template<typename T>
 inline void swap(T& a, T& b);
 
 // template header implementation
+
+template<typename T>
+inline int32 sign(const T& value) {
+    return (static_cast<T>(0) < value) - (value < static_cast<T>(0));
+}
 
 template<typename T>
 inline T min(const T& a, const T& b) {

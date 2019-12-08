@@ -3,7 +3,6 @@
 #include "core/light/areaLight.h"
 
 #include "math/distribution/distribution2D.h"
-#include "math/type/imageType.h"
 
 #include <memory>
 

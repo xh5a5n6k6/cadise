@@ -34,7 +34,7 @@ Spectrum LambertianDiffuse::evaluate(const SurfaceIntersection& surfaceIntersect
 Spectrum LambertianDiffuse::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
     const Vector3R Ns = surfaceIntersection.surfaceInfo().shadingNormal();
 
-    // build N's coordinate system
+    // build local coordinate system (shading normal as z-axis)
     const Vector3R zAxis(Ns);
     Vector3R xAxis;
     Vector3R yAxis;
@@ -48,10 +48,10 @@ Spectrum LambertianDiffuse::evaluateSample(SurfaceIntersection& surfaceIntersect
     L = xAxis * L.x() + yAxis * L.y() + zAxis * L.z();
     L = L.normalize();
 
-    const real pdf = L.absDot(zAxis) * constant::INV_PI;
+    const real pdfW = L.absDot(zAxis) * constant::INV_PI;
 
     surfaceIntersection.setWo(L);
-    surfaceIntersection.setPdf(pdf);
+    surfaceIntersection.setPdf(pdfW);
 
     const Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
     Spectrum sampleSpectrum;

@@ -6,6 +6,8 @@
 #include "fundamental/assertion.h"
 #include "math/constant.h"
 
+#include <cmath>
+
 namespace cadise {
 
 SingleAreaLight::SingleAreaLight(const Primitive* const primitive,
@@ -17,7 +19,7 @@ SingleAreaLight::SingleAreaLight(const Primitive* const primitive,
 
     CADISE_ASSERT(primitive);
 
-    const Spectrum unitWattColor = color / color.sum();
+    const Spectrum unitWattColor  = color / color.sum();
     const Spectrum totalWattColor = unitWattColor * watt;
 
     _emitRadiance = std::make_shared<ConstantTexture<Spectrum>>(
@@ -27,7 +29,7 @@ SingleAreaLight::SingleAreaLight(const Primitive* const primitive,
 Spectrum SingleAreaLight::emittance(const Vector3R& emitDirection, const SurfaceIntersection& emitSurface) const {
     // check if direction is at the front face 
     const Vector3R frontNormal = emitSurface.surfaceInfo().frontNormal();
-    if (emitDirection.dot(frontNormal) < 0.0_r && !_isBackFaceEmit) {
+    if (emitDirection.dot(frontNormal) <= 0.0_r && !_isBackFaceEmit) {
         return Spectrum(0.0_r);
     }
     else {
@@ -48,6 +50,9 @@ Spectrum SingleAreaLight::evaluateSampleRadiance(Vector3R& lightDirection, const
 
     const Vector3R direction = sampleSurface.point() - offsetOrigin;
     t = direction.length();
+    if (direction.isZero()) {
+        return Spectrum(0.0_r);
+    }
     lightDirection = direction.normalize();
 
     const Vector3R frontNormal = sampleSurface.frontNormal();
@@ -59,6 +64,10 @@ Spectrum SingleAreaLight::evaluateSampleRadiance(Vector3R& lightDirection, const
     // change delta A to delta w
     pdf = _primitive->samplePdfA(sampleSurface.point());
     pdf *= direction.lengthSquared() / sampleSurface.geometryNormal().absDot(-direction.normalize());
+    if (!std::isfinite(pdf)) {
+        pdf = 0.0_r;
+        return Spectrum(0.0_r);
+    }
 
     // TODO: fix here
     const Vector3R uvw = sampleSurface.uvw();
@@ -74,13 +83,17 @@ real SingleAreaLight::evaluatePdfW(const SurfaceIntersection& surfaceIntersectio
     const Vector3R emitDirection = surfaceIntersection.wi();
     const Vector3R frontNormal = surfaceIntersection.surfaceInfo().frontNormal();
 
-    if (emitDirection.dot(frontNormal) < 0.0_r && !_isBackFaceEmit) {
+    if (emitDirection.dot(frontNormal) <= 0.0_r && !_isBackFaceEmit) {
         return 0.0_r;
     }
 
     const real pdfA = _primitive->samplePdfA(emitPosition);
+    const real pdfW = pdfA * distance * distance / emitDirection.absDot(emitNormal);
+    if (!std::isfinite(pdfW)) {
+        return 0.0_r;
+    }
 
-    return pdfA * distance * distance / emitDirection.absDot(emitNormal);
+    return pdfW;
 }
 
 void SingleAreaLight::setEmitRadiance(const std::shared_ptr<Texture<Spectrum>>& emitRadiance) {

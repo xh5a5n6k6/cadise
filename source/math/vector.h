@@ -59,6 +59,7 @@ public:
     std::size_t maxDimension() const;
 
     void swap(Vector& v);
+    bool equals(const Vector& rhs) const;
     T dot(const Vector& v) const;
     T absDot(const Vector& v) const;
     Vector lerp(const Vector& rhs, const real ratio) const;

@@ -376,6 +376,17 @@ inline void Vector<T, N>::swap(Vector<T, N>& v) {
 }
 
 template<typename T, std::size_t N>
+inline bool Vector<T, N>::equals(const Vector<T, N>& rhs) const {
+    for (std::size_t i = 0; i < N; ++i) {
+        if (_v[i] != rhs._v[i]) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+template<typename T, std::size_t N>
 inline T Vector<T, N>::dot(const Vector<T, N>& v) const {
     T result = static_cast<T>(0);
     for (std::size_t i = 0; i < N; ++i) {

@@ -21,8 +21,8 @@ Spectrum DirectLightEvaluator::evaluate(const Scene& scene, const SurfaceInterse
     SurfaceIntersection intersection(surfaceIntersection);
     Spectrum directLightRadiance(0.0_r);
 
-    const Vector3R hitPoint  = intersection.surfaceInfo().point();
-    const Vector3R hitNormal = intersection.surfaceInfo().shadingNormal();
+    const Vector3R P  = intersection.surfaceInfo().point();
+    const Vector3R Ns = intersection.surfaceInfo().shadingNormal();
 
     if (bsdf->type().isExactOne(BxdfType::ABSORB)) {
         return directLightRadiance;
@@ -30,21 +30,21 @@ Spectrum DirectLightEvaluator::evaluate(const Scene& scene, const SurfaceInterse
 
     // mis using light sampling
     {
-        Vector3R lightDir;
+        Vector3R L;
         real t;
         real lightPdf;
-        Spectrum radiance = light->evaluateSampleRadiance(lightDir, intersection.surfaceInfo(), t, lightPdf);
-        intersection.setWo(lightDir);
+        const Spectrum radiance = light->evaluateSampleRadiance(L, intersection.surfaceInfo(), t, lightPdf);
+        intersection.setWo(L);
 
         // generate shadow ray to do occluded test
-        Ray shadowRay(hitPoint + constant::RAY_EPSILON * hitNormal,
-                      lightDir,
+        Ray shadowRay(P + constant::RAY_EPSILON * Ns,
+                      L,
                       constant::RAY_EPSILON,
                       t - constant::RAY_EPSILON);
 
         if (!radiance.isZero() && !scene.isOccluded(shadowRay)) {
             const Spectrum reflectance = bsdf->evaluate(intersection);
-            const real LdotN = lightDir.absDot(hitNormal);
+            const real LdotN = L.absDot(Ns);
             const Spectrum directLightFactor = reflectance * LdotN;
 
             // if light is delta light, not using mis technique
@@ -65,13 +65,14 @@ Spectrum DirectLightEvaluator::evaluate(const Scene& scene, const SurfaceInterse
     {
         if (!light->isDeltaLight()) {
             const Spectrum reflectance = bsdf->evaluateSample(intersection);
-            const real sign = (intersection.wo().dot(hitNormal) < 0.0_r) ? -1.0_r : 1.0_r;
+            const Vector3R L = intersection.wo();
+            const real sign = (L.dot(Ns) < 0.0_r) ? -1.0_r : 1.0_r;
 
-            const real LdotN = intersection.wo().absDot(hitNormal);
+            const real LdotN = L.absDot(Ns);
             const Spectrum directLightFactor = reflectance * LdotN;
 
-            Ray sampleRay(hitPoint + constant::RAY_EPSILON * hitNormal * sign,
-                          intersection.wo());
+            Ray sampleRay(P + constant::RAY_EPSILON * Ns * sign,
+                          L);
 
             if (!reflectance.isZero() && 
                 scene.isIntersecting(sampleRay, intersection)) {
