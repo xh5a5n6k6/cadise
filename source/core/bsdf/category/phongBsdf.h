@@ -18,9 +18,9 @@ namespace cadise {
     http://www.thetenthplanet.de/archives/255
     by christian
 */
-class Phong : public Bsdf {
+class PhongBsdf : public Bsdf {
 public:
-    Phong(const real exponent);
+    PhongBsdf(const real exponent);
 
     Spectrum evaluate(const SurfaceIntersection& surfaceIntersection) const override;
     Spectrum evaluateSample(SurfaceIntersection& surfaceIntersection) const override;

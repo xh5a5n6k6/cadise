@@ -442,14 +442,14 @@ inline Vector<T, N> Vector<T, N>::refract(const Vector<T, N>& normal, const real
     }
 
     const real etaRatio = etaI / etaT;
-    const real sin2_T = etaRatio * etaRatio * (1.0_r - cosI * cosI);
+    const real sinT2 = etaRatio * etaRatio * (1.0_r - cosI * cosI);
 
     // handle TIR condition
-    if (sin2_T > 1.0_r) {
+    if (sinT2 > 1.0_r) {
         return Vector<T, N>(static_cast<T>(0));
     }
 
-    const real cosT = std::sqrt(1.0_r - sin2_T);
+    const real cosT = std::sqrt(1.0_r - sinT2);
     Vector<T, N> refractDirection = -etaRatio * *this;
     refractDirection += (etaRatio * signFactor * cosI - cosT) * signFactor * normal;
     refractDirection = refractDirection.normalize();

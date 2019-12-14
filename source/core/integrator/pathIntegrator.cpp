@@ -31,7 +31,6 @@ Spectrum PathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const
     while (bounceTimes < _maxDepth) {
         SurfaceIntersection intersection;
         if (!scene.isIntersecting(traceRay, intersection)) {
-            //totalRadiance += pathWeight * Spectrum(Vector3R(0.204_r, 0.3_r, 0.411_r));
             break;
         }
 
@@ -51,7 +50,7 @@ Spectrum PathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const
 
 
         // estimate direct light using MIS technique 
-        // (but only at non-specular surface)
+        // (only at non-specular surface)
         if (!bsdf->type().isAtLeastOne(BxdfType::SPECULAR_REFLECTION,
                                        BxdfType::SPECULAR_TRANSMISSION)) {
 
@@ -87,8 +86,7 @@ Spectrum PathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const
         }
 
         bounceTimes += 1;
-        Ray sampleRay(P + constant::RAY_EPSILON * Ns * sign,
-                      L);
+        Ray sampleRay(P, L);
 
         // use russian roulette to decide if the ray needs to be kept tracking
         if (bounceTimes > 2) {

@@ -40,6 +40,8 @@ std::unique_ptr<FilmTile> Film::generateFilmTile(const int32 tileX, const int32 
 }
 
 void Film::mergeWithFilmTile(std::unique_ptr<FilmTile> filmTile) {
+    std::lock_guard<std::mutex> lock(_filmMutex);
+
     const AABB2I tileBound = filmTile->tileBound();
 
     const Vector2I x0y0 = tileBound.minVertex();

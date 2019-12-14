@@ -43,20 +43,20 @@ Spectrum SingleAreaLight::emittance(const Vector3R& emitDirection, const Surface
 }
 
 Spectrum SingleAreaLight::evaluateSampleRadiance(Vector3R& lightDirection, const SurfaceInfo& surfaceInfo, real& t, real& pdf) const {
-    const Vector3R offsetOrigin = surfaceInfo.point() + constant::RAY_EPSILON * surfaceInfo.geometryNormal();
+    const Vector3R P = surfaceInfo.point();
 
     SurfaceInfo sampleSurface;
     _primitive->sampleSurface(surfaceInfo, sampleSurface);
 
-    const Vector3R direction = sampleSurface.point() - offsetOrigin;
-    t = direction.length();
+    const Vector3R direction = sampleSurface.point() - P;
     if (direction.isZero()) {
         return Spectrum(0.0_r);
     }
+    t = direction.length();
     lightDirection = direction.normalize();
 
     const Vector3R frontNormal = sampleSurface.frontNormal();
-    if (lightDirection.reverse().dot(frontNormal) < 0.0_r && !_isBackFaceEmit) {
+    if (lightDirection.reverse().dot(frontNormal) <= 0.0_r && !_isBackFaceEmit) {
         pdf = 0.0_r;
         return Spectrum(0.0_r);
     }

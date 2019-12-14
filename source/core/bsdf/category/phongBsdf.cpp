@@ -1,4 +1,4 @@
-#include "core/bsdf/category/phong.h"
+#include "core/bsdf/category/phongBsdf.h"
 
 #include "core/integral-tool/hemisphere.h"
 #include "core/surfaceIntersection.h"
@@ -10,7 +10,7 @@
 
 namespace cadise {
 
-Phong::Phong(const real exponent) :
+PhongBsdf::PhongBsdf(const real exponent) :
     Bsdf(BsdfType(BxdfType::GLOSSY_REFLECTION)),
     _exponent(exponent) {
 
@@ -18,10 +18,16 @@ Phong::Phong(const real exponent) :
     _brdfFactor = (exponent + 2.0_r) * constant::INV_TWO_PI;
 }
 
-Spectrum Phong::evaluate(const SurfaceIntersection& surfaceIntersection) const {
+Spectrum PhongBsdf::evaluate(const SurfaceIntersection& surfaceIntersection) const {
     const Vector3R Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R R  = surfaceIntersection.wo().reflect(Ns);
     const Vector3R V  = surfaceIntersection.wi();
+    const Vector3R L  = surfaceIntersection.wo();
+
+    if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) {
+        return Spectrum(0.0_r);
+    }
+
+    const Vector3R R = surfaceIntersection.wo().reflect(Ns);
 
     const real RdotV         = math::max(R.dot(V), 0.0_r);
     const real specularValue = std::pow(RdotV, _exponent) * _brdfFactor;
@@ -29,8 +35,9 @@ Spectrum Phong::evaluate(const SurfaceIntersection& surfaceIntersection) const {
     return Spectrum(specularValue);
 }
 
-Spectrum Phong::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
+Spectrum PhongBsdf::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
     const Vector3R Ns = surfaceIntersection.surfaceInfo().shadingNormal();
+    const Vector3R V  = surfaceIntersection.wi();
 
     // build local coordinate system (shading normal as z-axis)
     const Vector3R zAxis(Ns);
@@ -46,8 +53,11 @@ Spectrum Phong::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
     L = xAxis * L.x() + yAxis * L.y() + zAxis * L.z();
     L = L.normalize();
 
+    if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) {
+        return Spectrum(0.0_r);
+    }
+
     const Vector3R R = L.reflect(Ns);
-    const Vector3R V = surfaceIntersection.wi();
 
     const real RdotV         = math::max(R.dot(V), 0.0_r);
     const real powerTerm     = std::pow(RdotV, _exponent);
@@ -60,10 +70,16 @@ Spectrum Phong::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
     return Spectrum(specularValue);
 }
 
-real Phong::evaluatePdfW(const SurfaceIntersection& surfaceIntersection) const {
+real PhongBsdf::evaluatePdfW(const SurfaceIntersection& surfaceIntersection) const {
     const Vector3R Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R R  = surfaceIntersection.wo().reflect(Ns);
     const Vector3R V  = surfaceIntersection.wi();
+    const Vector3R L  = surfaceIntersection.wo();
+
+    if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) {
+        return 0.0_r;
+    }
+
+    const Vector3R R = surfaceIntersection.wo().reflect(Ns);
 
     const real RdotV = math::max(R.dot(V), 0.0_r);
     const real pdfL  = std::pow(RdotV, _exponent) * _pdfFactor;

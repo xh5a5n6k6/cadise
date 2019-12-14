@@ -4,6 +4,7 @@
 #include "file-io/path.h"
 
 #include <memory>
+#include <mutex>
 #include <vector>
 
 namespace cadise {
@@ -36,6 +37,8 @@ private:
     std::shared_ptr<Filter> _filter;
 
     std::vector<FilmPixel> _pixels;
+
+    std::mutex _filmMutex;
 };
 
 } // namespace cadise

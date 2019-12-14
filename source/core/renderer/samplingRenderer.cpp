@@ -17,7 +17,7 @@
 namespace cadise {
 
 SamplingRenderer::SamplingRenderer(const std::shared_ptr<Integrator>& integrator, 
-                                   const std::shared_ptr<Sampler>& sampler) :
+                                   const std::shared_ptr<Sampler>&    sampler) :
     _integrator(integrator),
     _sampler(sampler) {
 
@@ -28,12 +28,22 @@ SamplingRenderer::SamplingRenderer(const std::shared_ptr<Integrator>& integrator
 void SamplingRenderer::render(const Scene& scene) const {
     const std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
     
+    const int32 filmtileSize = CADISE_FILMTILE_SIZE;
     const Vector2R realResolution(_film->resolution());
-    const Vector2I tileNumber((_film->resolution().x() + CADISE_FILMTILE_SIZE - 1) / CADISE_FILMTILE_SIZE,
-                              (_film->resolution().y() + CADISE_FILMTILE_SIZE - 1) / CADISE_FILMTILE_SIZE);
+    const Vector2I tileNumber((_film->resolution().x() + filmtileSize - 1) / filmtileSize,
+                              (_film->resolution().y() + filmtileSize - 1) / filmtileSize);
 
-    for (int32 tileY = 0; tileY < tileNumber.y(); ++tileY) {
-        for (int32 tileX = 0; tileX < tileNumber.x(); ++tileX) {
+    const std::size_t totalTiles   = static_cast<std::size_t>(tileNumber.x() * tileNumber.y());
+    const std::size_t totalThreads = 16;
+
+    utility::parallelWork(totalTiles, totalThreads, 
+        [&](const std::size_t tileBeginIndex, 
+            const std::size_t tileEndIndex) {
+
+        for (std::size_t tile = tileBeginIndex; tile < tileEndIndex; ++tile) {
+            const int32 tileX = static_cast<int32>(tile) % tileNumber.x();
+            const int32 tileY = static_cast<int32>(tile) / tileNumber.x();
+
             std::unique_ptr<FilmTile> filmTile = _film->generateFilmTile(tileX, tileY);
 
             const Vector2I x0y0 = filmTile->tileBound().minVertex();
@@ -65,7 +75,7 @@ void SamplingRenderer::render(const Scene& scene) const {
 
             _film->mergeWithFilmTile(std::move(filmTile));
         }
-    }
+    });
 
     _film->save();
 

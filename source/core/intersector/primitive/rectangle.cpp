@@ -46,7 +46,7 @@ bool Rectangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
 
     const Vector3R normal = eA.cross(eB).normalize();
     const real t = (normal.dot(_vB) - normal.dot(ray.origin())) / normal.dot(ray.direction());
-    if (t < 0.0_r || t > ray.maxT()) {
+    if (t < ray.minT() || t > ray.maxT()) {
         return false;
     }
 
@@ -74,7 +74,7 @@ bool Rectangle::isOccluded(const Ray& ray) const {
 
     const Vector3R normal = eA.cross(eB).normalize();
     const real t = (normal.dot(_vB) - normal.dot(ray.origin())) / normal.dot(ray.direction());
-    if (t < 0.0_r || t > ray.maxT()) {
+    if (t < ray.minT() || t > ray.maxT()) {
         return false;
     }
 

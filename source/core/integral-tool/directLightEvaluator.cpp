@@ -12,8 +12,10 @@
 
 namespace cadise {
 
-Spectrum DirectLightEvaluator::evaluate(const Scene& scene, const SurfaceIntersection& surfaceIntersection,
-                                        const Bsdf* bsdf, const Light* light) {
+Spectrum DirectLightEvaluator::evaluate(const Scene&               scene, 
+                                        const SurfaceIntersection& surfaceIntersection,
+                                        const Bsdf*                bsdf, 
+                                        const Light*               light) {
 
     CADISE_ASSERT(bsdf);
     CADISE_ASSERT(light);
@@ -23,6 +25,7 @@ Spectrum DirectLightEvaluator::evaluate(const Scene& scene, const SurfaceInterse
 
     const Vector3R P  = intersection.surfaceInfo().point();
     const Vector3R Ns = intersection.surfaceInfo().shadingNormal();
+    const Vector3R Ng = intersection.surfaceInfo().geometryNormal();
 
     if (bsdf->type().isExactOne(BxdfType::ABSORB)) {
         return directLightRadiance;
@@ -37,7 +40,7 @@ Spectrum DirectLightEvaluator::evaluate(const Scene& scene, const SurfaceInterse
         intersection.setWo(L);
 
         // generate shadow ray to do occluded test
-        Ray shadowRay(P + constant::RAY_EPSILON * Ns,
+        Ray shadowRay(P,
                       L,
                       constant::RAY_EPSILON,
                       t - constant::RAY_EPSILON);
@@ -66,19 +69,17 @@ Spectrum DirectLightEvaluator::evaluate(const Scene& scene, const SurfaceInterse
         if (!light->isDeltaLight()) {
             const Spectrum reflectance = bsdf->evaluateSample(intersection);
             const Vector3R L = intersection.wo();
-            const real sign = (L.dot(Ns) < 0.0_r) ? -1.0_r : 1.0_r;
 
-            const real LdotN = L.absDot(Ns);
-            const Spectrum directLightFactor = reflectance * LdotN;
-
-            Ray sampleRay(P + constant::RAY_EPSILON * Ns * sign,
-                          L);
+            Ray sampleRay(P, L);
 
             if (!reflectance.isZero() && 
                 scene.isIntersecting(sampleRay, intersection)) {
                 
                 const AreaLight* areaLight = intersection.primitiveInfo().primitive()->areaLight();
                 if (areaLight == light) {
+                    const real LdotN = L.absDot(Ns);
+                    const Spectrum directLightFactor = reflectance * LdotN;
+
                     const real bsdfPdf = intersection.pdf();
                     const Spectrum radiance = areaLight->emittance(sampleRay.direction().reverse(), intersection);
 

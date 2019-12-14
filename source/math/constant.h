@@ -7,7 +7,7 @@ namespace cadise {
 namespace constant {
 
 inline constexpr real RAY_EPSILON
-    = 0.01_r;
+    = 0.001_r;
 
 // 1 degree = pi/180 radian
 inline constexpr real RADIAN_PER_DEGREE

@@ -161,6 +161,13 @@ void Triangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, Surface
             uvw = (1.0_r - u - v) * _uvwA +
                   u * _uvwB +
                   v * _uvwC;
+
+            // HACK
+            Vector3R n = (1.0_r - u - v) * _nA +
+                         u * _nB +
+                         v * _nC;
+            n = (n.isZero()) ? normal : n;
+            surfaceInfo.setShadingNormal(n);
         }
         surfaceInfo.setUvw(uvw);
     }
@@ -202,15 +209,21 @@ real Triangle::area() const {
 }
 
 void Triangle::setNormalA(const Vector3R& nA) {
-    _nA = nA;
+    if (!nA.isZero()) {
+        _nA = nA;
+    }
 }
 
 void Triangle::setNormalB(const Vector3R& nB) {
-    _nB = nB;
+    if (!nB.isZero()) {
+        _nB = nB;
+    }
 }
 
 void Triangle::setNormalC(const Vector3R& nC) {
-    _nC = nC;
+    if (!nC.isZero()) {
+        _nC = nC;
+    }
 }
 
 void Triangle::setUvwA(const Vector3R& uvwA) {

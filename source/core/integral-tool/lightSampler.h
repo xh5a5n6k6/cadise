@@ -2,6 +2,7 @@
 
 #include "core/integral-tool/lightSamplePolicy.h"
 #include "core/scene.h"
+#include "fundamental/assertion.h"
 #include "math/random.h"
 
 namespace cadise {
@@ -21,9 +22,11 @@ inline std::size_t LightSampler::sampleOneLight(
     const std::vector<std::shared_ptr<Light>>& lights, 
     real* const out_lightPdf) {
 
+    CADISE_ASSERT(!lights.empty());
+
     std::size_t lightNumber = lights.size();
     if constexpr (Policy == LightSamplePolicy::UNIFORM) {
-        std::size_t sampleIndex = random::nextIndex(0, lightNumber - 1);
+        std::size_t sampleIndex = random::nextIndex(0, lightNumber);
 
         *out_lightPdf = 1.0_r / static_cast<real>(lightNumber);
 

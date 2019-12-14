@@ -3,7 +3,7 @@
 // bsdf type
 #include "core/bsdf/category/absorberBsdf.h"
 #include "core/bsdf/category/conductorMicrofacet.h"
-#include "core/bsdf/category/phong.h"
+#include "core/bsdf/category/phongBsdf.h"
 #include "core/bsdf/category/lambertianDiffuse.h"
 #include "core/bsdf/category/mixedBsdf.h"
 #include "core/bsdf/category/specularDielectric.h"
@@ -80,7 +80,7 @@ static std::shared_ptr<Bsdf> createPhong(
 
     const real exponent = data->findReal("exponent", 32.0_r);
 
-    return std::make_shared<Phong>(exponent);
+    return std::make_shared<PhongBsdf>(exponent);
 }
 
 static std::shared_ptr<Bsdf> createPlastic(
@@ -94,7 +94,7 @@ static std::shared_ptr<Bsdf> createPlastic(
     const real diffuseRatio     = data->findReal("diffuse-ratio", 0.7_r);
 
     return std::make_shared<MixedBsdf>(std::make_shared<LambertianDiffuse>(diffuseAlbedo),
-                                       std::make_shared<Phong>(specularExponent),
+                                       std::make_shared<PhongBsdf>(specularExponent),
                                        diffuseRatio);
 }
 
