@@ -86,29 +86,30 @@ void IsotropicBeckmann::sampleHalfVectorH(const real alphaX,
                                           Vector3R* const out_H) const {
 
     CADISE_ASSERT(out_H);
-
-    if (sample.x() == 1.0_r || sample.y() == 1.0_r) {
-        *out_H = Vector3R(0.0_r, 0.0_r, 1.0_r);
-        return;
-    }
+    
+    // to avoid random sample with 1 value
+    const Vector2R safeSample = sample.clamp(0.0_r, 0.9999_r);
 
     // for isotropic microfacet alphaX is equal to alphaY,
     // we can use either of them as alpha.
     const real alpha  = alphaX;
     const real alpha2 = alpha * alpha;
     
-    const real phi   = constant::TWO_PI * sample.x();
-    const real theta = std::atan(std::sqrt(-alpha2 * std::log(1.0_r - sample.y())));
+    const real phi   = constant::TWO_PI * safeSample.x();
+    const real theta = std::atan(std::sqrt(-alpha2 * std::log(1.0_r - safeSample.y())));
     if (!std::isfinite(theta)) {
         *out_H = Vector3R(0.0_r, 0.0_r, 1.0_r);
+
         return;
     }
 
     const real cosTheta = std::cos(theta);
     const real sinTheta = std::sin(theta);
+    const real cosPhi = std::cos(phi);
+    const real sinPhi = std::sin(phi);
 
-    *out_H = Vector3R(std::cos(phi) * sinTheta,
-                      std::sin(phi) * sinTheta,
+    *out_H = Vector3R(cosPhi * sinTheta,
+                      sinPhi * sinTheta,
                       cosTheta);
 }
 

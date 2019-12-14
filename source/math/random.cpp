@@ -12,7 +12,7 @@ static std::random_device randomDevice;
 static std::default_random_engine generator = std::default_random_engine(randomDevice());
 
 real nextReal() {
-    const std::uniform_real_distribution<real> distribution(0.0_r, 1.0_r);
+    std::uniform_real_distribution<real> distribution(0.0_r, 1.0_r);
 
     return distribution(generator);
 }
