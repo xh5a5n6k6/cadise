@@ -105,8 +105,8 @@ void IsotropicBeckmann::sampleHalfVectorH(const real alphaX,
 
     const real cosTheta = std::cos(theta);
     const real sinTheta = std::sin(theta);
-    const real cosPhi = std::cos(phi);
-    const real sinPhi = std::sin(phi);
+    const real cosPhi   = std::cos(phi);
+    const real sinPhi   = std::sin(phi);
 
     *out_H = Vector3R(cosPhi * sinTheta,
                       sinPhi * sinTheta,

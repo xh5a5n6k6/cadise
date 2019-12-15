@@ -6,15 +6,16 @@ project(Cadise)
 
 set(CMAKE_CONFIGURATION_TYPES "Release")
 
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+# Setting C++17 standard
+if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
 
-elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 endif()
 
+# Setting default include directory
 set(INCLUDE_DIR "${CMAKE_SOURCE_DIR}/source")
 include_directories(${INCLUDE_DIR})
 
@@ -23,9 +24,15 @@ file(GLOB_RECURSE SRC_DIR "./source/*.cpp")
 
 # HACK : exclude StackWalker-related files on linux environment
 # TODO : use another repository to obtain third-party libraries
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
     list(FILTER HEADER_DIR EXCLUDE REGEX "StackWalker.")
     list(FILTER SRC_DIR EXCLUDE REGEX "StackWalker.")
 endif()
 
 add_executable(${PROJECT_NAME} ${HEADER_DIR} ${SRC_DIR})
+
+# Link pthreads library
+if(UNIX)
+    find_package(Threads)
+    target_link_libraries(${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT})
+endif()
