@@ -12,9 +12,9 @@
 namespace cadise {
 
 Triangle::Triangle(const std::shared_ptr<Bsdf>& bsdf, 
-                   const Vector3R& vA, 
-                   const Vector3R& vB, 
-                   const Vector3R& vC) :
+                   const Vector3R&              vA, 
+                   const Vector3R&              vB, 
+                   const Vector3R&              vC) :
     Primitive(bsdf), 
     _vA(vA),
     _vB(vB), 
@@ -45,12 +45,10 @@ AABB3R Triangle::bound() const {
 bool Triangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
     Vector3R eAB = _eAB;
     Vector3R eAC = _eAC;
-    bool isBackSide = false;
 
     const Vector3R D = ray.direction();
     if (D.dot(eAB.cross(eAC)) > 0.0_r) {
         eAB.swap(eAC);
-        isBackSide = true;
     }
     const Vector3R T = ray.origin() - _vA;
     const Vector3R Q = T.cross(eAB);
@@ -76,7 +74,6 @@ bool Triangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
 
     ray.setMaxT(t);
     primitiveInfo.setPrimitive(this);
-    primitiveInfo.setIsBackSide(isBackSide);
 
     return true;
 }
@@ -84,12 +81,10 @@ bool Triangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
 bool Triangle::isOccluded(const Ray& ray) const {
     Vector3R eAB = _eAB;
     Vector3R eAC = _eAC;
-    bool isBackSide = false;
 
     const Vector3R D = ray.direction();
     if (D.dot(eAB.cross(eAC)) > 0.0_r) {
         eAB.swap(eAC);
-        isBackSide = true;
     }
     const Vector3R T = ray.origin() - _vA;
     const Vector3R Q = T.cross(eAB);
@@ -118,62 +113,36 @@ bool Triangle::isOccluded(const Ray& ray) const {
 
 void Triangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const {
     // TODO: refactor here
+    const Vector3R P = surfaceInfo.point();
     Vector3R normal = _eAB.cross(_eAC);
     normal = (normal.isZero()) ? Vector3R(0.0_r, 1.0_r, 0.0_r) : normal.normalize();
-    surfaceInfo.setFrontNormal(normal);
-
-    // TODO: interpolate normal in the triangle
-    normal = (primitiveInfo.isBackSide()) ? normal.reverse() : normal;
-    surfaceInfo.setGeometryNormal(normal);
-    surfaceInfo.setShadingNormal(normal);
 
     Vector3R uvw;
     if (_textureMapper) {
-        _textureMapper->mappingToUvw(surfaceInfo.frontNormal(), &uvw);
+        _textureMapper->mappingToUvw(normal, &uvw);
         surfaceInfo.setUvw(uvw);
     }
     else {
-        /*
-             Reference Note:
-             https://gamedev.stackexchange.com/questions/23743/whats-the-most-efficient-way-to-find-barycentric-coordinates
-        
-             which is transcribed from "Real-Time Collision Detection"
-        */
-        // TODO : integrate with intersecting/occluded 
-        //        barycentric coordinate calculation
-        const Vector3R v0 = _vB - _vA;
-        const Vector3R v1 = _vC - _vA;
-        const Vector3R v2 = surfaceInfo.point() - _vA;
-        const real d00 = v0.dot(v0);
-        const real d01 = v0.dot(v1);
-        const real d11 = v1.dot(v1);
-        const real d20 = v2.dot(v0);
-        const real d21 = v2.dot(v1);
-        const real denominator = d00 * d11 - d01 * d01;
-        if (denominator == 0.0_r) {
-            uvw = Vector3R(0.0_r, 0.0_r, 0.0_r);
-        }
-        else {
-            const real inverseDenominator = 1.0_r / denominator;
-            const real u = (d11 * d20 - d01 * d21) * inverseDenominator;
-            const real v = (d00 * d21 - d01 * d20) * inverseDenominator;
+        Vector3R barycentric;
+        _positionToBarycentric(P, &barycentric);
 
-            uvw = (1.0_r - u - v) * _uvwA +
-                  u * _uvwB +
-                  v * _uvwC;
+        uvw = barycentric.x() * _uvwA +
+              barycentric.y() * _uvwB +
+              barycentric.z() * _uvwC;
 
-            // HACK
-            Vector3R n = (1.0_r - u - v) * _nA +
-                         u * _nB +
-                         v * _nC;
-            n = (n.isZero()) ? normal : n;
-            surfaceInfo.setShadingNormal(n);
-        }
+        // HACK
+        Vector3R Ns = barycentric.x() * _nA +
+                      barycentric.y() * _nB +
+                      barycentric.z() * _nC;
+        Ns = (Ns.isZero()) ? normal : Ns;
+
+        surfaceInfo.setShadingNormal(Ns);
+        surfaceInfo.setGeometryNormal(normal);
         surfaceInfo.setUvw(uvw);
     }
 }
 
-void Triangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurface) const {
+void Triangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo* const out_surface) const {
     // TODO
     // improve sample point on triangle
     real s;
@@ -189,15 +158,21 @@ void Triangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurfa
     Vector3R eAC = _eAC;
 
     const Vector3R point = _vA + s * eAB + t * eAC;
-    const Vector3R direction = point - inSurface.point();
-    if (direction.dot(eAB.cross(eAC)) > 0.0_r) {
-        eAB.swap(eAC);
-    }
 
-    const Vector3R normal = eAB.cross(eAC).normalize();
+    Vector3R barycentric;
+    _positionToBarycentric(point, &barycentric);
 
-    outSurface.setPoint(point);
-    outSurface.setGeometryNormal(normal);
+    Vector3R Ng = _eAB.cross(_eAC);
+    Ng = (Ng.isZero()) ? Vector3R(0.0_r, 1.0_r, 0.0_r) : Ng.normalize();
+
+    Vector3R Ns = barycentric.x() * _nA +
+                  barycentric.y() * _nB +
+                  barycentric.z() * _nC;
+    Ns = (Ns.isZero()) ? Ng : Ns;
+
+    out_surface->setPoint(point);
+    out_surface->setGeometryNormal(Ng);
+    out_surface->setShadingNormal(Ns);
 }
 
 real Triangle::samplePdfA(const Vector3R& position) const {
@@ -208,19 +183,19 @@ real Triangle::area() const {
     return 0.5_r * _eAB.cross(_eAC).length();
 }
 
-void Triangle::setNormalA(const Vector3R& nA) {
+void Triangle::setNa(const Vector3R& nA) {
     if (!nA.isZero()) {
         _nA = nA;
     }
 }
 
-void Triangle::setNormalB(const Vector3R& nB) {
+void Triangle::setNb(const Vector3R& nB) {
     if (!nB.isZero()) {
         _nB = nB;
     }
 }
 
-void Triangle::setNormalC(const Vector3R& nC) {
+void Triangle::setNc(const Vector3R& nC) {
     if (!nC.isZero()) {
         _nC = nC;
     }
@@ -236,6 +211,31 @@ void Triangle::setUvwB(const Vector3R& uvwB) {
 
 void Triangle::setUvwC(const Vector3R& uvwC) {
     _uvwC = uvwC;
+}
+
+void Triangle::_positionToBarycentric(const Vector3R& position, Vector3R* const out_barycentric) const {
+    const Vector3R v0 = _vB - _vA;
+    const Vector3R v1 = _vC - _vA;
+    const Vector3R v2 = position - _vA;
+
+    const real d00 = v0.dot(v0);
+    const real d01 = v0.dot(v1);
+    const real d11 = v1.dot(v1);
+    const real d20 = v2.dot(v0);
+    const real d21 = v2.dot(v1);
+    const real denominator = d00 * d11 - d01 * d01;
+    if (denominator == 0.0_r) {
+        *out_barycentric = Vector3R(0.0_r, 0.0_r, 0.0_r);
+    }
+    else {
+        const real inverseDenominator = 1.0_r / denominator;
+        const real u = (d11 * d20 - d01 * d21) * inverseDenominator;
+        const real v = (d00 * d21 - d01 * d20) * inverseDenominator;
+
+        *out_barycentric = Vector3R(1.0_r - u - v, 
+                                    u, 
+                                    v);
+    }
 }
 
 } // namespace cadise

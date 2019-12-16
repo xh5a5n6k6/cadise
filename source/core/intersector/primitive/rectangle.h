@@ -6,7 +6,10 @@ namespace cadise {
 
 class Rectangle : public Primitive {
 public:
-    Rectangle(const std::shared_ptr<Bsdf>& bsdf, const Vector3R& vA, const Vector3R& vB, const Vector3R& vC);
+    Rectangle(const std::shared_ptr<Bsdf>& bsdf, 
+              const Vector3R&              vA, 
+              const Vector3R&              vB, 
+              const Vector3R&              vC);
 
     AABB3R bound() const override;
 
@@ -15,7 +18,7 @@ public:
 
     void evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const override;
 
-    void sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurface) const override;
+    void sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo* const out_surface) const override;
     real samplePdfA(const Vector3R& position) const override;
     real area() const override;
 

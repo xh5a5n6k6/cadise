@@ -25,9 +25,9 @@ void TriangleMesh::transformToTriangles(std::vector<std::shared_ptr<Primitive>>*
             = std::make_shared<Triangle>(_bsdf, _positions[i], _positions[i + 1], _positions[i + 2]);
 
         if (!_normals.empty()) {
-            triangle->setNormalA(_normals[i + 0]);
-            triangle->setNormalB(_normals[i + 1]);
-            triangle->setNormalC(_normals[i + 2]);
+            triangle->setNa(_normals[i + 0]);
+            triangle->setNb(_normals[i + 1]);
+            triangle->setNc(_normals[i + 2]);
         }
         if (!_uvws.empty()) {
             triangle->setUvwA(_uvws[i + 0]);

@@ -12,6 +12,9 @@
     - Specular Transmission
     - Specular Dielectric
     - Phong
+    - Mixed
+    - Microfacet (conductor)
+        - NDF: Beckmann, GGX
 - ### Primitive
     - Sphere
     - Triangle

@@ -17,7 +17,7 @@ public:
 
     void evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const override;
 
-    void sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurface) const override;
+    void sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo* const out_surface) const override;
     real samplePdfA(const Vector3R& position) const override;
     real area() const override;
 

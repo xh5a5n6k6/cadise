@@ -73,7 +73,6 @@ Spectrum PathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const
         // estimate indirect light with bsdf sampling
         const Spectrum reflectance = bsdf->evaluateSample(intersection);
         const Vector3R L = intersection.wo();
-        const real sign = (L.dot(Ns) < 0.0_r) ? -1.0_r : 1.0_r;
 
         const real LdotN = L.absDot(Ns);
         pathWeight *= reflectance * LdotN / intersection.pdf();

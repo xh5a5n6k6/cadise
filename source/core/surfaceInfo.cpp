@@ -6,7 +6,6 @@ SurfaceInfo::SurfaceInfo() :
     _point(0.0_r),
     _geometryNormal(0.0_r),
     _shadingNormal(0.0_r),
-    _frontNormal(0.0_r),
     _uvw(0.0_r) {
 }
 
@@ -20,10 +19,6 @@ const Vector3R& SurfaceInfo::geometryNormal() const {
 
 const Vector3R& SurfaceInfo::shadingNormal() const {
     return _shadingNormal;
-}
-
-const Vector3R& SurfaceInfo::frontNormal() const {
-    return _frontNormal;
 }
 
 const Vector3R& SurfaceInfo::uvw() const {
@@ -40,10 +35,6 @@ void SurfaceInfo::setGeometryNormal(const Vector3R& geometryNormal) {
 
 void SurfaceInfo::setShadingNormal(const Vector3R& shadingNormal) {
     _shadingNormal = shadingNormal;
-}
-
-void SurfaceInfo::setFrontNormal(const Vector3R& frontNormal) {
-    _frontNormal = frontNormal;
 }
 
 void SurfaceInfo::setUvw(const Vector3R& uvw) {

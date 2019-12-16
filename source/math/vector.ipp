@@ -445,7 +445,7 @@ inline Vector<T, N> Vector<T, N>::refract(const Vector<T, N>& normal, const real
     const real sinT2 = etaRatio * etaRatio * (1.0_r - cosI * cosI);
 
     // handle TIR condition
-    if (sinT2 > 1.0_r) {
+    if (sinT2 >= 1.0_r) {
         return Vector<T, N>(static_cast<T>(0));
     }
 

@@ -27,9 +27,9 @@ SingleAreaLight::SingleAreaLight(const Primitive* const primitive,
 }
 
 Spectrum SingleAreaLight::emittance(const Vector3R& emitDirection, const SurfaceIntersection& emitSurface) const {
-    // check if direction is at the front face 
-    const Vector3R frontNormal = emitSurface.surfaceInfo().frontNormal();
-    if (emitDirection.dot(frontNormal) <= 0.0_r && !_isBackFaceEmit) {
+    // check if direction is at the same hemisphere
+    const Vector3R Ns = emitSurface.surfaceInfo().shadingNormal();
+    if (emitDirection.dot(Ns) <= 0.0_r && !_isBackFaceEmit) {
         return Spectrum(0.0_r);
     }
     else {
@@ -46,7 +46,7 @@ Spectrum SingleAreaLight::evaluateSampleRadiance(Vector3R& lightDirection, const
     const Vector3R P = surfaceInfo.point();
 
     SurfaceInfo sampleSurface;
-    _primitive->sampleSurface(surfaceInfo, sampleSurface);
+    _primitive->sampleSurface(surfaceInfo, &sampleSurface);
 
     const Vector3R direction = sampleSurface.point() - P;
     if (direction.isZero()) {
@@ -55,8 +55,8 @@ Spectrum SingleAreaLight::evaluateSampleRadiance(Vector3R& lightDirection, const
     t = direction.length();
     lightDirection = direction.normalize();
 
-    const Vector3R frontNormal = sampleSurface.frontNormal();
-    if (lightDirection.reverse().dot(frontNormal) <= 0.0_r && !_isBackFaceEmit) {
+    const Vector3R Ns = sampleSurface.shadingNormal();
+    if (lightDirection.reverse().dot(Ns) <= 0.0_r && !_isBackFaceEmit) {
         pdf = 0.0_r;
         return Spectrum(0.0_r);
     }
@@ -81,9 +81,8 @@ real SingleAreaLight::evaluatePdfW(const SurfaceIntersection& surfaceIntersectio
     const Vector3R emitPosition = surfaceIntersection.surfaceInfo().point();
     const Vector3R emitNormal = surfaceIntersection.surfaceInfo().shadingNormal();
     const Vector3R emitDirection = surfaceIntersection.wi();
-    const Vector3R frontNormal = surfaceIntersection.surfaceInfo().frontNormal();
 
-    if (emitDirection.dot(frontNormal) <= 0.0_r && !_isBackFaceEmit) {
+    if (emitDirection.dot(emitNormal) <= 0.0_r && !_isBackFaceEmit) {
         return 0.0_r;
     }
 

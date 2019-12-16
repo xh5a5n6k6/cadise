@@ -24,16 +24,16 @@ void VanillaDielectricFresnel::evaluateReflectance(const real cosThetaI,
     }
 
     const real etaRatio = etaI / etaT;
-    const real sin2_T   = etaRatio * etaRatio * (1.0_r - cosI * cosI);
+    const real sinT2    = etaRatio * etaRatio * (1.0_r - cosI * cosI);
 
     // handle TIR condition
-    if (sin2_T >= 1.0_r) {
+    if (sinT2 >= 1.0_r) {
         *out_reflectance = Spectrum(1.0_r);
 
         return;
     }
 
-    const real cosT = std::sqrt(1.0_r - sin2_T);
+    const real cosT = std::sqrt(1.0_r - sinT2);
 
     const real rParallel      = (etaT * cosI - etaI * cosT) / (etaT * cosI + etaI * cosT);
     const real rPerpendicular = (etaI * cosI - etaT * cosT) / (etaI * cosI + etaT * cosT);

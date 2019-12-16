@@ -24,17 +24,18 @@ Spectrum SpecularTransmission::evaluate(const SurfaceIntersection& surfaceInters
 }
 
 Spectrum SpecularTransmission::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
-    const Vector3R normal = surfaceIntersection.surfaceInfo().frontNormal();
-    
+    const Vector3R Ns = surfaceIntersection.surfaceInfo().shadingNormal();
+    const Vector3R V  = surfaceIntersection.wi();
+
     real etaI = _fresnel->iorOuter();
     real etaT = _fresnel->iorInner();
 
-    const Vector3R refractDirection = surfaceIntersection.wi().refract(normal, etaI, etaT);
-    if (refractDirection.isZero()) {
+    const Vector3R L = V.refract(Ns, etaI, etaT);
+    if (L.isZero()) {
         return Spectrum(0.0_r);
     }
 
-    real cosThetaI = refractDirection.dot(normal);
+    real cosThetaI = L.dot(Ns);
     if (cosThetaI < 0.0_r) {
         math::swap(etaI, etaT);
     }
@@ -46,10 +47,10 @@ Spectrum SpecularTransmission::evaluateSample(SurfaceIntersection& surfaceInters
     const real btdfFactor = (etaT * etaT) / (etaI * etaI);
     const real pdf = 1.0_r;
 
-    surfaceIntersection.setWo(refractDirection);
+    surfaceIntersection.setWo(L);
     surfaceIntersection.setPdf(pdf);
 
-    const real LdotN = refractDirection.absDot(normal);
+    const real LdotN = L.absDot(Ns);
 
     const Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
     Spectrum sampleSpectrum;

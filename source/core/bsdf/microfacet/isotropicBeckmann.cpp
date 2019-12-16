@@ -13,7 +13,7 @@ real IsotropicBeckmann::distributionD(const real alphaX,
                                       const Vector3R& N,
                                       const Vector3R& H) const {
 
-    real NdotH = N.dot(H);
+    const real NdotH = N.dot(H);
     if (NdotH <= 0.0_r) {
         return 0.0_r;
     }

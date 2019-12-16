@@ -24,12 +24,14 @@ Spectrum SpecularReflection::evaluate(const SurfaceIntersection& surfaceIntersec
 }
 
 Spectrum SpecularReflection::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
-    const Vector3R normal = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R outDirection = surfaceIntersection.wi().reflect(normal);
-    const real LdotN = outDirection.dot(normal);
-    const real pdf = 1.0_r;
+    const Vector3R Ns = surfaceIntersection.surfaceInfo().shadingNormal();
+    const Vector3R V  = surfaceIntersection.wi();
+    const Vector3R L  = V.reflect(Ns);
+    
+    const real LdotN = L.dot(Ns);
+    const real pdf   = 1.0_r;
 
-    surfaceIntersection.setWo(outDirection);
+    surfaceIntersection.setWo(L);
     surfaceIntersection.setPdf(pdf);
 
     Spectrum reflectance;

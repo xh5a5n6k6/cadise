@@ -12,7 +12,10 @@
 
 namespace cadise {
 
-Rectangle::Rectangle(const std::shared_ptr<Bsdf>& bsdf, const Vector3R& vA, const Vector3R& vB, const Vector3R& vC) :
+Rectangle::Rectangle(const std::shared_ptr<Bsdf>& bsdf, 
+                     const Vector3R&              vA, 
+                     const Vector3R&              vB, 
+                     const Vector3R&              vC) :
     Primitive(bsdf),
     _vA(vA),
     _vB(vB),
@@ -38,10 +41,8 @@ AABB3R Rectangle::bound() const {
 bool Rectangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
     Vector3R eA = _eA;
     Vector3R eB = _eB;
-    bool isBackSide = false;
     if (ray.direction().dot(eA.cross(eB)) > 0.0_r) {
         eA.swap(eB);
-        isBackSide = true;
     }
 
     const Vector3R normal = eA.cross(eB).normalize();
@@ -60,7 +61,6 @@ bool Rectangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
 
     ray.setMaxT(t);
     primitiveInfo.setPrimitive(this);
-    primitiveInfo.setIsBackSide(isBackSide);
 
     return true;
 }
@@ -91,15 +91,14 @@ bool Rectangle::isOccluded(const Ray& ray) const {
 
 void Rectangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const {
     Vector3R normal = _eA.cross(_eB).normalize();
-    surfaceInfo.setFrontNormal(normal);
 
-    normal = (primitiveInfo.isBackSide()) ? normal.reverse() : normal;
+    //normal = (primitiveInfo.isBackSide()) ? normal.reverse() : normal;
     surfaceInfo.setGeometryNormal(normal);
     surfaceInfo.setShadingNormal(normal);
 
     Vector3R uvw;
     if (_textureMapper) {
-        _textureMapper->mappingToUvw(surfaceInfo.frontNormal(), &uvw);
+        _textureMapper->mappingToUvw(surfaceInfo.shadingNormal(), &uvw);
         surfaceInfo.setUvw(uvw);
     }
     else {
@@ -115,16 +114,15 @@ void Rectangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, Surfac
     }
 }
 
-void Rectangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurface) const {
+void Rectangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo* const out_surface) const {
     Vector3R eA = _eA;
     Vector3R eB = _eB;
-    outSurface.setFrontNormal(eA.cross(eB).normalize());
 
     if (eA.length() < eB.length()) {
         eA.swap(eB);
     }
 
-    const real longWidth = eA.length();
+    const real longWidth  = eA.length();
     const real shortWidth = eB.length();
 
     // TODO
@@ -139,14 +137,13 @@ void Rectangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurf
     } while (t > shortWidth / longWidth);
 
     const Vector3R point = _vB + s * eA + t * eA.length() * eB.normalize();
-    const Vector3R direction = point - inSurface.point();
-    if (direction.dot(eA.cross(eB)) > 0.0_r) {
-        eA.swap(eB);
-    }
 
-    const Vector3R normal = eA.cross(eB).normalize();
-    outSurface.setPoint(point);
-    outSurface.setGeometryNormal(normal);
+    Vector3R N = _eA.cross(_eB);
+    N = (N.isZero()) ? Vector3R(0.0_r, 1.0_r, 0.0_r) : N.normalize();
+
+    out_surface->setPoint(point);
+    out_surface->setGeometryNormal(N);
+    out_surface->setShadingNormal(N);
 }
 
 real Rectangle::samplePdfA(const Vector3R& position) const {

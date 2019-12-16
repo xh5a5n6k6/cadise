@@ -10,7 +10,7 @@
 #include "math/random.h"
 #include "math/transform.h"
 
-#include <limits>
+#include <cmath>
 
 namespace cadise {
 
@@ -30,87 +30,107 @@ AABB3R Sphere::bound() const {
 }
 
 bool Sphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
-    Ray localRay(_worldToLocal->transformPoint(ray.origin()),
-                 _worldToLocal->transformVector(ray.direction()),
-                 ray.minT(), 
-                 ray.maxT());
+    /*
+        Reference Note:
+        Ray Tracing Gems, p.87 ~ p.94
+        "Precision Improvements for Ray/Sphere Intersection"
+        Haines et al., 2019
+    */
+    const Vector3R O = ray.origin();
+    const Vector3R G = _center;
+    const Vector3R f = O - G;
+    const Vector3R d = ray.direction();
+    const real     b = -f.dot(d);
+    const real     r = _radius;
 
-    const int32 isOutside = localRay.origin().lengthSquared() > _radius * _radius;
-    real t = localRay.direction().dot(localRay.origin().reverse());
-    if (isOutside && t < 0.0_r) {
+    const Vector3R l = f + b * d;
+    const real discriminant = r * r - l.absDot(l);
+    if (discriminant >= 0.0_r) {
+        const real signB = (b > 0.0_r) ? 1.0_r : -1.0_r;
+        const real q     = b + signB * std::sqrt(discriminant);
+        const real c     = f.absDot(f) - r * r;
+
+        const real t0 = c / q;
+        const real t1 = q;
+        if (t0 > ray.maxT() || t1 < ray.minT()) {
+            return false;
+        }
+
+        real t = t0;
+        if (t < ray.minT()) {
+            t = t1;
+
+            if (t > ray.maxT()) {
+                return false;
+            }
+        }
+
+        ray.setMaxT(t);
+        primitiveInfo.setPrimitive(this);
+
+        return true;
+    }
+    else {
         return false;
     }
-
-    const real d2 = localRay.origin().lengthSquared() - t * t;
-    const real s2 = _radius * _radius - d2;
-    if (s2 < 0.0_r) {
-        return false;
-    }
-
-    const real t0 = t - std::sqrt(s2);
-    const real t1 = t + std::sqrt(s2);
-    t = isOutside * t0 + (1 - isOutside) * t1;
-
-    if (t < localRay.minT() || t > localRay.maxT()) {
-        return false;
-    }
-
-    ray.setMaxT(t);
-    primitiveInfo.setPrimitive(this);
-    primitiveInfo.setIsBackSide(isOutside == 0);
-
-    return true;
 }
 
 bool Sphere::isOccluded(const Ray& ray) const {
-    Ray localRay(_worldToLocal->transformPoint(ray.origin()),
-                 _worldToLocal->transformVector(ray.direction()),
-                 ray.minT(),
-                 ray.maxT());
+    const Vector3R O = ray.origin();
+    const Vector3R G = _center;
+    const Vector3R f = O - G;
+    const Vector3R d = ray.direction();
+    const real     b = -f.dot(d);
+    const real     r = _radius;
 
-    const int32 isOutside = localRay.origin().lengthSquared() > _radius * _radius;
-    real t = localRay.direction().dot(localRay.origin().reverse());
-    if (isOutside && t < 0.0_r) {
+    const Vector3R l = f + b * d;
+    const real discriminant = r * r - l.absDot(l);
+    if (discriminant >= 0.0_r) {
+        const real signB = (b > 0.0_r) ? 1.0_r : -1.0_r;
+        const real q     = b + signB * std::sqrt(discriminant);
+        const real c     = f.absDot(f) - r * r;
+
+        const real t0 = c / q;
+        const real t1 = q;
+        if (t0 > ray.maxT() || t1 < ray.minT()) {
+            return false;
+        }
+
+        real t = t0;
+        if (t < ray.minT()) {
+            t = t1;
+
+            if (t > ray.maxT()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    else {
         return false;
     }
-
-    const real d2 = localRay.origin().lengthSquared() - t * t;
-    const real s2 = _radius * _radius - d2;
-    if (s2 < 0.0_r) {
-        return false;
-    }
-
-    const real t0 = t - std::sqrt(s2);
-    const real t1 = t + std::sqrt(s2);
-    t = isOutside * t0 + (1 - isOutside) * t1;
-
-    if (t < localRay.minT() || t > localRay.maxT()) {
-        return false;
-    }
-
-    return true;
 }
 
 void Sphere::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const {
-    Vector3R normal = (surfaceInfo.point() - _center).normalize();
-    surfaceInfo.setFrontNormal(normal);
+    const Vector3R P = surfaceInfo.point();
+    const Vector3R N = (P - _center).normalize();
 
-    normal = (primitiveInfo.isBackSide()) ? normal.reverse() : normal;
-    surfaceInfo.setGeometryNormal(normal);
-    surfaceInfo.setShadingNormal(normal);
+    surfaceInfo.setGeometryNormal(N);
+    surfaceInfo.setShadingNormal(N);
 
     Vector3R uvw;
     if (_textureMapper) {
-        _textureMapper->mappingToUvw(surfaceInfo.frontNormal(), &uvw);
+        _textureMapper->mappingToUvw(surfaceInfo.shadingNormal(), &uvw);
         surfaceInfo.setUvw(uvw);
     }
     else {
-        _tmptextureMapper->mappingToUvw(surfaceInfo.frontNormal(), &uvw);
+        _tmptextureMapper->mappingToUvw(surfaceInfo.shadingNormal(), &uvw);
         surfaceInfo.setUvw(uvw);
     }
 }
 
-void Sphere::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurface) const {
+void Sphere::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo* const out_surface) const {
     // TODO: implement here
 }
 

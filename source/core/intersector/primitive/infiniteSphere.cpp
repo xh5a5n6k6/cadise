@@ -57,9 +57,11 @@ void InfiniteSphere::uvwToPosition(const Vector3R& uvw, Vector3R* const out_posi
 
     const real cosTheta = std::cos(theta);
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
+    const real cosPhi   = std::cos(phi);
+    const real sinPhi   = std::sin(phi);
 
-    const Vector3R direction(std::cos(phi) * sinTheta,
-                             std::sin(phi) * sinTheta,
+    const Vector3R direction(cosPhi * sinTheta,
+                             sinPhi * sinTheta,
                              cosTheta);
 
     *out_position = direction.normalize() * _radius;

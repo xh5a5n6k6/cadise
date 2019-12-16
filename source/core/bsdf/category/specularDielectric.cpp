@@ -24,12 +24,13 @@ Spectrum SpecularDielectric::evaluate(const SurfaceIntersection& surfaceIntersec
 }
 
 Spectrum SpecularDielectric::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
-    const Vector3R normal = surfaceIntersection.surfaceInfo().frontNormal();
+    const Vector3R Ns = surfaceIntersection.surfaceInfo().shadingNormal();
+    const Vector3R V  = surfaceIntersection.wi();
     
-    const real IdotN = surfaceIntersection.wi().dot(normal);
+    const real VdotN = V.dot(Ns);
     
     Spectrum reflectance;
-    _fresnel->evaluateReflectance(IdotN, &reflectance);
+    _fresnel->evaluateReflectance(VdotN, &reflectance);
     const real reflectionProbability = reflectance.average();
     const real sampleProbability     = random::nextReal();
     
@@ -47,16 +48,15 @@ Spectrum SpecularDielectric::evaluateSample(SurfaceIntersection& surfaceIntersec
     Spectrum result(0.0_r);
 
     if (isReflection) {
-        const real nFactor = (IdotN < 0.0_r) ? -1.0_r : 1.0_r;
-        const Vector3R shadingNormal = surfaceIntersection.surfaceInfo().shadingNormal();
-        const Vector3R reflectDirection = surfaceIntersection.wi().reflect(shadingNormal * nFactor);
+        const real nFactor = (VdotN > 0.0_r) ? 1.0_r : -1.0_r;
+        const Vector3R L = V.reflect(Ns * nFactor);
 
         const real pdf = reflectionProbability;
 
-        surfaceIntersection.setWo(reflectDirection);
+        surfaceIntersection.setWo(L);
         surfaceIntersection.setPdf(pdf);
 
-        const real LdotN = reflectDirection.absDot(normal);
+        const real LdotN = L.absDot(Ns);
 
         const Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
         Spectrum sampleSpectrum;
@@ -65,12 +65,12 @@ Spectrum SpecularDielectric::evaluateSample(SurfaceIntersection& surfaceIntersec
         result = sampleSpectrum * reflectance / LdotN;
     }
     else if (isRefraction) {
-        const Vector3R refractDirection = surfaceIntersection.wi().refract(normal, etaI, etaT);
-        if (refractDirection.isZero()) {
+        const Vector3R L = V.refract(Ns, etaI, etaT);
+        if (L.isZero()) {
             return Spectrum(0.0_r);
         }
 
-        const real cosThetaI = refractDirection.dot(normal);
+        const real cosThetaI = L.dot(Ns);
         if (cosThetaI < 0.0_r) {
             math::swap(etaI, etaT);
         }
@@ -82,10 +82,10 @@ Spectrum SpecularDielectric::evaluateSample(SurfaceIntersection& surfaceIntersec
         const real btdfFactor = (etaT * etaT) / (etaI * etaI);
         const real pdf = 1.0_r - reflectionProbability;
 
-        surfaceIntersection.setWo(refractDirection);
+        surfaceIntersection.setWo(L);
         surfaceIntersection.setPdf(pdf);
 
-        const real LdotN = refractDirection.absDot(normal);
+        const real LdotN = L.absDot(Ns);
 
         const Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
         Spectrum sampleSpectrum;

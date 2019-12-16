@@ -7,9 +7,9 @@ namespace cadise {
 class Triangle : public Primitive {
 public:
     Triangle(const std::shared_ptr<Bsdf>& bsdf, 
-             const Vector3R& vA, 
-             const Vector3R& vB, 
-             const Vector3R& vC);
+             const Vector3R&              vA, 
+             const Vector3R&              vB, 
+             const Vector3R&              vC);
 
     AABB3R bound() const override;
 
@@ -18,19 +18,27 @@ public:
 
     void evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const override;
 
-    void sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo& outSurface) const override;
+    void sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo* const out_surface) const override;
     real samplePdfA(const Vector3R& position) const override;
     real area() const override;
 
-    void setNormalA(const Vector3R& nA);
-    void setNormalB(const Vector3R& nB);
-    void setNormalC(const Vector3R& nC);
+    void setNa(const Vector3R& nA);
+    void setNb(const Vector3R& nB);
+    void setNc(const Vector3R& nC);
 
     void setUvwA(const Vector3R& uvwA);
     void setUvwB(const Vector3R& uvwB);
     void setUvwC(const Vector3R& uvwC);
 
 private:
+    /*
+        Reference Note:
+        https://gamedev.stackexchange.com/questions/23743/whats-the-most-efficient-way-to-find-barycentric-coordinates
+
+        which is transcribed from "Real-Time Collision Detection"
+    */
+    void _positionToBarycentric(const Vector3R& position, Vector3R* const out_barycentric) const;
+
     Vector3R _vA;
     Vector3R _vB;
     Vector3R _vC;
