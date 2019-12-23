@@ -6,6 +6,7 @@
 #include "core/ray.h"
 #include "core/scene.h"
 #include "core/surfaceIntersection.h"
+#include "fundamental/assertion.h"
 #include "math/constant.h"
 
 namespace cadise {
@@ -14,7 +15,12 @@ WhittedIntegrator::WhittedIntegrator(const int32 maxDepth) :
     _maxDepth(maxDepth) {
 }
 
-Spectrum WhittedIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const {
+void WhittedIntegrator::traceRadiance(const Scene& scene, 
+                                      const Ray&   ray,
+                                      Spectrum* const out_radiance) const {
+
+    CADISE_ASSERT(out_radiance);
+
     Spectrum totalRadiance(0.0_r);
     Spectrum pathWeight(1.0_r);
 
@@ -94,7 +100,7 @@ Spectrum WhittedIntegrator::traceRadiance(const Scene& scene, const Ray& ray) co
         }
     }
 
-    return totalRadiance;
+    *out_radiance = totalRadiance;
 }
 
 } // namespace cadise

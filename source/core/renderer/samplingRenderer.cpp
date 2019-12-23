@@ -64,9 +64,11 @@ void SamplingRenderer::render(const Scene& scene) const {
                         const Vector2R filmNdcPosition = filmJitterPosition / realResolution;
 
                         const Ray primaryRay = _camera->spawnPrimaryRay(filmNdcPosition);
-                        const Spectrum sampleSpectrum = _integrator->traceRadiance(scene, primaryRay);
+                        
+                        Spectrum sampleRadiance;
+                        _integrator->traceRadiance(scene, primaryRay, &sampleRadiance);
 
-                        filmTile->addSample(filmJitterPosition, sampleSpectrum);
+                        filmTile->addSample(filmJitterPosition, sampleRadiance);
                     }
 
                     sampleSampler.reset();

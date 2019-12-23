@@ -7,6 +7,7 @@
 #include "core/ray.h"
 #include "core/scene.h"
 #include "core/surfaceIntersection.h"
+#include "fundamental/assertion.h"
 #include "math/constant.h"
 
 namespace cadise {
@@ -15,7 +16,12 @@ NaivePathIntegrator::NaivePathIntegrator(const int32 maxDepth) :
     _maxDepth(maxDepth) {
 }
 
-Spectrum NaivePathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const {
+void NaivePathIntegrator::traceRadiance(const Scene& scene, 
+                                        const Ray&   ray,
+                                        Spectrum* const out_radiance) const {
+
+    CADISE_ASSERT(out_radiance);
+
     Spectrum totalRadiance(0.0_r);
     Spectrum pathWeight(1.0_r);
 
@@ -62,7 +68,7 @@ Spectrum NaivePathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) 
         traceRay = Ray(P, L);
     }
     
-    return totalRadiance;
+    *out_radiance = totalRadiance;
 }
 
 } // namespace cadise
