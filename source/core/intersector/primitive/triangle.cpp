@@ -214,6 +214,8 @@ void Triangle::setUvwC(const Vector3R& uvwC) {
 }
 
 void Triangle::_positionToBarycentric(const Vector3R& position, Vector3R* const out_barycentric) const {
+    CADISE_ASSERT(out_barycentric);
+
     const Vector3R v0 = _vB - _vA;
     const Vector3R v1 = _vC - _vA;
     const Vector3R v2 = position - _vA;
@@ -224,6 +226,7 @@ void Triangle::_positionToBarycentric(const Vector3R& position, Vector3R* const 
     const real d20 = v2.dot(v0);
     const real d21 = v2.dot(v1);
     const real denominator = d00 * d11 - d01 * d01;
+
     if (denominator == 0.0_r) {
         *out_barycentric = Vector3R(0.0_r, 0.0_r, 0.0_r);
     }

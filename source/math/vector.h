@@ -60,12 +60,15 @@ public:
 
     void swap(Vector& v);
     bool equals(const Vector& rhs) const;
+    bool canRefract(const Vector& normal, 
+                    const real iorOuter, 
+                    const real iorInner, 
+                    Vector* const out_vector) const;
     T dot(const Vector& v) const;
     T absDot(const Vector& v) const;
     Vector lerp(const Vector& rhs, const real ratio) const;
     Vector cross(const Vector& v) const;
     Vector reflect(const Vector& normal) const;
-    Vector refract(const Vector& normal, const real iorOuter, const real iorInner) const;
 
     T x() const;
     T y() const;

@@ -30,8 +30,8 @@ Spectrum SpecularTransmission::evaluateSample(SurfaceIntersection& surfaceInters
     real etaI = _fresnel->iorOuter();
     real etaT = _fresnel->iorInner();
 
-    const Vector3R L = V.refract(Ns, etaI, etaT);
-    if (L.isZero()) {
+    Vector3R L;
+    if (!V.canRefract(Ns, etaI, etaT, &L)) {
         return Spectrum(0.0_r);
     }
 

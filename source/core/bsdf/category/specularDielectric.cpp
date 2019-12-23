@@ -65,11 +65,11 @@ Spectrum SpecularDielectric::evaluateSample(SurfaceIntersection& surfaceIntersec
         result = sampleSpectrum * reflectance / LdotN;
     }
     else if (isRefraction) {
-        const Vector3R L = V.refract(Ns, etaI, etaT);
-        if (L.isZero()) {
+        Vector3R L;
+        if (!V.canRefract(Ns, etaI, etaT, &L)) {
             return Spectrum(0.0_r);
         }
-
+    
         const real cosThetaI = L.dot(Ns);
         if (cosThetaI < 0.0_r) {
             math::swap(etaI, etaT);

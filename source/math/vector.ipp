@@ -387,6 +387,44 @@ inline bool Vector<T, N>::equals(const Vector<T, N>& rhs) const {
 }
 
 template<typename T, std::size_t N>
+inline bool Vector<T, N>::canRefract(const Vector<T, N>& normal, 
+                                     const real iorOuter, 
+                                     const real iorInner,
+                                     Vector<T, N>* const out_vector) const {
+
+    CADISE_ASSERT(out_vector);
+
+    real etaI       = iorOuter;
+    real etaT       = iorInner;
+    real signFactor = 1.0_r;
+
+    const real cosI = dot(normal);
+
+    // check if incident ray is from inner to outer
+    if (cosI < 0.0_r) {
+        math::swap(etaI, etaT);
+        signFactor = -1.0_r;
+    }
+
+    const real etaRatio = etaI / etaT;
+    const real sinT2    = etaRatio * etaRatio * (1.0_r - cosI * cosI);
+
+    // handle TIR condition
+    if (sinT2 >= 1.0_r) {
+        return false;
+    }
+
+    const real cosT = std::sqrt(1.0_r - sinT2);
+    Vector<T, N> refractDirection = -etaRatio * *this;
+    refractDirection += (etaRatio * signFactor * cosI - cosT) * signFactor * normal;
+    refractDirection = refractDirection.normalize();
+
+    *out_vector = refractDirection;
+
+    return true;
+}
+
+template<typename T, std::size_t N>
 inline T Vector<T, N>::dot(const Vector<T, N>& v) const {
     T result = static_cast<T>(0);
     for (std::size_t i = 0; i < N; ++i) {
@@ -425,36 +463,6 @@ template<typename T, std::size_t N>
 inline Vector<T, N> Vector<T, N>::reflect(const Vector<T, N>& normal) const {
     const Vector<T, N> result = static_cast<T>(2) * absDot(normal) * normal;
     return result - *this;
-}
-
-template<typename T, std::size_t N>
-inline Vector<T, N> Vector<T, N>::refract(const Vector<T, N>& normal, const real iorOuter, const real iorInner) const {
-    real etaI = iorOuter;
-    real etaT = iorInner;
-    real signFactor = 1.0_r;
-
-    const real cosI = dot(normal);
-
-    // check if incident ray is from inner to outer
-    if (cosI < 0.0_r) {
-        math::swap(etaI, etaT);
-        signFactor = -1.0_r;
-    }
-
-    const real etaRatio = etaI / etaT;
-    const real sinT2 = etaRatio * etaRatio * (1.0_r - cosI * cosI);
-
-    // handle TIR condition
-    if (sinT2 >= 1.0_r) {
-        return Vector<T, N>(static_cast<T>(0));
-    }
-
-    const real cosT = std::sqrt(1.0_r - sinT2);
-    Vector<T, N> refractDirection = -etaRatio * *this;
-    refractDirection += (etaRatio * signFactor * cosI - cosT) * signFactor * normal;
-    refractDirection = refractDirection.normalize();
-
-    return refractDirection;
 }
 
 template<typename T, std::size_t N>
