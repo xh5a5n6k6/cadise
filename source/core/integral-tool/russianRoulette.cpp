@@ -1,25 +1,29 @@
 #include "core/integral-tool/russianRoulette.h"
 
+#include "fundamental/assertion.h"
 #include "math/math.h"
 #include "math/random.h"
 
 namespace cadise {
 
-namespace russianRoulette {
+bool RussianRoulette::isSurvivedOnNextRound(const Spectrum& weight,
+                                            Spectrum* const out_newWeight) {
+    
+    CADISE_ASSERT(out_newWeight);
 
-Spectrum weightOnNextPath(const Spectrum& weight) {
-    const real q = math::clamp(1.0_r - weight.maxComponent(), 0.05_r, 1.0_r);
-    const real randomNumber = random::nextReal();
+    const real q      = math::clamp(1.0_r - weight.maxComponent(), 0.05_r, 1.0_r);
+    const real sample = random::nextReal();
 
-    // roulette survive
-    if (randomNumber > q) {
-        return weight / (1.0_r - q);
+    // it survives on next round
+    if (sample > q) {
+        const real weightScale = 1.0_r / (1.0_r - q);
+        *out_newWeight = weight * weightScale;
+
+        return true;
     }
     else {
-        return Spectrum(0.0_r);
+        return false;
     }
 }
-
-} // namespace russianRoulette
 
 } // namespace cadise

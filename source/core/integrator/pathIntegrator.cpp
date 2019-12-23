@@ -20,7 +20,6 @@ PathIntegrator::PathIntegrator(const int32 maxDepth) :
 Spectrum PathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const {
     Spectrum totalRadiance(0.0_r);
     Spectrum pathWeight(1.0_r);
-    int32 bounceTimes = 0;
 
     // set this flag true at 0 bounce,
     // and update it at each intersection
@@ -28,7 +27,7 @@ Spectrum PathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const
     bool isCountForEmittance = true;
 
     Ray traceRay = Ray(ray);
-    while (bounceTimes < _maxDepth) {
+    for (int32 bounceTimes = 0; bounceTimes < _maxDepth; ++bounceTimes) {
         SurfaceIntersection intersection;
         if (!scene.isIntersecting(traceRay, intersection)) {
             break;
@@ -80,27 +79,23 @@ Spectrum PathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const
         if (reflectance.isZero() || intersection.pdf() == 0.0_r) {
             pathWeight = Spectrum(0.0_r);
         }
-        if (pathWeight.isZero()) {
-            break;
-        }
-
-        bounceTimes += 1;
-        Ray sampleRay(P, L);
 
         // use russian roulette to decide if the ray needs to be kept tracking
         if (bounceTimes > 2) {
-            pathWeight = russianRoulette::weightOnNextPath(pathWeight);
-
-            if (!pathWeight.isZero()) {
-                traceRay = sampleRay;
+            Spectrum newPathWeight;
+            if (RussianRoulette::isSurvivedOnNextRound(pathWeight, &newPathWeight)) {
+                pathWeight = newPathWeight;
             }
             else {
                 break;
             }
         }
-        else {
-            traceRay = sampleRay;
+
+        if (pathWeight.isZero()) {
+            break;
         }
+
+        traceRay = Ray(P, L);
     }
 
     return totalRadiance;

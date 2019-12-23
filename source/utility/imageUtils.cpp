@@ -6,9 +6,11 @@
 
 namespace cadise {
 
-namespace utility::image {
+namespace utility {
 
-void ldrToHdr(const LdrImage& ldrImage, HdrImage* const out_hdrImage) {
+void ImageUtils::ldrToHdr(const LdrImage& ldrImage, 
+                          HdrImage* const out_hdrImage) {
+
     CADISE_ASSERT(out_hdrImage);
 
     out_hdrImage->setImageSize(ldrImage.width(), ldrImage.height());
@@ -20,7 +22,9 @@ void ldrToHdr(const LdrImage& ldrImage, HdrImage* const out_hdrImage) {
     }
 }
 
-void hdrToLdr(const HdrImage& hdrImage, LdrImage* const out_ldrImage) {
+void ImageUtils::hdrToLdr(const HdrImage& hdrImage, 
+                          LdrImage* const out_ldrImage) {
+
     CADISE_ASSERT(out_ldrImage);
 
     out_ldrImage->setImageSize(hdrImage.width(), hdrImage.height());
@@ -33,7 +37,9 @@ void hdrToLdr(const HdrImage& hdrImage, LdrImage* const out_ldrImage) {
     }
 }
 
-void ldrAlphaToHdrAlpha(const LdrAlphaImage& ldrAlphaImage, HdrAlphaImage* const out_hdrAlphaImage) {
+void ImageUtils::ldrAlphaToHdrAlpha(const LdrAlphaImage& ldrAlphaImage, 
+                                    HdrAlphaImage* const out_hdrAlphaImage) {
+
     CADISE_ASSERT(out_hdrAlphaImage);
 
     out_hdrAlphaImage->setImageSize(ldrAlphaImage.width(), ldrAlphaImage.height());
@@ -41,6 +47,6 @@ void ldrAlphaToHdrAlpha(const LdrAlphaImage& ldrAlphaImage, HdrAlphaImage* const
     // TODO: implement here
 }
 
-} // namespace utility::image
+} // namespace utility
 
 } // namespace cadise

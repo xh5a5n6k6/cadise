@@ -4,10 +4,10 @@
 
 namespace cadise {
 
-namespace russianRoulette {
-
-Spectrum weightOnNextPath(const Spectrum& weight);
-
-} // namespace russianRoulette
+class RussianRoulette {
+public:
+    static bool isSurvivedOnNextRound(const Spectrum& weight,
+                                      Spectrum* const out_newWeight);
+};
 
 } // namespace cadise

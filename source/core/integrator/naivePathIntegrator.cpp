@@ -18,55 +18,48 @@ NaivePathIntegrator::NaivePathIntegrator(const int32 maxDepth) :
 Spectrum NaivePathIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const {
     Spectrum totalRadiance(0.0_r);
     Spectrum pathWeight(1.0_r);
-    int32 bounceTimes = 0;
 
     Ray traceRay(ray);
-    while (bounceTimes < _maxDepth) {
+    for (int32 bounceTimes = 0; bounceTimes < _maxDepth; ++bounceTimes) {
         SurfaceIntersection intersection;
         if (!scene.isIntersecting(traceRay, intersection)) {
             break;
         }
 
-        const Primitive* hitPrimitive = intersection.primitiveInfo().primitive();
-        const Bsdf*      hitBsdf      = hitPrimitive->bsdf();
+        const Primitive* primitive = intersection.primitiveInfo().primitive();
+        const Bsdf*      bsdf      = primitive->bsdf();
 
-        const Vector3R hitPoint  = intersection.surfaceInfo().point();
-        const Vector3R hitNormal = intersection.surfaceInfo().shadingNormal();
+        const Vector3R P  = intersection.surfaceInfo().point();
+        const Vector3R Ns = intersection.surfaceInfo().shadingNormal();
 
-        const AreaLight* areaLight = hitPrimitive->areaLight();
+        const AreaLight* areaLight = primitive->areaLight();
         if (areaLight) {
             const Spectrum emittance = areaLight->emittance(traceRay.direction().reverse(), intersection);
             totalRadiance += pathWeight * emittance;
         }
 
-        const Spectrum reflectance = hitBsdf->evaluateSample(intersection);
-        const real sign = (intersection.wo().dot(hitNormal) < 0.0_r) ? -1.0_r : 1.0_r;
+        const Spectrum reflectance = bsdf->evaluateSample(intersection);
+        const Vector3R L = intersection.wo();
 
-        const real LdotN = intersection.wo().absDot(hitNormal);
+        const real LdotN = L.absDot(Ns);
         pathWeight *= reflectance * LdotN / intersection.pdf();
 
-        if (pathWeight.isZero()) {
-            break;
-        }
-
-        bounceTimes += 1;
-        Ray sampleRay(hitPoint + constant::RAY_EPSILON * hitNormal * sign,
-                      intersection.wo());
-
         // use russian roulette to decide if the ray needs to be kept tracking
-        if(bounceTimes > 2) {
-            pathWeight = russianRoulette::weightOnNextPath(pathWeight);
-
-            if (!pathWeight.isZero()) {
-                traceRay = sampleRay;
+        if (bounceTimes > 2) {
+            Spectrum newPathWeight;
+            if (RussianRoulette::isSurvivedOnNextRound(pathWeight, &newPathWeight)) {
+                pathWeight = newPathWeight;
             }
             else {
                 break;
             }
         }
-        else {
-            traceRay = sampleRay;
+
+        if (pathWeight.isZero()) {
+            break;
         }
+
+        traceRay = Ray(P, L);
     }
     
     return totalRadiance;

@@ -11,10 +11,11 @@ namespace cadise {
 
 namespace utility {
 
-void parallelWork(const std::size_t totalWorks,
-                  const std::size_t workerNumber,
-                  const std::function<void(const std::size_t workBeginIndex,
-                                           const std::size_t workEndIndex)>& work) {
+void Parallel::parallelWork(
+    const std::size_t totalWorks,
+    const std::size_t workerNumber,
+    const std::function<void(const std::size_t workBeginIndex,
+                             const std::size_t workEndIndex)>& work) {
 
     const std::size_t averageWorkload = (totalWorks + workerNumber - 1) / workerNumber;
 

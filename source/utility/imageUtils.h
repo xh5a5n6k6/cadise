@@ -4,14 +4,20 @@
 
 namespace cadise {
 
-namespace utility::image {
+namespace utility {
 
-void ldrToHdr(const LdrImage& ldrImage, HdrImage* const out_hdrImage);
+class ImageUtils {
+public:
+    static void ldrToHdr(const LdrImage& ldrImage, 
+                         HdrImage* const out_hdrImage);
 
-void hdrToLdr(const HdrImage& hdrImage, LdrImage* const out_ldrImage);
+    static void hdrToLdr(const HdrImage& hdrImage, 
+                         LdrImage* const out_ldrImage);
 
-void ldrAlphaToHdrAlpha(const LdrAlphaImage& ldrAlphaImage, HdrAlphaImage* const out_hdrAlphaImage);
+    static void ldrAlphaToHdrAlpha(const LdrAlphaImage& ldrAlphaImage, 
+                                   HdrAlphaImage* const out_hdrAlphaImage);
+};
 
-} // namespace utility::image
+} // namespace utility
 
 } // namespace cadise

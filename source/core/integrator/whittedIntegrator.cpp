@@ -17,26 +17,25 @@ WhittedIntegrator::WhittedIntegrator(const int32 maxDepth) :
 Spectrum WhittedIntegrator::traceRadiance(const Scene& scene, const Ray& ray) const {
     Spectrum totalRadiance(0.0_r);
     Spectrum pathWeight(1.0_r);
-    int32 bounceTimes = 0;
 
     Ray traceRay(ray);
-    while (bounceTimes < _maxDepth) {
+    for (int32 bounceTimes = 0; bounceTimes < _maxDepth; ++bounceTimes) {
         SurfaceIntersection intersection;
         if (!scene.isIntersecting(traceRay, intersection)) {
             break;
         }
 
-        const Primitive* hitPrimitive = intersection.primitiveInfo().primitive();
-        const Bsdf*      hitBsdf      = hitPrimitive->bsdf();
+        const Primitive* primitive = intersection.primitiveInfo().primitive();
+        const Bsdf*      bsdf      = primitive->bsdf();
 
-        const Vector3R hitPoint  = intersection.surfaceInfo().point();
-        const Vector3R hitNormal = intersection.surfaceInfo().shadingNormal();
+        const Vector3R P  = intersection.surfaceInfo().point();
+        const Vector3R Ns = intersection.surfaceInfo().shadingNormal();
 
-        const bool isSpecular = hitBsdf->type().isAtLeastOne(BxdfType::SPECULAR_REFLECTION,
-                                                             BxdfType::SPECULAR_TRANSMISSION);
+        const bool isSpecular = bsdf->type().isAtLeastOne(BxdfType::SPECULAR_REFLECTION,
+                                                          BxdfType::SPECULAR_TRANSMISSION);
 
         // add radiance if hitting area light
-        const AreaLight* areaLight = hitPrimitive->areaLight();
+        const AreaLight* areaLight = primitive->areaLight();
         if (areaLight) {
             totalRadiance += areaLight->emittance(traceRay.direction().reverse(), intersection);
         }
@@ -45,14 +44,14 @@ Spectrum WhittedIntegrator::traceRadiance(const Scene& scene, const Ray& ray) co
         if (!isSpecular) {
             const std::vector<std::shared_ptr<Light>>& lights = scene.lights();
             for (std::size_t i = 0; i < lights.size(); ++i) {
-                Vector3R lightDir;
+                Vector3R L;
                 real t;
                 real pdf;
-                const Spectrum emitRadiance = lights[i]->evaluateSampleRadiance(lightDir, intersection.surfaceInfo(), t, pdf);
+                const Spectrum emitRadiance = lights[i]->evaluateSampleRadiance(L, intersection.surfaceInfo(), t, pdf);
 
                 // generate shadow ray to do occluded test
-                const Ray shadowRay(hitPoint + constant::RAY_EPSILON * hitNormal,
-                                    lightDir,
+                const Ray shadowRay(P,
+                                    L,
                                     constant::RAY_EPSILON,
                                     t - constant::RAY_EPSILON);
 
@@ -60,9 +59,9 @@ Spectrum WhittedIntegrator::traceRadiance(const Scene& scene, const Ray& ray) co
                     continue;
                 }
 
-                const Spectrum reflectance = hitBsdf->evaluate(intersection);
+                const Spectrum reflectance = bsdf->evaluate(intersection);
                 if (!reflectance.isZero() && pdf > 0.0_r) {
-                    const real LdotN = lightDir.absDot(hitNormal);
+                    const real LdotN = L.absDot(Ns);
                     const Spectrum directLightRadiance = reflectance * emitRadiance * LdotN / pdf;
 
                     totalRadiance += pathWeight * directLightRadiance;
@@ -77,27 +76,22 @@ Spectrum WhittedIntegrator::traceRadiance(const Scene& scene, const Ray& ray) co
         // only trace next ray at specular surface
         // according to bsdf sampling
         else {
-            const Spectrum reflectance = hitBsdf->evaluateSample(intersection);
+            const Spectrum reflectance = bsdf->evaluateSample(intersection);
             if (!reflectance.isZero()) {
-                const real sign  = (intersection.wo().dot(hitNormal) < 0.0_r) ? -1.0_r : 1.0_r;
-                const real LdotN = intersection.wo().absDot(hitNormal);
-                const Ray sampleRay(hitPoint + constant::RAY_EPSILON * hitNormal * sign,
-                                    intersection.wo());
+                const Vector3R L = intersection.wo();
+                const real LdotN = L.absDot(Ns);
                 
                 pathWeight *= reflectance * LdotN / intersection.pdf();
-                if (!pathWeight.isZero()) {
-                    traceRay = sampleRay;
-                }
-                else {
+                if (pathWeight.isZero()) {
                     break;
                 }
+                
+                traceRay = Ray(P, L);
             }
             else {
                 break;
             }
         }
-
-        bounceTimes += 1;
     }
 
     return totalRadiance;

@@ -58,7 +58,7 @@ Spectrum DirectLightEvaluator::evaluate(const Scene&               scene,
                 // calculate bsdf's pdf
                 const real bsdfPdf = bsdf->evaluatePdfW(intersection);
 
-                directLightRadiance += mis::powerHeuristic(lightPdf, bsdfPdf)
+                directLightRadiance += Mis<MisMode::POWER>::weight(lightPdf, bsdfPdf)
                                        * directLightFactor * radiance / lightPdf;
             }
         }
@@ -86,7 +86,7 @@ Spectrum DirectLightEvaluator::evaluate(const Scene&               scene,
                     // calcualte emitter's pdf
                     const real lightPdf = areaLight->evaluatePdfW(intersection, sampleRay.maxT());
 
-                    directLightRadiance += mis::powerHeuristic(bsdfPdf, lightPdf)
+                    directLightRadiance += Mis<MisMode::POWER>::weight(bsdfPdf, lightPdf)
                                            * directLightFactor * radiance / bsdfPdf;
                 }
             }

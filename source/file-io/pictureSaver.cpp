@@ -15,7 +15,7 @@ void PictureSaver::save(const Path& path, const HdrImage& hdrImage) {
         path.isExtendedWith(".ppm") || path.isExtendedWith(".PPM")) {
 
         LdrImage ldrImage;
-        utility::image::hdrToLdr(hdrImage, &ldrImage);
+        utility::ImageUtils::hdrToLdr(hdrImage, &ldrImage);
         saveLdrImage(path, ldrImage);
     }
     else if (path.isExtendedWith(".hdr") || path.isExtendedWith(".HDR")) {

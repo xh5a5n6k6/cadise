@@ -36,7 +36,9 @@ void SamplingRenderer::render(const Scene& scene) const {
     const std::size_t totalTiles   = static_cast<std::size_t>(tileNumber.x() * tileNumber.y());
     const std::size_t totalThreads = 16;
 
-    utility::parallelWork(totalTiles, totalThreads, 
+    utility::Parallel::parallelWork(
+        totalTiles, 
+        totalThreads, 
         [&](const std::size_t tileBeginIndex, 
             const std::size_t tileEndIndex) {
 
