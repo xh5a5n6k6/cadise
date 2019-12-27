@@ -45,7 +45,7 @@ Spectrum PhongBsdf::evaluateSample(SurfaceIntersection& surfaceIntersection) con
     Vector3R yAxis;
     math::buildCoordinateSystem(zAxis, &xAxis, &yAxis);
 
-    const Vector2R sample(random::nextReal(), random::nextReal());
+    const Vector2R sample(Random::nextReal(), Random::nextReal());
     Vector3R L;
     Hemisphere::cosineExpWeightedSampling(_exponent, sample, &L);
 

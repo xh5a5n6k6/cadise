@@ -57,7 +57,7 @@ Spectrum EnvironmentLight::evaluateSampleRadiance(Vector3R& lightDirection, cons
     const Vector3R offsetOrigin = surfaceInfo.point() + constant::RAY_EPSILON * surfaceInfo.geometryNormal();
 
     real uvPdf;
-    const Vector2R uvSample = _distribution.sampleContinuous({random::nextReal(), random::nextReal()}, 
+    const Vector2R uvSample = _distribution.sampleContinuous({Random::nextReal(), Random::nextReal()}, 
                                                              &uvPdf);
 
     Vector3R samplePosition;

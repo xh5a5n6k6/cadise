@@ -49,7 +49,7 @@ Spectrum LambertianDiffuse::evaluateSample(SurfaceIntersection& surfaceIntersect
     Vector3R yAxis;
     math::buildCoordinateSystem(zAxis, &xAxis, &yAxis);
 
-    const Vector2R sample(random::nextReal(), random::nextReal());
+    const Vector2R sample(Random::nextReal(), Random::nextReal());
     Vector3R L;
     Hemisphere::cosineWeightedSampling(sample, &L);
 

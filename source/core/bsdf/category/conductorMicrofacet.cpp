@@ -79,7 +79,7 @@ Spectrum ConductorMicrofacet::evaluateSample(SurfaceIntersection& surfaceInterse
     Vector3R yAxis;
     math::buildCoordinateSystem(zAxis, &xAxis, &yAxis);
 
-    const Vector2R sample(random::nextReal(), random::nextReal());
+    const Vector2R sample(Random::nextReal(), Random::nextReal());
     Vector3R H;
     _microfacet->sampleHalfVectorH(alpha, alpha, sample, &H);
 

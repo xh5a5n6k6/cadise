@@ -32,7 +32,7 @@ Spectrum SpecularDielectric::evaluateSample(SurfaceIntersection& surfaceIntersec
     Spectrum reflectance;
     _fresnel->evaluateReflectance(VdotN, &reflectance);
     const real reflectionProbability = reflectance.average();
-    const real sampleProbability     = random::nextReal();
+    const real sampleProbability     = Random::nextReal();
     
     bool isReflection = false;
     bool isRefraction = false;

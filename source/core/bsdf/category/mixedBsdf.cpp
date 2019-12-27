@@ -43,7 +43,7 @@ Spectrum MixedBsdf::evaluateSample(SurfaceIntersection& surfaceIntersection) con
     _ratio->evaluate(uvw, &sampleRatio);
 
     // sample out direction with bsdfA
-    if (random::nextReal() < sampleRatio.average()) {
+    if (Random::nextReal() < sampleRatio.average()) {
         const Spectrum fBsdfA = _bsdfA->evaluateSample(surfaceIntersection);
         const Spectrum fBsdfB = _bsdfB->evaluate(surfaceIntersection);
         result = sampleRatio * fBsdfA + sampleRatio.complement() * fBsdfB;

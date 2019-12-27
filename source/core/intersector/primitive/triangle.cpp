@@ -150,8 +150,8 @@ void Triangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo* const ou
 
     // Use rejection method
     do {
-        s = random::nextReal();
-        t = random::nextReal();
+        s = Random::nextReal();
+        t = Random::nextReal();
     } while (s + t >= 1.0_r);
 
     Vector3R eAB = _eAB;

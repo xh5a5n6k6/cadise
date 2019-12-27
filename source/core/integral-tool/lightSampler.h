@@ -24,9 +24,9 @@ inline std::size_t LightSampler::sampleOneLight(
 
     CADISE_ASSERT(!lights.empty());
 
-    std::size_t lightNumber = lights.size();
+    const std::size_t lightNumber = lights.size();
     if constexpr (Policy == LightSamplePolicy::UNIFORM) {
-        std::size_t sampleIndex = random::nextIndex(0, lightNumber);
+        const std::size_t sampleIndex = Random::nextIndex(0, lightNumber);
 
         *out_lightPdf = 1.0_r / static_cast<real>(lightNumber);
 

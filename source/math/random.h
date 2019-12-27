@@ -4,12 +4,11 @@
 
 namespace cadise {
 
-namespace random {
+class Random {
+public:
+    static real nextReal();
 
-real nextReal();
-
-std::size_t nextIndex(const std::size_t minIndex, const std::size_t maxIndex);
-
-} // namespace random
+    static std::size_t nextIndex(const std::size_t minIndex, const std::size_t maxIndex);
+};
 
 } // namespace cadise

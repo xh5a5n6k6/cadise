@@ -132,8 +132,8 @@ void Rectangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo* const o
 
     // use rejection method
     do {
-        s = random::nextReal();
-        t = random::nextReal();
+        s = Random::nextReal();
+        t = Random::nextReal();
     } while (t > shortWidth / longWidth);
 
     const Vector3R point = _vB + s * eA + t * eA.length() * eB.normalize();

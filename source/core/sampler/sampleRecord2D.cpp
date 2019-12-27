@@ -15,7 +15,7 @@ SampleRecord2D::SampleRecord2D(const std::size_t sampleNumber) :
 
 void SampleRecord2D::shuffle() {
     for (std::size_t i = 0; i < _sampleNumber; ++i) {
-        const std::size_t randomIndex = random::nextIndex(i, _sampleNumber - 1);
+        const std::size_t randomIndex = Random::nextIndex(i, _sampleNumber);
         
         const std::size_t indexOffset       = 2 * i;
         const std::size_t randomIndexOffset = 2 * randomIndex;
