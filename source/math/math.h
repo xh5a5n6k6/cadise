@@ -21,6 +21,8 @@ std::size_t nearestLowerSquareNumber(const std::size_t number);
 // input number
 std::size_t nearestUpperSquareNumber(const std::size_t number);
 
+real fractional(const real value);
+
 void buildCoordinateSystem(const Vector3R& zAxis, 
                            Vector3R* const out_xAxis, 
                            Vector3R* const out_yAxis);

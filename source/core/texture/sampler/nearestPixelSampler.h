@@ -1,12 +1,14 @@
 #pragma once
 
-#include "core/texture/sampling/pixelSampler.h"
+#include "core/texture/sampler/pixelSampler.h"
 
 namespace cadise {
 
 template<typename T, std::size_t N>
 class NearestPixelSampler : public PixelSampler<T, N> {
 public:
+    using PixelSampler::PixelSampler;
+    
     void sample(
         const Vector3R& uvw,
         const Image<T, N>& image,
@@ -15,4 +17,4 @@ public:
 
 } // namespace cadise
 
-#include "core/texture/sampling/nearestPixelSampler.ipp"
+#include "core/texture/sampler/nearestPixelSampler.ipp"

@@ -1,6 +1,7 @@
 #include "math/distribution/distribution1D.h"
 
 #include "fundamental/assertion.h"
+#include "math/math.h"
 
 namespace cadise {
 
@@ -68,7 +69,9 @@ real Distribution1D::sampleContinuous(const real seed,
         *out_pdf = pdfContinuous(sampleIndex);
     }
 
-    return (static_cast<real>(sampleIndex) + deltaValue) * _delta;
+    const real sample = (static_cast<real>(sampleIndex) + deltaValue) * _delta;
+    
+    return math::clamp(sample, 0.0_r, 1.0_r);
 }
 
 real Distribution1D::pdfContinuous(const real sample) const {
@@ -82,7 +85,7 @@ real Distribution1D::pdfContinuous(const std::size_t sampleIndex) const {
 }
 
 std::size_t Distribution1D::continuousToDiscrete(const real seed) const {
-    for (std::size_t i = _cdf.size() - 1; i >= 0; --i) {
+    for (std::size_t i = _cdf.size() - 2; i >= 0; --i) {
         if (_cdf[i] <= seed) {
             return i;
         }

@@ -54,7 +54,7 @@ Spectrum EnvironmentLight::emittance(const Vector3R& emitDirection, const Surfac
 }
 
 Spectrum EnvironmentLight::evaluateSampleRadiance(Vector3R& lightDirection, const SurfaceInfo& surfaceInfo, real& t, real& pdf) const {
-    const Vector3R offsetOrigin = surfaceInfo.point() + constant::RAY_EPSILON * surfaceInfo.geometryNormal();
+    const Vector3R P = surfaceInfo.point();
 
     real uvPdf;
     const Vector2R uvSample = _distribution.sampleContinuous({Random::nextReal(), Random::nextReal()}, 
@@ -63,7 +63,7 @@ Spectrum EnvironmentLight::evaluateSampleRadiance(Vector3R& lightDirection, cons
     Vector3R samplePosition;
     _primitive->uvwToPosition({uvSample.x(), uvSample.y(), 0.0_r}, &samplePosition);
 
-    const Vector3R direction = samplePosition - offsetOrigin;
+    const Vector3R direction = samplePosition - P;
     t = direction.length();
     lightDirection = direction.normalize();
 

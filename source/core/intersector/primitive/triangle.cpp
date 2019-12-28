@@ -134,7 +134,7 @@ void Triangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, Surface
         Vector3R Ns = barycentric.x() * _nA +
                       barycentric.y() * _nB +
                       barycentric.z() * _nC;
-        Ns = (Ns.isZero()) ? normal : Ns;
+        Ns = (Ns.isZero()) ? normal : Ns.normalize();
 
         surfaceInfo.setShadingNormal(Ns);
         surfaceInfo.setGeometryNormal(normal);

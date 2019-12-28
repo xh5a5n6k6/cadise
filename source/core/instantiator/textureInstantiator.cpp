@@ -9,6 +9,7 @@
 
 #include "core/imaging/image.h"
 #include "core/texture/textureSampleMode.h"
+#include "core/texture/textureWrapMode.h"
 #include "file-io/path.h"
 #include "file-io/pictureLoader.h"
 #include "file-io/scene-description/sdData.h"
@@ -76,21 +77,33 @@ static std::shared_ptr<Texture<Spectrum>> createSpectrumImage(
     const StringKeyMap<Texture<real>>& realTextures,
     const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
-    const std::string_view filename   = data->findString("filename");
-    const std::string_view sampleMode = data->findString("sample-mode");
+    const std::string_view filename = data->findString("filename");
+    const std::string_view sMode    = data->findString("sample-mode");
+    const std::string_view wMode    = data->findString("wrap-mode");
 
     HdrImage hdrImage = PictureLoader::loadRgbImage(Path(filename));
 
-    TextureSampleMode mode;
-    if (sampleMode == "nearest") {
-        mode = TextureSampleMode::NEAREST;
+    TextureSampleMode sampleMode;
+    if (sMode == "nearest") {
+        sampleMode = TextureSampleMode::NEAREST;
     }
     // TODO: add bilinear sample mode
     else {
-        mode = TextureSampleMode::NEAREST;
+        sampleMode = TextureSampleMode::NEAREST;
     }
 
-    return std::make_shared<RgbImageTexture>(hdrImage, mode);
+    TextureWrapMode wrapMode;
+    if (wMode == "clamp") {
+        wrapMode = TextureWrapMode::CLAMP;
+    }
+    else if (wMode == "repeat") {
+        wrapMode = TextureWrapMode::REPEAT;
+    }
+    else {
+        wrapMode = TextureWrapMode::REPEAT;
+    }
+
+    return std::make_shared<RgbImageTexture>(hdrImage, sampleMode, wrapMode);
 }
 
 //static std::shared_ptr<Texture<Spectrum>> createSpectrumAlphaImage(

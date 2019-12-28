@@ -60,9 +60,10 @@ static std::shared_ptr<Light> createEnvironment(
     HdrImage hdrImage = PictureLoader::loadRgbImage(Path(hdrFilename));
     hdrImage.flipHorizontal();
 
-    const TextureSampleMode mode = TextureSampleMode::NEAREST;
+    const TextureSampleMode sampleMode = TextureSampleMode::NEAREST;
+    const TextureWrapMode   wrapMode   = TextureWrapMode::REPEAT;
     const std::shared_ptr<Texture<Spectrum>> radiance
-        = std::make_shared<RgbImageTexture>(hdrImage, mode);
+        = std::make_shared<RgbImageTexture>(hdrImage, sampleMode, wrapMode);
 
     out_infiniteSphere = std::make_shared<InfiniteSphere>();
     std::shared_ptr<EnvironmentLight> environmentLight

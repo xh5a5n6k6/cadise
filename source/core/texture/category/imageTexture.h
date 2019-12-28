@@ -4,6 +4,7 @@
 
 #include "core/imaging/image.h"
 #include "core/texture/textureSampleMode.h"
+#include "core/texture/textureWrapMode.h"
 
 #include <memory>
 
@@ -16,7 +17,8 @@ template<typename T, typename ImageType, std::size_t N>
 class ImageTexture : public Texture<T> {
 public:
     ImageTexture(const Image<ImageType, N>& image, 
-                 const TextureSampleMode& mode);
+                 const TextureSampleMode&   sampleMode,
+                 const TextureWrapMode&     wrapMode);
 
     virtual void evaluate(const Vector3R& uvw, T* const out_value) const override = 0;
 

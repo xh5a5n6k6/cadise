@@ -32,6 +32,10 @@ std::size_t nearestUpperSquareNumber(const std::size_t number) {
     return upperSqrtNumber * upperSqrtNumber;
 }
 
+real fractional(const real value) {
+    return value - std::floor(value);
+}
+
 void buildCoordinateSystem(const Vector3R& zAxis, 
                            Vector3R* const out_xAxis, 
                            Vector3R* const out_yAxis) {
