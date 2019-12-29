@@ -23,11 +23,4 @@ PixelSampler<T, N>::PixelSampler(const TextureWrapMode& mode) {
     }
 }
 
-template<typename T, std::size_t N>
-void PixelSampler<T, N>::_uvwToWrapUvw(const Vector3R& uvw, Vector3R* const out_wrapUvw) const {
-    CADISE_ASSERT(out_wrapUvw);
-
-    _uvwWrapper->wrap(uvw, out_wrapUvw);
-}
-
 } // namespace cadise

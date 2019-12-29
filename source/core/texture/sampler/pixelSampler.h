@@ -21,9 +21,6 @@ public:
         Vector<T, N>* const out_value) const = 0;
 
 protected:
-    void _uvwToWrapUvw(const Vector3R& uvw, Vector3R* const out_wrapUvw) const;
-
-private:
     std::unique_ptr<UvwWrapper> _uvwWrapper;
 };
 

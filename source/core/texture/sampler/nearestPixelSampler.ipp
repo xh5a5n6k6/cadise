@@ -19,7 +19,7 @@ inline void NearestPixelSampler<T, N>::sample(
     CADISE_ASSERT(out_value);
 
     Vector3R wrapUvw;
-    _uvwToWrapUvw(uvw, &wrapUvw);
+    _uvwWrapper->wrap(uvw, &wrapUvw);
     
     int32 sampleW = static_cast<int32>(wrapUvw.x() * image.width());
     int32 sampleH = static_cast<int32>(wrapUvw.y() * image.height());
