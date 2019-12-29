@@ -25,6 +25,10 @@ It also includes some third-party libraries in the `./source/third-party/` folde
 ## Gallery
 Here are some images rendered with Cadise.
 
+<img src="./gallery/image/iPhone.png">
+<p align="center"><i>iPhone Scene (based on <a href="https://www.blendswap.com/blend/18439">iPhone 7 Plus</a> scene by sriniwasjha)</i></p>
+<img src="./gallery/image/mike.png">
+<p align="center"><i>Mike Scene (based on <a href="https://www.blendswap.com/blend/22596">Mike Rig</a> scene by lucky3d1)</i></p>
 <img src="./gallery/image/chess.png">
 <p align="center"><i>Chess Scene (based on <a href="https://www.blendswap.com/blend/18589">Standard Chess Set</a> scene by MiriamAHoyt; HDRI is <a href="https://hdrihaven.com/hdri/?c=artificial%20light&h=colorful_studio">Colorful Studio</a> by Sergej Majboroda)</i></p>
 <img src="./gallery/image/pear.png">
