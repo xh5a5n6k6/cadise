@@ -13,6 +13,7 @@
 #include "core/bsdf/fresnel/schlickConductorFresnel.h"
 #include "core/bsdf/fresnel/vanillaDielectricFresnel.h"
 #include "core/bsdf/microfacet/isotropicBeckmann.h"
+#include "core/bsdf/microfacet/isotropicBlinnPhong.h"
 #include "core/bsdf/microfacet/isotropicTrowbridgeReitz.h"
 #include "core/texture/texture.h"
 #include "file-io/scene-description/sdData.h"
@@ -137,6 +138,9 @@ static std::shared_ptr<Bsdf> createConductorMicrofacet(
     }
     else if (microfacetType == "ggx") {
         microfacet = std::make_shared<IsotropicTrowbridgeReitz>();
+    }
+    else if (microfacetType == "blinn-phong") {
+        microfacet = std::make_shared<IsotropicBlinnPhong>();
     }
     else {
         microfacet = std::make_shared<IsotropicTrowbridgeReitz>();
