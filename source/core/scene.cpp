@@ -14,12 +14,13 @@ Scene::Scene(const std::shared_ptr<Accelerator>& topAccelerator,
     
     _topAccelerator(topAccelerator),
     _lights(std::move(lights)),
-    _environmentSphere(nullptr) {
+    _backgroundSphere(nullptr) {
 
     CADISE_ASSERT(topAccelerator);
 }
 
 bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) const {
+    // TODO: Refactor here
     PrimitiveInfo primitiveInfo;
     if(_topAccelerator->isIntersecting(ray, primitiveInfo)) {
         surfaceIntersection.setWi(ray.direction().reverse());
@@ -35,8 +36,8 @@ bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) c
 
         return true;
     }
-    else if (_environmentSphere && 
-             _environmentSphere->isIntersecting(ray, primitiveInfo)) {
+    else if (_backgroundSphere && 
+             _backgroundSphere->isIntersecting(ray, primitiveInfo)) {
 
         surfaceIntersection.setWi(ray.direction().reverse());
         surfaceIntersection.setPrimitiveInfo(primitiveInfo);
@@ -56,10 +57,11 @@ bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) c
 }
 
 bool Scene::isOccluded(const Ray& ray) const {
+    // TODO: Refactor here
     if (_topAccelerator->isOccluded(ray)) {
         return true;
     }
-    else if (_environmentSphere && _environmentSphere->isOccluded(ray)) {
+    else if (_backgroundSphere && _backgroundSphere->isOccluded(ray)) {
         return true;
     }
 
@@ -70,10 +72,10 @@ const std::vector<std::shared_ptr<Light>>& Scene::lights() const {
     return _lights;
 }
 
-void Scene::setEnvironmentSphere(const Primitive* const environmentSphere) {
-    CADISE_ASSERT(environmentSphere);
+void Scene::setBackgroundSphere(const Primitive* const backgroundSphere) {
+    CADISE_ASSERT(backgroundSphere);
 
-    _environmentSphere = environmentSphere;
+    _backgroundSphere = backgroundSphere;
 }
 
 } // namespace cadise

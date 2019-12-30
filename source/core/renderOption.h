@@ -50,7 +50,7 @@ private:
     std::vector<std::shared_ptr<Light>>       _lights;
 
     // HACK
-    std::shared_ptr<Primitive> _infiniteSphere;
+    std::shared_ptr<Primitive> _backgroundSphere;
 
     StringKeyMap<Bsdf>              _bsdfs;
     StringKeyMap<Primitive>         _primitives; // for area light

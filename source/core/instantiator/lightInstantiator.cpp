@@ -51,7 +51,7 @@ static std::shared_ptr<Light> createSingleArea(
 static std::shared_ptr<Light> createEnvironment(
     const std::shared_ptr<SdData>& data,
     const StringKeyMap<Primitive>& primitives,
-    std::shared_ptr<Primitive>& out_infiniteSphere) {
+    std::shared_ptr<Primitive>& out_backgroundSphere) {
     
     const std::string_view hdrFilename = data->findString("hdr-filename");
 
@@ -65,13 +65,13 @@ static std::shared_ptr<Light> createEnvironment(
     const std::shared_ptr<Texture<Spectrum>> radiance
         = std::make_shared<RgbImageTexture>(hdrImage, sampleMode, wrapMode);
 
-    out_infiniteSphere = std::make_shared<InfiniteSphere>();
+    out_backgroundSphere = std::make_shared<InfiniteSphere>();
     std::shared_ptr<EnvironmentLight> environmentLight
-        = std::make_shared<EnvironmentLight>(out_infiniteSphere.get(), 
+        = std::make_shared<EnvironmentLight>(out_backgroundSphere.get(), 
                                              radiance, 
                                              hdrImage.resolution());
 
-    out_infiniteSphere->setAreaLight(environmentLight.get());
+    out_backgroundSphere->setAreaLight(environmentLight.get());
 
     return environmentLight;
 }
@@ -79,7 +79,7 @@ static std::shared_ptr<Light> createEnvironment(
 std::shared_ptr<Light> makeLight(
     const std::shared_ptr<SdData>& data,
     const StringKeyMap<Primitive>& primitives,
-    std::shared_ptr<Primitive>& out_infiniteSphere) {
+    std::shared_ptr<Primitive>& out_backgroundSphere) {
 
     CADISE_ASSERT(data);
 
@@ -92,7 +92,7 @@ std::shared_ptr<Light> makeLight(
         light = createSingleArea(data, primitives);
     }
     else if (type == "environment") {
-        light = createEnvironment(data, primitives, out_infiniteSphere);
+        light = createEnvironment(data, primitives, out_backgroundSphere);
     }
     else {
         // don't support light type

@@ -23,7 +23,7 @@ RenderOption::RenderOption() :
     _acceleratorData(nullptr),
     _scene(nullptr),
     _renderer(nullptr),
-    _infiniteSphere(nullptr) {
+    _backgroundSphere(nullptr) {
 }
 
 void RenderOption::setUpData(const std::shared_ptr<SdData>& data) {
@@ -78,8 +78,8 @@ void RenderOption::prepareRender() {
     _scene = std::make_shared<Scene>(accelerator, _lights);
     _renderer = std::move(instantiator::makeRenderer(_rendererData));
     
-    if (_infiniteSphere) {
-        _scene->setEnvironmentSphere(_infiniteSphere.get());
+    if (_backgroundSphere) {
+        _scene->setBackgroundSphere(_backgroundSphere.get());
     }
 
     const real rx = static_cast<real>(film->resolution().x());
@@ -137,7 +137,7 @@ void RenderOption::_setUpBsdf(const std::shared_ptr<SdData>& data) {
 }
 
 void RenderOption::_setUpLight(const std::shared_ptr<SdData>& data) {
-    const std::shared_ptr<Light> light = instantiator::makeLight(data, _primitives, _infiniteSphere);
+    const std::shared_ptr<Light> light = instantiator::makeLight(data, _primitives, _backgroundSphere);
     
     _lights.push_back(light);
 }

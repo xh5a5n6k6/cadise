@@ -22,13 +22,13 @@ public:
     
     const std::vector<std::shared_ptr<Light>>& lights() const;
 
-    void setEnvironmentSphere(const Primitive* const environmentSphere);
+    void setBackgroundSphere(const Primitive* const backgroundSphere);
 
 private:
     std::shared_ptr<Accelerator> _topAccelerator;
     std::vector<std::shared_ptr<Light>> _lights;
 
-    const Primitive* _environmentSphere;
+    const Primitive* _backgroundSphere;
 };
 
 } // namespace cadise
