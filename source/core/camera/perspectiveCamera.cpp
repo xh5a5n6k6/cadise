@@ -12,12 +12,13 @@ namespace cadise {
 PerspectiveCamera::PerspectiveCamera(const Vector3R& position, 
                                      const Vector3R& direction, 
                                      const Vector3R& up, 
-                                     const real      fov) :
+                                     const real      fov,
+                                     const real      sensorWidthMM) :
     Camera(position),
     _cameraToWorld(nullptr),
     _filmToCamera(nullptr),
     _fov(fov),
-    _sensorWidthMM(36.0_r) {
+    _sensorWidthMM(sensorWidthMM) {
 
     _cameraToWorld = std::make_shared<Transform>(Matrix4::lookAt(position, direction, up));
 }

@@ -14,7 +14,7 @@
     - Phong
     - Mixed
     - Microfacet (conductor)
-        - NDF: Beckmann, GGX
+        - NDF: Beckmann, GGX, Blinn-Phong
 - ### Primitive
     - Sphere
     - Triangle
@@ -27,8 +27,9 @@
     - Constant
     - Checkerboard
     - Image
-        - sample mode: nearest
         - supported type: gray, rgb
+        - sample mode: nearest
+        - UV wrap mode: clamp, repeat
 - ### Camera
     - Pinhole Perspective
 - ### Sampling

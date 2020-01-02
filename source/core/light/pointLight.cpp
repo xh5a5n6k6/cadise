@@ -15,14 +15,14 @@ Spectrum PointLight::emittance(const Vector3R& emitDirection, const SurfaceInter
 }
 
 Spectrum PointLight::evaluateSampleRadiance(Vector3R& lightDirection, const SurfaceInfo& surfaceInfo, real& t, real& pdf) const {
-    const Vector3R offsetOrigin = surfaceInfo.point() + constant::RAY_EPSILON * surfaceInfo.geometryNormal();
-    const Vector3R direction = _position - offsetOrigin;
+    const Vector3R P = surfaceInfo.point();
+    const Vector3R L = _position - P;
     
-    t = direction.length();
-    lightDirection = direction.normalize();
+    t = L.length();
+    lightDirection = L.normalize();
     pdf = 1.0_r;
 
-    return _color / direction.lengthSquared();
+    return _color / L.lengthSquared();
 }
 
 real PointLight::evaluatePdfW(const SurfaceIntersection& surfaceIntersection, const real distance) const {
