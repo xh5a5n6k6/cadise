@@ -13,11 +13,21 @@ public:
     AABB(const Vector<T, N>& minVertex, const Vector<T, N>& maxVertex);
 
     bool isIntersectingAABB(
-        const Vector<T, N>& origin, 
-        const Vector<T, N>& inverseDirection, 
-        real minT, 
-        real maxT) const;
+        const Vector<T, N>& rayOrigin, 
+        const Vector<T, N>& rayInverseDirection, 
+        const T             rayMinT, 
+        const T             rayMaxT) const;
 
+    bool isIntersectingAABB(
+        const Vector<T, N>& rayOrigin,
+        const Vector<T, N>& rayInverseDirection,
+        const T             rayMinT,
+        const T             rayMaxT,
+        T* const            out_boundMinT,
+        T* const            out_boundMaxT) const;
+
+    T surfaceArea() const;
+    T halfSurfaceArea() const;
     Vector<T, N> extent() const;
     Vector<T, N> centroid() const;
     std::size_t maxAxis() const;

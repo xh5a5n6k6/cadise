@@ -2,6 +2,7 @@
 
 #include "math/aabb.h"
 
+#include "fundamental/assertion.h"
 #include "math/math.h"
 
 #include <limits>
@@ -28,43 +29,71 @@ inline cadise::AABB<T, N>::AABB(const Vector<T, N>& minVertex, const Vector<T, N
 
 template<typename T, std::size_t N>
 inline bool AABB<T, N>::isIntersectingAABB(
-    const Vector<T, N>& origin, 
-    const Vector<T, N>& inverseDirection, 
-    real minT, 
-    real maxT) const {
+    const Vector<T, N>& rayOrigin, 
+    const Vector<T, N>& rayInverseDirection, 
+    const T             rayMinT, 
+    const T             rayMaxT) const {
 
     static_assert(N == 3, "Not support isIntersecting with this kind of AABB");
     
-    const Vector<T, N> nearT = (_minVertex - origin) * inverseDirection;
-    const Vector<T, N> farT  = (_maxVertex - origin) * inverseDirection;
-    
+    T localMinT;
+    T localMaxT;
+
+    return isIntersectingAABB(rayOrigin, 
+                              rayInverseDirection, 
+                              rayMinT, 
+                              rayMaxT,
+                              &localMinT,
+                              &localMaxT);
+}
+
+template<typename T, std::size_t N>
+inline bool AABB<T, N>::isIntersectingAABB(
+    const Vector<T, N>& rayOrigin,
+    const Vector<T, N>& rayInverseDirection,
+    const T             rayMinT,
+    const T             rayMaxT,
+    T* const            out_boundMinT,
+    T* const            out_boundMaxT) const {
+
+    static_assert(N == 3, "Not support isIntersecting with this kind of AABB");
+
+    CADISE_ASSERT(out_boundMinT);
+    CADISE_ASSERT(out_boundMaxT);
+
+    T minT = rayMinT;
+    T maxT = rayMaxT;
+
+    const Vector<T, N> nearT = (_minVertex - rayOrigin) * rayInverseDirection;
+    const Vector<T, N> farT  = (_maxVertex - rayOrigin) * rayInverseDirection;
+
     // calculate x-slab interval
-    if (inverseDirection.x() > 0.0_r) {
+    if (rayInverseDirection.x() > static_cast<T>(0)) {
         minT = math::max(minT, nearT.x());
-        maxT = math::min(maxT,  farT.x());
+        maxT = math::min(maxT, farT.x());
     }
     else {
-        minT = math::max(minT,  farT.x());
+        minT = math::max(minT, farT.x());
         maxT = math::min(maxT, nearT.x());
     }
 
     // calculate y-slab interval
-    if (inverseDirection.y() > 0.0_r) {
+    if (rayInverseDirection.y() > static_cast<T>(0)) {
         minT = math::max(minT, nearT.y());
-        maxT = math::min(maxT,  farT.y());
+        maxT = math::min(maxT, farT.y());
     }
     else {
-        minT = math::max(minT,  farT.y());
+        minT = math::max(minT, farT.y());
         maxT = math::min(maxT, nearT.y());
     }
 
     // calculate z-slab interval
-    if (inverseDirection.z() > 0.0_r) {
+    if (rayInverseDirection.z() > static_cast<T>(0)) {
         minT = math::max(minT, nearT.z());
-        maxT = math::min(maxT,  farT.z());
+        maxT = math::min(maxT, farT.z());
     }
     else {
-        minT = math::max(minT,  farT.z());
+        minT = math::max(minT, farT.z());
         maxT = math::min(maxT, nearT.z());
     }
 
@@ -73,7 +102,28 @@ inline bool AABB<T, N>::isIntersectingAABB(
         return false;
     }
 
+    *out_boundMinT = minT;
+    *out_boundMaxT = maxT;
+
     return true;
+}
+
+template<typename T, std::size_t N>
+inline T AABB<T, N>::surfaceArea() const {
+    static_assert(N == 3, "Not support surfaceArea with this kind of AABB");
+
+    return static_cast<T>(2) * halfSurfaceArea();
+}
+
+template<typename T, std::size_t N>
+inline T AABB<T, N>::halfSurfaceArea() const {
+    static_assert(N == 3, "Not support surfaceArea with this kind of AABB");
+
+    const Vector<T, N> extent = extent();
+
+    return extent.x() * extent.y() +
+           extent.x() * extent.z() +
+           extent.y() * extent.z();
 }
 
 template<typename T, std::size_t N>
