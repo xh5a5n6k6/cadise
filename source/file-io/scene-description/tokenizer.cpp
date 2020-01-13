@@ -62,48 +62,48 @@ void Tokenizer::_parseDataUnit(std::shared_ptr<SdData>& sdData, const std::strin
     const std::string_view valueString = dataUnitString.substr(startPosition + 1, endPosition - startPosition - 1);
 
     // parse value string to corresponding type
-    if (!type.compare("bool")) {
+    if (type == "bool") {
         std::unique_ptr<bool[]> value = std::move(_parseBool(valueString));
         sdData->addBool(name, std::move(value), 1);
     }
-    else if (!type.compare("real")) {
+    else if (type == "real") {
         std::unique_ptr<real[]> value = std::move(_parseReal(valueString));
         sdData->addReal(name, std::move(value), 1);
     }
-    else if (!type.compare("int32")) {
+    else if (type == "int32") {
         std::unique_ptr<int32[]> value = std::move(_parseInt32(valueString));
         sdData->addInt32(name, std::move(value), 1);
     }
-    else if (!type.compare("rgb")) {
+    else if (type == "rgb") {
         std::unique_ptr<Vector3R[]> value = std::move(_parseVector3r(valueString));
         sdData->addVector3R(name, std::move(value), 1);
     }
-    else if (!type.compare("vector3r")) {
+    else if (type == "vector3r") {
         std::unique_ptr<Vector3R[]> value = std::move(_parseVector3r(valueString));
         sdData->addVector3R(name, std::move(value), 1);
     }
-    else if (!type.compare("string")) {
+    else if (type == "string") {
         std::unique_ptr<std::string_view[]> value = std::move(_parseString(valueString));
         sdData->addString(name, std::move(value), 1);
     }
-    else if (!type.compare("material")) {
+    else if (type == "material") {
         std::unique_ptr<std::string_view[]> value = std::move(_parseString(valueString));
         sdData->addString(name, std::move(value), 1);
     }
-    else if (!type.compare("texture")) {
+    else if (type == "texture") {
         std::unique_ptr<std::string_view[]> value = std::move(_parseString(valueString));
         sdData->addString(name, std::move(value), 1);
     }
-    else if (!type.compare("primitive")) {
+    else if (type == "primitive") {
         std::unique_ptr<std::string_view[]> value = std::move(_parseString(valueString));
         sdData->addString(name, std::move(value), 1);
     }
-    else if (!type.compare("real-array")) {
+    else if (type == "real-array") {
         int32 valueNumber = 0;
         std::unique_ptr<real[]> value = std::move(_parseRealArray(valueString, &valueNumber));
         sdData->addReal(name, std::move(value), valueNumber);
     }
-    else if (!type.compare("vector3r-array")) {
+    else if (type == "vector3r-array") {
         int32 valueNumber = 0;
         std::unique_ptr<Vector3R[]> value = std::move(_parseVector3rArray(valueString, &valueNumber));
         sdData->addVector3R(name, std::move(value), valueNumber);
@@ -116,10 +116,10 @@ void Tokenizer::_parseDataUnit(std::shared_ptr<SdData>& sdData, const std::strin
 std::unique_ptr<bool[]> Tokenizer::_parseBool(const std::string_view& value) const {
     std::unique_ptr<bool[]> result(new bool);
 
-    if (!value.compare("true")) {
+    if (value == "true") {
         result[0] = true;
     }
-    else if (!value.compare("false")) {
+    else if (value == "false") {
         result[0] = false;
     }
     else {
