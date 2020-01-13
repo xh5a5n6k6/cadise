@@ -2,11 +2,15 @@
 
 #include "core/bsdf/bsdf.h"
 
-#include <memory>
-
 namespace cadise {
 
 /*
+    Implement modified Phong model (only specular term).
+
+    You can use pre-defind plastic bsdf to assign other
+    parameters like diffuse albedo or diffuse-specular ratio.
+    (you can see source/core/instantiator/bsdfInstantiator.cpp for more details.)
+
     Original Phong model doesn't obey BRDF's rule such as
     helmholtz reciprocity, so we need to add normalization term
     to correct it.

@@ -11,7 +11,7 @@
     - Specular Reflection
     - Specular Transmission
     - Specular Dielectric
-    - Phong
+    - Phong (modified)
     - Mixed
     - Microfacet (conductor)
         - NDF: Beckmann, GGX, Blinn-Phong
