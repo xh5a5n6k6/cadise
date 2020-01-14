@@ -5,6 +5,7 @@
     - Unidirectional Path Tracing with Next Event Estimation
 - ### Accelerator
     - BVH (equal)
+    - K-d Tree (SAH)
 - ### BSDF
     - Absorber
     - Lambertian Diffuse

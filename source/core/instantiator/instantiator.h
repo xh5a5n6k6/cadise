@@ -44,7 +44,7 @@ std::shared_ptr<Sampler> makeSampler(const std::shared_ptr<SdData>& data);
 // implement in core/instantiator/acceleratorInstantiator.cpp
 std::shared_ptr<Accelerator> makeAccelerator(
     const std::shared_ptr<SdData>& data,
-    const std::vector<std::shared_ptr<Intersector>> intersectors);
+    const std::vector<std::shared_ptr<Intersector>>& intersectors);
 
 // implement in core/instantiator/textureInstantiator.cpp
 std::shared_ptr<Texture<real>> makeRealTexture(

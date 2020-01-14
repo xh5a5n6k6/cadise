@@ -119,7 +119,7 @@ template<typename T, std::size_t N>
 inline T AABB<T, N>::halfSurfaceArea() const {
     static_assert(N == 3, "Not support surfaceArea with this kind of AABB");
 
-    const Vector<T, N> extent = extent();
+    const Vector<T, N> extent = this->extent();
 
     return extent.x() * extent.y() +
            extent.x() * extent.z() +

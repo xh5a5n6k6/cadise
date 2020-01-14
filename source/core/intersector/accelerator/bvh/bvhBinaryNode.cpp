@@ -3,8 +3,8 @@
 namespace cadise {
 
 BvhBinaryNode::BvhBinaryNode() :
-    _bound(), 
-    _children{} {
+    _children{},
+    _bound() {
 }
 
 BvhBinaryNode::~BvhBinaryNode() {
@@ -12,28 +12,35 @@ BvhBinaryNode::~BvhBinaryNode() {
     _children[1].release();
 }
 
-void BvhBinaryNode::initializeInternalNode(std::unique_ptr<BvhBinaryNode> firstChild, std::unique_ptr<BvhBinaryNode> secondChild, const std::size_t splitAxis) {
+void BvhBinaryNode::initializeInternalNode(std::unique_ptr<BvhBinaryNode> firstChild, 
+                                           std::unique_ptr<BvhBinaryNode> secondChild, 
+                                           const std::size_t              splitAxis) {
+
     _bound.unionWith(firstChild->bound()).unionWith(secondChild->bound());
     _children[0] = std::move(firstChild);
     _children[1] = std::move(secondChild);
-    _splitAxis = splitAxis;
-    _isLeaf = false;
+    _splitAxis   = splitAxis;
+    _isLeaf      = false;
 }
 
-void BvhBinaryNode::initializeLeafNode(const AABB3R& bound, const std::size_t intersectorIndex, const std::size_t intersectorCounts) {
-    _bound = bound;
-    _intersectorIndex = intersectorIndex;
+void BvhBinaryNode::initializeLeafNode(const AABB3R&     bound, 
+                                       const std::size_t intersectorIndex, 
+                                       const std::size_t intersectorCounts) {
+
+    _bound             = bound;
+    _intersectorIndex  = intersectorIndex;
     _intersectorCounts = intersectorCounts;
-    _isLeaf = true;
-}
-
-const AABB3R& BvhBinaryNode::bound() const {
-    return _bound;
+    _isLeaf            = true;
 }
 
 std::size_t BvhBinaryNode::intersectorIndex() const {
     return _intersectorIndex;
 }
+
+std::size_t BvhBinaryNode::intersectorCounts() const {
+    return _intersectorCounts;
+}
+
 std::unique_ptr<BvhBinaryNode> BvhBinaryNode::firstChild() {
     return std::move(_children[0]);
 }
@@ -42,12 +49,12 @@ std::unique_ptr<BvhBinaryNode> BvhBinaryNode::secondChild() {
     return std::move(_children[1]);
 }
 
-std::size_t BvhBinaryNode::intersectorCounts() const {
-    return _intersectorCounts;
-}
-
 std::size_t BvhBinaryNode::splitAxis() const {
     return _splitAxis;
+}
+
+const AABB3R& BvhBinaryNode::bound() const {
+    return _bound;
 }
 
 bool BvhBinaryNode::isLeaf() const {

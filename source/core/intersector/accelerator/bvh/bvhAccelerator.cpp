@@ -16,12 +16,14 @@ BvhAccelerator::BvhAccelerator(const std::vector<std::shared_ptr<Intersector>>& 
 
     std::size_t totalSize = 0;
     // build binary node tree recursively
-    std::unique_ptr<BvhBinaryNode> root = builder.buildBinaryNodes(std::move(intersectors), &_intersectors, &totalSize);
+    std::unique_ptr<BvhBinaryNode> root = builder.buildBinaryNodes(std::move(intersectors), 
+                                                                   &_intersectors, 
+                                                                   &totalSize);
 
     // flatten the binary tree and use BVHLinearNode to store the informations
     _nodes.clear();
     _nodes.shrink_to_fit();
-    builder.buildLinearNodes(std::move(root), &_nodes, totalSize);
+    builder.buildLinearNodes(std::move(root), totalSize, &_nodes);
 }
 
 AABB3R BvhAccelerator::bound() const {
@@ -54,41 +56,41 @@ bool BvhAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) cons
                     break;
                 }
                 else {
-                    currentStackSize -= 1;
+                    --currentStackSize;
                     currentNodeIndex = nodeStack[currentStackSize];
                 }
-            }
+            } // end leaf node
+
             else {
                 if (directionIsNegative[currentNode.splitAxis()]) {
                     nodeStack[currentStackSize] = currentNodeIndex + 1;
-                    currentStackSize += 1;
+                    ++currentStackSize;
                     currentNodeIndex = currentNode.secondChildIndex();
                 }
                 else {
                     nodeStack[currentStackSize] = currentNode.secondChildIndex();
-                    currentStackSize += 1;
+                    ++currentStackSize;
                     currentNodeIndex = currentNodeIndex + 1;
                 }
-            }
-        }
+            } // end internal node
+        } // end node intersection
+
         else {
             if (currentStackSize == 0) {
                 break;
             }
             else {
-                currentStackSize -= 1;
+                --currentStackSize;
                 currentNodeIndex = nodeStack[currentStackSize];
             }
         }
-    }
+    } // end while loop
 
     return result;
 }
 
 bool BvhAccelerator::isOccluded(const Ray& ray) const {
-    bool result = false;
-
-    const Vector3R origin = ray.origin();
+    const Vector3R origin           = ray.origin();
     const Vector3R inverseDirection = ray.direction().reciprocal();
     const int32 directionIsNegative[3] = { inverseDirection.x() < 0.0_r,
                                            inverseDirection.y() < 0.0_r,
@@ -113,33 +115,35 @@ bool BvhAccelerator::isOccluded(const Ray& ray) const {
                     break;
                 }
                 else {
-                    currentStackSize -= 1;
+                    --currentStackSize;
                     currentNodeIndex = nodeStack[currentStackSize];
                 }
-            }
+            } // end leaf node
+
             else {
                 if (directionIsNegative[currentNode.splitAxis()]) {
                     nodeStack[currentStackSize] = currentNodeIndex + 1;
-                    currentStackSize += 1;
+                    ++currentStackSize;
                     currentNodeIndex = currentNode.secondChildIndex();
                 }
                 else {
                     nodeStack[currentStackSize] = currentNode.secondChildIndex();
-                    currentStackSize += 1;
+                    ++currentStackSize;
                     currentNodeIndex = currentNodeIndex + 1;
                 }
-            }
-        }
+            } // end internal node
+        } // end node intersection
+
         else {
             if (currentStackSize == 0) {
                 break;
             }
             else {
-                currentStackSize -= 1;
+                --currentStackSize;
                 currentNodeIndex = nodeStack[currentStackSize];
             }
         }
-    }
+    } // end while loop
 
     return false;
 }

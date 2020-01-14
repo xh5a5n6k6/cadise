@@ -22,12 +22,11 @@ Spectrum PhongBsdf::evaluate(const SurfaceIntersection& surfaceIntersection) con
     const Vector3R Ns = surfaceIntersection.surfaceInfo().shadingNormal();
     const Vector3R V  = surfaceIntersection.wi();
     const Vector3R L  = surfaceIntersection.wo();
+    const Vector3R R  = L.reflect(Ns);
 
     if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) {
         return Spectrum(0.0_r);
     }
-
-    const Vector3R R = surfaceIntersection.wo().reflect(Ns);
 
     const real RdotV         = math::max(R.dot(V), 0.0_r);
     const real specularValue = std::pow(RdotV, _exponent) * _brdfFactor;
@@ -53,11 +52,11 @@ Spectrum PhongBsdf::evaluateSample(SurfaceIntersection& surfaceIntersection) con
     L = xAxis * L.x() + yAxis * L.y() + zAxis * L.z();
     L = L.normalize();
 
+    const Vector3R R = L.reflect(Ns);
+
     if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) {
         return Spectrum(0.0_r);
     }
-
-    const Vector3R R = L.reflect(Ns);
 
     const real RdotV         = math::max(R.dot(V), 0.0_r);
     const real powerTerm     = std::pow(RdotV, _exponent);
@@ -74,12 +73,11 @@ real PhongBsdf::evaluatePdfW(const SurfaceIntersection& surfaceIntersection) con
     const Vector3R Ns = surfaceIntersection.surfaceInfo().shadingNormal();
     const Vector3R V  = surfaceIntersection.wi();
     const Vector3R L  = surfaceIntersection.wo();
+    const Vector3R R  = L.reflect(Ns);
 
     if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) {
         return 0.0_r;
     }
-
-    const Vector3R R = surfaceIntersection.wo().reflect(Ns);
 
     const real RdotV = math::max(R.dot(V), 0.0_r);
     const real pdfL  = std::pow(RdotV, _exponent) * _pdfFactor;
