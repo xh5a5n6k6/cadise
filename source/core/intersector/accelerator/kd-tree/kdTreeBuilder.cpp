@@ -98,9 +98,8 @@ void KdTreeBuilder::_buildNodesRecursively(
         // it stores split axis and split position
         std::pair<std::size_t, real> splitInfo;
 
-        std::size_t newBadRefines;
-
         // make leaf node if there isn't good split choice
+        std::size_t newBadRefines;
         if (!_canSplitWithSah(intersectorIndices,
                               intersectorBounds,
                               entireBound,

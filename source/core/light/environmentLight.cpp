@@ -68,7 +68,7 @@ Spectrum EnvironmentLight::evaluateSampleRadiance(Vector3R& lightDirection, cons
     lightDirection = direction.normalize();
 
     const real sinTheta = std::sin((1.0_r - uvSample.y()) * constant::PI);
-    if (sinTheta == 0.0_r) {
+    if (sinTheta <= 0.0_r) {
         return Spectrum(0.0_r);
     }
     
@@ -83,11 +83,11 @@ Spectrum EnvironmentLight::evaluateSampleRadiance(Vector3R& lightDirection, cons
 real EnvironmentLight::evaluatePdfW(const SurfaceIntersection& surfaceIntersection, const real distance) const {
     const Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
     const real sinTheta = std::sin((1.0_r - uvw.y()) * constant::PI);
-    if (sinTheta == 0.0_r) {
+    if (sinTheta <= 0.0_r) {
         return 0.0_r;
     }
 
-    real uvPdf = _distribution.pdfContinuous({uvw.x(), uvw.y()});
+    const real uvPdf = _distribution.pdfContinuous({uvw.x(), uvw.y()});
 
     return uvPdf / (2.0_r * constant::PI * constant::PI * sinTheta);
 }
