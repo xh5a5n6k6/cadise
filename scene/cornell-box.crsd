@@ -49,9 +49,12 @@ material {
     [albedo rgb "0.3 0.3 0.75"]
 }
 material {
-    [type string "mirror"]
-    [name string "mirror"]
-    [albedo rgb "1.0 1.0 1.0"]
+    [type string "conductor-microfacet"]
+    [name string "microfacet"]
+    [microfacet-type string "ggx"]
+    [fresnel-type string "schlick"]
+    [f0 rgb "1.0 1.0 1.0"]
+    [roughness real "0.0"]
 }
 material {
     [type string "plastic"]
@@ -124,7 +127,7 @@ primitive {
 primitive {
     [type string "sphere"]
     [name string "rightSphere"]
-    [bsdf material "mirror"]
+    [bsdf material "microfacet"]
     [center vector3r "410.0 111.0 -216.0"]
     [radius real "111.0"]
 }
