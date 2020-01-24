@@ -9,6 +9,7 @@
 namespace cadise {
 
 class BvhBinaryNode;
+class BvhBoundInfo;
 class Intersector;
 
 class BvhBuilder {
@@ -18,29 +19,37 @@ public:
     std::unique_ptr<BvhBinaryNode> buildBinaryNodes(
         const std::vector<std::shared_ptr<Intersector>>& intersectors, 
         std::vector<std::shared_ptr<Intersector>>* const out_orderedIntersectors,
-        std::size_t* const                               out_totalSize) const;
+        std::size_t* const                               out_totalNodeSize) const;
 
     void buildLinearNodes(std::unique_ptr<BvhBinaryNode>    root, 
-                          const std::size_t                 totalSize,
+                          const std::size_t                 totalNodeSize,
                           std::vector<BvhLinearNode>* const out_linearNodes) const;
 
 private:
     std::unique_ptr<BvhBinaryNode> _buildBinaryNodesRecursively(
-        const std::size_t                                startIndex,
-        const std::vector<std::shared_ptr<Intersector>>& intersectors,
-        std::vector<std::shared_ptr<Intersector>>* const out_orderedIntersectors,
-        std::size_t* const                               out_totalSize) const;
+        const std::vector<BvhBoundInfo>&                  boundInfos,
+        const std::vector<std::shared_ptr<Intersector>>&  intersectors,
+        std::vector<std::shared_ptr<Intersector>>* const  out_orderedIntersectors,
+        std::size_t* const                                out_totalNodeSize) const;
 
     void _buildLinearNodesRecursively(
         std::unique_ptr<BvhBinaryNode>    binaryNode, 
         std::vector<BvhLinearNode>* const out_linearNodes,
         std::size_t* const                out_nodeIndex) const;
 
-    bool _splitWith_EQUAL(
-        const std::vector<std::shared_ptr<Intersector>>& intersectors,
-        const std::size_t                                splitAxis,
-        std::vector<std::shared_ptr<Intersector>>* const out_subIntersectorsA,
-        std::vector<std::shared_ptr<Intersector>>* const out_subIntersectorsB) const;
+    bool _splitWithEqual(
+        const std::vector<BvhBoundInfo>& boundInfos,
+        const std::size_t                splitAxis,
+        std::vector<BvhBoundInfo>* const out_subBoundInfosA,
+        std::vector<BvhBoundInfo>* const out_subBoundInfosB) const;
+
+    bool _splitWithSah(
+        const std::vector<BvhBoundInfo>& boundInfos,
+        const std::size_t                splitAxis,
+        const AABB3R&                    intersectorBound,
+        const AABB3R&                    centroidBound,
+        std::vector<BvhBoundInfo>* const out_subBoundInfosA,
+        std::vector<BvhBoundInfo>* const out_subBoundInfosB) const;
 
     BvhSplitMode _splitMode;
 

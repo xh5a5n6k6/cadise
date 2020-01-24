@@ -3,6 +3,7 @@
 // accelerator type
 #include "core/intersector/accelerator/bruteForceAccelerator.h"
 #include "core/intersector/accelerator/bvh/bvhAccelerator.h"
+#include "core/intersector/accelerator/bvh/bvhSplitMode.h"
 #include "core/intersector/accelerator/kd-tree/kdTreeAccelerator.h"
 
 #include "file-io/scene-description/sdData.h"
@@ -23,7 +24,20 @@ static std::shared_ptr<Accelerator> createBvh(
     const std::shared_ptr<SdData>& data,
     const std::vector<std::shared_ptr<Intersector>>& _intersectors) {
 
-    return std::make_shared<BvhAccelerator>(std::move(_intersectors));
+    const std::string_view splitMode = data->findString("split-mode", "sah");
+
+    BvhSplitMode mode;
+    if (splitMode == "equal") {
+        mode = BvhSplitMode::EQUAL;
+    }
+    else if (splitMode == "sah") {
+        mode = BvhSplitMode::SAH;
+    }
+    else {
+        mode = BvhSplitMode::SAH;
+    }
+
+    return std::make_shared<BvhAccelerator>(std::move(_intersectors), mode);
 }
 
 static std::shared_ptr<Accelerator> createKdTree(

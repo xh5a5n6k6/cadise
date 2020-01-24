@@ -4,7 +4,7 @@
     - Unidirectional Path Tracing
     - Unidirectional Path Tracing with Next Event Estimation
 - ### Accelerator
-    - BVH (equal)
+    - BVH (equal, SAH)
     - K-d Tree (SAH)
 - ### BSDF
     - Absorber

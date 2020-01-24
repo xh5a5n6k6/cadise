@@ -92,8 +92,8 @@ void KdTreeBuilder::_buildNodesRecursively(
         // into two sub-arrays.
         std::vector<std::size_t> subIntersectorIndicesA;
         std::vector<std::size_t> subIntersectorIndicesB;
-        subIntersectorIndicesA.reserve(intersectorIndices.size());
-        subIntersectorIndicesB.reserve(intersectorIndices.size());
+        subIntersectorIndicesA.reserve(intersectorCounts);
+        subIntersectorIndicesB.reserve(intersectorCounts);
 
         // it stores split axis and split position
         std::pair<std::size_t, real> splitInfo;
@@ -168,6 +168,12 @@ bool KdTreeBuilder::_canSplitWithSah(
     CADISE_ASSERT(out_splitInfo);
     CADISE_ASSERT(out_subIntersectorIndicesA);
     CADISE_ASSERT(out_subIntersectorIndicesB);
+
+    // clear buffer first
+    out_subIntersectorIndicesA->clear();
+    out_subIntersectorIndicesA->shrink_to_fit();
+    out_subIntersectorIndicesB->clear();
+    out_subIntersectorIndicesB->shrink_to_fit();
 
     const std::size_t intersectorCounts  = intersectorIndices.size();
     const Vector3R    boundExtent        = entireBound.extent();
@@ -271,7 +277,7 @@ bool KdTreeBuilder::_canSplitWithSah(
         ++newBadRefines;
     }
 
-    // could not find good split position
+    // it could not find good split position
     if ((bestCost > 4.0_r * noSplitCost && intersectorCounts < 16) ||
         bestAxis == std::numeric_limits<std::size_t>::max() ||
         newBadRefines == 3) {
@@ -287,6 +293,7 @@ bool KdTreeBuilder::_canSplitWithSah(
             out_subIntersectorIndicesA->push_back(endpoints[bestAxis][i].intersectorIndex());
         }
     }
+
     for (std::size_t i = bestEndpointIndex; i < 2 * intersectorCounts; ++i) {
         if (endpoints[bestAxis][i].type() == EndpointType::MAX) {
             out_subIntersectorIndicesB->push_back(endpoints[bestAxis][i].intersectorIndex());

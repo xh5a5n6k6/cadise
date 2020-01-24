@@ -9,9 +9,13 @@
 
 namespace cadise {
 
+enum class BvhSplitMode;
+
 class BvhAccelerator : public Accelerator {
 public:
-    BvhAccelerator(const std::vector<std::shared_ptr<Intersector>>& intersectors);
+    BvhAccelerator(
+        const std::vector<std::shared_ptr<Intersector>>& intersectors,
+        const BvhSplitMode&                              splitMode);
 
     AABB3R bound() const override;
 
@@ -20,7 +24,7 @@ public:
 
 private:
     std::vector<std::shared_ptr<Intersector>> _intersectors;
-    std::vector<BvhLinearNode> _nodes;
+    std::vector<BvhLinearNode>                _nodes;
 
     static const std::size_t MAX_STACK_SIZE = 64;
 };

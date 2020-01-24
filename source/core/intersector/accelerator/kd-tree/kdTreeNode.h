@@ -11,6 +11,7 @@ public:
     void initializInternalNode(const std::size_t secondChildIndex,
                                const std::size_t splitAxis,
                                const real        splitPosition);
+
     void initializeLeafNode(const std::size_t intersectorIndex,
                             const std::size_t intersectorCounts);
 

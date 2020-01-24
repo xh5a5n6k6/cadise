@@ -4,9 +4,7 @@ namespace cadise {
 
 enum class BvhSplitMode {
     EQUAL,
-
-    // TODO
-    // SAH,
+    SAH,
 };
 
 } // namespace cadise

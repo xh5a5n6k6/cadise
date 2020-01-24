@@ -11,9 +11,11 @@ public:
     BvhBinaryNode();
     ~BvhBinaryNode();
 
-    void initializeInternalNode(std::unique_ptr<BvhBinaryNode> firstChild, 
+    void initializeInternalNode(const AABB3R&                  bound,
+                                std::unique_ptr<BvhBinaryNode> firstChild, 
                                 std::unique_ptr<BvhBinaryNode> secondChild, 
                                 const std::size_t              splitAxis);
+
     void initializeLeafNode(const AABB3R&     bound, 
                             const std::size_t intersectorIndex, 
                             const std::size_t intersectorCounts);

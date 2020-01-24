@@ -40,9 +40,9 @@ AABB3R KdTreeAccelerator::bound() const {
 bool KdTreeAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
     bool result = false;
 
-    const Vector3R origin           = ray.origin();
-    const Vector3R direction        = ray.direction();
-    const Vector3R inverseDirection = direction.reciprocal();
+    const Vector3R& origin           = ray.origin();
+    const Vector3R& direction        = ray.direction();
+    const Vector3R  inverseDirection = direction.reciprocal();
 
     real boundMinT;
     real boundMaxT;
@@ -141,9 +141,9 @@ bool KdTreeAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) c
 }
 
 bool KdTreeAccelerator::isOccluded(const Ray& ray) const {
-    const Vector3R origin           = ray.origin();
-    const Vector3R direction        = ray.direction();
-    const Vector3R inverseDirection = direction.reciprocal();
+    const Vector3R& origin           = ray.origin();
+    const Vector3R& direction        = ray.direction();
+    const Vector3R  inverseDirection = direction.reciprocal();
 
     real boundMinT;
     real boundMaxT;

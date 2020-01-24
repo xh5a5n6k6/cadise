@@ -25,7 +25,7 @@ public:
 
 private:
     std::vector<std::shared_ptr<Intersector>> _intersectors;
-    std::vector<KdTreeNode> _nodes;
+    std::vector<KdTreeNode>                   _nodes;
 
     // it stores intersector indices all nodes point to,
     // its size may be more than total intersectors because 
