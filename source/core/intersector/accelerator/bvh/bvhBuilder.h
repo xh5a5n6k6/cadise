@@ -37,13 +37,13 @@ private:
         std::vector<BvhLinearNode>* const out_linearNodes,
         std::size_t* const                out_nodeIndex) const;
 
-    bool _splitWithEqual(
+    bool _canSplitWithEqual(
         const std::vector<BvhBoundInfo>& boundInfos,
         const std::size_t                splitAxis,
         std::vector<BvhBoundInfo>* const out_subBoundInfosA,
         std::vector<BvhBoundInfo>* const out_subBoundInfosB) const;
 
-    bool _splitWithSah(
+    bool _canSplitWithSah(
         const std::vector<BvhBoundInfo>& boundInfos,
         const std::size_t                splitAxis,
         const AABB3R&                    intersectorBound,

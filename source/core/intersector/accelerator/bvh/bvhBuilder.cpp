@@ -98,19 +98,19 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
         bool canSplit = false;
         switch (_splitMode) {
             case BvhSplitMode::EQUAL:
-                canSplit = _splitWithEqual(boundInfos,
-                                           splitAxis,
-                                           &subBoundInfosA, 
-                                           &subBoundInfosB);
+                canSplit = _canSplitWithEqual(boundInfos,
+                                              splitAxis,
+                                              &subBoundInfosA, 
+                                              &subBoundInfosB);
                 break;
 
             case BvhSplitMode::SAH:
-                canSplit = _splitWithSah(boundInfos,
-                                         splitAxis,
-                                         nodeBound,
-                                         centroidBound,
-                                         &subBoundInfosA,
-                                         &subBoundInfosB);
+                canSplit = _canSplitWithSah(boundInfos,
+                                            splitAxis,
+                                            nodeBound,
+                                            centroidBound,
+                                            &subBoundInfosA,
+                                            &subBoundInfosB);
                 break;
 
             default:
@@ -194,7 +194,7 @@ void BvhBuilder::_buildLinearNodesRecursively(
     }
 }
 
-bool BvhBuilder::_splitWithEqual(
+bool BvhBuilder::_canSplitWithEqual(
     const std::vector<BvhBoundInfo>& boundInfos,
     const std::size_t                splitAxis,
     std::vector<BvhBoundInfo>* const out_subBoundInfosA,
@@ -227,7 +227,7 @@ bool BvhBuilder::_splitWithEqual(
     return true;
 }
 
-bool BvhBuilder::_splitWithSah(
+bool BvhBuilder::_canSplitWithSah(
     const std::vector<BvhBoundInfo>& boundInfos,
     const std::size_t                splitAxis,
     const AABB3R&                    intersectorBound,
