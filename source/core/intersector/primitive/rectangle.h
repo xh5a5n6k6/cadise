@@ -11,7 +11,7 @@ public:
               const Vector3R&              vB, 
               const Vector3R&              vC);
 
-    AABB3R bound() const override;
+    void evaluateBound(AABB3R* const out_bound) const override;
 
     bool isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const override;
     bool isOccluded(const Ray& ray) const override;

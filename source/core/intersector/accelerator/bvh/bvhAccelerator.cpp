@@ -3,6 +3,7 @@
 #include "core/intersector/accelerator/bvh/bvhBinaryNode.h"
 #include "core/intersector/accelerator/bvh/bvhBuilder.h"
 #include "core/ray.h"
+#include "fundamental/assertion.h"
 
 namespace cadise {
 
@@ -29,8 +30,10 @@ BvhAccelerator::BvhAccelerator(
     builder.buildLinearNodes(std::move(root), totalNodeSize, &_nodes);
 }
 
-AABB3R BvhAccelerator::bound() const {
-    return _nodes[0].bound();
+void BvhAccelerator::evaluateBound(AABB3R* const out_bound) const {
+    CADISE_ASSERT(out_bound);
+
+    *out_bound = _nodes[0].bound();
 }
 
 bool BvhAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {

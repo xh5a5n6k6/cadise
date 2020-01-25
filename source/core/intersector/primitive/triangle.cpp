@@ -38,8 +38,13 @@ Triangle::Triangle(const std::shared_ptr<Bsdf>& bsdf,
     _uvwC = Vector3R(0.0_r, 1.0_r, 0.0_r);
 }
 
-AABB3R Triangle::bound() const {
-    return AABB3R(_vA).unionWith(_vB).unionWith(_vC).expand(0.0001_r);
+void Triangle::evaluateBound(AABB3R* const out_bound) const {
+    CADISE_ASSERT(out_bound);
+
+    AABB3R bound(_vA);
+    bound.unionWith(_vB).unionWith(_vC).expand(0.0001_r);
+
+    *out_bound = bound;
 }
 
 bool Triangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {

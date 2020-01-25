@@ -13,7 +13,7 @@ class BruteForceAccelerator : public Accelerator {
 public:
     BruteForceAccelerator(const std::vector<std::shared_ptr<Intersector>>& intersectors);
 
-    AABB3R bound() const override;
+    void evaluateBound(AABB3R* const out_bound) const override;
 
     bool isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const override;
     bool isOccluded(const Ray& ray) const override;

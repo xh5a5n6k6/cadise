@@ -18,7 +18,7 @@ public:
     Primitive();
     Primitive(const std::shared_ptr<Bsdf>& bsdf);
 	
-    AABB3R bound() const override = 0;
+    void evaluateBound(AABB3R* const out_bound) const override = 0;
 
     bool isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const override = 0;
     bool isOccluded(const Ray& ray) const override = 0;

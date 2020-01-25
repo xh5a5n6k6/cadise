@@ -3,6 +3,7 @@
 #include "core/intersector/accelerator/kd-tree/kdTreeBuilder.h"
 #include "core/intersector/accelerator/kd-tree/kdTreeNodeInfo.h"
 #include "core/ray.h"
+#include "fundamental/assertion.h"
 
 namespace cadise {
 
@@ -18,9 +19,10 @@ KdTreeAccelerator::KdTreeAccelerator(
     _bound() {
 
     // calculate AABBs of all intersectors
+    AABB3R bound;
     std::vector<AABB3R> intersectorBounds(_intersectors.size());
     for (std::size_t i = 0; i < _intersectors.size(); ++i) {
-        const AABB3R bound = _intersectors[i]->bound();
+        _intersectors[i]->evaluateBound(&bound);
         intersectorBounds[i] = bound;
         _bound.unionWith(bound);
     }
@@ -33,8 +35,10 @@ KdTreeAccelerator::KdTreeAccelerator(
                        &_intersectorIndices);
 }
 
-AABB3R KdTreeAccelerator::bound() const {
-    return _bound;
+void KdTreeAccelerator::evaluateBound(AABB3R* const out_bound) const {
+    CADISE_ASSERT(out_bound);
+
+    *out_bound = _bound;
 }
 
 bool KdTreeAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {

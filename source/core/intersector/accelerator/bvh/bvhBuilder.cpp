@@ -27,8 +27,9 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::buildBinaryNodes(
 
     std::vector<BvhBoundInfo> boundInfos;
     boundInfos.reserve(intersectorCounts);
+    AABB3R bound;
     for (std::size_t i = 0; i < intersectorCounts; ++i) {
-        const AABB3R bound = intersectors[i]->bound();
+        intersectors[i]->evaluateBound(&bound);
         boundInfos.push_back(BvhBoundInfo(bound, i));
     }
 

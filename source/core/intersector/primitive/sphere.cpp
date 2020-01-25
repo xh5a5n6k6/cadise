@@ -25,8 +25,13 @@ Sphere::Sphere(const std::shared_ptr<Bsdf>& bsdf, const Vector3R& center, const 
     _tmptextureMapper = std::make_shared<SphericalMapper>();
 }
 
-AABB3R Sphere::bound() const {
-    return AABB3R(_center - _radius, _center + _radius).expand(0.0001_r);
+void Sphere::evaluateBound(AABB3R* const out_bound) const {
+    CADISE_ASSERT(out_bound);
+
+    AABB3R bound(_center - _radius, _center + _radius);
+    bound.expand(0.0001_r);
+
+    *out_bound = bound;
 }
 
 bool Sphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {

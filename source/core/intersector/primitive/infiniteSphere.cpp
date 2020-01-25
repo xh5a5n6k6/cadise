@@ -24,8 +24,12 @@ InfiniteSphere::InfiniteSphere(const real radius) :
     _radius(radius) {
 }
 
-AABB3R InfiniteSphere::bound() const {
-    return AABB3R(Vector3R(-_radius), Vector3R(_radius));
+void InfiniteSphere::evaluateBound(AABB3R* const out_bound) const {
+    CADISE_ASSERT(out_bound);
+
+    AABB3R bound(Vector3R(-_radius), Vector3R(_radius));
+    
+    *out_bound = bound;
 }
 
 bool InfiniteSphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {

@@ -13,7 +13,7 @@ class PrimitiveInfo;
 */
 class Intersector {
 public:
-    virtual AABB3R bound() const = 0;
+    virtual void evaluateBound(AABB3R* const out_bound) const = 0;
 
     virtual bool isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const = 0;
     virtual bool isOccluded(const Ray& ray) const = 0;

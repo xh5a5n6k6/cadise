@@ -10,7 +10,7 @@ class Sphere : public Primitive {
 public:
     Sphere(const std::shared_ptr<Bsdf>& bsdf, const Vector3R& center, const real radius);
 
-    AABB3R bound() const override;
+    void evaluateBound(AABB3R* const out_bound) const override;
 
     bool isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const override;
     bool isOccluded(const Ray& ray) const override;

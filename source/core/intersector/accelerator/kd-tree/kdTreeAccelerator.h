@@ -18,7 +18,7 @@ public:
         const real                                       intersectionCost,
         const real                                       emptyBonus);
 
-    AABB3R bound() const override;
+    void evaluateBound(AABB3R* const out_bound) const override;
 
     bool isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const override;
     bool isOccluded(const Ray& ray) const override;
