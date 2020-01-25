@@ -1,6 +1,6 @@
 # Cadise Renderer
-<img src="./gallery/cover-image/lowpoly_Snowman.png">
-<p align="center"><i>Snowman Scene Rendered with Cadise (based on <a href="https://www.blendswap.com/blend/22629">Lowpoly Snowman</a> scene by sumo12)</i></p>
+<img src="./gallery/cover-image/living-room.jpg">
+<p align="center"><i>Living Room Scene Rendered with Cadise (based on <a href="https://www.blendswap.com/blend/13491">The Modern Living Room</a> scene by Wig42)</i></p>
 
 ## Introduction
 Cadise is a physically based renderer written in C++17, taking some other renderers ([PBRT-v3](https://github.com/mmp/pbrt-v3), [Photon-v2](https://github.com/TzuChieh/Photon-v2), [Tungsten](https://github.com/tunabrain/tungsten), etc) as references. The main purpose of a renderer is to solve the integral problem described in [rendering equation](https://en.wikipedia.org/wiki/Rendering_equation), which is more often known as light transport simulation.
@@ -25,13 +25,15 @@ It also includes some third-party libraries in the `./source/third-party/` folde
 ## Gallery
 Here are some images rendered with Cadise.
 
-<img src="./gallery/image/iPhone.png">
+<img src="./gallery/image/iPhone.jpg">
 <p align="center"><i>iPhone Scene (based on <a href="https://www.blendswap.com/blend/18439">iPhone 7 Plus</a> scene by sriniwasjha)</i></p>
-<img src="./gallery/image/mike.png">
+<img src="./gallery/image/mike.jpg">
 <p align="center"><i>Mike Scene (based on <a href="https://www.blendswap.com/blend/22596">Mike Rig</a> scene by lucky3d1)</i></p>
-<img src="./gallery/image/chess.png">
+<img src="./gallery/image/chess.jpg">
 <p align="center"><i>Chess Scene (based on <a href="https://www.blendswap.com/blend/18589">Standard Chess Set</a> scene by MiriamAHoyt; HDRI is <a href="https://hdrihaven.com/hdri/?c=artificial%20light&h=colorful_studio">Colorful Studio</a> by Sergej Majboroda)</i></p>
-<img src="./gallery/image/pear.png">
+<img src="./gallery/image/pear.jpg">
 <p align="center"><i>Pear Scene (based on <a href="https://www.blendswap.com/blend/18747">Pear</a> scene by MZiemys)</i></p>
-<img src="./gallery/image/cornell-box-sphere.png">
+<img src="./gallery/image/snowman.jpg">
+<p align="center"><i>Snowman Scene (based on <a href="https://www.blendswap.com/blend/22629">Lowpoly Snowman</a> scene by sumo12)</i></p>
+<img src="./gallery/image/cornell-box-sphere.jpg">
 <p align="center"><i>Cornell Box Scene (based on original <a href="https://www.graphics.cornell.edu/online/box/data.html">Cornell Box Data</a>)</i></p>
