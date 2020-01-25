@@ -56,10 +56,10 @@ void BvhBuilder::buildLinearNodes(std::unique_ptr<BvhBinaryNode>    root,
 }
 
 std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
-    const std::vector<BvhBoundInfo>&                  boundInfos,
-    const std::vector<std::shared_ptr<Intersector>>&  intersectors, 
-    std::vector<std::shared_ptr<Intersector>>* const  out_orderedIntersectors,
-    std::size_t* const                                out_totalNodeSize) const {
+    const std::vector<BvhBoundInfo>&                 boundInfos,
+    const std::vector<std::shared_ptr<Intersector>>& intersectors, 
+    std::vector<std::shared_ptr<Intersector>>* const out_orderedIntersectors,
+    std::size_t* const                               out_totalNodeSize) const {
 
     CADISE_ASSERT(out_orderedIntersectors);
     CADISE_ASSERT(out_totalNodeSize);
@@ -308,7 +308,6 @@ bool BvhBuilder::_canSplitWithSah(
         sortedBoundInfos.begin(),
         sortedBoundInfos.end(),
         [=](const BvhBoundInfo& b) {
-            const AABB3R&   bound    = b.bound();
             const Vector3R& centroid = b.centroid();
             const real      offset   = (centroid[splitAxis] - splitMinVertex[splitAxis]) * inverseSplitExtent;
 

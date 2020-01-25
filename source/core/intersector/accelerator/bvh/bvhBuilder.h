@@ -27,10 +27,10 @@ public:
 
 private:
     std::unique_ptr<BvhBinaryNode> _buildBinaryNodesRecursively(
-        const std::vector<BvhBoundInfo>&                  boundInfos,
-        const std::vector<std::shared_ptr<Intersector>>&  intersectors,
-        std::vector<std::shared_ptr<Intersector>>* const  out_orderedIntersectors,
-        std::size_t* const                                out_totalNodeSize) const;
+        const std::vector<BvhBoundInfo>&                 boundInfos,
+        const std::vector<std::shared_ptr<Intersector>>& intersectors,
+        std::vector<std::shared_ptr<Intersector>>* const out_orderedIntersectors,
+        std::size_t* const                               out_totalNodeSize) const;
 
     void _buildLinearNodesRecursively(
         std::unique_ptr<BvhBinaryNode>    binaryNode, 
