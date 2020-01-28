@@ -22,6 +22,9 @@ Cadise is under the [MIT](https://opensource.org/licenses/MIT) license.
 
 It also includes some third-party libraries in the `./source/third-party/` folder with their own licenses, you can see the `LICENSE.txt` for more details.
 
+<img src="./gallery/logo/cadise-logo-uhd.jpg">
+<p align="center">The Logo of Cadise Renderer</p>
+
 ## Gallery
 Here are some images rendered with Cadise.
 
