@@ -25,6 +25,9 @@ It also includes some third-party libraries in the `./source/third-party/` folde
 ## Gallery
 Here are some images rendered with Cadise.
 
+<img src="./gallery/image/anger.jpg">
+<p align="center">The above image is NOT used for any commercial purposes.</p>
+<p align="center"><i>Anger Scene (based on <a href="https://www.blendswap.com/blend/16288">Anger (Furia)</a> scene by hfmm99)</i></p>
 <img src="./gallery/image/iPhone.jpg">
 <p align="center"><i>iPhone Scene (based on <a href="https://www.blendswap.com/blend/18439">iPhone 7 Plus</a> scene by sriniwasjha)</i></p>
 <img src="./gallery/image/mike.jpg">
