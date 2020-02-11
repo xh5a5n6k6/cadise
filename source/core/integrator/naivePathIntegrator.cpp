@@ -3,7 +3,7 @@
 #include "core/bsdf/bsdf.h"
 #include "core/integral-tool/russianRoulette.h"
 #include "core/intersector/primitive/primitive.h"
-#include "core/light/areaLight.h"
+#include "core/light/category/areaLight.h"
 #include "core/ray.h"
 #include "core/scene.h"
 #include "core/surfaceIntersection.h"
@@ -16,9 +16,10 @@ NaivePathIntegrator::NaivePathIntegrator(const int32 maxDepth) :
     _maxDepth(maxDepth) {
 }
 
-void NaivePathIntegrator::traceRadiance(const Scene& scene, 
-                                        const Ray&   ray,
-                                        Spectrum* const out_radiance) const {
+void NaivePathIntegrator::traceRadiance(
+    const Scene&    scene, 
+    const Ray&      ray,
+    Spectrum* const out_radiance) const {
 
     CADISE_ASSERT(out_radiance);
 

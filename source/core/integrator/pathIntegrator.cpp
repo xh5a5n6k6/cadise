@@ -2,10 +2,9 @@
 
 #include "core/bsdf/bsdf.h"
 #include "core/integral-tool/directLightEvaluator.h"
-#include "core/integral-tool/lightSampler.h"
 #include "core/integral-tool/russianRoulette.h"
 #include "core/intersector/primitive/primitive.h"
-#include "core/light/areaLight.h"
+#include "core/light/category/areaLight.h"
 #include "core/ray.h"
 #include "core/scene.h"
 #include "core/surfaceIntersection.h"
@@ -18,9 +17,10 @@ PathIntegrator::PathIntegrator(const int32 maxDepth) :
     _maxDepth(maxDepth) {
 }
 
-void PathIntegrator::traceRadiance(const Scene& scene, 
-                                   const Ray&   ray,
-                                   Spectrum* const out_radiance) const {
+void PathIntegrator::traceRadiance(
+    const Scene&    scene, 
+    const Ray&      ray,
+    Spectrum* const out_radiance) const {
 
     CADISE_ASSERT(out_radiance);
 
@@ -61,11 +61,8 @@ void PathIntegrator::traceRadiance(const Scene& scene,
 
             isCountForEmittance = false;
 
-            const std::vector<std::shared_ptr<Light>>& lights = scene.lights();
-
             real lightPdf;
-            std::size_t lightIndex = LightSampler::sampleOneLight<LightSamplePolicy::UNIFORM>(lights, &lightPdf);
-            const Light* sampleLight = lights[lightIndex].get();
+            const Light* sampleLight = scene.sampleOneLight(&lightPdf);
 
             const Spectrum directLightRadiance = DirectLightEvaluator::evaluate(scene, intersection,
                                                                           bsdf, sampleLight) / lightPdf;

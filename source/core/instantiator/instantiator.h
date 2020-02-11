@@ -13,6 +13,7 @@ class Filter;
 class Integrator;
 class Intersector;
 class Light;
+class LightCluster;
 class Primitive;
 class Renderer;
 class Sampler;
@@ -45,6 +46,11 @@ std::shared_ptr<Sampler> makeSampler(const std::shared_ptr<SdData>& data);
 std::shared_ptr<Accelerator> makeAccelerator(
     const std::shared_ptr<SdData>& data,
     const std::vector<std::shared_ptr<Intersector>>& intersectors);
+
+// implement in core/instantiator/lightClusterInstantiator.cpp
+std::shared_ptr<LightCluster> makeLightCluster(
+    const std::shared_ptr<SdData>& data,
+    const std::vector<std::shared_ptr<Light>>& lights);
 
 // implement in core/instantiator/textureInstantiator.cpp
 std::shared_ptr<Texture<real>> makeRealTexture(

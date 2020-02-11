@@ -1,9 +1,9 @@
 #include "core/instantiator/instantiator.h"
 
 // light type
-#include "core/light/environmentLight.h"
-#include "core/light/pointLight.h"
-#include "core/light/singleAreaLight.h"
+#include "core/light/category/environmentLight.h"
+#include "core/light/category/pointLight.h"
+#include "core/light/category/singleAreaLight.h"
 
 #include "core/imaging/image.h"
 #include "core/intersector/primitive/infiniteSphere.h"

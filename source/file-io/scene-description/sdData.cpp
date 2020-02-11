@@ -151,6 +151,9 @@ void SdData::setClassType(const std::string_view& classType) {
     else if (classType == "accelerator") {
         setClassType(SdClassType::ACCELERATOR);
     }
+    else if (classType == "light-cluster") {
+        setClassType(SdClassType::LIGHT_CLUSTER);
+    }
     else if (classType == "texture-real") {
         setClassType(SdClassType::TEXTURE_REAL);
     }

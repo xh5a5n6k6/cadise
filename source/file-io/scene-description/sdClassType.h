@@ -10,6 +10,7 @@ enum class SdClassType {
     CAMERA,
     RENDERER,
     ACCELERATOR,
+    LIGHT_CLUSTER,
 
     // world setting
     TEXTURE_REAL,

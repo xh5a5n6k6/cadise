@@ -32,6 +32,7 @@ private:
     void _setUpCamera(const std::shared_ptr<SdData>& data);
     void _setUpRenderer(const std::shared_ptr<SdData>& data);
     void _setUpAccelerator(const std::shared_ptr<SdData>& data);
+    void _setUpLightCluster(const std::shared_ptr<SdData>& data);
     void _setUpRealTexture(const std::shared_ptr<SdData>& data);
     void _setUpSpectrumTexture(const std::shared_ptr<SdData>& data);
     void _setUpBsdf(const std::shared_ptr<SdData>& data);
@@ -42,6 +43,7 @@ private:
     std::shared_ptr<SdData> _cameraData;
     std::shared_ptr<SdData> _rendererData;
     std::shared_ptr<SdData> _acceleratorData;
+    std::shared_ptr<SdData> _lightClusterData;
 
     std::shared_ptr<Scene>    _scene;
     std::shared_ptr<Renderer> _renderer;

@@ -42,6 +42,9 @@ void RenderOption::setUpData(const std::shared_ptr<SdData>& data) {
         case SdClassType::ACCELERATOR:
             _setUpAccelerator(data);
             break;
+        case SdClassType::LIGHT_CLUSTER:
+            _setUpLightCluster(data);
+            break;
         case SdClassType::TEXTURE_REAL:
             _setUpRealTexture(data);
             break;
@@ -74,8 +77,9 @@ void RenderOption::prepareRender() {
     const std::shared_ptr<Film> film = instantiator::makeFilm(_filmData);
     const std::shared_ptr<Camera> camera = instantiator::makeCamera(_cameraData);
     const std::shared_ptr<Accelerator> accelerator = instantiator::makeAccelerator(_acceleratorData, _intersectors);
+    const std::shared_ptr<LightCluster> lightCluster = instantiator::makeLightCluster(_lightClusterData, _lights);
 
-    _scene = std::make_shared<Scene>(accelerator, _lights);
+    _scene = std::make_shared<Scene>(accelerator, lightCluster);
     _renderer = std::move(instantiator::makeRenderer(_rendererData));
     
     if (_backgroundSphere) {
@@ -109,6 +113,10 @@ void RenderOption::_setUpRenderer(const std::shared_ptr<SdData>& data) {
 
 void RenderOption::_setUpAccelerator(const std::shared_ptr<SdData>& data) {
     _acceleratorData = std::move(data);
+}
+
+void RenderOption::_setUpLightCluster(const std::shared_ptr<SdData>& data) {
+    _lightClusterData = std::move(data);
 }
 
 void RenderOption::_setUpRealTexture(const std::shared_ptr<SdData>& data) {

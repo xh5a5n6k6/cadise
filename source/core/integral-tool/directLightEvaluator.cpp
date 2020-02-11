@@ -1,7 +1,7 @@
 #include "core/integral-tool/directLightEvaluator.h"
 
 #include "core/bsdf/bsdf.h"
-#include "core/light/areaLight.h"
+#include "core/light/category/areaLight.h"
 #include "core/integral-tool/mis.h"
 #include "core/intersector/primitive/primitive.h"
 #include "core/ray.h"

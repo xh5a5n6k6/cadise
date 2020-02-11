@@ -1,4 +1,4 @@
-#include "core/light/areaLight.h"
+#include "core/light/category/areaLight.h"
 
 namespace cadise {
 

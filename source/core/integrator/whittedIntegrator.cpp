@@ -2,7 +2,7 @@
 
 #include "core/bsdf/bsdf.h"
 #include "core/intersector/primitive/primitive.h"
-#include "core/light/areaLight.h"
+#include "core/light/category/areaLight.h"
 #include "core/ray.h"
 #include "core/scene.h"
 #include "core/surfaceIntersection.h"
@@ -15,9 +15,10 @@ WhittedIntegrator::WhittedIntegrator(const int32 maxDepth) :
     _maxDepth(maxDepth) {
 }
 
-void WhittedIntegrator::traceRadiance(const Scene& scene, 
-                                      const Ray&   ray,
-                                      Spectrum* const out_radiance) const {
+void WhittedIntegrator::traceRadiance(
+    const Scene&    scene, 
+    const Ray&      ray,
+    Spectrum* const out_radiance) const {
 
     CADISE_ASSERT(out_radiance);
 
@@ -48,29 +49,29 @@ void WhittedIntegrator::traceRadiance(const Scene& scene,
 
         // add direct light only at non-specular surface
         if (!isSpecular) {
-            const std::vector<std::shared_ptr<Light>>& lights = scene.lights();
-            for (std::size_t i = 0; i < lights.size(); ++i) {
-                Vector3R L;
-                real t;
-                real pdf;
-                const Spectrum emitRadiance = lights[i]->evaluateSampleRadiance(L, intersection.surfaceInfo(), t, pdf);
+            real lightPdf;
+            const Light* sampleLight = scene.sampleOneLight(&lightPdf);
 
-                // generate shadow ray to do occluded test
-                const Ray shadowRay(P,
-                                    L,
-                                    constant::RAY_EPSILON,
-                                    t - constant::RAY_EPSILON);
+            Vector3R L;
+            real t;
+            real pdf;
+            const Spectrum emitRadiance = sampleLight->evaluateSampleRadiance(L, intersection.surfaceInfo(), t, pdf);
+            intersection.setWo(L);
 
-                if (scene.isOccluded(shadowRay)) {
-                    continue;
-                }
+            // generate shadow ray to do occluded test
+            const Ray shadowRay(P,
+                                L,
+                                constant::RAY_EPSILON,
+                                t - constant::RAY_EPSILON);
 
+            if (!scene.isOccluded(shadowRay)) {
                 const Spectrum reflectance = bsdf->evaluate(intersection);
+
                 if (!reflectance.isZero() && pdf > 0.0_r) {
                     const real LdotN = L.absDot(Ns);
                     const Spectrum directLightRadiance = reflectance * emitRadiance * LdotN / pdf;
 
-                    totalRadiance += pathWeight * directLightRadiance;
+                    totalRadiance += pathWeight * directLightRadiance / lightPdf;
                 }
             }
 

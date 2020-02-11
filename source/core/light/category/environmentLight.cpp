@@ -1,4 +1,4 @@
-#include "core/light/environmentLight.h"
+#include "core/light/category/environmentLight.h"
 
 #include "core/intersector/primitive/primitive.h"
 #include "core/surfaceIntersection.h"
