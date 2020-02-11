@@ -173,7 +173,7 @@ std::shared_ptr<Texture<Spectrum>> makeSpectrumTexture(
         //spectrumTexture = createSpectrumAlphaImage(data, realTextures, spectrumTextures);
     }
     else {
-        // don't support texture type
+        // unsupported texture type
     }
 
     return spectrumTexture;

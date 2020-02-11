@@ -198,7 +198,7 @@ std::shared_ptr<Bsdf> makeBsdf(
         bsdf = std::make_shared<AbsorberBsdf>();
     }
     else {
-        // don't support bsdf type
+        // unsupported bsdf type
         std::cout << "Unsupported bsdf type: " << type << std::endl;
     }
 

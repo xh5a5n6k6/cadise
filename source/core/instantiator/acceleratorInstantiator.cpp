@@ -73,7 +73,7 @@ std::shared_ptr<Accelerator> makeAccelerator(
         accelerator = createKdTree(data, intersectors);
     }
     else {
-        // don't support primitive type
+        // unsupported accelerator type
     }
 
     return accelerator;

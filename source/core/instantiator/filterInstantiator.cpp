@@ -77,7 +77,7 @@ std::shared_ptr<Filter> makeFilter(
         filter = createMitchell(data);
     }
     else {
-        // don't support filter type
+        // unsupported filter type
     }
 
     return filter;

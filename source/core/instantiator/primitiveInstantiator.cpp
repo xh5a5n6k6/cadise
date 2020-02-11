@@ -124,7 +124,7 @@ void makePrimitive(
         }
     }
     else {
-        // don't support primitive type
+        // unsupported primitive type
     }
 }
 

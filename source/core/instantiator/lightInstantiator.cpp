@@ -95,7 +95,7 @@ std::shared_ptr<Light> makeLight(
         light = createEnvironment(data, primitives, out_backgroundSphere);
     }
     else {
-        // don't support light type
+        // unsupported light type
     }
 
     return light;

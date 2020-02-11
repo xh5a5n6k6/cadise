@@ -30,7 +30,7 @@ std::shared_ptr<LightCluster> makeLightCluster(
         lightCluster = createUniform(data, lights);
     }
     else {
-        // don't support primitive type
+        // unsupported lightCluster type
     }
 
     return lightCluster;

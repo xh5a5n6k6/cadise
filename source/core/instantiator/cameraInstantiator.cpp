@@ -34,7 +34,7 @@ std::shared_ptr<Camera> makeCamera(
         camera = createPerspective(data);
     }
     else {
-        // don't support camera type
+        // unsupported camera type
     }
 
     return camera;

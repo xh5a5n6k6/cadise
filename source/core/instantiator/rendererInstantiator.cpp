@@ -31,7 +31,7 @@ std::shared_ptr<Renderer> makeRenderer(
         renderer = createSampling(data);
     }
     else {
-        // don't support renderer type
+        // unsupported renderer type
     }
 
     return renderer;

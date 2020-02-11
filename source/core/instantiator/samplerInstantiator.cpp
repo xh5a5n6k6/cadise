@@ -42,7 +42,7 @@ std::shared_ptr<Sampler> makeSampler(
         sampler = createStratified(data);
     }
     else {
-        // don't support sampler type
+        // unsupported sampler type
     }
 
     return sampler;

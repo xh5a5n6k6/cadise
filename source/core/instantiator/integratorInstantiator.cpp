@@ -56,7 +56,7 @@ std::shared_ptr<Integrator> makeIntegrator(
         integrator = createPath(data);
     }
     else {
-        // don't support integrator type
+        // unsupported integrator type
     }
 
     return integrator;
