@@ -51,7 +51,7 @@ bool Rectangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
     }
 
     const Vector3R normal = eA.cross(eB).normalize();
-    const real t = (normal.dot(_vB) - normal.dot(ray.origin())) / normal.dot(ray.direction());
+    const real t = normal.dot(_vB - ray.origin()) / normal.dot(ray.direction());
     if (t < ray.minT() || t > ray.maxT()) {
         return false;
     }
@@ -61,6 +61,7 @@ bool Rectangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
     const real projection2 = vectorOnPlane.dot(_eB.normalize());
     if (projection1 < 0.0_r || projection1 > _eA.length() ||
         projection2 < 0.0_r || projection2 > _eB.length()) {
+
         return false;
     }
 
@@ -78,7 +79,7 @@ bool Rectangle::isOccluded(const Ray& ray) const {
     }
 
     const Vector3R normal = eA.cross(eB).normalize();
-    const real t = (normal.dot(_vB) - normal.dot(ray.origin())) / normal.dot(ray.direction());
+    const real t = normal.dot(_vB - ray.origin()) / normal.dot(ray.direction());
     if (t < ray.minT() || t > ray.maxT()) {
         return false;
     }
@@ -88,6 +89,7 @@ bool Rectangle::isOccluded(const Ray& ray) const {
     const real projection2 = vectorOnPlane.dot(_eB.normalize());
     if (projection1 < 0.0_r || projection1 > _eA.length() ||
         projection2 < 0.0_r || projection2 > _eB.length()) {
+
         return false;
     }
 
@@ -107,8 +109,8 @@ void Rectangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, Surfac
         surfaceInfo.setUvw(uvw);
     }
     else {
-        const Vector3R point = surfaceInfo.point();
-        const Vector3R vectorOnPlane = point - _vB;
+        const Vector3R& point = surfaceInfo.point();
+        const Vector3R  vectorOnPlane = point - _vB;
         const real projection1 = vectorOnPlane.dot(_eA.normalize()) / _eA.length();
         const real projection2 = vectorOnPlane.dot(_eB.normalize()) / _eA.length();
 

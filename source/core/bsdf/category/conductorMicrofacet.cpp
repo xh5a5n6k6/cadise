@@ -27,9 +27,9 @@ ConductorMicrofacet::ConductorMicrofacet(const std::shared_ptr<Microfacet>&     
 }
 
 Spectrum ConductorMicrofacet::evaluate(const SurfaceIntersection& surfaceIntersection) const {
-    const Vector3R Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R V  = surfaceIntersection.wi();
-    const Vector3R L  = surfaceIntersection.wo();
+    const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
+    const Vector3R& V  = surfaceIntersection.wi();
+    const Vector3R& L  = surfaceIntersection.wo();
 
     const real VdotN = V.dot(Ns);
     const real LdotN = L.dot(Ns);
@@ -44,7 +44,7 @@ Spectrum ConductorMicrofacet::evaluate(const SurfaceIntersection& surfaceInterse
     }
     H = H.normalize();
 
-    const Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
+    const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
     real sampleRoughness;
     _roughness->evaluate(uvw, &sampleRoughness);
 
@@ -64,10 +64,10 @@ Spectrum ConductorMicrofacet::evaluate(const SurfaceIntersection& surfaceInterse
 }
 
 Spectrum ConductorMicrofacet::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
-    const Vector3R Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R V  = surfaceIntersection.wi();
+    const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
+    const Vector3R& V  = surfaceIntersection.wi();
 
-    const Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
+    const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
     real sampleRoughness;
     _roughness->evaluate(uvw, &sampleRoughness);
 
@@ -120,9 +120,9 @@ Spectrum ConductorMicrofacet::evaluateSample(SurfaceIntersection& surfaceInterse
 }
 
 real ConductorMicrofacet::evaluatePdfW(const SurfaceIntersection& surfaceIntersection) const {
-    const Vector3R Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R V  = surfaceIntersection.wi();
-    const Vector3R L  = surfaceIntersection.wo();
+    const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
+    const Vector3R& V  = surfaceIntersection.wi();
+    const Vector3R& L  = surfaceIntersection.wo();
 
     const real VdotN = V.dot(Ns);
     const real LdotN = L.dot(Ns);
@@ -137,7 +137,7 @@ real ConductorMicrofacet::evaluatePdfW(const SurfaceIntersection& surfaceInterse
     }
     H = H.normalize();
 
-    const Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
+    const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
     real sampleRoughness;
     _roughness->evaluate(uvw, &sampleRoughness);
 

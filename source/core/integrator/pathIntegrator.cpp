@@ -42,8 +42,8 @@ void PathIntegrator::traceRadiance(
         const Primitive* primitive = intersection.primitiveInfo().primitive();
         const Bsdf*      bsdf      = primitive->bsdf();
 
-        const Vector3R P  = intersection.surfaceInfo().point();
-        const Vector3R Ns = intersection.surfaceInfo().shadingNormal();
+        const Vector3R& P  = intersection.surfaceInfo().point();
+        const Vector3R& Ns = intersection.surfaceInfo().shadingNormal();
 
         // add emitter's emittance only at first hit-point (0 bounce)
         // or previous hit surface is specular
@@ -73,8 +73,8 @@ void PathIntegrator::traceRadiance(
         }
 
         // estimate indirect light with bsdf sampling
-        const Spectrum reflectance = bsdf->evaluateSample(intersection);
-        const Vector3R L = intersection.wo();
+        const Spectrum  reflectance = bsdf->evaluateSample(intersection);
+        const Vector3R& L = intersection.wo();
 
         const real LdotN = L.absDot(Ns);
         pathWeight *= reflectance * LdotN / intersection.pdf();

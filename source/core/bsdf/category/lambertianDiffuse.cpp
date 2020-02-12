@@ -24,15 +24,15 @@ LambertianDiffuse::LambertianDiffuse(const std::shared_ptr<Texture<Spectrum>>& a
 }
 
 Spectrum LambertianDiffuse::evaluate(const SurfaceIntersection& surfaceIntersection) const {
-    const Vector3R Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R V  = surfaceIntersection.wi();
-    const Vector3R L  = surfaceIntersection.wo();
+    const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
+    const Vector3R& V  = surfaceIntersection.wi();
+    const Vector3R& L  = surfaceIntersection.wo();
 
     if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) {
         return Spectrum(0.0_r);
     }
 
-    const Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
+    const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
     Spectrum sampleSpectrum;
     _albedo->evaluate(uvw, &sampleSpectrum);
 
@@ -40,8 +40,8 @@ Spectrum LambertianDiffuse::evaluate(const SurfaceIntersection& surfaceIntersect
 }
 
 Spectrum LambertianDiffuse::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
-    const Vector3R Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R V  = surfaceIntersection.wi();
+    const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
+    const Vector3R& V  = surfaceIntersection.wi();
 
     // build local coordinate system (shading normal as z-axis)
     const Vector3R zAxis(Ns);
@@ -65,7 +65,7 @@ Spectrum LambertianDiffuse::evaluateSample(SurfaceIntersection& surfaceIntersect
     surfaceIntersection.setWo(L);
     surfaceIntersection.setPdf(pdfW);
 
-    const Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
+    const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
     Spectrum sampleSpectrum;
     _albedo->evaluate(uvw, &sampleSpectrum);
 
@@ -73,9 +73,9 @@ Spectrum LambertianDiffuse::evaluateSample(SurfaceIntersection& surfaceIntersect
 }
 
 real LambertianDiffuse::evaluatePdfW(const SurfaceIntersection& surfaceIntersection) const {
-    const Vector3R Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R V  = surfaceIntersection.wi();
-    const Vector3R L  = surfaceIntersection.wo();
+    const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
+    const Vector3R& V  = surfaceIntersection.wi();
+    const Vector3R& L  = surfaceIntersection.wo();
 
     if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) {
         return 0.0_r;

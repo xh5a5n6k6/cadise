@@ -4,8 +4,10 @@
 
 namespace cadise {
 
-MitchellFilter::MitchellFilter(const real filterWidth, const real filterHeight,
-                               const real b, const real c) :
+MitchellFilter::MitchellFilter(const real filterWidth, 
+                               const real filterHeight,
+                               const real b, 
+                               const real c) :
     Filter(filterWidth, filterHeight),
     _b(b),
     _c(c) {

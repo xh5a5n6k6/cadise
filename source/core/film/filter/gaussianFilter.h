@@ -6,8 +6,11 @@ namespace cadise {
 
 class GaussianFilter : public Filter {
 public:
-    GaussianFilter(const real filterWidth, const real filterHeight,
-                   const real sigmaX, const real sigmaY, const real amplitude);
+    GaussianFilter(const real filterWidth, 
+                   const real filterHeight,
+                   const real sigmaX, 
+                   const real sigmaY, 
+                   const real amplitude);
 
     real evaluate(const real locationX, const real locationY) const override;
 

@@ -28,13 +28,13 @@ SingleAreaLight::SingleAreaLight(const Primitive* const primitive,
 
 Spectrum SingleAreaLight::emittance(const Vector3R& emitDirection, const SurfaceIntersection& emitSurface) const {
     // check if direction is at the same hemisphere
-    const Vector3R Ns = emitSurface.surfaceInfo().shadingNormal();
+    const Vector3R& Ns = emitSurface.surfaceInfo().shadingNormal();
     if (emitDirection.dot(Ns) <= 0.0_r && !_isBackFaceEmit) {
         return Spectrum(0.0_r);
     }
     else {
         // TODO: fix here
-        const Vector3R uvw = emitSurface.surfaceInfo().uvw();
+        const Vector3R& uvw = emitSurface.surfaceInfo().uvw();
         Spectrum sampleRadiance;
         _emitRadiance->evaluate(uvw, &sampleRadiance);
 
@@ -43,7 +43,7 @@ Spectrum SingleAreaLight::emittance(const Vector3R& emitDirection, const Surface
 }
 
 Spectrum SingleAreaLight::evaluateSampleRadiance(Vector3R& lightDirection, const SurfaceInfo& surfaceInfo, real& t, real& pdf) const {
-    const Vector3R P = surfaceInfo.point();
+    const Vector3R& P = surfaceInfo.point();
 
     SurfaceInfo sampleSurface;
     _primitive->sampleSurface(surfaceInfo, &sampleSurface);
@@ -55,7 +55,7 @@ Spectrum SingleAreaLight::evaluateSampleRadiance(Vector3R& lightDirection, const
     t = direction.length();
     lightDirection = direction.normalize();
 
-    const Vector3R Ns = sampleSurface.shadingNormal();
+    const Vector3R& Ns = sampleSurface.shadingNormal();
     if (lightDirection.reverse().dot(Ns) <= 0.0_r && !_isBackFaceEmit) {
         pdf = 0.0_r;
         return Spectrum(0.0_r);
@@ -70,7 +70,7 @@ Spectrum SingleAreaLight::evaluateSampleRadiance(Vector3R& lightDirection, const
     }
 
     // TODO: fix here
-    const Vector3R uvw = sampleSurface.uvw();
+    const Vector3R& uvw = sampleSurface.uvw();
     Spectrum sampleRadiance;
     _emitRadiance->evaluate(uvw, &sampleRadiance);
 
@@ -78,9 +78,9 @@ Spectrum SingleAreaLight::evaluateSampleRadiance(Vector3R& lightDirection, const
 }
 
 real SingleAreaLight::evaluatePdfW(const SurfaceIntersection& surfaceIntersection, const real distance) const {
-    const Vector3R emitPosition = surfaceIntersection.surfaceInfo().point();
-    const Vector3R emitNormal = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R emitDirection = surfaceIntersection.wi();
+    const Vector3R& emitPosition  = surfaceIntersection.surfaceInfo().point();
+    const Vector3R& emitNormal    = surfaceIntersection.surfaceInfo().shadingNormal();
+    const Vector3R& emitDirection = surfaceIntersection.wi();
 
     if (emitDirection.dot(emitNormal) <= 0.0_r && !_isBackFaceEmit) {
         return 0.0_r;

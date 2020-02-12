@@ -48,8 +48,8 @@ void SamplingRenderer::render(const Scene& scene) const {
 
             std::unique_ptr<FilmTile> filmTile = _film->generateFilmTile(tileX, tileY);
 
-            const Vector2I x0y0 = filmTile->tileBound().minVertex();
-            const Vector2I x1y1 = filmTile->tileBound().maxVertex();
+            const Vector2I& x0y0 = filmTile->tileBound().minVertex();
+            const Vector2I& x1y1 = filmTile->tileBound().maxVertex();
 
             for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy) {
                 for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix) {
@@ -61,7 +61,7 @@ void SamplingRenderer::render(const Scene& scene) const {
 
                     for (std::size_t in = 0; in < sampleSampler->sampleNumber(); ++in) {
                         const Vector2R filmJitterPosition = filmPosition + sample2D->nextSample();
-                        const Vector2R filmNdcPosition = filmJitterPosition / realResolution;
+                        const Vector2R filmNdcPosition    = filmJitterPosition / realResolution;
 
                         const Ray primaryRay = _camera->spawnPrimaryRay(filmNdcPosition);
                         

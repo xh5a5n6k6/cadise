@@ -15,9 +15,9 @@ void ImageUtils::ldrToHdr(const LdrImage& ldrImage,
 
     out_hdrImage->setImageSize(ldrImage.width(), ldrImage.height());
 
-    const uint8* datas = ldrImage.rawData();
+    const uint8* data = ldrImage.rawData();
     for (std::size_t i = 0; i < ldrImage.dataSize(); ++i) {
-        const real value = static_cast<real>(datas[i]) / 255.0_r;
+        const real value = static_cast<real>(data[i]) / 255.0_r;
         out_hdrImage->setDataValue(i, value);
     }
 }
@@ -29,10 +29,10 @@ void ImageUtils::hdrToLdr(const HdrImage& hdrImage,
 
     out_ldrImage->setImageSize(hdrImage.width(), hdrImage.height());
 
-    const real* datas = hdrImage.rawData();
+    const real* data = hdrImage.rawData();
     for (std::size_t i = 0; i < hdrImage.dataSize(); ++i) {
         const uint8 value = static_cast<uint8>(
-            math::clamp(datas[i] * 255.0_r + 0.5_r, 0.0_r, 255.0_r));
+            math::clamp(data[i] * 255.0_r + 0.5_r, 0.0_r, 255.0_r));
         out_ldrImage->setDataValue(i, value);
     }
 }

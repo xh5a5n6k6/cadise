@@ -19,10 +19,10 @@ PhongBsdf::PhongBsdf(const real exponent) :
 }
 
 Spectrum PhongBsdf::evaluate(const SurfaceIntersection& surfaceIntersection) const {
-    const Vector3R Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R V  = surfaceIntersection.wi();
-    const Vector3R L  = surfaceIntersection.wo();
-    const Vector3R R  = L.reflect(Ns);
+    const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
+    const Vector3R& V  = surfaceIntersection.wi();
+    const Vector3R& L  = surfaceIntersection.wo();
+    const Vector3R  R  = L.reflect(Ns);
 
     if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) {
         return Spectrum(0.0_r);
@@ -35,8 +35,8 @@ Spectrum PhongBsdf::evaluate(const SurfaceIntersection& surfaceIntersection) con
 }
 
 Spectrum PhongBsdf::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
-    const Vector3R Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R V  = surfaceIntersection.wi();
+    const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
+    const Vector3R& V  = surfaceIntersection.wi();
 
     // build local coordinate system (shading normal as z-axis)
     const Vector3R zAxis(Ns);
@@ -70,10 +70,10 @@ Spectrum PhongBsdf::evaluateSample(SurfaceIntersection& surfaceIntersection) con
 }
 
 real PhongBsdf::evaluatePdfW(const SurfaceIntersection& surfaceIntersection) const {
-    const Vector3R Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R V  = surfaceIntersection.wi();
-    const Vector3R L  = surfaceIntersection.wo();
-    const Vector3R R  = L.reflect(Ns);
+    const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
+    const Vector3R& V  = surfaceIntersection.wi();
+    const Vector3R& L  = surfaceIntersection.wo();
+    const Vector3R  R  = L.reflect(Ns);
 
     if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) {
         return 0.0_r;

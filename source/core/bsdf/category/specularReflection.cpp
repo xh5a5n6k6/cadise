@@ -24,9 +24,9 @@ Spectrum SpecularReflection::evaluate(const SurfaceIntersection& surfaceIntersec
 }
 
 Spectrum SpecularReflection::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
-    const Vector3R Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R V  = surfaceIntersection.wi();
-    const Vector3R L  = V.reflect(Ns);
+    const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
+    const Vector3R& V  = surfaceIntersection.wi();
+    const Vector3R  L  = V.reflect(Ns);
     
     const real LdotN = L.dot(Ns);
     const real pdf   = 1.0_r;
@@ -37,7 +37,7 @@ Spectrum SpecularReflection::evaluateSample(SurfaceIntersection& surfaceIntersec
     Spectrum reflectance;
     _fresnel->evaluateReflectance(LdotN, &reflectance);
 
-    const Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
+    const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
     Spectrum sampleSpectrum;
     _albedo->evaluate(uvw, &sampleSpectrum);
 

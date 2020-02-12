@@ -6,8 +6,11 @@
 
 namespace cadise {
 
-GaussianFilter::GaussianFilter(const real filterWidth, const real filterHeight,
-                               const real sigmaX, const real sigmaY, const real amplitude) :
+GaussianFilter::GaussianFilter(const real filterWidth, 
+                               const real filterHeight,
+                               const real sigmaX, 
+                               const real sigmaY, 
+                               const real amplitude) :
     Filter(filterWidth, filterHeight),
     _amplitude(amplitude) {
 

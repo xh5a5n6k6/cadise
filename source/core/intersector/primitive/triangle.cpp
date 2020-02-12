@@ -51,7 +51,7 @@ bool Triangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
     Vector3R eAB = _eAB;
     Vector3R eAC = _eAC;
 
-    const Vector3R D = ray.direction();
+    const Vector3R& D = ray.direction();
     if (D.dot(eAB.cross(eAC)) > 0.0_r) {
         eAB.swap(eAC);
     }
@@ -87,7 +87,7 @@ bool Triangle::isOccluded(const Ray& ray) const {
     Vector3R eAB = _eAB;
     Vector3R eAC = _eAC;
 
-    const Vector3R D = ray.direction();
+    const Vector3R& D = ray.direction();
     if (D.dot(eAB.cross(eAC)) > 0.0_r) {
         eAB.swap(eAC);
     }
@@ -118,7 +118,7 @@ bool Triangle::isOccluded(const Ray& ray) const {
 
 void Triangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const {
     // TODO: refactor here
-    const Vector3R P = surfaceInfo.point();
+    const Vector3R& P = surfaceInfo.point();
     Vector3R normal = _eAB.cross(_eAC);
     normal = (normal.isZero()) ? Vector3R(0.0_r, 1.0_r, 0.0_r) : normal.normalize();
 

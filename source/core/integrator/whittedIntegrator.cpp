@@ -35,8 +35,8 @@ void WhittedIntegrator::traceRadiance(
         const Primitive* primitive = intersection.primitiveInfo().primitive();
         const Bsdf*      bsdf      = primitive->bsdf();
 
-        const Vector3R P  = intersection.surfaceInfo().point();
-        const Vector3R Ns = intersection.surfaceInfo().shadingNormal();
+        const Vector3R& P  = intersection.surfaceInfo().point();
+        const Vector3R& Ns = intersection.surfaceInfo().shadingNormal();
 
         const bool isSpecular = bsdf->type().isAtLeastOne(BxdfType::SPECULAR_REFLECTION,
                                                           BxdfType::SPECULAR_TRANSMISSION);
@@ -85,7 +85,7 @@ void WhittedIntegrator::traceRadiance(
         else {
             const Spectrum reflectance = bsdf->evaluateSample(intersection);
             if (!reflectance.isZero()) {
-                const Vector3R L = intersection.wo();
+                const Vector3R& L = intersection.wo();
                 const real LdotN = L.absDot(Ns);
                 
                 pathWeight *= reflectance * LdotN / intersection.pdf();

@@ -24,8 +24,8 @@ Spectrum SpecularTransmission::evaluate(const SurfaceIntersection& surfaceInters
 }
 
 Spectrum SpecularTransmission::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
-    const Vector3R Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R V  = surfaceIntersection.wi();
+    const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
+    const Vector3R& V  = surfaceIntersection.wi();
 
     real etaI = _fresnel->iorOuter();
     real etaT = _fresnel->iorInner();
@@ -52,7 +52,7 @@ Spectrum SpecularTransmission::evaluateSample(SurfaceIntersection& surfaceInters
 
     const real LdotN = L.absDot(Ns);
 
-    const Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
+    const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
     Spectrum sampleSpectrum;
     _albedo->evaluate(uvw, &sampleSpectrum);
 

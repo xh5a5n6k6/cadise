@@ -41,12 +41,12 @@ bool Sphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
         "Precision Improvements for Ray/Sphere Intersection"
         Haines et al., 2019
     */
-    const Vector3R O = ray.origin();
-    const Vector3R G = _center;
-    const Vector3R f = O - G;
-    const Vector3R d = ray.direction();
-    const real     b = -f.dot(d);
-    const real     r = _radius;
+    const Vector3R& O = ray.origin();
+    const Vector3R  G = _center;
+    const Vector3R  f = O - G;
+    const Vector3R& d = ray.direction();
+    const real      b = -f.dot(d);
+    const real      r = _radius;
 
     const Vector3R l = f + b * d;
     const real discriminant = r * r - l.absDot(l);
@@ -81,12 +81,12 @@ bool Sphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
 }
 
 bool Sphere::isOccluded(const Ray& ray) const {
-    const Vector3R O = ray.origin();
-    const Vector3R G = _center;
-    const Vector3R f = O - G;
-    const Vector3R d = ray.direction();
-    const real     b = -f.dot(d);
-    const real     r = _radius;
+    const Vector3R& O = ray.origin();
+    const Vector3R  G = _center;
+    const Vector3R  f = O - G;
+    const Vector3R& d = ray.direction();
+    const real      b = -f.dot(d);
+    const real      r = _radius;
 
     const Vector3R l = f + b * d;
     const real discriminant = r * r - l.absDot(l);
@@ -118,8 +118,8 @@ bool Sphere::isOccluded(const Ray& ray) const {
 }
 
 void Sphere::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const {
-    const Vector3R P = surfaceInfo.point();
-    const Vector3R N = (P - _center).normalize();
+    const Vector3R& P = surfaceInfo.point();
+    const Vector3R  N = (P - _center).normalize();
 
     surfaceInfo.setGeometryNormal(N);
     surfaceInfo.setShadingNormal(N);

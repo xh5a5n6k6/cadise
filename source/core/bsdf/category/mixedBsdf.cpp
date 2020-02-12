@@ -27,7 +27,7 @@ MixedBsdf::MixedBsdf(const std::shared_ptr<Bsdf>& bsdfA,
 }
 
 Spectrum MixedBsdf::evaluate(const SurfaceIntersection& surfaceIntersection) const {
-    const Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
+    const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
     Spectrum sampleRatio;
     _ratio->evaluate(uvw, &sampleRatio);
 
@@ -38,7 +38,7 @@ Spectrum MixedBsdf::evaluate(const SurfaceIntersection& surfaceIntersection) con
 Spectrum MixedBsdf::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
     Spectrum result(0.0_r);
 
-    const Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
+    const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
     Spectrum sampleRatio;
     _ratio->evaluate(uvw, &sampleRatio);
 
@@ -73,7 +73,7 @@ Spectrum MixedBsdf::evaluateSample(SurfaceIntersection& surfaceIntersection) con
 }
 
 real MixedBsdf::evaluatePdfW(const SurfaceIntersection& surfaceIntersection) const {
-    const Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
+    const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
     Spectrum sampleRatio;
     _ratio->evaluate(uvw, &sampleRatio);
     

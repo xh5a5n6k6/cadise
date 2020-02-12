@@ -42,16 +42,16 @@ std::unique_ptr<FilmTile> Film::generateFilmTile(const int32 tileX, const int32 
 void Film::mergeWithFilmTile(std::unique_ptr<FilmTile> filmTile) {
     std::lock_guard<std::mutex> lock(_filmMutex);
 
-    const AABB2I tileBound = filmTile->tileBound();
+    const AABB2I& tileBound = filmTile->tileBound();
 
-    const Vector2I x0y0 = tileBound.minVertex();
-    const Vector2I x1y1 = tileBound.maxVertex();
+    const Vector2I& x0y0 = tileBound.minVertex();
+    const Vector2I& x1y1 = tileBound.maxVertex();
 
     // add each pixel value recording in filmTile
     for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy) {
         for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix) {
-            const FilmSensor sensor = filmTile->getSensor(ix - x0y0.x(),
-                                                          iy - x0y0.y());
+            const FilmSensor& sensor = filmTile->getSensor(ix - x0y0.x(),
+                                                           iy - x0y0.y());
             const std::size_t pixelIndexOffset = _pixelIndexOffset(ix, iy);
             const Vector3R totalRadiance(sensor.r(), sensor.g(), sensor.b());
             const real inverseWeight = 1.0_r / sensor.weight();
@@ -69,7 +69,7 @@ void Film::save() {
         for (int32 ix = 0; ix < _resolution.x(); ++ix) {
             const std::size_t pixelOffset = _pixelIndexOffset(ix, iy);
 
-            const FilmPixel pixel = _pixels[pixelOffset];
+            const FilmPixel& pixel = _pixels[pixelOffset];
 
             const real r = math::gammaCorrection(pixel.x());
             const real g = math::gammaCorrection(pixel.y());

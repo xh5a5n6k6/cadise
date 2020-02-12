@@ -24,8 +24,8 @@ Spectrum SpecularDielectric::evaluate(const SurfaceIntersection& surfaceIntersec
 }
 
 Spectrum SpecularDielectric::evaluateSample(SurfaceIntersection& surfaceIntersection) const {
-    const Vector3R Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R V  = surfaceIntersection.wi();
+    const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
+    const Vector3R& V  = surfaceIntersection.wi();
     
     const real VdotN = V.dot(Ns);
     
@@ -58,7 +58,7 @@ Spectrum SpecularDielectric::evaluateSample(SurfaceIntersection& surfaceIntersec
 
         const real LdotN = L.absDot(Ns);
 
-        const Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
+        const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
         Spectrum sampleSpectrum;
         _albedo->evaluate(uvw, &sampleSpectrum);
 
@@ -87,7 +87,7 @@ Spectrum SpecularDielectric::evaluateSample(SurfaceIntersection& surfaceIntersec
 
         const real LdotN = L.absDot(Ns);
 
-        const Vector3R uvw = surfaceIntersection.surfaceInfo().uvw();
+        const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
         Spectrum sampleSpectrum;
         _albedo->evaluate(uvw, &sampleSpectrum);
 
