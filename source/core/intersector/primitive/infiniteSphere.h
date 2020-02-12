@@ -14,9 +14,13 @@ public:
     bool isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const override;
     bool isOccluded(const Ray& ray) const override;
 
-    void evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const override;
+    void evaluateSurfaceDetail(
+        const PrimitiveInfo& primitiveInfo, 
+        SurfaceInfo* const   out_surface) const override;
 
-    void uvwToPosition(const Vector3R& uvw, Vector3R* const out_position) const override;
+    void uvwToPosition(
+        const Vector3R& uvw, 
+        Vector3R* const out_position) const override;
 
 private:
     real _radius;

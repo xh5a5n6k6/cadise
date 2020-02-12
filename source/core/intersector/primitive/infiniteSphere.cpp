@@ -47,25 +47,31 @@ bool InfiniteSphere::isOccluded(const Ray& ray) const {
     return ray.maxT() >= std::numeric_limits<real>::max();
 }
 
-void InfiniteSphere::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const {
+void InfiniteSphere::evaluateSurfaceDetail(
+    const PrimitiveInfo& primitiveInfo, 
+    SurfaceInfo* const   out_surface) const {
+
+    CADISE_ASSERT(out_surface);
+
     Vector3R uvw;
-    SphericalMapper().mappingToUvw(surfaceInfo.point(), &uvw);
-    surfaceInfo.setUvw(uvw);
+    SphericalMapper().mappingToUvw(out_surface->point(), &uvw);
+
+    out_surface->setUvw(uvw);
 }
 
-void InfiniteSphere::uvwToPosition(const Vector3R& uvw, Vector3R* const out_position) const {
+void InfiniteSphere::uvwToPosition(
+    const Vector3R& uvw, 
+    Vector3R* const out_position) const {
+    
     CADISE_ASSERT(out_position);
 
-    const real theta = (1.0_r - uvw.y()) * constant::PI;
-    const real phi   = uvw.x() * constant::TWO_PI;
-
+    const real theta    = (1.0_r - uvw.y()) * constant::PI;
+    const real phi      = uvw.x() * constant::TWO_PI;
     const real cosTheta = std::cos(theta);
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
-    const real cosPhi   = std::cos(phi);
-    const real sinPhi   = std::sin(phi);
 
-    const Vector3R direction(cosPhi * sinTheta,
-                             sinPhi * sinTheta,
+    const Vector3R direction(std::cos(phi) * sinTheta,
+                             std::sin(phi) * sinTheta,
                              cosTheta);
 
     *out_position = direction.normalize() * _radius;

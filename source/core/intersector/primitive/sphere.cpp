@@ -117,25 +117,35 @@ bool Sphere::isOccluded(const Ray& ray) const {
     }
 }
 
-void Sphere::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const {
-    const Vector3R& P = surfaceInfo.point();
+void Sphere::evaluateSurfaceDetail(
+    const PrimitiveInfo& primitiveInfo, 
+    SurfaceInfo* const   out_surface) const {
+
+    CADISE_ASSERT(out_surface);
+
+    const Vector3R& P = out_surface->point();
     const Vector3R  N = (P - _center).normalize();
 
-    surfaceInfo.setGeometryNormal(N);
-    surfaceInfo.setShadingNormal(N);
+    out_surface->setGeometryNormal(N);
+    out_surface->setShadingNormal(N);
 
     Vector3R uvw;
     if (_textureMapper) {
-        _textureMapper->mappingToUvw(surfaceInfo.shadingNormal(), &uvw);
-        surfaceInfo.setUvw(uvw);
+        _textureMapper->mappingToUvw(out_surface->shadingNormal(), &uvw);
+        out_surface->setUvw(uvw);
     }
     else {
-        _tmptextureMapper->mappingToUvw(surfaceInfo.shadingNormal(), &uvw);
-        surfaceInfo.setUvw(uvw);
+        _tmptextureMapper->mappingToUvw(out_surface->shadingNormal(), &uvw);
+        out_surface->setUvw(uvw);
     }
 }
 
-void Sphere::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo* const out_surface) const {
+void Sphere::sampleSurface(
+    const SurfaceInfo& inSurface, 
+    SurfaceInfo* const out_surface) const {
+    
+    CADISE_ASSERT(out_surface);
+
     // TODO: implement here
 }
 

@@ -23,13 +23,20 @@ public:
     bool isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const override = 0;
     bool isOccluded(const Ray& ray) const override = 0;
 
-    virtual void evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const = 0;
+    virtual void evaluateSurfaceDetail(
+        const PrimitiveInfo& primitiveInfo, 
+        SurfaceInfo* const   out_surface) const = 0;
 
-    virtual void sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo* const out_surface) const;
+    virtual void sampleSurface(
+        const SurfaceInfo& inSurface, 
+        SurfaceInfo* const out_surface) const;
+
     virtual real samplePdfA(const Vector3R& position) const;
     virtual real area() const;
 
-    virtual void uvwToPosition(const Vector3R& uvw, Vector3R* const out_position) const;
+    virtual void uvwToPosition(
+        const Vector3R& uvw, 
+        Vector3R* const out_position) const;
 
     const Bsdf* bsdf() const;
     const AreaLight* areaLight() const;

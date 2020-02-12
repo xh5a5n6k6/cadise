@@ -96,32 +96,44 @@ bool Rectangle::isOccluded(const Ray& ray) const {
     return true;
 }
 
-void Rectangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const {
-    Vector3R normal = _eA.cross(_eB).normalize();
+void Rectangle::evaluateSurfaceDetail(
+    const PrimitiveInfo& primitiveInfo, 
+    SurfaceInfo* const   out_surface) const {
 
-    //normal = (primitiveInfo.isBackSide()) ? normal.reverse() : normal;
-    surfaceInfo.setGeometryNormal(normal);
-    surfaceInfo.setShadingNormal(normal);
+    CADISE_ASSERT(out_surface);
+
+    Vector3R N = _eA.cross(_eB);
+    N = (N.isZero()) ? Vector3R(0.0_r, 1.0_r, 0.0_r) : N.normalize();
+
+    out_surface->setGeometryNormal(N);
+    out_surface->setShadingNormal(N);
 
     Vector3R uvw;
     if (_textureMapper) {
-        _textureMapper->mappingToUvw(surfaceInfo.shadingNormal(), &uvw);
-        surfaceInfo.setUvw(uvw);
+        _textureMapper->mappingToUvw(out_surface->shadingNormal(), &uvw);
+
+        out_surface->setUvw(uvw);
     }
     else {
-        const Vector3R& point = surfaceInfo.point();
-        const Vector3R  vectorOnPlane = point - _vB;
+        const Vector3R& P = out_surface->point();
+        const Vector3R  vectorOnPlane = P - _vB;
         const real projection1 = vectorOnPlane.dot(_eA.normalize()) / _eA.length();
         const real projection2 = vectorOnPlane.dot(_eB.normalize()) / _eA.length();
 
         const Vector3R xUvwLerp1 = _uvwB.lerp(_uvwC, projection2);
         const Vector3R xUvwLerp2 = _uvwA.lerp(_uvwD, projection2);
         uvw = xUvwLerp1.lerp(xUvwLerp2, projection1);
-        surfaceInfo.setUvw(uvw);
+
+        out_surface->setUvw(uvw);
     }
 }
 
-void Rectangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo* const out_surface) const {
+void Rectangle::sampleSurface(
+    const SurfaceInfo& inSurface, 
+    SurfaceInfo* const out_surface) const {
+    
+    CADISE_ASSERT(out_surface);
+
     Vector3R eA = _eA;
     Vector3R eB = _eB;
 

@@ -26,12 +26,12 @@ Triangle::Triangle(const std::shared_ptr<Bsdf>& bsdf,
     _eAC = _vC - _vA;
 
     // TODO: refactor here
-    Vector3R faceNormal = _eAB.cross(_eAC);
-    faceNormal = (faceNormal.isZero()) ? Vector3R(0.0_r, 1.0_r, 0.0_r) : faceNormal.normalize();
+    Vector3R N = _eAB.cross(_eAC);
+    N = (N.isZero()) ? Vector3R(0.0_r, 1.0_r, 0.0_r) : N.normalize();
 
-    _nA = faceNormal;
-    _nB = faceNormal;
-    _nC = faceNormal;
+    _nA = N;
+    _nB = N;
+    _nC = N;
 
     _uvwA = Vector3R(0.0_r, 0.0_r, 0.0_r);
     _uvwB = Vector3R(1.0_r, 0.0_r, 0.0_r);
@@ -116,16 +116,22 @@ bool Triangle::isOccluded(const Ray& ray) const {
     return true;
 }
 
-void Triangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const {
+void Triangle::evaluateSurfaceDetail(
+    const PrimitiveInfo& primitiveInfo, 
+    SurfaceInfo* const   out_surface) const {
+    
+    CADISE_ASSERT(out_surface);
+    
     // TODO: refactor here
-    const Vector3R& P = surfaceInfo.point();
-    Vector3R normal = _eAB.cross(_eAC);
-    normal = (normal.isZero()) ? Vector3R(0.0_r, 1.0_r, 0.0_r) : normal.normalize();
+    const Vector3R& P = out_surface->point();
+    Vector3R Ng = _eAB.cross(_eAC);
+    Ng = (Ng.isZero()) ? Vector3R(0.0_r, 1.0_r, 0.0_r) : Ng.normalize();
 
     Vector3R uvw;
     if (_textureMapper) {
-        _textureMapper->mappingToUvw(normal, &uvw);
-        surfaceInfo.setUvw(uvw);
+        _textureMapper->mappingToUvw(Ng, &uvw);
+
+        out_surface->setUvw(uvw);
     }
     else {
         Vector3R barycentric;
@@ -139,15 +145,20 @@ void Triangle::evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, Surface
         Vector3R Ns = barycentric.x() * _nA +
                       barycentric.y() * _nB +
                       barycentric.z() * _nC;
-        Ns = (Ns.isZero()) ? normal : Ns.normalize();
+        Ns = (Ns.isZero()) ? Ng : Ns.normalize();
 
-        surfaceInfo.setShadingNormal(Ns);
-        surfaceInfo.setGeometryNormal(normal);
-        surfaceInfo.setUvw(uvw);
+        out_surface->setShadingNormal(Ns);
+        out_surface->setGeometryNormal(Ng);
+        out_surface->setUvw(uvw);
     }
 }
 
-void Triangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo* const out_surface) const {
+void Triangle::sampleSurface(
+    const SurfaceInfo& inSurface, 
+    SurfaceInfo* const out_surface) const {
+    
+    CADISE_ASSERT(out_surface);
+
     // TODO
     // improve sample point on triangle
     real s;
@@ -159,15 +170,14 @@ void Triangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo* const ou
         t = Random::nextReal();
     } while (s + t >= 1.0_r);
 
-    Vector3R eAB = _eAB;
-    Vector3R eAC = _eAC;
-
-    const Vector3R point = _vA + s * eAB + t * eAC;
+    const Vector3R eAB = _eAB;
+    const Vector3R eAC = _eAC;
+    const Vector3R P   = _vA + s * eAB + t * eAC;
 
     Vector3R barycentric;
-    _positionToBarycentric(point, &barycentric);
+    _positionToBarycentric(P, &barycentric);
 
-    Vector3R Ng = _eAB.cross(_eAC);
+    Vector3R Ng = eAB.cross(eAC);
     Ng = (Ng.isZero()) ? Vector3R(0.0_r, 1.0_r, 0.0_r) : Ng.normalize();
 
     Vector3R Ns = barycentric.x() * _nA +
@@ -175,7 +185,7 @@ void Triangle::sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo* const ou
                   barycentric.z() * _nC;
     Ns = (Ns.isZero()) ? Ng : Ns;
 
-    out_surface->setPoint(point);
+    out_surface->setPoint(P);
     out_surface->setGeometryNormal(Ng);
     out_surface->setShadingNormal(Ns);
 }
@@ -218,7 +228,10 @@ void Triangle::setUvwC(const Vector3R& uvwC) {
     _uvwC = uvwC;
 }
 
-void Triangle::_positionToBarycentric(const Vector3R& position, Vector3R* const out_barycentric) const {
+void Triangle::_positionToBarycentric(
+    const Vector3R& position, 
+    Vector3R* const out_barycentric) const {
+    
     CADISE_ASSERT(out_barycentric);
 
     const Vector3R v0 = _vB - _vA;

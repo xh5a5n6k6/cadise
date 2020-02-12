@@ -16,9 +16,14 @@ public:
     bool isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const override;
     bool isOccluded(const Ray& ray) const override;
 
-    void evaluateSurfaceDetail(const PrimitiveInfo& primitiveInfo, SurfaceInfo& surfaceInfo) const override;
+    void evaluateSurfaceDetail(
+        const PrimitiveInfo& primitiveInfo, 
+        SurfaceInfo* const   out_surface) const override;
 
-    void sampleSurface(const SurfaceInfo& inSurface, SurfaceInfo* const out_surface) const override;
+    void sampleSurface(
+        const SurfaceInfo& inSurface, 
+        SurfaceInfo* const out_surface) const override;
+
     real samplePdfA(const Vector3R& position) const override;
     real area() const override;
 
