@@ -89,12 +89,10 @@ void IsotropicTrowbridgeReitz::sampleHalfVectorH(const real alphaX,
     }
 
     const real cosTheta = std::cos(theta);
-    const real sinTheta = std::sin(theta);
-    const real cosPhi   = std::cos(phi);
-    const real sinPhi   = std::sin(phi);
+    const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
 
-    *out_H = Vector3R(cosPhi * sinTheta,
-                      sinPhi * sinTheta,
+    *out_H = Vector3R(std::cos(phi) * sinTheta,
+                      std::sin(phi) * sinTheta,
                       cosTheta);
 }
 

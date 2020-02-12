@@ -92,13 +92,11 @@ void IsotropicBlinnPhong::sampleHalfVectorH(const real alphaX,
     const real alphaP = 2.0_r / alpha2 - 2.0_r;
 
     const real phi      = constant::TWO_PI * sample.x();
-    const real cosPhi   = std::cos(phi);
-    const real sinPhi   = std::sin(phi);
     const real cosTheta = std::pow(sample.y(), 1.0_r / (alphaP + 2.0_r));
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
 
-    *out_H = Vector3R(cosPhi * sinTheta,
-                      sinPhi * sinTheta,
+    *out_H = Vector3R(std::cos(phi) * sinTheta,
+                      std::sin(phi) * sinTheta,
                       cosTheta);
 }
 
