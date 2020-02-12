@@ -27,8 +27,8 @@ public:
     Matrix4 transpose() const;
     Matrix4 inverse() const;
 
-    Vector3R transformPoint(const Vector3R& v) const;
-    Vector3R transformVector(const Vector3R& v) const;
+    void transformPoint(const Vector3R& p, Vector3R* const out_point) const;
+    void transformVector(const Vector3R& v, Vector3R* const out_vector) const;
 
     real n(const std::size_t row, const std::size_t col) const;
 

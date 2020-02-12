@@ -9,8 +9,8 @@ public:
     Transform(const Matrix4& matrix);
     Transform(const Matrix4& matrix, const Matrix4& inverseMatrix);
 
-    Vector3R transformPoint(const Vector3R& point) const;
-    Vector3R transformVector(const Vector3R& vector) const;
+    void transformPoint(const Vector3R& point, Vector3R* const out_point) const;
+    void transformVector(const Vector3R& vector, Vector3R* const out_vector) const;
 
     const Matrix4& matrix() const;
     const Matrix4& inverseMatrix() const;

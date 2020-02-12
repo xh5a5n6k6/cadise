@@ -1,5 +1,6 @@
 #include "math/matrix.h"
 
+#include "fundamental/assertion.h"
 #include "math/math.h"
 #include "math/vector.h"
 
@@ -150,16 +151,20 @@ Matrix4 Matrix4::inverse() const {
     return inv;
 }
 
-Vector3R Matrix4::transformPoint(const Vector3R& v) const {
-    return Vector3R(_n[0][0] * v.x() + _n[0][1] * v.y() + _n[0][2] * v.z() + _n[0][3],
-                    _n[1][0] * v.x() + _n[1][1] * v.y() + _n[1][2] * v.z() + _n[1][3],
-                    _n[2][0] * v.x() + _n[2][1] * v.y() + _n[2][2] * v.z() + _n[2][3]);
+void Matrix4::transformPoint(const Vector3R& p, Vector3R* const out_point) const {
+    CADISE_ASSERT(out_point);
+
+    *out_point = Vector3R(_n[0][0] * p.x() + _n[0][1] * p.y() + _n[0][2] * p.z() + _n[0][3],
+                          _n[1][0] * p.x() + _n[1][1] * p.y() + _n[1][2] * p.z() + _n[1][3],
+                          _n[2][0] * p.x() + _n[2][1] * p.y() + _n[2][2] * p.z() + _n[2][3]);
 }
 
-Vector3R Matrix4::transformVector(const Vector3R& v) const {
-    return Vector3R(_n[0][0] * v.x() + _n[0][1] * v.y() + _n[0][2] * v.z(),
-                    _n[1][0] * v.x() + _n[1][1] * v.y() + _n[1][2] * v.z(),
-                    _n[2][0] * v.x() + _n[2][1] * v.y() + _n[2][2] * v.z());
+void Matrix4::transformVector(const Vector3R& v, Vector3R* const out_vector) const {
+    CADISE_ASSERT(out_vector);
+
+    *out_vector = Vector3R(_n[0][0] * v.x() + _n[0][1] * v.y() + _n[0][2] * v.z(),
+                           _n[1][0] * v.x() + _n[1][1] * v.y() + _n[1][2] * v.z(),
+                           _n[2][0] * v.x() + _n[2][1] * v.y() + _n[2][2] * v.z());
 }
 
 real Matrix4::n(const std::size_t row, const std::size_t col) const {

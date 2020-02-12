@@ -1,5 +1,6 @@
 #include "math/transform.h"
 
+#include "fundamental/assertion.h"
 #include "math/vector.h"
 
 namespace cadise {
@@ -13,12 +14,16 @@ Transform::Transform(const Matrix4& matrix, const Matrix4& inverseMatrix) :
     _inverseMatrix(inverseMatrix) {
 }
 
-Vector3R Transform::transformPoint(const Vector3R& point) const {
-    return _matrix.transformPoint(point);
+void Transform::transformPoint(const Vector3R& point, Vector3R* const out_point) const {
+    CADISE_ASSERT(out_point);
+
+    _matrix.transformPoint(point, out_point);
 }
 
-Vector3R Transform::transformVector(const Vector3R& vector) const {
-    return _matrix.transformVector(vector);
+void Transform::transformVector(const Vector3R& vector, Vector3R* const out_vector) const {
+    CADISE_ASSERT(out_vector);
+
+    _matrix.transformVector(vector, out_vector);
 }
 
 const Matrix4& Transform::matrix() const {
