@@ -47,8 +47,8 @@ Matrix4 Matrix4::lookAt(const Vector3R& position, const Vector3R& direction, con
 }
 
 Matrix4::Matrix4() {
-    for (int32 row = 0; row < 4; ++row) {
-        for (int32 col = 0; col < 4; ++col) {
+    for (std::size_t row = 0; row < 4; ++row) {
+        for (std::size_t col = 0; col < 4; ++col) {
             _n[row][col] = 0.0_r;
         }
     }
@@ -66,9 +66,9 @@ Matrix4::Matrix4(const real n00, const real n01, const real n02, const real n03,
 
 Matrix4 Matrix4::operator*(const Matrix4& rhs) const {
     Matrix4 result;
-    for (int32 row = 0; row < 4; ++row) {
-        for (int32 col = 0; col < 4; ++col) {
-            for (int32 in = 0; in < 4; ++in) {
+    for (std::size_t row = 0; row < 4; ++row) {
+        for (std::size_t col = 0; col < 4; ++col) {
+            for (std::size_t in = 0; in < 4; ++in) {
                 result._n[row][col] += _n[row][in] * rhs._n[in][col];
             }
         }
@@ -79,21 +79,22 @@ Matrix4 Matrix4::operator*(const Matrix4& rhs) const {
 
 Matrix4& Matrix4::operator*=(const Matrix4& rhs) {
     Matrix4 tmp;
-    for (int32 row = 0; row < 4; ++row) {
-        for (int32 col = 0; col < 4; ++col) {
-            for (int32 in = 0; in < 4; ++in) {
+    for (std::size_t row = 0; row < 4; ++row) {
+        for (std::size_t col = 0; col < 4; ++col) {
+            for (std::size_t in = 0; in < 4; ++in) {
                 tmp._n[row][col] += _n[row][in] * rhs._n[in][col];
             }
         }
     }
 
     *this = std::move(tmp);
+
     return *this;
 }
 
 Matrix4& Matrix4::operator=(const Matrix4& mat) {
-    for (int32 row = 0; row < 4; ++row) {
-        for (int32 col = 0; col < 4; ++col) {
+    for (std::size_t row = 0; row < 4; ++row) {
+        for (std::size_t col = 0; col < 4; ++col) {
             _n[row][col] = mat._n[row][col];
         }
     }
@@ -114,17 +115,17 @@ Matrix4 Matrix4::inverse() const {
 
     // use Gauss-Jordan elimination method
     // for each column find a non-zero value to be the diagonal value
-    for (int32 col = 0; col < 4; ++col) {
+    for (std::size_t col = 0; col < 4; ++col) {
         // find non-zero row in column col, and assign it as pivot
-        int32 head = -1;
-        for (int32 row = col; row < 4; ++row) {
+        std::size_t head = 4;
+        for (std::size_t row = col; row < 4; ++row) {
             if (mat._n[row][col] != 0.0_r) {
                 head = row;
                 break;
             }
         }
 
-        if (head == -1) {
+        if (head == 4) {
             // TODO: logging
             return identity();
         }
@@ -138,7 +139,7 @@ Matrix4 Matrix4::inverse() const {
         mat._divideRow(col, mat._n[col][col]);
 
         // eliminate off-diagonal elements in column j (from row 0 ~ 3 excluded j)
-        for (int32 row = 0; row < 4; ++row) {
+        for (std::size_t row = 0; row < 4; ++row) {
             if (row != col) {
                 inv._substractRow(row, col, mat._n[row][col]);
                 mat._substractRow(row, col, mat._n[row][col]);
@@ -161,24 +162,24 @@ Vector3R Matrix4::transformVector(const Vector3R& v) const {
                     _n[2][0] * v.x() + _n[2][1] * v.y() + _n[2][2] * v.z());
 }
 
-real Matrix4::n(const int32 row, const int32 col) const {
+real Matrix4::n(const std::size_t row, const std::size_t col) const {
     return _n[row][col];
 }
 
-void Matrix4::_swapRows(const int32 r1, const int32 r2) {
-    for (int32 col = 0; col < 4; ++col) {
+void Matrix4::_swapRows(const std::size_t r1, const std::size_t r2) {
+    for (std::size_t col = 0; col < 4; ++col) {
         math::swap(_n[r1][col], _n[r2][col]);
     }
 }
 
-void Matrix4::_divideRow(const int32 r, const real s) {
-    for (int32 col = 0; col < 4; ++col) {
+void Matrix4::_divideRow(const std::size_t r, const real s) {
+    for (std::size_t col = 0; col < 4; ++col) {
         _n[r][col] /= s;
     }
 }
 
-void Matrix4::_substractRow(const int32 r1, const int32 r2, const real s) {
-    for (int32 col = 0; col < 4; ++col) {
+void Matrix4::_substractRow(const std::size_t r1, const std::size_t r2, const real s) {
+    for (std::size_t col = 0; col < 4; ++col) {
         _n[r1][col] -= _n[r2][col] * s;
     }
 }

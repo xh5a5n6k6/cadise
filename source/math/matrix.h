@@ -30,18 +30,18 @@ public:
     Vector3R transformPoint(const Vector3R& v) const;
     Vector3R transformVector(const Vector3R& v) const;
 
-    real n(const int32 row, const int32 col) const;
+    real n(const std::size_t row, const std::size_t col) const;
 
 private:
     // swap two rows
-    void _swapRows(const int32 r1, const int32 r2);
+    void _swapRows(const std::size_t r1, const std::size_t r2);
 
     // divide row r with scalar s
-    void _divideRow(const int32 r, const real s);
+    void _divideRow(const std::size_t r, const real s);
 
     // substract row r1 with row r2 multiplied by scalar s
     // i.e. r1 -= r2*s
-    void _substractRow(const int32 r1, const int32 r2, const real s);
+    void _substractRow(const std::size_t r1, const std::size_t r2, const real s);
 
     real _n[4][4];
 };
