@@ -8,7 +8,6 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
-#include <utility>
 
 namespace cadise {
 
@@ -96,7 +95,7 @@ void KdTreeBuilder::_buildNodesRecursively(
         subIntersectorIndicesB.reserve(intersectorCounts);
 
         // it stores split axis and split position
-        std::pair<std::size_t, real> splitInfo;
+        std::tuple<std::size_t, real> splitInfo;
 
         // make leaf node if there isn't good split choice
         std::size_t newBadRefines;
@@ -119,10 +118,14 @@ void KdTreeBuilder::_buildNodesRecursively(
 
         // make internal node
         else {
+            std::size_t splitAxis;
+            real        splitPosition;
+            std::tie(splitAxis, splitPosition) = splitInfo;
+
             Vector3R splitBoundMinVertex = entireBound.minVertex();
             Vector3R splitBoundMaxVertex = entireBound.maxVertex();
-            splitBoundMinVertex[splitInfo.first] = splitInfo.second;
-            splitBoundMaxVertex[splitInfo.first] = splitInfo.second;
+            splitBoundMinVertex[splitAxis] = splitPosition;
+            splitBoundMaxVertex[splitAxis] = splitPosition;
 
             const AABB3R splitBoundA(entireBound.minVertex(), splitBoundMaxVertex);
             const AABB3R splitBoundB(splitBoundMinVertex, entireBound.maxVertex());
@@ -140,8 +143,8 @@ void KdTreeBuilder::_buildNodesRecursively(
 
             const std::size_t secondChildIndex = out_nodes->size();
             (*out_nodes)[nodeIndex].initializInternalNode(secondChildIndex, 
-                                                          splitInfo.first, 
-                                                          splitInfo.second);
+                                                          splitAxis, 
+                                                          splitPosition);
 
             _buildNodesRecursively(subIntersectorIndicesB,
                                    intersectorBounds,
@@ -155,14 +158,14 @@ void KdTreeBuilder::_buildNodesRecursively(
 }
 
 bool KdTreeBuilder::_canSplitWithSah(
-    const std::vector<std::size_t>&     intersectorIndices,
-    const std::vector<AABB3R>&          intersectorBounds,
-    const AABB3R&                       entireBound,
-    const std::size_t                   badRefines,
-    std::size_t* const                  out_newBadRefines,
-    std::pair<std::size_t, real>* const out_splitInfo,
-    std::vector<std::size_t>* const     out_subIntersectorIndicesA,
-    std::vector<std::size_t>* const     out_subIntersectorIndicesB) const {
+    const std::vector<std::size_t>&      intersectorIndices,
+    const std::vector<AABB3R>&           intersectorBounds,
+    const AABB3R&                        entireBound,
+    const std::size_t                    badRefines,
+    std::size_t* const                   out_newBadRefines,
+    std::tuple<std::size_t, real>* const out_splitInfo,
+    std::vector<std::size_t>* const      out_subIntersectorIndicesA,
+    std::vector<std::size_t>* const      out_subIntersectorIndicesB) const {
 
     CADISE_ASSERT(out_newBadRefines);
     CADISE_ASSERT(out_splitInfo);
@@ -286,7 +289,7 @@ bool KdTreeBuilder::_canSplitWithSah(
     }
 
     *out_newBadRefines = newBadRefines;
-    *out_splitInfo = std::make_pair(bestAxis, endpoints[bestAxis][bestEndpointIndex].position());
+    *out_splitInfo = std::make_tuple(bestAxis, endpoints[bestAxis][bestEndpointIndex].position());
 
     for (std::size_t i = 0; i < bestEndpointIndex; ++i) {
         if (endpoints[bestAxis][i].type() == EndpointType::MIN) {

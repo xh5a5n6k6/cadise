@@ -4,6 +4,7 @@
 #include "math/type/mathType.h"
 
 #include <memory>
+#include <tuple>
 #include <vector>
 
 namespace cadise {
@@ -35,14 +36,14 @@ private:
         std::vector<std::size_t>* const out_intersectorIndices) const;
 
     bool _canSplitWithSah(
-        const std::vector<std::size_t>&     intersectorIndices,
-        const std::vector<AABB3R>&          intersectorBounds,
-        const AABB3R&                       entireBound,
-        const std::size_t                   badRefines,
-        std::size_t* const                  out_newBadRefines,
-        std::pair<std::size_t, real>* const out_splitInfo,
-        std::vector<std::size_t>* const     out_subIntersectorIndicesA,
-        std::vector<std::size_t>* const     out_subIntersectorIndicesB) const;
+        const std::vector<std::size_t>&      intersectorIndices,
+        const std::vector<AABB3R>&           intersectorBounds,
+        const AABB3R&                        entireBound,
+        const std::size_t                    badRefines,
+        std::size_t* const                   out_newBadRefines,
+        std::tuple<std::size_t, real>* const out_splitInfo,
+        std::vector<std::size_t>* const      out_subIntersectorIndicesA,
+        std::vector<std::size_t>* const      out_subIntersectorIndicesB) const;
 
     real        _traversalCost;
     real        _intersectionCost;
