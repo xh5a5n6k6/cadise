@@ -42,7 +42,7 @@ private:
         
             Last two bits represent as follows:
             00: for x-axis
-            10: for y-axis
+            01: for y-axis
             10: for z-axis
             11: for leaf node
 
