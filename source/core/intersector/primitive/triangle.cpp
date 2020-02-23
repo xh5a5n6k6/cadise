@@ -8,6 +8,7 @@
 #include "math/aabb.h"
 #include "math/constant.h"
 #include "math/random.h"
+#include "math/sample/sampleWarp.h"
 
 namespace cadise {
 
@@ -159,20 +160,13 @@ void Triangle::sampleSurface(
     
     CADISE_ASSERT(out_surface);
 
-    // TODO
-    // improve sample point on triangle
-    real s;
-    real t;
-
-    // Use rejection method
-    do {
-        s = Random::nextReal();
-        t = Random::nextReal();
-    } while (s + t >= 1.0_r);
+    const Vector2R sample(Random::nextReal(), Random::nextReal());
+    Vector2R sampleSt;
+    SampleWarp::uniformTriangle(sample, &sampleSt);
 
     const Vector3R eAB = _eAB;
     const Vector3R eAC = _eAC;
-    const Vector3R P   = _vA + s * eAB + t * eAC;
+    const Vector3R P   = _vA + sampleSt.x() * eAB + sampleSt.y() * eAC;
 
     Vector3R barycentric;
     _positionToBarycentric(P, &barycentric);
