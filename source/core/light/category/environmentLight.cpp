@@ -20,7 +20,9 @@ EnvironmentLight::EnvironmentLight(const Primitive* const primitive,
     _primitive(primitive),
     _environmentRadiance(environmentRadiance),
     _distribution(),
-    _approximatedFlux(0.0_r) {
+    _backgroundFlux(0.0_r),
+    _approximatedFlux(0.0_r),
+    _sceneBoundRadius(0.0_r) {
 
     CADISE_ASSERT(primitive);
     CADISE_ASSERT(environmentRadiance);
@@ -42,13 +44,14 @@ EnvironmentLight::EnvironmentLight(const Primitive* const primitive,
 
             weightedSampleRadiances[rowIndex + ix] = sampleRadiance.luminance() * sinTheta;
 
-            _approximatedFlux += weightedSampleRadiances[rowIndex + ix];
+            _backgroundFlux += weightedSampleRadiances[rowIndex + ix];
         }
     }
 
     _distribution = Distribution2D(weightedSampleRadiances.data(), resolution);
 
-    // flux calculation
+    // set dafulat scene radius
+    this->setSceneBoundRadius(5000.0_r);
 }
 
 Spectrum EnvironmentLight::emittance(const SurfaceIntersection& emitIntersection) const {
@@ -101,6 +104,18 @@ real EnvironmentLight::evaluateDirectPdfW(
 
 real EnvironmentLight::approximatedFlux() const {
     return _approximatedFlux;
+}
+
+void EnvironmentLight::setSceneBoundRadius(const real sceneBoundRadius) {
+    CADISE_ASSERT_GE(sceneBoundRadius, 0.0_r);
+
+    _sceneBoundRadius = sceneBoundRadius;
+
+    _updateApproxmiatedFlux();
+}
+
+void EnvironmentLight::_updateApproxmiatedFlux() {
+    _approximatedFlux = _backgroundFlux * constant::FOUR_PI * _sceneBoundRadius * _sceneBoundRadius;
 }
 
 } // namespace cadise

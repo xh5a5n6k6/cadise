@@ -62,6 +62,6 @@
 
 // check if a is not less than b
 // and not greater than c
-#define CADISE_ASSERT_RANGE_EXCLUSIVE(a, b, c) \
+#define CADISE_ASSERT_RANGE_INCLUSIVE(a, b, c) \
     CADISE_ASSERT_GE(a, b); \
     CADISE_ASSERT_LE(a, c)

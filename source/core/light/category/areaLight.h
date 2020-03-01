@@ -24,6 +24,7 @@ public:
 
 protected:
     bool _canEmit(const Vector3R& direction, const Vector3R& N) const;
+    real _defaultFlux() const;
 
     bool _isBackFaceEmit;
 };

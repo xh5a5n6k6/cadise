@@ -53,6 +53,7 @@ private:
 
     // HACK
     std::shared_ptr<Primitive> _backgroundSphere;
+    std::size_t                _environmentLightIndex;
 
     StringKeyMap<Bsdf>              _bsdfs;
     StringKeyMap<Primitive>         _primitives; // for area light

@@ -61,6 +61,8 @@ void WhittedIntegrator::traceRadiance(
                 const Vector3R LVector  = directLightSample.emitPosition() - P;
                 const real     distance = LVector.length();
 
+                CADISE_ASSERT_GT(distance, 0.0_r);
+
                 const Vector3R L = LVector / distance;
                 intersection.setWo(L);
 

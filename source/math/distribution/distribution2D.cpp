@@ -28,7 +28,7 @@ Distribution2D::Distribution2D(const real* const value, const Vector2S& resoluti
 }
 
 Vector2R Distribution2D::sampleContinuous(const Vector2R& seed,
-                                          real* const out_pdf) const {
+                                          real* const     out_pdf) const {
     CADISE_ASSERT(out_pdf);
 
     real pdfXconditionalY;

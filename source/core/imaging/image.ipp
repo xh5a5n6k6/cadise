@@ -87,8 +87,8 @@ inline void Image<T, N>::setDataValue(const std::size_t index, const T value) {
 template<typename T, std::size_t N>
 inline void Image<T, N>::getImagePixel(const int32 x, const int32 y, Vector<T, N>* const out_pixel) const {
     CADISE_ASSERT(out_pixel);
-    CADISE_ASSERT_RANGE_EXCLUSIVE(x, 0, _width);
-    CADISE_ASSERT_RANGE_EXCLUSIVE(y, 0, _height);
+    CADISE_ASSERT_RANGE_INCLUSIVE(x, 0, _width - 1);
+    CADISE_ASSERT_RANGE_INCLUSIVE(y, 0, _height - 1);
 
     const std::size_t dataIndexOffset = _pixelDataOffset(x, y);
 

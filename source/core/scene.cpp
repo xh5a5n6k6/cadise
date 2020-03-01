@@ -21,6 +21,12 @@ Scene::Scene(const std::shared_ptr<Accelerator>&  topAccelerator,
     CADISE_ASSERT(lightCluster);
 }
 
+void Scene::evaluateBound(AABB3R* const out_bound) const {
+    CADISE_ASSERT(out_bound);
+
+    _topAccelerator->evaluateBound(out_bound);
+}
+
 bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) const {
     // TODO: Refactor here
     PrimitiveInfo primitiveInfo;

@@ -4,6 +4,7 @@
 #include "core/camera/camera.h"
 #include "core/film/film.h"
 #include "core/instantiator/instantiator.h"
+#include "core/intersector/accelerator/accelerator.h"
 #include "core/intersector/primitive/primitive.h"
 #include "core/light/light.h"
 #include "core/renderer/renderer.h"
@@ -11,8 +12,10 @@
 #include "core/texture/texture.h"
 #include "file-io/scene-description/sdData.h"
 #include "fundamental/assertion.h"
+#include "math/aabb.h"
 
 #include <iostream>
+#include <limits>
 
 namespace cadise {
 
@@ -23,7 +26,8 @@ RenderOption::RenderOption() :
     _acceleratorData(nullptr),
     _scene(nullptr),
     _renderer(nullptr),
-    _backgroundSphere(nullptr) {
+    _backgroundSphere(nullptr),
+    _environmentLightIndex(std::numeric_limits<std::size_t>::max()) {
 }
 
 void RenderOption::setUpData(const std::shared_ptr<SdData>& data) {
@@ -77,6 +81,20 @@ void RenderOption::prepareRender() {
     const std::shared_ptr<Film> film = instantiator::makeFilm(_filmData);
     const std::shared_ptr<Camera> camera = instantiator::makeCamera(_cameraData);
     const std::shared_ptr<Accelerator> accelerator = instantiator::makeAccelerator(_acceleratorData, _intersectors);
+
+    // HACK
+    // it means there is an environment light
+    if (_environmentLightIndex != std::numeric_limits<std::size_t>::max()) {
+        AABB3R sceneBound;
+        accelerator->evaluateBound(&sceneBound);
+
+        if (!sceneBound.isEmpty()) {
+            const real sceneBoundRadius = sceneBound.extent().length() * 0.5_r;
+
+            _lights[_environmentLightIndex]->setSceneBoundRadius(sceneBoundRadius);
+        }
+    }
+
     const std::shared_ptr<LightCluster> lightCluster = instantiator::makeLightCluster(_lightClusterData, _lights);
 
     _scene = std::make_shared<Scene>(accelerator, lightCluster);
@@ -147,6 +165,11 @@ void RenderOption::_setUpBsdf(const std::shared_ptr<SdData>& data) {
 void RenderOption::_setUpLight(const std::shared_ptr<SdData>& data) {
     const std::shared_ptr<Light> light = instantiator::makeLight(data, _primitives, _backgroundSphere);
     
+    // HACK
+    if (_backgroundSphere) {
+        _environmentLightIndex = _lights.size();
+    }
+
     _lights.push_back(light);
 }
 

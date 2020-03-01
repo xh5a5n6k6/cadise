@@ -26,12 +26,19 @@ public:
         const Vector3R&            targetPosition) const override;
 
     real approximatedFlux() const override;
+    
+    void setSceneBoundRadius(const real sceneBoundRadius) override;
 
 private:
+    void _updateApproxmiatedFlux();
+
     const Primitive* _primitive;
     std::shared_ptr<Texture<Spectrum>> _environmentRadiance;
     Distribution2D _distribution;
+
+    real _backgroundFlux;
     real _approximatedFlux;
+    real _sceneBoundRadius;
 };
 
 } // namespace cadise

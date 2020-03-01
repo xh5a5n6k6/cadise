@@ -28,6 +28,11 @@ public:
     virtual real approximatedFlux() const = 0;
 
     virtual bool isDeltaLight() const = 0;
+
+    // HACK
+    // default this method does nothing,
+    // only environment light would override this method
+    virtual void setSceneBoundRadius(const real sceneBoundRadius);
 };
 
 } // namespace cadise

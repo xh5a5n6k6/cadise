@@ -28,6 +28,12 @@ inline cadise::AABB<T, N>::AABB(const Vector<T, N>& minVertex, const Vector<T, N
 }
 
 template<typename T, std::size_t N>
+inline bool AABB<T, N>::isEmpty() const {
+    return _minVertex.isEqualTo({std::numeric_limits<T>::max()}) ||
+           _maxVertex.isEqualTo({std::numeric_limits<T>::min()});
+}
+
+template<typename T, std::size_t N>
 inline bool AABB<T, N>::isIntersectingAABB(
     const Vector<T, N>& rayOrigin, 
     const Vector<T, N>& rayInverseDirection, 
@@ -112,7 +118,7 @@ template<typename T, std::size_t N>
 inline T AABB<T, N>::surfaceArea() const {
     static_assert(N == 3, "Not support surfaceArea with this kind of AABB");
 
-    return static_cast<T>(2) * halfSurfaceArea();
+    return static_cast<T>(2) * this->halfSurfaceArea();
 }
 
 template<typename T, std::size_t N>
@@ -143,7 +149,7 @@ inline Vector<T, N> AABB<T, N>::centroid() const {
 
 template<typename T, std::size_t N>
 inline std::size_t AABB<T, N>::maxAxis() const {
-    return extent().maxDimension();
+    return this->extent().maxDimension();
 }
 
 template<typename T, std::size_t N>

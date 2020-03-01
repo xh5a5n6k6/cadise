@@ -26,4 +26,8 @@ bool AreaLight::_canEmit(const Vector3R& direction, const Vector3R& N) const {
     return (direction.dot(N) >= 0.0_r) != _isBackFaceEmit;
 }
 
+real AreaLight::_defaultFlux() const {
+    return 1.0_r;
+}
+
 } // namespace cadise

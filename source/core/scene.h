@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/type/fundamentalType.h"
+#include "math/type/mathType.h"
 
 #include <memory>
 #include <vector>
@@ -19,6 +19,8 @@ class Scene {
 public:
     Scene(const std::shared_ptr<Accelerator>&  topAccelerator,
           const std::shared_ptr<LightCluster>& lightCluster);
+
+    void evaluateBound(AABB3R* const out_bound) const;
 
     bool isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) const;
     bool isOccluded(const Ray& ray) const;

@@ -376,7 +376,7 @@ inline void Vector<T, N>::swap(Vector<T, N>& v) {
 }
 
 template<typename T, std::size_t N>
-inline bool Vector<T, N>::equals(const Vector<T, N>& rhs) const {
+inline bool Vector<T, N>::isEqualTo(const Vector<T, N>& rhs) const {
     for (std::size_t i = 0; i < N; ++i) {
         if (_v[i] != rhs._v[i]) {
             return false;

@@ -111,7 +111,7 @@ real SingleAreaLight::approximatedFlux() const {
     _primitive->evaluatePositionSample(&positionSample);
     if (positionSample.pdfA() == 0.0_r) {
 
-        return 1.0_r;
+        return _defaultFlux();
     }
 
     const Vector3R& uvw = positionSample.uvw();
@@ -121,7 +121,7 @@ real SingleAreaLight::approximatedFlux() const {
     const real approximatedFlux = sampleRadiance.luminance() * _primitive->area() * constant::PI;
     if (approximatedFlux <= 0.0_r) {
 
-        return 1.0_r;
+        return _defaultFlux();
     }
 
     return approximatedFlux;

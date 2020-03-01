@@ -12,6 +12,8 @@ public:
     AABB(const Vector<T, N>& vertex);
     AABB(const Vector<T, N>& minVertex, const Vector<T, N>& maxVertex);
 
+    bool isEmpty() const;
+
     bool isIntersectingAABB(
         const Vector<T, N>& rayOrigin, 
         const Vector<T, N>& rayInverseDirection, 

@@ -59,7 +59,7 @@ public:
     std::size_t maxDimension() const;
 
     void swap(Vector& v);
-    bool equals(const Vector& rhs) const;
+    bool isEqualTo(const Vector& rhs) const;
     bool canRefract(const Vector& normal, 
                     const real iorOuter, 
                     const real iorInner, 

@@ -11,7 +11,7 @@ public:
     Distribution2D(const real* const value, const Vector2S& resolution);
 
     Vector2R sampleContinuous(const Vector2R& seed,
-                              real* const out_pdf) const;
+                              real* const     out_pdf) const;
 
     real pdfContinuous(const Vector2R& sample) const;
 
