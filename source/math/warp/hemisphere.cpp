@@ -1,4 +1,4 @@
-#include "core/integral-tool/hemisphere.h"
+#include "math/warp/hemisphere.h"
 
 #include "fundamental/assertion.h"
 #include "math/constant.h"
@@ -8,8 +8,9 @@
 
 namespace cadise {
 
-void Hemisphere::uniformSampling(const Vector2R& sample, 
-                                 Vector3R* const out_direction) {
+void Hemisphere::uniformSampling(
+    const Vector2R& sample, 
+    Vector3R* const out_direction) {
 
     CADISE_ASSERT(out_direction);
 
@@ -22,8 +23,9 @@ void Hemisphere::uniformSampling(const Vector2R& sample,
                                cosTheta);
 }
 
-void Hemisphere::cosineWeightedSampling(const Vector2R& sample, 
-                                        Vector3R* const out_direction) {
+void Hemisphere::cosineWeightedSampling(
+    const Vector2R& sample, 
+    Vector3R* const out_direction) {
 
     CADISE_ASSERT(out_direction);
 
@@ -37,9 +39,10 @@ void Hemisphere::cosineWeightedSampling(const Vector2R& sample,
                                cosTheta);
 }
 
-void Hemisphere::cosineExpWeightedSampling(const real exponent,
-                                           const Vector2R& sample,
-                                           Vector3R* const out_direction) {
+void Hemisphere::cosineExpWeightedSampling(
+    const Vector2R& sample,
+    const real      exponent,
+    Vector3R* const out_direction) {
 
     CADISE_ASSERT(out_direction);
 

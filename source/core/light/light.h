@@ -4,15 +4,26 @@
 
 namespace cadise {
 
+class DirectLightSample;
 class SurfaceInfo;
 class SurfaceIntersection;
 
 class Light {
 public:
-    virtual Spectrum emittance(const Vector3R& emitDirection, const SurfaceIntersection& emitSurface) const = 0;
-    virtual Spectrum evaluateSampleRadiance(Vector3R& lightDirection, const SurfaceInfo& surfaceInfo, real& t, real& pdf) const = 0;
+    virtual Spectrum emittance(const SurfaceIntersection& emitIntersection) const = 0;
+    
+    // light sampling used in next-event estimation (direct light)
+    virtual void evaluateDirectSample(DirectLightSample* const out_sample) const = 0;
+    virtual real evaluateDirectPdfW(
+        const SurfaceIntersection& emitIntersection,
+        const Vector3R&            targetPosition) const = 0;
 
-    virtual real evaluatePdfW(const SurfaceIntersection& surfaceIntersection, const real distance) const = 0;
+    // light sampling used in light tracing methods
+    // such as bidirectional path tracing and photon mapping
+    // virtual Spectrum evaluateEmitSample() const = 0;
+    // virtual real evaluateEmitPdfW() const = 0;
+
+    virtual real approximatedFlux() const = 0;
 
     virtual bool isDeltaLight() const = 0;
 };

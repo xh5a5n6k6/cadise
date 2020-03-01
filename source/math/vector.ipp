@@ -282,12 +282,12 @@ inline T Vector<T, N>::sum() const {
 
 template<typename T, std::size_t N>
 inline T Vector<T, N>::average() const {
-    return sum() / static_cast<T>(N);
+    return this->sum() / static_cast<T>(N);
 }
 
 template<typename T, std::size_t N>
 inline T Vector<T, N>::length() const {
-    return static_cast<T>(std::sqrt(lengthSquared()));
+    return static_cast<T>(std::sqrt(this->lengthSquared()));
 }
 
 template<typename T, std::size_t N>
@@ -302,14 +302,14 @@ inline T Vector<T, N>::lengthSquared() const {
 
 template<typename T, std::size_t N>
 inline T Vector<T, N>::maxComponent() const {
-    return _v[maxDimension()];
+    return _v[this->maxDimension()];
 }
 
 template<typename T, std::size_t N>
 inline Vector<T, N> Vector<T, N>::normalize() const {
-    CADISE_ASSERT(length() > static_cast<T>(0));
+    CADISE_ASSERT_GT(this->length(), static_cast<T>(0));
 
-    const T invLength = static_cast<T>(1) / length();
+    const T invLength = static_cast<T>(1) / this->length();
     return *this * invLength;
 }
 
@@ -398,9 +398,8 @@ inline bool Vector<T, N>::canRefract(const Vector<T, N>& normal,
     real etaT       = iorInner;
     real signFactor = 1.0_r;
 
-    const real cosI = dot(normal);
-
     // check if incident ray is from inner to outer
+    const real cosI = this->dot(normal);
     if (cosI < 0.0_r) {
         math::swap(etaI, etaT);
         signFactor = -1.0_r;
@@ -436,7 +435,7 @@ inline T Vector<T, N>::dot(const Vector<T, N>& v) const {
 
 template<typename T, std::size_t N>
 inline T Vector<T, N>::absDot(const Vector<T, N>& v) const {
-    return std::abs(dot(v));
+    return std::abs(this->dot(v));
 }
 
 template<typename T, std::size_t N>
@@ -461,7 +460,7 @@ inline Vector<T, N> Vector<T, N>::cross(const Vector<T, N>& v) const {
 
 template<typename T, std::size_t N>
 inline Vector<T, N> Vector<T, N>::reflect(const Vector<T, N>& normal) const {
-    const Vector<T, N> result = static_cast<T>(2) * absDot(normal) * normal;
+    const Vector<T, N> result = static_cast<T>(2) * this->absDot(normal) * normal;
     return result - *this;
 }
 

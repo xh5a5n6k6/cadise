@@ -1,6 +1,5 @@
 #include "core/bsdf/category/lambertianDiffuse.h"
 
-#include "core/integral-tool/hemisphere.h"
 #include "core/surfaceIntersection.h"
 #include "core/texture/category/constantTexture.h"
 #include "core/texture/texture.h"
@@ -8,6 +7,7 @@
 #include "math/constant.h"
 #include "math/math.h"
 #include "math/random.h"
+#include "math/warp/hemisphere.h"
 
 namespace cadise {
 

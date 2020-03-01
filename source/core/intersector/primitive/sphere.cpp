@@ -1,5 +1,6 @@
 #include "core/intersector/primitive/sphere.h"
 
+#include "core/integral-tool/sample/positionSample.h"
 #include "core/intersector/primitiveInfo.h"
 #include "core/ray.h"
 #include "core/surfaceInfo.h"
@@ -140,17 +141,14 @@ void Sphere::evaluateSurfaceDetail(
     }
 }
 
-void Sphere::sampleSurface(
-    const SurfaceInfo& inSurface, 
-    SurfaceInfo* const out_surface) const {
-    
-    CADISE_ASSERT(out_surface);
+void Sphere::evaluatePositionSample(PositionSample* const out_sample) const {
+    CADISE_ASSERT(out_sample);
 
     // TODO: implement here
 }
 
-real Sphere::samplePdfA(const Vector3R& position) const {
-    return 1.0_r / area();
+real Sphere::evaluatePositionPdfA(const Vector3R& position) const {
+    return 1.0_r / this->area();
 }
 
 real Sphere::area() const {

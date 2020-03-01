@@ -20,11 +20,8 @@ public:
         const PrimitiveInfo& primitiveInfo, 
         SurfaceInfo* const   out_surface) const override;
 
-    void sampleSurface(
-        const SurfaceInfo& inSurface, 
-        SurfaceInfo* const out_surface) const override;
-
-    real samplePdfA(const Vector3R& position) const override;
+    void evaluatePositionSample(PositionSample* const out_sample) const override;
+    real evaluatePositionPdfA(const Vector3R& position) const override;
     real area() const override;
 
     void setNa(const Vector3R& nA);

@@ -49,7 +49,7 @@ void PathIntegrator::traceRadiance(
         // or previous hit surface is specular
         const AreaLight* areaLight = primitive->areaLight();
         if (areaLight && isCountForEmittance) {
-            const Spectrum emittance = areaLight->emittance(traceRay.direction().reverse(), intersection);
+            const Spectrum emittance = areaLight->emittance(intersection);
             totalRadiance += pathWeight * emittance;
         }
 

@@ -1,5 +1,6 @@
 #include "core/intersector/primitive/triangle.h"
 
+#include "core/integral-tool/sample/positionSample.h"
 #include "core/intersector/primitiveInfo.h"
 #include "core/ray.h"
 #include "core/surfaceInfo.h"
@@ -8,7 +9,7 @@
 #include "math/aabb.h"
 #include "math/constant.h"
 #include "math/random.h"
-#include "math/sample/sampleWarp.h"
+#include "math/warp/sampleWarp.h"
 
 namespace cadise {
 
@@ -154,15 +155,12 @@ void Triangle::evaluateSurfaceDetail(
     }
 }
 
-void Triangle::sampleSurface(
-    const SurfaceInfo& inSurface, 
-    SurfaceInfo* const out_surface) const {
-    
-    CADISE_ASSERT(out_surface);
+void Triangle::evaluatePositionSample(PositionSample* const out_sample) const {
+    CADISE_ASSERT(out_sample);
 
     const Vector2R sample(Random::nextReal(), Random::nextReal());
     Vector2R sampleSt;
-    SampleWarp::uniformTriangle(sample, &sampleSt);
+    SampleWarp::uniformTriangleUv(sample, &sampleSt);
 
     const Vector3R eAB = _eAB;
     const Vector3R eAC = _eAC;
@@ -179,13 +177,19 @@ void Triangle::sampleSurface(
                   barycentric.z() * _nC;
     Ns = (Ns.isZero()) ? Ng : Ns;
 
-    out_surface->setPoint(P);
-    out_surface->setGeometryNormal(Ng);
-    out_surface->setShadingNormal(Ns);
+    const Vector3R uvw = barycentric.x() * _uvwA +
+                         barycentric.y() * _uvwB +
+                         barycentric.z() * _uvwC;
+
+    out_sample->setPosition(P);
+    out_sample->setGeometryNormal(Ng);
+    out_sample->setShadingNormal(Ns);
+    out_sample->setUvw(uvw);
+    out_sample->setPdfA(this->evaluatePositionPdfA(P));
 }
 
-real Triangle::samplePdfA(const Vector3R& position) const {
-    return 1.0_r / area();
+real Triangle::evaluatePositionPdfA(const Vector3R& position) const {
+    return 1.0_r / this->area();
 }
 
 real Triangle::area() const {

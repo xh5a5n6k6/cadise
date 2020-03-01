@@ -1,10 +1,10 @@
 #include "core/bsdf/category/phongBsdf.h"
 
-#include "core/integral-tool/hemisphere.h"
 #include "core/surfaceIntersection.h"
 #include "math/constant.h"
 #include "math/math.h"
 #include "math/random.h"
+#include "math/warp/hemisphere.h"
 
 #include <cmath>
 
@@ -46,7 +46,7 @@ Spectrum PhongBsdf::evaluateSample(SurfaceIntersection& surfaceIntersection) con
 
     const Vector2R sample(Random::nextReal(), Random::nextReal());
     Vector3R L;
-    Hemisphere::cosineExpWeightedSampling(_exponent, sample, &L);
+    Hemisphere::cosineExpWeightedSampling(sample, _exponent, &L);
 
     // transform L to world coordinate
     L = xAxis * L.x() + yAxis * L.y() + zAxis * L.z();

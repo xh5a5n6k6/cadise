@@ -6,18 +6,22 @@ namespace cadise {
 
 class PointLight : public Light {
 public:
-    PointLight(const Vector3R& position, const Spectrum& color);
+    PointLight(const Vector3R& position, const Spectrum& intensity);
 
-    Spectrum emittance(const Vector3R& emitDirection, const SurfaceIntersection& emitSurface) const override;
-    Spectrum evaluateSampleRadiance(Vector3R& lightDirection, const SurfaceInfo& surfaceInfo, real& t, real& pdf) const override;
+    Spectrum emittance(const SurfaceIntersection& emitIntersection) const override;
 
-    real evaluatePdfW(const SurfaceIntersection& surfaceIntersection, const real distance) const override;
+    void evaluateDirectSample(DirectLightSample* const out_sample) const override;
+    real evaluateDirectPdfW(
+        const SurfaceIntersection& emitIntersection,
+        const Vector3R&            targetPosition) const override;
+
+    real approximatedFlux() const override;
 
     bool isDeltaLight() const override;
 
 private:
     Vector3R _position;
-    Spectrum _color;
+    Spectrum _intensity;
 };
 
 } // namespace cadise

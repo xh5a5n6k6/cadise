@@ -1,9 +1,10 @@
 #include "core/integral-tool/directLightEvaluator.h"
 
 #include "core/bsdf/bsdf.h"
-#include "core/light/category/areaLight.h"
 #include "core/integral-tool/mis.h"
+#include "core/integral-tool/sample/directLightSample.h"
 #include "core/intersector/primitive/primitive.h"
+#include "core/light/category/areaLight.h"
 #include "core/ray.h"
 #include "core/scene.h"
 #include "core/surfaceIntersection.h"
@@ -12,10 +13,11 @@
 
 namespace cadise {
 
-Spectrum DirectLightEvaluator::evaluate(const Scene&               scene, 
-                                        const SurfaceIntersection& surfaceIntersection,
-                                        const Bsdf*                bsdf, 
-                                        const Light*               light) {
+Spectrum DirectLightEvaluator::evaluate(
+    const Scene&               scene, 
+    const SurfaceIntersection& surfaceIntersection,
+    const Bsdf*                bsdf, 
+    const Light*               light) {
 
     CADISE_ASSERT(bsdf);
     CADISE_ASSERT(light);
@@ -23,9 +25,9 @@ Spectrum DirectLightEvaluator::evaluate(const Scene&               scene,
     SurfaceIntersection intersection(surfaceIntersection);
     Spectrum directLightRadiance(0.0_r);
 
-    const Vector3R& P  = intersection.surfaceInfo().point();
-    const Vector3R& Ns = intersection.surfaceInfo().shadingNormal();
-    const Vector3R& Ng = intersection.surfaceInfo().geometryNormal();
+    const Vector3R P  = intersection.surfaceInfo().point();
+    const Vector3R Ns = intersection.surfaceInfo().shadingNormal();
+    const Vector3R Ng = intersection.surfaceInfo().geometryNormal();
 
     if (bsdf->type().isExactOne(BxdfType::ABSORB)) {
         return directLightRadiance;
@@ -33,32 +35,40 @@ Spectrum DirectLightEvaluator::evaluate(const Scene&               scene,
 
     // mis using light sampling
     {
-        Vector3R L;
-        real t;
-        real lightPdf;
-        const Spectrum radiance = light->evaluateSampleRadiance(L, intersection.surfaceInfo(), t, lightPdf);
-        intersection.setWo(L);
+        DirectLightSample directLightSample;
+        directLightSample.setTargetPosition(P);
 
-        // generate shadow ray to do occluded test
-        Ray shadowRay(P,
-                      L,
-                      constant::RAY_EPSILON,
-                      t - constant::RAY_EPSILON);
+        light->evaluateDirectSample(&directLightSample);
 
-        if (!radiance.isZero() && !scene.isOccluded(shadowRay)) {
-            const Spectrum reflectance       = bsdf->evaluate(intersection);
-            const Spectrum directLightFactor = reflectance * L.absDot(Ns);
+        if (directLightSample.isValid()) {
+            const Vector3R LVector  = directLightSample.emitPosition() - P;
+            const real     distance = LVector.length();
 
-            // if light is delta light, not using mis technique
-            if (light->isDeltaLight()) {
-                directLightRadiance += directLightFactor * radiance / lightPdf;
-            }
-            else {
-                // calculate bsdf's pdf
-                const real bsdfPdf = bsdf->evaluatePdfW(intersection);
+            CADISE_ASSERT_GT(distance, 0.0_r);
 
-                directLightRadiance += Mis<MisMode::POWER>::weight(lightPdf, bsdfPdf)
-                                       * directLightFactor * radiance / lightPdf;
+            const Vector3R L = LVector / distance;
+            intersection.setWo(L);
+
+            // generate shadow ray to do occluded test
+            Ray shadowRay(P, L, constant::RAY_EPSILON, distance - constant::RAY_EPSILON);
+
+            if (!scene.isOccluded(shadowRay)) {
+                const Spectrum& radiance  = directLightSample.radiance();
+                const real      lightPdfW = directLightSample.pdfW();
+
+                const Spectrum reflectance       = bsdf->evaluate(intersection);
+                const Spectrum directLightFactor = reflectance * L.absDot(Ns);
+
+                // if light is delta light, not using mis technique
+                if (light->isDeltaLight()) {
+                    directLightRadiance += radiance * directLightFactor / lightPdfW;
+                }
+                else {
+                    const real bsdfPdfW  = bsdf->evaluatePdfW(intersection);
+                    const real misWeight = Mis<MisMode::POWER>::weight(lightPdfW, bsdfPdfW);
+
+                    directLightRadiance += misWeight * radiance * directLightFactor / lightPdfW;
+                }
             }
         }
     } // mis using light sampling
@@ -69,23 +79,25 @@ Spectrum DirectLightEvaluator::evaluate(const Scene&               scene,
             const Spectrum  reflectance = bsdf->evaluateSample(intersection);
             const Vector3R& L = intersection.wo();
 
-            Ray sampleRay(P, L);
+            if (!reflectance.isZero()) {
 
-            if (!reflectance.isZero() && 
-                scene.isIntersecting(sampleRay, intersection)) {
-                
-                const AreaLight* areaLight = intersection.primitiveInfo().primitive()->areaLight();
-                if (areaLight == light) {
-                    const Spectrum directLightFactor = reflectance * L.absDot(Ns);
+                CADISE_ASSERT(!L.isZero());
 
-                    const real bsdfPdf = intersection.pdf();
-                    const Spectrum radiance = areaLight->emittance(sampleRay.direction().reverse(), intersection);
+                Ray sampleRay(P, L);
 
-                    // calcualte emitter's pdf
-                    const real lightPdf = areaLight->evaluatePdfW(intersection, sampleRay.maxT());
+                if (scene.isIntersecting(sampleRay, intersection)) {
 
-                    directLightRadiance += Mis<MisMode::POWER>::weight(bsdfPdf, lightPdf)
-                                           * directLightFactor * radiance / bsdfPdf;
+                    const AreaLight* areaLight = intersection.primitiveInfo().primitive()->areaLight();
+                    if (areaLight == light) {
+                        const Spectrum directLightFactor = reflectance * L.absDot(Ns);
+                        const Spectrum radiance = areaLight->emittance(intersection);
+
+                        const real bsdfPdfW = intersection.pdf();
+                        const real lightPdfW = areaLight->evaluateDirectPdfW(intersection, P);
+                        const real misWeight = Mis<MisMode::POWER>::weight(bsdfPdfW, lightPdfW);
+
+                        directLightRadiance += misWeight * radiance * directLightFactor / bsdfPdfW;
+                    }
                 }
             }
         }

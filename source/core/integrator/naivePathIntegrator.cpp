@@ -41,7 +41,7 @@ void NaivePathIntegrator::traceRadiance(
 
         const AreaLight* areaLight = primitive->areaLight();
         if (areaLight) {
-            const Spectrum emittance = areaLight->emittance(traceRay.direction().reverse(), intersection);
+            const Spectrum emittance = areaLight->emittance(intersection);
             totalRadiance += pathWeight * emittance;
         }
 

@@ -6,7 +6,7 @@ namespace cadise {
 
 class SampleWarp {
 public:
-    static void uniformTriangle(
+    static void uniformTriangleUv(
         const Vector2R& sample,
         Vector2R* const out_uv);
 };

@@ -14,14 +14,13 @@ Primitive::Primitive(const std::shared_ptr<Bsdf>& bsdf) :
     CADISE_ASSERT(bsdf);
 }
 
-void Primitive::sampleSurface(
-    const SurfaceInfo& inSurface, 
-    SurfaceInfo* const out_surface) const {
+void Primitive::evaluatePositionSample(PositionSample* const out_sample) const {
+    CADISE_ASSERT(out_sample);
 
     return;
 }
 
-real Primitive::samplePdfA(const Vector3R& position) const {
+real Primitive::evaluatePositionPdfA(const Vector3R& position) const {
     return 0.0_r;
 }
 
@@ -32,6 +31,8 @@ real Primitive::area() const {
 void Primitive::uvwToPosition(
     const Vector3R& uvw, 
     Vector3R* const out_position) const {
+
+    CADISE_ASSERT(out_position);
 
     return;
 }

@@ -10,6 +10,7 @@ namespace cadise {
 
 class AreaLight;
 class Bsdf;
+class PositionSample;
 class SurfaceInfo;
 class TextureMapper;
 
@@ -27,11 +28,8 @@ public:
         const PrimitiveInfo& primitiveInfo, 
         SurfaceInfo* const   out_surface) const = 0;
 
-    virtual void sampleSurface(
-        const SurfaceInfo& inSurface, 
-        SurfaceInfo* const out_surface) const;
-
-    virtual real samplePdfA(const Vector3R& position) const;
+    virtual void evaluatePositionSample(PositionSample* const out_sample) const;
+    virtual real evaluatePositionPdfA(const Vector3R& position) const;
     virtual real area() const;
 
     virtual void uvwToPosition(

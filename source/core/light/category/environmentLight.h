@@ -18,15 +18,20 @@ public:
                      const std::shared_ptr<Texture<Spectrum>>& environmentRadiance,
                      const Vector2S& resolution);
 
-    Spectrum emittance(const Vector3R& emitDirection, const SurfaceIntersection& emitSurface) const override;
-    Spectrum evaluateSampleRadiance(Vector3R& lightDirection, const SurfaceInfo& surfaceInfo, real& t, real& pdf) const override;
+    Spectrum emittance(const SurfaceIntersection& emitIntersection) const override;
 
-    real evaluatePdfW(const SurfaceIntersection& surfaceIntersection, const real distance) const override;
+    void evaluateDirectSample(DirectLightSample* const out_sample) const override;
+    real evaluateDirectPdfW(
+        const SurfaceIntersection& emitIntersection, 
+        const Vector3R&            targetPosition) const override;
+
+    real approximatedFlux() const override;
 
 private:
     const Primitive* _primitive;
     std::shared_ptr<Texture<Spectrum>> _environmentRadiance;
     Distribution2D _distribution;
+    real _approximatedFlux;
 };
 
 } // namespace cadise

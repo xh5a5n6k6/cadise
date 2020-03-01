@@ -22,10 +22,10 @@ static std::shared_ptr<Light> createPoint(
     const std::shared_ptr<SdData>& data,
     const StringKeyMap<Primitive>& primitives) {
 
-    const Vector3R position = data->findVector3r("position");
-    const Vector3R color    = data->findVector3r("color");
+    const Vector3R position  = data->findVector3r("position");
+    const Vector3R intensity = data->findVector3r("intensity");
 
-    return std::make_shared<PointLight>(position, color);
+    return std::make_shared<PointLight>(position, intensity);
 }
 
 static std::shared_ptr<Light> createSingleArea(
@@ -35,6 +35,7 @@ static std::shared_ptr<Light> createSingleArea(
     const Vector3R color          = data->findVector3r("color");
     const real     watt           = data->findReal("watt");
     const bool     isBackFaceEmit = data->findBool("is-back-face-emit");
+
     const std::string_view primitiveName = data->findString("primitive");
     auto&& primitive = primitives.find(primitiveName);
 

@@ -1,5 +1,6 @@
 #include "core/light/category/environmentLight.h"
 
+#include "core/integral-tool/sample/directLightSample.h"
 #include "core/intersector/primitive/primitive.h"
 #include "core/surfaceIntersection.h"
 #include "core/texture/texture.h"
@@ -18,7 +19,8 @@ EnvironmentLight::EnvironmentLight(const Primitive* const primitive,
     AreaLight(false),
     _primitive(primitive),
     _environmentRadiance(environmentRadiance),
-    _distribution() {
+    _distribution(),
+    _approximatedFlux(0.0_r) {
 
     CADISE_ASSERT(primitive);
     CADISE_ASSERT(environmentRadiance);
@@ -39,57 +41,66 @@ EnvironmentLight::EnvironmentLight(const Primitive* const primitive,
             environmentRadiance->evaluate({sampleU, sampleV, 0.0_r}, &sampleRadiance);
 
             weightedSampleRadiances[rowIndex + ix] = sampleRadiance.luminance() * sinTheta;
+
+            _approximatedFlux += weightedSampleRadiances[rowIndex + ix];
         }
     }
 
     _distribution = Distribution2D(weightedSampleRadiances.data(), resolution);
+
+    // flux calculation
 }
 
-Spectrum EnvironmentLight::emittance(const Vector3R& emitDirection, const SurfaceIntersection& emitSurface) const {
-    const Vector3R& uvw = emitSurface.surfaceInfo().uvw();
+Spectrum EnvironmentLight::emittance(const SurfaceIntersection& emitIntersection) const {
+    const Vector3R& uvw = emitIntersection.surfaceInfo().uvw();
     Spectrum sampleRadiance;
     _environmentRadiance->evaluate(uvw, &sampleRadiance);
 
     return sampleRadiance;
 }
 
-Spectrum EnvironmentLight::evaluateSampleRadiance(Vector3R& lightDirection, const SurfaceInfo& surfaceInfo, real& t, real& pdf) const {
-    const Vector3R& P = surfaceInfo.point();
+void EnvironmentLight::evaluateDirectSample(DirectLightSample* const out_sample) const {
+    CADISE_ASSERT(out_sample);
 
+    const Vector2R sample(Random::nextReal(), Random::nextReal());
     real uvPdf;
-    const Vector2R uvSample = _distribution.sampleContinuous({Random::nextReal(), Random::nextReal()}, 
-                                                             &uvPdf);
+    const Vector2R uvSample = _distribution.sampleContinuous(sample, &uvPdf);
 
     Vector3R samplePosition;
     _primitive->uvwToPosition({uvSample.x(), uvSample.y(), 0.0_r}, &samplePosition);
 
-    const Vector3R direction = samplePosition - P;
-    t = direction.length();
-    lightDirection = direction.normalize();
-
     const real sinTheta = std::sin((1.0_r - uvSample.y()) * constant::PI);
     if (sinTheta <= 0.0_r) {
-        return Spectrum(0.0_r);
+
+        return;
     }
-    
-    pdf = uvPdf / (2.0_r * constant::PI * constant::PI * sinTheta);
 
     Spectrum sampleRadiance;
     _environmentRadiance->evaluate({uvSample.x(), uvSample.y(), 0.0_r}, &sampleRadiance);
 
-    return sampleRadiance;
+    out_sample->setEmitPosition(samplePosition);
+    out_sample->setPdfW(uvPdf / (2.0_r * constant::PI * constant::PI * sinTheta));
+    out_sample->setRadiance(sampleRadiance);
 }
 
-real EnvironmentLight::evaluatePdfW(const SurfaceIntersection& surfaceIntersection, const real distance) const {
-    const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
+real EnvironmentLight::evaluateDirectPdfW(
+    const SurfaceIntersection& emitIntersection, 
+    const Vector3R&            targetPosition) const {
+
+    const Vector3R& uvw = emitIntersection.surfaceInfo().uvw();
     const real sinTheta = std::sin((1.0_r - uvw.y()) * constant::PI);
     if (sinTheta <= 0.0_r) {
+
         return 0.0_r;
     }
 
     const real uvPdf = _distribution.pdfContinuous({uvw.x(), uvw.y()});
 
     return uvPdf / (2.0_r * constant::PI * constant::PI * sinTheta);
+}
+
+real EnvironmentLight::approximatedFlux() const {
+    return _approximatedFlux;
 }
 
 } // namespace cadise

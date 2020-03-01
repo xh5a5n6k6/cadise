@@ -1,5 +1,6 @@
 #include "core/ray.h"
 
+#include "fundamental/assertion.h"
 #include "math/constant.h"
 
 #include <limits>
@@ -12,9 +13,13 @@ Ray::Ray(const Vector3R& origin, const Vector3R& direction) :
 
 Ray::Ray(const Vector3R& origin, const Vector3R& direction, const real minT, const real maxT) : 
     _origin(origin), 
-    _direction(direction.normalize()), 
+    _direction(direction), 
     _minT(minT),
     _maxT(maxT) {
+
+    CADISE_ASSERT(!direction.isZero());
+
+    _direction = direction.normalize();
 }
 
 Vector3R Ray::at(const real t) const {

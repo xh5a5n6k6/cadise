@@ -1,5 +1,6 @@
 #include "core/intersector/primitive/rectangle.h"
 
+#include "core/integral-tool/sample/positionSample.h"
 #include "core/intersector/primitiveInfo.h"
 #include "core/ray.h"
 #include "core/surfaceInfo.h"
@@ -128,11 +129,8 @@ void Rectangle::evaluateSurfaceDetail(
     }
 }
 
-void Rectangle::sampleSurface(
-    const SurfaceInfo& inSurface, 
-    SurfaceInfo* const out_surface) const {
-    
-    CADISE_ASSERT(out_surface);
+void Rectangle::evaluatePositionSample(PositionSample* const out_sample) const {
+    CADISE_ASSERT(out_sample);
 
     Vector3R eA = _eA;
     Vector3R eB = _eB;
@@ -155,18 +153,21 @@ void Rectangle::sampleSurface(
         t = Random::nextReal();
     } while (t > shortWidth / longWidth);
 
-    const Vector3R point = _vB + s * eA + t * eA.length() * eB.normalize();
+    const Vector3R P = _vB + s * eA + t * eA.length() * eB.normalize();
 
     Vector3R N = _eA.cross(_eB);
     N = (N.isZero()) ? Vector3R(0.0_r, 1.0_r, 0.0_r) : N.normalize();
 
-    out_surface->setPoint(point);
-    out_surface->setGeometryNormal(N);
-    out_surface->setShadingNormal(N);
+    out_sample->setPosition(P);
+    out_sample->setGeometryNormal(N);
+    out_sample->setShadingNormal(N);
+    // TODO: rectangle uvw calculation
+    // out_sample->setUvw(uvw);
+    out_sample->setPdfA(this->evaluatePositionPdfA(P));
 }
 
-real Rectangle::samplePdfA(const Vector3R& position) const {
-    return 1.0_r / area();
+real Rectangle::evaluatePositionPdfA(const Vector3R& position) const {
+    return 1.0_r / this->area();
 }
 
 real Rectangle::area() const {
