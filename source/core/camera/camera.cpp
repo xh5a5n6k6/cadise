@@ -7,6 +7,8 @@ Camera::Camera(const Vector3R& position) :
     _aspectRatio(16.0_r / 9.0_r) {
 }
 
+Camera::~Camera() = default;
+
 void Camera::setAspectRatio(const real aspectRatio) {
     _aspectRatio = aspectRatio;
 }

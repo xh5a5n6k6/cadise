@@ -8,6 +8,8 @@ class Microfacet {
 public:
     Microfacet();
 
+    virtual ~Microfacet();
+
     virtual real distributionD(const real alphaX, 
                                const real alphaY,
                                const Vector3R& N,

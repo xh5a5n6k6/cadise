@@ -25,6 +25,9 @@ inline ConceptualSpectrum<N>::ConceptualSpectrum(const ConceptualSpectrum<N>& cs
 }
 
 template<std::size_t N>
+inline ConceptualSpectrum<N>::~ConceptualSpectrum() = default;
+
+template<std::size_t N>
 inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator-() const {
     ConceptualSpectrum<N> result;
     result._values = -_values;

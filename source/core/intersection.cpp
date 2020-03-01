@@ -2,4 +2,6 @@
 
 namespace cadise {
 
+Intersection::~Intersection() = default;
+
 } // namespace cadise

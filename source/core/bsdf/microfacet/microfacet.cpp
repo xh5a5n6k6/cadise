@@ -6,6 +6,8 @@ namespace cadise {
 
 Microfacet::Microfacet() = default;
 
+Microfacet::~Microfacet() = default;
+
 bool Microfacet::_isShadowingMaskingValid(const Vector3R& V,
                                           const Vector3R& L,
                                           const Vector3R& N,

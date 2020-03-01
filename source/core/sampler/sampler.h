@@ -11,6 +11,8 @@ class Sampler {
 public:
     Sampler(const std::size_t sampleNumber);
 
+    virtual ~Sampler();
+
     virtual std::unique_ptr<Sampler> clone(const std::size_t sampleNumber) const = 0;
 
     virtual std::unique_ptr<SampleRecord1D> requestSample1D() const = 0;

@@ -15,6 +15,8 @@ class PixelSampler {
 public:
     PixelSampler(const TextureWrapMode& mode);
 
+    virtual ~PixelSampler();
+
     virtual void sample(
         const Vector3R& uvw, 
         const Image<T, N>& image, 

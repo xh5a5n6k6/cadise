@@ -8,6 +8,8 @@ Bsdf::Bsdf(const BsdfType& type) :
     _type(type) {
 }
 
+Bsdf::~Bsdf() = default;
+
 const BsdfType& Bsdf::type() const {
     return _type;
 }

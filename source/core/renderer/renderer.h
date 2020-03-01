@@ -12,6 +12,8 @@ class Renderer {
 public:
     Renderer();
 
+    virtual ~Renderer();
+
     virtual void render(const Scene& scene) const = 0;
     
     void setCamera(const std::shared_ptr<Camera>& camera);

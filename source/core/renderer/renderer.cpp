@@ -11,6 +11,8 @@ Renderer::Renderer() :
     _film(nullptr) {
 }
 
+Renderer::~Renderer() = default;
+
 void Renderer::setCamera(const std::shared_ptr<Camera>& camera) {
     CADISE_ASSERT(camera);
 

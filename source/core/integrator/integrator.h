@@ -9,6 +9,8 @@ class Scene;
 
 class Integrator {
 public:
+    virtual ~Integrator();
+
     virtual void traceRadiance(
         const Scene&    scene, 
         const Ray&      ray, 

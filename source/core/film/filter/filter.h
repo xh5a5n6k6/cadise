@@ -8,6 +8,8 @@ class Filter {
 public:
     Filter(const real filterWidth, const real filterHeight);
 
+    virtual ~Filter();
+
     virtual real evaluate(const real locationX, const real locationY) const = 0;
 
     const Vector2R& filterSize() const;

@@ -23,4 +23,7 @@ PixelSampler<T, N>::PixelSampler(const TextureWrapMode& mode) {
     }
 }
 
+template<typename T, std::size_t N>
+PixelSampler<T, N>::~PixelSampler() = default;
+
 } // namespace cadise

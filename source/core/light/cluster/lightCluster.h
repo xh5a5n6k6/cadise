@@ -8,6 +8,8 @@ class Light;
 
 class LightCluster {
 public:
+    virtual ~LightCluster();
+
     virtual const Light* sampleOneLight(real* const out_pdf) const = 0;
 };
 

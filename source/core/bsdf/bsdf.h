@@ -12,6 +12,8 @@ public:
     Bsdf();
     Bsdf(const BsdfType& type);
 
+    virtual ~Bsdf();
+
     virtual Spectrum evaluate(const SurfaceIntersection& surfaceIntersection) const = 0;
     virtual Spectrum evaluateSample(SurfaceIntersection& surfaceIntersection) const = 0;
 

@@ -15,6 +15,8 @@ public:
     ConceptualSpectrum(const SpectralArray& sa);
     ConceptualSpectrum(const ConceptualSpectrum& cs);
 
+    virtual ~ConceptualSpectrum();
+
     ConceptualSpectrum operator-() const;
     ConceptualSpectrum operator+(const real s) const;
     ConceptualSpectrum operator-(const real s) const;

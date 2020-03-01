@@ -10,6 +10,8 @@ class Camera {
 public:
     Camera(const Vector3R& position);
 
+    virtual ~Camera();
+
     virtual void updateTransform() = 0;
     virtual Ray spawnPrimaryRay(const Vector2R& filmNdcPosition) const = 0;
 

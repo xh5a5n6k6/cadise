@@ -10,6 +10,8 @@ class SurfaceIntersection;
 
 class Light {
 public:
+    virtual ~Light();
+
     virtual Spectrum emittance(const SurfaceIntersection& emitIntersection) const = 0;
     
     // light sampling used in next-event estimation (direct light)
