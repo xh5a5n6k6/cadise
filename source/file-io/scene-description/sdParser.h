@@ -5,7 +5,7 @@
 
 namespace cadise {
 
-class RenderOption;
+class RenderDatabase;
 class Tokenizer;
 
 // SdParser is for scene description parser
@@ -20,8 +20,8 @@ private:
     std::string _parseSdToString(const std::string& filename) const;
     void _parseEnd();
 
-    std::unique_ptr<Tokenizer>    _tokenizer;
-    std::unique_ptr<RenderOption> _renderOption;
+    std::unique_ptr<Tokenizer>      _tokenizer;
+    std::unique_ptr<RenderDatabase> _renderDatabase;
 };
 
 } // namespace cadise

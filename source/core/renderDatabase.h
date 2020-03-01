@@ -18,9 +18,9 @@ class SdData;
 template<typename T>
 class Texture;
 
-class RenderOption {
+class RenderDatabase {
 public:
-    RenderOption();
+    RenderDatabase();
 
     void setUpData(const std::shared_ptr<SdData>& data);
 

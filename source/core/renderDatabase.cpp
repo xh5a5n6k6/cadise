@@ -1,4 +1,4 @@
-#include "core/renderOption.h"
+#include "core/renderDatabase.h"
 
 #include "core/bsdf/bsdf.h"
 #include "core/camera/camera.h"
@@ -19,7 +19,7 @@
 
 namespace cadise {
 
-RenderOption::RenderOption() :
+RenderDatabase::RenderDatabase() :
     _filmData(nullptr),
     _cameraData(nullptr),
     _rendererData(nullptr),
@@ -30,7 +30,7 @@ RenderOption::RenderOption() :
     _environmentLightIndex(std::numeric_limits<std::size_t>::max()) {
 }
 
-void RenderOption::setUpData(const std::shared_ptr<SdData>& data) {
+void RenderDatabase::setUpData(const std::shared_ptr<SdData>& data) {
     CADISE_ASSERT(data);
 
     switch (data->classType()) {
@@ -69,7 +69,7 @@ void RenderOption::setUpData(const std::shared_ptr<SdData>& data) {
     }
 }
 
-void RenderOption::prepareRender() {
+void RenderDatabase::prepareRender() {
     _bsdfs.clear();
     _primitives.clear();
     _realTextures.clear();
@@ -113,31 +113,31 @@ void RenderOption::prepareRender() {
     _renderer->setFilm(film);
 }
 
-void RenderOption::startRender() const {
+void RenderDatabase::startRender() const {
     _renderer->render(*_scene);
 }
 
-void RenderOption::_setUpFilm(const std::shared_ptr<SdData>& data) {
+void RenderDatabase::_setUpFilm(const std::shared_ptr<SdData>& data) {
     _filmData = std::move(data);
 }
 
-void RenderOption::_setUpCamera(const std::shared_ptr<SdData>& data) {
+void RenderDatabase::_setUpCamera(const std::shared_ptr<SdData>& data) {
     _cameraData = std::move(data);
 }
 
-void RenderOption::_setUpRenderer(const std::shared_ptr<SdData>& data) {
+void RenderDatabase::_setUpRenderer(const std::shared_ptr<SdData>& data) {
     _rendererData = std::move(data);
 }
 
-void RenderOption::_setUpAccelerator(const std::shared_ptr<SdData>& data) {
+void RenderDatabase::_setUpAccelerator(const std::shared_ptr<SdData>& data) {
     _acceleratorData = std::move(data);
 }
 
-void RenderOption::_setUpLightCluster(const std::shared_ptr<SdData>& data) {
+void RenderDatabase::_setUpLightCluster(const std::shared_ptr<SdData>& data) {
     _lightClusterData = std::move(data);
 }
 
-void RenderOption::_setUpRealTexture(const std::shared_ptr<SdData>& data) {
+void RenderDatabase::_setUpRealTexture(const std::shared_ptr<SdData>& data) {
     const std::shared_ptr<Texture<real>> texture
         = instantiator::makeRealTexture(data, _realTextures, _spectrumTextures);
     const std::string_view textureName = data->findString("name");
@@ -146,7 +146,7 @@ void RenderOption::_setUpRealTexture(const std::shared_ptr<SdData>& data) {
         std::pair<std::string, std::shared_ptr<Texture<real>>>(textureName, texture));
 }
 
-void RenderOption::_setUpSpectrumTexture(const std::shared_ptr<SdData>& data) {
+void RenderDatabase::_setUpSpectrumTexture(const std::shared_ptr<SdData>& data) {
     const std::shared_ptr<Texture<Spectrum>> texture
         = instantiator::makeSpectrumTexture(data, _realTextures, _spectrumTextures);
     const std::string_view textureName = data->findString("name");
@@ -155,14 +155,14 @@ void RenderOption::_setUpSpectrumTexture(const std::shared_ptr<SdData>& data) {
         std::pair<std::string, std::shared_ptr<Texture<Spectrum>>>(textureName, texture));
 }
 
-void RenderOption::_setUpBsdf(const std::shared_ptr<SdData>& data) {
+void RenderDatabase::_setUpBsdf(const std::shared_ptr<SdData>& data) {
     const std::shared_ptr<Bsdf> bsdf = instantiator::makeBsdf(data, _realTextures, _spectrumTextures, _bsdfs);
     const std::string_view bsdfName = data->findString("name");
 
     _bsdfs.insert(std::pair<std::string, std::shared_ptr<Bsdf>>(bsdfName, bsdf));
 }
 
-void RenderOption::_setUpLight(const std::shared_ptr<SdData>& data) {
+void RenderDatabase::_setUpLight(const std::shared_ptr<SdData>& data) {
     const std::shared_ptr<Light> light = instantiator::makeLight(data, _primitives, _backgroundSphere);
     
     // HACK
@@ -173,7 +173,7 @@ void RenderOption::_setUpLight(const std::shared_ptr<SdData>& data) {
     _lights.push_back(light);
 }
 
-void RenderOption::_setUpPrimitive(const std::shared_ptr<SdData>& data) {
+void RenderDatabase::_setUpPrimitive(const std::shared_ptr<SdData>& data) {
     instantiator::makePrimitive(data, _bsdfs, &_intersectors, &_primitives);
 }
 

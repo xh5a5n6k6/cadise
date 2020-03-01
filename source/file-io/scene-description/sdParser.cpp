@@ -1,6 +1,6 @@
 #include "file-io/scene-description/sdParser.h"
 
-#include "core/renderOption.h"
+#include "core/renderDatabase.h"
 #include "file-io/scene-description/tokenizer.h"
 
 #include <cstdio>
@@ -11,7 +11,7 @@ namespace cadise {
 
 SdParser::SdParser() :
     _tokenizer(std::make_unique<Tokenizer>()),
-    _renderOption(std::make_unique<RenderOption>()) {
+    _renderDatabase(std::make_unique<RenderDatabase>()) {
 }
 
 SdParser::~SdParser() = default;
@@ -26,7 +26,7 @@ void SdParser::parseSd(const std::string& filename) {
         const std::size_t stringCount = endPosition - startPosition + 1;
         const std::string_view subStringView = fileStringView.substr(startPosition, stringCount);
         const std::shared_ptr<SdData> data = _tokenizer->tokenize(subStringView);
-        _renderOption->setUpData(data);
+        _renderDatabase->setUpData(data);
 
         startPosition = endPosition + 1;
     }
@@ -61,11 +61,11 @@ std::string SdParser::_parseSdToString(const std::string& filename) const {
 }
 
 void SdParser::_parseEnd() {
-    _renderOption->prepareRender();
-    _renderOption->startRender();
+    _renderDatabase->prepareRender();
+    _renderDatabase->startRender();
 
     _tokenizer.reset();
-    _renderOption.reset();
+    _renderDatabase.reset();
 }
 
 } // namespace cadise
