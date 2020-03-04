@@ -22,6 +22,9 @@ public:
          const Path& filename,
          const std::shared_ptr<Filter>& filter);
 
+    //std::unique_ptr<Film> cloneEmpty() const;
+    //void mergeWithFilm(std::unique_ptr<Film> other);
+
     std::unique_ptr<FilmTile> generateFilmTile(const int32 tileX, const int32 tileY) const;
     void mergeWithFilmTile(std::unique_ptr<FilmTile> filmTile);
 

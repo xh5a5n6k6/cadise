@@ -1,0 +1,173 @@
+#include "core/camera/perspectivePinholeCamera.h"
+
+#include "core/integral-tool/sample/cameraSample.h"
+#include "core/ray.h"
+#include "fundamental/assertion.h"
+#include "math/constant.h"
+#include "math/transform.h"
+
+#include <cmath>
+#include <limits>
+
+namespace cadise {
+
+PerspectivePinholeCamera::PerspectivePinholeCamera(
+    const Vector3R& position,
+    const Vector3R& direction, 
+    const Vector3R& up, 
+    const real      fov,
+    const real      sensorWidthMM) :
+    
+    Camera(position),
+    _cameraToWorld(nullptr),
+    _filmNdcToCamera(nullptr),
+    _fov(fov),
+    _sensorWidthMM(sensorWidthMM) {
+
+    _cameraToWorld = std::make_shared<Transform>(Matrix4::lookAt(position, direction, up));
+
+    this->updateTransform();
+}
+
+void PerspectivePinholeCamera::updateTransform() {
+    const auto[sensorWidth, sensorHeight] = _getSensorSize();
+
+    // update sensorOffset
+    _sensorOffset = (sensorWidth / 2.0_r) / std::tan(math::degreeToRadian(_fov / 2.0_r));
+
+    // matrix multiplication is right-hand-side, so we
+    // need to initialize matrix first.
+    //
+    // translate needs to be multiplied last, it means
+    // we need to multiply it first (it will be the leftmost part).
+    Matrix4 filmToCameraMatrix = Matrix4::identity();
+    filmToCameraMatrix *= Matrix4::translate(-(sensorWidth / 2.0_r), sensorHeight / 2.0_r, -_sensorOffset);
+    filmToCameraMatrix *= Matrix4::scale(sensorWidth, -sensorHeight, 1.0_r);
+
+    _filmNdcToCamera = std::make_shared<Transform>(filmToCameraMatrix);
+}
+
+Ray PerspectivePinholeCamera::spawnPrimaryRay(const Vector2R& filmNdcPosition) const {
+    Vector3R sampleCameraPosition;
+    _filmNdcToCamera->transformPoint({filmNdcPosition.x(), filmNdcPosition.y(), 0.0_r}, &sampleCameraPosition);
+
+    // calculate parameter in camera space
+    const Vector3R origin = _position;
+    Vector3R direction;
+    _cameraToWorld->transformVector(sampleCameraPosition, &direction);
+
+    // generate ray in world space
+    return Ray(origin, direction);
+}
+
+void PerspectivePinholeCamera::evaluateCameraSample(
+    CameraSample* const out_sample, 
+    Ray* const          out_ray) const {
+
+    CADISE_ASSERT(out_sample);
+    CADISE_ASSERT(out_ray);
+
+    Vector3R cameraRayN;
+    _cameraToWorld->transformVector({0.0_r, 0.0_r, -1.0_r}, &cameraRayN);
+
+    const Vector3R& targetPosition  = out_sample->targetPosition();
+    const Vector3R  cameraRayVector = targetPosition - _position;
+
+    CADISE_ASSERT(!cameraRayVector.isZero());
+
+    const real     sensorArea         = _getSensorArea();
+    const real     distance           = cameraRayVector.length();
+    const Vector3R cameraRayDirection = cameraRayVector / distance;
+    const real     cosTheta           = cameraRayDirection.dot(cameraRayN);
+    if (cosTheta <= 0.0_r) {
+
+        return;
+    }
+
+    Vector3R targetCameraPosition;
+    _cameraToWorld->inverseMatrix().transformPoint(targetPosition, &targetCameraPosition);
+
+    CADISE_ASSERT(!targetCameraPosition.isZero());
+
+    // transform to focus (film) plane in camera space
+    const real     cameraToImageDistance  = _sensorOffset / cosTheta;
+    const real     cameraToImageDistance2 = cameraToImageDistance * cameraToImageDistance;
+    const Vector3R targetFocusPosition    = (targetCameraPosition / distance) * cameraToImageDistance;
+
+    Vector3R filmNdcPosition;
+    _filmNdcToCamera->inverseMatrix().transformPoint(targetFocusPosition, &filmNdcPosition);
+
+    // check NDC boundary (0 ~ 1)
+    if (filmNdcPosition.x() <  0.0_r || 
+        filmNdcPosition.x() >= 1.0_r ||
+        filmNdcPosition.y() <  0.0_r || 
+        filmNdcPosition.y() >= 1.0_r) {
+
+        return;
+    }
+
+    const real pdfA = 1.0_r;
+
+    out_sample->setFilmNdcPosition(Vector2R(filmNdcPosition.x(), filmNdcPosition.y()));
+    out_sample->setImportance(Spectrum(cameraToImageDistance2 / (sensorArea * cosTheta * cosTheta)));
+    out_sample->setPdfW(pdfA * distance * distance / cosTheta);
+
+    // or shooting from targetPosition ?
+    *out_ray = Ray(_position, cameraRayDirection, constant::RAY_EPSILON, distance - constant::RAY_EPSILON);
+}
+
+void PerspectivePinholeCamera::evaluateCameraPdf(
+    const Ray&  cameraRay,
+    real* const out_pdfA,
+    real* const out_pdfW) const {
+
+    CADISE_ASSERT(out_pdfA);
+    CADISE_ASSERT(out_pdfW);
+
+    Vector3R cameraRayN;
+    _cameraToWorld->transformVector({0.0_r, 0.0_r, -1.0_r}, &cameraRayN);
+
+    const real sensorArea = _getSensorArea();
+    const real cosTheta   = cameraRay.direction().dot(cameraRayN);
+    if (cosTheta <= 0.0_r) {
+
+        return;
+    }
+
+    const real     cameraToImageDistance  = _sensorOffset / cosTheta;
+    const real     cameraToImageDistance2 = cameraToImageDistance * cameraToImageDistance;
+    const Vector3R rayWorldFocusPosition  = cameraRay.at(cameraToImageDistance);
+
+    Vector3R rayCameraFocusPosition;
+    _cameraToWorld->inverseMatrix().transformPoint(rayWorldFocusPosition, &rayCameraFocusPosition);
+
+    Vector3R filmNdcPosition;
+    _filmNdcToCamera->inverseMatrix().transformPoint(rayCameraFocusPosition, &filmNdcPosition);
+
+    // check NDC boundary (0 ~ 1)
+    if (filmNdcPosition.x() <  0.0_r ||
+        filmNdcPosition.x() >= 1.0_r ||
+        filmNdcPosition.y() <  0.0_r ||
+        filmNdcPosition.y() >= 1.0_r) {
+
+        return;
+    }
+
+    *out_pdfA = 1.0_r;
+    *out_pdfW = cameraToImageDistance2 / (sensorArea * cosTheta);
+}
+
+std::pair<real, real> PerspectivePinholeCamera::_getSensorSize() const {
+    return {
+        _sensorWidthMM,               // sensorWidth
+        _sensorWidthMM / _aspectRatio // sensorHeight
+    };
+}
+
+real PerspectivePinholeCamera::_getSensorArea() const {
+    const auto [sensorWidth, sensorHeight] = _getSensorSize();
+
+    return sensorWidth * sensorHeight;
+}
+
+} // namespace cadise

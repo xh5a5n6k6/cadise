@@ -27,6 +27,8 @@ Film::Film(const int32 widthPx,
     _pixels.resize(pixelNumber);
 }
 
+
+
 std::unique_ptr<FilmTile> Film::generateFilmTile(const int32 tileX, const int32 tileY) const {
     const int32 minIndexX = tileX * CADISE_FILMTILE_SIZE;
     const int32 minIndexY = tileY * CADISE_FILMTILE_SIZE;

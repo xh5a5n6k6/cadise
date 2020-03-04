@@ -14,7 +14,7 @@ film {
     [filter string "gaussian"]
 }
 camera {
-    [type string "perspective"]
+    [type string "perspective-pinhole"]
     [position vector3r "278 273 800"]
     [direction vector3r "0 0 -1"]
     [up vector3r "0 1 0"]
