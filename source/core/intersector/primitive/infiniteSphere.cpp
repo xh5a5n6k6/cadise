@@ -1,8 +1,8 @@
 #include "core/intersector/primitive/infiniteSphere.h"
 
-#include "core/bsdf/category/absorberBsdf.h"
 #include "core/intersector/primitiveInfo.h"
 #include "core/ray.h"
+#include "core/surface/bsdf/absorberBsdf.h"
 #include "core/surfaceInfo.h"
 #include "core/texture/mapper/sphericalMapper.h"
 #include "fundamental/assertion.h"

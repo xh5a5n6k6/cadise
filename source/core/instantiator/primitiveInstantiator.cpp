@@ -6,7 +6,7 @@
 #include "core/intersector/primitive/triangle.h"
 #include "core/intersector/primitive/triangleMesh.h"
 
-#include "core/bsdf/category/lambertianDiffuse.h"
+#include "core/surface/bsdf/lambertianDiffuse.h"
 #include "file-io/scene-description/sdData.h"
 #include "fundamental/assertion.h"
 

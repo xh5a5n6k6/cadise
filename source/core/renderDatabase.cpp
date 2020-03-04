@@ -1,6 +1,5 @@
 #include "core/renderDatabase.h"
 
-#include "core/bsdf/bsdf.h"
 #include "core/camera/camera.h"
 #include "core/film/film.h"
 #include "core/instantiator/instantiator.h"
@@ -9,6 +8,7 @@
 #include "core/light/light.h"
 #include "core/renderer/renderer.h"
 #include "core/scene.h"
+#include "core/surface/bsdf/bsdf.h"
 #include "core/texture/texture.h"
 #include "file-io/scene-description/sdData.h"
 #include "fundamental/assertion.h"
