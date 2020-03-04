@@ -1,12 +1,13 @@
 #include "core/integrator/pathIntegrator.h"
 
-#include "core/bsdf/bsdf.h"
 #include "core/integral-tool/directLightEvaluator.h"
 #include "core/integral-tool/russianRoulette.h"
 #include "core/intersector/primitive/primitive.h"
 #include "core/light/category/areaLight.h"
 #include "core/ray.h"
 #include "core/scene.h"
+#include "core/surface/bsdf/bsdf.h"
+#include "core/surface/transportInfo.h"
 #include "core/surfaceIntersection.h"
 #include "fundamental/assertion.h"
 #include "math/constant.h"
@@ -56,8 +57,8 @@ void PathIntegrator::traceRadiance(
 
         // estimate direct light using MIS technique 
         // (only at non-specular surface)
-        if (!bsdf->type().isAtLeastOne(BxdfType::SPECULAR_REFLECTION,
-                                       BxdfType::SPECULAR_TRANSMISSION)) {
+        if (!bsdf->type().hasAtLeastOne(BxdfType::SPECULAR_REFLECTION,
+                                        BxdfType::SPECULAR_TRANSMISSION)) {
 
             isCountForEmittance = false;
 
@@ -73,7 +74,7 @@ void PathIntegrator::traceRadiance(
         }
 
         // estimate indirect light with bsdf sampling
-        const Spectrum  reflectance = bsdf->evaluateSample(intersection);
+        const Spectrum  reflectance = bsdf->evaluateSample(TransportInfo(), intersection);
         const Vector3R& L = intersection.wo();
 
         const real LdotN = L.absDot(Ns);

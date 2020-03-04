@@ -1,12 +1,13 @@
 #include "core/integral-tool/directLightEvaluator.h"
 
-#include "core/bsdf/bsdf.h"
 #include "core/integral-tool/mis.h"
 #include "core/integral-tool/sample/directLightSample.h"
 #include "core/intersector/primitive/primitive.h"
 #include "core/light/category/areaLight.h"
 #include "core/ray.h"
 #include "core/scene.h"
+#include "core/surface/bsdf/bsdf.h"
+#include "core/surface/transportInfo.h"
 #include "core/surfaceIntersection.h"
 #include "fundamental/assertion.h"
 #include "math/constant.h"
@@ -56,7 +57,7 @@ Spectrum DirectLightEvaluator::evaluate(
                 const Spectrum& radiance  = directLightSample.radiance();
                 const real      lightPdfW = directLightSample.pdfW();
 
-                const Spectrum reflectance       = bsdf->evaluate(intersection);
+                const Spectrum reflectance       = bsdf->evaluate(TransportInfo(), intersection);
                 const Spectrum directLightFactor = reflectance * L.absDot(Ns);
 
                 // if light is delta light, not using mis technique
@@ -64,7 +65,7 @@ Spectrum DirectLightEvaluator::evaluate(
                     directLightRadiance += radiance * directLightFactor / lightPdfW;
                 }
                 else {
-                    const real bsdfPdfW  = bsdf->evaluatePdfW(intersection);
+                    const real bsdfPdfW  = bsdf->evaluatePdfW(TransportInfo(), intersection);
                     const real misWeight = Mis<MisMode::POWER>::weight(lightPdfW, bsdfPdfW);
 
                     directLightRadiance += misWeight * radiance * directLightFactor / lightPdfW;
@@ -76,7 +77,7 @@ Spectrum DirectLightEvaluator::evaluate(
     // mis using bsdf sampling
     {
         if (!light->isDeltaLight()) {
-            const Spectrum  reflectance = bsdf->evaluateSample(intersection);
+            const Spectrum  reflectance = bsdf->evaluateSample(TransportInfo(), intersection);
             const Vector3R& L = intersection.wo();
 
             if (!reflectance.isZero()) {

@@ -1,11 +1,12 @@
 #include "core/integrator/whittedIntegrator.h"
 
-#include "core/bsdf/bsdf.h"
 #include "core/integral-tool/sample/directLightSample.h"
 #include "core/intersector/primitive/primitive.h"
 #include "core/light/category/areaLight.h"
 #include "core/ray.h"
 #include "core/scene.h"
+#include "core/surface/bsdf/bsdf.h"
+#include "core/surface/transportInfo.h"
 #include "core/surfaceIntersection.h"
 #include "fundamental/assertion.h"
 #include "math/constant.h"
@@ -39,8 +40,8 @@ void WhittedIntegrator::traceRadiance(
         const Vector3R& P  = intersection.surfaceInfo().point();
         const Vector3R& Ns = intersection.surfaceInfo().shadingNormal();
 
-        const bool isSpecular = bsdf->type().isAtLeastOne(BxdfType::SPECULAR_REFLECTION,
-                                                          BxdfType::SPECULAR_TRANSMISSION);
+        const bool isSpecular = bsdf->type().hasAtLeastOne(BxdfType::SPECULAR_REFLECTION,
+                                                           BxdfType::SPECULAR_TRANSMISSION);
 
         // add radiance if hitting area light
         const AreaLight* areaLight = primitive->areaLight();
@@ -73,7 +74,7 @@ void WhittedIntegrator::traceRadiance(
                     const Spectrum& radiance  = directLightSample.radiance();
                     const real      lightPdfW = directLightSample.pdfW();
 
-                    const Spectrum reflectance         = bsdf->evaluate(intersection);
+                    const Spectrum reflectance         = bsdf->evaluate(TransportInfo(), intersection);
                     const Spectrum directLightFactor   = reflectance * L.absDot(Ns);
                     const Spectrum directLightRadiance = radiance * directLightFactor / lightPdfW;
 
@@ -89,7 +90,7 @@ void WhittedIntegrator::traceRadiance(
         // only trace next ray at specular surface
         // according to bsdf sampling
         else {
-            const Spectrum reflectance = bsdf->evaluateSample(intersection);
+            const Spectrum reflectance = bsdf->evaluateSample(TransportInfo(), intersection);
             if (!reflectance.isZero()) {
                 const Vector3R& L = intersection.wo();
                 const real LdotN = L.absDot(Ns);

@@ -1,11 +1,12 @@
 #include "core/integrator/naivePathIntegrator.h"
 
-#include "core/bsdf/bsdf.h"
 #include "core/integral-tool/russianRoulette.h"
 #include "core/intersector/primitive/primitive.h"
 #include "core/light/category/areaLight.h"
 #include "core/ray.h"
 #include "core/scene.h"
+#include "core/surface/bsdf/bsdf.h"
+#include "core/surface/transportInfo.h"
 #include "core/surfaceIntersection.h"
 #include "fundamental/assertion.h"
 #include "math/constant.h"
@@ -45,7 +46,7 @@ void NaivePathIntegrator::traceRadiance(
             totalRadiance += pathWeight * emittance;
         }
 
-        const Spectrum  reflectance = bsdf->evaluateSample(intersection);
+        const Spectrum  reflectance = bsdf->evaluateSample(TransportInfo(), intersection);
         const Vector3R& L = intersection.wo();
 
         const real LdotN = L.absDot(Ns);
