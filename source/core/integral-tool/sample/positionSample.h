@@ -20,6 +20,8 @@ public:
     void setUvw(const Vector3R& uvw);
     void setPdfA(const real pdfA);
 
+    bool isValid() const;
+
 private:
     Vector3R _position;
     Vector3R _geometryNormal;

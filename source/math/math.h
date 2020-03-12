@@ -50,6 +50,9 @@ inline T clamp(const T& value, const T& lowerBound, const T& upperBound);
 template<typename T>
 inline void swap(T& a, T& b);
 
+template<typename T>
+inline T mapToNonZero(const T& value);
+
 // template header implementation
 
 template<typename T>
@@ -77,6 +80,11 @@ inline void swap(T& a, T& b) {
     T tmp = std::move(a);
     a = std::move(b);
     b = std::move(tmp);
+}
+
+template<typename T>
+inline T mapToNonZero(const T& value) {
+    return (value == T(0)) ? T(1) : value;
 }
 
 } // namespace math

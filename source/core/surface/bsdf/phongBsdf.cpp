@@ -52,7 +52,8 @@ Spectrum PhongBsdf::evaluateSample(
 
     const Vector2R sample(Random::nextReal(), Random::nextReal());
     Vector3R L;
-    Hemisphere::cosineExpWeightedSampling(sample, _exponent, &L);
+    real pdfW;
+    Hemisphere::cosineExpWeightedSampling(sample, _exponent, &L, &pdfW);
 
     // transform L to world coordinate
     L = xAxis * L.x() + yAxis * L.y() + zAxis * L.z();
@@ -66,6 +67,8 @@ Spectrum PhongBsdf::evaluateSample(
 
     const real RdotV         = math::max(R.dot(V), 0.0_r);
     const real powerTerm     = std::pow(RdotV, _exponent);
+
+    // TODO: use pdfW instead ?
     const real pdfL          = powerTerm * _pdfFactor;
     const real specularValue = powerTerm * _brdfFactor;
 

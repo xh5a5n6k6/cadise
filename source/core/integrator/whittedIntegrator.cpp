@@ -37,7 +37,7 @@ void WhittedIntegrator::traceRadiance(
         const Primitive* primitive = intersection.primitiveInfo().primitive();
         const Bsdf*      bsdf      = primitive->bsdf();
 
-        const Vector3R& P  = intersection.surfaceInfo().point();
+        const Vector3R& P  = intersection.surfaceInfo().position();
         const Vector3R& Ns = intersection.surfaceInfo().shadingNormal();
 
         const bool isSpecular = bsdf->type().hasAtLeastOne(BxdfType::SPECULAR_REFLECTION,

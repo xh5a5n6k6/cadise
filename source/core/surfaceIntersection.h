@@ -11,6 +11,9 @@ class SurfaceIntersection : public Intersection {
 public:
     SurfaceIntersection();
 
+    // return wi/wo swap SurfaceIntersection
+    SurfaceIntersection reverse() const;
+
     const PrimitiveInfo& primitiveInfo() const;
     const SurfaceInfo& surfaceInfo() const;
     const Vector3R& wi() const;

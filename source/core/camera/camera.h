@@ -18,7 +18,8 @@ public:
 
     virtual void evaluateCameraSample(
         CameraSample* const out_sample, 
-        Ray* const          out_ray) const = 0;
+        Ray* const          out_toCameraRay) const = 0;
+
     virtual void evaluateCameraPdf(
         const Ray&  cameraRay,
         real* const out_pdfA,

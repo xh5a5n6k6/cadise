@@ -16,6 +16,12 @@ public:
         const SurfaceIntersection& emitIntersection,
         const Vector3R&            targetPosition) const override = 0;
 
+    void evaluateEmitSample(EmitLightSample* const out_sample) const override = 0;
+    void evaluateEmitPdf(
+        const Ray&  emitRay,
+        real* const out_pdfA,
+        real* const out_pdfW) const override = 0;
+
     real approximatedFlux() const override = 0;
 
     bool isDeltaLight() const override;

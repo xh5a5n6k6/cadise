@@ -5,6 +5,8 @@
 #include "fundamental/assertion.h"
 #include "math/constant.h"
 
+#include <cmath>
+
 namespace cadise {
 
 PointLight::PointLight(const Vector3R& position, const Spectrum& intensity) :
@@ -24,8 +26,11 @@ void PointLight::evaluateDirectSample(DirectLightSample* const out_sample) const
     
     CADISE_ASSERT(!emitVector.isZero());
 
+    const real distance2 = emitVector.lengthSquared();
+
     out_sample->setEmitPosition(emitPosition);
-    out_sample->setRadiance(_intensity / emitVector.lengthSquared());
+    out_sample->setEmitNormal(emitVector / std::sqrt(distance2));
+    out_sample->setRadiance(_intensity / distance2);
     out_sample->setPdfW(1.0_r);
 }
 
@@ -34,6 +39,25 @@ real PointLight::evaluateDirectPdfW(
     const Vector3R&            targetPosition) const {
 
     return 0.0_r;
+}
+
+void PointLight::evaluateEmitSample(EmitLightSample* const out_sample) const {
+    CADISE_ASSERT(out_sample);
+
+
+}
+
+void PointLight::evaluateEmitPdf(
+    const Ray&  emitRay,
+    real* const out_pdfA,
+    real* const out_pdfW) const {
+
+    CADISE_ASSERT(out_pdfA);
+    CADISE_ASSERT(out_pdfW);
+
+    *out_pdfA = 0.0_r;
+    // TODO: sphere sample pdf
+
 }
 
 real PointLight::approximatedFlux() const {

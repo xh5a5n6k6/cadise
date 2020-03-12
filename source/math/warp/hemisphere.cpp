@@ -10,9 +10,11 @@ namespace cadise {
 
 void Hemisphere::uniformSampling(
     const Vector2R& sample, 
-    Vector3R* const out_direction) {
+    Vector3R* const out_direction,
+    real* const     out_pdfW) {
 
     CADISE_ASSERT(out_direction);
+    CADISE_ASSERT(out_pdfW);
 
     const real phi      = constant::TWO_PI * sample.x();
     const real cosTheta = sample.y();
@@ -21,13 +23,17 @@ void Hemisphere::uniformSampling(
     *out_direction =  Vector3R(std::cos(phi) * sinTheta,
                                std::sin(phi) * sinTheta,
                                cosTheta);
+
+    *out_pdfW = constant::INV_TWO_PI;
 }
 
 void Hemisphere::cosineWeightedSampling(
     const Vector2R& sample, 
-    Vector3R* const out_direction) {
+    Vector3R* const out_direction,
+    real* const     out_pdfW) {
 
     CADISE_ASSERT(out_direction);
+    CADISE_ASSERT(out_pdfW);
 
     const real phi      = constant::TWO_PI * sample.x();
     const real theta    = std::acos(1.0_r - 2.0_r * sample.y()) * 0.5_r;
@@ -37,14 +43,18 @@ void Hemisphere::cosineWeightedSampling(
     *out_direction =  Vector3R(std::cos(phi) * sinTheta,
                                std::sin(phi) * sinTheta,
                                cosTheta);
+
+    *out_pdfW = cosTheta * constant::INV_PI;
 }
 
 void Hemisphere::cosineExpWeightedSampling(
     const Vector2R& sample,
     const real      exponent,
-    Vector3R* const out_direction) {
+    Vector3R* const out_direction,
+    real* const     out_pdfW) {
 
     CADISE_ASSERT(out_direction);
+    CADISE_ASSERT(out_pdfW);
 
     const real phi      = constant::TWO_PI * sample.x();
     const real cosTheta = std::pow(sample.y(), 1.0_r / (exponent + 1.0_r));
@@ -53,6 +63,8 @@ void Hemisphere::cosineExpWeightedSampling(
     *out_direction = Vector3R(std::cos(phi) * sinTheta,
                               std::sin(phi) * sinTheta,
                               cosTheta);
+
+    *out_pdfW = (exponent + 1.0_r) * constant::INV_TWO_PI * std::pow(cosTheta, exponent);
 }
 
 } // namespace cadise

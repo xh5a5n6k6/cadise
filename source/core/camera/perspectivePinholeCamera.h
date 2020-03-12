@@ -23,7 +23,8 @@ public:
 
     void evaluateCameraSample(
         CameraSample* const out_sample, 
-        Ray* const          out_ray) const override;
+        Ray* const          out_toCameraRay) const override;
+
     void evaluateCameraPdf(
         const Ray&  cameraRay, 
         real* const out_pdfA, 
@@ -31,7 +32,6 @@ public:
 
 private:
     std::pair<real, real> _getSensorSize() const;
-
     real _getSensorArea() const;
 
     std::shared_ptr<Transform> _cameraToWorld;

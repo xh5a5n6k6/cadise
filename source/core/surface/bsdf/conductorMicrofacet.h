@@ -18,7 +18,6 @@ public:
         const std::shared_ptr<ConductorFresnel>& fresnel,
         const std::shared_ptr<Texture<real>>&    roughness);
 
-
     Spectrum evaluate(
         const TransportInfo&       transportInfo,
         const SurfaceIntersection& surfaceIntersection) const override;

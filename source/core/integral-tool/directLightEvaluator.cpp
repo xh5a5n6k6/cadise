@@ -26,7 +26,7 @@ Spectrum DirectLightEvaluator::evaluate(
     SurfaceIntersection intersection(surfaceIntersection);
     Spectrum directLightRadiance(0.0_r);
 
-    const Vector3R P  = intersection.surfaceInfo().point();
+    const Vector3R P  = intersection.surfaceInfo().position();
     const Vector3R Ns = intersection.surfaceInfo().shadingNormal();
     const Vector3R Ng = intersection.surfaceInfo().geometryNormal();
 
@@ -40,7 +40,6 @@ Spectrum DirectLightEvaluator::evaluate(
         directLightSample.setTargetPosition(P);
 
         light->evaluateDirectSample(&directLightSample);
-
         if (directLightSample.isValid()) {
             const Vector3R LVector  = directLightSample.emitPosition() - P;
             const real     distance = LVector.length();
@@ -52,7 +51,6 @@ Spectrum DirectLightEvaluator::evaluate(
 
             // generate shadow ray to do occluded test
             Ray shadowRay(P, L, constant::RAY_EPSILON, distance - constant::RAY_EPSILON);
-
             if (!scene.isOccluded(shadowRay)) {
                 const Spectrum& radiance  = directLightSample.radiance();
                 const real      lightPdfW = directLightSample.pdfW();
@@ -85,15 +83,13 @@ Spectrum DirectLightEvaluator::evaluate(
                 CADISE_ASSERT(!L.isZero());
 
                 Ray sampleRay(P, L);
-
                 if (scene.isIntersecting(sampleRay, intersection)) {
-
                     const AreaLight* areaLight = intersection.primitiveInfo().primitive()->areaLight();
                     if (areaLight == light) {
                         const Spectrum directLightFactor = reflectance * L.absDot(Ns);
-                        const Spectrum radiance = areaLight->emittance(intersection);
+                        const Spectrum radiance          = areaLight->emittance(intersection);
 
-                        const real bsdfPdfW = intersection.pdf();
+                        const real bsdfPdfW  = intersection.pdf();
                         const real lightPdfW = areaLight->evaluateDirectPdfW(intersection, P);
                         const real misWeight = Mis<MisMode::POWER>::weight(bsdfPdfW, lightPdfW);
 

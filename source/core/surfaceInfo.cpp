@@ -3,14 +3,14 @@
 namespace cadise {
 
 SurfaceInfo::SurfaceInfo() :
-    _point(0.0_r),
+    _position(0.0_r),
     _geometryNormal(0.0_r),
     _shadingNormal(0.0_r),
     _uvw(0.0_r) {
 }
 
-const Vector3R& SurfaceInfo::point() const {
-    return _point;
+const Vector3R& SurfaceInfo::position() const {
+    return _position;
 }
 
 const Vector3R& SurfaceInfo::geometryNormal() const {
@@ -25,8 +25,8 @@ const Vector3R& SurfaceInfo::uvw() const {
     return _uvw;
 }
 
-void SurfaceInfo::setPoint(const Vector3R& point) {
-    _point = point;
+void SurfaceInfo::setPosition(const Vector3R& position) {
+    _position = position;
 }
 
 void SurfaceInfo::setGeometryNormal(const Vector3R& geometryNormal) {

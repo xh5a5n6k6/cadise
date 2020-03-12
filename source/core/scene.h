@@ -26,6 +26,7 @@ public:
     bool isOccluded(const Ray& ray) const;
     
     const Light* sampleOneLight(real* const out_pdf) const;
+    real evaluatePickLightPdf(const Light* const light) const;
 
     void setBackgroundSphere(const Primitive* const backgroundSphere);
 

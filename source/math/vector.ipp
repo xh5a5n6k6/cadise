@@ -6,6 +6,7 @@
 #include "math/math.h"
 
 #include <cmath>
+#include <type_traits>
 
 namespace cadise {
 
@@ -252,6 +253,19 @@ template<typename T, std::size_t N>
 inline bool Vector<T, N>::hasNaN() const {
     for (std::size_t i = 0; i < N; ++i) {
         if (std::isnan(_v[i])) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+template<typename T, std::size_t N>
+inline bool Vector<T, N>::hasNegative() const {
+    static_assert(std::is_signed_v<T>);
+
+    for (std::size_t i = 0; i < N; ++i) {
+        if (_v[i] < static_cast<T>(0)) {
             return true;
         }
     }

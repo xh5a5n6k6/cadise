@@ -50,4 +50,8 @@ void PositionSample::setPdfA(const real pdfA) {
     _pdfA = pdfA;
 }
 
+bool PositionSample::isValid() const {
+    return _pdfA > 0.0_r;
+}
+
 } // namespace cadise

@@ -7,6 +7,10 @@
 
 namespace cadise {
 
+Ray::Ray() :
+    Ray(Vector3R(0.0_r), Vector3R(0.0_r, 0.0_r, -1.0_r)) {
+}
+
 Ray::Ray(const Vector3R& origin, const Vector3R& direction) :
     Ray(origin, direction, constant::RAY_EPSILON, std::numeric_limits<real>::max()) {
 }
@@ -40,6 +44,14 @@ real Ray::minT() const {
 
 real Ray::maxT() const {
     return _maxT;
+}
+
+void Ray::setOrigin(const Vector3R& origin) {
+    _origin = origin;
+}
+
+void Ray::setDirection(const Vector3R& direction) {
+    _direction = direction;
 }
 
 void Ray::setMinT(const real minT) {

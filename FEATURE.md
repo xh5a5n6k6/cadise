@@ -3,6 +3,7 @@
     - Whitted Ray Tracing
     - Unidirectional Path Tracing
     - Unidirectional Path Tracing with Next Event Estimation
+    - Bidirectional Path Tracing
 - ### Accelerator
     - BVH (equal, SAH)
     - K-d Tree (SAH)

@@ -124,7 +124,7 @@ void Sphere::evaluateSurfaceDetail(
 
     CADISE_ASSERT(out_surface);
 
-    const Vector3R& P = out_surface->point();
+    const Vector3R& P = out_surface->position();
     const Vector3R  N = (P - _center).normalize();
 
     out_surface->setGeometryNormal(N);

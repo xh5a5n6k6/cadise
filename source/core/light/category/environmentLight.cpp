@@ -102,6 +102,23 @@ real EnvironmentLight::evaluateDirectPdfW(
     return uvPdf / (2.0_r * constant::PI * constant::PI * sinTheta);
 }
 
+void EnvironmentLight::evaluateEmitSample(EmitLightSample* const out_sample) const {
+    CADISE_ASSERT(out_sample);
+
+
+}
+
+void EnvironmentLight::evaluateEmitPdf(
+    const Ray&  emitRay,
+    real* const out_pdfA,
+    real* const out_pdfW) const {
+
+    CADISE_ASSERT(out_pdfA);
+    CADISE_ASSERT(out_pdfW);
+
+
+}
+
 real EnvironmentLight::approximatedFlux() const {
     return _approximatedFlux;
 }

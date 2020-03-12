@@ -3,6 +3,7 @@
 #include "core/film/filmTile.h"
 #include "core/film/filter/filter.h"
 #include "core/imaging/image.h"
+#include "core/renderer/bdpt-renderer/connectEvent.h"
 #include "file-io/pictureSaver.h"
 #include "fundamental/assertion.h"
 #include "math/math.h"
@@ -19,12 +20,14 @@ Film::Film(const int32 widthPx,
     _resolution(widthPx, heightPx),
     _filename(filename),
     _filter(filter),
-    _pixels() {
+    _pixels(),
+    _splatPixels() {
 
     CADISE_ASSERT(filter);
 
     const std::size_t pixelNumber = static_cast<std::size_t>(_resolution.x() * _resolution.y());
     _pixels.resize(pixelNumber);
+    _splatPixels.resize(pixelNumber);
 }
 
 
@@ -63,19 +66,40 @@ void Film::mergeWithFilmTile(std::unique_ptr<FilmTile> filmTile) {
     }
 }
 
-void Film::save() {
+void Film::addSplatRadiance(const ConnectEvent& connectEvent) {
+    std::lock_guard<std::mutex> lock(_filmMutex);
+
+    const Spectrum& splatRadiance = connectEvent.splatRadiance();
+    Vector3R splatRgb;
+    splatRadiance.transformToRgb(&splatRgb);
+
+    const Vector2R& filmNdcPosition = connectEvent.filmNdcPosition();
+    const Vector2R  filmPosition = filmNdcPosition * Vector2R(_resolution);
+
+    int32 ix = static_cast<int32>(std::floor(filmPosition.x()));
+    int32 iy = static_cast<int32>(std::floor(filmPosition.y()));
+    ix = (ix < _resolution.x()) ? ix : _resolution.x() - 1;
+    iy = (iy < _resolution.y()) ? iy : _resolution.y() - 1;
+
+    const std::size_t pixelIndexOffset = _pixelIndexOffset(ix, iy);
+    _splatPixels[pixelIndexOffset] += splatRgb;
+}
+
+void Film::save(const std::size_t samplesPerPixel) {
     // TODO: refactor here
     HdrImage hdrImage(_resolution);
+    const real inverseSpp = 1.0_r / static_cast<real>(samplesPerPixel);
 
     for (int32 iy = 0; iy < _resolution.y(); ++iy) {
         for (int32 ix = 0; ix < _resolution.x(); ++ix) {
             const std::size_t pixelOffset = _pixelIndexOffset(ix, iy);
 
-            const FilmPixel& pixel = _pixels[pixelOffset];
+            const FilmPixel& pixel      = _pixels[pixelOffset];
+            const FilmPixel& splatPixel = _splatPixels[pixelOffset];
 
-            const real r = math::gammaCorrection(pixel.x());
-            const real g = math::gammaCorrection(pixel.y());
-            const real b = math::gammaCorrection(pixel.z());
+            const real r = math::gammaCorrection(pixel.x() + splatPixel.x() * inverseSpp);
+            const real g = math::gammaCorrection(pixel.y() + splatPixel.y() * inverseSpp);
+            const real b = math::gammaCorrection(pixel.z() + splatPixel.z() * inverseSpp);
 
             hdrImage.setPixelValue(ix, iy, {r, g, b});
         }

@@ -43,7 +43,7 @@ void PathIntegrator::traceRadiance(
         const Primitive* primitive = intersection.primitiveInfo().primitive();
         const Bsdf*      bsdf      = primitive->bsdf();
 
-        const Vector3R& P  = intersection.surfaceInfo().point();
+        const Vector3R& P  = intersection.surfaceInfo().position();
         const Vector3R& Ns = intersection.surfaceInfo().shadingNormal();
 
         // add emitter's emittance only at first hit-point (0 bounce)

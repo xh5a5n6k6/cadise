@@ -10,6 +10,14 @@ SurfaceIntersection::SurfaceIntersection() :
     _pdf(0.0_r) {
 }
 
+SurfaceIntersection SurfaceIntersection::reverse() const {
+    SurfaceIntersection intersection(*this);
+    intersection.setWi(_wo);
+    intersection.setWo(_wi);
+
+    return intersection;
+}
+
 const PrimitiveInfo& SurfaceIntersection::primitiveInfo() const {
     return _primitiveInfo;
 }

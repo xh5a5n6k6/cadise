@@ -1,11 +1,11 @@
 #include "core/integral-tool/sample/cameraSample.h"
 
-#include <cmath>
-
 namespace cadise {
 
 CameraSample::CameraSample() :
     _targetPosition(),
+    _cameraPosition(),
+    _cameraNormal(),
     _filmNdcPosition(),
     _importance(0.0_r),
     _pdfW(0.0_r) {
@@ -13,6 +13,14 @@ CameraSample::CameraSample() :
 
 const Vector3R& CameraSample::targetPosition() const {
     return _targetPosition;
+}
+
+const Vector3R& CameraSample::cameraPosition() const {
+    return _cameraPosition;
+}
+
+const Vector3R& CameraSample::cameraNormal() const {
+    return _cameraNormal;
 }
 
 const Vector2R& CameraSample::filmNdcPosition() const {
@@ -31,6 +39,14 @@ void CameraSample::setTargetPosition(const Vector3R& targetPosition) {
     _targetPosition = targetPosition;
 }
 
+void CameraSample::setCameraPosition(const Vector3R& cameraPosition) {
+    _cameraPosition = cameraPosition;
+}
+
+void CameraSample::setCameraNormal(const Vector3R& cameraNormal) {
+    _cameraNormal = cameraNormal;
+}
+
 void CameraSample::setFilmNdcPosition(const Vector2R& filmNdcPosition) {
     _filmNdcPosition = filmNdcPosition;
 }
@@ -44,7 +60,7 @@ void CameraSample::setPdfW(const real pdfW) {
 }
 
 bool CameraSample::isValid() const {
-    return !_importance.isZero() && _pdfW > 0.0_r && std::isfinite(_pdfW);
+    return !_importance.isZero() && _pdfW > 0.0_r && !_cameraNormal.isZero();
 }
 
 } // namespace cadise

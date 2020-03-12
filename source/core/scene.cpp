@@ -36,7 +36,7 @@ bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) c
 
         // calculate intersection surface details
         SurfaceInfo surfaceInfo;
-        surfaceInfo.setPoint(ray.at(ray.maxT()));
+        surfaceInfo.setPosition(ray.at(ray.maxT()));
 
         const Primitive* hitPrimitive = surfaceIntersection.primitiveInfo().primitive();
         hitPrimitive->evaluateSurfaceDetail(primitiveInfo, &surfaceInfo);
@@ -52,7 +52,7 @@ bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) c
 
         // calculate intersection surface details
         SurfaceInfo surfaceInfo;
-        surfaceInfo.setPoint(ray.direction());
+        surfaceInfo.setPosition(ray.direction());
 
         const Primitive* hitPrimitive = surfaceIntersection.primitiveInfo().primitive();
         hitPrimitive->evaluateSurfaceDetail(primitiveInfo, &surfaceInfo);
@@ -80,6 +80,12 @@ const Light* Scene::sampleOneLight(real* const out_pdf) const {
     CADISE_ASSERT(out_pdf);
 
     return _lightCluster->sampleOneLight(out_pdf);
+}
+
+real Scene::evaluatePickLightPdf(const Light* const light) const {
+    CADISE_ASSERT(light);
+
+    return _lightCluster->evaluatePickLightPdf(light);
 }
 
 void Scene::setBackgroundSphere(const Primitive* const backgroundSphere) {

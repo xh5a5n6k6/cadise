@@ -125,7 +125,7 @@ void Triangle::evaluateSurfaceDetail(
     CADISE_ASSERT(out_surface);
     
     // TODO: refactor here
-    const Vector3R& P = out_surface->point();
+    const Vector3R& P = out_surface->position();
     Vector3R Ng = _eAB.cross(_eAC);
     Ng = (Ng.isZero()) ? Vector3R(0.0_r, 1.0_r, 0.0_r) : Ng.normalize();
 

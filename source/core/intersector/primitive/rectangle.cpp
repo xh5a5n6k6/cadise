@@ -116,7 +116,7 @@ void Rectangle::evaluateSurfaceDetail(
         out_surface->setUvw(uvw);
     }
     else {
-        const Vector3R& P = out_surface->point();
+        const Vector3R& P = out_surface->position();
         const Vector3R  vectorOnPlane = P - _vB;
         const real projection1 = vectorOnPlane.dot(_eA.normalize()) / _eA.length();
         const real projection2 = vectorOnPlane.dot(_eB.normalize()) / _eA.length();

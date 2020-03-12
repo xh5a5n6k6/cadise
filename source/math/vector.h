@@ -44,6 +44,7 @@ public:
 
     bool isZero() const;
     bool hasNaN() const;
+    bool hasNegative() const;
     bool hasInfinite() const;
     T sum() const;
     T average() const;

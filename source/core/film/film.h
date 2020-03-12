@@ -9,6 +9,7 @@
 
 namespace cadise {
 
+class ConnectEvent;
 class FilmTile;
 class Filter;
 
@@ -22,13 +23,15 @@ public:
          const Path& filename,
          const std::shared_ptr<Filter>& filter);
 
+    // TODO: add these two method ?
     //std::unique_ptr<Film> cloneEmpty() const;
     //void mergeWithFilm(std::unique_ptr<Film> other);
 
     std::unique_ptr<FilmTile> generateFilmTile(const int32 tileX, const int32 tileY) const;
     void mergeWithFilmTile(std::unique_ptr<FilmTile> filmTile);
+    void addSplatRadiance(const ConnectEvent& connectEvent);
 
-    void save();
+    void save(const std::size_t samplesPerPixel);
 
     const Vector2I& resolution() const;
 
@@ -40,6 +43,7 @@ private:
     std::shared_ptr<Filter> _filter;
 
     std::vector<FilmPixel> _pixels;
+    std::vector<FilmPixel> _splatPixels;
 
     std::mutex _filmMutex;
 };

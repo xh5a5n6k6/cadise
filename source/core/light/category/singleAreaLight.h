@@ -24,6 +24,12 @@ public:
         const SurfaceIntersection& emitIntersection, 
         const Vector3R&            targetPosition) const override;
 
+    void evaluateEmitSample(EmitLightSample* const out_sample) const override;
+    void evaluateEmitPdf(
+        const Ray&  emitRay,
+        real* const out_pdfA,
+        real* const out_pdfW) const override;
+
     real approximatedFlux() const override;
 
     void setEmitRadiance(const std::shared_ptr<Texture<Spectrum>>& emitRadiance);

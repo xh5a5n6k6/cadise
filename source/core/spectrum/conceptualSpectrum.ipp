@@ -168,6 +168,11 @@ inline bool ConceptualSpectrum<N>::isZero() const {
 }
 
 template<std::size_t N>
+inline bool ConceptualSpectrum<N>::hasNegative() const {
+    return _values.hasNegative();
+}
+
+template<std::size_t N>
 inline bool ConceptualSpectrum<N>::hasNaN() const {
     return _values.hasNaN();
 }

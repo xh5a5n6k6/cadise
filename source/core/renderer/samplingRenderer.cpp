@@ -81,7 +81,7 @@ void SamplingRenderer::render(const Scene& scene) const {
         }
     });
 
-    _film->save();
+    _film->save(_sampler->sampleNumber());
 
     const std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
     std::cout << "Rendering time : "

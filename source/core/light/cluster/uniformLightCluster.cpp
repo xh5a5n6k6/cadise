@@ -23,4 +23,10 @@ const Light* UniformLightCluster::sampleOneLight(real* const out_pdf) const {
     return _lights[sampleIndex].get();
 }
 
+real UniformLightCluster::evaluatePickLightPdf(const Light* const light) const {
+    CADISE_ASSERT(light);
+
+    return 1.0_r / static_cast<real>(_lights.size());
+}
+
 } // namespace cadise

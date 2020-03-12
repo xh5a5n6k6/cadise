@@ -57,7 +57,8 @@ Spectrum LambertianDiffuse::evaluateSample(
 
     const Vector2R sample(Random::nextReal(), Random::nextReal());
     Vector3R L;
-    Hemisphere::cosineWeightedSampling(sample, &L);
+    real pdfW;
+    Hemisphere::cosineWeightedSampling(sample, &L, &pdfW);
 
     // transform L to world coordinate
     L = xAxis * L.x() + yAxis * L.y() + zAxis * L.z();
@@ -65,8 +66,6 @@ Spectrum LambertianDiffuse::evaluateSample(
     if (V.dot(Ns) <= 0.0_r) {
         L = L.reverse();
     }
-
-    const real pdfW = L.absDot(zAxis) * constant::INV_PI;
 
     surfaceIntersection.setWo(L);
     surfaceIntersection.setPdf(pdfW);

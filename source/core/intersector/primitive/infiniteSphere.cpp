@@ -54,7 +54,7 @@ void InfiniteSphere::evaluateSurfaceDetail(
     CADISE_ASSERT(out_surface);
 
     Vector3R uvw;
-    SphericalMapper().mappingToUvw(out_surface->point(), &uvw);
+    SphericalMapper().mappingToUvw(out_surface->position(), &uvw);
 
     out_surface->setUvw(uvw);
 }
