@@ -100,7 +100,9 @@ void WhittedIntegrator::traceRadiance(
                     break;
                 }
                 
-                traceRay = Ray(P, L);
+                traceRay.reset();
+                traceRay.setOrigin(P);
+                traceRay.setDirection(L);
             }
             else {
                 break;

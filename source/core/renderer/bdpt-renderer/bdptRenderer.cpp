@@ -52,7 +52,6 @@ void BdptRenderer::render(const Scene& scene) const {
             const int32 tileX = static_cast<int32>(tile) % tileNumber.x();
             const int32 tileY = static_cast<int32>(tile) / tileNumber.x();
 
-            std::unique_ptr<Film> localFilm;
             std::unique_ptr<FilmTile> filmTile = _film->generateFilmTile(tileX, tileY);
 
             const Vector2I& x0y0 = filmTile->tileBound().minVertex();

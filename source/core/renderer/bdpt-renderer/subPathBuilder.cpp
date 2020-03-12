@@ -90,7 +90,8 @@ void SubPathBuilder::buildCameraPath(
     CADISE_ASSERT(out_zeroBounceRadiance);
     CADISE_ASSERT(_camera);
 
-    const Ray primaryRay = _camera->spawnPrimaryRay(filmNdcPosition);
+    Ray primaryRay;
+    _camera->spawnPrimaryRay(filmNdcPosition, &primaryRay);
 
     real pdfA;
     real pdfW;
@@ -227,7 +228,9 @@ void SubPathBuilder::_buildSubPathCompletely(
             break;
         }
 
-        traceRay = Ray(newP, L);
+        traceRay.reset();
+        traceRay.setOrigin(newP);
+        traceRay.setDirection(L);
     }
 }
 

@@ -99,7 +99,9 @@ void PathIntegrator::traceRadiance(
             break;
         }
 
-        traceRay = Ray(P, L);
+        traceRay.reset();
+        traceRay.setOrigin(P);
+        traceRay.setDirection(L);
     }
 
     *out_radiance = totalRadiance;

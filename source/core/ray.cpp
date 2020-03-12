@@ -30,6 +30,13 @@ Vector3R Ray::at(const real t) const {
     return _origin + _direction * t;
 }
 
+void Ray::reset() {
+    this->setOrigin(Vector3R(0.0_r));
+    this->setDirection(Vector3R(0.0_r, 0.0_r, -1.0_r));
+    this->setMinT(constant::RAY_EPSILON);
+    this->setMaxT(std::numeric_limits<real>::max());
+}
+
 const Vector3R& Ray::origin() const {
     return _origin;
 }
@@ -51,7 +58,9 @@ void Ray::setOrigin(const Vector3R& origin) {
 }
 
 void Ray::setDirection(const Vector3R& direction) {
-    _direction = direction;
+    CADISE_ASSERT(!direction.isZero());
+
+    _direction = direction.normalize();
 }
 
 void Ray::setMinT(const real minT) {

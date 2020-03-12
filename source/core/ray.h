@@ -11,6 +11,7 @@ public:
     Ray(const Vector3R& origin, const Vector3R& direction, const real minT, const real maxT);
 
     Vector3R at(const real t) const;
+    void reset();
 
     const Vector3R& origin() const;
     const Vector3R& direction() const;

@@ -19,7 +19,10 @@ public:
         const real      sensorWidthMM);
 
     void updateTransform() override;
-    Ray spawnPrimaryRay(const Vector2R& filmNdcPosition) const override;
+
+    void spawnPrimaryRay(
+        const Vector2R& filmNdcPosition,
+        Ray* const      out_primaryRay) const override;
 
     void evaluateCameraSample(
         CameraSample* const out_sample, 

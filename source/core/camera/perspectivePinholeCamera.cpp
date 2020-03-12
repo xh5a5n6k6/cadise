@@ -47,7 +47,12 @@ void PerspectivePinholeCamera::updateTransform() {
     _filmNdcToCamera = std::make_shared<Transform>(filmNdcToCameraMatrix);
 }
 
-Ray PerspectivePinholeCamera::spawnPrimaryRay(const Vector2R& filmNdcPosition) const {
+void PerspectivePinholeCamera::spawnPrimaryRay(
+    const Vector2R& filmNdcPosition,
+    Ray* const      out_primaryRay) const {
+
+    CADISE_ASSERT(out_primaryRay);
+
     Vector3R sampleCameraPosition;
     _filmNdcToCamera->transformPoint({filmNdcPosition.x(), filmNdcPosition.y(), 0.0_r}, &sampleCameraPosition);
 
@@ -56,8 +61,12 @@ Ray PerspectivePinholeCamera::spawnPrimaryRay(const Vector2R& filmNdcPosition) c
     Vector3R direction;
     _cameraToWorld->transformVector(sampleCameraPosition, &direction);
 
+    CADISE_ASSERT(!direction.isZero());
+
     // generate ray in world space
-    return Ray(origin, direction);
+    out_primaryRay->reset();
+    out_primaryRay->setOrigin(origin);
+    out_primaryRay->setDirection(direction);
 }
 
 void PerspectivePinholeCamera::evaluateCameraSample(
@@ -114,10 +123,10 @@ void PerspectivePinholeCamera::evaluateCameraSample(
     out_sample->setPdfW(pdfA * distance * distance / cosTheta);
 
     // shooting from targetPosition
-    *out_toCameraRay = Ray(out_sample->targetPosition(), 
-                           cameraRayDirection.reverse(), 
-                           constant::RAY_EPSILON, 
-                           distance - constant::RAY_EPSILON);
+    out_toCameraRay->reset();
+    out_toCameraRay->setOrigin(out_sample->targetPosition());
+    out_toCameraRay->setDirection(cameraRayDirection.reverse());
+    out_toCameraRay->setMaxT(distance - constant::RAY_EPSILON);
 }
 
 void PerspectivePinholeCamera::evaluateCameraPdf(

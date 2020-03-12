@@ -14,7 +14,10 @@ public:
     virtual ~Camera();
 
     virtual void updateTransform() = 0;
-    virtual Ray spawnPrimaryRay(const Vector2R& filmNdcPosition) const = 0;
+
+    virtual void spawnPrimaryRay(
+        const Vector2R& filmNdcPosition,
+        Ray* const      out_primaryRay) const = 0;
 
     virtual void evaluateCameraSample(
         CameraSample* const out_sample, 
