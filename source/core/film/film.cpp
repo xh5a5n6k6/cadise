@@ -3,7 +3,7 @@
 #include "core/film/filmTile.h"
 #include "core/film/filter/filter.h"
 #include "core/imaging/image.h"
-#include "core/renderer/bdpt-renderer/connectEvent.h"
+#include "core/integral-tool/connectEvent.h"
 #include "file-io/pictureSaver.h"
 #include "fundamental/assertion.h"
 #include "math/math.h"
@@ -13,10 +13,12 @@
 
 namespace cadise {
 
-Film::Film(const int32 widthPx, 
-           const int32 heightPx, 
-           const Path& filename,
-           const std::shared_ptr<Filter>& filter) :
+Film::Film(
+    const int32                    widthPx, 
+    const int32                    heightPx, 
+    const Path&                    filename,
+    const std::shared_ptr<Filter>& filter) :
+    
     _resolution(widthPx, heightPx),
     _filename(filename),
     _filter(filter),
@@ -25,9 +27,10 @@ Film::Film(const int32 widthPx,
 
     CADISE_ASSERT(filter);
 
-    const std::size_t pixelNumber = static_cast<std::size_t>(_resolution.x() * _resolution.y());
-    _pixels.resize(pixelNumber);
-    _splatPixels.resize(pixelNumber);
+    const std::size_t numPixels = static_cast<std::size_t>(_resolution.x() * _resolution.y());
+
+    _pixels.resize(numPixels);
+    _splatPixels.resize(numPixels);
 }
 
 
@@ -57,6 +60,7 @@ void Film::mergeWithFilmTile(std::unique_ptr<FilmTile> filmTile) {
         for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix) {
             const FilmSensor& sensor = filmTile->getSensor(ix - x0y0.x(),
                                                            iy - x0y0.y());
+
             const std::size_t pixelIndexOffset = _pixelIndexOffset(ix, iy);
             const Vector3R totalRadiance(sensor.r(), sensor.g(), sensor.b());
             const real inverseWeight = 1.0_r / sensor.weight();
@@ -74,7 +78,7 @@ void Film::addSplatRadiance(const ConnectEvent& connectEvent) {
     splatRadiance.transformToRgb(&splatRgb);
 
     const Vector2R& filmNdcPosition = connectEvent.filmNdcPosition();
-    const Vector2R  filmPosition = filmNdcPosition * Vector2R(_resolution);
+    const Vector2R  filmPosition    = filmNdcPosition * Vector2R(_resolution);
 
     int32 ix = static_cast<int32>(std::floor(filmPosition.x()));
     int32 iy = static_cast<int32>(std::floor(filmPosition.y()));

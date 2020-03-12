@@ -20,7 +20,6 @@ public:
         const Spectrum&   throughput);
 
     bool isConnectible() const;
-    bool isLight() const;
 
     Spectrum evaluate(
         const TransportMode& mode,

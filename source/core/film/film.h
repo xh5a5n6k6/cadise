@@ -18,18 +18,20 @@ private:
     using FilmPixel = Vector3R;
 
 public:
-    Film(const int32 widthPx, 
-         const int32 heightPx,
-         const Path& filename,
-         const std::shared_ptr<Filter>& filter);
+    Film(
+        const int32                    widthPx, 
+        const int32                    heightPx,
+        const Path&                    filename,
+        const std::shared_ptr<Filter>& filter);
 
     // TODO: add these two method ?
     //std::unique_ptr<Film> cloneEmpty() const;
     //void mergeWithFilm(std::unique_ptr<Film> other);
 
+    void addSplatRadiance(const ConnectEvent& connectEvent);
+
     std::unique_ptr<FilmTile> generateFilmTile(const int32 tileX, const int32 tileY) const;
     void mergeWithFilmTile(std::unique_ptr<FilmTile> filmTile);
-    void addSplatRadiance(const ConnectEvent& connectEvent);
 
     void save(const std::size_t samplesPerPixel);
 

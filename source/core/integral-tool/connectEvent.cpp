@@ -1,4 +1,4 @@
-#include "core/renderer/bdpt-renderer/connectEvent.h"
+#include "core/integral-tool/connectEvent.h"
 
 namespace cadise {
 

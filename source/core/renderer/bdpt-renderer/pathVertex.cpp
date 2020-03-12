@@ -60,10 +60,6 @@ bool PathVertex::isConnectible() const {
     return false;
 }
 
-bool PathVertex::isLight() const {
-    return _light != nullptr;
-}
-
 Spectrum PathVertex::evaluate(
     const TransportMode& mode,
     const PathVertex&    previous, 
