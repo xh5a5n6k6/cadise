@@ -5,6 +5,7 @@
 
 namespace cadise {
 
+class BsdfSample;
 class SurfaceIntersection;
 class TransportInfo;
 
@@ -19,9 +20,10 @@ public:
         const TransportInfo&       transportInfo,
         const SurfaceIntersection& surfaceIntersection) const = 0;
 
-    virtual Spectrum evaluateSample(
-        const TransportInfo& transportInfo,
-        SurfaceIntersection& surfaceIntersection) const = 0;
+    virtual void evaluateSample(
+        const TransportInfo&       transportInfo,
+        const SurfaceIntersection& surfaceIntersection,
+        BsdfSample* const          out_sample) const = 0;
 
     virtual real evaluatePdfW(
         const TransportInfo&       transportInfo,

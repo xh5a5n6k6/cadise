@@ -1,5 +1,6 @@
 #include "core/surface/bsdf/conductorMicrofacet.h"
 
+#include "core/integral-tool/sample/bsdfSample.h"
 #include "core/surface/fresnel/conductorFresnel.h"
 #include "core/surface/microfacet/microfacet.h"
 #include "core/surface/microfacet/roughnessMapper.h"
@@ -68,9 +69,12 @@ Spectrum ConductorMicrofacet::evaluate(
     return numerator / denominator;
 }
 
-Spectrum ConductorMicrofacet::evaluateSample(
-    const TransportInfo& transportInfo, 
-    SurfaceIntersection& surfaceIntersection) const {
+void ConductorMicrofacet::evaluateSample(
+    const TransportInfo&       transportInfo, 
+    const SurfaceIntersection& surfaceIntersection,
+    BsdfSample* const          out_sample) const {
+
+    CADISE_ASSERT(out_sample);
 
     const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
     const Vector3R& V  = surfaceIntersection.wi();
@@ -103,7 +107,7 @@ Spectrum ConductorMicrofacet::evaluateSample(
     const real NdotH = Ns.dot(H);
 
     if (VdotN * LdotN <= 0.0_r) {
-        return Spectrum(0.0_r);
+        return;
     }
 
     Spectrum F;
@@ -115,16 +119,15 @@ Spectrum ConductorMicrofacet::evaluateSample(
     const real pdfH = std::abs(D * NdotH);
     const real pdfL = std::abs(pdfH / (4.0_r * LdotH));
     if (!std::isfinite(pdfL)) {
-        return Spectrum(0.0_r);
+        return;
     }
 
     const Spectrum numerator   = F * G * D;
     const real     denominator = 4.0_r * std::abs(VdotN * LdotN);
 
-    surfaceIntersection.setWo(L);
-    surfaceIntersection.setPdf(pdfL);
-
-    return numerator / denominator;
+    out_sample->setScatterValue(numerator / denominator);
+    out_sample->setScatterDirection(L);
+    out_sample->setPdfW(pdfL);
 }
 
 real ConductorMicrofacet::evaluatePdfW(

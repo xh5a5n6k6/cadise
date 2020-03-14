@@ -140,13 +140,12 @@ void PerspectivePinholeCamera::evaluateCameraPdf(
     Vector3R cameraRayN;
     _cameraToWorld->transformVector({0.0_r, 0.0_r, -1.0_r}, &cameraRayN);
 
-    const real sensorArea = _getSensorArea();
-    const real cosTheta   = cameraRay.direction().dot(cameraRayN);
+    const real cosTheta = cameraRay.direction().dot(cameraRayN);
     if (cosTheta <= 0.0_r) {
-
         return;
     }
 
+    const real     sensorArea                  = _getSensorArea();
     const real     cameraToImagePointDistance  = _sensorOffset / cosTheta;
     const real     cameraToImagePointDistance2 = cameraToImagePointDistance * cameraToImagePointDistance;
     const Vector3R rayWorldFocusPosition       = cameraRay.at(cameraToImagePointDistance);

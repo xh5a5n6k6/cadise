@@ -1,5 +1,6 @@
 #include "core/integrator/whittedIntegrator.h"
 
+#include "core/integral-tool/sample/bsdfSample.h"
 #include "core/integral-tool/sample/directLightSample.h"
 #include "core/intersector/primitive/primitive.h"
 #include "core/light/category/areaLight.h"
@@ -25,7 +26,7 @@ void WhittedIntegrator::traceRadiance(
     CADISE_ASSERT(out_radiance);
 
     Spectrum totalRadiance(0.0_r);
-    Spectrum pathWeight(1.0_r);
+    Spectrum pathThroughput(1.0_r);
 
     Ray traceRay(ray);
     for (int32 bounceTimes = 0; bounceTimes < _maxDepth; ++bounceTimes) {
@@ -56,8 +57,8 @@ void WhittedIntegrator::traceRadiance(
 
             DirectLightSample directLightSample;
             directLightSample.setTargetPosition(P);
-            sampleLight->evaluateDirectSample(&directLightSample);
 
+            sampleLight->evaluateDirectSample(&directLightSample);
             if (directLightSample.isValid()) {
                 const Vector3R LVector  = directLightSample.emitPosition() - P;
                 const real     distance = LVector.length();
@@ -69,7 +70,6 @@ void WhittedIntegrator::traceRadiance(
 
                 // generate shadow ray to do occluded test
                 const Ray shadowRay(P, L, constant::RAY_EPSILON, distance - constant::RAY_EPSILON);
-
                 if (!scene.isOccluded(shadowRay)) {
                     const Spectrum& radiance  = directLightSample.radiance();
                     const real      lightPdfW = directLightSample.pdfW();
@@ -78,7 +78,7 @@ void WhittedIntegrator::traceRadiance(
                     const Spectrum directLightFactor   = reflectance * L.absDot(Ns);
                     const Spectrum directLightRadiance = radiance * directLightFactor / lightPdfW;
 
-                    totalRadiance += pathWeight * directLightRadiance / lightPdf;
+                    totalRadiance += pathThroughput * directLightRadiance / lightPdf;
                 }
             }
 
@@ -90,23 +90,25 @@ void WhittedIntegrator::traceRadiance(
         // only trace next ray at specular surface
         // according to bsdf sampling
         else {
-            const Spectrum reflectance = bsdf->evaluateSample(TransportInfo(), intersection);
-            if (!reflectance.isZero()) {
-                const Vector3R& L = intersection.wo();
-                const real LdotN = L.absDot(Ns);
-                
-                pathWeight *= reflectance * LdotN / intersection.pdf();
-                if (pathWeight.isZero()) {
-                    break;
-                }
-                
-                traceRay.reset();
-                traceRay.setOrigin(P);
-                traceRay.setDirection(L);
-            }
-            else {
+            BsdfSample bsdfSample;
+            bsdf->evaluateSample(TransportInfo(), intersection, &bsdfSample);
+            if (!bsdfSample.isValid()) {
                 break;
             }
+
+            const Spectrum& reflectance = bsdfSample.scatterValue();
+            const Vector3R& L           = bsdfSample.scatterDirection();
+            const real      pdfW        = bsdfSample.pdfW();
+            const real      LdotN       = L.absDot(Ns);
+                
+            pathThroughput *= reflectance * LdotN / pdfW;
+            if (pathThroughput.isZero()) {
+                break;
+            }
+                
+            traceRay.reset();
+            traceRay.setOrigin(P);
+            traceRay.setDirection(L);
         }
     }
 

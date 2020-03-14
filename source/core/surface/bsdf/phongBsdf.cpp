@@ -1,5 +1,6 @@
 #include "core/surface/bsdf/phongBsdf.h"
 
+#include "core/integral-tool/sample/bsdfSample.h"
 #include "core/surfaceIntersection.h"
 #include "math/constant.h"
 #include "math/math.h"
@@ -37,9 +38,12 @@ Spectrum PhongBsdf::evaluate(
     return Spectrum(specularValue);
 }
 
-Spectrum PhongBsdf::evaluateSample(
-    const TransportInfo& transportInfo, 
-    SurfaceIntersection& surfaceIntersection) const {
+void PhongBsdf::evaluateSample(
+    const TransportInfo&       transportInfo, 
+    const SurfaceIntersection& surfaceIntersection,
+    BsdfSample* const          out_sample) const {
+
+    CADISE_ASSERT(out_sample);
 
     const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
     const Vector3R& V  = surfaceIntersection.wi();
@@ -59,23 +63,21 @@ Spectrum PhongBsdf::evaluateSample(
     L = xAxis * L.x() + yAxis * L.y() + zAxis * L.z();
     L = L.normalize();
 
-    const Vector3R R = L.reflect(Ns);
-
     if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) {
-        return Spectrum(0.0_r);
+        return;
     }
 
-    const real RdotV         = math::max(R.dot(V), 0.0_r);
-    const real powerTerm     = std::pow(RdotV, _exponent);
+    const Vector3R R         = L.reflect(Ns);
+    const real     RdotV     = math::max(R.dot(V), 0.0_r);
+    const real     powerTerm = std::pow(RdotV, _exponent);
 
     // TODO: use pdfW instead ?
     const real pdfL          = powerTerm * _pdfFactor;
     const real specularValue = powerTerm * _brdfFactor;
 
-    surfaceIntersection.setWo(L);
-    surfaceIntersection.setPdf(pdfL);
-
-    return Spectrum(specularValue);
+    out_sample->setScatterValue(Spectrum(specularValue));
+    out_sample->setScatterDirection(L);
+    out_sample->setPdfW(pdfL);
 }
 
 real PhongBsdf::evaluatePdfW(

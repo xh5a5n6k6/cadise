@@ -2,6 +2,7 @@
 
 #include "core/camera/camera.h"
 #include "core/integral-tool/russianRoulette.h"
+#include "core/integral-tool/sample/bsdfSample.h"
 #include "core/integral-tool/sample/directLightSample.h"
 #include "core/integral-tool/sample/emitLightSample.h"
 #include "core/intersector/primitive/primitive.h"
@@ -186,18 +187,27 @@ void SubPathBuilder::_buildSubPathCompletely(
             break;
         }
 
-        const Spectrum  reflectance = bsdf->evaluateSample(TransportInfo(mode), intersection);
-        const Vector3R& L = intersection.wo();
+        // estimate next direction with bsdf sampling
+        BsdfSample bsdfSample;
+        bsdf->evaluateSample(TransportInfo(mode), intersection, &bsdfSample);
+        if (!bsdfSample.isValid()) {
+            break;
+        }
 
-        const real LdotN = L.absDot(newNs);
+        const Spectrum& reflectance = bsdfSample.scatterValue();
+        const Vector3R& L           = bsdfSample.scatterDirection();
+        const real      pdfW        = bsdfSample.pdfW();
+        const real      LdotN       = L.absDot(newNs);
+
+        intersection.setWo(L);
 
         // for non-symmetric scattering correction
-        throughput *= reflectance * LdotN / intersection.pdf();
+        throughput *= reflectance * LdotN / pdfW;
         if (mode == TransportMode::IMPORTANCE) {
             throughput *= 1.0_r;
         }
 
-        pdfWForward = intersection.pdf();
+        pdfWForward = pdfW;
         pdfWReverse = bsdf->evaluatePdfW(TransportInfo(mode), intersection.reverse());
 
         // for specular surface, it is impossible
@@ -208,10 +218,6 @@ void SubPathBuilder::_buildSubPathCompletely(
         }
 
         previousVertex.setPdfAReverse(pdfWReverse * previousToNewDotN / distance2);
-
-        if (reflectance.isZero() || intersection.pdf() == 0.0_r) {
-            break;
-        }
 
         // use russian roulette to decide if the ray needs to be kept tracking
         if (currentLength > 4) {
@@ -231,7 +237,7 @@ void SubPathBuilder::_buildSubPathCompletely(
         traceRay.reset();
         traceRay.setOrigin(newP);
         traceRay.setDirection(L);
-    }
+    } // end while loop
 }
 
 } // namespace cadise

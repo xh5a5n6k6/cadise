@@ -1,5 +1,6 @@
 #include "core/surface/bsdf/lambertianDiffuse.h"
 
+#include "core/integral-tool/sample/bsdfSample.h"
 #include "core/surfaceIntersection.h"
 #include "core/texture/category/constantTexture.h"
 #include "core/texture/texture.h"
@@ -42,9 +43,12 @@ Spectrum LambertianDiffuse::evaluate(
     return sampleSpectrum * constant::INV_PI;
 }
 
-Spectrum LambertianDiffuse::evaluateSample(
-    const TransportInfo& transportInfo,
-    SurfaceIntersection& surfaceIntersection) const {
+void LambertianDiffuse::evaluateSample(
+    const TransportInfo&       transportInfo,
+    const SurfaceIntersection& surfaceIntersection,
+    BsdfSample* const          out_sample) const {
+
+    CADISE_ASSERT(out_sample);
 
     const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
     const Vector3R& V  = surfaceIntersection.wi();
@@ -67,14 +71,13 @@ Spectrum LambertianDiffuse::evaluateSample(
         L = L.reverse();
     }
 
-    surfaceIntersection.setWo(L);
-    surfaceIntersection.setPdf(pdfW);
-
     const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
     Spectrum sampleSpectrum;
     _albedo->evaluate(uvw, &sampleSpectrum);
 
-    return sampleSpectrum * constant::INV_PI;
+    out_sample->setScatterValue(sampleSpectrum * constant::INV_PI);
+    out_sample->setScatterDirection(L);
+    out_sample->setPdfW(pdfW);
 }
 
 real LambertianDiffuse::evaluatePdfW(

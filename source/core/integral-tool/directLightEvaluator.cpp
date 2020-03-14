@@ -1,6 +1,7 @@
 #include "core/integral-tool/directLightEvaluator.h"
 
 #include "core/integral-tool/mis.h"
+#include "core/integral-tool/sample/bsdfSample.h"
 #include "core/integral-tool/sample/directLightSample.h"
 #include "core/intersector/primitive/primitive.h"
 #include "core/light/category/areaLight.h"
@@ -75,22 +76,24 @@ Spectrum DirectLightEvaluator::evaluate(
     // mis using bsdf sampling
     {
         if (!light->isDeltaLight()) {
-            const Spectrum  reflectance = bsdf->evaluateSample(TransportInfo(), intersection);
-            const Vector3R& L = intersection.wo();
-
-            if (!reflectance.isZero()) {
+            BsdfSample bsdfSample;
+            bsdf->evaluateSample(TransportInfo(), intersection, &bsdfSample);
+            if (bsdfSample.isValid()) {
+                const Spectrum& reflectance = bsdfSample.scatterValue();
+                const Vector3R& L           = bsdfSample.scatterDirection();
 
                 CADISE_ASSERT(!L.isZero());
 
                 Ray sampleRay(P, L);
-                if (scene.isIntersecting(sampleRay, intersection)) {
-                    const AreaLight* areaLight = intersection.primitiveInfo().primitive()->areaLight();
+                SurfaceIntersection localIntersection;
+                if (scene.isIntersecting(sampleRay, localIntersection)) {
+                    const AreaLight* areaLight = localIntersection.primitiveInfo().primitive()->areaLight();
                     if (areaLight == light) {
                         const Spectrum directLightFactor = reflectance * L.absDot(Ns);
-                        const Spectrum radiance          = areaLight->emittance(intersection);
+                        const Spectrum radiance          = areaLight->emittance(localIntersection);
 
-                        const real bsdfPdfW  = intersection.pdf();
-                        const real lightPdfW = areaLight->evaluateDirectPdfW(intersection, P);
+                        const real bsdfPdfW  = bsdfSample.pdfW();
+                        const real lightPdfW = areaLight->evaluateDirectPdfW(localIntersection, P);
                         const real misWeight = Mis<MisMode::POWER>::weight(bsdfPdfW, lightPdfW);
 
                         directLightRadiance += misWeight * radiance * directLightFactor / bsdfPdfW;

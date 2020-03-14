@@ -1,5 +1,6 @@
 #include "core/integrator/pathIntegrator.h"
 
+#include "core/integral-tool/sample/bsdfSample.h"
 #include "core/integral-tool/directLightEvaluator.h"
 #include "core/integral-tool/russianRoulette.h"
 #include "core/intersector/primitive/primitive.h"
@@ -26,7 +27,7 @@ void PathIntegrator::traceRadiance(
     CADISE_ASSERT(out_radiance);
 
     Spectrum totalRadiance(0.0_r);
-    Spectrum pathWeight(1.0_r);
+    Spectrum pathThroughput(1.0_r);
 
     // set this flag true at 0 bounce,
     // and update it at each intersection
@@ -51,7 +52,7 @@ void PathIntegrator::traceRadiance(
         const AreaLight* areaLight = primitive->areaLight();
         if (areaLight && isCountForEmittance) {
             const Spectrum emittance = areaLight->emittance(intersection);
-            totalRadiance += pathWeight * emittance;
+            totalRadiance += pathThroughput * emittance;
         }
 
 
@@ -67,35 +68,39 @@ void PathIntegrator::traceRadiance(
 
             const Spectrum directLightRadiance = DirectLightEvaluator::evaluate(scene, intersection,
                                                                           bsdf, sampleLight) / lightPdf;
-            totalRadiance += pathWeight * directLightRadiance;
+            
+            totalRadiance += pathThroughput * directLightRadiance;
         }
         else {
             isCountForEmittance = true;
         }
 
         // estimate indirect light with bsdf sampling
-        const Spectrum  reflectance = bsdf->evaluateSample(TransportInfo(), intersection);
-        const Vector3R& L = intersection.wo();
-
-        const real LdotN = L.absDot(Ns);
-        pathWeight *= reflectance * LdotN / intersection.pdf();
-
-        if (reflectance.isZero() || intersection.pdf() == 0.0_r) {
-            pathWeight = Spectrum(0.0_r);
+        BsdfSample bsdfSample;
+        bsdf->evaluateSample(TransportInfo(), intersection, &bsdfSample);
+        if (!bsdfSample.isValid()) {
+            break;
         }
+
+        const Spectrum& reflectance = bsdfSample.scatterValue();
+        const Vector3R& L           = bsdfSample.scatterDirection();
+        const real      pdfW        = bsdfSample.pdfW();
+        const real      LdotN       = L.absDot(Ns);
+
+        pathThroughput *= reflectance * LdotN / pdfW;
 
         // use russian roulette to decide if the ray needs to be kept tracking
         if (bounceTimes > 2) {
-            Spectrum newPathWeight;
-            if (RussianRoulette::isSurvivedOnNextRound(pathWeight, &newPathWeight)) {
-                pathWeight = newPathWeight;
+            Spectrum newPathThroughput;
+            if (RussianRoulette::isSurvivedOnNextRound(pathThroughput, &newPathThroughput)) {
+                pathThroughput = newPathThroughput;
             }
             else {
                 break;
             }
         }
 
-        if (pathWeight.isZero()) {
+        if (pathThroughput.isZero()) {
             break;
         }
 

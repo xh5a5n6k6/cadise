@@ -1,5 +1,6 @@
 #include "core/surface/bsdf/specularDielectric.h"
 
+#include "core/integral-tool/sample/bsdfSample.h"
 #include "core/surface/fresnel/dielectricFresnel.h"
 #include "core/surface/transportInfo.h"
 #include "core/surfaceIntersection.h"
@@ -7,6 +8,8 @@
 #include "fundamental/assertion.h"
 #include "math/math.h"
 #include "math/random.h"
+
+#include <cmath>
 
 namespace cadise {
 
@@ -29,14 +32,16 @@ Spectrum SpecularDielectric::evaluate(
     return Spectrum(0.0_r);
 }
 
-Spectrum SpecularDielectric::evaluateSample(
-    const TransportInfo& transportInfo,
-    SurfaceIntersection& surfaceIntersection) const {
+void SpecularDielectric::evaluateSample(
+    const TransportInfo&       transportInfo,
+    const SurfaceIntersection& surfaceIntersection,
+    BsdfSample* const          out_sample) const {
 
-    const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R& V  = surfaceIntersection.wi();
-    
-    const real VdotN = V.dot(Ns);
+    CADISE_ASSERT(out_sample);
+
+    const Vector3R& Ns    = surfaceIntersection.surfaceInfo().shadingNormal();
+    const Vector3R& V     = surfaceIntersection.wi();
+    const real      VdotN = V.dot(Ns);
     
     Spectrum reflectance;
     _fresnel->evaluateReflectance(VdotN, &reflectance);
@@ -52,36 +57,34 @@ Spectrum SpecularDielectric::evaluateSample(
         isRefraction = true;
     }
 
-    real etaI = _fresnel->iorOuter();
-    real etaT = _fresnel->iorInner();
-    Spectrum result(0.0_r);
+    real     scatterPdfW = 0.0_r;
+    Vector3R scatterDirection(0.0_r);
+    Spectrum scatterValue(0.0_r);
 
     if (isReflection) {
-        const real nFactor = (VdotN > 0.0_r) ? 1.0_r : -1.0_r;
-        const Vector3R L = V.reflect(Ns * nFactor);
-
-        const real pdf = reflectionProbability;
-
-        surfaceIntersection.setWo(L);
-        surfaceIntersection.setPdf(pdf);
-
-        const real LdotN = L.absDot(Ns);
+        const real     Nfactor = (VdotN > 0.0_r) ? 1.0_r : -1.0_r;
+        const Vector3R L       = V.reflect(Ns * Nfactor);
+        const real     LdotN   = L.absDot(Ns);
 
         const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
         Spectrum sampleSpectrum;
         _albedo->evaluate(uvw, &sampleSpectrum);
 
-        result = sampleSpectrum * reflectance / LdotN;
+        scatterValue     = sampleSpectrum * reflectance / LdotN;
+        scatterDirection = L;
+        scatterPdfW      = reflectionProbability;
     }
     else if (isRefraction) {
+        real etaI = _fresnel->iorOuter();
+        real etaT = _fresnel->iorInner();
+        
         Vector3R L;
         if (!V.canRefract(Ns, etaI, etaT, &L)) {
-            return Spectrum(0.0_r);
+            return;
         }
     
         const real cosThetaI = L.dot(Ns);
-
-        Spectrum refractDirectionReflectance;
+        Spectrum   refractDirectionReflectance;
         _fresnel->evaluateReflectance(cosThetaI, &refractDirectionReflectance);
 
         real btdfFactor = 1.0_r;
@@ -93,23 +96,24 @@ Spectrum SpecularDielectric::evaluateSample(
             btdfFactor = (etaT * etaT) / (etaI * etaI);
         }
 
-        surfaceIntersection.setWo(L);
-        surfaceIntersection.setPdf(1.0_r - reflectionProbability);
-
-        const real LdotN = L.absDot(Ns);
+        const real     LdotN         = std::abs(cosThetaI);
         const Spectrum transmittance = refractDirectionReflectance.complement();
 
         const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
         Spectrum sampleSpectrum;
         _albedo->evaluate(uvw, &sampleSpectrum);
 
-        result = sampleSpectrum * transmittance * btdfFactor / LdotN;
+        scatterValue     = sampleSpectrum * transmittance * btdfFactor / LdotN;
+        scatterDirection = L;
+        scatterPdfW      = 1.0_r - reflectionProbability;
     }
     else {
         // something wrong
     }
 
-    return result;
+    out_sample->setScatterValue(scatterValue);
+    out_sample->setScatterDirection(scatterDirection);
+    out_sample->setPdfW(scatterPdfW);
 }
 
 real SpecularDielectric::evaluatePdfW(

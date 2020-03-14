@@ -1,5 +1,6 @@
 #include "core/surface/bsdf/specularReflection.h"
 
+#include "core/integral-tool/sample/bsdfSample.h"
 #include "core/surface/fresnel/dielectricFresnel.h"
 #include "core/surfaceIntersection.h"
 #include "core/texture/texture.h"
@@ -28,19 +29,19 @@ Spectrum SpecularReflection::evaluate(
     return Spectrum(0.0_r);
 }
 
-Spectrum SpecularReflection::evaluateSample(
-    const TransportInfo& transportInfo, 
-    SurfaceIntersection& surfaceIntersection) const {
+void SpecularReflection::evaluateSample(
+    const TransportInfo&       transportInfo, 
+    const SurfaceIntersection& surfaceIntersection,
+    BsdfSample* const          out_sample) const {
     
+    CADISE_ASSERT(out_sample);
+
     const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
     const Vector3R& V  = surfaceIntersection.wi();
     const Vector3R  L  = V.reflect(Ns);
     
     const real LdotN = L.dot(Ns);
-    const real pdf   = 1.0_r;
-
-    surfaceIntersection.setWo(L);
-    surfaceIntersection.setPdf(pdf);
+    const real pdfW  = 1.0_r;
 
     Spectrum reflectance;
     _fresnel->evaluateReflectance(LdotN, &reflectance);
@@ -49,7 +50,9 @@ Spectrum SpecularReflection::evaluateSample(
     Spectrum sampleSpectrum;
     _albedo->evaluate(uvw, &sampleSpectrum);
 
-    return reflectance * sampleSpectrum / std::abs(LdotN);
+    out_sample->setScatterValue(reflectance * sampleSpectrum / std::abs(LdotN));
+    out_sample->setScatterDirection(L);
+    out_sample->setPdfW(pdfW);
 }
 
 real SpecularReflection::evaluatePdfW(

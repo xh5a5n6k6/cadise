@@ -1,5 +1,6 @@
 #include "core/surface/bsdf/mixedBsdf.h"
 
+#include "core/integral-tool/sample/bsdfSample.h"
 #include "core/surfaceIntersection.h"
 #include "core/texture/category/constantTexture.h"
 #include "fundamental/assertion.h"
@@ -42,44 +43,67 @@ Spectrum MixedBsdf::evaluate(
            sampleRatio.complement() * _bsdfB->evaluate(transportInfo, surfaceIntersection);
 }
 
-Spectrum MixedBsdf::evaluateSample(
-    const TransportInfo& transportInfo, 
-    SurfaceIntersection& surfaceIntersection) const {
+void MixedBsdf::evaluateSample(
+    const TransportInfo&       transportInfo, 
+    const SurfaceIntersection& surfaceIntersection,
+    BsdfSample* const          out_sample) const {
 
-    Spectrum result(0.0_r);
+    CADISE_ASSERT(out_sample);
+
+    SurfaceIntersection intersection(surfaceIntersection);
+    Spectrum            scatterValue(0.0_r);
+    Vector3R            scatterDirection(0.0_r);
+    real                scatterPdfW = 0.0_r;
 
     const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
     Spectrum sampleRatio;
     _ratio->evaluate(uvw, &sampleRatio);
 
+    const real averageRatio = sampleRatio.average();
+    const real sample       = Random::nextReal();
+
     // sample out direction with bsdfA
-    if (Random::nextReal() < sampleRatio.average()) {
-        const Spectrum fBsdfA = _bsdfA->evaluateSample(transportInfo, surfaceIntersection);
-        const Spectrum fBsdfB = _bsdfB->evaluate(transportInfo, surfaceIntersection);
-        result = sampleRatio * fBsdfA + sampleRatio.complement() * fBsdfB;
+    if (sample < sampleRatio.average()) {
+        BsdfSample localSample;
+        _bsdfA->evaluateSample(transportInfo, intersection, &localSample);
+        if(!localSample.isValid()) {
+            return;
+        }
 
-        const real pdfBsdfA = surfaceIntersection.pdf();
-        const real pdfBsdfB = _bsdfB->evaluatePdfW(transportInfo, surfaceIntersection);
-        const real averageRatio = sampleRatio.average();
+        scatterDirection = localSample.scatterDirection();
+        intersection.setWo(scatterDirection);
 
-        const real totalPdf = averageRatio * pdfBsdfA + (1.0_r - averageRatio) * pdfBsdfB;
-        surfaceIntersection.setPdf(totalPdf);
+        const Spectrum& fBsdfA = localSample.scatterValue();
+        const Spectrum  fBsdfB = _bsdfB->evaluate(transportInfo, intersection);
+        scatterValue = sampleRatio * fBsdfA + sampleRatio.complement() * fBsdfB;
+
+        const real pdfWbsdfA = localSample.pdfW();
+        const real pdfWbsdfB = _bsdfB->evaluatePdfW(transportInfo, intersection);
+        scatterPdfW = averageRatio * pdfWbsdfA + (1.0_r - averageRatio) * pdfWbsdfB;
     }
     // sample out direction with bsdfB
     else {
-        const Spectrum fBsdfB = _bsdfB->evaluateSample(transportInfo, surfaceIntersection);
-        const Spectrum fBsdfA = _bsdfA->evaluate(transportInfo, surfaceIntersection);
-        result = sampleRatio * fBsdfB + sampleRatio.complement() * fBsdfA;
+        BsdfSample localSample;
+        _bsdfB->evaluateSample(transportInfo, intersection, &localSample);
+        if (!localSample.isValid()) {
+            return;
+        }
 
-        const real pdfBsdfB = surfaceIntersection.pdf();
-        const real pdfBsdfA = _bsdfA->evaluatePdfW(transportInfo, surfaceIntersection);
-        const real averageRatio = sampleRatio.average();
+        scatterDirection = localSample.scatterDirection();
+        intersection.setWo(scatterDirection);
 
-        const real totalPdf = averageRatio * pdfBsdfB + (1.0_r - averageRatio) * pdfBsdfA;
-        surfaceIntersection.setPdf(totalPdf);
+        const Spectrum& fBsdfB = localSample.scatterValue();
+        const Spectrum  fBsdfA = _bsdfA->evaluate(transportInfo, intersection);
+        scatterValue = sampleRatio * fBsdfB + sampleRatio.complement() * fBsdfA;
+
+        const real pdfWbsdfB = localSample.pdfW();
+        const real pdfWbsdfA = _bsdfA->evaluatePdfW(transportInfo, surfaceIntersection);
+        scatterPdfW = averageRatio * pdfWbsdfB + (1.0_r - averageRatio) * pdfWbsdfA;
     }
 
-    return result;
+    out_sample->setScatterValue(scatterValue);
+    out_sample->setScatterDirection(scatterDirection);
+    out_sample->setPdfW(scatterPdfW);
 }
 
 real MixedBsdf::evaluatePdfW(

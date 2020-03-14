@@ -1,5 +1,7 @@
 #include "core/surface/bsdf/absorberBsdf.h"
 
+#include "fundamental/assertion.h"
+
 namespace cadise {
 
 AbsorberBsdf::AbsorberBsdf() :
@@ -13,11 +15,14 @@ Spectrum AbsorberBsdf::evaluate(
     return Spectrum(0.0_r);
 }
 
-Spectrum AbsorberBsdf::evaluateSample(
-    const TransportInfo& transportInfo,
-    SurfaceIntersection& surfaceIntersection) const {
+void AbsorberBsdf::evaluateSample(
+    const TransportInfo&       transportInfo,
+    const SurfaceIntersection& surfaceIntersection,
+    BsdfSample* const          out_sample) const {
 
-    return Spectrum(0.0_r);
+    CADISE_ASSERT(out_sample);
+
+    return;
 }
 
 real AbsorberBsdf::evaluatePdfW(

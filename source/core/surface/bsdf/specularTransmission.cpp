@@ -1,11 +1,14 @@
 #include "core/surface/bsdf/specularTransmission.h"
 
+#include "core/integral-tool/sample/bsdfSample.h"
 #include "core/surface/fresnel/dielectricFresnel.h"
 #include "core/surface/transportInfo.h"
 #include "core/surfaceIntersection.h"
 #include "core/texture/texture.h"
 #include "fundamental/assertion.h"
 #include "math/math.h"
+
+#include <cmath>
 
 namespace cadise {
 
@@ -29,10 +32,13 @@ Spectrum SpecularTransmission::evaluate(
     return Spectrum(0.0_r);
 }
 
-Spectrum SpecularTransmission::evaluateSample(
-    const TransportInfo& transportInfo, 
-    SurfaceIntersection& surfaceIntersection) const {
+void SpecularTransmission::evaluateSample(
+    const TransportInfo&       transportInfo, 
+    const SurfaceIntersection& surfaceIntersection,
+    BsdfSample* const          out_sample) const {
     
+    CADISE_ASSERT(out_sample);
+
     const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
     const Vector3R& V  = surfaceIntersection.wi();
 
@@ -41,11 +47,10 @@ Spectrum SpecularTransmission::evaluateSample(
 
     Vector3R L;
     if (!V.canRefract(Ns, etaI, etaT, &L)) {
-        return Spectrum(0.0_r);
+        return;
     }
 
     const real cosThetaI = L.dot(Ns);
-
     Spectrum reflectance;
     _fresnel->evaluateReflectance(cosThetaI, &reflectance);
 
@@ -57,18 +62,18 @@ Spectrum SpecularTransmission::evaluateSample(
 
         btdfFactor = (etaT * etaT) / (etaI * etaI);
     }
-
-    surfaceIntersection.setWo(L);
-    surfaceIntersection.setPdf(1.0_r);
-
-    const real LdotN = L.absDot(Ns);
+    
+    const real     pdfW          = 1.0_r;
+    const real     LdotN         = std::abs(cosThetaI);
     const Spectrum transmittance = reflectance.complement();
 
     const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
     Spectrum sampleSpectrum;
     _albedo->evaluate(uvw, &sampleSpectrum);
 
-    return sampleSpectrum * transmittance * btdfFactor / LdotN;
+    out_sample->setScatterValue(sampleSpectrum * transmittance * btdfFactor / LdotN);
+    out_sample->setScatterDirection(L);
+    out_sample->setPdfW(pdfW);
 }
 
 real SpecularTransmission::evaluatePdfW(

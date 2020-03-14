@@ -1,5 +1,6 @@
 #include "core/integrator/naivePathIntegrator.h"
 
+#include "core/integral-tool/sample/bsdfSample.h"
 #include "core/integral-tool/russianRoulette.h"
 #include "core/intersector/primitive/primitive.h"
 #include "core/light/category/areaLight.h"
@@ -25,7 +26,7 @@ void NaivePathIntegrator::traceRadiance(
     CADISE_ASSERT(out_radiance);
 
     Spectrum totalRadiance(0.0_r);
-    Spectrum pathWeight(1.0_r);
+    Spectrum pathThroughput(1.0_r);
 
     Ray traceRay(ray);
     for (int32 bounceTimes = 0; bounceTimes < _maxDepth; ++bounceTimes) {
@@ -43,27 +44,34 @@ void NaivePathIntegrator::traceRadiance(
         const AreaLight* areaLight = primitive->areaLight();
         if (areaLight) {
             const Spectrum emittance = areaLight->emittance(intersection);
-            totalRadiance += pathWeight * emittance;
+            totalRadiance += pathThroughput * emittance;
         }
 
-        const Spectrum  reflectance = bsdf->evaluateSample(TransportInfo(), intersection);
-        const Vector3R& L = intersection.wo();
+        BsdfSample bsdfSample;
+        bsdf->evaluateSample(TransportInfo(), intersection, &bsdfSample);
+        if (!bsdfSample.isValid()) {
+            break;
+        }
 
-        const real LdotN = L.absDot(Ns);
-        pathWeight *= reflectance * LdotN / intersection.pdf();
+        const Spectrum& reflectance = bsdfSample.scatterValue();
+        const Vector3R& L           = bsdfSample.scatterDirection();
+        const real      pdfW        = bsdfSample.pdfW();
+        const real      LdotN       = L.absDot(Ns);
+
+        pathThroughput *= reflectance * LdotN / pdfW;
 
         // use russian roulette to decide if the ray needs to be kept tracking
         if (bounceTimes > 2) {
-            Spectrum newPathWeight;
-            if (RussianRoulette::isSurvivedOnNextRound(pathWeight, &newPathWeight)) {
-                pathWeight = newPathWeight;
+            Spectrum newPathThroughput;
+            if (RussianRoulette::isSurvivedOnNextRound(pathThroughput, &newPathThroughput)) {
+                pathThroughput = newPathThroughput;
             }
             else {
                 break;
             }
         }
 
-        if (pathWeight.isZero()) {
+        if (pathThroughput.isZero()) {
             break;
         }
 

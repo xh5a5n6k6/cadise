@@ -19,9 +19,10 @@ public:
         const TransportInfo&       transportInfo,
         const SurfaceIntersection& surfaceIntersection) const override;
 
-    Spectrum evaluateSample(
-        const TransportInfo& transportInfo,
-        SurfaceIntersection& surfaceIntersection) const override;
+    void evaluateSample(
+        const TransportInfo&       transportInfo,
+        const SurfaceIntersection& surfaceIntersection,
+        BsdfSample* const          out_sample) const override;
 
     real evaluatePdfW(
         const TransportInfo&       transportInfo,

@@ -4,7 +4,6 @@
 #include "core/film/film.h"
 #include "core/film/filmTile.h"
 #include "core/integral-tool/connectEvent.h"
-#include "core/ray.h"
 #include "core/renderer/bdpt-renderer/subPath.h"
 #include "core/renderer/bdpt-renderer/subPathBuilder.h"
 #include "core/renderer/bdpt-renderer/subPathConnector.h"
