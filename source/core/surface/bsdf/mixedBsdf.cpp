@@ -13,7 +13,7 @@ MixedBsdf::MixedBsdf(
     const std::shared_ptr<Bsdf>& bsdfB,
     const real                   ratio) :
     
-    MixedBsdf(bsdfA, bsdfB, std::make_shared<ConstantTexture<Spectrum>>(ratio)) {
+    MixedBsdf(bsdfA, bsdfB, std::make_shared<ConstantTexture<Spectrum>>(Spectrum(ratio))) {
 }
 
 MixedBsdf::MixedBsdf(
@@ -55,7 +55,7 @@ void MixedBsdf::evaluateSample(
     Vector3R            scatterDirection(0.0_r);
     real                scatterPdfW = 0.0_r;
 
-    const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
+    const Vector3R& uvw = intersection.surfaceInfo().uvw();
     Spectrum sampleRatio;
     _ratio->evaluate(uvw, &sampleRatio);
 
@@ -97,7 +97,7 @@ void MixedBsdf::evaluateSample(
         scatterValue = sampleRatio * fBsdfB + sampleRatio.complement() * fBsdfA;
 
         const real pdfWbsdfB = localSample.pdfW();
-        const real pdfWbsdfA = _bsdfA->evaluatePdfW(transportInfo, surfaceIntersection);
+        const real pdfWbsdfA = _bsdfA->evaluatePdfW(transportInfo, intersection);
         scatterPdfW = averageRatio * pdfWbsdfB + (1.0_r - averageRatio) * pdfWbsdfA;
     }
 
