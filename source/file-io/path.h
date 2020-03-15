@@ -7,8 +7,8 @@ namespace cadise {
 
 class Path {
 public:
-    Path(const std::string& path);
-    Path(const std::string_view& path);
+    explicit Path(const std::string& path);
+    explicit Path(const std::string_view& path);
 
     bool isExtendedWith(const std::string& extension) const;
 

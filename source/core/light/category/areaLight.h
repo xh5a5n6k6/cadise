@@ -7,7 +7,7 @@ namespace cadise {
 class AreaLight : public Light {
 public:
     AreaLight();
-    AreaLight(const bool isBackFaceEmit);
+    explicit AreaLight(const bool isBackFaceEmit);
 
     Spectrum emittance(const SurfaceIntersection& emitIntersection) const override = 0;
 

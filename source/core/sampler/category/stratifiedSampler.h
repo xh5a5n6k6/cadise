@@ -6,7 +6,7 @@ namespace cadise {
 
 class StratifiedSampler : public Sampler {
 public:
-    StratifiedSampler(const std::size_t sampleNumber);
+    explicit StratifiedSampler(const std::size_t sampleNumber);
 
     std::unique_ptr<Sampler> clone(const std::size_t sampleNumber) const override;
 

@@ -9,7 +9,7 @@ namespace cadise {
 
 class UniformLightCluster : public LightCluster {
 public:
-    UniformLightCluster(const std::vector<std::shared_ptr<Light>>& lights);
+    explicit UniformLightCluster(const std::vector<std::shared_ptr<Light>>& lights);
 
     const Light* sampleOneLight(real* const out_pdf) const override;
     real evaluatePickLightPdf(const Light* const light) const override;

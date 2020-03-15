@@ -10,7 +10,7 @@ public:
         const real      iorOuter, 
         const Spectrum& eta, 
         const Spectrum& k);
-    SchlickConductorFresnel(const Spectrum& f0);
+    explicit SchlickConductorFresnel(const Spectrum& f0);
 
     void evaluateReflectance(
         const real      cosThetaI,

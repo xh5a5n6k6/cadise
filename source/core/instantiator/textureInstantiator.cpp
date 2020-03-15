@@ -53,7 +53,7 @@ static std::shared_ptr<Texture<Spectrum>> createSpectrumConstant(
     // it now only support rgb spectrum
     const Vector3R value = data->findVector3r("value");
 
-    return std::make_shared<ConstantTexture<Spectrum>>(value);
+    return std::make_shared<ConstantTexture<Spectrum>>(Spectrum(value));
 }
 
 static std::shared_ptr<Texture<Spectrum>> createSpectrumCheckerboard(

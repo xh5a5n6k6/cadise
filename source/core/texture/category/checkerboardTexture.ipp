@@ -9,10 +9,12 @@
 namespace cadise {
 
 template<typename T>
-inline CheckerboardTexture<T>::CheckerboardTexture(const real oddTextureNumber, 
-                                                   const real evenTextureNumber,
-                                                   const std::shared_ptr<Texture<T>>& oddTexture, 
-                                                   const std::shared_ptr<Texture<T>>& evenTexture) :
+inline CheckerboardTexture<T>::CheckerboardTexture(
+    const real                         oddTextureNumber, 
+    const real                         evenTextureNumber,
+    const std::shared_ptr<Texture<T>>& oddTexture, 
+    const std::shared_ptr<Texture<T>>& evenTexture) :
+    
     _oddTexture(oddTexture), 
     _evenTexture(evenTexture) {
 

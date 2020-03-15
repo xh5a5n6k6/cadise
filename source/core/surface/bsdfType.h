@@ -7,8 +7,8 @@ namespace cadise {
 class BsdfType {
 public:
     BsdfType();
-    BsdfType(const BxdfType& type);
-    BsdfType(const uint32 type);
+    explicit BsdfType(const BxdfType& type);
+    explicit BsdfType(const uint32 type);
 
     BsdfType operator|(const BsdfType& type) const;
 

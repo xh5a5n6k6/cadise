@@ -9,7 +9,7 @@ class Ray;
 
 class Camera {
 public:
-    Camera(const Vector3R& position);
+    explicit Camera(const Vector3R& position);
 
     virtual ~Camera();
 

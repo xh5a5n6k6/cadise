@@ -20,7 +20,7 @@ public:
     static SubPath oneVertexPath(const PathVertex& vertex);
 
 public:
-    SubPath(const std::size_t maxPathLength);
+    explicit SubPath(const std::size_t maxPathLength);
 
     PathVertex& operator[](const std::size_t index);
     const PathVertex& operator[](const std::size_t index) const;

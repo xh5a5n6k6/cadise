@@ -7,7 +7,7 @@ namespace cadise {
 class InfiniteSphere : public Primitive {
 public:
     InfiniteSphere();
-    InfiniteSphere(const real radius);
+    explicit InfiniteSphere(const real radius);
 
     void evaluateBound(AABB3R* const out_bound) const override;
 

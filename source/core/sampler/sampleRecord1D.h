@@ -6,7 +6,7 @@ namespace cadise {
 
 class SampleRecord1D : public SampleRecord {
 public:
-    SampleRecord1D(const std::size_t sampleNumber);
+    explicit SampleRecord1D(const std::size_t sampleNumber);
 
     void shuffle() override;
 

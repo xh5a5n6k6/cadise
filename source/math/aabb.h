@@ -9,7 +9,7 @@ template<typename T, std::size_t N>
 class AABB {
 public:
     AABB();
-    AABB(const Vector<T, N>& vertex);
+    explicit AABB(const Vector<T, N>& vertex);
     AABB(const Vector<T, N>& minVertex, const Vector<T, N>& maxVertex);
 
     bool isEmpty() const;

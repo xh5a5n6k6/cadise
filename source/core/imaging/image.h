@@ -20,7 +20,7 @@ template<typename T, std::size_t N>
 class Image {
 public:
     Image();
-    Image(const Vector2I& resolution);
+    explicit Image(const Vector2I& resolution);
     Image(const int32 width, const int32 height);
     Image(const Image& img);
 

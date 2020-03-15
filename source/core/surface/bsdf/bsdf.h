@@ -12,7 +12,7 @@ class TransportInfo;
 class Bsdf {
 public:
     Bsdf();
-    Bsdf(const BsdfType& type);
+    explicit Bsdf(const BsdfType& type);
 
     virtual ~Bsdf();
 

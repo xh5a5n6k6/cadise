@@ -24,7 +24,7 @@ namespace cadise {
 */
 class PhongBsdf : public Bsdf {
 public:
-    PhongBsdf(const real exponent);
+    explicit PhongBsdf(const real exponent);
 
     Spectrum evaluate(
         const TransportInfo&       transportInfo,

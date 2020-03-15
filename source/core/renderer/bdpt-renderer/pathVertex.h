@@ -14,7 +14,7 @@ enum class TransportMode;
 
 class PathVertex {
 public:
-    PathVertex(const VertexType& type);
+    explicit PathVertex(const VertexType& type);
     PathVertex(
         const VertexType& type,
         const Spectrum&   throughput);

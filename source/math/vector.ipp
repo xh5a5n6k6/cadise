@@ -49,10 +49,13 @@ inline Vector<T, N>::Vector(const T v1, const T v2, const Ts... ts) :
 }
 
 template<typename T, std::size_t N>
+inline Vector<T, N>::Vector(const Vector<T, N>& other) = default;
+
+template<typename T, std::size_t N>
 template<typename U>
-inline Vector<T, N>::Vector(const Vector<U, N>& v) {
+inline Vector<T, N>::Vector(const Vector<U, N>& other) {
     for (std::size_t i = 0; i < N; ++i) {
-        _v[i] = static_cast<T>(v[i]);
+        _v[i] = static_cast<T>(other[i]);
     }
 }
 

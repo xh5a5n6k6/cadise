@@ -13,7 +13,7 @@ class UvwWrapper;
 template<typename T, std::size_t N>
 class PixelSampler {
 public:
-    PixelSampler(const TextureWrapMode& mode);
+    explicit PixelSampler(const TextureWrapMode& mode);
 
     virtual ~PixelSampler();
 

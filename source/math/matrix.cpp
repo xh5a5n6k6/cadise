@@ -65,6 +65,8 @@ Matrix4::Matrix4(const real n00, const real n01, const real n02, const real n03,
     _n[3][0] = n30; _n[3][1] = n31; _n[3][2] = n32; _n[3][3] = n33;
 }
 
+Matrix4::Matrix4(const Matrix4& other) = default;
+
 Matrix4 Matrix4::operator*(const Matrix4& rhs) const {
     Matrix4 result;
     for (std::size_t row = 0; row < 4; ++row) {
@@ -112,7 +114,7 @@ Matrix4 Matrix4::transpose() const {
 
 Matrix4 Matrix4::inverse() const {
     Matrix4 mat = *this;
-    Matrix4 inv = identity();
+    Matrix4 inv = this->identity();
 
     // use Gauss-Jordan elimination method
     // for each column find a non-zero value to be the diagonal value

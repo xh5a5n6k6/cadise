@@ -149,11 +149,11 @@ static std::shared_ptr<Bsdf> createConductorMicrofacet(
     std::shared_ptr<ConductorFresnel> fresnel = nullptr;
     if (fresnelType == "schlick") {
         const Vector3R f0 = data->findVector3r("f0");
-        fresnel = std::make_shared<SchlickConductorFresnel>(f0);
+        fresnel = std::make_shared<SchlickConductorFresnel>(Spectrum(f0));
     }
     else {
         const Vector3R f0 = data->findVector3r("f0");
-        fresnel = std::make_shared<SchlickConductorFresnel>(f0);
+        fresnel = std::make_shared<SchlickConductorFresnel>(Spectrum(f0));
     }
 
     return std::make_shared<ConductorMicrofacet>(microfacet, fresnel, roughness);

@@ -6,7 +6,7 @@ namespace cadise {
 
 class RandomSampler : public Sampler {
 public:
-    RandomSampler(const std::size_t sampleNumber);
+    explicit RandomSampler(const std::size_t sampleNumber);
 
     std::unique_ptr<Sampler> clone(const std::size_t sampleNumber) const override;
 

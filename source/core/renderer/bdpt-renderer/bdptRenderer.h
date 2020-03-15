@@ -11,7 +11,7 @@ class Sampler;
 
 class BdptRenderer : public Renderer {
 public:
-    BdptRenderer(const std::shared_ptr<Sampler>& sampler);
+    explicit BdptRenderer(const std::shared_ptr<Sampler>& sampler);
 
     void render(const Scene& scene) const override;
 

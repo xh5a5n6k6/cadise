@@ -9,7 +9,7 @@ class SampleRecord2D;
 
 class Sampler {
 public:
-    Sampler(const std::size_t sampleNumber);
+    explicit Sampler(const std::size_t sampleNumber);
 
     virtual ~Sampler();
 

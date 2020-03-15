@@ -8,7 +8,7 @@ namespace cadise {
 
 class SampleRecord2D : public SampleRecord {
 public:
-    SampleRecord2D(const std::size_t sampleNumber);
+    explicit SampleRecord2D(const std::size_t sampleNumber);
 
     void shuffle() override;
 

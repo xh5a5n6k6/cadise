@@ -6,7 +6,7 @@ namespace cadise {
 
 class Transform {
 public:
-    Transform(const Matrix4& matrix);
+    explicit Transform(const Matrix4& matrix);
     Transform(const Matrix4& matrix, const Matrix4& inverseMatrix);
 
     void transformPoint(const Vector3R& point, Vector3R* const out_point) const;

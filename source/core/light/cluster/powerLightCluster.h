@@ -12,7 +12,7 @@ namespace cadise {
 
 class PowerLightCluster : public LightCluster {
 public:
-    PowerLightCluster(const std::vector<std::shared_ptr<Light>>& lights);
+    explicit PowerLightCluster(const std::vector<std::shared_ptr<Light>>& lights);
 
     const Light* sampleOneLight(real* const out_pdf) const override;
     real evaluatePickLightPdf(const Light* const light) const override;

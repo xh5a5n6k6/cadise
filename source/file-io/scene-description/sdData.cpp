@@ -128,7 +128,7 @@ std::shared_ptr<Texture<Spectrum>> SdData::getSpectrumTexture(
     else {
         // it now only support rgb spectrum
         const Vector3R rgb = findVector3r(name);
-        spectrumTexture = std::make_shared<ConstantTexture<Spectrum>>(rgb);
+        spectrumTexture = std::make_shared<ConstantTexture<Spectrum>>(Spectrum(rgb));
     }
 
     return spectrumTexture;

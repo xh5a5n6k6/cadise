@@ -13,7 +13,7 @@ class SurfaceIntersection;
 */
 class WhittedIntegrator : public Integrator {
 public:
-    WhittedIntegrator(const int32 maxDepth);
+    explicit WhittedIntegrator(const int32 maxDepth);
 
     void traceRadiance(
         const Scene&    scene, 

@@ -12,7 +12,7 @@ enum class TransportMode;
 
 class SubPathBuilder {
 public:
-    SubPathBuilder(const std::size_t maxPathLength);
+    explicit SubPathBuilder(const std::size_t maxPathLength);
 
     void setCamera(const Camera* const camera);
 

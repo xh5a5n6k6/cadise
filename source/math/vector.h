@@ -14,12 +14,14 @@ public:
 
 public:
     Vector();
-    Vector(const T v);
+    explicit Vector(const T v);
     template<typename... Ts>
     Vector(const T v1, const T v2, const Ts... ts);
 
+    Vector(const Vector& other);
+
     template<typename U>
-    explicit Vector(const Vector<U, N>& v);
+    explicit Vector(const Vector<U, N>& other);
 
     Vector operator-() const;
     Vector operator+(const T s) const;

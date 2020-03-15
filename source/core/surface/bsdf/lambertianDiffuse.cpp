@@ -14,7 +14,7 @@ namespace cadise {
 
 // Hack
 LambertianDiffuse::LambertianDiffuse() :
-    LambertianDiffuse(std::make_shared<ConstantTexture<Spectrum>>(0.5_r)) {
+    LambertianDiffuse(std::make_shared<ConstantTexture<Spectrum>>(Spectrum(0.5_r))) {
 }
 
 LambertianDiffuse::LambertianDiffuse(const std::shared_ptr<Texture<Spectrum>>& albedo) :

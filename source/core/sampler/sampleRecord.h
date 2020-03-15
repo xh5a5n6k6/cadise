@@ -6,7 +6,7 @@ namespace cadise {
 
 class SampleRecord {
 public:
-    SampleRecord(const std::size_t sampleNumber);
+    explicit SampleRecord(const std::size_t sampleNumber);
 
     virtual void shuffle() = 0;
 

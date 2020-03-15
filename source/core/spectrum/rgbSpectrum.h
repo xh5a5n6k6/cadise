@@ -9,9 +9,13 @@ namespace cadise {
 class RgbSpectrum : public ConceptualSpectrum<3> {
 public:
     RgbSpectrum();
-    RgbSpectrum(const real v);
-    RgbSpectrum(const Vector3R& v);
-    RgbSpectrum(const ConceptualSpectrum<3>& cs);
+    explicit RgbSpectrum(const real value);
+    explicit RgbSpectrum(const Vector3R& value);
+    RgbSpectrum(const ConceptualSpectrum<3>& other);
+    RgbSpectrum(const RgbSpectrum& other);
+
+    using Parent = ConceptualSpectrum<3>;
+    using Parent::Parent;
 
     void transformToRgb(Vector3R* const out_rgb) const;
 

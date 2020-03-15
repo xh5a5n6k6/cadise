@@ -4,6 +4,7 @@
 
 namespace cadise {
 
+// TODO: refactor as CRTP (curiously recurring template pattern)
 template<std::size_t N>
 class ConceptualSpectrum {
 protected:
@@ -11,8 +12,8 @@ protected:
 
 public:
     ConceptualSpectrum();
-    ConceptualSpectrum(const real v);
-    ConceptualSpectrum(const SpectralArray& sa);
+    explicit ConceptualSpectrum(const real v);
+    explicit ConceptualSpectrum(const SpectralArray& sa);
     ConceptualSpectrum(const ConceptualSpectrum& cs);
 
     virtual ~ConceptualSpectrum();

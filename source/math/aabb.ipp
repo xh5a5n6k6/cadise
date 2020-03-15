@@ -29,8 +29,8 @@ inline cadise::AABB<T, N>::AABB(const Vector<T, N>& minVertex, const Vector<T, N
 
 template<typename T, std::size_t N>
 inline bool AABB<T, N>::isEmpty() const {
-    return _minVertex.isEqualTo({std::numeric_limits<T>::max()}) ||
-           _maxVertex.isEqualTo({std::numeric_limits<T>::min()});
+    return _minVertex.isEqualTo(Vector<T, N>(std::numeric_limits<T>::max())) ||
+           _maxVertex.isEqualTo(Vector<T, N>(std::numeric_limits<T>::min()));
 }
 
 template<typename T, std::size_t N>

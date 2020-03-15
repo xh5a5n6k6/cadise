@@ -25,7 +25,7 @@ static std::shared_ptr<Light> createPoint(
     const Vector3R position  = data->findVector3r("position");
     const Vector3R intensity = data->findVector3r("intensity");
 
-    return std::make_shared<PointLight>(position, intensity);
+    return std::make_shared<PointLight>(position, Spectrum(intensity));
 }
 
 static std::shared_ptr<Light> createSingleArea(
@@ -41,8 +41,8 @@ static std::shared_ptr<Light> createSingleArea(
 
     CADISE_ASSERT_NE(primitive, primitives.end());
 
-    std::shared_ptr<SingleAreaLight> areaLight = std::make_shared<SingleAreaLight>(
-                                                     primitive->second.get(), color, watt, isBackFaceEmit);
+    std::shared_ptr<SingleAreaLight> areaLight
+        = std::make_shared<SingleAreaLight>(primitive->second.get(), Spectrum(color), watt, isBackFaceEmit);
 
     primitive->second->setAreaLight(areaLight.get());
 

@@ -12,7 +12,7 @@ namespace cadise {
 */
 class NaivePathIntegrator : public Integrator {
 public:
-    NaivePathIntegrator(const int32 maxDepth);
+    explicit NaivePathIntegrator(const int32 maxDepth);
 
     void traceRadiance(
         const Scene&    scene, 

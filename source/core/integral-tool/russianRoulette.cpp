@@ -6,8 +6,9 @@
 
 namespace cadise {
 
-bool RussianRoulette::isSurvivedOnNextRound(const Spectrum& weight,
-                                            Spectrum* const out_newWeight) {
+bool RussianRoulette::isSurvivedOnNextRound(
+    const Spectrum& weight,
+    Spectrum* const out_newWeight) {
     
     CADISE_ASSERT(out_newWeight);
 

@@ -7,7 +7,7 @@ namespace cadise {
 class TransportInfo {
 public:
     TransportInfo();
-    TransportInfo(const TransportMode& mode);
+    explicit TransportInfo(const TransportMode& mode);
 
     const TransportMode& mode() const;
 

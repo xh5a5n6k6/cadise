@@ -29,11 +29,7 @@ inline Image<T, N>::Image(const int32 width, const int32 height) :
 }
 
 template<typename T, std::size_t N>
-inline Image<T, N>::Image(const Image<T, N>& img) :
-    _width(img._width),
-    _height(img._height),
-    _data(img._data) {
-}
+inline Image<T, N>::Image(const Image<T, N>& img) = default;
 
 template<typename T, std::size_t N>
 inline void Image<T, N>::flipHorizontal() {

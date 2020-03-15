@@ -11,7 +11,7 @@ namespace cadise {
 // It is for debugging usage compared to other accelerators.
 class BruteForceAccelerator : public Accelerator {
 public:
-    BruteForceAccelerator(const std::vector<std::shared_ptr<Intersector>>& intersectors);
+    explicit BruteForceAccelerator(const std::vector<std::shared_ptr<Intersector>>& intersectors);
 
     void evaluateBound(AABB3R* const out_bound) const override;
 

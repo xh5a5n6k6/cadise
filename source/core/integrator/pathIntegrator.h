@@ -14,7 +14,7 @@ namespace cadise {
 */
 class PathIntegrator : public Integrator {
 public:
-    PathIntegrator(const int32 maxDepth);
+    explicit PathIntegrator(const int32 maxDepth);
 
     void traceRadiance(
         const Scene&    scene, 

@@ -15,10 +15,12 @@ public:
 
 public:
     Matrix4();
-    Matrix4(const real n00, const real n01, const real n02, const real n03,
-            const real n10, const real n11, const real n12, const real n13,
-            const real n20, const real n21, const real n22, const real n23,
-            const real n30, const real n31, const real n32, const real n33);
+    Matrix4(
+        const real n00, const real n01, const real n02, const real n03,
+        const real n10, const real n11, const real n12, const real n13,
+        const real n20, const real n21, const real n22, const real n23,
+        const real n30, const real n31, const real n32, const real n33);
+    Matrix4(const Matrix4& other);
 
     Matrix4 operator*(const Matrix4& rhs) const;
     Matrix4& operator*=(const Matrix4& rhs);

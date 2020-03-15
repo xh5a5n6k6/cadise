@@ -17,7 +17,7 @@ class TextureMapper;
 class Primitive : public Intersector {
 public:
     Primitive();
-    Primitive(const std::shared_ptr<Bsdf>& bsdf);
+    explicit Primitive(const std::shared_ptr<Bsdf>& bsdf);
 	
     void evaluateBound(AABB3R* const out_bound) const override = 0;
 

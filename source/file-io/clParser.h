@@ -10,7 +10,6 @@ public:
 
     int32 parse(int32 argc, char* argv[]) const;
 
-private:
 };
 
 } // namespace cadise

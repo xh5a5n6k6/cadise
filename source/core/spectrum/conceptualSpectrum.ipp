@@ -20,9 +20,7 @@ inline ConceptualSpectrum<N>::ConceptualSpectrum(const SpectralArray& as) :
 }
 
 template<std::size_t N>
-inline ConceptualSpectrum<N>::ConceptualSpectrum(const ConceptualSpectrum<N>& cs) :
-    _values(cs._values) {
-}
+inline ConceptualSpectrum<N>::ConceptualSpectrum(const ConceptualSpectrum<N>& cs) = default;
 
 template<std::size_t N>
 inline ConceptualSpectrum<N>::~ConceptualSpectrum() = default;
