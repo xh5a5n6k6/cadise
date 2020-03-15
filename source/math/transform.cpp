@@ -5,11 +5,11 @@
 
 namespace cadise {
 
-Transform::Transform(const Matrix4& matrix) :
+Transform::Transform(const Matrix4R& matrix) :
     Transform(matrix, matrix.inverse()) {
 }
 
-Transform::Transform(const Matrix4& matrix, const Matrix4& inverseMatrix) :
+Transform::Transform(const Matrix4R& matrix, const Matrix4R& inverseMatrix) :
     _matrix(matrix),
     _inverseMatrix(inverseMatrix) {
 }
@@ -26,11 +26,11 @@ void Transform::transformVector(const Vector3R& vector, Vector3R* const out_vect
     _matrix.transformVector(vector, out_vector);
 }
 
-const Matrix4& Transform::matrix() const {
+const Matrix4R& Transform::matrix() const {
     return _matrix;
 }
 
-const Matrix4& Transform::inverseMatrix() const {
+const Matrix4R& Transform::inverseMatrix() const {
     return _inverseMatrix;
 }
 

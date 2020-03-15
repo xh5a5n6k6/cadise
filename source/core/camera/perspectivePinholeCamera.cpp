@@ -24,7 +24,7 @@ PerspectivePinholeCamera::PerspectivePinholeCamera(
     _fov(fov),
     _sensorWidthMM(sensorWidthMM) {
 
-    _cameraToWorld = std::make_shared<Transform>(Matrix4::lookAt(position, direction, up));
+    _cameraToWorld = std::make_shared<Transform>(Matrix4R::lookAt(position, direction, up));
 
     this->updateTransform();
 }
@@ -40,9 +40,9 @@ void PerspectivePinholeCamera::updateTransform() {
     //
     // translate needs to be multiplied last, it means
     // we need to multiply it first (it will be the leftmost part).
-    Matrix4 filmNdcToCameraMatrix = Matrix4::identity();
-    filmNdcToCameraMatrix *= Matrix4::translate(-(sensorWidth / 2.0_r), sensorHeight / 2.0_r, -_sensorOffset);
-    filmNdcToCameraMatrix *= Matrix4::scale(sensorWidth, -sensorHeight, 1.0_r);
+    Matrix4R filmNdcToCameraMatrix = Matrix4R::identity();
+    filmNdcToCameraMatrix *= Matrix4R::translate(-(sensorWidth / 2.0_r), sensorHeight / 2.0_r, -_sensorOffset);
+    filmNdcToCameraMatrix *= Matrix4R::scale(sensorWidth, -sensorHeight, 1.0_r);
 
     _filmNdcToCamera = std::make_shared<Transform>(filmNdcToCameraMatrix);
 }

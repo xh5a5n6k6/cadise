@@ -22,7 +22,7 @@ Sphere::Sphere(const std::shared_ptr<Bsdf>& bsdf, const Vector3R& center, const 
 
     CADISE_ASSERT(bsdf);
 
-    _worldToLocal = std::make_shared<Transform>(Matrix4::translate(center.reverse()));
+    _worldToLocal     = std::make_shared<Transform>(Matrix4R::translate(center.reverse()));
     _tmptextureMapper = std::make_shared<SphericalMapper>();
 }
 

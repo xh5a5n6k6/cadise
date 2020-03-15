@@ -13,6 +13,12 @@ using Vector2R = Vector<real, 2>;
 using Vector2S = Vector<std::size_t, 2>;
 using Vector3R = Vector<real, 3>;
 
+// arbitrary type 4x4 matrix
+template<typename T>
+class Matrix4;
+
+using Matrix4R = Matrix4<real>;
+
 // arbitrary dimension axis-aligned bounding box
 template<typename T, std::size_t N>
 class AABB;
