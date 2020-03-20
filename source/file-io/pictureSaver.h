@@ -10,6 +10,7 @@ class PictureSaver {
 public:
     static void save(const Path& path, const HdrImage& hdrImage);
 
+private:
     static void saveLdrImage(const Path& path, const LdrImage& ldrImage);
     static void saveHdrImage(const Path& path, const HdrImage& hdrImage);
 

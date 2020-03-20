@@ -2,15 +2,18 @@
 
 #include "math/math.h"
 
+#include <atomic>
 #include <random>
 
 namespace cadise {
 
-static std::random_device randomDevice;
-static std::default_random_engine generator = std::default_random_engine(randomDevice());
+static std::atomic<int32> seed = 81;
 
 real Random::nextReal() {
-    static thread_local std::uniform_real_distribution<real> distribution(0.0_r, 1.0_r);
+    static thread_local std::random_device randomDevice;
+    static thread_local std::mt19937 generator(seed += randomDevice());
+
+    std::uniform_real_distribution<real> distribution(0.0_r, 1.0_r);
 
     return distribution(generator);
 }
