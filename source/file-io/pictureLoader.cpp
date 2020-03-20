@@ -19,7 +19,7 @@ HdrImage PictureLoader::loadRgbImage(const Path& path) {
 
         LdrImage ldrImage;
         loadLdrImage(path, &ldrImage);
-        utility::ImageUtils::ldrToHdr(ldrImage, &hdrImage);
+        ImageUtils::ldrToHdr(ldrImage, &hdrImage);
     }
     else if (path.isExtendedWith(".hdr") || path.isExtendedWith(".HDR")) {
         loadHdrImage(path, &hdrImage);

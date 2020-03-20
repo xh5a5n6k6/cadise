@@ -6,8 +6,6 @@
 
 namespace cadise {
 
-namespace utility {
-
 void ImageUtils::ldrToHdr(const LdrImage& ldrImage, 
                           HdrImage* const out_hdrImage) {
 
@@ -46,7 +44,5 @@ void ImageUtils::ldrAlphaToHdrAlpha(const LdrAlphaImage& ldrAlphaImage,
 
     // TODO: implement here
 }
-
-} // namespace utility
 
 } // namespace cadise

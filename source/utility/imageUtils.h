@@ -4,8 +4,6 @@
 
 namespace cadise {
 
-namespace utility {
-
 class ImageUtils {
 public:
     static void ldrToHdr(const LdrImage& ldrImage, 
@@ -17,7 +15,5 @@ public:
     static void ldrAlphaToHdrAlpha(const LdrAlphaImage& ldrAlphaImage, 
                                    HdrAlphaImage* const out_hdrAlphaImage);
 };
-
-} // namespace utility
 
 } // namespace cadise

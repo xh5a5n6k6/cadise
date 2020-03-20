@@ -4,8 +4,6 @@
 
 namespace cadise {
 
-namespace utility {
-
 class Parallel {
 public:
     static void parallelWork(
@@ -14,7 +12,5 @@ public:
         const std::function<void(const std::size_t workBeginIndex,
                                  const std::size_t workEndIndex)>& work);
 };
-
-} // namespace utility
 
 } // namespace cadise

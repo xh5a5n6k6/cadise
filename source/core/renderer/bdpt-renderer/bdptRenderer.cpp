@@ -20,6 +20,7 @@
 namespace cadise {
 
 BdptRenderer::BdptRenderer(const std::shared_ptr<Sampler>& sampler) :
+    Renderer(),
     _sampler(sampler) {
 
     CADISE_ASSERT(sampler);
@@ -36,7 +37,7 @@ void BdptRenderer::render(const Scene& scene) const {
     const std::size_t totalTiles   = static_cast<std::size_t>(tileNumber.x() * tileNumber.y());
     const std::size_t totalThreads = 16;
 
-    utility::Parallel::parallelWork(
+    Parallel::parallelWork(
         totalTiles,
         totalThreads,
         [=](const std::size_t tileBeginIndex,

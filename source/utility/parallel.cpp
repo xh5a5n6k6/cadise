@@ -3,13 +3,10 @@
 #include "fundamental/assertion.h"
 #include "math/math.h"
 
-#include <functional>
 #include <thread>
 #include <vector>
 
 namespace cadise {
-
-namespace utility {
 
 void Parallel::parallelWork(
     const std::size_t totalWorks,
@@ -33,7 +30,5 @@ void Parallel::parallelWork(
         workers[i].join();
     }
 }
-
-} // namespace utility
 
 } // namespace cadise

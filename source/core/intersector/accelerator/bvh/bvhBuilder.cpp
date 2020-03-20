@@ -277,15 +277,15 @@ bool BvhBuilder::_canSplitWithSah(
                                   out_subBoundInfosB);
     }
 
-    constexpr std::size_t numBuckets = 12;
-    BvhSahBucket buckets[numBuckets];
+    constexpr std::size_t NUM_BUCKETS = 12;
+    BvhSahBucket buckets[NUM_BUCKETS];
     for (std::size_t i = 0; i < intersectorCounts; ++i) {
         const AABB3R&   bound    = boundInfos[i].bound();
         const Vector3R& centroid = boundInfos[i].centroid();
         const real      offset   = (centroid[splitAxis] - splitMinVertex[splitAxis]) * inverseSplitExtent;
 
-        const std::size_t bucketIndex     = static_cast<std::size_t>(offset * numBuckets);
-        const std::size_t safeBucketIndex = (bucketIndex == numBuckets) ? numBuckets - 1 : bucketIndex;
+        const std::size_t bucketIndex     = static_cast<std::size_t>(offset * NUM_BUCKETS);
+        const std::size_t safeBucketIndex = (bucketIndex == NUM_BUCKETS) ? NUM_BUCKETS - 1 : bucketIndex;
 
         buckets[safeBucketIndex].addOneBoundAndCount(bound);
     }
@@ -298,7 +298,7 @@ bool BvhBuilder::_canSplitWithSah(
     std::size_t bestSplitBucketIndex = std::numeric_limits<std::size_t>::max();
     real        bestCost             = std::numeric_limits<real>::max();
 
-    for (std::size_t split = 0; split < numBuckets - 1; ++split) {
+    for (std::size_t split = 0; split < NUM_BUCKETS - 1; ++split) {
         std::size_t subIntersectorCountsA = 0;
         std::size_t subIntersectorCountsB = 0;
         AABB3R      subBoundA;
@@ -309,7 +309,7 @@ bool BvhBuilder::_canSplitWithSah(
             subIntersectorCountsA += buckets[i].intersectorCounts();
         }
 
-        for (std::size_t i = split + 1; i < numBuckets; ++i) {
+        for (std::size_t i = split + 1; i < NUM_BUCKETS; ++i) {
             subBoundB.unionWith(buckets[i].bound());
             subIntersectorCountsB += buckets[i].intersectorCounts();
         }
@@ -340,8 +340,8 @@ bool BvhBuilder::_canSplitWithSah(
             const Vector3R& centroid = b.centroid();
             const real      offset   = (centroid[splitAxis] - splitMinVertex[splitAxis]) * inverseSplitExtent;
 
-            const std::size_t bucketIndex     = static_cast<std::size_t>(offset * numBuckets);
-            const std::size_t safeBucketIndex = (bucketIndex == numBuckets) ? numBuckets - 1 : bucketIndex;
+            const std::size_t bucketIndex     = static_cast<std::size_t>(offset * NUM_BUCKETS);
+            const std::size_t safeBucketIndex = (bucketIndex == NUM_BUCKETS) ? NUM_BUCKETS - 1 : bucketIndex;
 
             return safeBucketIndex <= bestSplitBucketIndex;
         });

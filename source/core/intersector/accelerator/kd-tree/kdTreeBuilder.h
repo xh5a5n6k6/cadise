@@ -17,7 +17,6 @@ public:
                   const real intersectionCost,
                   const real emptyBonus);
 
-
     void buildNodes(
         const std::vector<std::shared_ptr<Intersector>>& intersectors,
         const std::vector<AABB3R>&                       intersectorBounds,

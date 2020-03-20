@@ -131,6 +131,7 @@ void SubPathBuilder::_buildSubPathCompletely(
     Spectrum* const      out_zeroBounceRadiance) const {
 
     CADISE_ASSERT(out_subPath);
+    CADISE_ASSERT(out_zeroBounceRadiance);
 
     std::size_t currentLength = out_subPath->length();
     if (currentLength == _maxPathLength) {
