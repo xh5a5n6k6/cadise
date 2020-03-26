@@ -109,9 +109,10 @@ void EnvironmentLight::evaluateEmitSample(EmitLightSample* const out_sample) con
 }
 
 void EnvironmentLight::evaluateEmitPdf(
-    const Ray&  emitRay,
-    real* const out_pdfA,
-    real* const out_pdfW) const {
+    const Ray&      emitRay,
+    const Vector3R& emitN,
+    real* const     out_pdfA,
+    real* const     out_pdfW) const {
 
     CADISE_ASSERT(out_pdfA);
     CADISE_ASSERT(out_pdfW);

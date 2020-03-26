@@ -109,12 +109,13 @@ void RenderDatabase::prepareRender() {
     camera->setAspectRatio(rx / ry);
     camera->updateTransform();
 
+    _renderer->setScene(_scene.get());
     _renderer->setCamera(camera);
     _renderer->setFilm(film);
 }
 
 void RenderDatabase::startRender() const {
-    _renderer->render(*_scene);
+    _renderer->render();
 }
 
 void RenderDatabase::_setUpFilm(const std::shared_ptr<SdData>& data) {

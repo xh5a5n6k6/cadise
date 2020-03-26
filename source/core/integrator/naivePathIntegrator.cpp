@@ -1,7 +1,7 @@
 #include "core/integrator/naivePathIntegrator.h"
 
-#include "core/integral-tool/sample/bsdfSample.h"
 #include "core/integral-tool/russianRoulette.h"
+#include "core/integral-tool/sample/bsdfSample.h"
 #include "core/intersector/primitive/primitive.h"
 #include "core/light/category/areaLight.h"
 #include "core/ray.h"

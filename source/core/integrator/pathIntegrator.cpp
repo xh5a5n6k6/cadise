@@ -1,8 +1,8 @@
 #include "core/integrator/pathIntegrator.h"
 
-#include "core/integral-tool/sample/bsdfSample.h"
 #include "core/integral-tool/directLightEvaluator.h"
 #include "core/integral-tool/russianRoulette.h"
+#include "core/integral-tool/sample/bsdfSample.h"
 #include "core/intersector/primitive/primitive.h"
 #include "core/light/category/areaLight.h"
 #include "core/ray.h"
@@ -58,6 +58,8 @@ void PathIntegrator::traceRadiance(
 
         // estimate direct light using MIS technique 
         // (only at non-specular surface)
+        // TODO: FIX HERE
+        //       use sample bxdfType to do this check instead
         if (!bsdf->type().hasAtLeastOne(BxdfType::SPECULAR_REFLECTION,
                                         BxdfType::SPECULAR_TRANSMISSION)) {
 
@@ -66,8 +68,11 @@ void PathIntegrator::traceRadiance(
             real lightPdf;
             const Light* sampleLight = scene.sampleOneLight(&lightPdf);
 
-            const Spectrum directLightRadiance = DirectLightEvaluator::evaluate(scene, intersection,
-                                                                          bsdf, sampleLight) / lightPdf;
+            CADISE_ASSERT(sampleLight);
+            CADISE_ASSERT_GT(lightPdf, 0.0_r);
+
+            const Spectrum directLightRadiance 
+                = DirectLightEvaluator::evaluate(scene, intersection, bsdf, sampleLight) / lightPdf;
             
             totalRadiance += pathThroughput * directLightRadiance;
         }

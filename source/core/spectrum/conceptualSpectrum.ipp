@@ -26,7 +26,7 @@ template<std::size_t N>
 inline ConceptualSpectrum<N>::~ConceptualSpectrum() = default;
 
 template<std::size_t N>
-inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator-() const {
+inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator - () const {
     ConceptualSpectrum<N> result;
     result._values = -_values;
 
@@ -34,7 +34,7 @@ inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator-() const {
 }
 
 template<std::size_t N>
-inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator+(const real s) const {
+inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator + (const real s) const {
     ConceptualSpectrum<N> result;
     result._values = _values + s;
 
@@ -42,7 +42,7 @@ inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator+(const real s) cons
 }
 
 template<std::size_t N>
-inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator-(const real s) const {
+inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator - (const real s) const {
     ConceptualSpectrum<N> result;
     result._values = _values - s;
 
@@ -50,7 +50,7 @@ inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator-(const real s) cons
 }
 
 template<std::size_t N>
-inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator*(const real s) const {
+inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator * (const real s) const {
     ConceptualSpectrum<N> result;
     result._values = _values * s;
 
@@ -58,7 +58,7 @@ inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator*(const real s) cons
 }
 
 template<std::size_t N>
-inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator/(const real s) const {
+inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator / (const real s) const {
     ConceptualSpectrum<N> result;
     result._values = _values / s;
 
@@ -66,7 +66,7 @@ inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator/(const real s) cons
 }
 
 template<std::size_t N>
-inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator+(const ConceptualSpectrum<N>& cs) const {
+inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator + (const ConceptualSpectrum<N>& cs) const {
     ConceptualSpectrum<N> result;
     result._values = _values + cs._values;
 
@@ -74,7 +74,7 @@ inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator+(const ConceptualSp
 }
 
 template<std::size_t N>
-inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator-(const ConceptualSpectrum<N>& cs) const {
+inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator - (const ConceptualSpectrum<N>& cs) const {
     ConceptualSpectrum<N> result;
     result._values = _values - cs._values;
 
@@ -82,7 +82,7 @@ inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator-(const ConceptualSp
 }
 
 template<std::size_t N>
-inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator*(const ConceptualSpectrum<N>& cs) const {
+inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator * (const ConceptualSpectrum<N>& cs) const {
     ConceptualSpectrum<N> result;
     result._values = _values * cs._values;
 
@@ -90,7 +90,7 @@ inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator*(const ConceptualSp
 }
 
 template<std::size_t N>
-inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator/(const ConceptualSpectrum<N>& cs) const {
+inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator / (const ConceptualSpectrum<N>& cs) const {
     ConceptualSpectrum<N> result;
     result._values = _values / cs._values;
 
@@ -98,63 +98,63 @@ inline ConceptualSpectrum<N> ConceptualSpectrum<N>::operator/(const ConceptualSp
 }
 
 template<std::size_t N>
-inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator+=(const real s) {
+inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator += (const real s) {
     _values += s;
 
     return *this;
 }
 
 template<std::size_t N>
-inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator-=(const real s) {
+inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator -= (const real s) {
     _values -= s;
 
     return *this;
 }
 
 template<std::size_t N>
-inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator*=(const real s) {
+inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator *= (const real s) {
     _values *= s;
 
     return *this;
 }
 
 template<std::size_t N>
-inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator/=(const real s) {
+inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator /= (const real s) {
     _values /= s;
 
     return *this;
 }
 
 template<std::size_t N>
-inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator+=(const ConceptualSpectrum<N>& cs) {
+inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator += (const ConceptualSpectrum<N>& cs) {
     _values += cs._values;
 
     return *this;
 }
 
 template<std::size_t N>
-inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator-=(const ConceptualSpectrum<N>& cs) {
+inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator -= (const ConceptualSpectrum<N>& cs) {
     _values -= cs._values;
 
     return *this;
 }
 
 template<std::size_t N>
-inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator*=(const ConceptualSpectrum<N>& cs) {
+inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator *= (const ConceptualSpectrum<N>& cs) {
     _values *= cs._values;
 
     return *this;
 }
 
 template<std::size_t N>
-inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator/=(const ConceptualSpectrum<N>& cs) {
+inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator /= (const ConceptualSpectrum<N>& cs) {
     _values /= cs._values;
 
     return *this;
 }
 
 template<std::size_t N>
-inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator=(const ConceptualSpectrum<N>& cs) {
+inline ConceptualSpectrum<N>& ConceptualSpectrum<N>::operator = (const ConceptualSpectrum<N>& cs) {
     _values = cs._values;
 
     return *this;

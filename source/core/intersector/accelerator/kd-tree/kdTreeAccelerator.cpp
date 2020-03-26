@@ -23,6 +23,7 @@ KdTreeAccelerator::KdTreeAccelerator(
     std::vector<AABB3R> intersectorBounds(_intersectors.size());
     for (std::size_t i = 0; i < _intersectors.size(); ++i) {
         _intersectors[i]->evaluateBound(&bound);
+
         intersectorBounds[i] = bound;
         _bound.unionWith(bound);
     }
@@ -65,7 +66,7 @@ bool KdTreeAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) c
 
     while (true) {
         const std::size_t currentNodeIndex = currentNodeInfo.nodeIndex();
-        const KdTreeNode& currentNode      = _nodes[currentNodeIndex];
+        const KdTreeNode<>& currentNode      = _nodes[currentNodeIndex];
 
         // early exits when there is a closer intersection
         // than current node
@@ -75,9 +76,9 @@ bool KdTreeAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) c
 
         // leaf node traversal
         if (currentNode.isLeaf()) {
-            for (std::size_t i = 0; i < currentNode.intersectorCounts(); ++i) {
+            for (std::size_t i = 0; i < currentNode.numObjects(); ++i) {
                 const std::size_t realIntersectorIndex 
-                    = _intersectorIndices[currentNode.intersectorIndex() + i];
+                    = _intersectorIndices[currentNode.objectIndex() + i];
 
                 result |= _intersectors[realIntersectorIndex]->isIntersecting(ray, primitiveInfo);
             }
@@ -102,6 +103,7 @@ bool KdTreeAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) c
             std::size_t farChildIndex;
 
             // decide which child is near/far node
+            //
             // near child is first node
             if ((origin[splitAxis] < currentNode.splitPosition()) ||
                 (origin[splitAxis] == currentNode.splitPosition() && direction[splitAxis] <= 0.0_r)) {
@@ -166,7 +168,7 @@ bool KdTreeAccelerator::isOccluded(const Ray& ray) const {
 
     while (true) {
         const std::size_t currentNodeIndex = currentNodeInfo.nodeIndex();
-        const KdTreeNode& currentNode      = _nodes[currentNodeIndex];
+        const KdTreeNode<>& currentNode      = _nodes[currentNodeIndex];
 
         // early exits when there is a closer intersection
         // than current node
@@ -176,9 +178,9 @@ bool KdTreeAccelerator::isOccluded(const Ray& ray) const {
 
         // leaf node traversal
         if (currentNode.isLeaf()) {
-            for (std::size_t i = 0; i < currentNode.intersectorCounts(); ++i) {
+            for (std::size_t i = 0; i < currentNode.numObjects(); ++i) {
                 const std::size_t realIntersectorIndex 
-                    = _intersectorIndices[currentNode.intersectorIndex() + i];
+                    = _intersectorIndices[currentNode.objectIndex() + i];
 
                 if (_intersectors[realIntersectorIndex]->isOccluded(ray)) {
                     return true;
@@ -205,6 +207,7 @@ bool KdTreeAccelerator::isOccluded(const Ray& ray) const {
             std::size_t farChildIndex;
 
             // decide which child is near/far node
+            //
             // near child is first node
             if ((origin[splitAxis] < currentNode.splitPosition()) ||
                 (origin[splitAxis] == currentNode.splitPosition() && direction[splitAxis] <= 0.0_r)) {

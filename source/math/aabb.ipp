@@ -34,6 +34,17 @@ inline bool AABB<T, N>::isEmpty() const {
 }
 
 template<typename T, std::size_t N>
+inline bool AABB<T, N>::isInside(const Vector<T, N>& position) const {
+    for (std::size_t i = 0; i < N; ++i) {
+        if (position[i] < _minVertex[i] || position[i] > _maxVertex[i]) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+template<typename T, std::size_t N>
 inline bool AABB<T, N>::isIntersectingAABB(
     const Vector<T, N>& rayOrigin, 
     const Vector<T, N>& rayInverseDirection, 
@@ -112,6 +123,12 @@ inline bool AABB<T, N>::isIntersectingAABB(
     *out_boundMaxT = maxT;
 
     return true;
+}
+
+template<typename T, std::size_t N>
+inline void AABB<T, N>::reset() {
+    _minVertex = Vector<T, N>(std::numeric_limits<T>::max());
+    _maxVertex = Vector<T, N>(std::numeric_limits<T>::min());
 }
 
 template<typename T, std::size_t N>

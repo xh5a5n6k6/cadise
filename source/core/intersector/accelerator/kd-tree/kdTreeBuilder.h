@@ -13,26 +13,27 @@ class Intersector;
 
 class KdTreeBuilder {
 public:
-    KdTreeBuilder(const real traversalCost, 
-                  const real intersectionCost,
-                  const real emptyBonus);
+    KdTreeBuilder(
+        const real traversalCost, 
+        const real intersectionCost,
+        const real emptyBonus);
 
     void buildNodes(
         const std::vector<std::shared_ptr<Intersector>>& intersectors,
         const std::vector<AABB3R>&                       intersectorBounds,
         const AABB3R&                                    entireBound,
-        std::vector<KdTreeNode>* const                   out_nodes,
+        std::vector<KdTreeNode<>>* const                 out_nodes,
         std::vector<std::size_t>* const                  out_intersectorIndices);
 
 private:
     void _buildNodesRecursively(
-        const std::vector<std::size_t>& intersectorIndices, 
-        const std::vector<AABB3R>&      intersectorBounds,
-        const AABB3R&                   entireBound,
-        const std::size_t               currentDepth,
-        const std::size_t               badRefines,
-        std::vector<KdTreeNode>* const  out_nodes,
-        std::vector<std::size_t>* const out_intersectorIndices) const;
+        const std::vector<std::size_t>&  intersectorIndices, 
+        const std::vector<AABB3R>&       intersectorBounds,
+        const AABB3R&                    entireBound,
+        const std::size_t                currentDepth,
+        const std::size_t                badRefines,
+        std::vector<KdTreeNode<>>* const out_nodes,
+        std::vector<std::size_t>* const  out_intersectorIndices) const;
 
     bool _canSplitWithSah(
         const std::vector<std::size_t>&      intersectorIndices,

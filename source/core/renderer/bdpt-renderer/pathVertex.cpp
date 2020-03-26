@@ -114,7 +114,10 @@ real PathVertex::evaluateOriginPdfA(
 
         real pdfA;
         real pdfW;
-        _light->evaluateEmitPdf(Ray(nowP, nextP - nowP), &pdfA, &pdfW);
+        _light->evaluateEmitPdf(Ray(nowP, nextP - nowP), 
+                                _surfaceInfo.shadingNormal(),
+                                &pdfA, 
+                                &pdfW);
 
         return pickLightPdf * pdfA;
     }
@@ -151,7 +154,10 @@ real PathVertex::evaluateDirectPdfA(
     else if (_light) {
         real pdfA;
         real pdfW;
-        _light->evaluateEmitPdf(Ray(nowP, nextP - nowP), &pdfA, &pdfW);
+        _light->evaluateEmitPdf(Ray(nowP, nextP - nowP), 
+                                _surfaceInfo.shadingNormal(),
+                                &pdfA,
+                                &pdfW);
 
         return pdfW * nextToNowDotN / distance2;
     }

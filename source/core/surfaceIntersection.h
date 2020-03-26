@@ -18,21 +18,17 @@ public:
     const SurfaceInfo& surfaceInfo() const;
     const Vector3R& wi() const;
     const Vector3R& wo() const;
-    real pdf() const;
 
     void setPrimitiveInfo(const PrimitiveInfo& primitiveInfo);
     void setSurfaceInfo(const SurfaceInfo& surfaceInfo);
     void setWi(const Vector3R& wi);
     void setWo(const Vector3R& wo);
-    void setPdf(const real pdf);
 
 private:
     PrimitiveInfo _primitiveInfo;
-    SurfaceInfo _surfaceInfo;
-    Vector3R _wi;
-    Vector3R _wo;
-
-    real _pdf;
+    SurfaceInfo   _surfaceInfo;
+    Vector3R      _wi;
+    Vector3R      _wo;
 };
 
 } // namespace cadise

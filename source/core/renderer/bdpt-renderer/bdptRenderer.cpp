@@ -26,7 +26,11 @@ BdptRenderer::BdptRenderer(const std::shared_ptr<Sampler>& sampler) :
     CADISE_ASSERT(sampler);
 }
 
-void BdptRenderer::render(const Scene& scene) const {
+void BdptRenderer::render() const {
+    CADISE_ASSERT(_scene);
+
+    const Scene* scene = _scene;
+
     const std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 
     const int32    filmtileSize = CADISE_FILMTILE_SIZE;
@@ -35,12 +39,13 @@ void BdptRenderer::render(const Scene& scene) const {
                               (_film->resolution().y() + filmtileSize - 1) / filmtileSize);
 
     const std::size_t totalTiles   = static_cast<std::size_t>(tileNumber.x() * tileNumber.y());
-    const std::size_t totalThreads = 16;
+    const std::size_t totalThreads = _numWorkers;
 
     Parallel::parallelWork(
         totalTiles,
         totalThreads,
-        [=](const std::size_t tileBeginIndex,
+        [=](const std::size_t workerId,
+            const std::size_t tileBeginIndex,
             const std::size_t tileEndIndex) {
 
         SubPathBuilder subPathBuilder(MAX_PATH_LENGTH);
@@ -73,27 +78,27 @@ void BdptRenderer::render(const Scene& scene) const {
 
                         // build light sub-path
                         SubPath lightPath(MAX_PATH_LENGTH);
-                        subPathBuilder.buildLightPath(scene, &lightPath);
+                        subPathBuilder.buildLightPath(*scene, &lightPath);
 
                         // build camera sub-path
                         // it also calculates s=0 situation radiance
                         SubPath  cameraPath(MAX_PATH_LENGTH);
                         Spectrum zeroBounceRadiance(0.0_r);
-                        subPathBuilder.buildCameraPath(scene, filmNdcPosition, &cameraPath, &zeroBounceRadiance);
+                        subPathBuilder.buildCameraPath(*scene, filmNdcPosition, &cameraPath, &zeroBounceRadiance);
                         if (!zeroBounceRadiance.isZero()) {
                             accumulatedRadiance += zeroBounceRadiance;
                         }
 
                         // light sub-path connects to camera (t=1 situation)
                         std::vector<ConnectEvent> connectEvents;
-                        lightPath.connectCamera(scene, _camera.get(), &connectEvents);
+                        lightPath.connectCamera(*scene, _camera.get(), &connectEvents);
                         for (std::size_t i = 0; i < connectEvents.size(); ++i) {
                             _film->addSplatRadiance(connectEvents[i]);
                         }
 
                         // camera sub-path connects to light (s=1 situation)
                         Spectrum neeRadiance(0.0_r);
-                        cameraPath.connectLight(scene, &neeRadiance);
+                        cameraPath.connectLight(*scene, &neeRadiance);
                         if (!neeRadiance.isZero()) {
                             accumulatedRadiance += neeRadiance;
                         }
@@ -106,7 +111,7 @@ void BdptRenderer::render(const Scene& scene) const {
                         for (std::size_t s = 2; s <= lightPathLength; ++s) {
                             for (std::size_t t = 2; t <= cameraPathLength; ++t) {
                                 Spectrum connectRadiance(0.0_r);
-                                subPathConnector.connect(scene, lightPath, cameraPath, s, t, &connectRadiance);
+                                subPathConnector.connect(*scene, lightPath, cameraPath, s, t, &connectRadiance);
 
                                 if (!connectRadiance.isZero()) {
                                     accumulatedRadiance += connectRadiance;

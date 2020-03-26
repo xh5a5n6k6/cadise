@@ -11,9 +11,10 @@
 
 namespace cadise {
 
-KdTreeBuilder::KdTreeBuilder(const real traversalCost,
-                             const real intersectionCost,
-                             const real emptyBonus) :
+KdTreeBuilder::KdTreeBuilder(
+    const real traversalCost,
+    const real intersectionCost,
+    const real emptyBonus) :
 
     _traversalCost(traversalCost),
     _intersectionCost(intersectionCost),
@@ -25,7 +26,7 @@ void KdTreeBuilder::buildNodes(
     const std::vector<std::shared_ptr<Intersector>>& intersectors,
     const std::vector<AABB3R>&                       intersectorBounds,
     const AABB3R&                                    entireBound,
-    std::vector<KdTreeNode>* const                   out_nodes,
+    std::vector<KdTreeNode<>>* const                 out_nodes,
     std::vector<std::size_t>* const                  out_intersectorIndices) {
 
     CADISE_ASSERT(out_nodes);
@@ -53,19 +54,19 @@ void KdTreeBuilder::buildNodes(
 }
 
 void KdTreeBuilder::_buildNodesRecursively(
-    const std::vector<std::size_t>& intersectorIndices,
-    const std::vector<AABB3R>&      intersectorBounds,
-    const AABB3R&                   entireBound,
-    const std::size_t               currentDepth,
-    const std::size_t               badRefines,
-    std::vector<KdTreeNode>* const  out_nodes,
-    std::vector<std::size_t>* const out_intersectorIndices) const {
+    const std::vector<std::size_t>&  intersectorIndices,
+    const std::vector<AABB3R>&       intersectorBounds,
+    const AABB3R&                    entireBound,
+    const std::size_t                currentDepth,
+    const std::size_t                badRefines,
+    std::vector<KdTreeNode<>>* const out_nodes,
+    std::vector<std::size_t>* const  out_intersectorIndices) const {
 
     CADISE_ASSERT(out_nodes);
     CADISE_ASSERT(out_intersectorIndices);
 
-    KdTreeNode node;
-    const std::size_t nodeIndex = out_nodes->size();
+    KdTreeNode<> node;
+    const std::size_t nodeIndex                    = out_nodes->size();
     const std::size_t intersectorIndicesBeginIndex = out_intersectorIndices->size();
 
     // make leaf node
@@ -216,16 +217,17 @@ bool KdTreeBuilder::_canSplitWithSah(
         }
 
         // sort all enpoints according to their positions and types
-        std::sort(&(endpoints[axis][0]), 
-                  &(endpoints[axis][2 * intersectorCounts]),
-                  [](const Endpoint& eA, const Endpoint& eB) {
-                      if (eA.position() == eB.position()) {
-                          return eA.type() < eB.type();
-                      }
-                      else {
-                          return eA.position() < eB.position();
-                      }
-                  });
+        std::sort(
+            &(endpoints[axis][0]), 
+            &(endpoints[axis][2 * intersectorCounts]),
+            [](const Endpoint& eA, const Endpoint& eB) {
+                if (eA.position() == eB.position()) {
+                    return eA.type() < eB.type();
+                }
+                else {
+                    return eA.position() < eB.position();
+                }
+            });
 
         std::size_t subIntersectorCountsA = 0;
         std::size_t subIntersectorCountsB = intersectorCounts;
@@ -260,8 +262,8 @@ bool KdTreeBuilder::_canSplitWithSah(
                       (probabilitySplitBoundA * subIntersectorCountsA + probabilitySplitBoundB * subIntersectorCountsB);
 
                 if (splitCost < bestCost) {
-                    bestCost = splitCost;
-                    bestAxis = axis;
+                    bestCost          = splitCost;
+                    bestAxis          = axis;
                     bestEndpointIndex = i;
                 }
             }

@@ -1,17 +1,23 @@
 #include "core/renderer/renderer.h"
 
-#include "core/camera/camera.h"
-#include "core/film/film.h"
 #include "fundamental/assertion.h"
 
 namespace cadise {
 
 Renderer::Renderer() :
+    _scene(nullptr),
     _camera(nullptr),
-    _film(nullptr) {
+    _film(nullptr),
+    _numWorkers(16) {
 }
 
 Renderer::~Renderer() = default;
+
+void Renderer::setScene(const Scene* const scene) {
+    CADISE_ASSERT(scene);
+
+    _scene = scene;
+}
 
 void Renderer::setCamera(const std::shared_ptr<Camera>& camera) {
     CADISE_ASSERT(camera);

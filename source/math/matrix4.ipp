@@ -85,7 +85,7 @@ template<typename T>
 inline Matrix4<T>::Matrix4(const Matrix4<T>& other) = default;
 
 template<typename T>
-inline Matrix4<T> Matrix4<T>::operator*(const Matrix4<T>& rhs) const {
+inline Matrix4<T> Matrix4<T>::operator * (const Matrix4<T>& rhs) const {
     Matrix4<T> result;
     for (std::size_t row = 0; row < 4; ++row) {
         for (std::size_t col = 0; col < 4; ++col) {
@@ -99,7 +99,7 @@ inline Matrix4<T> Matrix4<T>::operator*(const Matrix4<T>& rhs) const {
 }
 
 template<typename T>
-inline Matrix4<T>& Matrix4<T>::operator*=(const Matrix4<T>& rhs) {
+inline Matrix4<T>& Matrix4<T>::operator *= (const Matrix4<T>& rhs) {
     Matrix4<T> tmp;
     for (std::size_t row = 0; row < 4; ++row) {
         for (std::size_t col = 0; col < 4; ++col) {
@@ -115,7 +115,7 @@ inline Matrix4<T>& Matrix4<T>::operator*=(const Matrix4<T>& rhs) {
 }
 
 template<typename T>
-inline Matrix4<T>& Matrix4<T>::operator=(const Matrix4<T>& rhs) {
+inline Matrix4<T>& Matrix4<T>::operator = (const Matrix4<T>& rhs) {
     for (std::size_t row = 0; row < 4; ++row) {
         for (std::size_t col = 0; col < 4; ++col) {
             _n[row][col] = rhs._n[row][col];

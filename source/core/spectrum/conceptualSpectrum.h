@@ -18,24 +18,24 @@ public:
 
     virtual ~ConceptualSpectrum();
 
-    ConceptualSpectrum operator-() const;
-    ConceptualSpectrum operator+(const real s) const;
-    ConceptualSpectrum operator-(const real s) const;
-    ConceptualSpectrum operator*(const real s) const;
-    ConceptualSpectrum operator/(const real s) const;
-    ConceptualSpectrum operator+(const ConceptualSpectrum& cs) const;
-    ConceptualSpectrum operator-(const ConceptualSpectrum& cs) const;
-    ConceptualSpectrum operator*(const ConceptualSpectrum& cs) const;
-    ConceptualSpectrum operator/(const ConceptualSpectrum& cs) const;
-    ConceptualSpectrum& operator+=(const real s);
-    ConceptualSpectrum& operator-=(const real s);
-    ConceptualSpectrum& operator*=(const real s);
-    ConceptualSpectrum& operator/=(const real s);
-    ConceptualSpectrum& operator+=(const ConceptualSpectrum& cs);
-    ConceptualSpectrum& operator-=(const ConceptualSpectrum& cs);
-    ConceptualSpectrum& operator*=(const ConceptualSpectrum& cs);
-    ConceptualSpectrum& operator/=(const ConceptualSpectrum& cs);
-    ConceptualSpectrum& operator=(const ConceptualSpectrum& cs);
+    ConceptualSpectrum operator - () const;
+    ConceptualSpectrum operator + (const real s) const;
+    ConceptualSpectrum operator - (const real s) const;
+    ConceptualSpectrum operator * (const real s) const;
+    ConceptualSpectrum operator / (const real s) const;
+    ConceptualSpectrum operator + (const ConceptualSpectrum& cs) const;
+    ConceptualSpectrum operator - (const ConceptualSpectrum& cs) const;
+    ConceptualSpectrum operator * (const ConceptualSpectrum& cs) const;
+    ConceptualSpectrum operator / (const ConceptualSpectrum& cs) const;
+    ConceptualSpectrum& operator += (const real s);
+    ConceptualSpectrum& operator -= (const real s);
+    ConceptualSpectrum& operator *= (const real s);
+    ConceptualSpectrum& operator /= (const real s);
+    ConceptualSpectrum& operator += (const ConceptualSpectrum& cs);
+    ConceptualSpectrum& operator -= (const ConceptualSpectrum& cs);
+    ConceptualSpectrum& operator *= (const ConceptualSpectrum& cs);
+    ConceptualSpectrum& operator /= (const ConceptualSpectrum& cs);
+    ConceptualSpectrum& operator  = (const ConceptualSpectrum& cs);
 
     bool isZero() const;
     bool hasNegative() const;
@@ -55,12 +55,12 @@ protected:
 // template header implementation
 
 template<std::size_t N>
-inline ConceptualSpectrum<N> operator+(const real s, const ConceptualSpectrum<N>& cs) {
+inline ConceptualSpectrum<N> operator + (const real s, const ConceptualSpectrum<N>& cs) {
     return cs + s;
 }
 
 template<std::size_t N>
-inline ConceptualSpectrum<N> operator*(const real s, const ConceptualSpectrum<N>& cs) {
+inline ConceptualSpectrum<N> operator * (const real s, const ConceptualSpectrum<N>& cs) {
     return cs * s;
 }
 

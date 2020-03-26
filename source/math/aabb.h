@@ -13,6 +13,7 @@ public:
     AABB(const Vector<T, N>& minVertex, const Vector<T, N>& maxVertex);
 
     bool isEmpty() const;
+    bool isInside(const Vector<T, N>& position) const;
 
     bool isIntersectingAABB(
         const Vector<T, N>& rayOrigin, 
@@ -28,6 +29,7 @@ public:
         T* const            out_boundMinT,
         T* const            out_boundMaxT) const;
 
+    void reset();
     T surfaceArea() const;
     T halfSurfaceArea() const;
     Vector<T, N> extent() const;

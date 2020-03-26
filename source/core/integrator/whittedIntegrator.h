@@ -7,9 +7,9 @@ namespace cadise {
 class SurfaceIntersection;
 
 /*
-    WhittedIntegrator means Whitted-style ray tracing integrator, it only
-    consider direct lighting except hitting specular surface (support 
-    specular reflection and specular refraction).
+    WhittedIntegrator is Whitted-style ray tracing integrator, 
+    it considers direct lighting and reflection/refraction effects.
+    (reflection/refraction effects are calculated only at specular surface)
 */
 class WhittedIntegrator : public Integrator {
 public:

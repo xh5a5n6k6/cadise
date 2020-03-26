@@ -124,7 +124,7 @@ void SingleAreaLight::evaluateEmitSample(EmitLightSample* const out_sample) cons
     const Vector2R sample = Vector2R(Random::nextReal(), Random::nextReal());
     Vector3R emitDirection;
     real pdfW;
-    Hemisphere::uniformSampling(sample, &emitDirection, &pdfW);
+    Hemisphere::cosineWeightedSampling(sample, &emitDirection, &pdfW);
 
     // transform emitDirection to world coordinate
     emitDirection = xAxis * emitDirection.x() +
@@ -150,17 +150,18 @@ void SingleAreaLight::evaluateEmitSample(EmitLightSample* const out_sample) cons
 }
 
 void SingleAreaLight::evaluateEmitPdf(
-    const Ray&  emitRay,
-    real* const out_pdfA,
-    real* const out_pdfW) const {
+    const Ray&      emitRay,
+    const Vector3R& emitN,
+    real* const     out_pdfA,
+    real* const     out_pdfW) const {
 
     CADISE_ASSERT(out_pdfA);
     CADISE_ASSERT(out_pdfW);
 
     *out_pdfA = _primitive->evaluatePositionPdfA(emitRay.origin());
 
-    // refactor here
-    *out_pdfW = constant::INV_TWO_PI;
+    const real cosTheta = emitRay.direction().dot(emitN);
+    *out_pdfW = cosTheta * constant::INV_PI;
 }
 
 real SingleAreaLight::approximatedFlux() const {

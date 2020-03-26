@@ -1,9 +1,10 @@
 ## Feature Lists
-- ### Rendering Technique
+- ### Light Transport Algorithm
     - Whitted Ray Tracing
     - Unidirectional Path Tracing
     - Unidirectional Path Tracing with Next Event Estimation
     - Bidirectional Path Tracing
+    - Photon Mapping
 - ### Accelerator
     - BVH (equal, SAH)
     - K-d Tree (SAH)
@@ -33,7 +34,7 @@
         - sample mode: nearest
         - UV wrap mode: clamp, repeat
 - ### Camera
-    - Pinhole Perspective
+    - Perspective Pinhole
 - ### Sampling
     - Random
     - Stratified

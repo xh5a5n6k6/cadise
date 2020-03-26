@@ -28,9 +28,9 @@ public:
         const T n30, const T n31, const T n32, const T n33);
     Matrix4(const Matrix4& other);
 
-    Matrix4 operator*(const Matrix4& rhs) const;
-    Matrix4& operator*=(const Matrix4& rhs);
-    Matrix4& operator=(const Matrix4& rhs);
+    Matrix4 operator * (const Matrix4& rhs) const;
+    Matrix4& operator *= (const Matrix4& rhs);
+    Matrix4& operator  = (const Matrix4& rhs);
 
     Matrix4 transpose() const;
     Matrix4 inverse() const;

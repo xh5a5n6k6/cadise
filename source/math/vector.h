@@ -23,26 +23,26 @@ public:
     template<typename U>
     explicit Vector(const Vector<U, N>& other);
 
-    Vector operator-() const;
-    Vector operator+(const T s) const;
-    Vector operator-(const T s) const;
-    Vector operator*(const T s) const;
-    Vector operator/(const T s) const;
-    Vector operator+(const Vector& v) const;
-    Vector operator-(const Vector& v) const;
-    Vector operator*(const Vector& v) const;
-    Vector operator/(const Vector& v) const;
-    Vector& operator+=(const T s);
-    Vector& operator-=(const T s);
-    Vector& operator*=(const T s);
-    Vector& operator/=(const T s);
-    Vector& operator+=(const Vector& v);
-    Vector& operator-=(const Vector& v);
-    Vector& operator*=(const Vector& v);
-    Vector& operator/=(const Vector& v);
-    Vector& operator=(const Vector& v);
-    T& operator[](const std::size_t index);
-    const T& operator[](const std::size_t index) const;
+    Vector operator - () const;
+    Vector operator + (const T s) const;
+    Vector operator - (const T s) const;
+    Vector operator * (const T s) const;
+    Vector operator / (const T s) const;
+    Vector operator + (const Vector& v) const;
+    Vector operator - (const Vector& v) const;
+    Vector operator * (const Vector& v) const;
+    Vector operator / (const Vector& v) const;
+    Vector& operator += (const T s);
+    Vector& operator -= (const T s);
+    Vector& operator *= (const T s);
+    Vector& operator /= (const T s);
+    Vector& operator += (const Vector& v);
+    Vector& operator -= (const Vector& v);
+    Vector& operator *= (const Vector& v);
+    Vector& operator /= (const Vector& v);
+    Vector& operator  = (const Vector& v);
+    T& operator [] (const std::size_t index);
+    const T& operator [] (const std::size_t index) const;
 
     bool isZero() const;
     bool hasNaN() const;
@@ -84,12 +84,12 @@ private:
 // template header implementation
 
 template<typename T, std::size_t N>
-inline Vector<T, N> operator+(const T s, const Vector<T, N>& v) {
+inline Vector<T, N> operator + (const T s, const Vector<T, N>& v) {
     return v + s;
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N> operator*(const T s, const Vector<T, N>& v) {
+inline Vector<T, N> operator * (const T s, const Vector<T, N>& v) {
     return v * s;
 }
 

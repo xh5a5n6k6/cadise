@@ -18,9 +18,10 @@ public:
 
     void evaluateEmitSample(EmitLightSample* const out_sample) const override = 0;
     void evaluateEmitPdf(
-        const Ray&  emitRay,
-        real* const out_pdfA,
-        real* const out_pdfW) const override = 0;
+        const Ray&      emitRay,
+        const Vector3R& emitN,
+        real* const     out_pdfA,
+        real* const     out_pdfW) const override = 0;
 
     real approximatedFlux() const override = 0;
 

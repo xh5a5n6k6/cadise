@@ -4,20 +4,23 @@
 
 namespace cadise {
 
+template<typename Index = std::size_t>
 class KdTreeNode {
 public:
     KdTreeNode();
 
-    void initializInternalNode(const std::size_t secondChildIndex,
-                               const std::size_t splitAxis,
-                               const real        splitPosition);
+    void initializInternalNode(
+        const std::size_t secondChildIndex,
+        const std::size_t splitAxis,
+        const real        splitPosition);
 
-    void initializeLeafNode(const std::size_t intersectorIndex,
-                            const std::size_t intersectorCounts);
+    void initializeLeafNode(
+        const std::size_t objectIndex,
+        const std::size_t numObjects);
 
     // for leaf node
-    std::size_t intersectorIndex() const;
-    std::size_t intersectorCounts() const;
+    std::size_t objectIndex() const;
+    std::size_t numObjects() const;
 
     // for internal node
     real splitPosition() const;
@@ -29,15 +32,15 @@ public:
 private:
     union {
         // for leaf node
-        std::size_t _intersectorIndex;
+        Index _objectIndex;
         // for internal node
-        real _splitPosition;
+        real  _splitPosition;
     };
 
     union {
         /*
             use last two bits to recognize if it is leaf node,
-            remaining bits store intersector count in leaf node
+            remaining bits store object count in leaf node
             or second child index in internal node.
         
             Last two bits represent as follows:
@@ -51,12 +54,14 @@ private:
         */
         
         // for both nodes
-        std::size_t _splitAxis;
+        Index _splitAxis;
         // for leaf node
-        std::size_t _intersectorCounts;
+        Index _numObjects;
         // for internal node
-        std::size_t _secondChildIndex;
+        Index _secondChildIndex;
     };
 };
 
 } // namespace cadise
+
+#include "core/intersector/accelerator/kd-tree/kdTreeNode.ipp"

@@ -26,9 +26,10 @@ public:
     // such as bidirectional path tracing and photon mapping
     virtual void evaluateEmitSample(EmitLightSample* const out_sample) const = 0;
     virtual void evaluateEmitPdf(
-        const Ray&  emitRay,
-        real* const out_pdfA,
-        real* const out_pdfW) const = 0;
+        const Ray&      emitRay,
+        const Vector3R& emitN,
+        real* const     out_pdfA,
+        real* const     out_pdfW) const = 0;
 
     virtual real approximatedFlux() const = 0;
 
