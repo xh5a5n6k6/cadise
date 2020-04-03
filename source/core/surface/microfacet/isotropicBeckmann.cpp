@@ -27,7 +27,7 @@ real IsotropicBeckmann::distributionD(
     const real NdotH4 = NdotH2 * NdotH2;
 
     const real exponent    = (NdotH2 - 1.0_r) / (NdotH2 * alpha2);
-    const real denominator = constant::PI * alpha2 * NdotH4;
+    const real denominator = constant::pi<real> * alpha2 * NdotH4;
 
     return std::exp(exponent) / denominator;
 }
@@ -98,7 +98,7 @@ void IsotropicBeckmann::sampleHalfVectorH(
     const real alpha  = alphaX;
     const real alpha2 = alpha * alpha;
     
-    const real phi   = constant::TWO_PI * safeSample.x();
+    const real phi   = constant::two_pi<real> * safeSample.x();
     const real theta = std::atan(std::sqrt(-alpha2 * std::log(1.0_r - safeSample.y())));
     if (!std::isfinite(theta)) {
         *out_H = Vector3R(0.0_r, 0.0_r, 1.0_r);

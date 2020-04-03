@@ -19,11 +19,11 @@ void SphericalMapper::mappingToUvw(const Vector3R& direction, Vector3R* const ou
     const real theta = std::acos(math::clamp(unitVector.y(), -1.0_r, 1.0_r));
     real phi = std::atan2(unitVector.x(), unitVector.z());
     if (phi < 0.0_r) {
-        phi += constant::TWO_PI;
+        phi += constant::two_pi<real>;
     }
 
-    *out_uvw =  Vector3R(phi * constant::INV_TWO_PI,
-                         (constant::PI - theta) * constant::INV_PI,
+    *out_uvw =  Vector3R(phi * constant::inv_two_pi<real>,
+                         (constant::pi<real> - theta) * constant::inv_pi<real>,
                          0.0_r);
 }
 

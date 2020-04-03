@@ -152,7 +152,7 @@ real Sphere::evaluatePositionPdfA(const Vector3R& position) const {
 }
 
 real Sphere::area() const {
-    return constant::FOUR_PI * _radius * _radius;
+    return constant::four_pi<real> * _radius * _radius;
 }
 
 } // namespace cadise

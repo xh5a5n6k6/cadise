@@ -89,7 +89,7 @@ void PmRadianceEstimator::estimate(
             }
 
             const real normalizationTerm
-                = 1.0_r / (constant::PI * searchRadius * searchRadius * _numPhotonPaths);
+                = 1.0_r / (constant::pi<real> * searchRadius * searchRadius * _numPhotonPaths);
 
             totalRadiance += radiance * normalizationTerm;
 

@@ -126,7 +126,7 @@ void PerspectivePinholeCamera::evaluateCameraSample(
     out_toCameraRay->reset();
     out_toCameraRay->setOrigin(out_sample->targetPosition());
     out_toCameraRay->setDirection(cameraRayDirection.reverse());
-    out_toCameraRay->setMaxT(distance - constant::RAY_EPSILON);
+    out_toCameraRay->setMaxT(distance - constant::ray_epsilon<real>);
 }
 
 void PerspectivePinholeCamera::evaluateCameraPdf(

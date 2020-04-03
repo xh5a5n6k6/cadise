@@ -6,31 +6,39 @@ namespace cadise {
 
 namespace constant {
 
-inline constexpr real RAY_EPSILON
-    = 0.001_r;
+template<typename T>
+inline constexpr T ray_epsilon
+    = T(0.001);
 
 // 1 degree = pi/180 radian
-inline constexpr real RADIAN_PER_DEGREE
-    = 0.0174532925199432_r;
+template<typename T>
+inline constexpr T radian_per_degree
+    = T(0.0174532925199432);
 
 // 1 radian = 180/pi degree
-inline constexpr real DEGREE_PER_RADIAN
-    = 57.295779513082320_r;
+template<typename T>
+inline constexpr T degree_per_radian
+    = T(57.295779513082320);
 
-inline constexpr real PI
-    = 3.1415926535897932_r;
+template<typename T>
+inline constexpr T pi
+    = T(3.1415926535897932);
 
-inline constexpr real TWO_PI
-    = 6.2831853071795864_r;
+template<typename T>
+inline constexpr T two_pi
+    = T(6.2831853071795864);
 
-inline constexpr real FOUR_PI
-    = 12.566370614359172_r;
+template<typename T>
+inline constexpr T four_pi
+    = T(12.566370614359172);
 
-inline constexpr real INV_PI
-    = 0.3183098861837906_r;
+template<typename T>
+inline constexpr T inv_pi
+    = T(0.3183098861837906);
 
-inline constexpr real INV_TWO_PI
-    = 0.1591549430918953_r;
+template<typename T>
+inline constexpr T inv_two_pi
+    = T(0.1591549430918953);
 
 } // namespace constant
 

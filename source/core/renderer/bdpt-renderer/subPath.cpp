@@ -191,7 +191,9 @@ void SubPath::connectLight(
         }
 
         // do visibility test only when radiance is valid
-        const Ray testRay(cameraP, L, constant::RAY_EPSILON, distance - constant::RAY_EPSILON);
+        Ray testRay(cameraP, L);
+        testRay.setMaxT(distance - constant::ray_epsilon<real>);
+
         if (scene.isOccluded(testRay)) {
             continue;
         }

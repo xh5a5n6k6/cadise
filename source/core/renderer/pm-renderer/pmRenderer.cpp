@@ -78,7 +78,7 @@ void PmRenderer::render() const {
     photonMap.buildNodes(std::move(photons));
 
     std::cout << "Finish building photon map, total photons use " 
-              << (sizeof(Photon) * photons.size()) / 1024.0_r / 1024.0_r << " MB"
+              << (sizeof(Photon) * totalWorks) / 1024.0_r / 1024.0_r << " MB"
               << std::endl;
 
     // TODO: refactor here, use renderWork instead ?

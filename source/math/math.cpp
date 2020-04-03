@@ -11,11 +11,11 @@ namespace cadise {
 namespace math {
 
 real degreeToRadian(const real degree) {
-    return degree * constant::RADIAN_PER_DEGREE;
+    return degree * constant::radian_per_degree<real>;
 }
 
 real radianToDegree(const real radian) {
-    return radian * constant::DEGREE_PER_RADIAN;
+    return radian * constant::degree_per_radian<real>;
 }
 
 std::size_t nearestLowerSquareNumber(const std::size_t number) {

@@ -78,10 +78,8 @@ bool SubPathConnector::_canConnect(
     const Vector3R cameraToLightDirection = cameraToLightVector / distance;
 
     // visibility test
-    const Ray testRay(cameraP, 
-                      cameraToLightDirection, 
-                      constant::RAY_EPSILON, 
-                      distance - constant::RAY_EPSILON);
+    Ray testRay(cameraP, cameraToLightDirection);
+    testRay.setMaxT(distance - constant::ray_epsilon<real>);
 
     if (scene.isOccluded(testRay)) {
         return false;

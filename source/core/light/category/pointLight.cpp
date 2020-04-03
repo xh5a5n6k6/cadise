@@ -62,7 +62,7 @@ void PointLight::evaluateEmitPdf(
 }
 
 real PointLight::approximatedFlux() const {
-    return constant::FOUR_PI * _intensity.luminance();
+    return constant::four_pi<real> * _intensity.luminance();
 }
 
 bool PointLight::isDeltaLight() const {

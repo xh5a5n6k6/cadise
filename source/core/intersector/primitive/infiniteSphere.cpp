@@ -65,8 +65,8 @@ void InfiniteSphere::uvwToPosition(
     
     CADISE_ASSERT(out_position);
 
-    const real theta    = (1.0_r - uvw.y()) * constant::PI;
-    const real phi      = uvw.x() * constant::TWO_PI;
+    const real theta    = (1.0_r - uvw.y()) * constant::pi<real>;
+    const real phi      = uvw.x() * constant::two_pi<real>;
     const real cosTheta = std::cos(theta);
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
 

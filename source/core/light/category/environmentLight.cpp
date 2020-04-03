@@ -34,7 +34,7 @@ EnvironmentLight::EnvironmentLight(const Primitive* const primitive,
         
         // image's y coordinate is from bottom to top, but
         // spherical theta is from top to bottom.
-        const real sinTheta = std::sin((1.0_r - sampleV) * constant::PI);
+        const real sinTheta = std::sin((1.0_r - sampleV) * constant::pi<real>);
 
         for (std::size_t ix = 0; ix < resolution.x(); ++ix) {
             const real sampleU = (static_cast<real>(ix) + 0.5_r) / static_cast<real>(resolution.x());
@@ -72,7 +72,7 @@ void EnvironmentLight::evaluateDirectSample(DirectLightSample* const out_sample)
     Vector3R samplePosition;
     _primitive->uvwToPosition({uvSample.x(), uvSample.y(), 0.0_r}, &samplePosition);
 
-    const real sinTheta = std::sin((1.0_r - uvSample.y()) * constant::PI);
+    const real sinTheta = std::sin((1.0_r - uvSample.y()) * constant::pi<real>);
     if (sinTheta <= 0.0_r) {
 
         return;
@@ -82,7 +82,7 @@ void EnvironmentLight::evaluateDirectSample(DirectLightSample* const out_sample)
     _environmentRadiance->evaluate({uvSample.x(), uvSample.y(), 0.0_r}, &sampleRadiance);
 
     out_sample->setEmitPosition(samplePosition);
-    out_sample->setPdfW(uvPdf / (2.0_r * constant::PI * constant::PI * sinTheta));
+    out_sample->setPdfW(uvPdf / (2.0_r * constant::pi<real> * constant::pi<real> * sinTheta));
     out_sample->setRadiance(sampleRadiance);
 }
 
@@ -91,7 +91,7 @@ real EnvironmentLight::evaluateDirectPdfW(
     const Vector3R&            targetPosition) const {
 
     const Vector3R& uvw = emitIntersection.surfaceInfo().uvw();
-    const real sinTheta = std::sin((1.0_r - uvw.y()) * constant::PI);
+    const real sinTheta = std::sin((1.0_r - uvw.y()) * constant::pi<real>);
     if (sinTheta <= 0.0_r) {
 
         return 0.0_r;
@@ -99,7 +99,7 @@ real EnvironmentLight::evaluateDirectPdfW(
 
     const real uvPdf = _distribution.pdfContinuous({uvw.x(), uvw.y()});
 
-    return uvPdf / (2.0_r * constant::PI * constant::PI * sinTheta);
+    return uvPdf / (2.0_r * constant::pi<real> * constant::pi<real> * sinTheta);
 }
 
 void EnvironmentLight::evaluateEmitSample(EmitLightSample* const out_sample) const {
@@ -133,7 +133,7 @@ void EnvironmentLight::setSceneBoundRadius(const real sceneBoundRadius) {
 }
 
 void EnvironmentLight::_updateApproxmiatedFlux() {
-    _approximatedFlux = _backgroundFlux * constant::FOUR_PI * _sceneBoundRadius * _sceneBoundRadius;
+    _approximatedFlux = _backgroundFlux * constant::four_pi<real> * _sceneBoundRadius * _sceneBoundRadius;
 }
 
 } // namespace cadise

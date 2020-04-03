@@ -28,7 +28,7 @@ real IsotropicTrowbridgeReitz::distributionD(
     const real tan2   = (1.0_r - NdotH2) / NdotH2;
 
     const real numerator   = alpha2;
-    const real denominator = constant::PI * NdotH4 * (alpha2 + tan2) * (alpha2 + tan2);
+    const real denominator = constant::pi<real> * NdotH4 * (alpha2 + tan2) * (alpha2 + tan2);
 
     return numerator / denominator;
 }
@@ -83,7 +83,7 @@ void IsotropicTrowbridgeReitz::sampleHalfVectorH(
     // we can use either of them as alpha.
     const real alpha = alphaX;
 
-    const real phi   = constant::TWO_PI * safeSample.x();
+    const real phi   = constant::two_pi<real> * safeSample.x();
     const real theta = std::atan((alpha * std::sqrt(sample.y())) / std::sqrt(1.0_r - safeSample.y()));
     if (!std::isfinite(theta)) {
         *out_H = Vector3R(0.0_r, 0.0_r, 1.0_r);

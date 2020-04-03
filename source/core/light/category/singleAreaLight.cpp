@@ -31,7 +31,7 @@ SingleAreaLight::SingleAreaLight(const Primitive* const primitive,
     const Spectrum totalWattColor = unitWattColor * watt;
 
     _emitRadiance = std::make_shared<ConstantTexture<Spectrum>>(
-                        totalWattColor / primitive->area() * constant::INV_PI);
+                        totalWattColor / primitive->area() * constant::inv_pi<real>);
 }
 
 Spectrum SingleAreaLight::emittance(const SurfaceIntersection& emitIntersection) const {
@@ -161,7 +161,7 @@ void SingleAreaLight::evaluateEmitPdf(
     *out_pdfA = _primitive->evaluatePositionPdfA(emitRay.origin());
 
     const real cosTheta = emitRay.direction().dot(emitN);
-    *out_pdfW = cosTheta * constant::INV_PI;
+    *out_pdfW = cosTheta * constant::inv_pi<real>;
 }
 
 real SingleAreaLight::approximatedFlux() const {
@@ -175,7 +175,7 @@ real SingleAreaLight::approximatedFlux() const {
     Spectrum sampleRadiance;
     _emitRadiance->evaluate(uvw, &sampleRadiance);
 
-    const real approximatedFlux = sampleRadiance.luminance() * _primitive->area() * constant::PI;
+    const real approximatedFlux = sampleRadiance.luminance() * _primitive->area() * constant::pi<real>;
     if (approximatedFlux <= 0.0_r) {
         return _defaultFlux();
     }

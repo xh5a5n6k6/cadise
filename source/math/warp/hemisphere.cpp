@@ -16,7 +16,7 @@ void Hemisphere::uniformSampling(
     CADISE_ASSERT(out_direction);
     CADISE_ASSERT(out_pdfW);
 
-    const real phi      = constant::TWO_PI * sample.x();
+    const real phi      = constant::two_pi<real> * sample.x();
     const real cosTheta = sample.y();
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
 
@@ -24,7 +24,7 @@ void Hemisphere::uniformSampling(
                                std::sin(phi) * sinTheta,
                                cosTheta);
 
-    *out_pdfW = constant::INV_TWO_PI;
+    *out_pdfW = constant::inv_two_pi<real>;
 }
 
 void Hemisphere::cosineWeightedSampling(
@@ -35,7 +35,7 @@ void Hemisphere::cosineWeightedSampling(
     CADISE_ASSERT(out_direction);
     CADISE_ASSERT(out_pdfW);
 
-    const real phi      = constant::TWO_PI * sample.x();
+    const real phi      = constant::two_pi<real> * sample.x();
     const real theta    = std::acos(1.0_r - 2.0_r * sample.y()) * 0.5_r;
     const real cosTheta = std::cos(theta);
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
@@ -44,7 +44,7 @@ void Hemisphere::cosineWeightedSampling(
                                std::sin(phi) * sinTheta,
                                cosTheta);
 
-    *out_pdfW = cosTheta * constant::INV_PI;
+    *out_pdfW = cosTheta * constant::inv_pi<real>;
 }
 
 void Hemisphere::cosineExpWeightedSampling(
@@ -56,7 +56,7 @@ void Hemisphere::cosineExpWeightedSampling(
     CADISE_ASSERT(out_direction);
     CADISE_ASSERT(out_pdfW);
 
-    const real phi      = constant::TWO_PI * sample.x();
+    const real phi      = constant::two_pi<real> * sample.x();
     const real cosTheta = std::pow(sample.y(), 1.0_r / (exponent + 1.0_r));
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
 
@@ -64,7 +64,7 @@ void Hemisphere::cosineExpWeightedSampling(
                               std::sin(phi) * sinTheta,
                               cosTheta);
 
-    *out_pdfW = (exponent + 1.0_r) * constant::INV_TWO_PI * std::pow(cosTheta, exponent);
+    *out_pdfW = (exponent + 1.0_r) * constant::inv_two_pi<real> * std::pow(cosTheta, exponent);
 }
 
 } // namespace cadise

@@ -15,8 +15,8 @@ PhongBsdf::PhongBsdf(const real exponent) :
     Bsdf(BsdfType(BxdfType::GLOSSY_REFLECTION)),
     _exponent(exponent) {
 
-    _pdfFactor  = (exponent + 1.0_r) * constant::INV_TWO_PI;
-    _brdfFactor = (exponent + 2.0_r) * constant::INV_TWO_PI;
+    _pdfFactor  = (exponent + 1.0_r) * constant::inv_two_pi<real>;
+    _brdfFactor = (exponent + 2.0_r) * constant::inv_two_pi<real>;
 }
 
 Spectrum PhongBsdf::evaluate(

@@ -2,11 +2,7 @@
 
 namespace cadise {
 
-Photon::Photon() :
-    _position(0.0_r),
-    _inDirection(0.0_r),
-    _throughputRadiance(0.0_r) {
-}
+Photon::Photon() = default;
 
 const Vector3R& Photon::position() const {
     return _position;

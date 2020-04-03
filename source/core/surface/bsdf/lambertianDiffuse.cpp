@@ -40,7 +40,7 @@ Spectrum LambertianDiffuse::evaluate(
     Spectrum sampleSpectrum;
     _albedo->evaluate(uvw, &sampleSpectrum);
 
-    return sampleSpectrum * constant::INV_PI;
+    return sampleSpectrum * constant::inv_pi<real>;
 }
 
 void LambertianDiffuse::evaluateSample(
@@ -75,7 +75,7 @@ void LambertianDiffuse::evaluateSample(
     Spectrum sampleSpectrum;
     _albedo->evaluate(uvw, &sampleSpectrum);
 
-    out_sample->setScatterValue(sampleSpectrum * constant::INV_PI);
+    out_sample->setScatterValue(sampleSpectrum * constant::inv_pi<real>);
     out_sample->setScatterDirection(L);
     out_sample->setPdfW(pdfW);
 }
@@ -92,7 +92,7 @@ real LambertianDiffuse::evaluatePdfW(
         return 0.0_r;
     }
 
-    return L.absDot(Ns) * constant::INV_PI;
+    return L.absDot(Ns) * constant::inv_pi<real>;
 }
 
 } // namespace cadise

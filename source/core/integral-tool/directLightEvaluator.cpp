@@ -51,7 +51,9 @@ Spectrum DirectLightEvaluator::evaluate(
             intersection.setWo(L);
 
             // generate shadow ray to do occluded test
-            const Ray shadowRay(P, L, constant::RAY_EPSILON, distance - constant::RAY_EPSILON);
+            Ray shadowRay(P, L);
+            shadowRay.setMaxT(distance - constant::ray_epsilon<real>);
+
             if (!scene.isOccluded(shadowRay)) {
                 const Spectrum& radiance  = directLightSample.radiance();
                 const real      lightPdfW = directLightSample.pdfW();

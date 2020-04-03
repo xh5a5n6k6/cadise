@@ -25,7 +25,7 @@ real IsotropicBlinnPhong::distributionD(
     const real alpha2 = alpha * alpha;
     const real alphaP = 2.0_r / alpha2 - 2.0_r;
 
-    return (alphaP + 2.0_r) * std::pow(NdotH, alphaP) * constant::INV_TWO_PI;
+    return (alphaP + 2.0_r) * std::pow(NdotH, alphaP) * constant::inv_two_pi<real>;
 }
 
 real IsotropicBlinnPhong::shadowingMaskingG(
@@ -94,7 +94,7 @@ void IsotropicBlinnPhong::sampleHalfVectorH(
     const real alpha2 = alpha * alpha;
     const real alphaP = 2.0_r / alpha2 - 2.0_r;
 
-    const real phi      = constant::TWO_PI * sample.x();
+    const real phi      = constant::two_pi<real> * sample.x();
     const real cosTheta = std::pow(sample.y(), 1.0_r / (alphaP + 2.0_r));
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
 

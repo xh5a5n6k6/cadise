@@ -12,7 +12,7 @@ Ray::Ray() :
 }
 
 Ray::Ray(const Vector3R& origin, const Vector3R& direction) :
-    Ray(origin, direction, constant::RAY_EPSILON, std::numeric_limits<real>::max()) {
+    Ray(origin, direction, constant::ray_epsilon<real>, std::numeric_limits<real>::max()) {
 }
 
 Ray::Ray(const Vector3R& origin, const Vector3R& direction, const real minT, const real maxT) : 
@@ -33,7 +33,7 @@ Vector3R Ray::at(const real t) const {
 void Ray::reset() {
     this->setOrigin(Vector3R(0.0_r));
     this->setDirection(Vector3R(0.0_r, 0.0_r, -1.0_r));
-    this->setMinT(constant::RAY_EPSILON);
+    this->setMinT(constant::ray_epsilon<real>);
     this->setMaxT(std::numeric_limits<real>::max());
 }
 
