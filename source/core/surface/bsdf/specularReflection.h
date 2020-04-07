@@ -6,7 +6,7 @@
 
 namespace cadise {
 
-class DielectricFresnel;
+class Fresnel;
 template<typename T>
 class Texture;
 
@@ -14,7 +14,7 @@ class SpecularReflection : public Bsdf {
 public:
     SpecularReflection(
         const std::shared_ptr<Texture<Spectrum>>& albedo,
-        const std::shared_ptr<DielectricFresnel>& fresnel);
+        const std::shared_ptr<Fresnel>&           fresnel);
 
     Spectrum evaluate(
         const TransportInfo&       transportInfo,
@@ -31,7 +31,7 @@ public:
 
 private:
     std::shared_ptr<Texture<Spectrum>> _albedo;
-    std::shared_ptr<DielectricFresnel> _fresnel;
+    std::shared_ptr<Fresnel>           _fresnel;
 };
 
 } // namespace cadise

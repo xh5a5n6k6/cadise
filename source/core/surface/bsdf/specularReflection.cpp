@@ -1,7 +1,7 @@
 #include "core/surface/bsdf/specularReflection.h"
 
 #include "core/integral-tool/sample/bsdfSample.h"
-#include "core/surface/fresnel/dielectricFresnel.h"
+#include "core/surface/fresnel/fresnel.h"
 #include "core/surfaceIntersection.h"
 #include "core/texture/texture.h"
 #include "fundamental/assertion.h"
@@ -12,7 +12,7 @@ namespace cadise {
 
 SpecularReflection::SpecularReflection(
     const std::shared_ptr<Texture<Spectrum>>& albedo,
-    const std::shared_ptr<DielectricFresnel>& fresnel) :
+    const std::shared_ptr<Fresnel>&           fresnel) :
     
     Bsdf(BsdfType(BxdfType::SPECULAR_REFLECTION)),
     _albedo(albedo),

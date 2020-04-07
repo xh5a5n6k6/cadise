@@ -30,7 +30,7 @@ static std::shared_ptr<Bsdf> createLambertianDiffuse(
     const StringKeyMap<Texture<real>>& realTextures,
     const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
-    const std::shared_ptr<Texture<Spectrum>> albedo = data->getSpectrumTexture("albedo", spectrumTextures);
+    const auto albedo = data->getSpectrumTexture("albedo", spectrumTextures);
 
     return std::make_shared<LambertianDiffuse>(albedo);
 }
@@ -40,12 +40,27 @@ static std::shared_ptr<Bsdf> createSpecularReflection(
     const StringKeyMap<Texture<real>>& realTextures,
     const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
-    const std::shared_ptr<Texture<Spectrum>> albedo = data->getSpectrumTexture("albedo", spectrumTextures);
-    const real                               iorOuter = data->findReal("ior-outer", 1.0_r);
-    const real                               iorInner = data->findReal("ior-inner", 1.0_r);
+    const auto albedo      = data->getSpectrumTexture("albedo", spectrumTextures);
+    const auto fresnelType = data->findString("fresnel-type", "conductor");
+    
+    std::shared_ptr<Fresnel> fresnel = nullptr;
+    if (fresnelType == "conductor") {
+        const auto f0 = data->findVector3r("f0", Vector3R(1.0_r));
 
-    return std::make_shared<SpecularReflection>(albedo,
-                                                std::make_shared<VanillaDielectricFresnel>(iorOuter, iorInner));
+        fresnel = std::make_shared<SchlickConductorFresnel>(Spectrum(f0));
+    }
+    else if (fresnelType == "dielectric") {
+        const real iorOuter = data->findReal("ior-outer", 1.0_r);
+        const real iorInner = data->findReal("ior-inner", 1.5_r);
+
+        fresnel = std::make_shared<VanillaDielectricFresnel>(iorOuter, iorInner);
+    }
+    else {
+        std::cout << "Unknown fresnel type <" << fresnelType << "> in specular reflection"
+                  << std::endl;
+    }
+
+    return std::make_shared<SpecularReflection>(albedo, fresnel);
 }
 
 static std::shared_ptr<Bsdf> createSpecularTransmission(
@@ -53,12 +68,13 @@ static std::shared_ptr<Bsdf> createSpecularTransmission(
     const StringKeyMap<Texture<real>>& realTextures,
     const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
-    const std::shared_ptr<Texture<Spectrum>> albedo   = data->getSpectrumTexture("albedo", spectrumTextures);
-    const real                               iorOuter = data->findReal("ior-outer", 1.0_r);
-    const real                               iorInner = data->findReal("ior-inner", 1.0_r);
-
-    return std::make_shared<SpecularTransmission>(albedo,
-                                                  std::make_shared<VanillaDielectricFresnel>(iorOuter, iorInner));
+    const auto albedo   = data->getSpectrumTexture("albedo", spectrumTextures);
+    const real iorOuter = data->findReal("ior-outer", 1.0_r);
+    const real iorInner = data->findReal("ior-inner", 1.0_r);
+    
+    const auto fresnel = std::make_shared<VanillaDielectricFresnel>(iorOuter, iorInner);
+    
+    return std::make_shared<SpecularTransmission>(albedo, fresnel);
 }
 
 static std::shared_ptr<Bsdf> createSpecularDielectric(
@@ -66,12 +82,13 @@ static std::shared_ptr<Bsdf> createSpecularDielectric(
     const StringKeyMap<Texture<real>>& realTextures,
     const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
-    const std::shared_ptr<Texture<Spectrum>> albedo   = data->getSpectrumTexture("albedo", spectrumTextures);
-    const real                               iorOuter = data->findReal("ior-outer", 1.0_r);
-    const real                               iorInner = data->findReal("ior-inner", 1.5_r);
+    const auto albedo   = data->getSpectrumTexture("albedo", spectrumTextures);
+    const real iorOuter = data->findReal("ior-outer", 1.0_r);
+    const real iorInner = data->findReal("ior-inner", 1.5_r);
 
-    return std::make_shared<SpecularDielectric>(albedo,
-                                                std::make_shared<VanillaDielectricFresnel>(iorOuter, iorInner));
+    const auto fresnel = std::make_shared<VanillaDielectricFresnel>(iorOuter, iorInner);
+
+    return std::make_shared<SpecularDielectric>(albedo, fresnel);
 }
 
 static std::shared_ptr<Bsdf> createPhong(
@@ -89,8 +106,7 @@ static std::shared_ptr<Bsdf> createPlastic(
     const StringKeyMap<Texture<real>>& realTextures,
     const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
-    const std::shared_ptr<Texture<Spectrum>> diffuseAlbedo
-        = data->getSpectrumTexture("diffuse-albedo", spectrumTextures);
+    const auto diffuseAlbedo    = data->getSpectrumTexture("diffuse-albedo", spectrumTextures);
     const real specularExponent = data->findReal("specular-exponent", 32.0_r);
     const real diffuseRatio     = data->findReal("diffuse-ratio", 0.7_r);
 
@@ -105,13 +121,13 @@ static std::shared_ptr<Bsdf> createMixed(
     const StringKeyMap<Texture<Spectrum>>& spectrumTextures,
     const StringKeyMap<Bsdf>& bsdfs) {
 
-    const std::string_view bsdfAName = data->findString("bsdf-a");
-    const auto&& bsdfA = bsdfs.find(bsdfAName);
+    const auto   bsdfAName = data->findString("bsdf-a");
+    const auto&& bsdfA     = bsdfs.find(bsdfAName);
 
     CADISE_ASSERT_NE(bsdfA, bsdfs.end());
 
-    const std::string_view bsdfBName = data->findString("bsdf-b");
-    const auto&& bsdfB = bsdfs.find(bsdfBName);
+    const auto   bsdfBName = data->findString("bsdf-b");
+    const auto&& bsdfB     = bsdfs.find(bsdfBName);
 
     CADISE_ASSERT_NE(bsdfB, bsdfs.end());
 
@@ -127,10 +143,9 @@ static std::shared_ptr<Bsdf> createConductorMicrofacet(
     const StringKeyMap<Texture<real>>& realTextures,
     const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
-    const std::string_view microfacetType = data->findString("microfacet-type", "ggx");
-    const std::string_view fresnelType    = data->findString("fresnel-type", "schlick");
-    const std::shared_ptr<Texture<real>> roughness
-        = data->getRealTexture("roughness", realTextures);
+    const auto microfacetType = data->findString("microfacet-type", "ggx");
+    const auto fresnelType    = data->findString("fresnel-type", "schlick");
+    const auto roughness      = data->getRealTexture("roughness", realTextures);
 
     std::shared_ptr<Microfacet> microfacet = nullptr;
     if (microfacetType == "beckmann") {
@@ -148,11 +163,11 @@ static std::shared_ptr<Bsdf> createConductorMicrofacet(
 
     std::shared_ptr<ConductorFresnel> fresnel = nullptr;
     if (fresnelType == "schlick") {
-        const Vector3R f0 = data->findVector3r("f0");
+        const auto f0 = data->findVector3r("f0");
         fresnel = std::make_shared<SchlickConductorFresnel>(Spectrum(f0));
     }
     else {
-        const Vector3R f0 = data->findVector3r("f0");
+        const auto f0 = data->findVector3r("f0");
         fresnel = std::make_shared<SchlickConductorFresnel>(Spectrum(f0));
     }
 
@@ -199,7 +214,7 @@ std::shared_ptr<Bsdf> makeBsdf(
     }
     else {
         // unsupported bsdf type
-        std::cout << "Unsupported bsdf type: " << type << std::endl;
+        std::cout << "Unsupported bsdf type: <" << type << ">" << std::endl;
     }
 
     return bsdf;
