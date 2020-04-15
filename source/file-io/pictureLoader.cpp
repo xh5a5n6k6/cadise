@@ -70,7 +70,7 @@ void PictureLoader::loadLdrImage(const Path& path, LdrImage* const out_ldrImage)
                 // TODO: transform input sRGB to linear-sRGB
                 //       ldr -> hdr -> inverseGamma -> ldr
                 real value = static_cast<real>(imageData[indexOffset]) / 255.0_r;
-                real linearValue = math::inverseGammaCorrection(value);
+                real linearValue = math::inverse_gamma_correction(value);
                 linearValue = linearValue * 255.0_r + 0.5_r;
                 
                 const uint8 ldrLinearValue = static_cast<uint8>(math::clamp(linearValue, 0.0_r, 255.0_r));
@@ -93,9 +93,9 @@ void PictureLoader::loadLdrImage(const Path& path, LdrImage* const out_ldrImage)
                 real g = static_cast<real>(imageData[indexOffset + 1]) / 255.0_r;
                 real b = static_cast<real>(imageData[indexOffset + 2]) / 255.0_r;
 
-                Vector3R linearRgb(math::inverseGammaCorrection(r),
-                                   math::inverseGammaCorrection(g),
-                                   math::inverseGammaCorrection(b));
+                Vector3R linearRgb(math::inverse_gamma_correction(r),
+                                   math::inverse_gamma_correction(g),
+                                   math::inverse_gamma_correction(b));
 
                 linearRgb = linearRgb * 255.0_r + 0.5_r;
 

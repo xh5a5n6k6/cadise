@@ -52,7 +52,7 @@ void PhongBsdf::evaluateSample(
     const Vector3R zAxis(Ns);
     Vector3R xAxis;
     Vector3R yAxis;
-    math::buildCoordinateSystem(zAxis, &xAxis, &yAxis);
+    math::build_coordinate_system(zAxis, &xAxis, &yAxis);
 
     const Vector2R sample(Random::nextReal(), Random::nextReal());
     Vector3R L;

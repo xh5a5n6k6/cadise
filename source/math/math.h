@@ -9,27 +9,28 @@ namespace cadise {
 // some math utilities here
 namespace math {
 
-real degreeToRadian(const real degree);
+real degree_to_radian(const real degree);
 
-real radianToDegree(const real radian);
+real radian_to_degree(const real radian);
 
 // find the nearest perfect square number which is not greater than
 // input number
-std::size_t nearestLowerSquareNumber(const std::size_t number);
+std::size_t nearest_lower_square_number(const std::size_t number);
 
 // find the nearest perfect square number which is not less than
 // input number
-std::size_t nearestUpperSquareNumber(const std::size_t number);
+std::size_t nearest_upper_square_number(const std::size_t number);
 
 real fractional(const real value);
 
-void buildCoordinateSystem(const Vector3R& zAxis, 
-                           Vector3R* const out_xAxis, 
-                           Vector3R* const out_yAxis);
+void build_coordinate_system(
+    const Vector3R& zAxis, 
+    Vector3R* const out_xAxis, 
+    Vector3R* const out_yAxis);
 
-real gammaCorrection(const real value);
+real gamma_correction(const real value);
 
-real inverseGammaCorrection(const real value);
+real inverse_gamma_correction(const real value);
 
 /*
     Reference Note:
@@ -51,7 +52,7 @@ template<typename T>
 inline void swap(T& a, T& b);
 
 template<typename T>
-inline T mapToNonZero(const T& value);
+inline T map_to_non_zero(const T& value);
 
 // template header implementation
 
@@ -83,7 +84,7 @@ inline void swap(T& a, T& b) {
 }
 
 template<typename T>
-inline T mapToNonZero(const T& value) {
+inline T map_to_non_zero(const T& value) {
     return (value == T(0)) ? T(1) : value;
 }
 

@@ -109,8 +109,8 @@ real BdptMis::weight(
     // TODO: modify here when supporting t=0 situation
     real cameraPathMisWeight = 0.0_r;
     for (std::size_t i = t; i > 1; --i) {
-        ri *= math::mapToNonZero<real>(modifiedCameraPath[i - 1].pdfAReverse()) / 
-              math::mapToNonZero<real>(modifiedCameraPath[i - 1].pdfAForward());
+        ri *= math::map_to_non_zero<real>(modifiedCameraPath[i - 1].pdfAReverse()) / 
+              math::map_to_non_zero<real>(modifiedCameraPath[i - 1].pdfAForward());
         
         if (modifiedCameraPath[i - 1].isConnectible() && 
             modifiedCameraPath[i - 2].isConnectible()) {
@@ -122,8 +122,8 @@ real BdptMis::weight(
     ri = 1.0_r;
     real lightPathMisWeight = 0.0_r;
     for (std::size_t i = s; i >= 1; --i) {
-        ri *= math::mapToNonZero<real>(modifiedLightPath[i - 1].pdfAReverse()) /
-              math::mapToNonZero<real>(modifiedLightPath[i - 1].pdfAForward());
+        ri *= math::map_to_non_zero<real>(modifiedLightPath[i - 1].pdfAReverse()) /
+              math::map_to_non_zero<real>(modifiedLightPath[i - 1].pdfAForward());
 
         const bool canConnect = i > 1 ?
             modifiedLightPath[i - 1].isConnectible() && modifiedLightPath[i - 2].isConnectible() :

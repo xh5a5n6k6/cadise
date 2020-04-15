@@ -101,9 +101,9 @@ void Film::save(const std::size_t samplesPerPixel) {
             const FilmPixel& pixel      = _pixels[pixelOffset];
             const FilmPixel& splatPixel = _splatPixels[pixelOffset];
 
-            const real r = math::gammaCorrection(pixel.x() + splatPixel.x() * inverseSpp);
-            const real g = math::gammaCorrection(pixel.y() + splatPixel.y() * inverseSpp);
-            const real b = math::gammaCorrection(pixel.z() + splatPixel.z() * inverseSpp);
+            const real r = math::gamma_correction(pixel.x() + splatPixel.x() * inverseSpp);
+            const real g = math::gamma_correction(pixel.y() + splatPixel.y() * inverseSpp);
+            const real b = math::gamma_correction(pixel.z() + splatPixel.z() * inverseSpp);
 
             hdrImage.setPixelValue(ix, iy, {r, g, b});
         }

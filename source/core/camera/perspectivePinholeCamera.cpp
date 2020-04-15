@@ -33,7 +33,7 @@ void PerspectivePinholeCamera::updateTransform() {
     const auto [sensorWidth, sensorHeight] = _getSensorSize();
 
     // update sensorOffset
-    _sensorOffset = (sensorWidth / 2.0_r) / std::tan(math::degreeToRadian(_fov / 2.0_r));
+    _sensorOffset = (sensorWidth / 2.0_r) / std::tan(math::degree_to_radian(_fov / 2.0_r));
 
     // matrix multiplication is right-hand-side, so we
     // need to initialize matrix first.

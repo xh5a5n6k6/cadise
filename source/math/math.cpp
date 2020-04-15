@@ -10,22 +10,22 @@ namespace cadise {
 
 namespace math {
 
-real degreeToRadian(const real degree) {
+real degree_to_radian(const real degree) {
     return degree * constant::radian_per_degree<real>;
 }
 
-real radianToDegree(const real radian) {
+real radian_to_degree(const real radian) {
     return radian * constant::degree_per_radian<real>;
 }
 
-std::size_t nearestLowerSquareNumber(const std::size_t number) {
+std::size_t nearest_lower_square_number(const std::size_t number) {
     const std::size_t lowerSqrtNumber
         = static_cast<std::size_t>(std::floor(std::sqrt(static_cast<real>(number))));
 
     return lowerSqrtNumber * lowerSqrtNumber;
 }
 
-std::size_t nearestUpperSquareNumber(const std::size_t number) {
+std::size_t nearest_upper_square_number(const std::size_t number) {
     const std::size_t upperSqrtNumber
         = static_cast<std::size_t>(std::ceil(std::sqrt(static_cast<real>(number))));
 
@@ -36,9 +36,10 @@ real fractional(const real value) {
     return value - std::floor(value);
 }
 
-void buildCoordinateSystem(const Vector3R& zAxis, 
-                           Vector3R* const out_xAxis, 
-                           Vector3R* const out_yAxis) {
+void build_coordinate_system(
+    const Vector3R& zAxis, 
+    Vector3R* const out_xAxis, 
+    Vector3R* const out_yAxis) {
     
     CADISE_ASSERT(out_xAxis);
     CADISE_ASSERT(out_yAxis);
@@ -59,7 +60,7 @@ void buildCoordinateSystem(const Vector3R& zAxis,
     *out_yAxis = zAxis.cross(*out_xAxis);
 }
 
-real gammaCorrection(const real value) {
+real gamma_correction(const real value) {
     if (value <= 0.0031308_r) {
         return 12.92_r * value;
     }
@@ -68,7 +69,7 @@ real gammaCorrection(const real value) {
     }
 }
 
-real inverseGammaCorrection(const real value) {
+real inverse_gamma_correction(const real value) {
     if (value <= 0.04045_r) {
         return value * 1.0_r / 12.92_r;
     }

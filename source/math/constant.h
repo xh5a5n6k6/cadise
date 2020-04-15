@@ -40,6 +40,10 @@ template<typename T>
 inline constexpr T inv_two_pi
     = T(0.1591549430918953);
 
+template<typename T>
+inline constexpr T inv_four_pi
+    = T(0.0795774715459476);
+
 } // namespace constant
 
 } // namespace cadise
