@@ -53,11 +53,11 @@ void LambertianDiffuse::evaluateSample(
     const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
     const Vector3R& V  = surfaceIntersection.wi();
 
-    // build local coordinate system (shading normal as z-axis)
-    const Vector3R zAxis(Ns);
+    // build local coordinate system (shading normal as y-axis)
+    const Vector3R yAxis(Ns);
+    Vector3R zAxis;
     Vector3R xAxis;
-    Vector3R yAxis;
-    math::build_coordinate_system(zAxis, &xAxis, &yAxis);
+    math::build_coordinate_system(yAxis, &zAxis, &xAxis);
 
     const Vector2R sample(Random::nextReal(), Random::nextReal());
     Vector3R L;

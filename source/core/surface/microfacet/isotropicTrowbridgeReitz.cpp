@@ -86,7 +86,7 @@ void IsotropicTrowbridgeReitz::sampleHalfVectorH(
     const real phi   = constant::two_pi<real> * safeSample.x();
     const real theta = std::atan((alpha * std::sqrt(sample.y())) / std::sqrt(1.0_r - safeSample.y()));
     if (!std::isfinite(theta)) {
-        *out_H = Vector3R(0.0_r, 0.0_r, 1.0_r);
+        *out_H = Vector3R(0.0_r, 1.0_r, 0.0_r);
 
         return;
     }
@@ -94,9 +94,9 @@ void IsotropicTrowbridgeReitz::sampleHalfVectorH(
     const real cosTheta = std::cos(theta);
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
 
-    *out_H = Vector3R(std::cos(phi) * sinTheta,
-                      std::sin(phi) * sinTheta,
-                      cosTheta);
+    *out_H = Vector3R(std::sin(phi) * sinTheta,
+                      cosTheta,
+                      std::cos(phi) * sinTheta);
 }
 
 } // namespace cadise

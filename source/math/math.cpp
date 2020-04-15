@@ -37,27 +37,62 @@ real fractional(const real value) {
 }
 
 void build_coordinate_system(
-    const Vector3R& zAxis, 
-    Vector3R* const out_xAxis, 
-    Vector3R* const out_yAxis) {
+    const Vector3R& yAxis, 
+    Vector3R* const out_zAxis, 
+    Vector3R* const out_xAxis) {
     
+    CADISE_ASSERT(out_zAxis);
     CADISE_ASSERT(out_xAxis);
-    CADISE_ASSERT(out_yAxis);
 
-    if (std::abs(zAxis.x()) > std::abs(zAxis.y())) {
-        Vector3R xAxis(-zAxis.z(), 0.0_r, zAxis.x());
-        xAxis /= std::sqrt(zAxis.x() * zAxis.x() + zAxis.z() * zAxis.z());
+    if (std::abs(yAxis.x()) > std::abs(yAxis.y())) {
+        Vector3R zAxis(-yAxis.z(), 0.0_r, yAxis.x());
+        zAxis /= std::sqrt(yAxis.x() * yAxis.x() + yAxis.z() * yAxis.z());
 
-        *out_xAxis = xAxis;
+        *out_zAxis = zAxis;
     }
     else {
-        Vector3R xAxis(0.0_r, zAxis.z(), -zAxis.y());
-        xAxis /= std::sqrt(zAxis.y() * zAxis.y() + zAxis.z() * zAxis.z());
+        Vector3R zAxis(0.0_r, yAxis.z(), -yAxis.y());
+        zAxis /= std::sqrt(yAxis.y() * yAxis.y() + yAxis.z() * yAxis.z());
 
-        *out_xAxis = xAxis;
+        *out_zAxis = zAxis;
     }
 
-    *out_yAxis = zAxis.cross(*out_xAxis);
+    *out_xAxis = yAxis.cross(*out_zAxis);
+}
+
+void direction_to_canonical(
+    const Vector3R& direction,
+    Vector2R* const out_uvDirection) {
+
+    CADISE_ASSERT(out_uvDirection);
+    CADISE_ASSERT(!out_uvDirection->isZero());
+
+    const Vector3R unitDirection = direction.normalize();
+
+    const real theta = std::acos(math::clamp(unitDirection.y(), -1.0_r, 1.0_r));
+    real phi = std::atan2(unitDirection.x(), unitDirection.z());
+    if (phi < 0.0_r) {
+        phi += constant::two_pi<real>;
+    }
+
+    *out_uvDirection = Vector2R(phi * constant::inv_two_pi<real>,
+                                theta * constant::inv_pi<real>);
+}
+
+void canonical_to_direction(
+    const Vector2R& uvDirection,
+    Vector3R* const out_direction) {
+
+    CADISE_ASSERT(out_direction);
+
+    const real theta    = uvDirection.y() * constant::pi<real>;
+    const real phi      = uvDirection.x() * constant::two_pi<real>;
+    const real cosTheta = std::cos(theta);
+    const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
+
+    *out_direction = Vector3R(std::sin(phi) * sinTheta,
+                              cosTheta,
+                              std::cos(phi) * sinTheta);
 }
 
 real gamma_correction(const real value) {

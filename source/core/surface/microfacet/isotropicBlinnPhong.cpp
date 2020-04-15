@@ -98,9 +98,9 @@ void IsotropicBlinnPhong::sampleHalfVectorH(
     const real cosTheta = std::pow(sample.y(), 1.0_r / (alphaP + 2.0_r));
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
 
-    *out_H = Vector3R(std::cos(phi) * sinTheta,
-                      std::sin(phi) * sinTheta,
-                      cosTheta);
+    *out_H = Vector3R(std::sin(phi) * sinTheta,
+                      cosTheta,
+                      std::cos(phi) * sinTheta);
 }
 
 } // namespace cadise

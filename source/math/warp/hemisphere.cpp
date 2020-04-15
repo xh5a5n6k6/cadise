@@ -20,9 +20,9 @@ void Hemisphere::uniformSampling(
     const real cosTheta = sample.y();
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
 
-    *out_direction =  Vector3R(std::cos(phi) * sinTheta,
-                               std::sin(phi) * sinTheta,
-                               cosTheta);
+    *out_direction =  Vector3R(std::sin(phi) * sinTheta,
+                               cosTheta,
+                               std::cos(phi) * sinTheta);
 
     *out_pdfW = constant::inv_two_pi<real>;
 }
@@ -40,9 +40,9 @@ void Hemisphere::cosineWeightedSampling(
     const real cosTheta = std::cos(theta);
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
 
-    *out_direction =  Vector3R(std::cos(phi) * sinTheta,
-                               std::sin(phi) * sinTheta,
-                               cosTheta);
+    *out_direction = Vector3R(std::sin(phi) * sinTheta,
+                              cosTheta,
+                              std::cos(phi) * sinTheta);
 
     *out_pdfW = cosTheta * constant::inv_pi<real>;
 }
@@ -60,9 +60,9 @@ void Hemisphere::cosineExpWeightedSampling(
     const real cosTheta = std::pow(sample.y(), 1.0_r / (exponent + 1.0_r));
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
 
-    *out_direction = Vector3R(std::cos(phi) * sinTheta,
-                              std::sin(phi) * sinTheta,
-                              cosTheta);
+    *out_direction = Vector3R(std::sin(phi) * sinTheta,
+                              cosTheta,
+                              std::cos(phi) * sinTheta);
 
     *out_pdfW = (exponent + 1.0_r) * constant::inv_two_pi<real> * std::pow(cosTheta, exponent);
 }

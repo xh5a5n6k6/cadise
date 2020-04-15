@@ -24,9 +24,21 @@ std::size_t nearest_upper_square_number(const std::size_t number);
 real fractional(const real value);
 
 void build_coordinate_system(
-    const Vector3R& zAxis, 
-    Vector3R* const out_xAxis, 
-    Vector3R* const out_yAxis);
+    const Vector3R& yAxis, 
+    Vector3R* const out_zAxis, 
+    Vector3R* const out_xAxis);
+
+void direction_to_canonical(
+    const Vector3R& direction,
+    Vector2R* const out_uvDirection);
+
+/*
+    u: 0~1 maps to 0~2pi (phi)
+    v: 0~1 maps to 0~pi  (theta)
+*/
+void canonical_to_direction(
+    const Vector2R& uvDirection,
+    Vector3R* const out_direction);
 
 real gamma_correction(const real value);
 

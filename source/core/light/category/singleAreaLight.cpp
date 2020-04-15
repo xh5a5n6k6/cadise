@@ -116,10 +116,11 @@ void SingleAreaLight::evaluateEmitSample(EmitLightSample* const out_sample) cons
     }
 
     const Vector3R& Ns = positionSample.shadingNormal();
-    const Vector3R  zAxis(Ns);
+
+    const Vector3R yAxis(Ns);
+    Vector3R zAxis;
     Vector3R xAxis;
-    Vector3R yAxis;
-    math::build_coordinate_system(zAxis, &xAxis, &yAxis);
+    math::build_coordinate_system(yAxis, &zAxis, &xAxis);
 
     const Vector2R sample = Vector2R(Random::nextReal(), Random::nextReal());
     Vector3R emitDirection;
