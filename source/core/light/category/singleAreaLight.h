@@ -31,12 +31,13 @@ public:
         real* const     out_pdfA,
         real* const     out_pdfW) const override;
 
-    real approximatedFlux() const override;
+    real approximateFlux() const override;
 
     void setEmitRadiance(const std::shared_ptr<Texture<Spectrum>>& emitRadiance);
 
 private:
     const Primitive* _primitive;
+
     std::shared_ptr<Texture<Spectrum>> _emitRadiance;
 };
 

@@ -17,7 +17,7 @@ PowerLightCluster::PowerLightCluster(const std::vector<std::shared_ptr<Light>>& 
 
     std::vector<real> fluxVector(numLights);
     for (std::size_t i = 0; i < numLights; ++i) {
-        fluxVector[i] = _lights[i]->approximatedFlux();
+        fluxVector[i] = _lights[i]->approximateFlux();
 
         // build reverse mapping from light pointer to index offsets
         _lightIndexMap[_lights[i].get()] = i;

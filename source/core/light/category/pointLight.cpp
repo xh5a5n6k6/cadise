@@ -61,7 +61,7 @@ void PointLight::evaluateEmitPdf(
 
 }
 
-real PointLight::approximatedFlux() const {
+real PointLight::approximateFlux() const {
     return constant::four_pi<real> * _intensity.luminance();
 }
 

@@ -32,7 +32,7 @@ public:
         real* const     out_pdfA,
         real* const     out_pdfW) const override;
 
-    real approximatedFlux() const override;
+    real approximateFlux() const override;
     
     void setSceneBoundRadius(const real sceneBoundRadius) override;
 
@@ -40,11 +40,12 @@ private:
     void _updateApproxmiatedFlux();
 
     const Primitive* _primitive;
+
     std::shared_ptr<Texture<Spectrum>> _environmentRadiance;
-    Distribution2D _distribution;
+    Distribution2D                     _distribution;
 
     real _backgroundFlux;
-    real _approximatedFlux;
+    real _approximateFlux;
     real _sceneBoundRadius;
 };
 

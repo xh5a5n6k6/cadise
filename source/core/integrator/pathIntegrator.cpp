@@ -28,13 +28,13 @@ void PathIntegrator::traceRadiance(
 
     Spectrum totalRadiance(0.0_r);
     Spectrum pathThroughput(1.0_r);
+    Ray      traceRay(ray);
 
     // set this flag true at 0 bounce,
     // and update it at each intersection
     // (specular surface for true, non-specular surface for false)
     bool isCountForEmittance = true;
 
-    Ray traceRay = Ray(ray);
     for (int32 bounceTimes = 0; bounceTimes < _maxDepth; ++bounceTimes) {
         SurfaceIntersection intersection;
         if (!scene.isIntersecting(traceRay, intersection)) {
@@ -97,12 +97,11 @@ void PathIntegrator::traceRadiance(
         // use russian roulette to decide if the ray needs to be kept tracking
         if (bounceTimes > 2) {
             Spectrum newPathThroughput;
-            if (RussianRoulette::isSurvivedOnNextRound(pathThroughput, &newPathThroughput)) {
-                pathThroughput = newPathThroughput;
-            }
-            else {
+            if (!RussianRoulette::isSurvivedOnNextRound(pathThroughput, &newPathThroughput)) {
                 break;
             }
+
+            pathThroughput = newPathThroughput;
         }
 
         if (pathThroughput.isZero()) {

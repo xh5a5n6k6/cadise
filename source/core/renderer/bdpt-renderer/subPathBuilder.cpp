@@ -223,12 +223,11 @@ void SubPathBuilder::_buildSubPathCompletely(
         // use russian roulette to decide if the ray needs to be kept tracking
         if (currentLength > 4) {
             Spectrum newThroughput;
-            if (RussianRoulette::isSurvivedOnNextRound(throughput, &newThroughput)) {
-                throughput = newThroughput;
-            }
-            else {
+            if (!RussianRoulette::isSurvivedOnNextRound(throughput, &newThroughput)) {
                 break;
             }
+
+            throughput = newThroughput;
         }
 
         if (throughput.isZero()) {

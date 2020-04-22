@@ -31,7 +31,7 @@ public:
         real* const     out_pdfA,
         real* const     out_pdfW) const = 0;
 
-    virtual real approximatedFlux() const = 0;
+    virtual real approximateFlux() const = 0;
 
     virtual bool isDeltaLight() const = 0;
 

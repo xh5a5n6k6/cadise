@@ -23,7 +23,7 @@ public:
         real* const     out_pdfA,
         real* const     out_pdfW) const override = 0;
 
-    real approximatedFlux() const override = 0;
+    real approximateFlux() const override = 0;
 
     bool isDeltaLight() const override;
 

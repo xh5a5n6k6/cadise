@@ -22,7 +22,8 @@ public:
 
 private:
     const PhotonMap*  _photonMap;
-    const std::size_t _numPhotonPaths;
+    
+    std::size_t _numPhotonPaths;
 };
 
 } // namespace cadise

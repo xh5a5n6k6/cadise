@@ -27,8 +27,8 @@ void WhittedIntegrator::traceRadiance(
 
     Spectrum totalRadiance(0.0_r);
     Spectrum pathThroughput(1.0_r);
+    Ray      traceRay(ray);
 
-    Ray traceRay(ray);
     for (int32 bounceTimes = 0; bounceTimes < _maxDepth; ++bounceTimes) {
         SurfaceIntersection intersection;
         if (!scene.isIntersecting(traceRay, intersection)) {

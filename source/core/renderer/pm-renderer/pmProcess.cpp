@@ -108,12 +108,11 @@ void PmProcess::process(
 
             // use russian roulette to decide if the ray needs to be kept tracking
             Spectrum newThroughput;
-            if (RussianRoulette::isSurvivedOnNextRound(throughputRadiance, &newThroughput)) {
-                throughputRadiance = newThroughput;
-            }
-            else {
+            if (!RussianRoulette::isSurvivedOnNextRound(throughputRadiance, &newThroughput)) {
                 break;
             }
+
+            throughputRadiance = newThroughput;
 
             if (throughputRadiance.isZero()) {
                 break;

@@ -165,7 +165,7 @@ void SingleAreaLight::evaluateEmitPdf(
     *out_pdfW = cosTheta * constant::inv_pi<real>;
 }
 
-real SingleAreaLight::approximatedFlux() const {
+real SingleAreaLight::approximateFlux() const {
     PositionSample positionSample;
     _primitive->evaluatePositionSample(&positionSample);
     if (positionSample.pdfA() == 0.0_r) {

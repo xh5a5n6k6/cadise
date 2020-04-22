@@ -27,8 +27,8 @@ void NaivePathIntegrator::traceRadiance(
 
     Spectrum totalRadiance(0.0_r);
     Spectrum pathThroughput(1.0_r);
+    Ray      traceRay(ray);
 
-    Ray traceRay(ray);
     for (int32 bounceTimes = 0; bounceTimes < _maxDepth; ++bounceTimes) {
         SurfaceIntersection intersection;
         if (!scene.isIntersecting(traceRay, intersection)) {
@@ -63,12 +63,11 @@ void NaivePathIntegrator::traceRadiance(
         // use russian roulette to decide if the ray needs to be kept tracking
         if (bounceTimes > 2) {
             Spectrum newPathThroughput;
-            if (RussianRoulette::isSurvivedOnNextRound(pathThroughput, &newPathThroughput)) {
-                pathThroughput = newPathThroughput;
-            }
-            else {
+            if (!RussianRoulette::isSurvivedOnNextRound(pathThroughput, &newPathThroughput)) {
                 break;
             }
+
+            pathThroughput = newPathThroughput;
         }
 
         if (pathThroughput.isZero()) {

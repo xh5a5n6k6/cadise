@@ -21,7 +21,7 @@ EnvironmentLight::EnvironmentLight(const Primitive* const primitive,
     _environmentRadiance(environmentRadiance),
     _distribution(),
     _backgroundFlux(0.0_r),
-    _approximatedFlux(0.0_r),
+    _approximateFlux(0.0_r),
     _sceneBoundRadius(0.0_r) {
 
     CADISE_ASSERT(primitive);
@@ -120,8 +120,8 @@ void EnvironmentLight::evaluateEmitPdf(
 
 }
 
-real EnvironmentLight::approximatedFlux() const {
-    return _approximatedFlux;
+real EnvironmentLight::approximateFlux() const {
+    return _approximateFlux;
 }
 
 void EnvironmentLight::setSceneBoundRadius(const real sceneBoundRadius) {
@@ -133,7 +133,7 @@ void EnvironmentLight::setSceneBoundRadius(const real sceneBoundRadius) {
 }
 
 void EnvironmentLight::_updateApproxmiatedFlux() {
-    _approximatedFlux = _backgroundFlux * constant::four_pi<real> * _sceneBoundRadius * _sceneBoundRadius;
+    _approximateFlux = _backgroundFlux * constant::four_pi<real> * _sceneBoundRadius * _sceneBoundRadius;
 }
 
 } // namespace cadise
