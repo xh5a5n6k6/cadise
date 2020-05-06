@@ -36,12 +36,14 @@ void SpecularReflection::evaluateSample(
     
     CADISE_ASSERT(out_sample);
 
-    const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R& V  = surfaceIntersection.wi();
-    const Vector3R  L  = V.reflect(Ns);
+    const Vector3R& Ns      = surfaceIntersection.surfaceInfo().shadingNormal();
+    const Vector3R& V       = surfaceIntersection.wi();
+    const real      VdotN   = V.dot(Ns);
+    const real      NFactor = (VdotN > 0.0_r) ? 1.0_r : -1.0_r;
     
-    const real LdotN = L.dot(Ns);
-    const real pdfW  = 1.0_r;
+    const Vector3R L     = V.reflect(Ns * NFactor);
+    const real     LdotN = L.dot(Ns);
+    const real     pdfW  = 1.0_r;
 
     Spectrum reflectance;
     _fresnel->evaluateReflectance(LdotN, &reflectance);
