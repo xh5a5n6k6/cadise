@@ -67,7 +67,7 @@ void SingleAreaLight::evaluateDirectSample(DirectLightSample* const out_sample) 
 
     const real distance2              = emitVector.lengthSquared();
     const real emitDirectionDotEmitNs = (emitVector / std::sqrt(distance2)).absDot(emitNs);
-    if (emitDirectionDotEmitNs == 0.0_r) {
+    if (emitDirectionDotEmitNs <= 0.0_r) {
         return;
     }
 
@@ -96,7 +96,7 @@ real SingleAreaLight::evaluateDirectPdfW(
     }
 
     const real emitDirectionDotEmitNs = emitDirection.absDot(emitNs);
-    if (emitDirectionDotEmitNs == 0.0_r) {
+    if (emitDirectionDotEmitNs <= 0.0_r) {
         return 0.0_r;
     }
 
@@ -159,16 +159,16 @@ void SingleAreaLight::evaluateEmitPdf(
     CADISE_ASSERT(out_pdfA);
     CADISE_ASSERT(out_pdfW);
 
-    *out_pdfA = _primitive->evaluatePositionPdfA(emitRay.origin());
+    const real cosTheta = emitRay.direction().absDot(emitN);
 
-    const real cosTheta = emitRay.direction().dot(emitN);
+    *out_pdfA = _primitive->evaluatePositionPdfA(emitRay.origin());
     *out_pdfW = cosTheta * constant::inv_pi<real>;
 }
 
 real SingleAreaLight::approximateFlux() const {
     PositionSample positionSample;
     _primitive->evaluatePositionSample(&positionSample);
-    if (positionSample.pdfA() == 0.0_r) {
+    if (positionSample.pdfA() <= 0.0_r) {
         return _defaultFlux();
     }
 

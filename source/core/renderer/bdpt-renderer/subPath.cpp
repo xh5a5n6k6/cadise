@@ -167,7 +167,6 @@ void SubPath::connectLight(
 
         const Vector3R L                = LVector / distance;
         const real     LdotN            = L.absDot(cameraNs);
-        //const real     LReverseDotEmitN = L.reverse().absDot(emitN);
 
         SurfaceInfo surfaceInfo;
         surfaceInfo.setPosition(emitP);
@@ -177,7 +176,6 @@ void SubPath::connectLight(
 
         PathVertex lightVertex(VertexType::LIGHT_END, radiance / (pickLightPdf * pdfW));
         lightVertex.setSurfaceInfo(surfaceInfo);
-        //pdfW * LReverseDotEmitN / (distance * distance));
         lightVertex.setLight(sampleLight);
         lightVertex.setPdfAForward(lightVertex.evaluateOriginPdfA(scene, cameraEndpoint));
 
