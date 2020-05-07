@@ -62,7 +62,9 @@ void PmRenderer::render() const {
         localPhotons.reserve(workload);
 
         PmProcess pmProcess(scene);
-        pmProcess.process(workload, &localPhotons, &(photonPaths[workerId]));
+        pmProcess.setMaxNumPhotons(workload);
+
+        pmProcess.process(&localPhotons, &(photonPaths[workerId]));
 
         {
             std::lock_guard<std::mutex> lock(pmMutex);

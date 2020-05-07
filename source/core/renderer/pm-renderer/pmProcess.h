@@ -14,12 +14,17 @@ public:
     PmProcess(const Scene* const scene);
 
     void process(
-        const std::size_t          maxNumPhotons,
         std::vector<Photon>* const out_photons,
         std::size_t* const         out_numPhotonPaths) const;
 
+    void setMaxNumPhotons(const std::size_t maxNumPhotons);
+    void setMaxNumPhotonPaths(const std::size_t maxNumPhotonPaths);
+
 private:
     const Scene* _scene;
+
+    std::size_t _maxNumPhotons;
+    std::size_t _maxNumPhotonPaths;
 };
 
 } // namespace cadise

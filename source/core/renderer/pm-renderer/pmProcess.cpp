@@ -13,25 +13,32 @@
 #include "core/surfaceIntersection.h"
 #include "fundamental/assertion.h"
 
+#include <limits>
+
 namespace cadise {
 
 PmProcess::PmProcess(const Scene* const scene) :
-    _scene(scene) {
+    _scene(scene),
+    _maxNumPhotons(std::numeric_limits<std::size_t>::max()),
+    _maxNumPhotonPaths(std::numeric_limits<std::size_t>::max()) {
 
     CADISE_ASSERT(scene);
 }
 
 void PmProcess::process(
-    const std::size_t          maxNumPhotons,
     std::vector<Photon>* const out_photons,
     std::size_t* const         out_numPhotonPaths) const {
 
     CADISE_ASSERT(out_photons);
     CADISE_ASSERT(out_numPhotonPaths);
 
+    CADISE_ASSERT(
+        !(_maxNumPhotons     == std::numeric_limits<std::size_t>::max() &&
+          _maxNumPhotonPaths == std::numeric_limits<std::size_t>::max()));
+
     std::size_t numPhotonPaths = 0;
     std::size_t numPhotons     = 0;
-    while (numPhotons < maxNumPhotons) {
+    while (numPhotons < _maxNumPhotons && numPhotonPaths < _maxNumPhotonPaths) {
         ++numPhotonPaths;
 
         real pickLightPdf;
@@ -84,7 +91,7 @@ void PmProcess::process(
                 out_photons->push_back(std::move(photon));
 
                 ++numPhotons;
-                if (numPhotons == maxNumPhotons) {
+                if (numPhotons == _maxNumPhotons) {
                     break;
                 }
             }
@@ -111,8 +118,9 @@ void PmProcess::process(
             if (!RussianRoulette::isSurvivedOnNextRound(throughputRadiance, &newThroughput)) {
                 break;
             }
-
-            throughputRadiance = newThroughput;
+            else {
+                throughputRadiance = newThroughput;
+            }
 
             if (throughputRadiance.isZero()) {
                 break;
@@ -125,6 +133,14 @@ void PmProcess::process(
     } // end while loop
 
     *out_numPhotonPaths = numPhotonPaths;
+}
+
+void PmProcess::setMaxNumPhotons(const std::size_t maxNumPhotons) {
+    _maxNumPhotons = maxNumPhotons;
+}
+
+void PmProcess::setMaxNumPhotonPaths(const std::size_t maxNumPhotonPaths) {
+    _maxNumPhotonPaths = maxNumPhotonPaths;
 }
 
 } // namespace cadise
