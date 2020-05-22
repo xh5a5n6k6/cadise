@@ -84,7 +84,7 @@ void IsotropicTrowbridgeReitz::sampleHalfVectorH(
     const real alpha = alphaX;
 
     const real phi   = constant::two_pi<real> * safeSample.x();
-    const real theta = std::atan((alpha * std::sqrt(sample.y())) / std::sqrt(1.0_r - safeSample.y()));
+    const real theta = std::atan(alpha * std::sqrt(safeSample.y() / 1.0_r - safeSample.y()));
     if (!std::isfinite(theta)) {
         *out_H = Vector3R(0.0_r, 1.0_r, 0.0_r);
 
