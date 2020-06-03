@@ -57,7 +57,7 @@ void PmRadianceEstimator::estimate(
         // add radiance if hitting area light
         const AreaLight* areaLight = primitive->areaLight();
         if (areaLight) {
-            totalRadiance += areaLight->emittance(intersection);
+            totalRadiance += pathThroughput * areaLight->emittance(intersection);
         }
 
         // collect photons near the non-specular surface,

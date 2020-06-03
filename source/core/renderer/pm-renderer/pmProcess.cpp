@@ -61,8 +61,10 @@ void PmProcess::process(
 
         const real numerator   = emitDirection.absDot(emitN);
         const real denominator = pickLightPdf * emitPdfA * emitPdfW;
-        Spectrum throughputRadiance(emittance * (numerator / denominator));
-        Ray      traceRay(emitPosition, emitDirection);
+
+        Spectrum      throughputRadiance(emittance * (numerator / denominator));
+        TransportInfo transportInfo(TransportMode::IMPORTANCE);
+        Ray           traceRay(emitPosition, emitDirection);
 
         // tracing light ray
         for(int32 bounceTimes = 0;; ++bounceTimes) {
@@ -98,7 +100,7 @@ void PmProcess::process(
 
             // keep tracing with bsdf sampling
             BsdfSample bsdfSample;
-            bsdf->evaluateSample(TransportInfo(), intersection, &bsdfSample);
+            bsdf->evaluateSample(transportInfo, intersection, &bsdfSample);
             if (!bsdfSample.isValid()) {
                 break;
             }
