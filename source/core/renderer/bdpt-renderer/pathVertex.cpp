@@ -195,7 +195,12 @@ real PathVertex::evaluateConnectPdfA(
 
     const real pdfW = _bsdf->evaluatePdfW(TransportInfo(mode), intersection);
 
-    return pdfW * nextToNowDotN / distance2;
+    real pdfA = pdfW / distance2;
+    if (next.camera() == nullptr) {
+        pdfA *= nextToNowDotN;
+    }
+
+    return pdfA;
 }
 
 const VertexType& PathVertex::type() const {
@@ -216,6 +221,18 @@ real PathVertex::pdfAForward() const {
 
 real PathVertex::pdfAReverse() const {
     return _pdfAReverse;
+}
+
+const Camera* PathVertex::camera() const {
+    return _camera;
+}
+
+const Light* PathVertex::light() const {
+    return _light;
+}
+
+const Bsdf* PathVertex::bsdf() const {
+    return _bsdf;
 }
 
 void PathVertex::setSurfaceInfo(const SurfaceInfo& surfaceInfo) {

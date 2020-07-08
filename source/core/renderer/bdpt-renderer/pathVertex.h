@@ -42,6 +42,9 @@ public:
     const SurfaceInfo& surfaceInfo() const;
     real pdfAForward() const;
     real pdfAReverse() const;
+    const Camera* camera() const;
+    const Light* light() const;
+    const Bsdf* bsdf() const;
 
     void setSurfaceInfo(const SurfaceInfo& surfaceInfo);
     void setPdfAForward(const real pdfAForward);

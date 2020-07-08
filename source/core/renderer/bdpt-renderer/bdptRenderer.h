@@ -15,7 +15,7 @@ public:
 private:
     std::shared_ptr<Sampler> _sampler;
 
-    const static std::size_t MAX_PATH_LENGTH = 32;
+    const static std::size_t MAX_PATH_LENGTH = 16;
 };
 
 } // namespace cadise

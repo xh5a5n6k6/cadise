@@ -53,6 +53,7 @@ void SubPath::connectCamera(
     const Camera* const              camera,
     std::vector<ConnectEvent>* const out_events) const {
 
+    CADISE_ASSERT(camera);
     CADISE_ASSERT(out_events);
 
     const std::size_t pathLength = this->length();
@@ -95,8 +96,8 @@ void SubPath::connectCamera(
 
         PathVertex cameraVertex(VertexType::CAMERA_END, importance /  pdfW);
         cameraVertex.setSurfaceInfo(surfaceInfo);
-        cameraVertex.setPdfAForward(pdfW * cameraToLightDotN / distance2);
         cameraVertex.setCamera(camera);
+        cameraVertex.setPdfAForward(cameraVertex.evaluateOriginPdfA(scene, lightEndpoint));
 
         const Spectrum& throughputA = cameraVertex.throughput();
         const Spectrum& throughputB = lightEndpoint.throughput();
@@ -165,8 +166,8 @@ void SubPath::connectLight(
 
         CADISE_ASSERT_GT(distance, 0.0_r);
 
-        const Vector3R L                = LVector / distance;
-        const real     LdotN            = L.absDot(cameraNs);
+        const Vector3R L     = LVector / distance;
+        const real     LdotN = L.absDot(cameraNs);
 
         SurfaceInfo surfaceInfo;
         surfaceInfo.setPosition(emitP);

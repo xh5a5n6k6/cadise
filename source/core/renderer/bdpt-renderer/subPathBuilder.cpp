@@ -101,9 +101,9 @@ void SubPathBuilder::buildCameraPath(
     SurfaceInfo surfaceInfo;
     surfaceInfo.setPosition(primaryRay.origin());
     // TODO: refactor here
-    const Vector3R cameraN(0.0_r, 0.0_r, -1.0_r);
-    surfaceInfo.setGeometryNormal(cameraN);
-    surfaceInfo.setShadingNormal(cameraN);
+    //const Vector3R cameraN(0.0_r, 0.0_r, -1.0_r);
+    surfaceInfo.setGeometryNormal(primaryRay.direction());
+    surfaceInfo.setShadingNormal(primaryRay.direction());
 
     PathVertex cameraVertex(VertexType::CAMERA_END, Spectrum(1.0_r));
     cameraVertex.setSurfaceInfo(surfaceInfo);
@@ -143,7 +143,7 @@ void SubPathBuilder::_buildSubPathCompletely(
     real     pdfWForward = secondVertexForwardPdfW;
     real     pdfWReverse = 0.0_r;
 
-    while (true) {
+    for (int32 bounceTimes = 0; bounceTimes <= _maxPathLength; ++bounceTimes) {
         SurfaceIntersection intersection;
         if (!scene.isIntersecting(traceRay, intersection)) {
             break;
@@ -218,10 +218,14 @@ void SubPathBuilder::_buildSubPathCompletely(
             pdfWReverse = 0.0_r;
         }
 
-        previousVertex.setPdfAReverse(pdfWReverse * previousToNewDotN / distance2);
+        real pdfAReverse = pdfWReverse / distance2;
+        if (previousVertex.camera() == nullptr) {
+            pdfAReverse *= previousToNewDotN;
+        }
+        previousVertex.setPdfAReverse(pdfAReverse);
 
         // use russian roulette to decide if the ray needs to be kept tracking
-        if (currentLength > 4) {
+        if (bounceTimes > 10) {
             Spectrum newThroughput;
             if (!RussianRoulette::isSurvivedOnNextRound(throughput, &newThroughput)) {
                 break;

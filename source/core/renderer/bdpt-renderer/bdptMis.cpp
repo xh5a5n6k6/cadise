@@ -31,10 +31,10 @@ real BdptMis::weight(
     SubPath modifiedLightPath(lightPath);
     SubPath modifiedCameraPath(cameraPath);
 
-    PathVertex* lightEndpoint       = s > 0 ? &modifiedLightPath[s - 1] : nullptr;
-    PathVertex* lightEndpointMinus  = s > 1 ? &modifiedLightPath[s - 2] : nullptr;
-    PathVertex* cameraEndpoint      = t > 0 ? &modifiedCameraPath[t - 1] : nullptr;
-    PathVertex* cameraEndpointMinus = t > 1 ? &modifiedCameraPath[t - 2] : nullptr;
+    PathVertex* lightEndpoint       = (s > 0) ? &modifiedLightPath[s - 1] : nullptr;
+    PathVertex* lightEndpointMinus  = (s > 1) ? &modifiedLightPath[s - 2] : nullptr;
+    PathVertex* cameraEndpoint      = (t > 0) ? &modifiedCameraPath[t - 1] : nullptr;
+    PathVertex* cameraEndpointMinus = (t > 1) ? &modifiedCameraPath[t - 2] : nullptr;
 
     real pdfAReverse = 0.0_r;
 
@@ -125,7 +125,7 @@ real BdptMis::weight(
         ri *= math::map_to_non_zero<real>(modifiedLightPath[i - 1].pdfAReverse()) /
               math::map_to_non_zero<real>(modifiedLightPath[i - 1].pdfAForward());
 
-        const bool canConnect = i > 1 ?
+        const bool canConnect = (i > 1) ?
             modifiedLightPath[i - 1].isConnectible() && modifiedLightPath[i - 2].isConnectible() :
             modifiedLightPath[i - 1].isConnectible();
 

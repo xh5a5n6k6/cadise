@@ -27,6 +27,10 @@ void SubPathConnector::connect(
     CADISE_ASSERT_GE(s, 2);
     CADISE_ASSERT_GE(t, 2);
 
+    if (s + t - 1 > 16) {
+        return;
+    }
+
     const PathVertex& lightPathEndpoint  = lightPath[s - 1];
     const PathVertex& cameraPathEndpoint = cameraPath[t - 1];
 
