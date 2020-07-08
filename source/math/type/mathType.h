@@ -4,7 +4,7 @@
 
 namespace cadise {
 
-// arbitrary dimension vector
+// vector with arbitrary type and dimension
 template<typename T, std::size_t N>
 class Vector;
 
@@ -18,13 +18,13 @@ using Vector2S = Vector<std::size_t, 2>;
 using Vector3S = Vector<std::size_t, 3>;
 using Vector4S = Vector<std::size_t, 4>;
 
-// arbitrary type 4x4 matrix
+// 4x4 matrix with arbitrary type
 template<typename T>
 class Matrix4;
 
 using Matrix4R = Matrix4<real>;
 
-// arbitrary dimension axis-aligned bounding box
+// axis-aligned bounding box with arbitrary type and dimension
 template<typename T, std::size_t N>
 class AABB;
 

@@ -1,7 +1,6 @@
 #include "math/math.h"
 
 #include "fundamental/assertion.h"
-#include "math/constant.h"
 #include "math/vector.h"
 
 #include <cmath>
@@ -62,32 +61,29 @@ void build_coordinate_system(
 
 void direction_to_canonical(
     const Vector3R& direction,
-    Vector2R* const out_uvDirection) {
+    Vector2R* const out_canonical) {
 
-    CADISE_ASSERT(out_uvDirection);
-    CADISE_ASSERT(!out_uvDirection->isZero());
+    CADISE_ASSERT(out_canonical);
+    CADISE_ASSERT(!direction.isZero());
 
     const Vector3R unitDirection = direction.normalize();
 
-    const real theta = std::acos(math::clamp(unitDirection.y(), -1.0_r, 1.0_r));
-    real phi = std::atan2(unitDirection.x(), unitDirection.z());
-    if (phi < 0.0_r) {
-        phi += constant::two_pi<real>;
-    }
+    const real cosTheta = math::clamp(unitDirection.y(), -1.0_r, 1.0_r);
+    const real rawPhi   = std::atan2(unitDirection.x(), unitDirection.z());
+    const real phi      = (rawPhi < 0.0_r) ? rawPhi + constant::two_pi<real> : rawPhi;
 
-    *out_uvDirection = Vector2R(phi * constant::inv_two_pi<real>,
-                                theta * constant::inv_pi<real>);
+    *out_canonical = Vector2R(phi * constant::inv_two_pi<real>,
+                              (cosTheta + 1.0_r) * 0.5_r);
 }
 
 void canonical_to_direction(
-    const Vector2R& uvDirection,
+    const Vector2R& canonical,
     Vector3R* const out_direction) {
 
     CADISE_ASSERT(out_direction);
 
-    const real theta    = uvDirection.y() * constant::pi<real>;
-    const real phi      = uvDirection.x() * constant::two_pi<real>;
-    const real cosTheta = std::cos(theta);
+    const real cosTheta = canonical.y() * 2.0_r - 1.0_r;
+    const real phi      = canonical.x() * constant::two_pi<real>;
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
 
     *out_direction = Vector3R(std::sin(phi) * sinTheta,
@@ -95,7 +91,7 @@ void canonical_to_direction(
                               std::cos(phi) * sinTheta);
 }
 
-real gamma_correction(const real value) {
+real forward_gamma_correction(const real value) {
     if (value <= 0.0031308_r) {
         return 12.92_r * value;
     }

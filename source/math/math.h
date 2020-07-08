@@ -1,55 +1,91 @@
 #pragma once
 
+#include "math/constant.h"
 #include "math/type/mathType.h"
 
 #include <utility>
 
 namespace cadise {
 
-// some math utilities here
+/*
+    some math utilities here
+*/
 namespace math {
 
+/*
+    map degree to radian
+*/
 real degree_to_radian(const real degree);
 
+/*
+    map radian to degree
+*/
 real radian_to_degree(const real radian);
 
-// find the nearest perfect square number which is not greater than
-// input number
+/*
+    find the nearest perfect square number which is not greater than
+    input number
+*/
 std::size_t nearest_lower_square_number(const std::size_t number);
 
-// find the nearest perfect square number which is not less than
-// input number
+/*
+    find the nearest perfect square number which is not less than
+    input number
+*/
 std::size_t nearest_upper_square_number(const std::size_t number);
 
+/*
+    extract the fractional part of a floating point
+*/
 real fractional(const real value);
 
+/*
+    given up-axis, build local coordinate system.
+*/
 void build_coordinate_system(
     const Vector3R& yAxis, 
     Vector3R* const out_zAxis, 
     Vector3R* const out_xAxis);
 
+/*
+    direction (x, y, z) maps to canonical (u, v)
+
+    u: [0, 1] represents phi      [0, 2pi]
+    v: [0, 1] represents cosTheta [-1, 1]
+*/
 void direction_to_canonical(
     const Vector3R& direction,
-    Vector2R* const out_uvDirection);
+    Vector2R* const out_canonical);
 
 /*
-    u: 0~1 maps to 0~2pi (phi)
-    v: 0~1 maps to 0~pi  (theta)
+    canonical (u, v) maps to direction (x, y, z)
+
+    u: [0, 1] represents phi      [0, 2pi]
+    v: [0, 1] represents cosTheta [-1, 1]
 */
 void canonical_to_direction(
-    const Vector2R& uvDirection,
+    const Vector2R& canonical,
     Vector3R* const out_direction);
 
-real gamma_correction(const real value);
+/*
+    linear value maps to standard (non-linear) value
+*/
+real forward_gamma_correction(const real value);
 
+/*
+    standard (non-linear) value maps to linear value
+*/
 real inverse_gamma_correction(const real value);
 
 /*
+    get the sign of the input value, and there are
+    three situations: positive, zero, or negative
+
     Reference Note:
     https://stackoverflow.com/questions/1903954/is-there-a-standard-sign-function-signum-sgn-in-c-c
 */
 template<typename T>
-inline int32 sign(const T& value);
+inline constant::Sign sign(const T& value);
 
 template<typename T>
 inline T min(const T& a, const T& b);
@@ -63,14 +99,20 @@ inline T clamp(const T& value, const T& lowerBound, const T& upperBound);
 template<typename T>
 inline void swap(T& a, T& b);
 
+/*
+    zero maps to one and the others remain the same
+*/
 template<typename T>
 inline T map_to_non_zero(const T& value);
 
-// template header implementation
+/*
+    template header implementation
+*/
 
 template<typename T>
-inline int32 sign(const T& value) {
-    return (static_cast<T>(0) < value) - (value < static_cast<T>(0));
+inline constant::Sign sign(const T& value) {
+    return static_cast<constant::Sign>(
+        static_cast<T>(0) < value) - (value < static_cast<T>(0));
 }
 
 template<typename T>
@@ -97,7 +139,7 @@ inline void swap(T& a, T& b) {
 
 template<typename T>
 inline T map_to_non_zero(const T& value) {
-    return (value == T(0)) ? T(1) : value;
+    return (value == static_cast<T>(0)) ? static_cast<T>(1) : value;
 }
 
 } // namespace math
