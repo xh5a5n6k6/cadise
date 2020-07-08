@@ -5,9 +5,7 @@
 
 #include <cmath>
 
-namespace cadise {
-
-namespace math {
+namespace cadise::math {
 
 real degree_to_radian(const real degree) {
     return degree * constant::radian_per_degree<real>;
@@ -109,6 +107,4 @@ real inverse_gamma_correction(const real value) {
     }
 }
 
-} // namespace math
-
-} // namespace cadise
+} // namespace cadise::math

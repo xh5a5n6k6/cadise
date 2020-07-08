@@ -5,12 +5,10 @@
 
 #include <utility>
 
-namespace cadise {
-
 /*
     some math utilities here
 */
-namespace math {
+namespace cadise::math {
 
 /*
     map degree to radian
@@ -40,7 +38,7 @@ std::size_t nearest_upper_square_number(const std::size_t number);
 real fractional(const real value);
 
 /*
-    given up-axis, build local coordinate system.
+    given up-axis, build local coordinate system
 */
 void build_coordinate_system(
     const Vector3R& yAxis, 
@@ -105,9 +103,9 @@ inline void swap(T& a, T& b);
 template<typename T>
 inline T map_to_non_zero(const T& value);
 
-/*
-    template header implementation
-*/
+
+
+// template header implementation
 
 template<typename T>
 inline constant::Sign sign(const T& value) {
@@ -142,6 +140,4 @@ inline T map_to_non_zero(const T& value) {
     return (value == static_cast<T>(0)) ? static_cast<T>(1) : value;
 }
 
-} // namespace math
-
-} // namespace cadise
+} // namespace cadise::math
