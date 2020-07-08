@@ -29,7 +29,7 @@ PowerLightCluster::PowerLightCluster(const std::vector<std::shared_ptr<Light>>& 
 const Light* PowerLightCluster::sampleOneLight(real* const out_pdf) const {
     CADISE_ASSERT(out_pdf);
 
-    const real sample = Random::nextReal();
+    const real        sample      = Random::nextReal();
     const std::size_t sampleIndex = _distribution.sampleDiscrete(sample, out_pdf);
 
     return _lights[sampleIndex].get();

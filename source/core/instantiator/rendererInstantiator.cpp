@@ -1,6 +1,8 @@
 #include "core/instantiator/instantiator.h"
 
 // renderer type
+//#include "core/renderer/bdpg-renderer/bdpgRenderer.h"
+//#include "core/renderer/bdpg-renderer/ppgRenderer.h"
 #include "core/renderer/bdpt-renderer/bdptRenderer.h"
 #include "core/renderer/pm-renderer/pmRenderer.h"
 #include "core/renderer/samplingRenderer.h"
@@ -44,6 +46,32 @@ static std::shared_ptr<Renderer> createPm(
     return std::make_shared<PmRenderer>(std::move(sampler), std::move(setting));
 }
 
+//static std::shared_ptr<Renderer> createPpg(
+//    const std::shared_ptr<SdData>& data) {
+//
+//    const auto  sampler    = makeSampler(data);
+//    const int32 numSamples = data->findInt32("num-samples", 4);
+//    const int32 maxTrainingIterations = data->findInt32("max-training-iterations", std::numeric_limits<int32>::max());
+//
+//    return std::make_shared<PpgRenderer>(
+//        std::move(sampler),
+//        static_cast<std::size_t>(numSamples),
+//        static_cast<std::size_t>(maxTrainingIterations));
+//}
+
+//static std::shared_ptr<Renderer> createBdpg(
+//    const std::shared_ptr<SdData>& data) {
+//
+//    const auto  sampler               = makeSampler(data);
+//    const int32 numSamples            = data->findInt32("num-samples", 4);
+//    const int32 maxTrainingIterations = data->findInt32("max-training-iterations", std::numeric_limits<int32>::max());
+//
+//    return std::make_shared<BdpgRenderer>(
+//        std::move(sampler), 
+//        static_cast<std::size_t>(numSamples),
+//        static_cast<std::size_t>(maxTrainingIterations));
+//}
+
 std::shared_ptr<Renderer> makeRenderer(
     const std::shared_ptr<SdData>& data) {
 
@@ -61,6 +89,12 @@ std::shared_ptr<Renderer> makeRenderer(
     else if (type == "pm") {
         renderer = createPm(data);
     }
+    //else if (type == "ppg") {
+    //    renderer = createPpg(data);
+    //}
+    //else if (type == "bdpg") {
+    //    renderer = createBdpg(data);
+    //}
     else {
         // unsupported renderer type
     }

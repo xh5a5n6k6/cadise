@@ -101,10 +101,11 @@ void Film::save(const std::size_t samplesPerPixel) {
             const FilmPixel& pixel      = _pixels[pixelOffset];
             const FilmPixel& splatPixel = _splatPixels[pixelOffset];
 
-            const real r = math::gamma_correction(pixel.x() + splatPixel.x() * inverseSpp);
-            const real g = math::gamma_correction(pixel.y() + splatPixel.y() * inverseSpp);
-            const real b = math::gamma_correction(pixel.z() + splatPixel.z() * inverseSpp);
-
+            // TODO: refactor here, use toneMapper instead
+            const real r = math::forward_gamma_correction(pixel.x() + splatPixel.x() * inverseSpp);
+            const real g = math::forward_gamma_correction(pixel.y() + splatPixel.y() * inverseSpp);
+            const real b = math::forward_gamma_correction(pixel.z() + splatPixel.z() * inverseSpp);
+            
             hdrImage.setPixelValue(ix, iy, {r, g, b});
         }
     }
