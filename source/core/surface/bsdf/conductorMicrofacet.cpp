@@ -76,8 +76,9 @@ void ConductorMicrofacet::evaluateSample(
 
     CADISE_ASSERT(out_sample);
 
-    const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R& V  = surfaceIntersection.wi();
+    const Vector3R& Ns      = surfaceIntersection.surfaceInfo().shadingNormal();
+    const Vector3R& V       = surfaceIntersection.wi();
+    const real      Nfactor = (V.dot(Ns) > 0.0_r) ? 1.0_r : -1.0_r;
 
     const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
     real sampleRoughness;
@@ -99,7 +100,7 @@ void ConductorMicrofacet::evaluateSample(
     H = xAxis * H.x() + yAxis * H.y() + zAxis * H.z();
     H = H.normalize();
 
-    const Vector3R L = V.reflect(H);
+    const Vector3R L = V.reflect(H * Nfactor);
 
     const real VdotN = V.dot(Ns);
     const real LdotN = L.dot(Ns);
