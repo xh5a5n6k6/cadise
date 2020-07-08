@@ -14,29 +14,10 @@ enum class EOps {
 };
 
 /*
-    atomic variable operates with non-atomic value
+    It provides atomic operation between atomic variable and non-atomic value
 */
 template<EOps OPERATOR, typename T>
-void atomic_operator(
-    const T               value,
-    std::atomic<T>* const out_variable);
-
-template<typename T>
-using atomic_add = atomic_operator<EOps::ADD, T>;
-
-template<typename T>
-using atomic_sub = atomic_operator<EOps::SUB, T>;
-
-template<typename T>
-using atomic_mul = atomic_operator<EOps::MUL, T>;
-
-template<typename T>
-using atomic_div = atomic_operator<EOps::DIV, T>;
-
-// template header implementation
-
-template<EOps OPERATOR, typename T>
-inline void atomic_operator(
+inline void atomic_operate(
     const T               value,
     std::atomic<T>* const out_variable) {
 
