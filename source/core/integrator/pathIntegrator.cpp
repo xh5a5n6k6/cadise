@@ -60,8 +60,9 @@ void PathIntegrator::traceRadiance(
         // (only at non-specular surface)
         // TODO: FIX HERE
         //       use sample bxdfType to do this check instead
-        if (!bsdf->type().hasAtLeastOne(BxdfType::SPECULAR_REFLECTION,
-                                        BxdfType::SPECULAR_TRANSMISSION)) {
+        if (!bsdf->lobes().hasAtLeastOne({
+            ELobe::SPECULAR_REFLECTION,
+            ELobe::SPECULAR_TRANSMISSION })) {
 
             isCountForEmittance = false;
 

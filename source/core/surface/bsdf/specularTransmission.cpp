@@ -17,7 +17,7 @@ SpecularTransmission::SpecularTransmission(
     const std::shared_ptr<Texture<Spectrum>>& albedo,
     const std::shared_ptr<DielectricFresnel>& fresnel) :
     
-    Bsdf(BsdfType(BxdfType::SPECULAR_TRANSMISSION)),
+    Bsdf(BsdfLobes({ ELobe::SPECULAR_TRANSMISSION })),
     _albedo(albedo),
     _fresnel(fresnel) {
 
@@ -26,21 +26,21 @@ SpecularTransmission::SpecularTransmission(
 }
 
 Spectrum SpecularTransmission::evaluate(
-    const TransportInfo&       transportInfo, 
-    const SurfaceIntersection& surfaceIntersection) const {
+    const TransportInfo&       info, 
+    const SurfaceIntersection& si) const {
     
     return Spectrum(0.0_r);
 }
 
 void SpecularTransmission::evaluateSample(
-    const TransportInfo&       transportInfo, 
-    const SurfaceIntersection& surfaceIntersection,
+    const TransportInfo&       info, 
+    const SurfaceIntersection& si,
     BsdfSample* const          out_sample) const {
     
     CADISE_ASSERT(out_sample);
 
-    const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R& V  = surfaceIntersection.wi();
+    const Vector3R& Ns = si.surfaceInfo().shadingNormal();
+    const Vector3R& V  = si.wi();
 
     real etaI = _fresnel->iorOuter();
     real etaT = _fresnel->iorInner();
@@ -55,7 +55,7 @@ void SpecularTransmission::evaluateSample(
     _fresnel->evaluateReflectance(cosThetaI, &reflectance);
 
     real btdfFactor = 1.0_r;
-    if (transportInfo.mode() == TransportMode::RADIANCE) {
+    if (info.mode() == TransportMode::RADIANCE) {
         if (cosThetaI < 0.0_r) {
             math::swap(etaI, etaT);
         }
@@ -67,18 +67,18 @@ void SpecularTransmission::evaluateSample(
     const real     LdotN         = std::abs(cosThetaI);
     const Spectrum transmittance = reflectance.complement();
 
-    const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
-    Spectrum sampleSpectrum;
-    _albedo->evaluate(uvw, &sampleSpectrum);
+    const Vector3R& uvw = si.surfaceInfo().uvw();
+    Spectrum sampleAlbedo;
+    _albedo->evaluate(uvw, &sampleAlbedo);
 
-    out_sample->setScatterValue(sampleSpectrum * transmittance * btdfFactor / LdotN);
+    out_sample->setScatterValue(sampleAlbedo * transmittance * btdfFactor / LdotN);
     out_sample->setScatterDirection(L);
     out_sample->setPdfW(pdfW);
 }
 
 real SpecularTransmission::evaluatePdfW(
-    const TransportInfo&       transportInfo, 
-    const SurfaceIntersection& surfaceIntersection) const {
+    const TransportInfo&       info, 
+    const SurfaceIntersection& si) const {
     
     return 0.0_r;
 }

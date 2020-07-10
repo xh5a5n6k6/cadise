@@ -25,6 +25,8 @@ void WhittedIntegrator::traceRadiance(
 
     CADISE_ASSERT(out_radiance);
 
+    const TransportInfo transportInfo(TransportMode::RADIANCE);
+
     Spectrum totalRadiance(0.0_r);
     Spectrum pathThroughput(1.0_r);
     Ray      traceRay(ray);
@@ -41,8 +43,9 @@ void WhittedIntegrator::traceRadiance(
         const Vector3R& P  = intersection.surfaceInfo().position();
         const Vector3R& Ns = intersection.surfaceInfo().shadingNormal();
 
-        const bool isSpecular = bsdf->type().hasAtLeastOne(BxdfType::SPECULAR_REFLECTION,
-                                                           BxdfType::SPECULAR_TRANSMISSION);
+        const bool isSpecular = bsdf->lobes().hasAtLeastOne({
+            ELobe::SPECULAR_REFLECTION,
+            ELobe::SPECULAR_TRANSMISSION });
 
         // add radiance if hitting area light
         const AreaLight* areaLight = primitive->areaLight();
@@ -93,7 +96,7 @@ void WhittedIntegrator::traceRadiance(
         // according to bsdf sampling
         else {
             BsdfSample bsdfSample;
-            bsdf->evaluateSample(TransportInfo(), intersection, &bsdfSample);
+            bsdf->evaluateSample(transportInfo, intersection, &bsdfSample);
             if (!bsdfSample.isValid()) {
                 break;
             }

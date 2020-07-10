@@ -25,6 +25,8 @@ void NaivePathIntegrator::traceRadiance(
 
     CADISE_ASSERT(out_radiance);
 
+    const TransportInfo transportInfo(TransportMode::RADIANCE);
+    
     Spectrum totalRadiance(0.0_r);
     Spectrum pathThroughput(1.0_r);
     Ray      traceRay(ray);
@@ -48,7 +50,7 @@ void NaivePathIntegrator::traceRadiance(
         }
 
         BsdfSample bsdfSample;
-        bsdf->evaluateSample(TransportInfo(), intersection, &bsdfSample);
+        bsdf->evaluateSample(transportInfo, intersection, &bsdfSample);
         if (!bsdfSample.isValid()) {
             break;
         }

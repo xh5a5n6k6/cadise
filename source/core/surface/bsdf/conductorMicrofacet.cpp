@@ -19,7 +19,7 @@ ConductorMicrofacet::ConductorMicrofacet(
     const std::shared_ptr<ConductorFresnel>& fresnel,
     const std::shared_ptr<Texture<real>>&    roughness) :
     
-    Bsdf(BsdfType(BxdfType::GLOSSY_REFLECTION)),
+    Bsdf(BsdfLobes({ ELobe::GLOSSY_REFLECTION })),
     _microfacet(microfacet),
     _fresnel(fresnel),
     _roughness(roughness) {
@@ -30,12 +30,12 @@ ConductorMicrofacet::ConductorMicrofacet(
 }
 
 Spectrum ConductorMicrofacet::evaluate(
-    const TransportInfo&       transportInfo,
-    const SurfaceIntersection& surfaceIntersection) const {
+    const TransportInfo&       info,
+    const SurfaceIntersection& si) const {
     
-    const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R& V  = surfaceIntersection.wi();
-    const Vector3R& L  = surfaceIntersection.wo();
+    const Vector3R& Ns = si.surfaceInfo().shadingNormal();
+    const Vector3R& V  = si.wi();
+    const Vector3R& L  = si.wo();
 
     const real VdotN = V.dot(Ns);
     const real LdotN = L.dot(Ns);
@@ -50,10 +50,9 @@ Spectrum ConductorMicrofacet::evaluate(
     }
     H = H.normalize();
 
-    const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
+    const Vector3R& uvw = si.surfaceInfo().uvw();
     real sampleRoughness;
     _roughness->evaluate(uvw, &sampleRoughness);
-
     const real alpha = RoughnessMapper<RoughnessMapMode::SQUARE>::map(sampleRoughness);
 
     const real LdotH = L.dot(H);
@@ -63,27 +62,23 @@ Spectrum ConductorMicrofacet::evaluate(
     const real D = _microfacet->distributionD(alpha, alpha, Ns, H);
     const real G = _microfacet->shadowingMaskingG(alpha, alpha, V, L, Ns, H);
 
-    const Spectrum numerator   = F * G * D;
-    const real     denominator = 4.0_r * std::abs(VdotN * LdotN);
-
-    return numerator / denominator;
+    return F * G * D / (4.0_r * std::abs(VdotN * LdotN));
 }
 
 void ConductorMicrofacet::evaluateSample(
-    const TransportInfo&       transportInfo, 
-    const SurfaceIntersection& surfaceIntersection,
+    const TransportInfo&       info, 
+    const SurfaceIntersection& si,
     BsdfSample* const          out_sample) const {
 
     CADISE_ASSERT(out_sample);
 
-    const Vector3R& Ns      = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R& V       = surfaceIntersection.wi();
+    const Vector3R& Ns      = si.surfaceInfo().shadingNormal();
+    const Vector3R& V       = si.wi();
     const real      Nfactor = (V.dot(Ns) > 0.0_r) ? 1.0_r : -1.0_r;
 
-    const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
+    const Vector3R& uvw = si.surfaceInfo().uvw();
     real sampleRoughness;
     _roughness->evaluate(uvw, &sampleRoughness);
-
     const real alpha = RoughnessMapper<RoughnessMapMode::SQUARE>::map(sampleRoughness);
 
     // build local coordinate system (shading normal as y-axis)
@@ -123,21 +118,18 @@ void ConductorMicrofacet::evaluateSample(
         return;
     }
 
-    const Spectrum numerator   = F * G * D;
-    const real     denominator = 4.0_r * std::abs(VdotN * LdotN);
-
-    out_sample->setScatterValue(numerator / denominator);
+    out_sample->setScatterValue(F * G * D / (4.0_r * std::abs(VdotN * LdotN)));
     out_sample->setScatterDirection(L);
     out_sample->setPdfW(pdfL);
 }
 
 real ConductorMicrofacet::evaluatePdfW(
-    const TransportInfo&       transportInfo, 
-    const SurfaceIntersection& surfaceIntersection) const {
+    const TransportInfo&       info, 
+    const SurfaceIntersection& si) const {
     
-    const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R& V  = surfaceIntersection.wi();
-    const Vector3R& L  = surfaceIntersection.wo();
+    const Vector3R& Ns = si.surfaceInfo().shadingNormal();
+    const Vector3R& V  = si.wi();
+    const Vector3R& L  = si.wo();
 
     const real VdotN = V.dot(Ns);
     const real LdotN = L.dot(Ns);
@@ -152,13 +144,12 @@ real ConductorMicrofacet::evaluatePdfW(
     }
     H = H.normalize();
 
-    const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
+    const Vector3R& uvw = si.surfaceInfo().uvw();
     real sampleRoughness;
     _roughness->evaluate(uvw, &sampleRoughness);
-
     const real alpha = RoughnessMapper<RoughnessMapMode::SQUARE>::map(sampleRoughness);
-    const real D     = _microfacet->distributionD(alpha, alpha, Ns, H);
 
+    const real D     = _microfacet->distributionD(alpha, alpha, Ns, H);
     const real NdotH = Ns.dot(H);
     const real LdotH = L.dot(H);
 

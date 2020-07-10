@@ -2,6 +2,7 @@
 
 #include "core/integral-tool/sample/bsdfSample.h"
 #include "core/surfaceIntersection.h"
+#include "core/surface/transportInfo.h"
 #include "core/texture/category/constantTexture.h"
 #include "fundamental/assertion.h"
 #include "math/random.h"
@@ -21,7 +22,7 @@ MixedBsdf::MixedBsdf(
     const std::shared_ptr<Bsdf>&              bsdfB,
     const std::shared_ptr<Texture<Spectrum>>& ratio) :
     
-    Bsdf(bsdfA->type() | bsdfB->type()),
+    Bsdf(bsdfA->lobes() | bsdfB->lobes(), bsdfA->components() + bsdfB->components()),
     _bsdfA(bsdfA),
     _bsdfB(bsdfB),
     _ratio(ratio) {
@@ -32,73 +33,120 @@ MixedBsdf::MixedBsdf(
 }
 
 Spectrum MixedBsdf::evaluate(
-    const TransportInfo&       transportInfo,
-    const SurfaceIntersection& surfaceIntersection) const {
+    const TransportInfo&       info,
+    const SurfaceIntersection& si) const {
     
-    const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
+    const Vector3R& uvw = si.surfaceInfo().uvw();
     Spectrum sampleRatio;
     _ratio->evaluate(uvw, &sampleRatio);
 
-    return sampleRatio * _bsdfA->evaluate(transportInfo, surfaceIntersection) +
-           sampleRatio.complement() * _bsdfB->evaluate(transportInfo, surfaceIntersection);
+    Spectrum scatterValue(0.0_r);
+    if(info.components() == BSDF_ALL_COMPONENTS){
+        scatterValue = _bsdfA->evaluate(info, si) * sampleRatio +
+                       _bsdfB->evaluate(info, si) * sampleRatio.complement();
+    }
+    else {
+        CADISE_ASSERT_LT(info.components(), _bsdfA->components() + _bsdfB->components());
+
+        if (info.components() < _bsdfA->components()) {
+            scatterValue = _bsdfA->evaluate(info, si) * sampleRatio;
+        }
+        else {
+            TransportInfo localInfo(info);
+            localInfo.setComponents(info.components() - _bsdfA->components());
+
+            scatterValue = _bsdfB->evaluate(localInfo, si) * sampleRatio.complement();
+        }
+    }
+
+    return scatterValue;
 }
 
 void MixedBsdf::evaluateSample(
-    const TransportInfo&       transportInfo, 
-    const SurfaceIntersection& surfaceIntersection,
+    const TransportInfo&       info, 
+    const SurfaceIntersection& si,
     BsdfSample* const          out_sample) const {
 
     CADISE_ASSERT(out_sample);
 
-    SurfaceIntersection intersection(surfaceIntersection);
     Spectrum            scatterValue(0.0_r);
     Vector3R            scatterDirection(0.0_r);
     real                scatterPdfW = 0.0_r;
 
-    const Vector3R& uvw = intersection.surfaceInfo().uvw();
+    const Vector3R& uvw = si.surfaceInfo().uvw();
     Spectrum sampleRatio;
     _ratio->evaluate(uvw, &sampleRatio);
 
     const real averageRatio = sampleRatio.average();
     const real sample       = Random::nextReal();
 
-    // sample out direction with bsdfA
-    if (sample < sampleRatio.average()) {
-        BsdfSample localSample;
-        _bsdfA->evaluateSample(transportInfo, intersection, &localSample);
-        if(!localSample.isValid()) {
-            return;
+    if (info.components() == BSDF_ALL_COMPONENTS) {
+        SurfaceIntersection localSi(si);
+
+        // sample out direction with bsdfA
+        if (sample < sampleRatio.average()) {
+            BsdfSample localSample;
+            _bsdfA->evaluateSample(info, localSi, &localSample);
+            if (!localSample.isValid()) {
+                return;
+            }
+
+            scatterDirection = localSample.scatterDirection();
+            localSi.setWo(scatterDirection);
+
+            const Spectrum& fBsdfA = localSample.scatterValue();
+            const Spectrum  fBsdfB = _bsdfB->evaluate(info, localSi);
+            scatterValue = sampleRatio * fBsdfA + sampleRatio.complement() * fBsdfB;
+
+            const real pdfWbsdfA = localSample.pdfW();
+            const real pdfWbsdfB = _bsdfB->evaluatePdfW(info, localSi);
+            scatterPdfW = averageRatio * pdfWbsdfA + (1.0_r - averageRatio) * pdfWbsdfB;
         }
 
-        scatterDirection = localSample.scatterDirection();
-        intersection.setWo(scatterDirection);
+        // sample out direction with bsdfB
+        else {
+            BsdfSample localSample;
+            _bsdfB->evaluateSample(info, localSi, &localSample);
+            if (!localSample.isValid()) {
+                return;
+            }
 
-        const Spectrum& fBsdfA = localSample.scatterValue();
-        const Spectrum  fBsdfB = _bsdfB->evaluate(transportInfo, intersection);
-        scatterValue = sampleRatio * fBsdfA + sampleRatio.complement() * fBsdfB;
+            scatterDirection = localSample.scatterDirection();
+            localSi.setWo(scatterDirection);
 
-        const real pdfWbsdfA = localSample.pdfW();
-        const real pdfWbsdfB = _bsdfB->evaluatePdfW(transportInfo, intersection);
-        scatterPdfW = averageRatio * pdfWbsdfA + (1.0_r - averageRatio) * pdfWbsdfB;
+            const Spectrum& fBsdfB = localSample.scatterValue();
+            const Spectrum  fBsdfA = _bsdfA->evaluate(info, localSi);
+            scatterValue = sampleRatio * fBsdfB + sampleRatio.complement() * fBsdfA;
+
+            const real pdfWbsdfB = localSample.pdfW();
+            const real pdfWbsdfA = _bsdfA->evaluatePdfW(info, localSi);
+            scatterPdfW = averageRatio * pdfWbsdfB + (1.0_r - averageRatio) * pdfWbsdfA;
+        }
     }
-    // sample out direction with bsdfB
     else {
+        CADISE_ASSERT_LT(info.components(), _bsdfA->components() + _bsdfB->components());
+
+        Spectrum   localRatio(0.0_r);
         BsdfSample localSample;
-        _bsdfB->evaluateSample(transportInfo, intersection, &localSample);
+        if (info.components() < _bsdfA->components()) {
+            _bsdfA->evaluateSample(info, si, &localSample);
+            localRatio = sampleRatio;
+        }
+        else {
+            TransportInfo localInfo(info);
+            localInfo.setComponents(info.components() - _bsdfA->components());
+
+            _bsdfB->evaluateSample(localInfo, si, &localSample);
+            localRatio = sampleRatio.complement();
+        }
+
         if (!localSample.isValid()) {
             return;
         }
 
+        scatterValue     = localSample.scatterValue() * localRatio;
         scatterDirection = localSample.scatterDirection();
-        intersection.setWo(scatterDirection);
-
-        const Spectrum& fBsdfB = localSample.scatterValue();
-        const Spectrum  fBsdfA = _bsdfA->evaluate(transportInfo, intersection);
-        scatterValue = sampleRatio * fBsdfB + sampleRatio.complement() * fBsdfA;
-
-        const real pdfWbsdfB = localSample.pdfW();
-        const real pdfWbsdfA = _bsdfA->evaluatePdfW(transportInfo, intersection);
-        scatterPdfW = averageRatio * pdfWbsdfB + (1.0_r - averageRatio) * pdfWbsdfA;
+        scatterPdfW      = localSample.pdfW();
     }
 
     out_sample->setScatterValue(scatterValue);
@@ -107,17 +155,35 @@ void MixedBsdf::evaluateSample(
 }
 
 real MixedBsdf::evaluatePdfW(
-    const TransportInfo&       transportInfo, 
-    const SurfaceIntersection& surfaceIntersection) const {
+    const TransportInfo&       info, 
+    const SurfaceIntersection& si) const {
     
-    const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
+    const Vector3R& uvw = si.surfaceInfo().uvw();
     Spectrum sampleRatio;
     _ratio->evaluate(uvw, &sampleRatio);
     
-    const real averageRatio = sampleRatio.average();
+    real pdfW = 0.0_r;
+    if (info.components() == BSDF_ALL_COMPONENTS) {
+        const real averageRatio = sampleRatio.average();
 
-    return averageRatio * _bsdfA->evaluatePdfW(transportInfo, surfaceIntersection) +
-           (1.0_r - averageRatio) * _bsdfB->evaluatePdfW(transportInfo, surfaceIntersection);
+        pdfW = _bsdfA->evaluatePdfW(info, si) * averageRatio +
+               _bsdfB->evaluatePdfW(info, si) * (1.0_r - averageRatio);
+    }
+    else {
+        CADISE_ASSERT_LT(info.components(), _bsdfA->components() + _bsdfB->components());
+
+        if (info.components() < _bsdfA->components()) {
+            pdfW = _bsdfA->evaluatePdfW(info, si);
+        }
+        else {
+            TransportInfo localInfo(info);
+            localInfo.setComponents(info.components() - _bsdfA->components());
+
+            pdfW = _bsdfB->evaluatePdfW(localInfo, si);
+        }
+    }
+
+    return pdfW;
 }
 
 } // namespace cadise

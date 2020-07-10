@@ -12,7 +12,7 @@
 namespace cadise {
 
 PhongBsdf::PhongBsdf(const real exponent) :
-    Bsdf(BsdfType(BxdfType::GLOSSY_REFLECTION)),
+    Bsdf(BsdfLobes({ ELobe::GLOSSY_REFLECTION })),
     _exponent(exponent) {
 
     _pdfFactor  = (exponent + 1.0_r) * constant::inv_two_pi<real>;
@@ -20,12 +20,12 @@ PhongBsdf::PhongBsdf(const real exponent) :
 }
 
 Spectrum PhongBsdf::evaluate(
-    const TransportInfo&       transportInfo,
-    const SurfaceIntersection& surfaceIntersection) const {
+    const TransportInfo&       info,
+    const SurfaceIntersection& si) const {
 
-    const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R& V  = surfaceIntersection.wi();
-    const Vector3R& L  = surfaceIntersection.wo();
+    const Vector3R& Ns = si.surfaceInfo().shadingNormal();
+    const Vector3R& V  = si.wi();
+    const Vector3R& L  = si.wo();
     const Vector3R  R  = L.reflect(Ns);
 
     if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) {
@@ -39,14 +39,14 @@ Spectrum PhongBsdf::evaluate(
 }
 
 void PhongBsdf::evaluateSample(
-    const TransportInfo&       transportInfo, 
-    const SurfaceIntersection& surfaceIntersection,
+    const TransportInfo&       info,
+    const SurfaceIntersection& si,
     BsdfSample* const          out_sample) const {
 
     CADISE_ASSERT(out_sample);
 
-    const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R& V  = surfaceIntersection.wi();
+    const Vector3R& Ns = si.surfaceInfo().shadingNormal();
+    const Vector3R& V  = si.wi();
 
     // build local coordinate system (shading normal as y-axis)
     const Vector3R yAxis(Ns);
@@ -81,12 +81,12 @@ void PhongBsdf::evaluateSample(
 }
 
 real PhongBsdf::evaluatePdfW(
-    const TransportInfo&       transportInfo, 
-    const SurfaceIntersection& surfaceIntersection) const {
+    const TransportInfo&       info,
+    const SurfaceIntersection& si) const {
 
-    const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R& V  = surfaceIntersection.wi();
-    const Vector3R& L  = surfaceIntersection.wo();
+    const Vector3R& Ns = si.surfaceInfo().shadingNormal();
+    const Vector3R& V  = si.wi();
+    const Vector3R& L  = si.wo();
     const Vector3R  R  = L.reflect(Ns);
 
     if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) {

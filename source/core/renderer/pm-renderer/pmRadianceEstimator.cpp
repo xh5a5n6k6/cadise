@@ -51,8 +51,9 @@ void PmRadianceEstimator::estimate(
         const Vector3R& P  = intersection.surfaceInfo().position();
         const Vector3R& Ns = intersection.surfaceInfo().shadingNormal();
 
-        const bool isSpecular = bsdf->type().hasAtLeastOne(BxdfType::SPECULAR_REFLECTION,
-                                                           BxdfType::SPECULAR_TRANSMISSION);
+        const bool isSpecular = bsdf->lobes().hasAtLeastOne({
+            ELobe::SPECULAR_REFLECTION,
+            ELobe::SPECULAR_TRANSMISSION });
 
         // add radiance if hitting area light
         const AreaLight* areaLight = primitive->areaLight();

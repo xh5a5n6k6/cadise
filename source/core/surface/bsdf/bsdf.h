@@ -1,6 +1,7 @@
 #pragma once
 
-#include "core/surface/bsdfType.h"
+#include "core/surface/bsdfComponents.h"
+#include "core/surface/bsdfLobes.h"
 #include "core/spectrum/spectrum.h"
 
 namespace cadise {
@@ -12,27 +13,30 @@ class TransportInfo;
 class Bsdf {
 public:
     Bsdf();
-    explicit Bsdf(const BsdfType& type);
+    explicit Bsdf(const BsdfLobes& lobes);
+    Bsdf(const BsdfLobes& lobes, const BsdfComponents components);
 
     virtual ~Bsdf();
 
     virtual Spectrum evaluate(
-        const TransportInfo&       transportInfo,
-        const SurfaceIntersection& surfaceIntersection) const = 0;
+        const TransportInfo&       info,
+        const SurfaceIntersection& si) const = 0;
 
     virtual void evaluateSample(
-        const TransportInfo&       transportInfo,
-        const SurfaceIntersection& surfaceIntersection,
+        const TransportInfo&       info,
+        const SurfaceIntersection& si,
         BsdfSample* const          out_sample) const = 0;
 
     virtual real evaluatePdfW(
-        const TransportInfo&       transportInfo,
-        const SurfaceIntersection& surfaceIntersection) const = 0;
+        const TransportInfo&       info,
+        const SurfaceIntersection& si) const = 0;
 
-    const BsdfType& type() const;
+    const BsdfLobes& lobes() const;
+    BsdfComponents components() const;
 
 protected:
-    BsdfType _type;
+    BsdfLobes      _lobes;
+    BsdfComponents _components;
 };
 
 } // namespace cadise

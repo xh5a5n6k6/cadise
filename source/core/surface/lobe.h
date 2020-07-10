@@ -4,7 +4,7 @@
 
 namespace cadise {
 
-enum class BxdfType : uint32 {
+enum class ELobe : uint32 {
     ABSORB                = 1 << 0,
     DIFFUSE_REFLECTION    = 1 << 1,
     SPECULAR_REFLECTION   = 1 << 2,

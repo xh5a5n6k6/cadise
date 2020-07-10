@@ -5,7 +5,7 @@
 namespace cadise {
 
 AbsorberBsdf::AbsorberBsdf() :
-    Bsdf(BsdfType(BxdfType::ABSORB)) {
+    Bsdf(BsdfLobes({ ELobe::ABSORB })) {
 }
 
 Spectrum AbsorberBsdf::evaluate(
@@ -16,8 +16,8 @@ Spectrum AbsorberBsdf::evaluate(
 }
 
 void AbsorberBsdf::evaluateSample(
-    const TransportInfo&       transportInfo,
-    const SurfaceIntersection& surfaceIntersection,
+    const TransportInfo&       info,
+    const SurfaceIntersection& si,
     BsdfSample* const          out_sample) const {
 
     CADISE_ASSERT(out_sample);
@@ -26,8 +26,8 @@ void AbsorberBsdf::evaluateSample(
 }
 
 real AbsorberBsdf::evaluatePdfW(
-    const TransportInfo&       transportInfo, 
-    const SurfaceIntersection& surfaceIntersection) const {
+    const TransportInfo&       info, 
+    const SurfaceIntersection& si) const {
 
     return 0.0_r;
 }

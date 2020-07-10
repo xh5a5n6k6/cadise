@@ -18,40 +18,40 @@ LambertianDiffuse::LambertianDiffuse() :
 }
 
 LambertianDiffuse::LambertianDiffuse(const std::shared_ptr<Texture<Spectrum>>& albedo) :
-    Bsdf(BsdfType(BxdfType::DIFFUSE_REFLECTION)),
+    Bsdf(BsdfLobes({ ELobe::DIFFUSE_REFLECTION })),
     _albedo(albedo) {
 
     CADISE_ASSERT(albedo);
 }
 
 Spectrum LambertianDiffuse::evaluate(
-    const TransportInfo&       transportInfo,
-    const SurfaceIntersection& surfaceIntersection) const {
+    const TransportInfo&       info,
+    const SurfaceIntersection& si) const {
 
-    const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R& V  = surfaceIntersection.wi();
-    const Vector3R& L  = surfaceIntersection.wo();
-
+    const Vector3R& Ns = si.surfaceInfo().shadingNormal();
+    const Vector3R& V  = si.wi();
+    const Vector3R& L  = si.wo();
+    
     if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) {
         return Spectrum(0.0_r);
     }
 
-    const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
-    Spectrum sampleSpectrum;
-    _albedo->evaluate(uvw, &sampleSpectrum);
+    const Vector3R& uvw = si.surfaceInfo().uvw();
+    Spectrum sampleAlbedo;
+    _albedo->evaluate(uvw, &sampleAlbedo);
 
-    return sampleSpectrum * constant::inv_pi<real>;
+    return sampleAlbedo * constant::inv_pi<real>;
 }
 
 void LambertianDiffuse::evaluateSample(
-    const TransportInfo&       transportInfo,
-    const SurfaceIntersection& surfaceIntersection,
+    const TransportInfo&       info,
+    const SurfaceIntersection& si,
     BsdfSample* const          out_sample) const {
 
     CADISE_ASSERT(out_sample);
 
-    const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R& V  = surfaceIntersection.wi();
+    const Vector3R& Ns = si.surfaceInfo().shadingNormal();
+    const Vector3R& V  = si.wi();
 
     // build local coordinate system (shading normal as y-axis)
     const Vector3R yAxis(Ns);
@@ -71,22 +71,22 @@ void LambertianDiffuse::evaluateSample(
         L = L.reverse();
     }
 
-    const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
-    Spectrum sampleSpectrum;
-    _albedo->evaluate(uvw, &sampleSpectrum);
+    const Vector3R& uvw = si.surfaceInfo().uvw();
+    Spectrum sampleAlbedo;
+    _albedo->evaluate(uvw, &sampleAlbedo);
 
-    out_sample->setScatterValue(sampleSpectrum * constant::inv_pi<real>);
+    out_sample->setScatterValue(sampleAlbedo * constant::inv_pi<real>);
     out_sample->setScatterDirection(L);
     out_sample->setPdfW(pdfW);
 }
 
 real LambertianDiffuse::evaluatePdfW(
-    const TransportInfo&       transportInfo,
-    const SurfaceIntersection& surfaceIntersection) const {
+    const TransportInfo&       info,
+    const SurfaceIntersection& si) const {
 
-    const Vector3R& Ns = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R& V  = surfaceIntersection.wi();
-    const Vector3R& L  = surfaceIntersection.wo();
+    const Vector3R& Ns = si.surfaceInfo().shadingNormal();
+    const Vector3R& V  = si.wi();
+    const Vector3R& L  = si.wo();
 
     if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) {
         return 0.0_r;

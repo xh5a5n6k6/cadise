@@ -31,7 +31,7 @@ Spectrum DirectLightEvaluator::evaluate(
     const Vector3R Ns = intersection.surfaceInfo().shadingNormal();
     const Vector3R Ng = intersection.surfaceInfo().geometryNormal();
 
-    if (bsdf->type().isExactOne(BxdfType::ABSORB)) {
+    if (bsdf->lobes().hasExactly({ ELobe::ABSORB })) {
         return directLightRadiance;
     }
 

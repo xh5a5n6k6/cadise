@@ -31,7 +31,6 @@ void PmProcess::process(
 
     CADISE_ASSERT(out_photons);
     CADISE_ASSERT(out_numPhotonPaths);
-
     CADISE_ASSERT(
         !(_maxNumPhotons     == std::numeric_limits<std::size_t>::max() &&
           _maxNumPhotonPaths == std::numeric_limits<std::size_t>::max()));
@@ -80,10 +79,11 @@ void PmProcess::process(
             const Vector3R& Ns = intersection.surfaceInfo().shadingNormal();
 
             // only store photon at non-specular surface
-            if (bsdf->type().hasAtLeastOne(BxdfType::DIFFUSE_REFLECTION,
-                                           BxdfType::DIFFUSE_TRANSMISSION,
-                                           BxdfType::GLOSSY_REFLECTION,
-                                           BxdfType::GLOSSY_TRANSMISSION)) {
+            if (bsdf->lobes().hasAtLeastOne({
+                ELobe::DIFFUSE_REFLECTION,
+                ELobe::DIFFUSE_TRANSMISSION,
+                ELobe::GLOSSY_REFLECTION,
+                ELobe::GLOSSY_TRANSMISSION })) {
 
                 Photon photon;
                 photon.setPosition(P);

@@ -17,17 +17,17 @@ public:
         const std::shared_ptr<Fresnel>&           fresnel);
 
     Spectrum evaluate(
-        const TransportInfo&       transportInfo,
-        const SurfaceIntersection& surfaceIntersection) const override;
+        const TransportInfo&       info,
+        const SurfaceIntersection& si) const override;
 
     void evaluateSample(
-        const TransportInfo&       transportInfo,
-        const SurfaceIntersection& surfaceIntersection,
+        const TransportInfo&       info,
+        const SurfaceIntersection& si,
         BsdfSample* const          out_sample) const override;
 
     real evaluatePdfW(
-        const TransportInfo&       transportInfo,
-        const SurfaceIntersection& surfaceIntersection) const override;
+        const TransportInfo&       info,
+        const SurfaceIntersection& si) const override;
 
 private:
     std::shared_ptr<Texture<Spectrum>> _albedo;

@@ -46,10 +46,11 @@ bool PathVertex::isConnectible() const {
         case VertexType::SURFACE:
             CADISE_ASSERT(_bsdf);
 
-            return _bsdf->type().hasAtLeastOne(BxdfType::DIFFUSE_REFLECTION,
-                                               BxdfType::DIFFUSE_TRANSMISSION,
-                                               BxdfType::GLOSSY_REFLECTION,
-                                               BxdfType::GLOSSY_TRANSMISSION);
+            return _bsdf->lobes().hasAtLeastOne({
+                ELobe::DIFFUSE_REFLECTION,
+                ELobe::DIFFUSE_TRANSMISSION,
+                ELobe::GLOSSY_REFLECTION,
+                ELobe::GLOSSY_TRANSMISSION });
 
         default:
             // unreachable place

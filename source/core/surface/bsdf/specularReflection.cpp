@@ -14,7 +14,7 @@ SpecularReflection::SpecularReflection(
     const std::shared_ptr<Texture<Spectrum>>& albedo,
     const std::shared_ptr<Fresnel>&           fresnel) :
     
-    Bsdf(BsdfType(BxdfType::SPECULAR_REFLECTION)),
+    Bsdf(BsdfLobes({ ELobe::SPECULAR_REFLECTION })),
     _albedo(albedo),
     _fresnel(fresnel) {
 
@@ -23,21 +23,21 @@ SpecularReflection::SpecularReflection(
 }
 
 Spectrum SpecularReflection::evaluate(
-    const TransportInfo&       transportInfo, 
-    const SurfaceIntersection& surfaceIntersection) const {
+    const TransportInfo&       info, 
+    const SurfaceIntersection& si) const {
 
     return Spectrum(0.0_r);
 }
 
 void SpecularReflection::evaluateSample(
-    const TransportInfo&       transportInfo, 
-    const SurfaceIntersection& surfaceIntersection,
+    const TransportInfo&       info, 
+    const SurfaceIntersection& si,
     BsdfSample* const          out_sample) const {
     
     CADISE_ASSERT(out_sample);
 
-    const Vector3R& Ns      = surfaceIntersection.surfaceInfo().shadingNormal();
-    const Vector3R& V       = surfaceIntersection.wi();
+    const Vector3R& Ns      = si.surfaceInfo().shadingNormal();
+    const Vector3R& V       = si.wi();
     const real      VdotN   = V.dot(Ns);
     const real      NFactor = (VdotN > 0.0_r) ? 1.0_r : -1.0_r;
     
@@ -48,18 +48,18 @@ void SpecularReflection::evaluateSample(
     Spectrum reflectance;
     _fresnel->evaluateReflectance(LdotN, &reflectance);
 
-    const Vector3R& uvw = surfaceIntersection.surfaceInfo().uvw();
-    Spectrum sampleSpectrum;
-    _albedo->evaluate(uvw, &sampleSpectrum);
+    const Vector3R& uvw = si.surfaceInfo().uvw();
+    Spectrum sampleAlbedo;
+    _albedo->evaluate(uvw, &sampleAlbedo);
 
-    out_sample->setScatterValue(reflectance * sampleSpectrum / std::abs(LdotN));
+    out_sample->setScatterValue(reflectance * sampleAlbedo / std::abs(LdotN));
     out_sample->setScatterDirection(L);
     out_sample->setPdfW(pdfW);
 }
 
 real SpecularReflection::evaluatePdfW(
-    const TransportInfo&       transportInfo, 
-    const SurfaceIntersection& surfaceIntersection) const {
+    const TransportInfo&       info, 
+    const SurfaceIntersection& si) const {
 
     return 0.0_r;
 }
