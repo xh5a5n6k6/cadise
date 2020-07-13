@@ -23,7 +23,7 @@ PathVertex::PathVertex(
 
     _type(type),
     _throughput(throughput),
-    _surfaceInfo(),
+    _surfaceDetail(),
     _pdfAForward(0.0_r),
     _pdfAReverse(0.0_r),
     _camera(nullptr),
@@ -72,14 +72,14 @@ Spectrum PathVertex::evaluate(
         return Spectrum(0.0_r);
     }
 
-    const Vector3R toPrevious = previous.surfaceInfo().position() - _surfaceInfo.position();
-    const Vector3R toNext     = next.surfaceInfo().position() - _surfaceInfo.position();
+    const Vector3R toPrevious = previous.surfaceDetail().position() - _surfaceDetail.position();
+    const Vector3R toNext     = next.surfaceDetail().position() - _surfaceDetail.position();
 
     CADISE_ASSERT(!toPrevious.isZero());
     CADISE_ASSERT(!toNext.isZero());
 
     SurfaceIntersection intersection;
-    intersection.setSurfaceInfo(_surfaceInfo);
+    intersection.setSurfaceDetail(_surfaceDetail);
     intersection.setWi(toPrevious.normalize());
     intersection.setWo(toNext.normalize());
 
@@ -95,8 +95,8 @@ real PathVertex::evaluateOriginPdfA(
     const Scene&      scene,
     const PathVertex& next) const {
     
-    const Vector3R& nowP  = _surfaceInfo.position();
-    const Vector3R& nextP = next.surfaceInfo().position();
+    const Vector3R& nowP  = _surfaceDetail.position();
+    const Vector3R& nextP = next.surfaceDetail().position();
     if (nowP.isEqualTo(nextP)) {
         return 0.0_r;
     }
@@ -116,7 +116,7 @@ real PathVertex::evaluateOriginPdfA(
         real pdfA;
         real pdfW;
         _light->evaluateEmitPdf(Ray(nowP, nextP - nowP), 
-                                _surfaceInfo.shadingNormal(),
+                                _surfaceDetail.shadingNormal(),
                                 &pdfA, 
                                 &pdfW);
 
@@ -131,15 +131,15 @@ real PathVertex::evaluateDirectPdfA(
     const Scene&      scene,
     const PathVertex& next) const {
 
-    const Vector3R& nowP  = _surfaceInfo.position();
-    const Vector3R& nextP = next.surfaceInfo().position();
+    const Vector3R& nowP  = _surfaceDetail.position();
+    const Vector3R& nextP = next.surfaceDetail().position();
     if (nowP.isEqualTo(nextP)) {
         return 0.0_r;
     }
 
     CADISE_ASSERT(!(_camera && _light));
 
-    const Vector3R& nextNs    = next.surfaceInfo().shadingNormal();
+    const Vector3R& nextNs    = next.surfaceDetail().shadingNormal();
     const Vector3R  nowToNext = nextP - nowP;
     
     const real distance2     = nowToNext.lengthSquared();
@@ -156,7 +156,7 @@ real PathVertex::evaluateDirectPdfA(
         real pdfA;
         real pdfW;
         _light->evaluateEmitPdf(Ray(nowP, nextP - nowP), 
-                                _surfaceInfo.shadingNormal(),
+                                _surfaceDetail.shadingNormal(),
                                 &pdfA,
                                 &pdfW);
 
@@ -172,16 +172,16 @@ real PathVertex::evaluateConnectPdfA(
     const PathVertex&    previous,
     const PathVertex&    next) const {
 
-    const Vector3R& nowP      = _surfaceInfo.position();
-    const Vector3R& previousP = previous.surfaceInfo().position();
-    const Vector3R& nextP     = next.surfaceInfo().position();
+    const Vector3R& nowP      = _surfaceDetail.position();
+    const Vector3R& previousP = previous.surfaceDetail().position();
+    const Vector3R& nextP     = next.surfaceDetail().position();
     if (nowP.isEqualTo(nextP) || nowP.isEqualTo(previousP)) {
         return 0.0_r;
     }
 
     CADISE_ASSERT(_bsdf);
 
-    const Vector3R& nextNs        = next.surfaceInfo().shadingNormal();
+    const Vector3R& nextNs        = next.surfaceDetail().shadingNormal();
     const Vector3R  nowToPrevious = previousP - nowP;
     const Vector3R  nowToNext     = nextP - nowP;
 
@@ -190,7 +190,7 @@ real PathVertex::evaluateConnectPdfA(
 
     // TODO: refactor here
     SurfaceIntersection intersection;
-    intersection.setSurfaceInfo(_surfaceInfo);
+    intersection.setSurfaceDetail(_surfaceDetail);
     intersection.setWi(nowToPrevious.normalize());
     intersection.setWo(nowToNext.normalize());
 
@@ -212,8 +212,8 @@ const Spectrum& PathVertex::throughput() const {
     return _throughput;
 }
 
-const SurfaceInfo& PathVertex::surfaceInfo() const {
-    return _surfaceInfo;
+const SurfaceDetail& PathVertex::surfaceDetail() const {
+    return _surfaceDetail;
 }
 
 real PathVertex::pdfAForward() const {
@@ -236,8 +236,8 @@ const Bsdf* PathVertex::bsdf() const {
     return _bsdf;
 }
 
-void PathVertex::setSurfaceInfo(const SurfaceInfo& surfaceInfo) {
-    _surfaceInfo = surfaceInfo;
+void PathVertex::setSurfaceDetail(const SurfaceDetail& surfaceDetail) {
+    _surfaceDetail = surfaceDetail;
 }
 
 void PathVertex::setPdfAForward(const real pdfAForward) {

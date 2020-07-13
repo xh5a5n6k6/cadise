@@ -23,7 +23,7 @@ Spectrum PhongBsdf::evaluate(
     const TransportInfo&       info,
     const SurfaceIntersection& si) const {
 
-    const Vector3R& Ns = si.surfaceInfo().shadingNormal();
+    const Vector3R& Ns = si.surfaceDetail().shadingNormal();
     const Vector3R& V  = si.wi();
     const Vector3R& L  = si.wo();
     const Vector3R  R  = L.reflect(Ns);
@@ -45,7 +45,7 @@ void PhongBsdf::evaluateSample(
 
     CADISE_ASSERT(out_sample);
 
-    const Vector3R& Ns = si.surfaceInfo().shadingNormal();
+    const Vector3R& Ns = si.surfaceDetail().shadingNormal();
     const Vector3R& V  = si.wi();
 
     // build local coordinate system (shading normal as y-axis)
@@ -84,7 +84,7 @@ real PhongBsdf::evaluatePdfW(
     const TransportInfo&       info,
     const SurfaceIntersection& si) const {
 
-    const Vector3R& Ns = si.surfaceInfo().shadingNormal();
+    const Vector3R& Ns = si.surfaceDetail().shadingNormal();
     const Vector3R& V  = si.wi();
     const Vector3R& L  = si.wo();
     const Vector3R  R  = L.reflect(Ns);

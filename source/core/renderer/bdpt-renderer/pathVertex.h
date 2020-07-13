@@ -2,7 +2,7 @@
 
 #include "core/renderer/bdpt-renderer/vertexType.h"
 #include "core/spectrum/spectrum.h"
-#include "core/surfaceInfo.h"
+#include "core/surfaceDetail.h"
 
 namespace cadise {
 
@@ -39,14 +39,14 @@ public:
 
     const VertexType& type() const;
     const Spectrum& throughput() const;
-    const SurfaceInfo& surfaceInfo() const;
+    const SurfaceDetail& surfaceDetail() const;
     real pdfAForward() const;
     real pdfAReverse() const;
     const Camera* camera() const;
     const Light* light() const;
     const Bsdf* bsdf() const;
 
-    void setSurfaceInfo(const SurfaceInfo& surfaceInfo);
+    void setSurfaceDetail(const SurfaceDetail& surfaceDetail);
     void setPdfAForward(const real pdfAForward);
     void setPdfAReverse(const real pdfAReverse);
     void setCamera(const Camera* const camera);
@@ -54,9 +54,9 @@ public:
     void setBsdf(const Bsdf* const bsdf);
 
 private:
-    VertexType  _type;
-    Spectrum    _throughput;
-    SurfaceInfo _surfaceInfo;
+    VertexType    _type;
+    Spectrum      _throughput;
+    SurfaceDetail _surfaceDetail;
     
     real _pdfAForward;
     real _pdfAReverse;

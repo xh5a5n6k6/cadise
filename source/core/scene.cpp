@@ -35,12 +35,12 @@ bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) c
         surfaceIntersection.setPrimitiveInfo(primitiveInfo);
 
         // calculate intersection surface details
-        SurfaceInfo surfaceInfo;
-        surfaceInfo.setPosition(ray.at(ray.maxT()));
+        SurfaceDetail surfaceDetail;
+        surfaceDetail.setPosition(ray.at(ray.maxT()));
 
         const Primitive* hitPrimitive = surfaceIntersection.primitiveInfo().primitive();
-        hitPrimitive->evaluateSurfaceDetail(primitiveInfo, &surfaceInfo);
-        surfaceIntersection.setSurfaceInfo(surfaceInfo);
+        hitPrimitive->evaluateSurfaceDetail(primitiveInfo, &surfaceDetail);
+        surfaceIntersection.setSurfaceDetail(surfaceDetail);
 
         return true;
     }
@@ -51,12 +51,12 @@ bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) c
         surfaceIntersection.setPrimitiveInfo(primitiveInfo);
 
         // calculate intersection surface details
-        SurfaceInfo surfaceInfo;
-        surfaceInfo.setPosition(ray.direction());
+        SurfaceDetail surfaceDetail;
+        surfaceDetail.setPosition(ray.direction());
 
         const Primitive* hitPrimitive = surfaceIntersection.primitiveInfo().primitive();
-        hitPrimitive->evaluateSurfaceDetail(primitiveInfo, &surfaceInfo);
-        surfaceIntersection.setSurfaceInfo(surfaceInfo);
+        hitPrimitive->evaluateSurfaceDetail(primitiveInfo, &surfaceDetail);
+        surfaceIntersection.setSurfaceDetail(surfaceDetail);
 
         return true;
     }

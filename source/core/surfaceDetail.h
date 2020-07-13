@@ -4,9 +4,9 @@
 
 namespace cadise {
 
-class SurfaceInfo {
+class SurfaceDetail {
 public:
-    SurfaceInfo();
+    SurfaceDetail();
 
     const Vector3R& position() const;
     const Vector3R& geometryNormal() const;

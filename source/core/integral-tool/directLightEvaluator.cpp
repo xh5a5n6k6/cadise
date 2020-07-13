@@ -27,9 +27,9 @@ Spectrum DirectLightEvaluator::evaluate(
     SurfaceIntersection intersection(surfaceIntersection);
     Spectrum directLightRadiance(0.0_r);
 
-    const Vector3R P  = intersection.surfaceInfo().position();
-    const Vector3R Ns = intersection.surfaceInfo().shadingNormal();
-    const Vector3R Ng = intersection.surfaceInfo().geometryNormal();
+    const Vector3R P  = intersection.surfaceDetail().position();
+    const Vector3R Ns = intersection.surfaceDetail().shadingNormal();
+    const Vector3R Ng = intersection.surfaceDetail().geometryNormal();
 
     if (bsdf->lobes().hasExactly({ ELobe::ABSORB })) {
         return directLightRadiance;

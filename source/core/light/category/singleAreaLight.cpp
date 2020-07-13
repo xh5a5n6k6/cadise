@@ -36,13 +36,13 @@ SingleAreaLight::SingleAreaLight(const Primitive* const primitive,
 
 Spectrum SingleAreaLight::emittance(const SurfaceIntersection& emitIntersection) const {
     const Vector3R& emitDirection = emitIntersection.wi();
-    const Vector3R& emitNs        = emitIntersection.surfaceInfo().shadingNormal();
+    const Vector3R& emitNs        = emitIntersection.surfaceDetail().shadingNormal();
     if (!_canEmit(emitDirection, emitNs)) {
         return Spectrum(0.0_r);
     }
     
     // TODO: refactor here
-    const Vector3R& uvw = emitIntersection.surfaceInfo().uvw();
+    const Vector3R& uvw = emitIntersection.surfaceDetail().uvw();
     Spectrum sampleRadiance;
     _emitRadiance->evaluate(uvw, &sampleRadiance);
 
@@ -86,8 +86,8 @@ real SingleAreaLight::evaluateDirectPdfW(
     const SurfaceIntersection& emitIntersection, 
     const Vector3R&            targetPosition) const {
 
-    const Vector3R& emitPosition  = emitIntersection.surfaceInfo().position();
-    const Vector3R& emitNs        = emitIntersection.surfaceInfo().shadingNormal();
+    const Vector3R& emitPosition  = emitIntersection.surfaceDetail().position();
+    const Vector3R& emitNs        = emitIntersection.surfaceDetail().shadingNormal();
     const Vector3R& emitDirection = emitIntersection.wi();
     const Vector3R  emitVector    = targetPosition - emitPosition;
 

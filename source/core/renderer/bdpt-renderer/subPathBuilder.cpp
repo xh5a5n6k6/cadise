@@ -54,13 +54,13 @@ void SubPathBuilder::buildLightPath(
     const real      emitPdfW      = emitLightSample.pdfW();
     const real      pdfAForward   = pickLightPdf * emitPdfA;
 
-    SurfaceInfo surfaceInfo;
-    surfaceInfo.setPosition(emitPosition);
-    surfaceInfo.setGeometryNormal(emitN);
-    surfaceInfo.setShadingNormal(emitN);
+    SurfaceDetail surfaceDetail;
+    surfaceDetail.setPosition(emitPosition);
+    surfaceDetail.setGeometryNormal(emitN);
+    surfaceDetail.setShadingNormal(emitN);
 
     PathVertex lightVertex(VertexType::LIGHT_END, emittance);
-    lightVertex.setSurfaceInfo(surfaceInfo);
+    lightVertex.setSurfaceDetail(surfaceDetail);
     lightVertex.setPdfAForward(pdfAForward);
     lightVertex.setLight(sampleLight);
 
@@ -98,15 +98,15 @@ void SubPathBuilder::buildCameraPath(
     real pdfW;
     _camera->evaluateCameraPdf(primaryRay, &pdfA, &pdfW);
 
-    SurfaceInfo surfaceInfo;
-    surfaceInfo.setPosition(primaryRay.origin());
+    SurfaceDetail surfaceDetail;
+    surfaceDetail.setPosition(primaryRay.origin());
     // TODO: refactor here
     //const Vector3R cameraN(0.0_r, 0.0_r, -1.0_r);
-    surfaceInfo.setGeometryNormal(primaryRay.direction());
-    surfaceInfo.setShadingNormal(primaryRay.direction());
+    surfaceDetail.setGeometryNormal(primaryRay.direction());
+    surfaceDetail.setShadingNormal(primaryRay.direction());
 
     PathVertex cameraVertex(VertexType::CAMERA_END, Spectrum(1.0_r));
-    cameraVertex.setSurfaceInfo(surfaceInfo);
+    cameraVertex.setSurfaceDetail(surfaceDetail);
     cameraVertex.setPdfAForward(pdfA);
     cameraVertex.setCamera(_camera);
 
@@ -155,17 +155,17 @@ void SubPathBuilder::_buildSubPathCompletely(
         const Primitive* primitive = intersection.primitiveInfo().primitive();
         const Bsdf*      bsdf      = primitive->bsdf();
 
-        const Vector3R& newP       = intersection.surfaceInfo().position();
-        const Vector3R& newNs      = intersection.surfaceInfo().shadingNormal();
-        const Vector3R& previousP  = previousVertex.surfaceInfo().position();
-        const Vector3R& previousNs = previousVertex.surfaceInfo().shadingNormal();
+        const Vector3R& newP       = intersection.surfaceDetail().position();
+        const Vector3R& newNs      = intersection.surfaceDetail().shadingNormal();
+        const Vector3R& previousP  = previousVertex.surfaceDetail().position();
+        const Vector3R& previousNs = previousVertex.surfaceDetail().shadingNormal();
 
         const real distance          = traceRay.maxT();
         const real distance2         = distance * distance;
         const real previousToNewDotN = traceRay.direction().absDot(previousNs);
         const real newToPreviousDotN = traceRay.direction().reverse().absDot(newNs);
 
-        newVertex.setSurfaceInfo(intersection.surfaceInfo());
+        newVertex.setSurfaceDetail(intersection.surfaceDetail());
         newVertex.setPdfAForward(pdfWForward * newToPreviousDotN / distance2);
         newVertex.setBsdf(bsdf);
 

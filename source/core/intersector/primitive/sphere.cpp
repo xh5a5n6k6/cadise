@@ -3,7 +3,7 @@
 #include "core/integral-tool/sample/positionSample.h"
 #include "core/intersector/primitiveInfo.h"
 #include "core/ray.h"
-#include "core/surfaceInfo.h"
+#include "core/surfaceDetail.h"
 #include "core/texture/mapper/sphericalMapper.h"
 #include "fundamental/assertion.h"
 #include "math/aabb.h"
@@ -15,7 +15,11 @@
 
 namespace cadise {
 
-Sphere::Sphere(const std::shared_ptr<Bsdf>& bsdf, const Vector3R& center, const real radius) :
+Sphere::Sphere(
+    const std::shared_ptr<Bsdf>& bsdf, 
+    const Vector3R&              center, 
+    const real                   radius) :
+    
     Primitive(bsdf), 
     _center(center),
     _radius(radius) {
@@ -51,34 +55,26 @@ bool Sphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
 
     const Vector3R l = f + b * d;
     const real discriminant = r * r - l.absDot(l);
-    if (discriminant >= 0.0_r) {
-        const real signB = (b > 0.0_r) ? 1.0_r : -1.0_r;
-        const real q     = b + signB * std::sqrt(discriminant);
-        const real c     = f.absDot(f) - r * r;
-
-        const real t0 = c / q;
-        const real t1 = q;
-        if (t0 > ray.maxT() || t1 < ray.minT()) {
-            return false;
-        }
-
-        real t = t0;
-        if (t < ray.minT()) {
-            t = t1;
-
-            if (t > ray.maxT()) {
-                return false;
-            }
-        }
-
-        ray.setMaxT(t);
-        primitiveInfo.setPrimitive(this);
-
-        return true;
-    }
-    else {
+    if (discriminant < 0.0_r) {
         return false;
     }
+
+    const real signB = (b > 0.0_r) ? 1.0_r : -1.0_r;
+    const real q     = b + signB * std::sqrt(discriminant);
+    const real c     = f.absDot(f) - r * r;
+
+    const real t0 = c / q;
+    const real t1 = q;
+
+    real t;
+    if (!_isSolutionValid(t0, t1, ray.minT(), ray.maxT(), &t)) {
+        return false;
+    }
+
+    ray.setMaxT(t);
+    primitiveInfo.setPrimitive(this);
+
+    return true;
 }
 
 bool Sphere::isOccluded(const Ray& ray) const {
@@ -91,36 +87,28 @@ bool Sphere::isOccluded(const Ray& ray) const {
 
     const Vector3R l = f + b * d;
     const real discriminant = r * r - l.absDot(l);
-    if (discriminant >= 0.0_r) {
-        const real signB = (b > 0.0_r) ? 1.0_r : -1.0_r;
-        const real q     = b + signB * std::sqrt(discriminant);
-        const real c     = f.absDot(f) - r * r;
-
-        const real t0 = c / q;
-        const real t1 = q;
-        if (t0 > ray.maxT() || t1 < ray.minT()) {
-            return false;
-        }
-
-        real t = t0;
-        if (t < ray.minT()) {
-            t = t1;
-
-            if (t > ray.maxT()) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-    else {
+    if (discriminant < 0.0_r) {
         return false;
     }
+
+    const real signB = (b > 0.0_r) ? 1.0_r : -1.0_r;
+    const real q     = b + signB * std::sqrt(discriminant);
+    const real c     = f.absDot(f) - r * r;
+
+    const real t0 = c / q;
+    const real t1 = q;
+
+    real t;
+    if (!_isSolutionValid(t0, t1, ray.minT(), ray.maxT(), &t)) {
+        return false;
+    }
+
+    return true;
 }
 
 void Sphere::evaluateSurfaceDetail(
     const PrimitiveInfo& primitiveInfo, 
-    SurfaceInfo* const   out_surface) const {
+    SurfaceDetail* const out_surface) const {
 
     CADISE_ASSERT(out_surface);
 
@@ -153,6 +141,33 @@ real Sphere::evaluatePositionPdfA(const Vector3R& position) const {
 
 real Sphere::area() const {
     return constant::four_pi<real> * _radius * _radius;
+}
+
+bool Sphere::_isSolutionValid(
+    const real  t0,
+    const real  t1,
+    const real  minT,
+    const real  maxT,
+    real* const out_finalT) const {
+
+    CADISE_ASSERT(out_finalT);
+
+    if (t0 > maxT || t1 < minT) {
+        return false;
+    }
+
+    real localT = t0;
+    if (localT < minT) {
+        localT = t1;
+
+        if (localT > maxT) {
+            return false;
+        }
+    }
+
+    *out_finalT = localT;
+
+    return true;
 }
 
 } // namespace cadise

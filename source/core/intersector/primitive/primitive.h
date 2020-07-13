@@ -11,7 +11,7 @@ namespace cadise {
 class AreaLight;
 class Bsdf;
 class PositionSample;
-class SurfaceInfo;
+class SurfaceDetail;
 class TextureMapper;
 
 class Primitive : public Intersector {
@@ -26,7 +26,7 @@ public:
 
     virtual void evaluateSurfaceDetail(
         const PrimitiveInfo& primitiveInfo, 
-        SurfaceInfo* const   out_surface) const = 0;
+        SurfaceDetail* const out_surface) const = 0;
 
     virtual void evaluatePositionSample(PositionSample* const out_sample) const;
     virtual real evaluatePositionPdfA(const Vector3R& position) const;

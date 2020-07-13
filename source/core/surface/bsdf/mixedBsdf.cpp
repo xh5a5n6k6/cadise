@@ -36,7 +36,7 @@ Spectrum MixedBsdf::evaluate(
     const TransportInfo&       info,
     const SurfaceIntersection& si) const {
     
-    const Vector3R& uvw = si.surfaceInfo().uvw();
+    const Vector3R& uvw = si.surfaceDetail().uvw();
     Spectrum sampleRatio;
     _ratio->evaluate(uvw, &sampleRatio);
 
@@ -73,7 +73,7 @@ void MixedBsdf::evaluateSample(
     Vector3R            scatterDirection(0.0_r);
     real                scatterPdfW = 0.0_r;
 
-    const Vector3R& uvw = si.surfaceInfo().uvw();
+    const Vector3R& uvw = si.surfaceDetail().uvw();
     Spectrum sampleRatio;
     _ratio->evaluate(uvw, &sampleRatio);
 
@@ -158,7 +158,7 @@ real MixedBsdf::evaluatePdfW(
     const TransportInfo&       info, 
     const SurfaceIntersection& si) const {
     
-    const Vector3R& uvw = si.surfaceInfo().uvw();
+    const Vector3R& uvw = si.surfaceDetail().uvw();
     Spectrum sampleRatio;
     _ratio->evaluate(uvw, &sampleRatio);
     

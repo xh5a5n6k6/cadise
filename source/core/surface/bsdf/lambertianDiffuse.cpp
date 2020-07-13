@@ -28,7 +28,7 @@ Spectrum LambertianDiffuse::evaluate(
     const TransportInfo&       info,
     const SurfaceIntersection& si) const {
 
-    const Vector3R& Ns = si.surfaceInfo().shadingNormal();
+    const Vector3R& Ns = si.surfaceDetail().shadingNormal();
     const Vector3R& V  = si.wi();
     const Vector3R& L  = si.wo();
     
@@ -36,7 +36,7 @@ Spectrum LambertianDiffuse::evaluate(
         return Spectrum(0.0_r);
     }
 
-    const Vector3R& uvw = si.surfaceInfo().uvw();
+    const Vector3R& uvw = si.surfaceDetail().uvw();
     Spectrum sampleAlbedo;
     _albedo->evaluate(uvw, &sampleAlbedo);
 
@@ -50,7 +50,7 @@ void LambertianDiffuse::evaluateSample(
 
     CADISE_ASSERT(out_sample);
 
-    const Vector3R& Ns = si.surfaceInfo().shadingNormal();
+    const Vector3R& Ns = si.surfaceDetail().shadingNormal();
     const Vector3R& V  = si.wi();
 
     // build local coordinate system (shading normal as y-axis)
@@ -71,7 +71,7 @@ void LambertianDiffuse::evaluateSample(
         L = L.reverse();
     }
 
-    const Vector3R& uvw = si.surfaceInfo().uvw();
+    const Vector3R& uvw = si.surfaceDetail().uvw();
     Spectrum sampleAlbedo;
     _albedo->evaluate(uvw, &sampleAlbedo);
 
@@ -84,7 +84,7 @@ real LambertianDiffuse::evaluatePdfW(
     const TransportInfo&       info,
     const SurfaceIntersection& si) const {
 
-    const Vector3R& Ns = si.surfaceInfo().shadingNormal();
+    const Vector3R& Ns = si.surfaceDetail().shadingNormal();
     const Vector3R& V  = si.wi();
     const Vector3R& L  = si.wo();
 

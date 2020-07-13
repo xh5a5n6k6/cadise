@@ -39,7 +39,7 @@ void SpecularTransmission::evaluateSample(
     
     CADISE_ASSERT(out_sample);
 
-    const Vector3R& Ns = si.surfaceInfo().shadingNormal();
+    const Vector3R& Ns = si.surfaceDetail().shadingNormal();
     const Vector3R& V  = si.wi();
 
     real etaI = _fresnel->iorOuter();
@@ -67,7 +67,7 @@ void SpecularTransmission::evaluateSample(
     const real     LdotN         = std::abs(cosThetaI);
     const Spectrum transmittance = reflectance.complement();
 
-    const Vector3R& uvw = si.surfaceInfo().uvw();
+    const Vector3R& uvw = si.surfaceDetail().uvw();
     Spectrum sampleAlbedo;
     _albedo->evaluate(uvw, &sampleAlbedo);
 

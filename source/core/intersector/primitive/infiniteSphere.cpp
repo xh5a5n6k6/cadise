@@ -3,7 +3,7 @@
 #include "core/intersector/primitiveInfo.h"
 #include "core/ray.h"
 #include "core/surface/bsdf/absorberBsdf.h"
-#include "core/surfaceInfo.h"
+#include "core/surfaceDetail.h"
 #include "core/texture/mapper/sphericalMapper.h"
 #include "fundamental/assertion.h"
 #include "math/aabb.h"
@@ -49,7 +49,7 @@ bool InfiniteSphere::isOccluded(const Ray& ray) const {
 
 void InfiniteSphere::evaluateSurfaceDetail(
     const PrimitiveInfo& primitiveInfo, 
-    SurfaceInfo* const   out_surface) const {
+    SurfaceDetail* const out_surface) const {
 
     CADISE_ASSERT(out_surface);
 

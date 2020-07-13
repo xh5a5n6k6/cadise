@@ -6,10 +6,11 @@ namespace cadise {
 
 class Triangle : public Primitive {
 public:
-    Triangle(const std::shared_ptr<Bsdf>& bsdf, 
-             const Vector3R&              vA, 
-             const Vector3R&              vB, 
-             const Vector3R&              vC);
+    Triangle(
+        const std::shared_ptr<Bsdf>& bsdf, 
+        const Vector3R&              vA, 
+        const Vector3R&              vB, 
+        const Vector3R&              vC);
 
     void evaluateBound(AABB3R* const out_bound) const override;
 
@@ -18,7 +19,7 @@ public:
 
     void evaluateSurfaceDetail(
         const PrimitiveInfo& primitiveInfo, 
-        SurfaceInfo* const   out_surface) const override;
+        SurfaceDetail* const out_surface) const override;
 
     void evaluatePositionSample(PositionSample* const out_sample) const override;
     real evaluatePositionPdfA(const Vector3R& position) const override;

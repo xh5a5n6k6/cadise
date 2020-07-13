@@ -69,8 +69,8 @@ void SubPath::connectCamera(
             continue;
         }
 
-        const Vector3R& lightP  = lightEndpoint.surfaceInfo().position();
-        const Vector3R& lightNs = lightEndpoint.surfaceInfo().shadingNormal();
+        const Vector3R& lightP  = lightEndpoint.surfaceDetail().position();
+        const Vector3R& lightNs = lightEndpoint.surfaceDetail().shadingNormal();
 
         Ray toCameraRay;
         CameraSample cameraSample;
@@ -89,13 +89,13 @@ void SubPath::connectCamera(
         const real      distance2         = (lightP - cameraP).lengthSquared();
         const real      cameraToLightDotN = toCameraRay.direction().reverse().absDot(cameraN);
 
-        SurfaceInfo surfaceInfo;
-        surfaceInfo.setPosition(cameraP);
-        surfaceInfo.setGeometryNormal(cameraN);
-        surfaceInfo.setShadingNormal(cameraN);
+        SurfaceDetail surfaceDetail;
+        surfaceDetail.setPosition(cameraP);
+        surfaceDetail.setGeometryNormal(cameraN);
+        surfaceDetail.setShadingNormal(cameraN);
 
         PathVertex cameraVertex(VertexType::CAMERA_END, importance /  pdfW);
-        cameraVertex.setSurfaceInfo(surfaceInfo);
+        cameraVertex.setSurfaceDetail(surfaceDetail);
         cameraVertex.setCamera(camera);
         cameraVertex.setPdfAForward(cameraVertex.evaluateOriginPdfA(scene, lightEndpoint));
 
@@ -141,8 +141,8 @@ void SubPath::connectLight(
             continue;
         }
 
-        const Vector3R& cameraP  = cameraEndpoint.surfaceInfo().position();
-        const Vector3R& cameraNs = cameraEndpoint.surfaceInfo().shadingNormal();
+        const Vector3R& cameraP  = cameraEndpoint.surfaceDetail().position();
+        const Vector3R& cameraNs = cameraEndpoint.surfaceDetail().shadingNormal();
 
         real pickLightPdf;
         const Light* sampleLight = scene.sampleOneLight(&pickLightPdf);
@@ -169,14 +169,14 @@ void SubPath::connectLight(
         const Vector3R L     = LVector / distance;
         const real     LdotN = L.absDot(cameraNs);
 
-        SurfaceInfo surfaceInfo;
-        surfaceInfo.setPosition(emitP);
+        SurfaceDetail surfaceDetail;
+        surfaceDetail.setPosition(emitP);
         // TODO: refactor here
-        surfaceInfo.setGeometryNormal(emitN);
-        surfaceInfo.setShadingNormal(emitN);
+        surfaceDetail.setGeometryNormal(emitN);
+        surfaceDetail.setShadingNormal(emitN);
 
         PathVertex lightVertex(VertexType::LIGHT_END, radiance / (pickLightPdf * pdfW));
-        lightVertex.setSurfaceInfo(surfaceInfo);
+        lightVertex.setSurfaceDetail(surfaceDetail);
         lightVertex.setLight(sampleLight);
         lightVertex.setPdfAForward(lightVertex.evaluateOriginPdfA(scene, cameraEndpoint));
 

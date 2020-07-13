@@ -16,8 +16,8 @@ const PrimitiveInfo& SurfaceIntersection::primitiveInfo() const {
     return _primitiveInfo;
 }
 
-const SurfaceInfo& SurfaceIntersection::surfaceInfo() const {
-    return _surfaceInfo;
+const SurfaceDetail& SurfaceIntersection::surfaceDetail() const {
+    return _surfaceDetail;
 }
 
 const Vector3R& SurfaceIntersection::wi() const {
@@ -32,8 +32,8 @@ void SurfaceIntersection::setPrimitiveInfo(const PrimitiveInfo& primitiveInfo) {
     _primitiveInfo = primitiveInfo;
 }
 
-void SurfaceIntersection::setSurfaceInfo(const SurfaceInfo& surfaceInfo) {
-    _surfaceInfo = surfaceInfo;
+void SurfaceIntersection::setSurfaceDetail(const SurfaceDetail& surfaceDetail) {
+    _surfaceDetail = surfaceDetail;
 }
 
 void SurfaceIntersection::setWi(const Vector3R& wi) {

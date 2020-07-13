@@ -39,7 +39,7 @@ void SpecularDielectric::evaluateSample(
 
     CADISE_ASSERT(out_sample);
 
-    const Vector3R& Ns    = si.surfaceInfo().shadingNormal();
+    const Vector3R& Ns    = si.surfaceDetail().shadingNormal();
     const Vector3R& V     = si.wi();
     const real      VdotN = V.dot(Ns);
     
@@ -69,7 +69,7 @@ void SpecularDielectric::evaluateSample(
         const Vector3R L       = V.reflect(Ns * Nfactor);
         const real     LdotN   = L.absDot(Ns);
 
-        const Vector3R& uvw = si.surfaceInfo().uvw();
+        const Vector3R& uvw = si.surfaceDetail().uvw();
         Spectrum sampleSpectrum;
         _albedo->evaluate(uvw, &sampleSpectrum);
 
@@ -105,7 +105,7 @@ void SpecularDielectric::evaluateSample(
         const real     LdotN         = std::abs(cosThetaI);
         const Spectrum transmittance = refractDirectionReflectance.complement();
 
-        const Vector3R& uvw = si.surfaceInfo().uvw();
+        const Vector3R& uvw = si.surfaceDetail().uvw();
         Spectrum sampleSpectrum;
         _albedo->evaluate(uvw, &sampleSpectrum);
 

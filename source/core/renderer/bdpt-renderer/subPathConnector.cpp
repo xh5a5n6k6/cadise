@@ -69,10 +69,10 @@ bool SubPathConnector::_canConnect(
 
     CADISE_ASSERT(out_connectG);
 
-    const Vector3R& cameraP  = cameraEndpoint.surfaceInfo().position();
-    const Vector3R& cameraNs = cameraEndpoint.surfaceInfo().shadingNormal();
-    const Vector3R& lightP   = lightEndpoint.surfaceInfo().position();
-    const Vector3R& lightNs  = lightEndpoint.surfaceInfo().shadingNormal();
+    const Vector3R& cameraP  = cameraEndpoint.surfaceDetail().position();
+    const Vector3R& cameraNs = cameraEndpoint.surfaceDetail().shadingNormal();
+    const Vector3R& lightP   = lightEndpoint.surfaceDetail().position();
+    const Vector3R& lightNs  = lightEndpoint.surfaceDetail().shadingNormal();
 
     const Vector3R cameraToLightVector = lightP - cameraP;
     const real     distance            = cameraToLightVector.length();

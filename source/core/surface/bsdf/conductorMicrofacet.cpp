@@ -33,7 +33,7 @@ Spectrum ConductorMicrofacet::evaluate(
     const TransportInfo&       info,
     const SurfaceIntersection& si) const {
     
-    const Vector3R& Ns = si.surfaceInfo().shadingNormal();
+    const Vector3R& Ns = si.surfaceDetail().shadingNormal();
     const Vector3R& V  = si.wi();
     const Vector3R& L  = si.wo();
 
@@ -50,7 +50,7 @@ Spectrum ConductorMicrofacet::evaluate(
     }
     H = H.normalize();
 
-    const Vector3R& uvw = si.surfaceInfo().uvw();
+    const Vector3R& uvw = si.surfaceDetail().uvw();
     real sampleRoughness;
     _roughness->evaluate(uvw, &sampleRoughness);
     const real alpha = RoughnessMapper<RoughnessMapMode::SQUARE>::map(sampleRoughness);
@@ -72,11 +72,11 @@ void ConductorMicrofacet::evaluateSample(
 
     CADISE_ASSERT(out_sample);
 
-    const Vector3R& Ns      = si.surfaceInfo().shadingNormal();
+    const Vector3R& Ns      = si.surfaceDetail().shadingNormal();
     const Vector3R& V       = si.wi();
     const real      Nfactor = (V.dot(Ns) > 0.0_r) ? 1.0_r : -1.0_r;
 
-    const Vector3R& uvw = si.surfaceInfo().uvw();
+    const Vector3R& uvw = si.surfaceDetail().uvw();
     real sampleRoughness;
     _roughness->evaluate(uvw, &sampleRoughness);
     const real alpha = RoughnessMapper<RoughnessMapMode::SQUARE>::map(sampleRoughness);
@@ -127,7 +127,7 @@ real ConductorMicrofacet::evaluatePdfW(
     const TransportInfo&       info, 
     const SurfaceIntersection& si) const {
     
-    const Vector3R& Ns = si.surfaceInfo().shadingNormal();
+    const Vector3R& Ns = si.surfaceDetail().shadingNormal();
     const Vector3R& V  = si.wi();
     const Vector3R& L  = si.wo();
 
@@ -144,7 +144,7 @@ real ConductorMicrofacet::evaluatePdfW(
     }
     H = H.normalize();
 
-    const Vector3R& uvw = si.surfaceInfo().uvw();
+    const Vector3R& uvw = si.surfaceDetail().uvw();
     real sampleRoughness;
     _roughness->evaluate(uvw, &sampleRoughness);
     const real alpha = RoughnessMapper<RoughnessMapMode::SQUARE>::map(sampleRoughness);

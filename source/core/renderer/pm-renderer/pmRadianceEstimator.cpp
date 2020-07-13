@@ -48,8 +48,8 @@ void PmRadianceEstimator::estimate(
         const Primitive* primitive = intersection.primitiveInfo().primitive();
         const Bsdf*      bsdf      = primitive->bsdf();
 
-        const Vector3R& P  = intersection.surfaceInfo().position();
-        const Vector3R& Ns = intersection.surfaceInfo().shadingNormal();
+        const Vector3R& P  = intersection.surfaceDetail().position();
+        const Vector3R& Ns = intersection.surfaceDetail().shadingNormal();
 
         const bool isSpecular = bsdf->lobes().hasAtLeastOne({
             ELobe::SPECULAR_REFLECTION,

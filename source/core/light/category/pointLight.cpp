@@ -1,7 +1,7 @@
 #include "core/light/category/pointLight.h"
 
 #include "core/integral-tool/sample/directLightSample.h"
-#include "core/surfaceInfo.h"
+#include "core/surfaceDetail.h"
 #include "fundamental/assertion.h"
 #include "math/constant.h"
 

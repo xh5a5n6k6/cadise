@@ -16,7 +16,7 @@ public:
 
     void evaluateSurfaceDetail(
         const PrimitiveInfo& primitiveInfo, 
-        SurfaceInfo* const   out_surface) const override;
+        SurfaceDetail* const out_surface) const override;
 
     void uvwToPosition(
         const Vector3R& uvw, 

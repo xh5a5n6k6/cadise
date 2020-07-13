@@ -3,7 +3,7 @@
 #include "core/integral-tool/sample/positionSample.h"
 #include "core/intersector/primitiveInfo.h"
 #include "core/ray.h"
-#include "core/surfaceInfo.h"
+#include "core/surfaceDetail.h"
 #include "core/texture/mapper/textureMapper.h"
 #include "fundamental/assertion.h"
 #include "math/aabb.h"
@@ -13,10 +13,12 @@
 
 namespace cadise {
 
-Triangle::Triangle(const std::shared_ptr<Bsdf>& bsdf, 
-                   const Vector3R&              vA, 
-                   const Vector3R&              vB, 
-                   const Vector3R&              vC) :
+Triangle::Triangle(
+    const std::shared_ptr<Bsdf>& bsdf, 
+    const Vector3R&              vA, 
+    const Vector3R&              vB, 
+    const Vector3R&              vC) :
+    
     Primitive(bsdf), 
     _vA(vA),
     _vB(vB), 
@@ -57,6 +59,7 @@ bool Triangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
     if (D.dot(eAB.cross(eAC)) > 0.0_r) {
         eAB.swap(eAC);
     }
+
     const Vector3R T = ray.origin() - _vA;
     const Vector3R Q = T.cross(eAB);
     const Vector3R P = D.cross(eAC);
@@ -93,6 +96,7 @@ bool Triangle::isOccluded(const Ray& ray) const {
     if (D.dot(eAB.cross(eAC)) > 0.0_r) {
         eAB.swap(eAC);
     }
+
     const Vector3R T = ray.origin() - _vA;
     const Vector3R Q = T.cross(eAB);
     const Vector3R P = D.cross(eAC);
@@ -120,7 +124,7 @@ bool Triangle::isOccluded(const Ray& ray) const {
 
 void Triangle::evaluateSurfaceDetail(
     const PrimitiveInfo& primitiveInfo, 
-    SurfaceInfo* const   out_surface) const {
+    SurfaceDetail* const out_surface) const {
     
     CADISE_ASSERT(out_surface);
     

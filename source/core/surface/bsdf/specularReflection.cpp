@@ -36,7 +36,7 @@ void SpecularReflection::evaluateSample(
     
     CADISE_ASSERT(out_sample);
 
-    const Vector3R& Ns      = si.surfaceInfo().shadingNormal();
+    const Vector3R& Ns      = si.surfaceDetail().shadingNormal();
     const Vector3R& V       = si.wi();
     const real      VdotN   = V.dot(Ns);
     const real      NFactor = (VdotN > 0.0_r) ? 1.0_r : -1.0_r;
@@ -48,7 +48,7 @@ void SpecularReflection::evaluateSample(
     Spectrum reflectance;
     _fresnel->evaluateReflectance(LdotN, &reflectance);
 
-    const Vector3R& uvw = si.surfaceInfo().uvw();
+    const Vector3R& uvw = si.surfaceDetail().uvw();
     Spectrum sampleAlbedo;
     _albedo->evaluate(uvw, &sampleAlbedo);
 

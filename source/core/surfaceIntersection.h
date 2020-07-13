@@ -3,7 +3,7 @@
 #include "core/intersection.h"
 
 #include "core/intersector/primitiveInfo.h"
-#include "core/surfaceInfo.h"
+#include "core/surfaceDetail.h"
 
 namespace cadise {
 
@@ -15,18 +15,18 @@ public:
     SurfaceIntersection reverse() const;
 
     const PrimitiveInfo& primitiveInfo() const;
-    const SurfaceInfo& surfaceInfo() const;
+    const SurfaceDetail& surfaceDetail() const;
     const Vector3R& wi() const;
     const Vector3R& wo() const;
 
     void setPrimitiveInfo(const PrimitiveInfo& primitiveInfo);
-    void setSurfaceInfo(const SurfaceInfo& surfaceInfo);
+    void setSurfaceDetail(const SurfaceDetail& surfaceDetail);
     void setWi(const Vector3R& wi);
     void setWo(const Vector3R& wo);
 
 private:
     PrimitiveInfo _primitiveInfo;
-    SurfaceInfo   _surfaceInfo;
+    SurfaceDetail _surfaceDetail;
     Vector3R      _wi;
     Vector3R      _wo;
 };
