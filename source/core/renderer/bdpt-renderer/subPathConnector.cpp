@@ -42,8 +42,8 @@ void SubPathConnector::connect(
 
     const Spectrum& throughputA  = lightPathEndpoint.throughput();
     const Spectrum& throughputB  = cameraPathEndpoint.throughput();
-    const Spectrum  reflectanceA = lightPathEndpoint.evaluate(TransportMode::IMPORTANCE, lightPath[s - 2], cameraPathEndpoint);
-    const Spectrum  reflectanceB = cameraPathEndpoint.evaluate(TransportMode::RADIANCE, cameraPath[t - 2], lightPathEndpoint);
+    const Spectrum  reflectanceA = lightPathEndpoint.evaluate(ETransportMode::IMPORTANCE, lightPath[s - 2], cameraPathEndpoint);
+    const Spectrum  reflectanceB = cameraPathEndpoint.evaluate(ETransportMode::RADIANCE, cameraPath[t - 2], lightPathEndpoint);
 
     Spectrum radiance = throughputA * reflectanceA * throughputB * reflectanceB;
     if (radiance.isZero()) {

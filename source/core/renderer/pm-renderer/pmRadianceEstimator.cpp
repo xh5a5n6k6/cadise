@@ -34,7 +34,7 @@ void PmRadianceEstimator::estimate(
 
     CADISE_ASSERT(out_radiance);
 
-    const TransportInfo transportInfo(TransportMode::IMPORTANCE);
+    const TransportInfo transportInfo(ETransportMode::IMPORTANCE);
     Spectrum totalRadiance(0.0_r);
     Spectrum pathThroughput(1.0_r);
     Ray      traceRay(ray);

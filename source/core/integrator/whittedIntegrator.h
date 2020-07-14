@@ -4,8 +4,6 @@
 
 namespace cadise {
 
-class SurfaceIntersection;
-
 /*
     WhittedIntegrator is Whitted-style ray tracing integrator, 
     it considers direct lighting and reflection/refraction effects.

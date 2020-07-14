@@ -8,18 +8,18 @@ namespace cadise {
 class TransportInfo {
 public:
     TransportInfo();
-    explicit TransportInfo(const TransportMode& mode);
+    explicit TransportInfo(const ETransportMode& mode);
     TransportInfo(
-        const TransportMode& mode,
-        const BsdfComponents components);
+        const ETransportMode& mode,
+        const BsdfComponents  components);
 
     void setComponents(const BsdfComponents components);
 
-    const TransportMode& mode() const;
+    const ETransportMode& mode() const;
     BsdfComponents components() const;
 
 private:
-    TransportMode  _mode;
+    ETransportMode _mode;
     BsdfComponents _components;
 };
 

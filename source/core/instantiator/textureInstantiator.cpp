@@ -83,24 +83,24 @@ static std::shared_ptr<Texture<Spectrum>> createSpectrumImage(
 
     HdrImage hdrImage = PictureLoader::loadRgbImage(Path(filename));
 
-    TextureSampleMode sampleMode;
+    ETextureSampleMode sampleMode;
     if (sMode == "nearest") {
-        sampleMode = TextureSampleMode::NEAREST;
+        sampleMode = ETextureSampleMode::NEAREST;
     }
     // TODO: add bilinear sample mode
     else {
-        sampleMode = TextureSampleMode::NEAREST;
+        sampleMode = ETextureSampleMode::NEAREST;
     }
 
-    TextureWrapMode wrapMode;
+    ETextureWrapMode wrapMode;
     if (wMode == "clamp") {
-        wrapMode = TextureWrapMode::CLAMP;
+        wrapMode = ETextureWrapMode::CLAMP;
     }
     else if (wMode == "repeat") {
-        wrapMode = TextureWrapMode::REPEAT;
+        wrapMode = ETextureWrapMode::REPEAT;
     }
     else {
-        wrapMode = TextureWrapMode::REPEAT;
+        wrapMode = ETextureWrapMode::REPEAT;
     }
 
     return std::make_shared<RgbImageTexture>(hdrImage, sampleMode, wrapMode);

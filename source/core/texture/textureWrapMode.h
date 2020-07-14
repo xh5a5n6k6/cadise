@@ -2,7 +2,7 @@
 
 namespace cadise {
 
-enum class TextureWrapMode {
+enum class ETextureWrapMode {
     CLAMP,
     REPEAT,
 };

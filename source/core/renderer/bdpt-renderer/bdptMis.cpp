@@ -50,7 +50,7 @@ real BdptMis::weight(
         }
         else {
             pdfAReverse = lightEndpoint->evaluateConnectPdfA(
-                TransportMode::IMPORTANCE, *lightEndpointMinus, *cameraEndpoint);
+                ETransportMode::IMPORTANCE, *lightEndpointMinus, *cameraEndpoint);
         }
 
         cameraEndpoint->setPdfAReverse(pdfAReverse);
@@ -64,7 +64,7 @@ real BdptMis::weight(
         }
         else {
             pdfAReverse = cameraEndpoint->evaluateConnectPdfA(
-                TransportMode::IMPORTANCE, *lightEndpoint, *cameraEndpointMinus);
+                ETransportMode::IMPORTANCE, *lightEndpoint, *cameraEndpointMinus);
         }
 
         cameraEndpointMinus->setPdfAReverse(pdfAReverse);
@@ -82,7 +82,7 @@ real BdptMis::weight(
         }
         else {
             pdfAReverse = cameraEndpoint->evaluateConnectPdfA(
-                TransportMode::RADIANCE, *cameraEndpointMinus, *lightEndpoint);
+                ETransportMode::RADIANCE, *cameraEndpointMinus, *lightEndpoint);
         }
 
         lightEndpoint->setPdfAReverse(pdfAReverse);
@@ -96,7 +96,7 @@ real BdptMis::weight(
         }
         else {
             pdfAReverse = lightEndpoint->evaluateConnectPdfA(
-                TransportMode::RADIANCE, *cameraEndpoint, *lightEndpointMinus);
+                ETransportMode::RADIANCE, *cameraEndpoint, *lightEndpointMinus);
         }
 
         lightEndpointMinus->setPdfAReverse(pdfAReverse);

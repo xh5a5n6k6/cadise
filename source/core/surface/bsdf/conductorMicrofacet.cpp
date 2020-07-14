@@ -53,7 +53,7 @@ Spectrum ConductorMicrofacet::evaluate(
     const Vector3R& uvw = si.surfaceDetail().uvw();
     real sampleRoughness;
     _roughness->evaluate(uvw, &sampleRoughness);
-    const real alpha = RoughnessMapper<RoughnessMapMode::SQUARE>::map(sampleRoughness);
+    const real alpha = RoughnessMapper<ERoughnessMapMode::SQUARE>::map(sampleRoughness);
 
     const real LdotH = L.dot(H);
     Spectrum F;
@@ -79,7 +79,7 @@ void ConductorMicrofacet::evaluateSample(
     const Vector3R& uvw = si.surfaceDetail().uvw();
     real sampleRoughness;
     _roughness->evaluate(uvw, &sampleRoughness);
-    const real alpha = RoughnessMapper<RoughnessMapMode::SQUARE>::map(sampleRoughness);
+    const real alpha = RoughnessMapper<ERoughnessMapMode::SQUARE>::map(sampleRoughness);
 
     // build local coordinate system (shading normal as y-axis)
     const Vector3R yAxis(Ns);
@@ -147,7 +147,7 @@ real ConductorMicrofacet::evaluatePdfW(
     const Vector3R& uvw = si.surfaceDetail().uvw();
     real sampleRoughness;
     _roughness->evaluate(uvw, &sampleRoughness);
-    const real alpha = RoughnessMapper<RoughnessMapMode::SQUARE>::map(sampleRoughness);
+    const real alpha = RoughnessMapper<ERoughnessMapMode::SQUARE>::map(sampleRoughness);
 
     const real D     = _microfacet->distributionD(alpha, alpha, Ns, H);
     const real NdotH = Ns.dot(H);

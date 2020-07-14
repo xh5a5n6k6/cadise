@@ -55,7 +55,7 @@ void SpecularTransmission::evaluateSample(
     _fresnel->evaluateReflectance(cosThetaI, &reflectance);
 
     real btdfFactor = 1.0_r;
-    if (info.mode() == TransportMode::RADIANCE) {
+    if (info.mode() == ETransportMode::RADIANCE) {
         if (cosThetaI < 0.0_r) {
             math::swap(etaI, etaT);
         }

@@ -13,13 +13,13 @@
 
 namespace cadise {
 
-PathVertex::PathVertex(const VertexType& type) :
+PathVertex::PathVertex(const EVertexType& type) :
     PathVertex(type, Spectrum(0.0_r)) {
 }
 
 PathVertex::PathVertex(
-    const VertexType& type,
-    const Spectrum&   throughput) :
+    const EVertexType& type,
+    const Spectrum&    throughput) :
 
     _type(type),
     _throughput(throughput),
@@ -33,17 +33,17 @@ PathVertex::PathVertex(
 
 bool PathVertex::isConnectible() const {
     switch (_type) {
-        case VertexType::CAMERA_END:
+        case EVertexType::CAMERA_END:
             CADISE_ASSERT(_camera);
 
             return true;
 
-        case VertexType::LIGHT_END:
+        case EVertexType::LIGHT_END:
             CADISE_ASSERT(_light);
 
             return !_light->isDeltaLight();
 
-        case VertexType::SURFACE:
+        case EVertexType::SURFACE:
             CADISE_ASSERT(_bsdf);
 
             return _bsdf->lobes().hasAtLeastOne({
@@ -62,9 +62,9 @@ bool PathVertex::isConnectible() const {
 }
 
 Spectrum PathVertex::evaluate(
-    const TransportMode& mode,
-    const PathVertex&    previous, 
-    const PathVertex&    next) const {
+    const ETransportMode& mode,
+    const PathVertex&     previous, 
+    const PathVertex&     next) const {
 
     CADISE_ASSERT(_bsdf);
 
@@ -84,7 +84,7 @@ Spectrum PathVertex::evaluate(
     intersection.setWo(toNext.normalize());
 
     Spectrum reflectance = _bsdf->evaluate(TransportInfo(mode), intersection);
-    if (mode == TransportMode::IMPORTANCE) {
+    if (mode == ETransportMode::IMPORTANCE) {
         reflectance *= 1.0_r;
     }
 
@@ -168,9 +168,9 @@ real PathVertex::evaluateDirectPdfA(
 }
 
 real PathVertex::evaluateConnectPdfA(
-    const TransportMode& mode,
-    const PathVertex&    previous,
-    const PathVertex&    next) const {
+    const ETransportMode& mode,
+    const PathVertex&     previous,
+    const PathVertex&     next) const {
 
     const Vector3R& nowP      = _surfaceDetail.position();
     const Vector3R& previousP = previous.surfaceDetail().position();
@@ -204,7 +204,7 @@ real PathVertex::evaluateConnectPdfA(
     return pdfA;
 }
 
-const VertexType& PathVertex::type() const {
+const EVertexType& PathVertex::type() const {
     return _type;
 }
 

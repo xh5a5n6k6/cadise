@@ -6,22 +6,24 @@
 
 namespace cadise {
 
-template<MisMode Mode>
+template<EMisMode Mode>
 class Mis {
 public:
-    static real weight(const real  pdfA, 
-                       const real  pdfB,
-                       const int32 nA = 1, 
-                       const int32 nB = 1);
+    static real weight(
+        const real  pdfA, 
+        const real  pdfB,
+        const int32 nA = 1, 
+        const int32 nB = 1);
 };
 
 // template header implementation
 
-template<MisMode Mode>
-real Mis<Mode>::weight(const real  pdfA,
-                       const real  pdfB,
-                       const int32 nA,
-                       const int32 nB) {
+template<EMisMode Mode>
+real Mis<Mode>::weight(
+    const real  pdfA,
+    const real  pdfB,
+    const int32 nA,
+    const int32 nB) {
 
     CADISE_ASSERT_GE(pdfA, 0.0_r);
     CADISE_ASSERT_GE(pdfB, 0.0_r);
@@ -29,11 +31,11 @@ real Mis<Mode>::weight(const real  pdfA,
     const real mulA = nA * pdfA;
     const real mulB = nB * pdfB;
 
-    if constexpr (Mode == MisMode::BALANCE) {
+    if constexpr (Mode == EMisMode::BALANCE) {
         return mulA / (mulA + mulB);
     }
     // using power as 2
-    else if constexpr (Mode == MisMode::POWER) {
+    else if constexpr (Mode == EMisMode::POWER) {
         const real mulA2 = mulA * mulA;
         const real mulB2 = mulB * mulB;
 

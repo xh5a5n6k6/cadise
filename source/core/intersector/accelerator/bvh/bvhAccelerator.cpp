@@ -9,7 +9,7 @@ namespace cadise {
 
 BvhAccelerator::BvhAccelerator(
     const std::vector<std::shared_ptr<Intersector>>& intersectors,
-    const BvhSplitMode&                              splitMode) :
+    const EBvhSplitMode&                             splitMode) :
     
     _intersectors(),
     _nodes() {

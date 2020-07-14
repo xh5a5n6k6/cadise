@@ -2,7 +2,7 @@
 
 namespace cadise {
 
-enum class TransportMode {
+enum class ETransportMode {
     RADIANCE,
     IMPORTANCE,
 };

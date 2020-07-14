@@ -25,7 +25,7 @@ void NaivePathIntegrator::traceRadiance(
 
     CADISE_ASSERT(out_radiance);
 
-    const TransportInfo transportInfo(TransportMode::RADIANCE);
+    const TransportInfo transportInfo(ETransportMode::RADIANCE);
     
     Spectrum totalRadiance(0.0_r);
     Spectrum pathThroughput(1.0_r);

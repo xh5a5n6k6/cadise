@@ -59,7 +59,7 @@ void SubPathBuilder::buildLightPath(
     surfaceDetail.setGeometryNormal(emitN);
     surfaceDetail.setShadingNormal(emitN);
 
-    PathVertex lightVertex(VertexType::LIGHT_END, emittance);
+    PathVertex lightVertex(EVertexType::LIGHT_END, emittance);
     lightVertex.setSurfaceDetail(surfaceDetail);
     lightVertex.setPdfAForward(pdfAForward);
     lightVertex.setLight(sampleLight);
@@ -72,7 +72,7 @@ void SubPathBuilder::buildLightPath(
 
     // it will not used in light sub-path construction
     Spectrum localRadiance;
-    _buildSubPathCompletely(TransportMode::IMPORTANCE,
+    _buildSubPathCompletely(ETransportMode::IMPORTANCE,
                             scene,
                             Ray(emitPosition, emitDirection),
                             throughput,
@@ -105,14 +105,14 @@ void SubPathBuilder::buildCameraPath(
     surfaceDetail.setGeometryNormal(primaryRay.direction());
     surfaceDetail.setShadingNormal(primaryRay.direction());
 
-    PathVertex cameraVertex(VertexType::CAMERA_END, Spectrum(1.0_r));
+    PathVertex cameraVertex(EVertexType::CAMERA_END, Spectrum(1.0_r));
     cameraVertex.setSurfaceDetail(surfaceDetail);
     cameraVertex.setPdfAForward(pdfA);
     cameraVertex.setCamera(_camera);
 
     out_cameraPath->addVertex(cameraVertex);
 
-    _buildSubPathCompletely(TransportMode::RADIANCE,
+    _buildSubPathCompletely(ETransportMode::RADIANCE,
                             scene,
                             primaryRay,
                             Spectrum(1.0_r),
@@ -122,13 +122,13 @@ void SubPathBuilder::buildCameraPath(
 }
 
 void SubPathBuilder::_buildSubPathCompletely(
-    const TransportMode& mode,
-    const Scene&         scene,
-    const Ray&           firstRay,
-    const Spectrum&      secondVertexThroughput,
-    const real           secondVertexForwardPdfW,
-    SubPath* const       out_subPath,
-    Spectrum* const      out_zeroBounceRadiance) const {
+    const ETransportMode& mode,
+    const Scene&          scene,
+    const Ray&            firstRay,
+    const Spectrum&       secondVertexThroughput,
+    const real            secondVertexForwardPdfW,
+    SubPath* const        out_subPath,
+    Spectrum* const       out_zeroBounceRadiance) const {
 
     CADISE_ASSERT(out_subPath);
     CADISE_ASSERT(out_zeroBounceRadiance);
@@ -150,7 +150,7 @@ void SubPathBuilder::_buildSubPathCompletely(
         }
 
         PathVertex& previousVertex = (*out_subPath)[currentLength - 1];
-        PathVertex  newVertex(VertexType::SURFACE, throughput);
+        PathVertex  newVertex(EVertexType::SURFACE, throughput);
 
         const Primitive* primitive = intersection.primitiveInfo().primitive();
         const Bsdf*      bsdf      = primitive->bsdf();
@@ -175,7 +175,7 @@ void SubPathBuilder::_buildSubPathCompletely(
         // add s=0 situation radiance when hitting area light
         // (while building camera sub-path)
         const AreaLight* areaLight = primitive->areaLight();
-        if (areaLight && mode == TransportMode::RADIANCE) {
+        if (areaLight && mode == ETransportMode::RADIANCE) {
             (*out_subPath)[currentLength - 1].setLight(areaLight);
 
             const Spectrum emittance = areaLight->emittance(intersection);
@@ -204,7 +204,7 @@ void SubPathBuilder::_buildSubPathCompletely(
 
         // for non-symmetric scattering correction
         throughput *= reflectance * LdotN / pdfW;
-        if (mode == TransportMode::IMPORTANCE) {
+        if (mode == ETransportMode::IMPORTANCE) {
             throughput *= 1.0_r;
         }
 

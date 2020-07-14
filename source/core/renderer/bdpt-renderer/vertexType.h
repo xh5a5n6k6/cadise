@@ -2,7 +2,7 @@
 
 namespace cadise {
 
-enum class VertexType {
+enum class EVertexType {
     LIGHT_END,
     CAMERA_END,
     SURFACE,

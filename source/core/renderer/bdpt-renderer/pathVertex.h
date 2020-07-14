@@ -10,21 +10,21 @@ class Bsdf;
 class Camera;
 class Light;
 class Scene;
-enum class TransportMode;
+enum class ETransportMode;
 
 class PathVertex {
 public:
-    explicit PathVertex(const VertexType& type);
+    explicit PathVertex(const EVertexType& type);
     PathVertex(
-        const VertexType& type,
-        const Spectrum&   throughput);
+        const EVertexType& type,
+        const Spectrum&    throughput);
 
     bool isConnectible() const;
 
     Spectrum evaluate(
-        const TransportMode& mode,
-        const PathVertex&    previous, 
-        const PathVertex&    next) const;
+        const ETransportMode& mode,
+        const PathVertex&     previous, 
+        const PathVertex&     next) const;
 
     real evaluateOriginPdfA(
         const Scene&      scene,
@@ -33,11 +33,11 @@ public:
         const Scene&      scene,
         const PathVertex& next) const;
     real evaluateConnectPdfA(
-        const TransportMode& mode,
-        const PathVertex&    previous,
-        const PathVertex&    next) const;
+        const ETransportMode& mode,
+        const PathVertex&     previous,
+        const PathVertex&     next) const;
 
-    const VertexType& type() const;
+    const EVertexType& type() const;
     const Spectrum& throughput() const;
     const SurfaceDetail& surfaceDetail() const;
     real pdfAForward() const;
@@ -54,7 +54,7 @@ public:
     void setBsdf(const Bsdf* const bsdf);
 
 private:
-    VertexType    _type;
+    EVertexType   _type;
     Spectrum      _throughput;
     SurfaceDetail _surfaceDetail;
     

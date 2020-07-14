@@ -2,7 +2,7 @@
 
 namespace cadise {
 
-enum class TextureSampleMode {
+enum class ETextureSampleMode {
     NEAREST,
 
     // TODO:

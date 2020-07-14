@@ -34,34 +34,34 @@ void RenderDatabase::setUpData(const std::shared_ptr<SdData>& data) {
     CADISE_ASSERT(data);
 
     switch (data->classType()) {
-        case SdClassType::FILM:
+        case ESdClassType::FILM:
             _setUpFilm(data);
             break;
-        case SdClassType::CAMERA:
+        case ESdClassType::CAMERA:
             _setUpCamera(data);
             break;
-        case SdClassType::RENDERER:
+        case ESdClassType::RENDERER:
             _setUpRenderer(data);
             break;
-        case SdClassType::ACCELERATOR:
+        case ESdClassType::ACCELERATOR:
             _setUpAccelerator(data);
             break;
-        case SdClassType::LIGHT_CLUSTER:
+        case ESdClassType::LIGHT_CLUSTER:
             _setUpLightCluster(data);
             break;
-        case SdClassType::TEXTURE_REAL:
+        case ESdClassType::TEXTURE_REAL:
             _setUpRealTexture(data);
             break;
-        case SdClassType::TEXTURE_SPECTRUM:
+        case ESdClassType::TEXTURE_SPECTRUM:
             _setUpSpectrumTexture(data);
             break;
-        case SdClassType::MATERIAL:
+        case ESdClassType::MATERIAL:
             _setUpBsdf(data);
             break;
-        case SdClassType::LIGHT:
+        case ESdClassType::LIGHT:
             _setUpLight(data);
             break;
-        case SdClassType::PRIMITIVE:
+        case ESdClassType::PRIMITIVE:
             _setUpPrimitive(data);
             break;
         default: 

@@ -26,15 +26,15 @@ static std::shared_ptr<Accelerator> createBvh(
 
     const std::string_view splitMode = data->findString("split-mode", "sah");
 
-    BvhSplitMode mode;
+    EBvhSplitMode mode;
     if (splitMode == "equal") {
-        mode = BvhSplitMode::EQUAL;
+        mode = EBvhSplitMode::EQUAL;
     }
     else if (splitMode == "sah") {
-        mode = BvhSplitMode::SAH;
+        mode = EBvhSplitMode::SAH;
     }
     else {
-        mode = BvhSplitMode::SAH;
+        mode = EBvhSplitMode::SAH;
     }
 
     return std::make_shared<BvhAccelerator>(std::move(intersectors), mode);

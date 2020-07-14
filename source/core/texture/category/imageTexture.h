@@ -16,9 +16,10 @@ class PixelSampler;
 template<typename T, typename ImageType, std::size_t N>
 class ImageTexture : public Texture<T> {
 public:
-    ImageTexture(const Image<ImageType, N>& image, 
-                 const TextureSampleMode&   sampleMode,
-                 const TextureWrapMode&     wrapMode);
+    ImageTexture(
+        const Image<ImageType, N>& image, 
+        const ETextureSampleMode&  sampleMode,
+        const ETextureWrapMode&    wrapMode);
 
     virtual void evaluate(const Vector3R& uvw, T* const out_value) const override = 0;
 

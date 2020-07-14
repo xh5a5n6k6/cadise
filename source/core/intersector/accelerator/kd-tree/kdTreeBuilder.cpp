@@ -209,11 +209,11 @@ bool KdTreeBuilder::_canSplitWithSah(
             const std::size_t endpointBaseIndex = 2 * i;
             endpoints[axis][endpointBaseIndex + 0] = Endpoint(intersectorIndex, 
                                                               bound.minVertex()[axis],
-                                                              EndpointType::MIN);
+                                                              EEndpointType::MIN);
 
             endpoints[axis][endpointBaseIndex + 1] = Endpoint(intersectorIndex, 
                                                               bound.maxVertex()[axis],
-                                                              EndpointType::MAX);
+                                                              EEndpointType::MAX);
         }
 
         // sort all enpoints according to their positions and types
@@ -234,7 +234,7 @@ bool KdTreeBuilder::_canSplitWithSah(
 
         // test for each split candidate
         for (std::size_t i = 0; i < 2 * intersectorCounts; ++i) {
-            if (endpoints[axis][i].type() == EndpointType::MAX) {
+            if (endpoints[axis][i].type() == EEndpointType::MAX) {
                 --subIntersectorCountsB;
             }
 
@@ -268,7 +268,7 @@ bool KdTreeBuilder::_canSplitWithSah(
                 }
             }
 
-            if (endpoints[axis][i].type() == EndpointType::MIN) {
+            if (endpoints[axis][i].type() == EEndpointType::MIN) {
                 ++subIntersectorCountsA;
             }
         }
@@ -294,13 +294,13 @@ bool KdTreeBuilder::_canSplitWithSah(
     *out_splitInfo = std::make_tuple(bestAxis, endpoints[bestAxis][bestEndpointIndex].position());
 
     for (std::size_t i = 0; i < bestEndpointIndex; ++i) {
-        if (endpoints[bestAxis][i].type() == EndpointType::MIN) {
+        if (endpoints[bestAxis][i].type() == EEndpointType::MIN) {
             out_subIntersectorIndicesA->push_back(endpoints[bestAxis][i].intersectorIndex());
         }
     }
 
     for (std::size_t i = bestEndpointIndex; i < 2 * intersectorCounts; ++i) {
-        if (endpoints[bestAxis][i].type() == EndpointType::MAX) {
+        if (endpoints[bestAxis][i].type() == EEndpointType::MAX) {
             out_subIntersectorIndicesB->push_back(endpoints[bestAxis][i].intersectorIndex());
         }
     }

@@ -2,7 +2,7 @@
 
 namespace cadise {
 
-enum class EndpointType {
+enum class EEndpointType {
     NONE,
     MIN,
     MAX,

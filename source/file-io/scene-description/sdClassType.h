@@ -2,7 +2,7 @@
 
 namespace cadise {
 
-enum class SdClassType {
+enum class ESdClassType {
     NONE,
 
     // global setting

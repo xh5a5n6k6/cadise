@@ -60,10 +60,10 @@ public:
         const std::string_view& name,
         const StringKeyMap<Texture<Spectrum>>& spectrumTextures) const;
 
-    const SdClassType& classType() const;
+    const ESdClassType& classType() const;
 
     void setClassType(const std::string_view& classType);
-    void setClassType(const SdClassType& classType);
+    void setClassType(const ESdClassType& classType);
 
 private:
     template<typename T>
@@ -77,7 +77,7 @@ private:
         const std::string_view& name,
         const std::vector<std::shared_ptr<SdDataUnit<T>>>& dataset) const;
 
-    SdClassType _classType;
+    ESdClassType _classType;
 
     std::vector<std::shared_ptr<SdDataUnit<bool>>>             _bools;
     std::vector<std::shared_ptr<SdDataUnit<real>>>             _reals;

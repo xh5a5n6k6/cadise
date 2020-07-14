@@ -2,7 +2,7 @@
 
 namespace cadise {
 
-enum class MisMode {
+enum class EMisMode {
     BALANCE,
     POWER,
 };

@@ -3,12 +3,14 @@
 namespace cadise {
 
 Endpoint::Endpoint() :
-    Endpoint(0, 0.0_r, EndpointType::NONE) {
+    Endpoint(0, 0.0_r, EEndpointType::NONE) {
 }
 
-Endpoint::Endpoint(const std::size_t   intersectorIndex,
-                   const real          position,
-                   const EndpointType& type) :
+Endpoint::Endpoint(
+    const std::size_t    intersectorIndex,
+    const real           position,
+    const EEndpointType& type) :
+
     _intersectorIndex(intersectorIndex),
     _position(position),
     _type(type) {
@@ -22,7 +24,7 @@ real Endpoint::position() const {
     return _position;
 }
 
-const EndpointType& Endpoint::type() const {
+const EEndpointType& Endpoint::type() const {
     return _type;
 }
 

@@ -9,13 +9,13 @@
 
 namespace cadise {
 
-enum class BvhSplitMode;
+enum class EBvhSplitMode;
 
 class BvhAccelerator : public Accelerator {
 public:
     BvhAccelerator(
         const std::vector<std::shared_ptr<Intersector>>& intersectors,
-        const BvhSplitMode&                              splitMode);
+        const EBvhSplitMode&                             splitMode);
 
     void evaluateBound(AABB3R* const out_bound) const override;
 

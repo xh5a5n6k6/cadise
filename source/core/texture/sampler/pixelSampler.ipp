@@ -9,12 +9,12 @@
 namespace cadise {
 
 template<typename T, std::size_t N>
-PixelSampler<T, N>::PixelSampler(const TextureWrapMode& mode) {
+PixelSampler<T, N>::PixelSampler(const ETextureWrapMode& mode) {
     switch (mode) {
-        case TextureWrapMode::CLAMP:
+        case ETextureWrapMode::CLAMP:
             _uvwWrapper = std::make_unique<ClampUvwWrapper>();
             break;
-        case TextureWrapMode::REPEAT:
+        case ETextureWrapMode::REPEAT:
             _uvwWrapper = std::make_unique<RepeatUvwWrapper>();
             break;
         default:

@@ -62,7 +62,7 @@ void PmProcess::process(
         const real denominator = pickLightPdf * emitPdfA * emitPdfW;
 
         Spectrum      throughputRadiance(emittance * (numerator / denominator));
-        TransportInfo transportInfo(TransportMode::IMPORTANCE);
+        TransportInfo transportInfo(ETransportMode::IMPORTANCE);
         Ray           traceRay(emitPosition, emitDirection);
 
         // tracing light ray

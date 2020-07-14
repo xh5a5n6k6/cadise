@@ -7,7 +7,7 @@
 
 namespace cadise {
 
-template<RoughnessMapMode Mode>
+template<ERoughnessMapMode Mode>
 class RoughnessMapper {
 public:
     static real map(const real roughness);
@@ -15,15 +15,15 @@ public:
 
 // template header implementation
 
-template<RoughnessMapMode Mode>
+template<ERoughnessMapMode Mode>
 inline real RoughnessMapper<Mode>::map(const real roughness) {
     real alpha;
     
     const real safeRoughness = math::max(roughness, 0.001_r);
-    if constexpr (Mode == RoughnessMapMode::SQUARE) {
+    if constexpr (Mode == ERoughnessMapMode::SQUARE) {
         alpha = safeRoughness * safeRoughness;
     }
-    else if constexpr (Mode == RoughnessMapMode::PBRT) {
+    else if constexpr (Mode == ERoughnessMapMode::PBRT) {
         const real x = std::log(safeRoughness);
 
         alpha = 1.621420000_r +

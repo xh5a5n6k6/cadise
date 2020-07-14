@@ -11,7 +11,7 @@
 
 namespace cadise {
 
-BvhBuilder::BvhBuilder(const BvhSplitMode& splitMode) :
+BvhBuilder::BvhBuilder(const EBvhSplitMode& splitMode) :
     _splitMode(splitMode) {
 }
 
@@ -111,14 +111,14 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
 
             bool canSplit = false;
             switch (_splitMode) {
-                case BvhSplitMode::EQUAL:
+                case EBvhSplitMode::EQUAL:
                     canSplit = _canSplitWithEqual(boundInfos,
                                                   splitAxis,
                                                   &subBoundInfosA,
                                                   &subBoundInfosB);
                     break;
 
-                case BvhSplitMode::SAH:
+                case EBvhSplitMode::SAH:
                     canSplit = _canSplitWithSah(boundInfos,
                                                 splitAxis,
                                                 nodeBound,

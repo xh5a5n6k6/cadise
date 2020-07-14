@@ -8,18 +8,19 @@ namespace cadise {
 class Endpoint {
 public:
     Endpoint();
-    Endpoint(const std::size_t   intersectorIndex, 
-             const real          position,
-             const EndpointType& type);
+    Endpoint(
+        const std::size_t    intersectorIndex, 
+        const real           position,
+        const EEndpointType& type);
 
     std::size_t intersectorIndex() const;
     real position() const;
-    const EndpointType& type() const;
+    const EEndpointType& type() const;
 
 private:
-    std::size_t  _intersectorIndex;
-    real         _position;
-    EndpointType _type;
+    std::size_t   _intersectorIndex;
+    real          _position;
+    EEndpointType _type;
 };
 
 } // namespace cadise

@@ -5,7 +5,7 @@
 namespace cadise {
 
 SdData::SdData() :
-    _classType(SdClassType::NONE) {
+    _classType(ESdClassType::NONE) {
 }
 
 void SdData::addBool(
@@ -134,47 +134,47 @@ std::shared_ptr<Texture<Spectrum>> SdData::getSpectrumTexture(
     return spectrumTexture;
 }
 
-const SdClassType& SdData::classType() const {
+const ESdClassType& SdData::classType() const {
     return _classType;
 }
 
 void SdData::setClassType(const std::string_view& classType) {
     if (classType == "film") {
-        setClassType(SdClassType::FILM);
+        setClassType(ESdClassType::FILM);
     }
     else if (classType == "camera") {
-        setClassType(SdClassType::CAMERA);
+        setClassType(ESdClassType::CAMERA);
     }
     else if (classType == "renderer") {
-        setClassType(SdClassType::RENDERER);
+        setClassType(ESdClassType::RENDERER);
     }
     else if (classType == "accelerator") {
-        setClassType(SdClassType::ACCELERATOR);
+        setClassType(ESdClassType::ACCELERATOR);
     }
     else if (classType == "light-cluster") {
-        setClassType(SdClassType::LIGHT_CLUSTER);
+        setClassType(ESdClassType::LIGHT_CLUSTER);
     }
     else if (classType == "texture-real") {
-        setClassType(SdClassType::TEXTURE_REAL);
+        setClassType(ESdClassType::TEXTURE_REAL);
     }
     else if (classType == "texture-spectrum") {
-        setClassType(SdClassType::TEXTURE_SPECTRUM);
+        setClassType(ESdClassType::TEXTURE_SPECTRUM);
     }
     else if (classType == "material") {
-        setClassType(SdClassType::MATERIAL);
+        setClassType(ESdClassType::MATERIAL);
     }
     else if (classType == "light") {
-        setClassType(SdClassType::LIGHT);
+        setClassType(ESdClassType::LIGHT);
     }
     else if (classType == "primitive") {
-        setClassType(SdClassType::PRIMITIVE);
+        setClassType(ESdClassType::PRIMITIVE);
     }
     else {
         // unsupported type
     }
 }
 
-void SdData::setClassType(const SdClassType& classType) {
+void SdData::setClassType(const ESdClassType& classType) {
     _classType = classType;
 }
 

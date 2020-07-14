@@ -2,7 +2,7 @@
 
 namespace cadise {
 
-enum class RoughnessMapMode {
+enum class ERoughnessMapMode {
     SQUARE,
     PBRT,
 };
