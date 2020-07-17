@@ -2,13 +2,16 @@
 
 #include "fundamental/assertion.h"
 
+#include <thread>
+
 namespace cadise {
 
 Renderer::Renderer() :
     _scene(nullptr),
     _camera(nullptr),
-    _film(nullptr),
-    _numWorkers(16) {
+    _film(nullptr) {
+
+    _numWorkers = static_cast<std::size_t>(std::thread::hardware_concurrency());
 }
 
 Renderer::~Renderer() = default;
