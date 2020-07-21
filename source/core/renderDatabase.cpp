@@ -12,12 +12,18 @@
 #include "core/texture/texture.h"
 #include "file-io/scene-description/sdData.h"
 #include "fundamental/assertion.h"
+#include "fundamental/logger/logger.h"
 #include "math/aabb.h"
 
 #include <iostream>
 #include <limits>
 
 namespace cadise {
+
+// local logger declaration
+namespace {
+    Logger logger("Database");
+} // anonymous namespace
 
 RenderDatabase::RenderDatabase() :
     _filmData(nullptr),
@@ -75,8 +81,7 @@ void RenderDatabase::prepareRender() {
     _realTextures.clear();
     _spectrumTextures.clear();
 
-    // TODO: add logger
-    std::cout << "Total primitives: " << _intersectors.size() << std::endl;
+    logger.log("Finished loading scene objects: " + std::to_string(_intersectors.size()) + " primitives");
 
     const std::shared_ptr<Film> film = instantiator::makeFilm(_filmData);
     const std::shared_ptr<Camera> camera = instantiator::makeCamera(_cameraData);
