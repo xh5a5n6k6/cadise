@@ -96,18 +96,19 @@ const std::vector<Vector3R> SdData::findVector3rArray(
 }
 
 std::shared_ptr<Texture<real>> SdData::getRealTexture(
-    const std::string_view& name,
-    const StringKeyMap<Texture<real>>& realTextures) const {
+    const std::string_view&            name,
+    const StringKeyMap<Texture<real>>& realTextures,
+    const real                         defaultValue) const {
 
     std::shared_ptr<Texture<real>> realTexture = nullptr;
 
-    const std::string_view textureName = findString(name);
+    const std::string_view textureName = this->findString(name);
     if (textureName != "") {
         auto&& texture = realTextures.find(textureName);
         realTexture = texture->second;
     }
     else {
-        const real value = findReal(name);
+        const real value = this->findReal(name, defaultValue);
         realTexture = std::make_shared<ConstantTexture<real>>(value);
     }
 
@@ -115,19 +116,23 @@ std::shared_ptr<Texture<real>> SdData::getRealTexture(
 }
 
 std::shared_ptr<Texture<Spectrum>> SdData::getSpectrumTexture(
-    const std::string_view& name,
-    const StringKeyMap<Texture<Spectrum>>& spectrumTextures) const {
+    const std::string_view&                name,
+    const StringKeyMap<Texture<Spectrum>>& spectrumTextures,
+    const Spectrum&                        defaultValue) const {
 
     std::shared_ptr<Texture<Spectrum>> spectrumTexture = nullptr;
 
-    const std::string_view textureName = findString(name);
+    const std::string_view textureName = this->findString(name);
     if (textureName != "") {
         auto&& texture = spectrumTextures.find(textureName);
         spectrumTexture = texture->second;
     }
     else {
         // it now only support rgb spectrum
-        const Vector3R rgb = findVector3r(name);
+        Vector3R defaultRgb;
+        defaultValue.transformToRgb(&defaultRgb);
+
+        const Vector3R rgb = this->findVector3r(name, defaultRgb);
         spectrumTexture = std::make_shared<ConstantTexture<Spectrum>>(Spectrum(rgb));
     }
 

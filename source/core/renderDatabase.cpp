@@ -22,7 +22,7 @@ namespace cadise {
 
 // local logger declaration
 namespace {
-    Logger logger("Database");
+    const Logger logger("Database");
 } // anonymous namespace
 
 RenderDatabase::RenderDatabase() :

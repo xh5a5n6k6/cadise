@@ -54,11 +54,13 @@ public:
         const std::string_view& name) const;
 
     std::shared_ptr<Texture<real>> getRealTexture(
-        const std::string_view& name, 
-        const StringKeyMap<Texture<real>>& realTextures) const;
+        const std::string_view&            name, 
+        const StringKeyMap<Texture<real>>& realTextures,
+        const real                         defaultValue = 0.0_r) const;
     std::shared_ptr<Texture<Spectrum>> getSpectrumTexture(
-        const std::string_view& name,
-        const StringKeyMap<Texture<Spectrum>>& spectrumTextures) const;
+        const std::string_view&                name,
+        const StringKeyMap<Texture<Spectrum>>& spectrumTextures,
+        const Spectrum&                        defaultValue = Spectrum(0.0_r)) const;
 
     const ESdClassType& classType() const;
 

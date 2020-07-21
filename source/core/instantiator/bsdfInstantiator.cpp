@@ -26,8 +26,8 @@ namespace cadise {
 namespace instantiator {
 
 static std::shared_ptr<Bsdf> createLambertianDiffuse(
-    const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Texture<real>>& realTextures,
+    const std::shared_ptr<SdData>&         data,
+    const StringKeyMap<Texture<real>>&     realTextures,
     const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
     const auto albedo = data->getSpectrumTexture("albedo", spectrumTextures);
@@ -36,8 +36,8 @@ static std::shared_ptr<Bsdf> createLambertianDiffuse(
 }
 
 static std::shared_ptr<Bsdf> createSpecularReflection(
-    const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Texture<real>>& realTextures,
+    const std::shared_ptr<SdData>&         data,
+    const StringKeyMap<Texture<real>>&     realTextures,
     const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
     const auto albedo      = data->getSpectrumTexture("albedo", spectrumTextures);
@@ -64,8 +64,8 @@ static std::shared_ptr<Bsdf> createSpecularReflection(
 }
 
 static std::shared_ptr<Bsdf> createSpecularTransmission(
-    const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Texture<real>>& realTextures,
+    const std::shared_ptr<SdData>&         data,
+    const StringKeyMap<Texture<real>>&     realTextures,
     const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
     const auto albedo   = data->getSpectrumTexture("albedo", spectrumTextures);
@@ -78,8 +78,8 @@ static std::shared_ptr<Bsdf> createSpecularTransmission(
 }
 
 static std::shared_ptr<Bsdf> createSpecularDielectric(
-    const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Texture<real>>& realTextures,
+    const std::shared_ptr<SdData>&         data,
+    const StringKeyMap<Texture<real>>&     realTextures,
     const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
     const auto albedo   = data->getSpectrumTexture("albedo", spectrumTextures);
@@ -92,9 +92,9 @@ static std::shared_ptr<Bsdf> createSpecularDielectric(
 }
 
 static std::shared_ptr<Bsdf> createPhong(
-    const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Texture<real>>, std::less<>>& realTextures,
-    const std::map<std::string, std::shared_ptr<Texture<Spectrum>>, std::less<>>& spectrumTextures) {
+    const std::shared_ptr<SdData>&         data,
+    const StringKeyMap<Texture<real>>&     realTextures,
+    const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
     const real exponent = data->findReal("exponent", 32.0_r);
 
@@ -102,8 +102,8 @@ static std::shared_ptr<Bsdf> createPhong(
 }
 
 static std::shared_ptr<Bsdf> createPlastic(
-    const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Texture<real>>& realTextures,
+    const std::shared_ptr<SdData>&         data,
+    const StringKeyMap<Texture<real>>&     realTextures,
     const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
     const auto diffuseAlbedo    = data->getSpectrumTexture("diffuse-albedo", spectrumTextures);
@@ -116,10 +116,10 @@ static std::shared_ptr<Bsdf> createPlastic(
 }
 
 static std::shared_ptr<Bsdf> createMixed(
-    const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Texture<real>>& realTextures,
+    const std::shared_ptr<SdData>&         data,
+    const StringKeyMap<Texture<real>>&     realTextures,
     const StringKeyMap<Texture<Spectrum>>& spectrumTextures,
-    const StringKeyMap<Bsdf>& bsdfs) {
+    const StringKeyMap<Bsdf>&              bsdfs) {
 
     const auto   bsdfAName = data->findString("bsdf-a");
     const auto&& bsdfA     = bsdfs.find(bsdfAName);
@@ -131,7 +131,7 @@ static std::shared_ptr<Bsdf> createMixed(
 
     CADISE_ASSERT_NE(bsdfB, bsdfs.end());
 
-    const real ratio = data->findReal("ratio", 0.7_r);
+    const real ratio = data->findReal("ratio", 0.5_r);
 
     return std::make_shared<MixedBsdf>(bsdfA->second,
                                        bsdfB->second,
@@ -139,8 +139,8 @@ static std::shared_ptr<Bsdf> createMixed(
 }
 
 static std::shared_ptr<Bsdf> createConductorMicrofacet(
-    const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Texture<real>>& realTextures,
+    const std::shared_ptr<SdData>&         data,
+    const StringKeyMap<Texture<real>>&     realTextures,
     const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 
     const auto microfacetType = data->findString("microfacet-type", "ggx");
@@ -163,11 +163,11 @@ static std::shared_ptr<Bsdf> createConductorMicrofacet(
 
     std::shared_ptr<ConductorFresnel> fresnel = nullptr;
     if (fresnelType == "schlick") {
-        const auto f0 = data->findVector3r("f0");
+        const auto f0 = data->findVector3r("f0", Vector3R(1.0_r));
         fresnel = std::make_shared<SchlickConductorFresnel>(Spectrum(f0));
     }
     else {
-        const auto f0 = data->findVector3r("f0");
+        const auto f0 = data->findVector3r("f0", Vector3R(1.0_r));
         fresnel = std::make_shared<SchlickConductorFresnel>(Spectrum(f0));
     }
 
@@ -175,10 +175,10 @@ static std::shared_ptr<Bsdf> createConductorMicrofacet(
 }
 
 std::shared_ptr<Bsdf> makeBsdf(
-    const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Texture<real>>& realTextures,
+    const std::shared_ptr<SdData>&         data,
+    const StringKeyMap<Texture<real>>&     realTextures,
     const StringKeyMap<Texture<Spectrum>>& spectrumTextures,
-    const StringKeyMap<Bsdf>& bsdfs) {
+    const StringKeyMap<Bsdf>&              bsdfs) {
 
     CADISE_ASSERT(data);
 
