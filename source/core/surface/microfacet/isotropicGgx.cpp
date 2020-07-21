@@ -1,4 +1,4 @@
-#include "core/surface/microfacet/isotropicTrowbridgeReitz.h"
+#include "core/surface/microfacet/isotropicGgx.h"
 
 #include "fundamental/assertion.h"
 #include "math/constant.h"
@@ -8,7 +8,7 @@
 
 namespace cadise {
 
-real IsotropicTrowbridgeReitz::distributionD(
+real IsotropicGgx::distributionD(
     const real      alphaX,
     const real      alphaY,
     const Vector3R& N,
@@ -33,7 +33,7 @@ real IsotropicTrowbridgeReitz::distributionD(
     return numerator / denominator;
 }
 
-real IsotropicTrowbridgeReitz::shadowingMaskingG(
+real IsotropicGgx::shadowingMaskingG(
     const real      alphaX,
     const real      alphaY,
     const Vector3R& V,
@@ -68,7 +68,7 @@ real IsotropicTrowbridgeReitz::shadowingMaskingG(
     return G1V * G1L;
 }
 
-void IsotropicTrowbridgeReitz::sampleHalfVectorH(
+void IsotropicGgx::sampleHalfVectorH(
     const real      alphaX,
     const real      alphaY,
     const Vector2R& sample,

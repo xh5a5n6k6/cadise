@@ -14,7 +14,7 @@
 #include "core/surface/fresnel/vanillaDielectricFresnel.h"
 #include "core/surface/microfacet/isotropicBeckmann.h"
 #include "core/surface/microfacet/isotropicBlinnPhong.h"
-#include "core/surface/microfacet/isotropicTrowbridgeReitz.h"
+#include "core/surface/microfacet/isotropicGgx.h"
 #include "core/texture/texture.h"
 #include "file-io/scene-description/sdData.h"
 #include "fundamental/assertion.h"
@@ -152,13 +152,13 @@ static std::shared_ptr<Bsdf> createConductorMicrofacet(
         microfacet = std::make_shared<IsotropicBeckmann>();
     }
     else if (microfacetType == "ggx") {
-        microfacet = std::make_shared<IsotropicTrowbridgeReitz>();
+        microfacet = std::make_shared<IsotropicGgx>();
     }
     else if (microfacetType == "blinn-phong") {
         microfacet = std::make_shared<IsotropicBlinnPhong>();
     }
     else {
-        microfacet = std::make_shared<IsotropicTrowbridgeReitz>();
+        microfacet = std::make_shared<IsotropicGgx>();
     }
 
     std::shared_ptr<ConductorFresnel> fresnel = nullptr;

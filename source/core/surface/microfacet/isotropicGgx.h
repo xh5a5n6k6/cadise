@@ -9,7 +9,7 @@ namespace cadise {
     "Microfacet Models for Refraction through Rough Surfaces"
     Walter et al., EGSR 2007
 */
-class IsotropicTrowbridgeReitz : public Microfacet {
+class IsotropicGgx : public Microfacet {
 public:
     using Microfacet::Microfacet;
 
