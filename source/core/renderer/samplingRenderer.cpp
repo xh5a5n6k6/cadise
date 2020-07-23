@@ -9,12 +9,16 @@
 #include "core/sampler/sampleRecord2D.h"
 #include "core/scene.h"
 #include "fundamental/assertion.h"
+#include "fundamental/logger/logger.h"
+#include "fundamental/time/stopwatch.h"
 #include "utility/parallel.h"
 
-#include <chrono>
-#include <iostream>
-
 namespace cadise {
+
+// local logger declaration
+namespace {
+    const Logger logger("Sampling Renderer");
+} // anonymous namespace
 
 SamplingRenderer::SamplingRenderer(
     const std::shared_ptr<Integrator>& integrator, 
@@ -31,9 +35,10 @@ SamplingRenderer::SamplingRenderer(
 void SamplingRenderer::render() const {
     CADISE_ASSERT(_scene);
 
-    const Scene* scene = _scene;
+    Stopwatch stopwatch;
+    stopwatch.start();
 
-    const std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+    const Scene* scene = _scene;
     
     const int32 filmtileSize = CADISE_FILMTILE_SIZE;
     const Vector2R realResolution(_film->resolution());
@@ -92,10 +97,9 @@ void SamplingRenderer::render() const {
 
     _film->save(_sampler->sampleNumber());
 
-    const std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-    std::cout << "Rendering time : "
-              << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() / 1000.0_r
-              << " s" << std::endl;
+    stopwatch.stop();
+
+    logger.log("Render time: " + stopwatch.elapsedTime().format());
 }
 
 } // namespace cadise

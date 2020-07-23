@@ -13,6 +13,7 @@
 #include "file-io/scene-description/sdData.h"
 #include "fundamental/assertion.h"
 #include "fundamental/logger/logger.h"
+#include "fundamental/time/stopwatch.h"
 #include "math/aabb.h"
 
 #include <iostream>
@@ -81,11 +82,21 @@ void RenderDatabase::prepareRender() {
     _realTextures.clear();
     _spectrumTextures.clear();
 
-    logger.log("Finished loading scene objects: " + std::to_string(_intersectors.size()) + " primitives");
+    logger.log("Finished loading scene objects (" + std::to_string(_intersectors.size()) + " primitives)");
 
     const std::shared_ptr<Film> film = instantiator::makeFilm(_filmData);
     const std::shared_ptr<Camera> camera = instantiator::makeCamera(_cameraData);
+
+    logger.log("Building primitive accelerator");
+
+    Stopwatch stopwatch;
+    stopwatch.start();
+
     const std::shared_ptr<Accelerator> accelerator = instantiator::makeAccelerator(_acceleratorData, _intersectors);
+
+    stopwatch.stop();
+
+    logger.log("Finished building accelerator (" + stopwatch.elapsedTime().format() + ")");
 
     // HACK
     // it means there is an environment light

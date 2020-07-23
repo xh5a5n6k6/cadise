@@ -11,14 +11,19 @@
 #include "core/sampler/sampler.h"
 #include "core/sampler/sampleRecord2D.h"
 #include "fundamental/assertion.h"
+#include "fundamental/logger/logger.h"
+#include "fundamental/time/stopwatch.h"
 #include "utility/parallel.h"
 
-#include <chrono>
-#include <iostream>
 #include <mutex>
 #include <numeric>
 
 namespace cadise {
+
+// local logger declaration
+namespace {
+    const Logger logger("PM Renderer");
+} // anonymous namespace
 
 PmRenderer::PmRenderer(
     const std::shared_ptr<Sampler>&   sampler,
@@ -35,9 +40,10 @@ PmRenderer::PmRenderer(
 void PmRenderer::render() const {
     CADISE_ASSERT(_scene);
 
-    const Scene* scene = _scene;
+    Stopwatch stopwatch;
+    stopwatch.start();
 
-    const std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+    const Scene* scene = _scene;
 
     const std::size_t totalThreads = _numWorkers;
     const std::size_t totalWorks   = _setting->numPhotons();
@@ -141,13 +147,11 @@ void PmRenderer::render() const {
         }
     });
 
-
     _film->save(_sampler->sampleNumber());
 
-    const std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-    std::cout << "Rendering time : "
-              << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() / 1000.0_r
-              << " s" << std::endl;
+    stopwatch.stop();
+
+    logger.log("Render time: " + stopwatch.elapsedTime().format());
 }
 
 } // namespace cadise
