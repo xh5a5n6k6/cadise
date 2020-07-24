@@ -3,11 +3,11 @@
 // renderer type
 //#include "core/renderer/bdpg-renderer/bdpgRenderer.h"
 //#include "core/renderer/bdpg-renderer/ppgRenderer.h"
-#include "core/renderer/bdpt-renderer/bdptRenderer.h"
-#include "core/renderer/pm-renderer/pmRenderer.h"
-#include "core/renderer/samplingRenderer.h"
+#include "core/renderer/bidirectional-path-tracing/bdptRenderer.h"
+#include "core/renderer/vanilla-pm/pmRenderer.h"
+#include "core/renderer/sampling/samplingRenderer.h"
 
-#include "core/renderer/pm-renderer/pmSetting.h"
+#include "core/renderer/vanilla-pm/pmSetting.h"
 #include "file-io/scene-description/sdData.h"
 #include "fundamental/assertion.h"
 

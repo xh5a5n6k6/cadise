@@ -1,7 +1,7 @@
 #pragma once
 
 #include "core/integral-tool/pointKdTree.h"
-#include "core/renderer/pm-renderer/photonCenterCalculator.h"
+#include "core/renderer/vanilla-pm/photonCenterCalculator.h"
 
 namespace cadise {
 

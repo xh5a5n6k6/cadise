@@ -1,4 +1,4 @@
-#include "core/renderer/pm-renderer/pmProcess.h"
+#include "core/renderer/vanilla-pm/pmProcess.h"
 
 #include "core/integral-tool/russianRoulette.h"
 #include "core/integral-tool/sample/bsdfSample.h"
@@ -6,7 +6,7 @@
 #include "core/intersector/primitive/primitive.h"
 #include "core/light/light.h"
 #include "core/ray.h"
-#include "core/renderer/pm-renderer/photon.h"
+#include "core/renderer/vanilla-pm/photon.h"
 #include "core/scene.h"
 #include "core/surface/bsdf/bsdf.h"
 #include "core/surface/transportInfo.h"

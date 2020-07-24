@@ -16,7 +16,6 @@
 #include "fundamental/time/stopwatch.h"
 #include "math/aabb.h"
 
-#include <iostream>
 #include <limits>
 
 namespace cadise {

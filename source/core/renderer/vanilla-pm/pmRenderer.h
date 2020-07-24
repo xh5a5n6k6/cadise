@@ -18,12 +18,6 @@ public:
 private:
     std::shared_ptr<Sampler>   _sampler;
     std::shared_ptr<PmSetting> _setting;
-
-    //// number of photons stored in photon map per iteration
-    //std::size_t _numPhotons;
-
-    //std::size_t _numIterations;
-    //std::size_t _numSpp;
 };
 
 } // namespace cadise

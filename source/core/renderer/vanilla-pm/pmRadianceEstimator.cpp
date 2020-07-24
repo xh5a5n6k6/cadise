@@ -1,4 +1,4 @@
-#include "core/renderer/pm-renderer/pmRadianceEstimator.h"
+#include "core/renderer/vanilla-pm/pmRadianceEstimator.h"
 
 #include "core/integral-tool/russianRoulette.h"
 #include "core/integral-tool/sample/bsdfSample.h"

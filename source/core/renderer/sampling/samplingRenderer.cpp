@@ -1,111 +1,59 @@
-#include "core/renderer/pm-renderer/pmRenderer.h"
+#include "core/renderer/sampling/samplingRenderer.h"
 
 #include "core/camera/camera.h"
 #include "core/film/film.h"
 #include "core/film/filmTile.h"
+#include "core/integrator/integrator.h"
 #include "core/ray.h"
-#include "core/renderer/pm-renderer/photonMap.h"
-#include "core/renderer/pm-renderer/pmProcess.h"
-#include "core/renderer/pm-renderer/pmRadianceEstimator.h"
-#include "core/renderer/pm-renderer/pmSetting.h"
 #include "core/sampler/sampler.h"
 #include "core/sampler/sampleRecord2D.h"
+#include "core/scene.h"
 #include "fundamental/assertion.h"
 #include "fundamental/logger/logger.h"
 #include "fundamental/time/stopwatch.h"
 #include "utility/parallel.h"
 
-#include <mutex>
-#include <numeric>
-
 namespace cadise {
 
 // local logger declaration
 namespace {
-    const Logger logger("PM Renderer");
+    const Logger logger("Sampling Renderer");
 } // anonymous namespace
 
-PmRenderer::PmRenderer(
-    const std::shared_ptr<Sampler>&   sampler,
-    const std::shared_ptr<PmSetting>& setting) :
-
+SamplingRenderer::SamplingRenderer(
+    const std::shared_ptr<Integrator>& integrator, 
+    const std::shared_ptr<Sampler>&    sampler) :
+    
     Renderer(),
-    _sampler(sampler),
-    _setting(setting) {
+    _integrator(integrator),
+    _sampler(sampler) {
 
+    CADISE_ASSERT(integrator);
     CADISE_ASSERT(sampler);
-    CADISE_ASSERT(setting);
 }
 
-void PmRenderer::render() const {
+void SamplingRenderer::render() const {
     CADISE_ASSERT(_scene);
 
     Stopwatch stopwatch;
     stopwatch.start();
 
     const Scene* scene = _scene;
-
-    const std::size_t totalThreads = _numWorkers;
-    const std::size_t totalWorks   = _setting->numPhotons();
-    std::mutex pmMutex;
-
-    // step1: photon map construction
-    std::vector<std::size_t> photonPaths(totalThreads);
-    std::vector<Photon> photons;
-    photons.reserve(totalWorks);
-
-    Parallel::parallelWork(
-        totalWorks,
-        totalThreads,
-        [this, scene, &photons, &photonPaths, &pmMutex](
-            const std::size_t workerId,
-            const std::size_t workBeginIndex,
-            const std::size_t workEndIndex) {
-
-        const std::size_t workload = workEndIndex - workBeginIndex;
-        
-        std::vector<Photon> localPhotons;
-        localPhotons.reserve(workload);
-
-        PmProcess pmProcess(scene);
-        pmProcess.setMaxNumPhotons(workload);
-
-        pmProcess.process(&localPhotons, &(photonPaths[workerId]));
-
-        {
-            std::lock_guard<std::mutex> lock(pmMutex);
-
-            photons.insert(photons.end(), localPhotons.begin(), localPhotons.end());
-        }
-    });
-
-    const std::size_t numPhotonPaths 
-        = std::accumulate(photonPaths.begin(), photonPaths.end(), static_cast<std::size_t>(0));
-
-    PhotonMap photonMap = PhotonMap(PhotonCenterCalculator());
-    photonMap.buildNodes(std::move(photons));
-
-    std::cout << "Finish building photon map, total photons use " 
-              << (sizeof(Photon) * totalWorks) / 1024.0_r / 1024.0_r << " MB"
-              << std::endl;
-
-    // TODO: refactor here, use renderWork instead ?
-    // step2: radiance estimation
-    const int32    filmtileSize = CADISE_FILMTILE_SIZE;
+    
+    const int32 filmtileSize = CADISE_FILMTILE_SIZE;
     const Vector2R realResolution(_film->resolution());
     const Vector2I tileNumber((_film->resolution().x() + filmtileSize - 1) / filmtileSize,
                               (_film->resolution().y() + filmtileSize - 1) / filmtileSize);
 
-    const std::size_t totalTiles = static_cast<std::size_t>(tileNumber.x() * tileNumber.y());
+    const std::size_t totalTiles   = static_cast<std::size_t>(tileNumber.x() * tileNumber.y());
+    const std::size_t totalThreads = _numWorkers;
 
     Parallel::parallelWork(
-        totalTiles,
-        totalThreads,
+        totalTiles, 
+        totalThreads, 
         [&](const std::size_t workerId,
-            const std::size_t tileBeginIndex,
+            const std::size_t tileBeginIndex, 
             const std::size_t tileEndIndex) {
-
-        const PmRadianceEstimator pmRadianceEstimator(&photonMap, numPhotonPaths);
 
         for (std::size_t tile = tileBeginIndex; tile < tileEndIndex; ++tile) {
             const int32 tileX = static_cast<int32>(tile) % tileNumber.x();
@@ -130,9 +78,9 @@ void PmRenderer::render() const {
 
                         Ray primaryRay;
                         _camera->spawnPrimaryRay(filmNdcPosition, &primaryRay);
-
+                        
                         Spectrum sampleRadiance;
-                        pmRadianceEstimator.estimate(*scene, primaryRay, _setting->searchRadius(), &sampleRadiance);
+                        _integrator->traceRadiance(*scene, primaryRay, &sampleRadiance);
 
                         filmTile->addSample(filmJitterPosition, sampleRadiance);
                     }

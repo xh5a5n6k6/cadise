@@ -1,4 +1,4 @@
-#include "core/renderer/bdpt-renderer/subPathBuilder.h"
+#include "core/renderer/bidirectional-path-tracing/subPathBuilder.h"
 
 #include "core/camera/camera.h"
 #include "core/integral-tool/russianRoulette.h"
@@ -8,8 +8,8 @@
 #include "core/intersector/primitive/primitive.h"
 #include "core/light/category/areaLight.h"
 #include "core/ray.h"
-#include "core/renderer/bdpt-renderer/bdptMis.h"
-#include "core/renderer/bdpt-renderer/subPath.h"
+#include "core/renderer/bidirectional-path-tracing/bdptMis.h"
+#include "core/renderer/bidirectional-path-tracing/subPath.h"
 #include "core/scene.h"
 #include "core/surface/bsdf/bsdf.h"
 #include "core/surface/transportInfo.h"

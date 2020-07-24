@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/renderer/bdpt-renderer/pathVertex.h"
+#include "core/renderer/bidirectional-path-tracing/pathVertex.h"
 
 #include <vector>
 

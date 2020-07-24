@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/renderer/bdpt-renderer/vertexType.h"
+#include "core/renderer/bidirectional-path-tracing/vertexType.h"
 #include "core/spectrum/spectrum.h"
 #include "core/surfaceDetail.h"
 

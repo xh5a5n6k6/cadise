@@ -1,6 +1,6 @@
-#include "core/renderer/bdpt-renderer/bdptMis.h"
+#include "core/renderer/bidirectional-path-tracing/bdptMis.h"
 
-#include "core/renderer/bdpt-renderer/subPath.h"
+#include "core/renderer/bidirectional-path-tracing/subPath.h"
 #include "core/scene.h"
 #include "core/surface/transportMode.h"
 #include "fundamental/assertion.h"

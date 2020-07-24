@@ -1,4 +1,4 @@
-#include "core/renderer/bdpt-renderer/pathVertex.h"
+#include "core/renderer/bidirectional-path-tracing/pathVertex.h"
 
 #include "core/camera/camera.h"
 #include "core/light/light.h"

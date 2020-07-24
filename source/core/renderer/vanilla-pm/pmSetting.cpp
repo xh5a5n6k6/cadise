@@ -1,4 +1,4 @@
-#include "core/renderer/pm-renderer/pmSetting.h"
+#include "core/renderer/vanilla-pm/pmSetting.h"
 
 #include "fundamental/assertion.h"
 
