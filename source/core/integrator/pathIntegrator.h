@@ -21,8 +21,16 @@ public:
         const Ray&      ray,
         Spectrum* const out_radiance) const override;
 
+    std::string toString() const override;
+
 private:
     int32 _maxDepth;
 };
+
+// header implementation
+
+inline std::string PathIntegrator::toString() const {
+    return "Path Integrator";
+}
 
 } // namespace cadise

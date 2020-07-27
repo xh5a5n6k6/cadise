@@ -5,10 +5,11 @@
 namespace cadise {
 
 /*
-     NaivePathIntegrator means original path integrator, it means a path 
-     has contribution only when it hits an emitter. It may be the most
-     fundamental global illumination technique but still unbiased, so it 
-     is a good reference for ground truth rendering.
+     NaivePathIntegrator means original path integrator.
+     
+     It means a path has contribution only when it hits an emitter. 
+     It may be the most fundamental global illumination technique yet 
+     still unbiased, so it is a good reference for ground truth rendering.
 */
 class NaivePathIntegrator : public Integrator {
 public:
@@ -19,8 +20,16 @@ public:
         const Ray&      ray,
         Spectrum* const out_radiance) const override;
 
+    std::string toString() const override;
+
 private:
     int32 _maxDepth;
 };
+
+// header implementation
+
+inline std::string NaivePathIntegrator::toString() const {
+    return "Naive Path Integrator";
+}
 
 } // namespace cadise

@@ -35,6 +35,8 @@ SamplingRenderer::SamplingRenderer(
 void SamplingRenderer::render() const {
     CADISE_ASSERT(_scene);
 
+    logger.log("Integrator type: " + _integrator->toString());
+
     Stopwatch stopwatch;
     stopwatch.start();
 

@@ -5,8 +5,9 @@
 namespace cadise {
 
 /*
-    WhittedIntegrator is Whitted-style ray tracing integrator, 
-    it considers direct lighting and reflection/refraction effects.
+    WhittedIntegrator is Whitted-style ray tracing integrator.
+
+    It considers direct lighting and reflection/refraction effects.
     (reflection/refraction effects are calculated only at specular surface)
 */
 class WhittedIntegrator : public Integrator {
@@ -18,8 +19,16 @@ public:
         const Ray&      ray,
         Spectrum* const out_radiance) const override;
 
+    std::string toString() const override;
+
 private:
     int32 _maxDepth;
 };
+
+// header implementation
+
+inline std::string WhittedIntegrator::toString() const {
+    return "Whitted Integrator";
+}
 
 } // namespace cadise

@@ -2,6 +2,8 @@
 
 #include "core/spectrum/spectrum.h"
 
+#include <string>
+
 namespace cadise {
 
 class Ray;
@@ -15,6 +17,14 @@ public:
         const Scene&    scene, 
         const Ray&      ray, 
         Spectrum* const out_radiance) const = 0;
+
+    virtual std::string toString() const;
 };
+
+// header implementation
+
+inline std::string Integrator::toString() const {
+    return "Integrator";
+}
 
 } // namespace cadise
