@@ -322,6 +322,16 @@ inline T Vector<T, N>::lengthSquared() const {
 }
 
 template<typename T, std::size_t N>
+inline T Vector<T, N>::product() const {
+    T result = static_cast<T>(1);
+    for (std::size_t i = 0; i < N; ++i) {
+        result *= _v[i];
+    }
+
+    return result;
+}
+
+template<typename T, std::size_t N>
 inline T Vector<T, N>::maxComponent() const {
     return _v[this->maxDimension()];
 }

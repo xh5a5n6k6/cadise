@@ -52,6 +52,7 @@ public:
     T average() const;
     T length() const;
     T lengthSquared() const;
+    T product() const;
     T maxComponent() const;
     Vector normalize() const;
     Vector reverse() const;
