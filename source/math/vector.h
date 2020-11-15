@@ -19,7 +19,6 @@ public:
     Vector(const T v1, const T v2, const Ts... ts);
 
     Vector(const Vector& other);
-
     template<typename U>
     explicit Vector(const Vector<U, N>& other);
 
@@ -43,6 +42,9 @@ public:
     Vector& operator  = (const Vector& v);
     T& operator [] (const std::size_t index);
     const T& operator [] (const std::size_t index) const;
+    
+    template<typename U>
+    Vector<U, N> asType() const;
 
     bool isZero() const;
     bool hasNaN() const;

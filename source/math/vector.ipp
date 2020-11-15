@@ -247,6 +247,12 @@ inline const T& Vector<T, N>::operator [] (const std::size_t i) const {
 }
 
 template<typename T, std::size_t N>
+template<typename U>
+inline Vector<U, N> Vector<T, N>::asType() const {
+    return Vector<U, N>(*this);
+}
+
+template<typename T, std::size_t N>
 inline bool Vector<T, N>::isZero() const {
     bool result = true;
     for (std::size_t i = 0; i < N; ++i) {
