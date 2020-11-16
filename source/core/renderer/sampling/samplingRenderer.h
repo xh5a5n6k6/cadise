@@ -2,8 +2,6 @@
 
 #include "core/renderer/renderer.h"
 
-#include "math/type/fundamentalType.h"
-
 namespace cadise {
 
 class Integrator;

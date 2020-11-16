@@ -33,18 +33,19 @@ Film::Film(
     _splatPixels.resize(numPixels);
 }
 
-
+std::unique_ptr<FilmTile> Film::generateFilmTile(const Vector2I& tileXy) const {
+    return this->generateFilmTile(tileXy.x(), tileXy.y());
+}
 
 std::unique_ptr<FilmTile> Film::generateFilmTile(const int32 tileX, const int32 tileY) const {
     const int32 minIndexX = tileX * CADISE_FILMTILE_SIZE;
     const int32 minIndexY = tileY * CADISE_FILMTILE_SIZE;
-
     const int32 maxIndexX = math::min(minIndexX + CADISE_FILMTILE_SIZE, _resolution.x());
     const int32 maxIndexY = math::min(minIndexY + CADISE_FILMTILE_SIZE, _resolution.y());
 
-    return std::make_unique<FilmTile>(AABB2I({minIndexX, minIndexY},
-                                             {maxIndexX, maxIndexY}),
-                                      _filter.get());
+    return std::make_unique<FilmTile>(
+        AABB2I({minIndexX, minIndexY}, {maxIndexX, maxIndexY}),
+        _filter.get());
 }
 
 void Film::mergeWithFilmTile(std::unique_ptr<FilmTile> filmTile) {
@@ -68,6 +69,22 @@ void Film::mergeWithFilmTile(std::unique_ptr<FilmTile> filmTile) {
             _pixels[pixelIndexOffset] = totalRadiance * inverseWeight;
         }
     }
+}
+
+Vector2I Film::getTileXyIndices(const std::size_t tileIndex) const {
+    const std::size_t numTilesX = this->numTiles().x();
+
+    return {
+        static_cast<int32>(tileIndex % numTilesX), // tile x index
+        static_cast<int32>(tileIndex / numTilesX)  // tile y index
+    };
+}
+
+Vector2S Film::numTiles() const {
+    return {
+        static_cast<std::size_t>((_resolution.x() + CADISE_FILMTILE_SIZE - 1) / CADISE_FILMTILE_SIZE), // number of width tiles
+        static_cast<std::size_t>((_resolution.y() + CADISE_FILMTILE_SIZE - 1) / CADISE_FILMTILE_SIZE)  // number of height tiles
+    };
 }
 
 void Film::addSplatRadiance(const ConnectEvent& connectEvent) {

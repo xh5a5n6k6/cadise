@@ -30,8 +30,12 @@ public:
 
     void addSplatRadiance(const ConnectEvent& connectEvent);
 
+    std::unique_ptr<FilmTile> generateFilmTile(const Vector2I& tileXy) const;
     std::unique_ptr<FilmTile> generateFilmTile(const int32 tileX, const int32 tileY) const;
     void mergeWithFilmTile(std::unique_ptr<FilmTile> filmTile);
+
+    Vector2I getTileXyIndices(const std::size_t tileIndex) const;
+    Vector2S numTiles() const;
 
     void save(const std::size_t samplesPerPixel);
 
