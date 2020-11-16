@@ -13,7 +13,7 @@ public:
     void addMilliseconds(const uint64 milliseconds);
     void reset();
 
-    std::string format() const;
+    std::string toString() const;
 
 private:
     uint64 _sumMilliseconds;

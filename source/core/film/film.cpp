@@ -27,7 +27,7 @@ Film::Film(
 
     CADISE_ASSERT(filter);
 
-    const std::size_t numPixels = static_cast<std::size_t>(_resolution.x() * _resolution.y());
+    const std::size_t numPixels = _resolution.asType<std::size_t>().product();
 
     _pixels.resize(numPixels);
     _splatPixels.resize(numPixels);

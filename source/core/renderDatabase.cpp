@@ -95,7 +95,7 @@ void RenderDatabase::prepareRender() {
 
     stopwatch.stop();
 
-    logger.log("Finished building accelerator (" + stopwatch.elapsedTime().format() + ")");
+    logger.log("Finished building accelerator (" + stopwatch.elapsedTime().toString() + ")");
 
     // HACK
     // it means there is an environment light

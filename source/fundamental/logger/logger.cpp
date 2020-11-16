@@ -19,7 +19,7 @@ void Logger::log(const ELogLevel& logLevel, const std::string& message) const {
     const Timestamp timestamp;
 
     std::stringstream stringStream;
-    stringStream << "[" << timestamp.format() << "] ";
+    stringStream << "[" << timestamp.toString() << "] ";
 
     switch (logLevel) {
         case ELogLevel::INFO:

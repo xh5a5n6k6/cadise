@@ -151,7 +151,7 @@ void PmRenderer::render() const {
 
     stopwatch.stop();
 
-    logger.log("Render time: " + stopwatch.elapsedTime().format());
+    logger.log("Render time: " + stopwatch.elapsedTime().toString());
 }
 
 } // namespace cadise

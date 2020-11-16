@@ -65,7 +65,7 @@ void SamplingRenderer::render() const {
     _film->save(_sampler->sampleNumber());
 
     stopwatch.stop();
-    logger.log("Render time: " + stopwatch.elapsedTime().format());
+    logger.log("Render time: " + stopwatch.elapsedTime().toString());
 }
 
 } // namespace cadise

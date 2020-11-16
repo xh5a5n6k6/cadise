@@ -10,7 +10,7 @@ class Timestamp {
 public:
     Timestamp();
 
-    std::string format() const;
+    std::string toString() const;
 
 private:
     std::time_t _currentTime;

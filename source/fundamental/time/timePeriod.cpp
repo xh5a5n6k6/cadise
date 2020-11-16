@@ -16,7 +16,7 @@ void TimePeriod::reset() {
     _sumMilliseconds = 0;
 }
 
-std::string TimePeriod::format() const {
+std::string TimePeriod::toString() const {
     std::stringstream stringStream;
 
     if (_sumMilliseconds < 1000) {
