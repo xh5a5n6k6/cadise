@@ -41,9 +41,9 @@ void EstimatorTileWork::work() const {
         for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix) {
             const Vector2R filmPosition(static_cast<real>(ix), static_cast<real>(iy));
 
-            const auto sampleSampler = _sampler->clone(_sampler->sampleNumber());
-            const auto sample2D      = sampleSampler->requestSample2D();
-            for (std::size_t in = 0; in < _sampler->sampleNumber(); ++in) {
+            auto sampleSampler = _sampler->clone(_sampler->sampleNumber());
+            auto sample2D      = sampleSampler->requestSample2D();
+            for (std::size_t in = 0; in < sampleSampler->sampleNumber(); ++in) {
                 const Vector2R filmJitterPosition = filmPosition + sample2D->nextSample();
                 const Vector2R filmNdcPosition    = filmJitterPosition / realFilmResolution;
 
@@ -55,6 +55,10 @@ void EstimatorTileWork::work() const {
 
                 _filmTile->addSample(filmJitterPosition, sampleRadiance);
             }
+
+            sampleSampler.reset();
+            sample2D->clear();
+            sample2D.reset();
         }
     }
 }

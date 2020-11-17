@@ -8,6 +8,8 @@ class SampleRecord {
 public:
     explicit SampleRecord(const std::size_t sampleNumber);
 
+    virtual ~SampleRecord();
+
     virtual void shuffle() = 0;
 
     void setData(const std::size_t offset, const real value);
