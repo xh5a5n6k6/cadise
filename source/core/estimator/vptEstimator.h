@@ -1,21 +1,22 @@
 #pragma once
 
-#include "core/integrator/integrator.h"
+#include "core/estimator/radianceEstimator.h"
 
 namespace cadise {
 
 /*
-     NaivePathIntegrator means original path integrator.
+     VptEstimator: Vanilla Path Tracing Estimator
      
+     This estimator implements vanilla path tracing.
      It means a path has contribution only when it hits an emitter. 
      It may be the most fundamental global illumination technique yet 
      still unbiased, so it is a good reference for ground truth rendering.
 */
-class NaivePathIntegrator : public Integrator {
+class VptEstimator : public RadianceEstimator {
 public:
-    explicit NaivePathIntegrator(const int32 maxDepth);
+    explicit VptEstimator(const int32 maxDepth);
 
-    void traceRadiance(
+    void estimate(
         const Scene&    scene, 
         const Ray&      ray,
         Spectrum* const out_radiance) const override;
@@ -28,8 +29,8 @@ private:
 
 // header implementation
 
-inline std::string NaivePathIntegrator::toString() const {
-    return "Naive Path Integrator";
+inline std::string VptEstimator::toString() const {
+    return "VPT Estimator";
 }
 
 } // namespace cadise

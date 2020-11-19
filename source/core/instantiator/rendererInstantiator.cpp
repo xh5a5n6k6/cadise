@@ -18,16 +18,16 @@ namespace instantiator {
 static std::shared_ptr<Renderer> createSampling(
     const std::shared_ptr<SdData>& data) {
 
-    const std::shared_ptr<Integrator> integrator = makeIntegrator(data);
-    const std::shared_ptr<Sampler>    sampler    = makeSampler(data);
+    const auto estimator = makeEstimator(data);
+    const auto sampler   = makeSampler(data);
 
-    return std::make_shared<SamplingRenderer>(std::move(integrator), std::move(sampler));
+    return std::make_shared<SamplingRenderer>(std::move(estimator), std::move(sampler));
 }
 
 static std::shared_ptr<Renderer> createBdpt(
     const std::shared_ptr<SdData>& data) {
 
-    const std::shared_ptr<Sampler> sampler = makeSampler(data);
+    const auto sampler = makeSampler(data);
 
     return std::make_shared<BdptRenderer>(std::move(sampler));
 }
@@ -39,8 +39,8 @@ static std::shared_ptr<Renderer> createPm(
     const std::size_t numIterations = static_cast<std::size_t>(data->findInt32("num-iterations", 1));
     const real        searchRadius  = data->findReal("search-radius", 0.15_r);
 
-    const std::shared_ptr<Sampler>   sampler = makeSampler(data);
-    const std::shared_ptr<PmSetting> setting = std::make_shared<PmSetting>(numPhotons, numIterations, searchRadius);
+    const auto sampler = makeSampler(data);
+    const auto setting = std::make_shared<PmSetting>(numPhotons, numIterations, searchRadius);
 
 
     return std::make_shared<PmRenderer>(std::move(sampler), std::move(setting));
@@ -97,6 +97,7 @@ std::shared_ptr<Renderer> makeRenderer(
     //}
     else {
         // unsupported renderer type
+        std::cerr << "Unsupported renderer type: <" << type << ">" << std::endl;
     }
 
     return renderer;

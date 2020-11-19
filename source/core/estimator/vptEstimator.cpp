@@ -1,4 +1,4 @@
-#include "core/integrator/naivePathIntegrator.h"
+#include "core/estimator/vptEstimator.h"
 
 #include "core/integral-tool/russianRoulette.h"
 #include "core/integral-tool/sample/bsdfSample.h"
@@ -14,11 +14,11 @@
 
 namespace cadise {
 
-NaivePathIntegrator::NaivePathIntegrator(const int32 maxDepth) :
+VptEstimator::VptEstimator(const int32 maxDepth) :
     _maxDepth(maxDepth) {
 }
 
-void NaivePathIntegrator::traceRadiance(
+void VptEstimator::estimate(
     const Scene&    scene, 
     const Ray&      ray,
     Spectrum* const out_radiance) const {

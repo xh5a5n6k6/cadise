@@ -10,11 +10,11 @@ class Bsdf;
 class Camera;
 class Film;
 class Filter;
-class Integrator;
 class Intersector;
 class Light;
 class LightCluster;
 class Primitive;
+class RadianceEstimator;
 class Renderer;
 class Sampler;
 class Scene;
@@ -30,8 +30,8 @@ std::shared_ptr<Camera> makeCamera(const std::shared_ptr<SdData>& data);
 // implement in core/instantiator/rendererInstantiator.cpp
 std::shared_ptr<Renderer> makeRenderer(const std::shared_ptr<SdData>& data);
 
-// implement in core/instantiator/integratorInstantiator.cpp
-std::shared_ptr<Integrator> makeIntegrator(const std::shared_ptr<SdData>& data);
+// implement in core/instantiator/estimatorInstantiator.cpp
+std::shared_ptr<RadianceEstimator> makeEstimator(const std::shared_ptr<SdData>& data);
 
 // implement in core/instantiator/filmInstantiator.cpp
 std::shared_ptr<Film> makeFilm(const std::shared_ptr<SdData>& data);

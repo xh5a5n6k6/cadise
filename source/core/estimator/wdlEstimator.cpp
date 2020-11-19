@@ -1,4 +1,4 @@
-#include "core/integrator/whittedIntegrator.h"
+#include "core/estimator/wdlEstimator.h"
 
 #include "core/integral-tool/sample/bsdfSample.h"
 #include "core/integral-tool/sample/directLightSample.h"
@@ -14,11 +14,11 @@
 
 namespace cadise {
 
-WhittedIntegrator::WhittedIntegrator(const int32 maxDepth) :
+WdlEstimator::WdlEstimator(const int32 maxDepth) :
     _maxDepth(maxDepth) {
 }
 
-void WhittedIntegrator::traceRadiance(
+void WdlEstimator::estimate(
     const Scene&    scene, 
     const Ray&      ray,
     Spectrum* const out_radiance) const {

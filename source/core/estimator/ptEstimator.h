@@ -1,22 +1,24 @@
 #pragma once
 
-#include "core/integrator/integrator.h"
+#include "core/estimator/radianceEstimator.h"
 
 namespace cadise {
 
 /*
-     PathIntegrator means original path integrator plus next event estimation.
+     PtEstimator: Path Tracing Estimator
+
+     This estimator implements vanilla path tracing plus next event estimation.
 
      Jacco Bikker has a great tutorial about variance reduction at his lecture 
-     such as NEE and MIS used in PathIntegrator.
+     such as NEE and MIS used here.
      Reference Note:
      http://www.cs.uu.nl/docs/vakken/magr/portfolio/INFOMAGR/lecture8.pdf
 */
-class PathIntegrator : public Integrator {
+class PtEstimator : public RadianceEstimator {
 public:
-    explicit PathIntegrator(const int32 maxDepth);
+    explicit PtEstimator(const int32 maxDepth);
 
-    void traceRadiance(
+    void estimate(
         const Scene&    scene, 
         const Ray&      ray,
         Spectrum* const out_radiance) const override;
@@ -29,8 +31,8 @@ private:
 
 // header implementation
 
-inline std::string PathIntegrator::toString() const {
-    return "Path Integrator";
+inline std::string PtEstimator::toString() const {
+    return "PT Estimator";
 }
 
 } // namespace cadise

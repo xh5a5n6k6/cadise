@@ -77,7 +77,7 @@ void BdptTileWork::work() const {
                 accumulatedRadiance += neeRadiance;
 
                 // it means number of vertices, rather than edges, of the subpath
-                const std::size_t lightPathLength = lightPath.length();
+                const std::size_t lightPathLength  = lightPath.length();
                 const std::size_t cameraPathLength = cameraPath.length();
 
                 // step5: connect all sub-paths (s>1 & t>1)

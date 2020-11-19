@@ -2,7 +2,7 @@
 
 #include "core/camera/camera.h"
 #include "core/film/filmTile.h"
-#include "core/integrator/integrator.h"
+#include "core/estimator/radianceEstimator.h"
 #include "core/ray.h"
 #include "core/sampler/sampler.h"
 #include "core/sampler/sampleRecord2D.h"
@@ -12,20 +12,20 @@
 namespace cadise {
 
 EstimatorTileWork::EstimatorTileWork(
-    const Scene* const      scene,
-    const Camera* const     camera,
-    const Integrator* const integrator,
-    const Sampler* const    sampler) :
+    const Scene* const     scene,
+    const Camera* const    camera,
+    const Estimator* const estimator,
+    const Sampler* const   sampler) :
 
     TileWork(),
     _scene(scene),
     _camera(camera),
-    _integrator(integrator),
+    _estimator(estimator),
     _sampler(sampler) {
 
     CADISE_ASSERT(scene);
     CADISE_ASSERT(camera);
-    CADISE_ASSERT(integrator);
+    CADISE_ASSERT(estimator);
     CADISE_ASSERT(sampler);
 }
 
@@ -51,7 +51,7 @@ void EstimatorTileWork::work() const {
                 _camera->spawnPrimaryRay(filmNdcPosition, &primaryRay);
 
                 Spectrum sampleRadiance;
-                _integrator->traceRadiance(*_scene, primaryRay, &sampleRadiance);
+                _estimator->estimate(*_scene, primaryRay, &sampleRadiance);
 
                 _filmTile->addSample(filmJitterPosition, sampleRadiance);
             }

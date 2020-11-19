@@ -2,7 +2,7 @@
 
 #include "core/film/film.h"
 #include "core/film/filmTile.h"
-#include "core/integrator/integrator.h"
+#include "core/estimator/radianceEstimator.h"
 #include "core/renderer/render-work/estimatorTileWork.h"
 #include "core/sampler/sampler.h"
 #include "core/scene.h"
@@ -19,21 +19,21 @@ namespace {
 } // anonymous namespace
 
 SamplingRenderer::SamplingRenderer(
-    const std::shared_ptr<Integrator>& integrator, 
-    const std::shared_ptr<Sampler>&    sampler) :
+    const std::shared_ptr<Estimator>& estimator, 
+    const std::shared_ptr<Sampler>&   sampler) :
     
     Renderer(),
-    _integrator(integrator),
+    _estimator(estimator),
     _sampler(sampler) {
 
-    CADISE_ASSERT(integrator);
+    CADISE_ASSERT(estimator);
     CADISE_ASSERT(sampler);
 }
 
 void SamplingRenderer::render() const {
     CADISE_ASSERT(_scene);
 
-    logger.log("Begin rendering, integrator type: " + _integrator->toString());
+    logger.log("Begin rendering, estimator type: " + _estimator->toString());
 
     Stopwatch stopwatch;
     stopwatch.start();
@@ -51,7 +51,7 @@ void SamplingRenderer::render() const {
             EstimatorTileWork tileWork(
                 _scene, 
                 _camera.get(), 
-                _integrator.get(), 
+                _estimator.get(), 
                 _sampler.get());
             tileWork.setFilmTile(filmTile.get());
             tileWork.setFilmResolution(_film->resolution());

@@ -9,22 +9,16 @@ namespace cadise {
 class Ray;
 class Scene;
 
-class Integrator {
+class RadianceEstimator {
 public:
-    virtual ~Integrator();
+    virtual ~RadianceEstimator();
 
-    virtual void traceRadiance(
+    virtual void estimate(
         const Scene&    scene, 
         const Ray&      ray, 
         Spectrum* const out_radiance) const = 0;
 
-    virtual std::string toString() const;
+    virtual std::string toString() const = 0;
 };
-
-// header implementation
-
-inline std::string Integrator::toString() const {
-    return "Integrator";
-}
 
 } // namespace cadise

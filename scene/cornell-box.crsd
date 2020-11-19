@@ -24,7 +24,7 @@ renderer {
     [type string "sampling"]
     [sample-number int32 "32"]
     [sampler string "stratified"]
-    [integrator string "path"]
+    [estimator string "pt"]
 }
 accelerator {
     [type string "bvh"]

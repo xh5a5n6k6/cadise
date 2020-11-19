@@ -59,12 +59,12 @@ void Film::mergeWithFilmTile(std::unique_ptr<FilmTile> filmTile) {
     // add each pixel value recording in filmTile
     for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy) {
         for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix) {
-            const FilmSensor& sensor = filmTile->getSensor(ix - x0y0.x(),
-                                                           iy - x0y0.y());
+            const FilmSensor& sensor 
+                = filmTile->getSensor(ix - x0y0.x(), iy - x0y0.y());
 
             const std::size_t pixelIndexOffset = _pixelIndexOffset(ix, iy);
             const Vector3R totalRadiance(sensor.r(), sensor.g(), sensor.b());
-            const real inverseWeight = 1.0_r / sensor.weight();
+            const real inverseWeight = (sensor.weight() > 0.0_r) ? 1.0_r / sensor.weight() : 1.0_r;
 
             _pixels[pixelIndexOffset] = totalRadiance * inverseWeight;
         }
@@ -95,7 +95,7 @@ void Film::addSplatRadiance(const ConnectEvent& connectEvent) {
     splatRadiance.transformToRgb(&splatRgb);
 
     const Vector2R& filmNdcPosition = connectEvent.filmNdcPosition();
-    const Vector2R  filmPosition    = filmNdcPosition * Vector2R(_resolution);
+    const Vector2R  filmPosition    = filmNdcPosition * _resolution.asType<real>();
 
     int32 ix = static_cast<int32>(std::floor(filmPosition.x()));
     int32 iy = static_cast<int32>(std::floor(filmPosition.y()));

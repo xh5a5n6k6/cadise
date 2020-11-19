@@ -1,4 +1,4 @@
-#include "core/integrator/pathIntegrator.h"
+#include "core/estimator/ptEstimator.h"
 
 #include "core/integral-tool/directLightEvaluator.h"
 #include "core/integral-tool/russianRoulette.h"
@@ -15,11 +15,11 @@
 
 namespace cadise {
 
-PathIntegrator::PathIntegrator(const int32 maxDepth) :
+PtEstimator::PtEstimator(const int32 maxDepth) :
     _maxDepth(maxDepth) {
 }
 
-void PathIntegrator::traceRadiance(
+void PtEstimator::estimate(
     const Scene&    scene, 
     const Ray&      ray,
     Spectrum* const out_radiance) const {
