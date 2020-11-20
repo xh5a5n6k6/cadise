@@ -5,14 +5,19 @@
 namespace cadise {
 
 class Parallel {
-public:
-    static void parallelWork(
-        const std::size_t numWorks,
-        const std::size_t numWorkers,
-        const std::function<void(
+private:
+    using Work = 
+        std::function<void(
             const std::size_t workerId,
             const std::size_t workBeginIndex,
-            const std::size_t workEndIndex)>& work);
+            const std::size_t workEndIndex)
+        >;
+
+public:
+    static void execute(
+        const std::size_t numWorks,
+        const std::size_t numWorkers,
+        const Work&       work);
 };
 
 } // namespace cadise

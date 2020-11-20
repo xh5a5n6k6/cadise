@@ -33,7 +33,7 @@ void BdptRenderer::render() const {
     Stopwatch stopwatch;
     stopwatch.start();
 
-    Parallel::parallelWork(
+    Parallel::execute(
         _film->numTiles().product(),
         _numWorkers,
         [this](const std::size_t workerId,

@@ -48,7 +48,7 @@ void VpmRenderer::render() const {
     std::vector<Photon> photons;
     photons.reserve(_setting->numPhotons());
 
-    Parallel::parallelWork(
+    Parallel::execute(
         _setting->numPhotons(),
         _numWorkers,
         [this, &photons, &photonPaths, &vpmMutex](
@@ -88,7 +88,7 @@ void VpmRenderer::render() const {
                " MB");
 
     // step2: radiance estimation
-    Parallel::parallelWork(
+    Parallel::execute(
         _film->numTiles().product(),
         _numWorkers,
         [this, &photonMap, numPhotonPaths](
