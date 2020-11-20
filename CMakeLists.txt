@@ -10,6 +10,9 @@ set(CMAKE_CONFIGURATION_TYPES "Release")
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
 
+    # set multi-thread compilation
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
+
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
