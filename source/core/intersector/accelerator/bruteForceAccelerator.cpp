@@ -6,6 +6,7 @@
 namespace cadise {
 
 BruteForceAccelerator::BruteForceAccelerator(const std::vector<std::shared_ptr<Intersector>>& intersectors) :
+    Accelerator(),
     _intersectors(std::move(intersectors)) {
 }
 

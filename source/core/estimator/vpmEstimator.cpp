@@ -1,4 +1,4 @@
-#include "core/renderer/vanilla-pm/pmRadianceEstimator.h"
+#include "core/estimator/vpmEstimator.h"
 
 #include "core/integral-tool/russianRoulette.h"
 #include "core/integral-tool/sample/bsdfSample.h"
@@ -16,20 +16,24 @@
 
 namespace cadise {
 
-PmRadianceEstimator::PmRadianceEstimator(
+VpmEstimator::VpmEstimator(
     const PhotonMap* const photonMap,
-    const std::size_t      numPhotonPaths) :
+    const std::size_t      numPhotonPaths,
+    const real             searchRadius) :
+
     _photonMap(photonMap),
-    _numPhotonPaths(numPhotonPaths) {
+    _searchRadius(searchRadius) {
 
     CADISE_ASSERT(photonMap);
     CADISE_ASSERT_GT(numPhotonPaths, 0);
+    CADISE_ASSERT_GT(searchRadius, 0.0_r);
+
+    _kernelFactor = 1.0_r / (constant::pi<real> * _searchRadius * _searchRadius * numPhotonPaths);
 }
 
-void PmRadianceEstimator::estimate(
+void VpmEstimator::estimate(
     const Scene&    scene,
     const Ray&      ray,
-    const real      searchRadius,
     Spectrum* const out_radiance) const {
 
     CADISE_ASSERT(out_radiance);
@@ -67,7 +71,7 @@ void PmRadianceEstimator::estimate(
             Spectrum radiance(0.0_r);
 
             std::vector<Photon> nearPhotons;
-            _photonMap->findWithRange(P, searchRadius, &nearPhotons);
+            _photonMap->findWithRange(P, _searchRadius, &nearPhotons);
 
             for (std::size_t i = 0; i < nearPhotons.size(); ++i) {
                 const Photon&   photon             = nearPhotons[i];
@@ -89,10 +93,7 @@ void PmRadianceEstimator::estimate(
                 radiance += pathThroughput * reflectance * throughputRadiance;
             }
 
-            const real normalizationTerm
-                = 1.0_r / (constant::pi<real> * searchRadius * searchRadius * _numPhotonPaths);
-
-            totalRadiance += radiance * normalizationTerm;
+            totalRadiance += radiance * _kernelFactor;
 
             // once hitting non-specular surface, we
             // use near photons to estimate radiance and then exit
@@ -102,6 +103,8 @@ void PmRadianceEstimator::estimate(
         // only trace next ray at specular surface
         // according to bsdf sampling
         else {
+            // TODO: sample two directions if encountering
+            //       dielectric bsdf
             BsdfSample bsdfSample;
             bsdf->evaluateSample(TransportInfo(), intersection, &bsdfSample);
             if (!bsdfSample.isValid()) {

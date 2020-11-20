@@ -4,10 +4,10 @@
 //#include "core/renderer/bdpg-renderer/bdpgRenderer.h"
 //#include "core/renderer/bdpg-renderer/ppgRenderer.h"
 #include "core/renderer/bidirectional-path-tracing/bdptRenderer.h"
-#include "core/renderer/vanilla-pm/pmRenderer.h"
+#include "core/renderer/vanilla-pm/vpmRenderer.h"
 #include "core/renderer/sampling/samplingRenderer.h"
 
-#include "core/renderer/vanilla-pm/pmSetting.h"
+#include "core/renderer/vanilla-pm/vpmSetting.h"
 #include "file-io/scene-description/sdData.h"
 #include "fundamental/assertion.h"
 
@@ -32,18 +32,17 @@ static std::shared_ptr<Renderer> createBdpt(
     return std::make_shared<BdptRenderer>(std::move(sampler));
 }
 
-static std::shared_ptr<Renderer> createPm(
+static std::shared_ptr<Renderer> createVpm(
     const std::shared_ptr<SdData>& data) {
 
     const std::size_t numPhotons    = static_cast<std::size_t>(data->findInt32("num-photons", 200000));
-    const std::size_t numIterations = static_cast<std::size_t>(data->findInt32("num-iterations", 1));
     const real        searchRadius  = data->findReal("search-radius", 0.15_r);
 
     const auto sampler = makeSampler(data);
-    const auto setting = std::make_shared<PmSetting>(numPhotons, numIterations, searchRadius);
+    const auto setting = std::make_shared<VpmSetting>(numPhotons, searchRadius);
 
 
-    return std::make_shared<PmRenderer>(std::move(sampler), std::move(setting));
+    return std::make_shared<VpmRenderer>(std::move(sampler), std::move(setting));
 }
 
 //static std::shared_ptr<Renderer> createPpg(
@@ -86,8 +85,8 @@ std::shared_ptr<Renderer> makeRenderer(
     else if (type == "bdpt") {
         renderer = createBdpt(data);
     }
-    else if (type == "pm") {
-        renderer = createPm(data);
+    else if (type == "vpm") {
+        renderer = createVpm(data);
     }
     //else if (type == "ppg") {
     //    renderer = createPpg(data);

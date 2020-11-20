@@ -13,6 +13,7 @@ KdTreeAccelerator::KdTreeAccelerator(
     const real                                       intersectionCost,
     const real                                       emptyBonus) :
 
+    Accelerator(),
     _intersectors(std::move(intersectors)),
     _nodes(),
     _intersectorIndices(),

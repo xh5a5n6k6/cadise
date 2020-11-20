@@ -11,6 +11,7 @@ BvhAccelerator::BvhAccelerator(
     const std::vector<std::shared_ptr<Intersector>>& intersectors,
     const EBvhSplitMode&                             splitMode) :
     
+    Accelerator(),
     _intersectors(),
     _nodes() {
 

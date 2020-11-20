@@ -1,4 +1,4 @@
-#include "core/renderer/vanilla-pm/pmProcess.h"
+#include "core/renderer/render-work/photonMapWork.h"
 
 #include "core/integral-tool/russianRoulette.h"
 #include "core/integral-tool/sample/bsdfSample.h"
@@ -17,20 +17,24 @@
 
 namespace cadise {
 
-PmProcess::PmProcess(const Scene* const scene) :
+PhotonMapWork::PhotonMapWork(
+    const Scene* const         scene,
+    std::vector<Photon>* const photons,
+    std::size_t* const         numPhotonPaths) :
+
+    RenderWork(),
     _scene(scene),
+    _photons(photons),
+    _numPhotonPaths(numPhotonPaths),
     _maxNumPhotons(std::numeric_limits<std::size_t>::max()),
     _maxNumPhotonPaths(std::numeric_limits<std::size_t>::max()) {
 
     CADISE_ASSERT(scene);
+    CADISE_ASSERT(photons);
+    CADISE_ASSERT(numPhotonPaths);
 }
 
-void PmProcess::process(
-    std::vector<Photon>* const out_photons,
-    std::size_t* const         out_numPhotonPaths) const {
-
-    CADISE_ASSERT(out_photons);
-    CADISE_ASSERT(out_numPhotonPaths);
+void PhotonMapWork::work() const {
     CADISE_ASSERT(
         !(_maxNumPhotons     == std::numeric_limits<std::size_t>::max() &&
           _maxNumPhotonPaths == std::numeric_limits<std::size_t>::max()));
@@ -90,7 +94,7 @@ void PmProcess::process(
                 photon.setInDirection(traceRay.direction().reverse());
                 photon.setThroughputRadiance(throughputRadiance);
 
-                out_photons->push_back(std::move(photon));
+                _photons->push_back(std::move(photon));
 
                 ++numPhotons;
                 if (numPhotons == _maxNumPhotons) {
@@ -134,14 +138,14 @@ void PmProcess::process(
         }
     } // end while loop
 
-    *out_numPhotonPaths = numPhotonPaths;
+    *_numPhotonPaths = numPhotonPaths;
 }
 
-void PmProcess::setMaxNumPhotons(const std::size_t maxNumPhotons) {
+void PhotonMapWork::setMaxNumPhotons(const std::size_t maxNumPhotons) {
     _maxNumPhotons = maxNumPhotons;
 }
 
-void PmProcess::setMaxNumPhotonPaths(const std::size_t maxNumPhotonPaths) {
+void PhotonMapWork::setMaxNumPhotonPaths(const std::size_t maxNumPhotonPaths) {
     _maxNumPhotonPaths = maxNumPhotonPaths;
 }
 

@@ -15,7 +15,10 @@
 namespace cadise {
 
 VptEstimator::VptEstimator(const int32 maxDepth) :
+    RadianceEstimator(),
     _maxDepth(maxDepth) {
+
+    CADISE_ASSERT_GE(maxDepth, 0);
 }
 
 void VptEstimator::estimate(

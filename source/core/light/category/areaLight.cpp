@@ -9,6 +9,7 @@ AreaLight::AreaLight() :
 }
 
 AreaLight::AreaLight(const bool isBackFaceEmit) :
+    Light(),
     _isBackFaceEmit(isBackFaceEmit) {
 }
 
