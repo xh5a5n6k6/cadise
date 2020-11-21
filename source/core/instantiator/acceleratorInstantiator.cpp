@@ -3,9 +3,9 @@
 // accelerator type
 #include "core/intersector/accelerator/bruteForceAccelerator.h"
 #include "core/intersector/accelerator/bvh/bvhAccelerator.h"
-#include "core/intersector/accelerator/bvh/bvhSplitMode.h"
 #include "core/intersector/accelerator/kd-tree/kdTreeAccelerator.h"
 
+#include "core/intersector/accelerator/bvh/eBvhSplitMode.h"
 #include "file-io/scene-description/sdData.h"
 #include "fundamental/assertion.h"
 

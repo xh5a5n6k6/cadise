@@ -1,7 +1,7 @@
 #pragma once
 
 #include "core/surface/bsdfComponents.h"
-#include "core/surface/transportMode.h"
+#include "core/surface/eTransportMode.h"
 
 namespace cadise {
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/intersector/accelerator/kd-tree/endpointType.h"
+#include "core/intersector/accelerator/kd-tree/eEndpointType.h"
 #include "math/type/fundamentalType.h"
 
 namespace cadise {

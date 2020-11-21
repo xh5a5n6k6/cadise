@@ -8,7 +8,7 @@
 #include "core/ray.h"
 #include "core/renderer/bidirectional-path-tracing/bdptMis.h"
 #include "core/scene.h"
-#include "core/surface/transportMode.h"
+#include "core/surface/eTransportMode.h"
 #include "fundamental/assertion.h"
 #include "math/constant.h"
 

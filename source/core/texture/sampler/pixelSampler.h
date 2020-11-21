@@ -1,6 +1,5 @@
 #pragma once
 
-#include "core/texture/textureWrapMode.h"
 #include "math/type/imageType.h"
 #include "math/type/mathType.h"
 
@@ -8,6 +7,7 @@
 
 namespace cadise {
 
+enum class ETextureWrapMode;
 class UvwWrapper;
 
 template<typename T, std::size_t N>

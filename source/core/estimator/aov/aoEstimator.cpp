@@ -28,23 +28,23 @@ void AoEstimator::estimate(
 
     Spectrum            totalValue(0.0_r);
     Scene               localScene(scene);
-    SurfaceIntersection intersection;
+    SurfaceIntersection si;
     Ray                 traceRay(ray);
 
     // HACK: manually unset environment light 
     localScene.unsetBackgroundSphere();
 
-    if (!localScene.isIntersecting(traceRay, intersection)) {
+    if (!localScene.isIntersecting(traceRay, si)) {
         *out_radiance = Spectrum(1.0_r);
 
         return;
     }
 
-    const Vector3R& V  = intersection.wi();
-    const Vector3R& P  = intersection.surfaceDetail().position();
-    const Vector3R& Ng = intersection.surfaceDetail().geometryNormal();
+    const Vector3R& V  = si.wi();
+    const Vector3R& P  = si.surfaceDetail().position();
+    const Vector3R& Ng = si.surfaceDetail().geometryNormal();
 
-    // build local coordinate system (shading normal as y-axis)
+    // build local coordinate system (geometry normal as y-axis)
     const Vector3R yAxis(Ng);
     Vector3R zAxis;
     Vector3R xAxis;

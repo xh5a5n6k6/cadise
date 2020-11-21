@@ -3,8 +3,8 @@
 #include "core/texture/texture.h"
 
 #include "core/imaging/image.h"
-#include "core/texture/textureSampleMode.h"
-#include "core/texture/textureWrapMode.h"
+#include "core/texture/eTextureSampleMode.h"
+#include "core/texture/eTextureWrapMode.h"
 
 #include <memory>
 

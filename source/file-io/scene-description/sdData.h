@@ -1,7 +1,7 @@
 #pragma once
 
 #include "core/spectrum/spectrum.h"
-#include "file-io/scene-description/sdClassType.h"
+#include "file-io/scene-description/eSdClassType.h"
 #include "file-io/scene-description/sdDataUnit.h"
 #include "math/type/mapType.h"
 

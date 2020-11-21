@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/integral-tool/misMode.h"
+#include "core/integral-tool/eMisMode.h"
 #include "fundamental/assertion.h"
 #include "math/type/fundamentalType.h"
 
