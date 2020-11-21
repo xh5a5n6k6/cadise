@@ -1,10 +1,12 @@
 ## Feature Lists
-- ### Light Transport Algorithm
+- ### Rendering
     - Whitted Ray Tracing
     - Unidirectional Path Tracing
     - Unidirectional Path Tracing with Next Event Estimation
     - Bidirectional Path Tracing
     - Photon Mapping
+    - AOV Rendering
+        - Ambient Occlusion
 - ### Accelerator
     - BVH (equal, SAH)
     - K-d Tree (SAH)
@@ -14,7 +16,7 @@
     - Specular Reflection
     - Specular Transmission
     - Specular Dielectric
-    - Phong (modified)
+    - Modified Phong
     - Mixed
     - Microfacet (conductor)
         - NDF: Beckmann, GGX, Blinn-Phong

@@ -29,6 +29,7 @@ public:
     real evaluatePickLightPdf(const Light* const light) const;
 
     void setBackgroundSphere(const Primitive* const backgroundSphere);
+    void unsetBackgroundSphere();
 
 private:
     std::shared_ptr<Accelerator>  _topAccelerator;

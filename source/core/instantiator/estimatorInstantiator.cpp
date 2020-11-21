@@ -1,6 +1,7 @@
 #include "core/instantiator/instantiator.h"
 
-// integrator type
+// estimator type
+#include "core/estimator/aov/aoEstimator.h"
 #include "core/estimator/ptEstimator.h"
 #include "core/estimator/wdlEstimator.h"
 #include "core/estimator/vptEstimator.h"
@@ -38,6 +39,14 @@ static std::shared_ptr<RadianceEstimator> createPt(
     return std::make_shared<PtEstimator>(maxDepth);
 }
 
+static std::shared_ptr<RadianceEstimator> createAo(
+    const std::shared_ptr<SdData>& data) {
+
+    const std::size_t numSampleRays = static_cast<std::size_t>(data->findInt32("num-sample-rays", 4));
+
+    return std::make_shared<AoEstimator>(numSampleRays);
+}
+
 std::shared_ptr<RadianceEstimator> makeEstimator(
     const std::shared_ptr<SdData>& data) {
 
@@ -54,6 +63,9 @@ std::shared_ptr<RadianceEstimator> makeEstimator(
     }
     else if (type == "pt") {
         estimator = createPt(data);
+    }
+    else if (type == "ao") {
+        estimator = createAo(data);
     }
     else {
         // unsupported estimator type

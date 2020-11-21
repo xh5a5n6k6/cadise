@@ -94,4 +94,8 @@ void Scene::setBackgroundSphere(const Primitive* const backgroundSphere) {
     _backgroundSphere = backgroundSphere;
 }
 
+void Scene::unsetBackgroundSphere() {
+    _backgroundSphere = nullptr;
+}
+
 } // namespace cadise
