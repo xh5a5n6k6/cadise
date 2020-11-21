@@ -44,8 +44,8 @@ public:
 private:
     std::size_t _pixelDataOffset(const int32 x, const int32 y) const;
 
-    int32 _width;
-    int32 _height;
+    int32          _width;
+    int32          _height;
     std::vector<T> _data;
 };
 

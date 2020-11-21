@@ -49,7 +49,7 @@ inline void TImage<T, N>::flipHorizontal() {
 
 template<typename T, std::size_t N>
 inline void TImage<T, N>::setImageSize(const Vector2I& resolution) {
-    setTImageSize(resolution.x(), resolution.y());
+    this->setImageSize(resolution.x(), resolution.y());
 }
 
 template<typename T, std::size_t N>
