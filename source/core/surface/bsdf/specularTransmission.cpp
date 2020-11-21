@@ -4,7 +4,7 @@
 #include "core/surface/fresnel/dielectricFresnel.h"
 #include "core/surface/transportInfo.h"
 #include "core/surfaceIntersection.h"
-#include "core/texture/texture.h"
+#include "core/texture/tTexture.h"
 #include "fundamental/assertion.h"
 #include "math/math.h"
 
@@ -14,8 +14,8 @@ namespace cadise {
 
 
 SpecularTransmission::SpecularTransmission(
-    const std::shared_ptr<Texture<Spectrum>>& albedo,
-    const std::shared_ptr<DielectricFresnel>& fresnel) :
+    const std::shared_ptr<TTexture<Spectrum>>& albedo,
+    const std::shared_ptr<DielectricFresnel>&  fresnel) :
     
     Bsdf(BsdfLobes({ ELobe::SPECULAR_TRANSMISSION })),
     _albedo(albedo),

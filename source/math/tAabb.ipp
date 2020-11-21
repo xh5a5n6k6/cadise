@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/aabb.h"
+#include "math/tAabb.h"
 
 #include "fundamental/assertion.h"
 #include "math/math.h"
@@ -11,30 +11,30 @@
 namespace cadise {
 
 template<typename T, std::size_t N>
-inline cadise::AABB<T, N>::AABB() :
-    AABB(Vector<T, N>(std::numeric_limits<T>::max()), 
-         Vector<T, N>(std::numeric_limits<T>::min())) {
+inline cadise::TAABB<T, N>::TAABB() :
+    TAABB(TVector<T, N>(std::numeric_limits<T>::max()), 
+          TVector<T, N>(std::numeric_limits<T>::min())) {
 }
 
 template<typename T, std::size_t N>
-inline cadise::AABB<T, N>::AABB(const Vector<T, N>& vertex) :
-    AABB(vertex, vertex) {
+inline cadise::TAABB<T, N>::TAABB(const TVector<T, N>& vertex) :
+    TAABB(vertex, vertex) {
 }
 
 template<typename T, std::size_t N>
-inline cadise::AABB<T, N>::AABB(const Vector<T, N>& minVertex, const Vector<T, N>& maxVertex) :
+inline cadise::TAABB<T, N>::TAABB(const TVector<T, N>& minVertex, const TVector<T, N>& maxVertex) :
     _minVertex(minVertex),
     _maxVertex(maxVertex) { 
 }
 
 template<typename T, std::size_t N>
-inline bool AABB<T, N>::isEmpty() const {
-    return _minVertex.isEqualTo(Vector<T, N>(std::numeric_limits<T>::max())) ||
-           _maxVertex.isEqualTo(Vector<T, N>(std::numeric_limits<T>::min()));
+inline bool TAABB<T, N>::isEmpty() const {
+    return _minVertex.isEqualTo(TVector<T, N>(std::numeric_limits<T>::max())) ||
+           _maxVertex.isEqualTo(TVector<T, N>(std::numeric_limits<T>::min()));
 }
 
 template<typename T, std::size_t N>
-inline bool AABB<T, N>::isInside(const Vector<T, N>& position) const {
+inline bool TAABB<T, N>::isInside(const TVector<T, N>& position) const {
     for (std::size_t i = 0; i < N; ++i) {
         if (position[i] < _minVertex[i] || position[i] > _maxVertex[i]) {
             return false;
@@ -45,33 +45,34 @@ inline bool AABB<T, N>::isInside(const Vector<T, N>& position) const {
 }
 
 template<typename T, std::size_t N>
-inline bool AABB<T, N>::isIntersectingAABB(
-    const Vector<T, N>& rayOrigin, 
-    const Vector<T, N>& rayInverseDirection, 
-    const T             rayMinT, 
-    const T             rayMaxT) const {
+inline bool TAABB<T, N>::isIntersectingAABB(
+    const TVector<T, N>& rayOrigin, 
+    const TVector<T, N>& rayInverseDirection, 
+    const T              rayMinT, 
+    const T              rayMaxT) const {
 
     static_assert(N == 3, "Not support isIntersecting with this kind of AABB");
     
     T localMinT;
     T localMaxT;
 
-    return isIntersectingAABB(rayOrigin, 
-                              rayInverseDirection, 
-                              rayMinT, 
-                              rayMaxT,
-                              &localMinT,
-                              &localMaxT);
+    return this->isIntersectingAABB(
+        rayOrigin, 
+        rayInverseDirection, 
+        rayMinT, 
+        rayMaxT,
+        &localMinT,
+        &localMaxT);
 }
 
 template<typename T, std::size_t N>
-inline bool AABB<T, N>::isIntersectingAABB(
-    const Vector<T, N>& rayOrigin,
-    const Vector<T, N>& rayInverseDirection,
-    const T             rayMinT,
-    const T             rayMaxT,
-    T* const            out_boundMinT,
-    T* const            out_boundMaxT) const {
+inline bool TAABB<T, N>::isIntersectingAABB(
+    const TVector<T, N>& rayOrigin,
+    const TVector<T, N>& rayInverseDirection,
+    const T              rayMinT,
+    const T              rayMaxT,
+    T* const             out_boundMinT,
+    T* const             out_boundMaxT) const {
 
     static_assert(N == 3, "Not support isIntersecting with this kind of AABB");
 
@@ -81,8 +82,8 @@ inline bool AABB<T, N>::isIntersectingAABB(
     T minT = rayMinT;
     T maxT = rayMaxT;
 
-    const Vector<T, N> nearT = (_minVertex - rayOrigin) * rayInverseDirection;
-    const Vector<T, N> farT  = (_maxVertex - rayOrigin) * rayInverseDirection;
+    const TVector<T, N> nearT = (_minVertex - rayOrigin) * rayInverseDirection;
+    const TVector<T, N> farT  = (_maxVertex - rayOrigin) * rayInverseDirection;
 
     // calculate x-slab interval
     if (rayInverseDirection.x() > static_cast<T>(0)) {
@@ -126,23 +127,23 @@ inline bool AABB<T, N>::isIntersectingAABB(
 }
 
 template<typename T, std::size_t N>
-inline void AABB<T, N>::reset() {
-    _minVertex = Vector<T, N>(std::numeric_limits<T>::max());
-    _maxVertex = Vector<T, N>(std::numeric_limits<T>::min());
+inline void TAABB<T, N>::reset() {
+    _minVertex = TVector<T, N>(std::numeric_limits<T>::max());
+    _maxVertex = TVector<T, N>(std::numeric_limits<T>::min());
 }
 
 template<typename T, std::size_t N>
-inline T AABB<T, N>::surfaceArea() const {
+inline T TAABB<T, N>::surfaceArea() const {
     static_assert(N == 3, "Not support surfaceArea with this kind of AABB");
 
     return static_cast<T>(2) * this->halfSurfaceArea();
 }
 
 template<typename T, std::size_t N>
-inline T AABB<T, N>::halfSurfaceArea() const {
+inline T TAABB<T, N>::halfSurfaceArea() const {
     static_assert(N == 3, "Not support surfaceArea with this kind of AABB");
 
-    const Vector<T, N> extent = this->extent();
+    const TVector<T, N> extent = this->extent();
 
     return extent.x() * extent.y() +
            extent.x() * extent.z() +
@@ -150,12 +151,12 @@ inline T AABB<T, N>::halfSurfaceArea() const {
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N> AABB<T, N>::extent() const {
+inline TVector<T, N> TAABB<T, N>::extent() const {
     return _maxVertex - _minVertex;
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N> AABB<T, N>::centroid() const {
+inline TVector<T, N> TAABB<T, N>::centroid() const {
     if constexpr (std::is_integral_v<T>) {
         return (_minVertex + _maxVertex) / static_cast<T>(2);
     }
@@ -165,28 +166,28 @@ inline Vector<T, N> AABB<T, N>::centroid() const {
 }
 
 template<typename T, std::size_t N>
-inline std::size_t AABB<T, N>::maxAxis() const {
+inline std::size_t TAABB<T, N>::maxAxis() const {
     return this->extent().maxDimension();
 }
 
 template<typename T, std::size_t N>
-inline AABB<T, N>& AABB<T, N>::unionWith(const Vector<T, N>& vertex) {
-    _minVertex = Vector<T, N>::min(_minVertex, vertex);
-    _maxVertex = Vector<T, N>::max(_maxVertex, vertex);
+inline TAABB<T, N>& TAABB<T, N>::unionWith(const TVector<T, N>& vertex) {
+    _minVertex = TVector<T, N>::min(_minVertex, vertex);
+    _maxVertex = TVector<T, N>::max(_maxVertex, vertex);
     
     return *this;
 }
 
 template<typename T, std::size_t N>
-inline AABB<T, N>& AABB<T, N>::unionWith(const AABB<T, N>& aabb) {
-    _minVertex = Vector<T, N>::min(_minVertex, aabb._minVertex);
-    _maxVertex = Vector<T, N>::max(_maxVertex, aabb._maxVertex);
+inline TAABB<T, N>& TAABB<T, N>::unionWith(const TAABB<T, N>& aabb) {
+    _minVertex = TVector<T, N>::min(_minVertex, aabb._minVertex);
+    _maxVertex = TVector<T, N>::max(_maxVertex, aabb._maxVertex);
 
     return *this;
 }
 
 template<typename T, std::size_t N>
-inline AABB<T, N>& AABB<T, N>::expand(const T scalar) {
+inline TAABB<T, N>& TAABB<T, N>::expand(const T scalar) {
     _minVertex -= scalar;
     _maxVertex += scalar;
 
@@ -194,12 +195,12 @@ inline AABB<T, N>& AABB<T, N>::expand(const T scalar) {
 }
 
 template<typename T, std::size_t N>
-inline const Vector<T, N>& AABB<T, N>::minVertex() const {
+inline const TVector<T, N>& TAABB<T, N>::minVertex() const {
     return _minVertex;
 }
 
 template<typename T, std::size_t N>
-inline const Vector<T, N>& AABB<T, N>::maxVertex() const {
+inline const TVector<T, N>& TAABB<T, N>::maxVertex() const {
     return _maxVertex;
 }
 

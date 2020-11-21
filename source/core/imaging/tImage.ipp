@@ -1,25 +1,25 @@
 #pragma once
 
-#include "core/imaging/image.h"
+#include "core/imaging/tImage.h"
 
 #include "fundamental/assertion.h"
 #include "math/math.h"
-#include "math/vector.h"
+#include "math/tVector.h"
 
 namespace cadise {
 
 template<typename T, std::size_t N>
-inline Image<T, N>::Image() :
-    Image(0, 0) {
+inline TImage<T, N>::TImage() :
+    TImage(0, 0) {
 }
 
 template<typename T, std::size_t N>
-inline Image<T, N>::Image(const Vector2I& resolution) :
-    Image(resolution.x(), resolution.y()) {
+inline TImage<T, N>::TImage(const Vector2I& resolution) :
+    TImage(resolution.x(), resolution.y()) {
 }
 
 template<typename T, std::size_t N>
-inline Image<T, N>::Image(const int32 width, const int32 height) :
+inline TImage<T, N>::TImage(const int32 width, const int32 height) :
     _width(width),
     _height(height),
     _data() {
@@ -29,10 +29,10 @@ inline Image<T, N>::Image(const int32 width, const int32 height) :
 }
 
 template<typename T, std::size_t N>
-inline Image<T, N>::Image(const Image<T, N>& img) = default;
+inline TImage<T, N>::TImage(const TImage<T, N>& rhs) = default;
 
 template<typename T, std::size_t N>
-inline void Image<T, N>::flipHorizontal() {
+inline void TImage<T, N>::flipHorizontal() {
     const int32 halfWidth = _width / 2;
 
     for (int32 iy = 0; iy < _height; ++iy) {
@@ -48,26 +48,26 @@ inline void Image<T, N>::flipHorizontal() {
 }
 
 template<typename T, std::size_t N>
-inline void Image<T, N>::setImageSize(const Vector2I& resolution) {
-    setImageSize(resolution.x(), resolution.y());
+inline void TImage<T, N>::setImageSize(const Vector2I& resolution) {
+    setTImageSize(resolution.x(), resolution.y());
 }
 
 template<typename T, std::size_t N>
-inline void Image<T, N>::setImageSize(const int32 width, const int32 height) {
+inline void TImage<T, N>::setImageSize(const int32 width, const int32 height) {
     _width  = width;
     _height = height;
 
     const std::size_t dataNumber = static_cast<std::size_t>(width * height * N);
-    setDataSize(dataNumber);
+    this->setDataSize(dataNumber);
 }
 
 template<typename T, std::size_t N>
-inline void Image<T, N>::setDataSize(const std::size_t dataSize) {
+inline void TImage<T, N>::setDataSize(const std::size_t dataSize) {
     _data.resize(dataSize);
 }
 
 template<typename T, std::size_t N>
-inline void Image<T, N>::setPixelValue(const int32 x, const int32 y, const Vector<T, N>& pixelValue) {
+inline void TImage<T, N>::setPixelValue(const int32 x, const int32 y, const TVector<T, N>& pixelValue) {
     const std::size_t dataIndexOffset = _pixelDataOffset(x, y);
 
     for (std::size_t i = 0; i < N; ++i) {
@@ -76,12 +76,12 @@ inline void Image<T, N>::setPixelValue(const int32 x, const int32 y, const Vecto
 }
 
 template<typename T, std::size_t N>
-inline void Image<T, N>::setDataValue(const std::size_t index, const T value) {
+inline void TImage<T, N>::setDataValue(const std::size_t index, const T value) {
     _data[index] = value;
 }
 
 template<typename T, std::size_t N>
-inline void Image<T, N>::getImagePixel(const int32 x, const int32 y, Vector<T, N>* const out_pixel) const {
+inline void TImage<T, N>::getImagePixel(const int32 x, const int32 y, TVector<T, N>* const out_pixel) const {
     CADISE_ASSERT(out_pixel);
     CADISE_ASSERT_RANGE_INCLUSIVE(x, 0, _width - 1);
     CADISE_ASSERT_RANGE_INCLUSIVE(y, 0, _height - 1);
@@ -94,32 +94,32 @@ inline void Image<T, N>::getImagePixel(const int32 x, const int32 y, Vector<T, N
 }
 
 template<typename T, std::size_t N>
-inline int32 Image<T, N>::width() const {
+inline int32 TImage<T, N>::width() const {
     return _width;
 }
 
 template<typename T, std::size_t N>
-inline int32 Image<T, N>::height() const {
+inline int32 TImage<T, N>::height() const {
     return _height;
 }
 
 template<typename T, std::size_t N>
-inline Vector2S Image<T, N>::resolution() const {
+inline Vector2S TImage<T, N>::resolution() const {
     return Vector2S(_width, _height);
 }
 
 template<typename T, std::size_t N>
-inline std::size_t Image<T, N>::dataSize() const {
+inline std::size_t TImage<T, N>::dataSize() const {
     return _data.size();
 }
 
 template<typename T, std::size_t N>
-inline const T* Image<T, N>::rawData() const {
+inline const T* TImage<T, N>::rawData() const {
     return _data.data();
 }
 
 template<typename T, std::size_t N>
-inline std::size_t Image<T, N>::_pixelDataOffset(const int32 x, const int32 y) const {
+inline std::size_t TImage<T, N>::_pixelDataOffset(const int32 x, const int32 y) const {
     return static_cast<std::size_t>(x + y * _width) * N;
 }
 

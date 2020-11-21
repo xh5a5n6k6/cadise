@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/vector.h"
+#include "math/tVector.h"
 
 #include "fundamental/assertion.h"
 #include "math/math.h"
@@ -11,32 +11,32 @@
 namespace cadise {
 
 template<typename T, std::size_t N>
-inline Vector<T, N> Vector<T, N>::min(const Vector<T, N>& v1, const Vector<T, N>& v2) {
-    Vector<T, N> result;
+inline TVector<T, N> TVector<T, N>::min(const TVector<T, N>& vA, const TVector<T, N>& vB) {
+    TVector<T, N> result;
     for (std::size_t i = 0; i < N; ++i) {
-        result._v[i] = std::min(v1._v[i], v2._v[i]);
+        result._v[i] = std::min(vA._v[i], vB._v[i]);
     }
 
     return result;
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N> Vector<T, N>::max(const Vector<T, N>& v1, const Vector<T, N>& v2) {
-    Vector<T, N> result;
+inline TVector<T, N> TVector<T, N>::max(const TVector<T, N>& vA, const TVector<T, N>& vB) {
+    TVector<T, N> result;
     for (std::size_t i = 0; i < N; ++i) {
-        result._v[i] = std::max(v1._v[i], v2._v[i]);
+        result._v[i] = std::max(vA._v[i], vB._v[i]);
     }
 
     return result;
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N>::Vector() :
-    Vector(static_cast<T>(0)) {
+inline TVector<T, N>::TVector() :
+    TVector(static_cast<T>(0)) {
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N>::Vector(const T v) {
+inline TVector<T, N>::TVector(const T v) {
     for (std::size_t i = 0; i < N; ++i) {
         _v[i] = v;
     }
@@ -44,24 +44,24 @@ inline Vector<T, N>::Vector(const T v) {
 
 template<typename T, std::size_t N>
 template<typename... Ts>
-inline Vector<T, N>::Vector(const T v1, const T v2, const Ts... ts) :
+inline TVector<T, N>::TVector(const T v1, const T v2, const Ts... ts) :
     _v({ v1, v2, ts... }) {
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N>::Vector(const Vector<T, N>& other) = default;
+inline TVector<T, N>::TVector(const TVector<T, N>& other) = default;
 
 template<typename T, std::size_t N>
 template<typename U>
-inline Vector<T, N>::Vector(const Vector<U, N>& other) {
+inline TVector<T, N>::TVector(const TVector<U, N>& other) {
     for (std::size_t i = 0; i < N; ++i) {
         _v[i] = static_cast<T>(other[i]);
     }
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N> Vector<T, N>::operator - () const {
-    Vector<T, N> result;
+inline TVector<T, N> TVector<T, N>::operator - () const {
+    TVector<T, N> result;
     for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = -_v[i];
     }
@@ -70,8 +70,8 @@ inline Vector<T, N> Vector<T, N>::operator - () const {
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N> Vector<T, N>::operator + (const T s) const {
-    Vector<T, N> result;
+inline TVector<T, N> TVector<T, N>::operator + (const T s) const {
+    TVector<T, N> result;
     for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = _v[i] + s;
     }
@@ -80,8 +80,8 @@ inline Vector<T, N> Vector<T, N>::operator + (const T s) const {
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N> Vector<T, N>::operator - (const T s) const {
-    Vector<T, N> result;
+inline TVector<T, N> TVector<T, N>::operator - (const T s) const {
+    TVector<T, N> result;
     for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = _v[i] - s;
     }
@@ -90,8 +90,8 @@ inline Vector<T, N> Vector<T, N>::operator - (const T s) const {
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N> Vector<T, N>::operator * (const T s) const {
-    Vector<T, N> result;
+inline TVector<T, N> TVector<T, N>::operator * (const T s) const {
+    TVector<T, N> result;
     for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = _v[i] * s;
     }
@@ -100,9 +100,9 @@ inline Vector<T, N> Vector<T, N>::operator * (const T s) const {
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N> Vector<T, N>::operator / (const T s) const {
+inline TVector<T, N> TVector<T, N>::operator / (const T s) const {
     const T inverseS = static_cast<T>(1) / s;
-    Vector<T, N> result;
+    TVector<T, N> result;
     for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = _v[i] * inverseS;
     }
@@ -111,8 +111,8 @@ inline Vector<T, N> Vector<T, N>::operator / (const T s) const {
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N> Vector<T, N>::operator + (const Vector<T, N>& v) const {
-    Vector<T, N> result;
+inline TVector<T, N> TVector<T, N>::operator + (const TVector<T, N>& v) const {
+    TVector<T, N> result;
     for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = _v[i] + v._v[i];
     }
@@ -121,8 +121,8 @@ inline Vector<T, N> Vector<T, N>::operator + (const Vector<T, N>& v) const {
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N> Vector<T, N>::operator - (const Vector<T, N>& v) const {
-    Vector<T, N> result;
+inline TVector<T, N> TVector<T, N>::operator - (const TVector<T, N>& v) const {
+    TVector<T, N> result;
     for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = _v[i] - v._v[i];
     }
@@ -131,8 +131,8 @@ inline Vector<T, N> Vector<T, N>::operator - (const Vector<T, N>& v) const {
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N> Vector<T, N>::operator * (const Vector<T, N>& v) const {
-    Vector<T, N> result;
+inline TVector<T, N> TVector<T, N>::operator * (const TVector<T, N>& v) const {
+    TVector<T, N> result;
     for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = _v[i] * v._v[i];
     }
@@ -141,8 +141,8 @@ inline Vector<T, N> Vector<T, N>::operator * (const Vector<T, N>& v) const {
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N> Vector<T, N>::operator / (const Vector<T, N>& v) const {
-    Vector<T, N> result;
+inline TVector<T, N> TVector<T, N>::operator / (const TVector<T, N>& v) const {
+    TVector<T, N> result;
     for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = _v[i] / v._v[i];
     }
@@ -151,7 +151,7 @@ inline Vector<T, N> Vector<T, N>::operator / (const Vector<T, N>& v) const {
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N>& Vector<T, N>::operator += (const T s) {
+inline TVector<T, N>& TVector<T, N>::operator += (const T s) {
     for (std::size_t i = 0; i < N; ++i) {
         _v[i] += s;
     }
@@ -160,7 +160,7 @@ inline Vector<T, N>& Vector<T, N>::operator += (const T s) {
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N>& Vector<T, N>::operator -= (const T s) {
+inline TVector<T, N>& TVector<T, N>::operator -= (const T s) {
     for (std::size_t i = 0; i < N; ++i) {
         _v[i] -= s;
     }
@@ -169,7 +169,7 @@ inline Vector<T, N>& Vector<T, N>::operator -= (const T s) {
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N>& Vector<T, N>::operator *= (const T s) {
+inline TVector<T, N>& TVector<T, N>::operator *= (const T s) {
     for (std::size_t i = 0; i < N; ++i) {
         _v[i] *= s;
     }
@@ -178,7 +178,7 @@ inline Vector<T, N>& Vector<T, N>::operator *= (const T s) {
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N>& Vector<T, N>::operator /= (const T s) {
+inline TVector<T, N>& TVector<T, N>::operator /= (const T s) {
     const T inverseS = static_cast<T>(1) / s;
     for (std::size_t i = 0; i < N; ++i) {
         _v[i] *= inverseS;
@@ -188,7 +188,7 @@ inline Vector<T, N>& Vector<T, N>::operator /= (const T s) {
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N>& Vector<T, N>::operator += (const Vector<T, N>& v) {
+inline TVector<T, N>& TVector<T, N>::operator += (const TVector<T, N>& v) {
     for (std::size_t i = 0; i < N; ++i) {
         _v[i] += v._v[i];
     }
@@ -197,7 +197,7 @@ inline Vector<T, N>& Vector<T, N>::operator += (const Vector<T, N>& v) {
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N>& Vector<T, N>::operator -= (const Vector<T, N>& v) {
+inline TVector<T, N>& TVector<T, N>::operator -= (const TVector<T, N>& v) {
     for (std::size_t i = 0; i < N; ++i) {
         _v[i] -= v._v[i];
     }
@@ -206,7 +206,7 @@ inline Vector<T, N>& Vector<T, N>::operator -= (const Vector<T, N>& v) {
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N>& Vector<T, N>::operator *= (const Vector<T, N>& v) {
+inline TVector<T, N>& TVector<T, N>::operator *= (const TVector<T, N>& v) {
     for (std::size_t i = 0; i < N; ++i) {
         _v[i] *= v._v[i];
     }
@@ -215,7 +215,7 @@ inline Vector<T, N>& Vector<T, N>::operator *= (const Vector<T, N>& v) {
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N>& Vector<T, N>::operator /= (const Vector<T, N>& v) {
+inline TVector<T, N>& TVector<T, N>::operator /= (const TVector<T, N>& v) {
     for (std::size_t i = 0; i < N; ++i) {
         _v[i] /= v._v[i];
     }
@@ -224,7 +224,7 @@ inline Vector<T, N>& Vector<T, N>::operator /= (const Vector<T, N>& v) {
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N>& Vector<T, N>::operator = (const Vector<T, N>& v) {
+inline TVector<T, N>& TVector<T, N>::operator = (const TVector<T, N>& v) {
     for (std::size_t i = 0; i < N; ++i) {
         _v[i] = v._v[i];
     }
@@ -233,14 +233,14 @@ inline Vector<T, N>& Vector<T, N>::operator = (const Vector<T, N>& v) {
 }
 
 template<typename T, std::size_t N>
-inline T& Vector<T, N>::operator [] (const std::size_t i) {
+inline T& TVector<T, N>::operator [] (const std::size_t i) {
     CADISE_ASSERT_LT(i, N);
 
     return _v[i];
 }
 
 template<typename T, std::size_t N>
-inline const T& Vector<T, N>::operator [] (const std::size_t i) const {
+inline const T& TVector<T, N>::operator [] (const std::size_t i) const {
     CADISE_ASSERT_LT(i, N);
 
     return _v[i];
@@ -248,12 +248,12 @@ inline const T& Vector<T, N>::operator [] (const std::size_t i) const {
 
 template<typename T, std::size_t N>
 template<typename U>
-inline Vector<U, N> Vector<T, N>::asType() const {
-    return Vector<U, N>(*this);
+inline TVector<U, N> TVector<T, N>::asType() const {
+    return TVector<U, N>(*this);
 }
 
 template<typename T, std::size_t N>
-inline bool Vector<T, N>::isZero() const {
+inline bool TVector<T, N>::isZero() const {
     bool result = true;
     for (std::size_t i = 0; i < N; ++i) {
         result &= _v[i] == static_cast<T>(0);
@@ -263,7 +263,7 @@ inline bool Vector<T, N>::isZero() const {
 }
 
 template<typename T, std::size_t N>
-inline bool Vector<T, N>::hasNaN() const {
+inline bool TVector<T, N>::hasNaN() const {
     for (std::size_t i = 0; i < N; ++i) {
         if (std::isnan(_v[i])) {
             return true;
@@ -274,7 +274,7 @@ inline bool Vector<T, N>::hasNaN() const {
 }
 
 template<typename T, std::size_t N>
-inline bool Vector<T, N>::hasNegative() const {
+inline bool TVector<T, N>::hasNegative() const {
     static_assert(std::is_signed_v<T>);
 
     for (std::size_t i = 0; i < N; ++i) {
@@ -287,7 +287,7 @@ inline bool Vector<T, N>::hasNegative() const {
 }
 
 template<typename T, std::size_t N>
-inline bool Vector<T, N>::hasInfinite() const {
+inline bool TVector<T, N>::hasInfinite() const {
     for (std::size_t i = 0; i < N; ++i) {
         if (!std::isfinite(_v[i])) {
             return true;
@@ -298,7 +298,7 @@ inline bool Vector<T, N>::hasInfinite() const {
 }
 
 template<typename T, std::size_t N>
-inline T Vector<T, N>::sum() const {
+inline T TVector<T, N>::sum() const {
     T result = static_cast<T>(0);
     for (std::size_t i = 0; i < N; ++i) {
         result += _v[i];
@@ -308,17 +308,17 @@ inline T Vector<T, N>::sum() const {
 }
 
 template<typename T, std::size_t N>
-inline T Vector<T, N>::average() const {
+inline T TVector<T, N>::average() const {
     return this->sum() / static_cast<T>(N);
 }
 
 template<typename T, std::size_t N>
-inline T Vector<T, N>::length() const {
+inline T TVector<T, N>::length() const {
     return static_cast<T>(std::sqrt(this->lengthSquared()));
 }
 
 template<typename T, std::size_t N>
-inline T Vector<T, N>::lengthSquared() const {
+inline T TVector<T, N>::lengthSquared() const {
     T result = static_cast<T>(0);
     for (std::size_t i = 0; i < N; ++i) {
         result += _v[i] * _v[i];
@@ -328,7 +328,7 @@ inline T Vector<T, N>::lengthSquared() const {
 }
 
 template<typename T, std::size_t N>
-inline T Vector<T, N>::product() const {
+inline T TVector<T, N>::product() const {
     T result = static_cast<T>(1);
     for (std::size_t i = 0; i < N; ++i) {
         result *= _v[i];
@@ -338,12 +338,12 @@ inline T Vector<T, N>::product() const {
 }
 
 template<typename T, std::size_t N>
-inline T Vector<T, N>::maxComponent() const {
+inline T TVector<T, N>::maxComponent() const {
     return _v[this->maxDimension()];
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N> Vector<T, N>::normalize() const {
+inline TVector<T, N> TVector<T, N>::normalize() const {
     CADISE_ASSERT_GT(this->length(), static_cast<T>(0));
 
     const T invLength = static_cast<T>(1) / this->length();
@@ -351,13 +351,13 @@ inline Vector<T, N> Vector<T, N>::normalize() const {
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N> Vector<T, N>::reverse() const {
+inline TVector<T, N> TVector<T, N>::reverse() const {
     return -*this;
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N> Vector<T, N>::square() const {
-    Vector<T, N> result;
+inline TVector<T, N> TVector<T, N>::square() const {
+    TVector<T, N> result;
     for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = _v[i] * _v[i];
     }
@@ -366,14 +366,14 @@ inline Vector<T, N> Vector<T, N>::square() const {
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N> Vector<T, N>::complement() const {
-    const Vector<T, N> oneVector(static_cast<T>(1));
-    return oneVector - *this;
+inline TVector<T, N> TVector<T, N>::complement() const {
+    const TVector<T, N> oneTVector(static_cast<T>(1));
+    return oneTVector - *this;
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N> Vector<T, N>::reciprocal() const {
-    Vector<T, N> result;
+inline TVector<T, N> TVector<T, N>::reciprocal() const {
+    TVector<T, N> result;
     for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = static_cast<T>(1) / _v[i];
     }
@@ -382,8 +382,8 @@ inline Vector<T, N> Vector<T, N>::reciprocal() const {
 }
 
 template<typename T, std::size_t N>
-inline Vector<T, N> Vector<T, N>::clamp(const T min, const T max) const {
-    Vector<T, N> result;
+inline TVector<T, N> TVector<T, N>::clamp(const T min, const T max) const {
+    TVector<T, N> result;
     for (std::size_t i = 0; i < N; ++i) {
         result._v[i] = math::clamp(_v[i], min, max);
     }
@@ -392,12 +392,12 @@ inline Vector<T, N> Vector<T, N>::clamp(const T min, const T max) const {
 }
 
 template<typename T, std::size_t N>
-inline std::size_t Vector<T, N>::maxDimension() const {
-    T max = _v[0];
+inline std::size_t TVector<T, N>::maxDimension() const {
+    T           max  = _v[0];
     std::size_t maxD = 0;
     for (std::size_t i = 1; i < N; ++i) {
         if (_v[i] > max) {
-            max = _v[i];
+            max  = _v[i];
             maxD = i;
         }
     }
@@ -406,14 +406,14 @@ inline std::size_t Vector<T, N>::maxDimension() const {
 }
 
 template<typename T, std::size_t N>
-inline void Vector<T, N>::swap(Vector<T, N>& v) {
+inline void TVector<T, N>::swap(TVector<T, N>& v) {
     for (std::size_t i = 0; i < N; ++i) {
         math::swap(_v[i], v._v[i]);
     }
 }
 
 template<typename T, std::size_t N>
-inline bool Vector<T, N>::isEqualTo(const Vector<T, N>& rhs) const {
+inline bool TVector<T, N>::isEqualTo(const TVector<T, N>& rhs) const {
     for (std::size_t i = 0; i < N; ++i) {
         if (_v[i] != rhs._v[i]) {
             return false;
@@ -424,10 +424,52 @@ inline bool Vector<T, N>::isEqualTo(const Vector<T, N>& rhs) const {
 }
 
 template<typename T, std::size_t N>
-inline bool Vector<T, N>::canRefract(const Vector<T, N>& normal, 
-                                     const real iorOuter, 
-                                     const real iorInner,
-                                     Vector<T, N>* const out_vector) const {
+inline T TVector<T, N>::dot(const TVector<T, N>& v) const {
+    T result = static_cast<T>(0);
+    for (std::size_t i = 0; i < N; ++i) {
+        result += _v[i] * v._v[i];
+    }
+
+    return result;
+}
+
+template<typename T, std::size_t N>
+inline T TVector<T, N>::absDot(const TVector<T, N>& v) const {
+    return std::abs(this->dot(v));
+}
+
+template<typename T, std::size_t N>
+inline TVector<T, N> TVector<T, N>::lerp(const TVector<T, N>& rhs, const real ratio) const {
+    TVector<T, N> result;
+    const real ratioComplement = 1.0_r - ratio;
+    for (std::size_t i = 0; i < N; ++i) {
+        result._v[i] = ratioComplement * _v[i] + ratio * rhs._v[i];
+    }
+
+    return result;
+}
+
+template<typename T, std::size_t N>
+inline TVector<T, N> TVector<T, N>::cross(const TVector<T, N>& v) const {
+    static_assert(N == 3, "Error in vector's cross, this vector doesn't support cross method\n");
+
+    return TVector<T, N>(_v[1] * v._v[2] - _v[2] * v._v[1],
+                        _v[2] * v._v[0] - _v[0] * v._v[2],
+                        _v[0] * v._v[1] - _v[1] * v._v[0]);
+}
+
+template<typename T, std::size_t N>
+inline TVector<T, N> TVector<T, N>::reflect(const TVector<T, N>& normal) const {
+    const TVector<T, N> result = static_cast<T>(2) * this->absDot(normal) * normal;
+    return result - *this;
+}
+
+template<typename T, std::size_t N>
+inline bool TVector<T, N>::canRefract(
+    const TVector<T, N>& normal,
+    const real           iorOuter,
+    const real           iorInner,
+    TVector<T, N>* const out_vector) const {
 
     CADISE_ASSERT(out_vector);
 
@@ -451,9 +493,9 @@ inline bool Vector<T, N>::canRefract(const Vector<T, N>& normal,
     }
 
     const real cosT = std::sqrt(1.0_r - sinT2);
-    Vector<T, N> refractDirection = -etaRatio * *this;
+    TVector<T, N> refractDirection = -etaRatio * *this;
     refractDirection += (etaRatio * signFactor * cosI - cosT) * signFactor * normal;
-    refractDirection = refractDirection.normalize();
+    refractDirection  = refractDirection.normalize();
 
     *out_vector = refractDirection;
 
@@ -461,58 +503,17 @@ inline bool Vector<T, N>::canRefract(const Vector<T, N>& normal,
 }
 
 template<typename T, std::size_t N>
-inline T Vector<T, N>::dot(const Vector<T, N>& v) const {
-    T result = static_cast<T>(0);
-    for (std::size_t i = 0; i < N; ++i) {
-        result += _v[i] * v._v[i];
-    }
-
-    return result;
-}
-
-template<typename T, std::size_t N>
-inline T Vector<T, N>::absDot(const Vector<T, N>& v) const {
-    return std::abs(this->dot(v));
-}
-
-template<typename T, std::size_t N>
-inline Vector<T, N> Vector<T, N>::lerp(const Vector<T, N>& rhs, const real ratio) const {
-    Vector<T, N> result;
-    const real ratioComplement = 1.0_r - ratio;
-    for (std::size_t i = 0; i < N; ++i) {
-        result._v[i] = ratioComplement * _v[i] + ratio * rhs._v[i];
-    }
-
-    return result;
-}
-
-template<typename T, std::size_t N>
-inline Vector<T, N> Vector<T, N>::cross(const Vector<T, N>& v) const {
-    static_assert(N == 3, "Error in vector's cross, this vector doesn't support cross method\n");
-
-    return Vector<T, N>(_v[1] * v._v[2] - _v[2] * v._v[1],
-                        _v[2] * v._v[0] - _v[0] * v._v[2],
-                        _v[0] * v._v[1] - _v[1] * v._v[0]);
-}
-
-template<typename T, std::size_t N>
-inline Vector<T, N> Vector<T, N>::reflect(const Vector<T, N>& normal) const {
-    const Vector<T, N> result = static_cast<T>(2) * this->absDot(normal) * normal;
-    return result - *this;
-}
-
-template<typename T, std::size_t N>
-inline T Vector<T, N>::x() const {
+inline T TVector<T, N>::x() const {
     return _v[0];
 }
 
 template<typename T, std::size_t N>
-inline T Vector<T, N>::y() const {
+inline T TVector<T, N>::y() const {
     return _v[1];
 }
 
 template<typename T, std::size_t N>
-inline T Vector<T, N>::z() const {
+inline T TVector<T, N>::z() const {
     static_assert(N > 2, "Error in vector's z, this vector doesn't support z value\n");
 
     return _v[2];

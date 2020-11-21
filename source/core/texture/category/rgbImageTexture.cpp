@@ -1,6 +1,6 @@
 #include "core/texture/category/rgbImageTexture.h"
 
-#include "core/texture/sampler/pixelSampler.h"
+#include "core/texture/sampler/tPixelSampler.h"
 #include "fundamental/assertion.h"
 
 namespace cadise {

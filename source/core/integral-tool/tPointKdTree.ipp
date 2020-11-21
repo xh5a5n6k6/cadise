@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/integral-tool/pointKdTree.h"
+#include "core/integral-tool/tPointKdTree.h"
 
 #include "fundamental/assertion.h"
 
@@ -9,8 +9,8 @@
 namespace cadise {
 
 template<typename Index, typename Object, typename ObjectCenterCalculator>
-inline PointKdTree<Index, Object, ObjectCenterCalculator>::
-    PointKdTree(const ObjectCenterCalculator& centerCalculator) :
+inline TPointKdTree<Index, Object, ObjectCenterCalculator>::
+    TPointKdTree(const ObjectCenterCalculator& centerCalculator) :
     
     _objects(),
     _nodes(),
@@ -20,7 +20,7 @@ inline PointKdTree<Index, Object, ObjectCenterCalculator>::
 }
 
 template<typename Index, typename Object, typename ObjectCenterCalculator>
-inline void PointKdTree<Index, Object, ObjectCenterCalculator>::
+inline void TPointKdTree<Index, Object, ObjectCenterCalculator>::
     buildNodes(const std::vector<Object>& objects) {
 
     // clear buffer first
@@ -51,7 +51,7 @@ inline void PointKdTree<Index, Object, ObjectCenterCalculator>::
 }
 
 template<typename Index, typename Object, typename ObjectCenterCalculator>
-inline void PointKdTree<Index, Object, ObjectCenterCalculator>::
+inline void TPointKdTree<Index, Object, ObjectCenterCalculator>::
     findWithRange(
         const Vector3R&            position,
         const real                 searchRadius,
@@ -129,7 +129,7 @@ inline void PointKdTree<Index, Object, ObjectCenterCalculator>::
 }
 
 template<typename Index, typename Object, typename ObjectCenterCalculator>
-inline void PointKdTree<Index, Object, ObjectCenterCalculator>::
+inline void TPointKdTree<Index, Object, ObjectCenterCalculator>::
     _buildNodesRecursively(
         const std::vector<Vector3R>& objectCenters,
         const std::vector<Index>&    objectIndices,
@@ -213,7 +213,7 @@ inline void PointKdTree<Index, Object, ObjectCenterCalculator>::
 }
 
 template<typename Index, typename Object, typename ObjectCenterCalculator>
-inline bool PointKdTree<Index, Object, ObjectCenterCalculator>::
+inline bool TPointKdTree<Index, Object, ObjectCenterCalculator>::
     _canSplitWithEqual(
         const std::vector<Vector3R>&         objectCenters,
         const std::vector<Index>&            objectIndices,

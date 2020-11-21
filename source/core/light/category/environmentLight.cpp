@@ -3,7 +3,7 @@
 #include "core/integral-tool/sample/directLightSample.h"
 #include "core/intersector/primitive/primitive.h"
 #include "core/surfaceIntersection.h"
-#include "core/texture/texture.h"
+#include "core/texture/tTexture.h"
 #include "fundamental/assertion.h"
 #include "math/constant.h"
 #include "math/random.h"
@@ -13,9 +13,11 @@
 
 namespace cadise {
 
-EnvironmentLight::EnvironmentLight(const Primitive* const primitive,
-                                   const std::shared_ptr<Texture<Spectrum>>& environmentRadiance,
-                                   const Vector2S& resolution) :
+EnvironmentLight::EnvironmentLight(
+    const Primitive* const                     primitive,
+    const std::shared_ptr<TTexture<Spectrum>>& environmentRadiance,
+    const Vector2S&                            resolution) :
+    
     AreaLight(false),
     _primitive(primitive),
     _environmentRadiance(environmentRadiance),

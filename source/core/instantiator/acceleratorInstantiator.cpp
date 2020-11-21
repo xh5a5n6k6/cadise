@@ -24,7 +24,7 @@ static std::shared_ptr<Accelerator> createBvh(
     const std::shared_ptr<SdData>& data,
     const std::vector<std::shared_ptr<Intersector>>& intersectors) {
 
-    const std::string_view splitMode = data->findString("split-mode", "sah");
+    const auto splitMode = data->findString("split-mode", "sah");
 
     EBvhSplitMode mode;
     if (splitMode == "equal") {
@@ -62,7 +62,7 @@ std::shared_ptr<Accelerator> makeAccelerator(
 
     std::shared_ptr<Accelerator> accelerator = nullptr;
     
-    const std::string_view type = data->findString("type");
+    const auto type = data->findString("type");
     if (type == "bruteForce") {
         accelerator = createBruteForce(data, intersectors);
     }

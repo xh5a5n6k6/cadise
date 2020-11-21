@@ -40,8 +40,8 @@ static std::shared_ptr<Filter> createGaussian(
     const real sigmaY       = data->findReal("sigma-y", 0.5_r);
     const real amplitude    = data->findReal("amplitude", 1.0_r);
 
-    return std::make_shared<GaussianFilter>(filterWidth, filterHeight,
-                                            sigmaX, sigmaY, amplitude);
+    return std::make_shared<GaussianFilter>(
+        filterWidth, filterHeight, sigmaX, sigmaY, amplitude);
 }
 
 static std::shared_ptr<Filter> createMitchell(
@@ -52,8 +52,8 @@ static std::shared_ptr<Filter> createMitchell(
     const real b            = data->findReal("b", 1.0_r / 3.0_r);
     const real c            = data->findReal("c", 1.0_r / 3.0_r);
 
-    return std::make_shared<MitchellFilter>(filterWidth, filterHeight,
-                                            b, c);
+    return std::make_shared<MitchellFilter>(
+        filterWidth, filterHeight, b, c);
 }
 
 std::shared_ptr<Filter> makeFilter(
@@ -63,7 +63,7 @@ std::shared_ptr<Filter> makeFilter(
 
     std::shared_ptr<Filter> filter = nullptr;
 
-    const std::string_view type = data->findString("filter");
+    const auto type = data->findString("filter");
     if (type == "box") {
         filter = createBox(data);
     }

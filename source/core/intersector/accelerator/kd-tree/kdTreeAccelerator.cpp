@@ -67,7 +67,7 @@ bool KdTreeAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) c
 
     while (true) {
         const std::size_t currentNodeIndex = currentNodeInfo.nodeIndex();
-        const KdTreeNode<>& currentNode      = _nodes[currentNodeIndex];
+        const KdTreeNode& currentNode      = _nodes[currentNodeIndex];
 
         // early exits when there is a closer intersection
         // than current node
@@ -169,7 +169,7 @@ bool KdTreeAccelerator::isOccluded(const Ray& ray) const {
 
     while (true) {
         const std::size_t currentNodeIndex = currentNodeInfo.nodeIndex();
-        const KdTreeNode<>& currentNode      = _nodes[currentNodeIndex];
+        const KdTreeNode& currentNode      = _nodes[currentNodeIndex];
 
         // early exits when there is a closer intersection
         // than current node

@@ -2,7 +2,7 @@
 
 #include "core/film/filmSensor.h"
 #include "core/spectrum/spectrum.h"
-#include "math/aabb.h"
+#include "math/tAabb.h"
 
 #include <vector>
 
@@ -26,9 +26,10 @@ public:
 private:
     std::size_t _sensorIndexOffset(const int32 x, const int32 y) const;
 
-    Vector2I _resolution;
-    AABB2I _tileBound;
     const Filter* _filter;
+
+    Vector2I                _resolution;
+    AABB2I                  _tileBound;
     std::vector<FilmSensor> _sensors;
 };
 

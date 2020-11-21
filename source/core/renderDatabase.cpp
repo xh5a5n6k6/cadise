@@ -9,12 +9,12 @@
 #include "core/renderer/renderer.h"
 #include "core/scene.h"
 #include "core/surface/bsdf/bsdf.h"
-#include "core/texture/texture.h"
+#include "core/texture/tTexture.h"
 #include "file-io/scene-description/sdData.h"
 #include "fundamental/assertion.h"
 #include "fundamental/logger/logger.h"
 #include "fundamental/time/stopwatch.h"
-#include "math/aabb.h"
+#include "math/tAabb.h"
 
 #include <limits>
 
@@ -154,21 +154,21 @@ void RenderDatabase::_setUpLightCluster(const std::shared_ptr<SdData>& data) {
 }
 
 void RenderDatabase::_setUpRealTexture(const std::shared_ptr<SdData>& data) {
-    const std::shared_ptr<Texture<real>> texture
+    const std::shared_ptr<TTexture<real>> texture
         = instantiator::makeRealTexture(data, _realTextures, _spectrumTextures);
     const std::string_view textureName = data->findString("name");
 
     _realTextures.insert(
-        std::pair<std::string, std::shared_ptr<Texture<real>>>(textureName, texture));
+        std::pair<std::string, std::shared_ptr<TTexture<real>>>(textureName, texture));
 }
 
 void RenderDatabase::_setUpSpectrumTexture(const std::shared_ptr<SdData>& data) {
-    const std::shared_ptr<Texture<Spectrum>> texture
+    const std::shared_ptr<TTexture<Spectrum>> texture
         = instantiator::makeSpectrumTexture(data, _realTextures, _spectrumTextures);
     const std::string_view textureName = data->findString("name");
 
     _spectrumTextures.insert(
-        std::pair<std::string, std::shared_ptr<Texture<Spectrum>>>(textureName, texture));
+        std::pair<std::string, std::shared_ptr<TTexture<Spectrum>>>(textureName, texture));
 }
 
 void RenderDatabase::_setUpBsdf(const std::shared_ptr<SdData>& data) {

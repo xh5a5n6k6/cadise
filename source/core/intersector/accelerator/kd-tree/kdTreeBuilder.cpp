@@ -3,7 +3,7 @@
 #include "core/intersector/accelerator/kd-tree/endpoint.h"
 #include "core/intersector/intersector.h"
 #include "fundamental/assertion.h"
-#include "math/aabb.h"
+#include "math/tAabb.h"
 
 #include <algorithm>
 #include <cmath>
@@ -26,7 +26,7 @@ void KdTreeBuilder::buildNodes(
     const std::vector<std::shared_ptr<Intersector>>& intersectors,
     const std::vector<AABB3R>&                       intersectorBounds,
     const AABB3R&                                    entireBound,
-    std::vector<KdTreeNode<>>* const                 out_nodes,
+    std::vector<KdTreeNode>* const                   out_nodes,
     std::vector<std::size_t>* const                  out_intersectorIndices) {
 
     CADISE_ASSERT(out_nodes);
@@ -54,18 +54,18 @@ void KdTreeBuilder::buildNodes(
 }
 
 void KdTreeBuilder::_buildNodesRecursively(
-    const std::vector<std::size_t>&  intersectorIndices,
-    const std::vector<AABB3R>&       intersectorBounds,
-    const AABB3R&                    entireBound,
-    const std::size_t                currentDepth,
-    const std::size_t                badRefines,
-    std::vector<KdTreeNode<>>* const out_nodes,
-    std::vector<std::size_t>* const  out_intersectorIndices) const {
+    const std::vector<std::size_t>& intersectorIndices,
+    const std::vector<AABB3R>&      intersectorBounds,
+    const AABB3R&                   entireBound,
+    const std::size_t               currentDepth,
+    const std::size_t               badRefines,
+    std::vector<KdTreeNode>* const  out_nodes,
+    std::vector<std::size_t>* const out_intersectorIndices) const {
 
     CADISE_ASSERT(out_nodes);
     CADISE_ASSERT(out_intersectorIndices);
 
-    KdTreeNode<> node;
+    KdTreeNode node;
     const std::size_t nodeIndex                    = out_nodes->size();
     const std::size_t intersectorIndicesBeginIndex = out_intersectorIndices->size();
 

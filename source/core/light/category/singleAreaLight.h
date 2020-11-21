@@ -8,14 +8,15 @@ namespace cadise {
 
 class Primitive;
 template<typename T>
-class Texture;
+class TTexture;
 
 class SingleAreaLight : public AreaLight {
 public:
-    SingleAreaLight(const Primitive* const primitive,
-                    const Spectrum& color, 
-                    const real watt, 
-                    const bool isBackFaceEmit);
+    SingleAreaLight(
+        const Primitive* const primitive,
+        const Spectrum&        color, 
+        const real             watt, 
+        const bool             isBackFaceEmit);
 
     Spectrum emittance(const SurfaceIntersection& emitIntersection) const override;
 
@@ -33,12 +34,12 @@ public:
 
     real approximateFlux() const override;
 
-    void setEmitRadiance(const std::shared_ptr<Texture<Spectrum>>& emitRadiance);
+    void setEmitRadiance(const std::shared_ptr<TTexture<Spectrum>>& emitRadiance);
 
 private:
     const Primitive* _primitive;
 
-    std::shared_ptr<Texture<Spectrum>> _emitRadiance;
+    std::shared_ptr<TTexture<Spectrum>> _emitRadiance;
 };
 
 } // namespace cadise

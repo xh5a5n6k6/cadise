@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/texture/category/checkerboardTexture.h"
+#include "core/texture/category/tCheckerboardTexture.h"
 
 #include "fundamental/assertion.h"
 
@@ -9,11 +9,11 @@
 namespace cadise {
 
 template<typename T>
-inline CheckerboardTexture<T>::CheckerboardTexture(
-    const real                         oddTextureNumber, 
-    const real                         evenTextureNumber,
-    const std::shared_ptr<Texture<T>>& oddTexture, 
-    const std::shared_ptr<Texture<T>>& evenTexture) :
+inline TCheckerboardTexture<T>::TCheckerboardTexture(
+    const real                          oddTextureNumber, 
+    const real                          evenTextureNumber,
+    const std::shared_ptr<TTexture<T>>& oddTexture, 
+    const std::shared_ptr<TTexture<T>>& evenTexture) :
     
     _oddTexture(oddTexture), 
     _evenTexture(evenTexture) {
@@ -26,7 +26,7 @@ inline CheckerboardTexture<T>::CheckerboardTexture(
 }
 
 template<typename T>
-inline void CheckerboardTexture<T>::evaluate(const Vector3R& uvw, T* const out_value) const {
+inline void TCheckerboardTexture<T>::evaluate(const Vector3R& uvw, T* const out_value) const {
     CADISE_ASSERT(out_value);
 
     const int32 uCast = static_cast<int32>(std::floor(uvw.x() / _oddTextureSize));

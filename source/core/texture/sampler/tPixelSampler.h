@@ -11,16 +11,16 @@ enum class ETextureWrapMode;
 class UvwWrapper;
 
 template<typename T, std::size_t N>
-class PixelSampler {
+class TPixelSampler {
 public:
-    explicit PixelSampler(const ETextureWrapMode& mode);
+    explicit TPixelSampler(const ETextureWrapMode& mode);
 
-    virtual ~PixelSampler();
+    virtual ~TPixelSampler();
 
     virtual void sample(
-        const Vector3R& uvw, 
-        const Image<T, N>& image, 
-        Vector<T, N>* const out_value) const = 0;
+        const Vector3R&      uvw, 
+        const TImage<T, N>&  image, 
+        TVector<T, N>* const out_value) const = 0;
 
 protected:
     std::unique_ptr<UvwWrapper> _uvwWrapper;
@@ -28,4 +28,4 @@ protected:
 
 } // namespace cadise
 
-#include "core/texture/sampler/pixelSampler.ipp"
+#include "core/texture/sampler/tPixelSampler.ipp"

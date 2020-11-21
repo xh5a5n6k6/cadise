@@ -2,7 +2,7 @@
 
 #include "core/film/filmTile.h"
 #include "core/film/filter/filter.h"
-#include "core/imaging/image.h"
+#include "core/imaging/tImage.h"
 #include "core/integral-tool/connectEvent.h"
 #include "file-io/pictureSaver.h"
 #include "fundamental/assertion.h"

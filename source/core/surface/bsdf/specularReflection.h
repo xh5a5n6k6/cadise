@@ -8,13 +8,13 @@ namespace cadise {
 
 class Fresnel;
 template<typename T>
-class Texture;
+class TTexture;
 
 class SpecularReflection : public Bsdf {
 public:
     SpecularReflection(
-        const std::shared_ptr<Texture<Spectrum>>& albedo,
-        const std::shared_ptr<Fresnel>&           fresnel);
+        const std::shared_ptr<TTexture<Spectrum>>& albedo,
+        const std::shared_ptr<Fresnel>&            fresnel);
 
     Spectrum evaluate(
         const TransportInfo&       info,
@@ -30,8 +30,8 @@ public:
         const SurfaceIntersection& si) const override;
 
 private:
-    std::shared_ptr<Texture<Spectrum>> _albedo;
-    std::shared_ptr<Fresnel>           _fresnel;
+    std::shared_ptr<TTexture<Spectrum>> _albedo;
+    std::shared_ptr<Fresnel>            _fresnel;
 };
 
 } // namespace cadise

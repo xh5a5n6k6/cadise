@@ -5,9 +5,9 @@
 namespace cadise {
 
 template<typename T>
-class Texture {
+class TTexture {
 public:
-    virtual ~Texture();
+    virtual ~TTexture();
 
     virtual void evaluate(const Vector3R& uvw, T* const out_value) const = 0;
 };
@@ -15,6 +15,6 @@ public:
 // template header implementation
 
 template<typename T>
-inline Texture<T>::~Texture() = default;
+inline TTexture<T>::~TTexture() = default;
 
 } // namespace cadise

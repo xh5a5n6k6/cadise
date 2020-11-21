@@ -7,7 +7,7 @@
 namespace cadise {
 
 /*
-    Image represents value array.
+    TImage represents value array.
 
     T: value type. 
         [real]  for hdr image, 
@@ -17,12 +17,12 @@ namespace cadise {
         [4] for alpha image (rgba).
 */
 template<typename T, std::size_t N>
-class Image {
+class TImage {
 public:
-    Image();
-    explicit Image(const Vector2I& resolution);
-    Image(const int32 width, const int32 height);
-    Image(const Image& img);
+    TImage();
+    explicit TImage(const Vector2I& resolution);
+    TImage(const int32 width, const int32 height);
+    TImage(const TImage& rhs);
 
     void flipHorizontal();
 
@@ -30,10 +30,10 @@ public:
     void setImageSize(const int32 width, const int32 height);
     void setDataSize(const std::size_t dataSize);
 
-    void setPixelValue(const int32 x, const int32 y, const Vector<T, N>& pixelValue);
+    void setPixelValue(const int32 x, const int32 y, const TVector<T, N>& pixelValue);
     void setDataValue(const std::size_t index, const T value);
 
-    void getImagePixel(const int32 x, const int32 y, Vector<T, N>* const out_pixel) const;
+    void getImagePixel(const int32 x, const int32 y, TVector<T, N>* const out_pixel) const;
 
     int32 width() const;
     int32 height() const;
@@ -51,4 +51,4 @@ private:
 
 } // namespace cadise
 
-#include "core/imaging/image.ipp"
+#include "core/imaging/tImage.ipp"

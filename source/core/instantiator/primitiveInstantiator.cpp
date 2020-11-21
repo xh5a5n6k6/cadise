@@ -16,11 +16,11 @@ namespace instantiator {
 
 static std::shared_ptr<Primitive> createSphere(
     const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Bsdf>& bsdfs) {
+    const StringKeyMap<Bsdf>&      bsdfs) {
 
-    const Vector3R         center   = data->findVector3r("center");
-    const real             radius   = data->findReal("radius");
-    const std::string_view bsdfName = data->findString("bsdf");
+    const auto center   = data->findVector3r("center");
+    const real radius   = data->findReal("radius");
+    const auto bsdfName = data->findString("bsdf");
 
     const auto&& bsdf = bsdfs.find(bsdfName);
 
@@ -29,12 +29,12 @@ static std::shared_ptr<Primitive> createSphere(
 
 static std::shared_ptr<Primitive> createTriangle(
     const std::shared_ptr<SdData>& data,
-    const std::map<std::string, std::shared_ptr<Bsdf>, std::less<>>& bsdfs) {
+    const StringKeyMap<Bsdf>&      bsdfs) {
 
-    const Vector3R         v1       = data->findVector3r("v1");
-    const Vector3R         v2       = data->findVector3r("v2");
-    const Vector3R         v3       = data->findVector3r("v3");
-    const std::string_view bsdfName = data->findString("bsdf");
+    const auto v1       = data->findVector3r("v1");
+    const auto v2       = data->findVector3r("v2");
+    const auto v3       = data->findVector3r("v3");
+    const auto bsdfName = data->findString("bsdf");
 
     const auto&& bsdf = bsdfs.find(bsdfName);
 
@@ -43,12 +43,12 @@ static std::shared_ptr<Primitive> createTriangle(
 
 static std::shared_ptr<Primitive> createRectangle(
     const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Bsdf>& bsdfs) {
+    const StringKeyMap<Bsdf>&      bsdfs) {
 
-    const Vector3R         v1       = data->findVector3r("v1");
-    const Vector3R         v2       = data->findVector3r("v2");
-    const Vector3R         v3       = data->findVector3r("v3");
-    const std::string_view bsdfName = data->findString("bsdf");
+    const auto v1       = data->findVector3r("v1");
+    const auto v2       = data->findVector3r("v2");
+    const auto v3       = data->findVector3r("v3");
+    const auto bsdfName = data->findString("bsdf");
 
     const auto&& bsdf = bsdfs.find(bsdfName);
 
@@ -56,19 +56,19 @@ static std::shared_ptr<Primitive> createRectangle(
         return std::make_shared<Rectangle>(bsdf->second, v1, v2, v3);
     }
     else {
-        return std::make_shared<Rectangle>(std::make_shared<LambertianDiffuse>(),
-                                           v1, v2, v3);
+        return std::make_shared<Rectangle>(
+            std::make_shared<LambertianDiffuse>(), v1, v2, v3);
     }
 }
 
 static std::vector<std::shared_ptr<Primitive>> createTriangleMesh(
     const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Bsdf>& bsdfs) {
+    const StringKeyMap<Bsdf>&      bsdfs) {
 
-    const std::vector<Vector3R> positions = data->findVector3rArray("positions");
-    const std::vector<Vector3R> normals   = data->findVector3rArray("normals");
-    const std::vector<Vector3R> uvws      = data->findVector3rArray("uvws");
-    const std::string_view      bsdfName  = data->findString("bsdf");
+    const auto positions = data->findVector3rArray("positions");
+    const auto normals   = data->findVector3rArray("normals");
+    const auto uvws      = data->findVector3rArray("uvws");
+    const auto bsdfName  = data->findString("bsdf");
 
     const auto&& bsdf = bsdfs.find(bsdfName);
 
@@ -81,8 +81,8 @@ static std::vector<std::shared_ptr<Primitive>> createTriangleMesh(
         triangleMesh.transformToTriangles(&triangles);
     }
     else {
-        TriangleMesh triangleMesh(std::make_shared<LambertianDiffuse>(), 
-                                  positions, normals, uvws);
+        TriangleMesh triangleMesh(
+            std::make_shared<LambertianDiffuse>(), positions, normals, uvws);
         triangleMesh.transformToTriangles(&triangles);
     }
 
@@ -90,17 +90,17 @@ static std::vector<std::shared_ptr<Primitive>> createTriangleMesh(
 }
 
 void makePrimitive(
-    const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Bsdf>& bsdfs,
+    const std::shared_ptr<SdData>&                   data,
+    const StringKeyMap<Bsdf>&                        bsdfs,
     std::vector<std::shared_ptr<Intersector>>* const out_intersectors,
-    StringKeyMap<Primitive>* const out_primitives) {
+    StringKeyMap<Primitive>* const                   out_primitives) {
 
     CADISE_ASSERT(data);
     CADISE_ASSERT(out_intersectors);
     CADISE_ASSERT(out_primitives);
 
-    const std::string_view type = data->findString("type");
-    const std::string_view primitiveName = data->findString("name");
+    const auto type          = data->findString("type");
+    const auto primitiveName = data->findString("name");
     if (type == "sphere") {
         const auto sphere = createSphere(data, bsdfs);
         out_intersectors->push_back(sphere);

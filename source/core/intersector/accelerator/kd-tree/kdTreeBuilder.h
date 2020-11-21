@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/intersector/accelerator/kd-tree/kdTreeNode.h"
+#include "core/intersector/accelerator/kd-tree/tKdTreeNode.h"
 #include "math/type/mathType.h"
 
 #include <memory>
@@ -12,6 +12,9 @@ namespace cadise {
 class Intersector;
 
 class KdTreeBuilder {
+private:
+    using KdTreeNode = TKdTreeNode<std::size_t>;
+
 public:
     KdTreeBuilder(
         const real traversalCost, 
@@ -22,18 +25,18 @@ public:
         const std::vector<std::shared_ptr<Intersector>>& intersectors,
         const std::vector<AABB3R>&                       intersectorBounds,
         const AABB3R&                                    entireBound,
-        std::vector<KdTreeNode<>>* const                 out_nodes,
+        std::vector<KdTreeNode>* const                   out_nodes,
         std::vector<std::size_t>* const                  out_intersectorIndices);
 
 private:
     void _buildNodesRecursively(
-        const std::vector<std::size_t>&  intersectorIndices, 
-        const std::vector<AABB3R>&       intersectorBounds,
-        const AABB3R&                    entireBound,
-        const std::size_t                currentDepth,
-        const std::size_t                badRefines,
-        std::vector<KdTreeNode<>>* const out_nodes,
-        std::vector<std::size_t>* const  out_intersectorIndices) const;
+        const std::vector<std::size_t>& intersectorIndices, 
+        const std::vector<AABB3R>&      intersectorBounds,
+        const AABB3R&                   entireBound,
+        const std::size_t               currentDepth,
+        const std::size_t               badRefines,
+        std::vector<KdTreeNode>* const  out_nodes,
+        std::vector<std::size_t>* const out_intersectorIndices) const;
 
     bool _canSplitWithSah(
         const std::vector<std::size_t>&      intersectorIndices,

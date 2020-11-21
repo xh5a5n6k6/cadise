@@ -6,7 +6,7 @@
 #include "core/intersector/primitive/primitive.h"
 #include "core/ray.h"
 #include "core/surfaceIntersection.h"
-#include "core/texture/category/constantTexture.h"
+#include "core/texture/category/tConstantTexture.h"
 #include "fundamental/assertion.h"
 #include "math/constant.h"
 #include "math/math.h"
@@ -17,10 +17,12 @@
 
 namespace cadise {
 
-SingleAreaLight::SingleAreaLight(const Primitive* const primitive,
-                                 const Spectrum& color,
-                                 const real watt,
-                                 const bool isBackFaceEmit) :
+SingleAreaLight::SingleAreaLight(
+    const Primitive* const primitive,
+    const Spectrum&        color,
+    const real             watt,
+    const bool             isBackFaceEmit) :
+    
     AreaLight(isBackFaceEmit),
     _primitive(primitive) {
 
@@ -30,8 +32,8 @@ SingleAreaLight::SingleAreaLight(const Primitive* const primitive,
     const Spectrum unitWattColor  = color / color.sum();
     const Spectrum totalWattColor = unitWattColor * watt;
 
-    _emitRadiance = std::make_shared<ConstantTexture<Spectrum>>(
-                        totalWattColor / primitive->area() * constant::inv_pi<real>);
+    _emitRadiance = std::make_shared<TConstantTexture<Spectrum>>(
+        totalWattColor / primitive->area() * constant::inv_pi<real>);
 }
 
 Spectrum SingleAreaLight::emittance(const SurfaceIntersection& emitIntersection) const {
@@ -184,7 +186,7 @@ real SingleAreaLight::approximateFlux() const {
     return approximatedFlux;
 }
 
-void SingleAreaLight::setEmitRadiance(const std::shared_ptr<Texture<Spectrum>>& emitRadiance) {
+void SingleAreaLight::setEmitRadiance(const std::shared_ptr<TTexture<Spectrum>>& emitRadiance) {
     CADISE_ASSERT(emitRadiance);
 
     _emitRadiance = emitRadiance;

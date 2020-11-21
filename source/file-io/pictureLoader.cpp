@@ -1,6 +1,6 @@
 #include "file-io/pictureLoader.h"
 
-#include "core/imaging/image.h"
+#include "core/imaging/tImage.h"
 #include "file-io/path.h"
 #include "fundamental/assertion.h"
 #include "math/math.h"

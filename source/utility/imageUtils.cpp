@@ -1,6 +1,6 @@
 #include "utility/imageUtils.h"
 
-#include "core/imaging/image.h"
+#include "core/imaging/tImage.h"
 #include "fundamental/assertion.h"
 #include "math/math.h"
 

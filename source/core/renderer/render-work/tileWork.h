@@ -2,7 +2,7 @@
 
 #include "core/renderer/renderWork.h"
 
-#include "math/vector.h"
+#include "math/tVector.h"
 
 namespace cadise {
 

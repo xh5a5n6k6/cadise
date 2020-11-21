@@ -2,8 +2,8 @@
 
 #include "core/integral-tool/sample/bsdfSample.h"
 #include "core/surfaceIntersection.h"
-#include "core/texture/category/constantTexture.h"
-#include "core/texture/texture.h"
+#include "core/texture/category/tConstantTexture.h"
+#include "core/texture/tTexture.h"
 #include "fundamental/assertion.h"
 #include "math/constant.h"
 #include "math/math.h"
@@ -14,10 +14,10 @@ namespace cadise {
 
 // Hack
 LambertianDiffuse::LambertianDiffuse() :
-    LambertianDiffuse(std::make_shared<ConstantTexture<Spectrum>>(Spectrum(0.5_r))) {
+    LambertianDiffuse(std::make_shared<TConstantTexture<Spectrum>>(Spectrum(0.5_r))) {
 }
 
-LambertianDiffuse::LambertianDiffuse(const std::shared_ptr<Texture<Spectrum>>& albedo) :
+LambertianDiffuse::LambertianDiffuse(const std::shared_ptr<TTexture<Spectrum>>& albedo) :
     Bsdf(BsdfLobes({ ELobe::DIFFUSE_REFLECTION })),
     _albedo(albedo) {
 

@@ -1,7 +1,7 @@
 #include "core/texture/wrapper/clampUvwWrapper.h"
 
 #include "fundamental/assertion.h"
-#include "math/vector.h"
+#include "math/tVector.h"
 
 namespace cadise {
 

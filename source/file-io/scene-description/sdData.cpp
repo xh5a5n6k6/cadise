@@ -1,6 +1,6 @@
 #include "file-io/scene-description/sdData.h"
 
-#include "core/texture/category/constantTexture.h"
+#include "core/texture/category/tConstantTexture.h"
 
 namespace cadise {
 
@@ -14,7 +14,7 @@ void SdData::addBool(
     const int32 valueNumber) {
 
     _bools.push_back(
-        std::make_shared<SdDataUnit<bool>>(name, std::move(value), valueNumber));
+        std::make_shared<TSdDataUnit<bool>>(name, std::move(value), valueNumber));
 }
 
 void SdData::addReal(
@@ -23,7 +23,7 @@ void SdData::addReal(
     const int32 valueNumber) {
 
     _reals.push_back(
-        std::make_shared<SdDataUnit<real>>(name, std::move(value), valueNumber));
+        std::make_shared<TSdDataUnit<real>>(name, std::move(value), valueNumber));
 }
 
 void SdData::addInt32(
@@ -32,7 +32,7 @@ void SdData::addInt32(
     const int32 valueNumber) {
 
     _int32s.push_back(
-        std::make_shared<SdDataUnit<int32>>(name, std::move(value), valueNumber));
+        std::make_shared<TSdDataUnit<int32>>(name, std::move(value), valueNumber));
 }
 
 void SdData::addVector3R(
@@ -41,7 +41,7 @@ void SdData::addVector3R(
     const int32 valueNumber) {
 
     _vector3rs.push_back(
-        std::make_shared<SdDataUnit<Vector3R>>(name, std::move(value), valueNumber));
+        std::make_shared<TSdDataUnit<Vector3R>>(name, std::move(value), valueNumber));
 }
 
 void SdData::addString(
@@ -50,7 +50,7 @@ void SdData::addString(
     const int32 valueNumber) {
 
     _strings.push_back(
-        std::make_shared<SdDataUnit<std::string_view>>(name, std::move(value), valueNumber));
+        std::make_shared<TSdDataUnit<std::string_view>>(name, std::move(value), valueNumber));
 }
 
 bool SdData::findBool(
@@ -95,12 +95,12 @@ const std::vector<Vector3R> SdData::findVector3rArray(
     return _findDataArray(name, _vector3rs);
 }
 
-std::shared_ptr<Texture<real>> SdData::getRealTexture(
-    const std::string_view&            name,
-    const StringKeyMap<Texture<real>>& realTextures,
-    const real                         defaultValue) const {
+std::shared_ptr<TTexture<real>> SdData::getRealTexture(
+    const std::string_view&             name,
+    const StringKeyMap<TTexture<real>>& realTextures,
+    const real                          defaultValue) const {
 
-    std::shared_ptr<Texture<real>> realTexture = nullptr;
+    std::shared_ptr<TTexture<real>> realTexture = nullptr;
 
     const std::string_view textureName = this->findString(name);
     if (textureName != "") {
@@ -109,18 +109,18 @@ std::shared_ptr<Texture<real>> SdData::getRealTexture(
     }
     else {
         const real value = this->findReal(name, defaultValue);
-        realTexture = std::make_shared<ConstantTexture<real>>(value);
+        realTexture = std::make_shared<TConstantTexture<real>>(value);
     }
 
     return realTexture;
 }
 
-std::shared_ptr<Texture<Spectrum>> SdData::getSpectrumTexture(
-    const std::string_view&                name,
-    const StringKeyMap<Texture<Spectrum>>& spectrumTextures,
-    const Spectrum&                        defaultValue) const {
+std::shared_ptr<TTexture<Spectrum>> SdData::getSpectrumTexture(
+    const std::string_view&                 name,
+    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures,
+    const Spectrum&                         defaultValue) const {
 
-    std::shared_ptr<Texture<Spectrum>> spectrumTexture = nullptr;
+    std::shared_ptr<TTexture<Spectrum>> spectrumTexture = nullptr;
 
     const std::string_view textureName = this->findString(name);
     if (textureName != "") {
@@ -133,7 +133,7 @@ std::shared_ptr<Texture<Spectrum>> SdData::getSpectrumTexture(
         defaultValue.transformToRgb(&defaultRgb);
 
         const Vector3R rgb = this->findVector3r(name, defaultRgb);
-        spectrumTexture = std::make_shared<ConstantTexture<Spectrum>>(Spectrum(rgb));
+        spectrumTexture = std::make_shared<TConstantTexture<Spectrum>>(Spectrum(rgb));
     }
 
     return spectrumTexture;

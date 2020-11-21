@@ -5,9 +5,9 @@
 namespace cadise {
 
 template<typename Index = std::size_t>
-class KdTreeNode {
+class TKdTreeNode {
 public:
-    KdTreeNode();
+    TKdTreeNode();
 
     void initializInternalNode(
         const std::size_t secondChildIndex,
@@ -64,4 +64,4 @@ private:
 
 } // namespace cadise
 
-#include "core/intersector/accelerator/kd-tree/kdTreeNode.ipp"
+#include "core/intersector/accelerator/kd-tree/tKdTreeNode.ipp"

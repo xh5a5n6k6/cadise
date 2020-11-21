@@ -5,7 +5,7 @@
 #include "core/light/category/pointLight.h"
 #include "core/light/category/singleAreaLight.h"
 
-#include "core/imaging/image.h"
+#include "core/imaging/tImage.h"
 #include "core/intersector/primitive/infiniteSphere.h"
 #include "core/intersector/primitive/primitive.h"
 #include "core/texture/category/rgbImageTexture.h"
@@ -22,8 +22,8 @@ static std::shared_ptr<Light> createPoint(
     const std::shared_ptr<SdData>& data,
     const StringKeyMap<Primitive>& primitives) {
 
-    const Vector3R position  = data->findVector3r("position");
-    const Vector3R intensity = data->findVector3r("intensity");
+    const auto position  = data->findVector3r("position");
+    const auto intensity = data->findVector3r("intensity");
 
     return std::make_shared<PointLight>(position, Spectrum(intensity));
 }
@@ -32,12 +32,12 @@ static std::shared_ptr<Light> createSingleArea(
     const std::shared_ptr<SdData>& data,
     const StringKeyMap<Primitive>& primitives) {
 
-    const Vector3R color          = data->findVector3r("color");
-    const real     watt           = data->findReal("watt");
-    const bool     isBackFaceEmit = data->findBool("is-back-face-emit");
+    const auto color          = data->findVector3r("color");
+    const real watt           = data->findReal("watt");
+    const bool isBackFaceEmit = data->findBool("is-back-face-emit");
 
-    const std::string_view primitiveName = data->findString("primitive");
-    auto&& primitive = primitives.find(primitiveName);
+    const auto   primitiveName = data->findString("primitive");
+    const auto&& primitive     = primitives.find(primitiveName);
 
     CADISE_ASSERT_NE(primitive, primitives.end());
 
@@ -52,9 +52,9 @@ static std::shared_ptr<Light> createSingleArea(
 static std::shared_ptr<Light> createEnvironment(
     const std::shared_ptr<SdData>& data,
     const StringKeyMap<Primitive>& primitives,
-    std::shared_ptr<Primitive>& out_backgroundSphere) {
+    std::shared_ptr<Primitive>&    out_backgroundSphere) {
     
-    const std::string_view hdrFilename = data->findString("hdr-filename");
+    const auto hdrFilename = data->findString("hdr-filename");
 
     CADISE_ASSERT_NE(hdrFilename, "");
 
@@ -63,7 +63,7 @@ static std::shared_ptr<Light> createEnvironment(
 
     const ETextureSampleMode sampleMode = ETextureSampleMode::NEAREST;
     const ETextureWrapMode   wrapMode   = ETextureWrapMode::REPEAT;
-    const std::shared_ptr<Texture<Spectrum>> radiance
+    const std::shared_ptr<TTexture<Spectrum>> radiance
         = std::make_shared<RgbImageTexture>(hdrImage, sampleMode, wrapMode);
 
     out_backgroundSphere = std::make_shared<InfiniteSphere>();
@@ -80,12 +80,12 @@ static std::shared_ptr<Light> createEnvironment(
 std::shared_ptr<Light> makeLight(
     const std::shared_ptr<SdData>& data,
     const StringKeyMap<Primitive>& primitives,
-    std::shared_ptr<Primitive>& out_backgroundSphere) {
+    std::shared_ptr<Primitive>&    out_backgroundSphere) {
 
     CADISE_ASSERT(data);
 
     std::shared_ptr<Light> light = nullptr;
-    const std::string_view type = data->findString("type");
+    const auto type = data->findString("type");
     if (type == "point") {
         light = createPoint(data, primitives);
     }

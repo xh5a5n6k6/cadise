@@ -8,10 +8,10 @@
 namespace cadise {
 
 template<typename T>
-class SdDataUnit {
+class TSdDataUnit {
 public:
-    SdDataUnit();
-    SdDataUnit(const std::string_view& name, std::unique_ptr<T[]> value, const std::size_t valueNumber);
+    TSdDataUnit();
+    TSdDataUnit(const std::string_view& name, std::unique_ptr<T[]> value, const std::size_t valueNumber);
 
     const std::string_view& variableName() const;
     std::unique_ptr<T[]> value();
@@ -25,4 +25,4 @@ private:
 
 } // namespace cadise
 
-#include "file-io/scene-description/sdDataUnit.ipp"
+#include "file-io/scene-description/tSdDataUnit.ipp"

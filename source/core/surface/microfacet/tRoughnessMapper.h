@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/surface/microfacet/roughnessMapMode.h"
+#include "core/surface/microfacet/eRoughnessMapMode.h"
 #include "math/math.h"
 
 #include <cmath>
@@ -8,7 +8,7 @@
 namespace cadise {
 
 template<ERoughnessMapMode Mode>
-class RoughnessMapper {
+class TRoughnessMapper {
 public:
     static real map(const real roughness);
 };
@@ -16,7 +16,7 @@ public:
 // template header implementation
 
 template<ERoughnessMapMode Mode>
-inline real RoughnessMapper<Mode>::map(const real roughness) {
+inline real TRoughnessMapper<Mode>::map(const real roughness) {
     real alpha;
     
     const real safeRoughness = math::max(roughness, 0.001_r);

@@ -78,7 +78,7 @@ std::shared_ptr<Renderer> makeRenderer(
 
     std::shared_ptr<Renderer> renderer = nullptr;
     
-    const std::string_view type = data->findString("type");
+    const auto type = data->findString("type");
     if (type == "sampling") {
         renderer = createSampling(data);
     }

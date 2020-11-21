@@ -1,8 +1,8 @@
 #include "core/integral-tool/directLightEvaluator.h"
 
-#include "core/integral-tool/mis.h"
 #include "core/integral-tool/sample/bsdfSample.h"
 #include "core/integral-tool/sample/directLightSample.h"
+#include "core/integral-tool/tMis.h"
 #include "core/intersector/primitive/primitive.h"
 #include "core/light/category/areaLight.h"
 #include "core/ray.h"
@@ -67,7 +67,7 @@ Spectrum DirectLightEvaluator::evaluate(
                 }
                 else {
                     const real bsdfPdfW  = bsdf->evaluatePdfW(TransportInfo(), intersection);
-                    const real misWeight = Mis<EMisMode::POWER>::weight(lightPdfW, bsdfPdfW);
+                    const real misWeight = TMis<EMisMode::POWER>::weight(lightPdfW, bsdfPdfW);
 
                     directLightRadiance += misWeight * radiance * directLightFactor / lightPdfW;
                 }
@@ -96,7 +96,7 @@ Spectrum DirectLightEvaluator::evaluate(
 
                         const real bsdfPdfW  = bsdfSample.pdfW();
                         const real lightPdfW = areaLight->evaluateDirectPdfW(localIntersection, P);
-                        const real misWeight = Mis<EMisMode::POWER>::weight(bsdfPdfW, lightPdfW);
+                        const real misWeight = TMis<EMisMode::POWER>::weight(bsdfPdfW, lightPdfW);
 
                         directLightRadiance += misWeight * radiance * directLightFactor / bsdfPdfW;
                     }

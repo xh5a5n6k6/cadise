@@ -1,13 +1,13 @@
 #pragma once
 
-#include "core/texture/sampler/pixelSampler.h"
+#include "core/texture/sampler/tPixelSampler.h"
 
 namespace cadise {
 
 template<typename T, std::size_t N>
-class NearestPixelSampler : public PixelSampler<T, N> {
+class TNearestPixelSampler : public TPixelSampler<T, N> {
 public:
-    using Parent = PixelSampler<T, N>;
+    using Parent = TPixelSampler<T, N>;
     using Parent::Parent;
     
     /*
@@ -21,11 +21,11 @@ public:
     using Parent::_uvwWrapper;
 
     void sample(
-        const Vector3R& uvw,
-        const Image<T, N>& image,
-        Vector<T, N>* const out_value) const override;
+        const Vector3R&      uvw,
+        const TImage<T, N>&  image,
+        TVector<T, N>* const out_value) const override;
 };
 
 } // namespace cadise
 
-#include "core/texture/sampler/nearestPixelSampler.ipp"
+#include "core/texture/sampler/tNearestPixelSampler.ipp"

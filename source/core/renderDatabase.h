@@ -16,7 +16,7 @@ class Renderer;
 class Scene;
 class SdData;
 template<typename T>
-class Texture;
+class TTexture;
 
 class RenderDatabase {
 public:
@@ -55,10 +55,10 @@ private:
     std::shared_ptr<Primitive> _backgroundSphere;
     std::size_t                _environmentLightIndex;
 
-    StringKeyMap<Bsdf>              _bsdfs;
-    StringKeyMap<Primitive>         _primitives; // for area light
-    StringKeyMap<Texture<real>>     _realTextures;
-    StringKeyMap<Texture<Spectrum>> _spectrumTextures;
+    StringKeyMap<Bsdf>               _bsdfs;
+    StringKeyMap<Primitive>          _primitives; // for area light
+    StringKeyMap<TTexture<real>>     _realTextures;
+    StringKeyMap<TTexture<Spectrum>> _spectrumTextures;
 };
 
 } // namespace cadise

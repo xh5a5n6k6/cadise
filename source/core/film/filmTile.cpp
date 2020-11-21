@@ -2,7 +2,7 @@
 
 #include "core/film/filter/filter.h"
 #include "fundamental/assertion.h"
-#include "math/vector.h"
+#include "math/tVector.h"
 
 namespace cadise {
 

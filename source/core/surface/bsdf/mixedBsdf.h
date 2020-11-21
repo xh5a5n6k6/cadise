@@ -7,7 +7,7 @@
 namespace cadise {
 
 template<typename T>
-class Texture;
+class TTexture;
 
 class MixedBsdf : public Bsdf {
 public:
@@ -16,9 +16,9 @@ public:
         const std::shared_ptr<Bsdf>& bsdfB,
         const real                   ratio);
     MixedBsdf(
-        const std::shared_ptr<Bsdf>&              bsdfA, 
-        const std::shared_ptr<Bsdf>&              bsdfB,
-        const std::shared_ptr<Texture<Spectrum>>& ratio);
+        const std::shared_ptr<Bsdf>&               bsdfA, 
+        const std::shared_ptr<Bsdf>&               bsdfB,
+        const std::shared_ptr<TTexture<Spectrum>>& ratio);
 
     Spectrum evaluate(
         const TransportInfo&       info,
@@ -38,7 +38,7 @@ private:
     std::shared_ptr<Bsdf> _bsdfB;
 
     // result = _ratio*_bsdfA + (1 - _ratio)*_bsdfB
-    std::shared_ptr<Texture<Spectrum>> _ratio;
+    std::shared_ptr<TTexture<Spectrum>> _ratio;
 };
 
 } // namespace cadise

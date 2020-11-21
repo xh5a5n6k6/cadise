@@ -1,13 +1,13 @@
 #pragma once
 
-#include "core/texture/texture.h"
+#include "core/texture/tTexture.h"
 
 namespace cadise {
 
 template<typename T>
-class ConstantTexture : public Texture<T> {
+class TConstantTexture : public TTexture<T> {
 public:
-    explicit ConstantTexture(const T& value);
+    explicit TConstantTexture(const T& value);
 
     void evaluate(const Vector3R& uvw, T* const out_value) const override;
 
@@ -17,4 +17,4 @@ private:
 
 } // namespace cadise
 
-#include "core/texture/category/constantTexture.ipp"
+#include "core/texture/category/tConstantTexture.ipp"

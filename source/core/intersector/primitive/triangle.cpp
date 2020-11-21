@@ -6,7 +6,7 @@
 #include "core/surfaceDetail.h"
 #include "core/texture/mapper/textureMapper.h"
 #include "fundamental/assertion.h"
-#include "math/aabb.h"
+#include "math/tAabb.h"
 #include "math/constant.h"
 #include "math/random.h"
 #include "math/warp/sampleWarp.h"

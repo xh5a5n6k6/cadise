@@ -5,11 +5,11 @@
 namespace cadise {
 
 RgbSpectrum::RgbSpectrum() :
-    ConceptualSpectrum<3>() {
+    TConceptualSpectrum<3>() {
 }
 
 RgbSpectrum::RgbSpectrum(const real value) :
-    ConceptualSpectrum<3>(value) {
+    TConceptualSpectrum<3>(value) {
 }
 
 RgbSpectrum::RgbSpectrum(const Vector3R& value) {
@@ -18,8 +18,8 @@ RgbSpectrum::RgbSpectrum(const Vector3R& value) {
     _values[2] = value.z();
 }
 
-RgbSpectrum::RgbSpectrum(const ConceptualSpectrum<3>& other) :
-    ConceptualSpectrum<3>(other) {
+RgbSpectrum::RgbSpectrum(const TConceptualSpectrum<3>& other) :
+    TConceptualSpectrum<3>(other) {
 }
 
 RgbSpectrum::RgbSpectrum(const RgbSpectrum& other) = default;

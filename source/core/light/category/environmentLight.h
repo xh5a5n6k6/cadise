@@ -10,13 +10,14 @@ namespace cadise {
 
 class Primitive;
 template<typename T>
-class Texture;
+class TTexture;
 
 class EnvironmentLight : public AreaLight {
 public:
-    EnvironmentLight(const Primitive* const primitive,
-                     const std::shared_ptr<Texture<Spectrum>>& environmentRadiance,
-                     const Vector2S& resolution);
+    EnvironmentLight(
+        const Primitive* const                     primitive,
+        const std::shared_ptr<TTexture<Spectrum>>& environmentRadiance,
+        const Vector2S&                            resolution);
 
     Spectrum emittance(const SurfaceIntersection& emitIntersection) const override;
 
@@ -41,8 +42,8 @@ private:
 
     const Primitive* _primitive;
 
-    std::shared_ptr<Texture<Spectrum>> _environmentRadiance;
-    Distribution2D                     _distribution;
+    std::shared_ptr<TTexture<Spectrum>> _environmentRadiance;
+    Distribution2D                      _distribution;
 
     real _backgroundFlux;
     real _approximateFlux;

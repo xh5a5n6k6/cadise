@@ -1,20 +1,20 @@
 #pragma once
 
-#include "core/texture/sampler/nearestPixelSampler.h"
+#include "core/texture/sampler/tNearestPixelSampler.h"
 
-#include "core/imaging/image.h"
+#include "core/imaging/tImage.h"
 #include "core/texture/wrapper/uvwWrapper.h"
 #include "fundamental/assertion.h"
 #include "math/math.h"
-#include "math/vector.h"
+#include "math/tVector.h"
 
 namespace cadise {
 
 template<typename T, std::size_t N>
-inline void NearestPixelSampler<T, N>::sample(
-    const Vector3R& uvw,
-    const Image<T, N>& image,
-    Vector<T, N>* const out_value) const {
+inline void TNearestPixelSampler<T, N>::sample(
+    const Vector3R&      uvw,
+    const TImage<T, N>&  image,
+    TVector<T, N>* const out_value) const {
 
     CADISE_ASSERT(out_value);
 

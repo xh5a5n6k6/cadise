@@ -54,7 +54,7 @@ std::shared_ptr<RadianceEstimator> makeEstimator(
 
     std::shared_ptr<RadianceEstimator> estimator = nullptr;
 
-    const std::string_view type = data->findString("estimator");
+    const auto type = data->findString("estimator");
     if (type == "wdl") {
         estimator = createWdl(data);
     }

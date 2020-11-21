@@ -1,6 +1,6 @@
 #include "core/surface/microfacet/microfacet.h"
 
-#include "math/vector.h"
+#include "math/tVector.h"
 
 namespace cadise {
 

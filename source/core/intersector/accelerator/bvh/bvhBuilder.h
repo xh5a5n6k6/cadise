@@ -1,7 +1,7 @@
 #pragma once
 
-#include "core/intersector/accelerator/bvh/bvhSplitMode.h"
 #include "core/intersector/accelerator/bvh/bvhLinearNode.h"
+#include "core/intersector/accelerator/bvh/eBvhSplitMode.h"
 
 #include <memory>
 #include <vector>

@@ -1,18 +1,18 @@
 #pragma once
 
-#include "core/texture/category/constantTexture.h"
+#include "core/texture/category/tConstantTexture.h"
 
 #include "fundamental/assertion.h"
 
 namespace cadise {
 
 template<typename T>
-inline ConstantTexture<T>::ConstantTexture(const T& value) :
+inline TConstantTexture<T>::TConstantTexture(const T& value) :
     _value(value) {
 }
 
 template<typename T>
-inline void ConstantTexture<T>::evaluate(const Vector3R& uvw, T* const out_value) const {
+inline void TConstantTexture<T>::evaluate(const Vector3R& uvw, T* const out_value) const {
     CADISE_ASSERT(out_value);
 
     *out_value = _value;

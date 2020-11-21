@@ -3,9 +3,9 @@
 #include "core/integral-tool/sample/bsdfSample.h"
 #include "core/surface/fresnel/conductorFresnel.h"
 #include "core/surface/microfacet/microfacet.h"
-#include "core/surface/microfacet/roughnessMapper.h"
+#include "core/surface/microfacet/tRoughnessMapper.h"
 #include "core/surfaceIntersection.h"
-#include "core/texture/texture.h"
+#include "core/texture/tTexture.h"
 #include "fundamental/assertion.h"
 #include "math/math.h"
 #include "math/random.h"
@@ -17,7 +17,7 @@ namespace cadise {
 ConductorMicrofacet::ConductorMicrofacet(
     const std::shared_ptr<Microfacet>&       microfacet,
     const std::shared_ptr<ConductorFresnel>& fresnel,
-    const std::shared_ptr<Texture<real>>&    roughness) :
+    const std::shared_ptr<TTexture<real>>&   roughness) :
     
     Bsdf(BsdfLobes({ ELobe::GLOSSY_REFLECTION })),
     _microfacet(microfacet),
@@ -53,7 +53,7 @@ Spectrum ConductorMicrofacet::evaluate(
     const Vector3R& uvw = si.surfaceDetail().uvw();
     real sampleRoughness;
     _roughness->evaluate(uvw, &sampleRoughness);
-    const real alpha = RoughnessMapper<ERoughnessMapMode::SQUARE>::map(sampleRoughness);
+    const real alpha = TRoughnessMapper<ERoughnessMapMode::SQUARE>::map(sampleRoughness);
 
     const real LdotH = L.dot(H);
     Spectrum F;
@@ -79,7 +79,7 @@ void ConductorMicrofacet::evaluateSample(
     const Vector3R& uvw = si.surfaceDetail().uvw();
     real sampleRoughness;
     _roughness->evaluate(uvw, &sampleRoughness);
-    const real alpha = RoughnessMapper<ERoughnessMapMode::SQUARE>::map(sampleRoughness);
+    const real alpha = TRoughnessMapper<ERoughnessMapMode::SQUARE>::map(sampleRoughness);
 
     // build local coordinate system (shading normal as y-axis)
     const Vector3R yAxis(Ns);
@@ -147,7 +147,7 @@ real ConductorMicrofacet::evaluatePdfW(
     const Vector3R& uvw = si.surfaceDetail().uvw();
     real sampleRoughness;
     _roughness->evaluate(uvw, &sampleRoughness);
-    const real alpha = RoughnessMapper<ERoughnessMapMode::SQUARE>::map(sampleRoughness);
+    const real alpha = TRoughnessMapper<ERoughnessMapMode::SQUARE>::map(sampleRoughness);
 
     const real D     = _microfacet->distributionD(alpha, alpha, Ns, H);
     const real NdotH = Ns.dot(H);

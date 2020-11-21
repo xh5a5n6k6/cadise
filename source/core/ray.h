@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/vector.h"
+#include "math/tVector.h"
 
 namespace cadise {
 
@@ -26,9 +26,8 @@ public:
 private:
     Vector3R _origin;
     Vector3R _direction;
-
-    real _minT;
-    real _maxT;
+    real     _minT;
+    real     _maxT;
 };
 
 } // namespace cadise

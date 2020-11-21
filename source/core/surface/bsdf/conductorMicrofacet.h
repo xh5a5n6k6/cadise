@@ -9,14 +9,14 @@ namespace cadise {
 class ConductorFresnel;
 class Microfacet;
 template<typename T>
-class Texture;
+class TTexture;
 
 class ConductorMicrofacet : public Bsdf {
 public:
     ConductorMicrofacet(
         const std::shared_ptr<Microfacet>&       microfacet,
         const std::shared_ptr<ConductorFresnel>& fresnel,
-        const std::shared_ptr<Texture<real>>&    roughness);
+        const std::shared_ptr<TTexture<real>>&   roughness);
 
     Spectrum evaluate(
         const TransportInfo&       info,
@@ -34,7 +34,7 @@ public:
 private:
     std::shared_ptr<Microfacet>       _microfacet;
     std::shared_ptr<ConductorFresnel> _fresnel;
-    std::shared_ptr<Texture<real>>    _roughness;
+    std::shared_ptr<TTexture<real>>   _roughness;
 };
 
 } // namespace cadise

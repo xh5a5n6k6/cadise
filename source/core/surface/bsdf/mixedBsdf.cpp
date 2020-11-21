@@ -3,7 +3,7 @@
 #include "core/integral-tool/sample/bsdfSample.h"
 #include "core/surfaceIntersection.h"
 #include "core/surface/transportInfo.h"
-#include "core/texture/category/constantTexture.h"
+#include "core/texture/category/tConstantTexture.h"
 #include "fundamental/assertion.h"
 #include "math/random.h"
 
@@ -14,13 +14,13 @@ MixedBsdf::MixedBsdf(
     const std::shared_ptr<Bsdf>& bsdfB,
     const real                   ratio) :
     
-    MixedBsdf(bsdfA, bsdfB, std::make_shared<ConstantTexture<Spectrum>>(Spectrum(ratio))) {
+    MixedBsdf(bsdfA, bsdfB, std::make_shared<TConstantTexture<Spectrum>>(Spectrum(ratio))) {
 }
 
 MixedBsdf::MixedBsdf(
-    const std::shared_ptr<Bsdf>&              bsdfA, 
-    const std::shared_ptr<Bsdf>&              bsdfB,
-    const std::shared_ptr<Texture<Spectrum>>& ratio) :
+    const std::shared_ptr<Bsdf>&               bsdfA, 
+    const std::shared_ptr<Bsdf>&               bsdfB,
+    const std::shared_ptr<TTexture<Spectrum>>& ratio) :
     
     Bsdf(bsdfA->lobes() | bsdfB->lobes(), bsdfA->components() + bsdfB->components()),
     _bsdfA(bsdfA),

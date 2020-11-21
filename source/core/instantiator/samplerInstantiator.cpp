@@ -34,7 +34,7 @@ std::shared_ptr<Sampler> makeSampler(
 
     std::shared_ptr<Sampler> sampler = nullptr;
     
-    const std::string_view type = data->findString("sampler");
+    const auto type = data->findString("sampler");
     if (type == "random") {
         sampler = createRandom(data);
     }

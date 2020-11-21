@@ -1,7 +1,7 @@
 #include "math/math.h"
 
 #include "fundamental/assertion.h"
-#include "math/vector.h"
+#include "math/tVector.h"
 
 #include <cmath>
 

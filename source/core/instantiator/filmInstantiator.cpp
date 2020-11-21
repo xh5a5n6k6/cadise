@@ -17,11 +17,11 @@ std::shared_ptr<Film> makeFilm(
 
     std::shared_ptr<Film> film = nullptr;
 
-    const int32            width  = data->findInt32("image-width", 1024);
-    const int32            height = data->findInt32("image-height", 768);
-    const std::string_view output = data->findString("output-filename", "cadise.jpg");
+    const int32 width  = data->findInt32("image-width", 1024);
+    const int32 height = data->findInt32("image-height", 768);
+    const auto  output = data->findString("output-filename", "cadise.jpg");
 
-    const std::shared_ptr<Filter> filter = makeFilter(data);
+    const auto filter = makeFilter(data);
 
     return std::make_shared<Film>(width, height, Path(output), filter);
 }

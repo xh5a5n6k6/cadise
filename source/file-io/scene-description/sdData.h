@@ -2,7 +2,7 @@
 
 #include "core/spectrum/spectrum.h"
 #include "file-io/scene-description/eSdClassType.h"
-#include "file-io/scene-description/sdDataUnit.h"
+#include "file-io/scene-description/tSdDataUnit.h"
 #include "math/type/mapType.h"
 
 #include <vector>
@@ -10,7 +10,7 @@
 namespace cadise {
 
 template<typename T>
-class Texture;
+class TTexture;
 
 class SdData {
 public:
@@ -53,14 +53,14 @@ public:
     const std::vector<Vector3R> findVector3rArray(
         const std::string_view& name) const;
 
-    std::shared_ptr<Texture<real>> getRealTexture(
-        const std::string_view&            name, 
-        const StringKeyMap<Texture<real>>& realTextures,
-        const real                         defaultValue = 0.0_r) const;
-    std::shared_ptr<Texture<Spectrum>> getSpectrumTexture(
-        const std::string_view&                name,
-        const StringKeyMap<Texture<Spectrum>>& spectrumTextures,
-        const Spectrum&                        defaultValue = Spectrum(0.0_r)) const;
+    std::shared_ptr<TTexture<real>> getRealTexture(
+        const std::string_view&             name, 
+        const StringKeyMap<TTexture<real>>& realTextures,
+        const real                          defaultValue = 0.0_r) const;
+    std::shared_ptr<TTexture<Spectrum>> getSpectrumTexture(
+        const std::string_view&                 name,
+        const StringKeyMap<TTexture<Spectrum>>& spectrumTextures,
+        const Spectrum&                         defaultValue = Spectrum(0.0_r)) const;
 
     const ESdClassType& classType() const;
 
@@ -72,20 +72,20 @@ private:
     T _findData(
         const std::string_view& name, 
         const T& defaultValue,
-        const std::vector<std::shared_ptr<SdDataUnit<T>>>& dataset) const;
+        const std::vector<std::shared_ptr<TSdDataUnit<T>>>& dataset) const;
 
     template<typename T>
     decltype(auto) _findDataArray(
         const std::string_view& name,
-        const std::vector<std::shared_ptr<SdDataUnit<T>>>& dataset) const;
+        const std::vector<std::shared_ptr<TSdDataUnit<T>>>& dataset) const;
 
     ESdClassType _classType;
 
-    std::vector<std::shared_ptr<SdDataUnit<bool>>>             _bools;
-    std::vector<std::shared_ptr<SdDataUnit<real>>>             _reals;
-    std::vector<std::shared_ptr<SdDataUnit<int32>>>            _int32s;
-    std::vector<std::shared_ptr<SdDataUnit<Vector3R>>>         _vector3rs;
-    std::vector<std::shared_ptr<SdDataUnit<std::string_view>>> _strings;
+    std::vector<std::shared_ptr<TSdDataUnit<bool>>>             _bools;
+    std::vector<std::shared_ptr<TSdDataUnit<real>>>             _reals;
+    std::vector<std::shared_ptr<TSdDataUnit<int32>>>            _int32s;
+    std::vector<std::shared_ptr<TSdDataUnit<Vector3R>>>         _vector3rs;
+    std::vector<std::shared_ptr<TSdDataUnit<std::string_view>>> _strings;
 };
 
 // template header implementation
@@ -94,7 +94,7 @@ template<typename T>
 inline T SdData::_findData(
     const std::string_view& name,
     const T& defaultValue,
-    const std::vector<std::shared_ptr<SdDataUnit<T>>>& dataset) const {
+    const std::vector<std::shared_ptr<TSdDataUnit<T>>>& dataset) const {
 
     for (std::size_t i = 0; i < dataset.size(); ++i) {
         if (dataset[i]->variableName() == name) {
@@ -108,10 +108,10 @@ inline T SdData::_findData(
 template<typename T>
 inline decltype(auto) SdData::_findDataArray(
     const std::string_view& name,
-    const std::vector<std::shared_ptr<SdDataUnit<T>>>& dataset) const {
+    const std::vector<std::shared_ptr<TSdDataUnit<T>>>& dataset) const {
 
     std::vector<T> dataArray;
-    std::shared_ptr<SdDataUnit<T>> dataUnit = nullptr;
+    std::shared_ptr<TSdDataUnit<T>> dataUnit = nullptr;
 
     for (std::size_t i = 0; i < dataset.size(); ++i) {
         if (dataset[i]->variableName() == name) {
