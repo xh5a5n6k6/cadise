@@ -89,7 +89,7 @@ void VpmRenderer::render() const {
 
     // step2: radiance estimation
     Parallel::execute(
-        _film->numTiles().product(),
+        _film->numTilesXy().product(),
         _numWorkers,
         [this, &photonMap, numPhotonPaths](
             const std::size_t workerId,
@@ -99,7 +99,7 @@ void VpmRenderer::render() const {
         const VpmEstimator estimator(&photonMap, numPhotonPaths, _setting->searchRadius());
 
         for (std::size_t workIndex = workBegin; workIndex < workEnd; ++workIndex) {
-            auto filmTile = _film->generateFilmTile(_film->getTileXyIndices(workIndex));
+            auto filmTile = _film->generateFilmTile(workIndex);
 
             EstimatorTileWork tileWork(
                 _scene,

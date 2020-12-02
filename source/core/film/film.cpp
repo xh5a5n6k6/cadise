@@ -14,12 +14,13 @@
 namespace cadise {
 
 Film::Film(
-    const int32                    widthPx, 
-    const int32                    heightPx, 
+    const Vector2I&                resolution,
+    const Vector2I&                tileSize,
     const Path&                    filename,
     const std::shared_ptr<Filter>& filter) :
     
-    _resolution(widthPx, heightPx),
+    _resolution(resolution),
+    _tileSize(tileSize),
     _filename(filename),
     _filter(filter),
     _pixels(),
@@ -33,19 +34,37 @@ Film::Film(
     _splatPixels.resize(numPixels);
 }
 
-std::unique_ptr<FilmTile> Film::generateFilmTile(const Vector2I& tileXy) const {
-    return this->generateFilmTile(tileXy.x(), tileXy.y());
+std::unique_ptr<FilmTile> Film::generateFilmTile(const std::size_t tileIndex) const {
+    CADISE_ASSERT_LT(tileIndex, this->numTilesXy().product());
+
+    const auto tileIndicesXy = _getTileXyIndices(tileIndex);
+    
+    return this->generateFilmTile(tileIndicesXy);
 }
 
-std::unique_ptr<FilmTile> Film::generateFilmTile(const int32 tileX, const int32 tileY) const {
-    const int32 minIndexX = tileX * CADISE_FILMTILE_SIZE;
-    const int32 minIndexY = tileY * CADISE_FILMTILE_SIZE;
-    const int32 maxIndexX = math::min(minIndexX + CADISE_FILMTILE_SIZE, _resolution.x());
-    const int32 maxIndexY = math::min(minIndexY + CADISE_FILMTILE_SIZE, _resolution.y());
+std::unique_ptr<FilmTile> Film::generateFilmTile(const Vector2I& tileIndicesXy) const {
+    const Vector2I minIndicesXy = tileIndicesXy * _tileSize;
+    const Vector2I maxIndicesXy = Vector2I::min(minIndicesXy + _tileSize, _resolution);
 
     return std::make_unique<FilmTile>(
-        AABB2I({minIndexX, minIndexY}, {maxIndexX, maxIndexY}),
+        AABB2I(minIndicesXy, maxIndicesXy),
         _filter.get());
+
+    /*
+        origin source code calculates x/y index respectively
+
+        const int32 minIndexX = tileX * _tileSize.x();
+        const int32 minIndexY = tileY * _tileSize.y();
+        const int32 maxIndexX = math::min(minIndexX + _tileSize.x(), _resolution.x());
+        const int32 maxIndexY = math::min(minIndexY + _tileSize.y(), _resolution.y());
+
+        const Vector2I minBound = Vector2I(tileX, tileY) * _tileSize;
+        const Vector2I maxBound = Vector2I::min(minBound + _tileSize, _resolution); 
+
+        return std::make_unique<FilmTile>(
+            AABB2I({minIndexX, minIndexY}, {maxIndexX, maxIndexY}),
+            _filter.get());
+    */
 }
 
 void Film::mergeWithFilmTile(std::unique_ptr<FilmTile> filmTile) {
@@ -71,19 +90,10 @@ void Film::mergeWithFilmTile(std::unique_ptr<FilmTile> filmTile) {
     }
 }
 
-Vector2I Film::getTileXyIndices(const std::size_t tileIndex) const {
-    const std::size_t numTilesX = this->numTiles().x();
-
+Vector2S Film::numTilesXy() const {
     return {
-        static_cast<int32>(tileIndex % numTilesX), // tile x index
-        static_cast<int32>(tileIndex / numTilesX)  // tile y index
-    };
-}
-
-Vector2S Film::numTiles() const {
-    return {
-        static_cast<std::size_t>((_resolution.x() + CADISE_FILMTILE_SIZE - 1) / CADISE_FILMTILE_SIZE), // number of width tiles
-        static_cast<std::size_t>((_resolution.y() + CADISE_FILMTILE_SIZE - 1) / CADISE_FILMTILE_SIZE)  // number of height tiles
+        static_cast<std::size_t>((_resolution.x() + _tileSize.x() - 1) / _tileSize.x()), // number of width tiles
+        static_cast<std::size_t>((_resolution.y() + _tileSize.y() - 1) / _tileSize.y())  // number of height tiles
     };
 }
 
@@ -128,12 +138,23 @@ void Film::save(const std::size_t samplesPerPixel) {
     }
 
     PictureSaver::save(_filename, hdrImage);
-    _pixels.clear();
-    _pixels.shrink_to_fit();
 }
 
 const Vector2I& Film::resolution() const {
     return _resolution;
+}
+
+const Path& Film::filename() const {
+    return _filename;
+}
+
+Vector2I Film::_getTileXyIndices(const std::size_t tileIndex) const {
+    const std::size_t numTilesX = this->numTilesXy().x();
+
+    return {
+        static_cast<int32>(tileIndex % numTilesX), // tile x index
+        static_cast<int32>(tileIndex / numTilesX)  // tile y index
+    };
 }
 
 std::size_t Film::_pixelIndexOffset(const int32 x, const int32 y) const {

@@ -10,7 +10,10 @@ template<typename T>
 inline constexpr T MASK = T(3);
 
 template<typename Index>
-TKdTreeNode<Index>::TKdTreeNode() = default;
+TKdTreeNode<Index>::TKdTreeNode() :
+    _objectIndex(0),
+    _secondChildIndex(0) {
+}
 
 template<typename Index>
 void TKdTreeNode<Index>::initializInternalNode(

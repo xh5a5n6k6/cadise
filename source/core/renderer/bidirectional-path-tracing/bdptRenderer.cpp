@@ -34,7 +34,7 @@ void BdptRenderer::render() const {
     stopwatch.start();
 
     Parallel::execute(
-        _film->numTiles().product(),
+        _film->numTilesXy().product(),
         _numWorkers,
         [this](const std::size_t workerId,
                const std::size_t workBegin,
@@ -46,7 +46,7 @@ void BdptRenderer::render() const {
             std::vector<ConnectEvent> connectEvents;
             connectEvents.reserve(_film->resolution().product());
 
-            auto filmTile = _film->generateFilmTile(_film->getTileXyIndices(workIndex));
+            auto filmTile = _film->generateFilmTile(workIndex);
             
             BdptTileWork tileWork(
                 _scene,

@@ -39,14 +39,14 @@ void SamplingRenderer::render() const {
     stopwatch.start();
 
     Parallel::execute(
-        _film->numTiles().product(), 
+        _film->numTilesXy().product(), 
         _numWorkers,
         [this](const std::size_t workerId,
                const std::size_t workBegin,
                const std::size_t workEnd) {
 
         for (std::size_t workIndex = workBegin; workIndex < workEnd; ++workIndex) {
-            auto filmTile = _film->generateFilmTile(_film->getTileXyIndices(workIndex));
+            auto filmTile = _film->generateFilmTile(workIndex);
 
             EstimatorTileWork tileWork(
                 _scene, 

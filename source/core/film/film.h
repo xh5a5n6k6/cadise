@@ -19,8 +19,8 @@ private:
 
 public:
     Film(
-        const int32                    widthPx, 
-        const int32                    heightPx,
+        const Vector2I&                resolution,
+        const Vector2I&                tileSize,
         const Path&                    filename,
         const std::shared_ptr<Filter>& filter);
 
@@ -30,22 +30,24 @@ public:
 
     void addSplatRadiance(const ConnectEvent& connectEvent);
 
-    std::unique_ptr<FilmTile> generateFilmTile(const Vector2I& tileXy) const;
-    std::unique_ptr<FilmTile> generateFilmTile(const int32 tileX, const int32 tileY) const;
+    std::unique_ptr<FilmTile> generateFilmTile(const std::size_t tileIndex) const;
+    std::unique_ptr<FilmTile> generateFilmTile(const Vector2I& tileIndicesXy) const;
     void mergeWithFilmTile(std::unique_ptr<FilmTile> filmTile);
 
-    Vector2I getTileXyIndices(const std::size_t tileIndex) const;
-    Vector2S numTiles() const;
+    Vector2S numTilesXy() const;
 
     void save(const std::size_t samplesPerPixel);
 
     const Vector2I& resolution() const;
+    const Path& filename() const;
 
 private:
+    Vector2I _getTileXyIndices(const std::size_t tileIndex) const;
     std::size_t _pixelIndexOffset(const int32 x, const int32 y) const;
 
-    Vector2I                _resolution;
     Path                    _filename;
+    Vector2I                _resolution;
+    Vector2I                _tileSize;
     std::shared_ptr<Filter> _filter;
 
     std::vector<FilmPixel> _pixels;
