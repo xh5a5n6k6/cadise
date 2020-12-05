@@ -14,9 +14,6 @@ class FilmTile;
 class Filter;
 
 class Film {
-private:
-    using FilmPixel = Vector3R;
-
 public:
     Film(
         const Vector2I&                resolution,
@@ -36,7 +33,9 @@ public:
 
     Vector2S numTilesXy() const;
 
-    void save(const std::size_t samplesPerPixel);
+    void save(
+        const std::size_t samplesPerPixel,
+        const bool        usePostProcessing = true);
 
     const Vector2I& resolution() const;
     const Path& filename() const;
@@ -50,8 +49,8 @@ private:
     Vector2I                _tileSize;
     std::shared_ptr<Filter> _filter;
 
-    std::vector<FilmPixel> _pixels;
-    std::vector<FilmPixel> _splatPixels;
+    std::vector<Vector3R> _pixels;
+    std::vector<Vector3R> _splatPixels;
 
     std::mutex _filmMutex;
 };

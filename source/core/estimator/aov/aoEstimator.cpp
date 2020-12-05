@@ -15,7 +15,7 @@ AoEstimator::AoEstimator() :
 }
 
 AoEstimator::AoEstimator(const std::size_t numSampleRays) :
-    RadianceEstimator(),
+    AovEstimator(),
     _numSampleRays(numSampleRays) {
 }
 

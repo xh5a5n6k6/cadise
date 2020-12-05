@@ -21,7 +21,7 @@ public:
         const ETextureSampleMode&   sampleMode,
         const ETextureWrapMode&     wrapMode);
 
-    virtual void evaluate(const Vector3R& uvw, T* const out_value) const override = 0;
+    void evaluate(const Vector3R& uvw, T* const out_value) const override = 0;
 
 protected:
     TImage<ImageType, N> _image;

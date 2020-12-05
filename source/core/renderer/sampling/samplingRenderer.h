@@ -4,23 +4,20 @@
 
 namespace cadise {
 
-class RadianceEstimator;
+class EnergyEstimator;
 class Sampler;
 
 class SamplingRenderer : public Renderer {
-private:
-    using Estimator = RadianceEstimator;
-
 public:
     SamplingRenderer(
-        const std::shared_ptr<Estimator>& estimator,
-        const std::shared_ptr<Sampler>&   sampler);
+        const std::shared_ptr<EnergyEstimator>& estimator,
+        const std::shared_ptr<Sampler>&         sampler);
 
     void render() const override;
 
 private:
-    std::shared_ptr<Estimator> _estimator;
-    std::shared_ptr<Sampler>   _sampler;
+    std::shared_ptr<EnergyEstimator> _estimator;
+    std::shared_ptr<Sampler>         _sampler;
 };
 
 } // namespace cadise

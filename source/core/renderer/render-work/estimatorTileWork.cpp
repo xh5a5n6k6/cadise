@@ -2,7 +2,7 @@
 
 #include "core/camera/camera.h"
 #include "core/film/filmTile.h"
-#include "core/estimator/radianceEstimator.h"
+#include "core/estimator/energyEstimator.h"
 #include "core/ray.h"
 #include "core/sampler/sampler.h"
 #include "core/sampler/sampleRecord2D.h"
@@ -12,10 +12,10 @@
 namespace cadise {
 
 EstimatorTileWork::EstimatorTileWork(
-    const Scene* const     scene,
-    const Camera* const    camera,
-    const Estimator* const estimator,
-    const Sampler* const   sampler) :
+    const Scene* const           scene,
+    const Camera* const          camera,
+    const EnergyEstimator* const estimator,
+    const Sampler* const         sampler) :
 
     TileWork(),
     _scene(scene),

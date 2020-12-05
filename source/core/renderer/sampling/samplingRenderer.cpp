@@ -2,7 +2,7 @@
 
 #include "core/film/film.h"
 #include "core/film/filmTile.h"
-#include "core/estimator/radianceEstimator.h"
+#include "core/estimator/energyEstimator.h"
 #include "core/renderer/render-work/estimatorTileWork.h"
 #include "core/sampler/sampler.h"
 #include "core/scene.h"
@@ -19,8 +19,8 @@ namespace {
 } // anonymous namespace
 
 SamplingRenderer::SamplingRenderer(
-    const std::shared_ptr<Estimator>& estimator, 
-    const std::shared_ptr<Sampler>&   sampler) :
+    const std::shared_ptr<EnergyEstimator>& estimator, 
+    const std::shared_ptr<Sampler>&         sampler) :
     
     Renderer(),
     _estimator(estimator),
@@ -62,7 +62,7 @@ void SamplingRenderer::render() const {
         }
     });
 
-    _film->save(_sampler->sampleNumber());
+    _film->save(_sampler->sampleNumber(), !_estimator->useDirectly());
 
     stopwatch.stop();
     logger.log("Render time: " + stopwatch.elapsedTime().toString());

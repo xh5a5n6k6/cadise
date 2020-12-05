@@ -116,7 +116,10 @@ void Film::addSplatRadiance(const ConnectEvent& connectEvent) {
     _splatPixels[pixelIndexOffset] += splatRgb;
 }
 
-void Film::save(const std::size_t samplesPerPixel) {
+void Film::save(
+    const std::size_t samplesPerPixel,
+    const bool        usePostProcessing) {
+
     // TODO: refactor here
     HdrImage hdrImage(_resolution);
     const real inverseSpp = 1.0_r / static_cast<real>(samplesPerPixel);
@@ -125,15 +128,22 @@ void Film::save(const std::size_t samplesPerPixel) {
         for (int32 ix = 0; ix < _resolution.x(); ++ix) {
             const std::size_t pixelOffset = _pixelIndexOffset(ix, iy);
 
-            const FilmPixel& pixel      = _pixels[pixelOffset];
-            const FilmPixel& splatPixel = _splatPixels[pixelOffset];
+            const Vector3R& pixel      = _pixels[pixelOffset];
+            const Vector3R& splatPixel = _splatPixels[pixelOffset];
 
-            // TODO: refactor here, use toneMapper instead
-            const real r = math::forward_gamma_correction(pixel.x() + splatPixel.x() * inverseSpp);
-            const real g = math::forward_gamma_correction(pixel.y() + splatPixel.y() * inverseSpp);
-            const real b = math::forward_gamma_correction(pixel.z() + splatPixel.z() * inverseSpp);
+            const Vector3R recordLinearSrgb = pixel + splatPixel * inverseSpp;
             
-            hdrImage.setPixelValue(ix, iy, {r, g, b});
+            if (usePostProcessing) {
+                const Vector3R recordSrgb = {
+                    math::forward_gamma_correction(recordLinearSrgb.x()),
+                    math::forward_gamma_correction(recordLinearSrgb.y()),
+                    math::forward_gamma_correction(recordLinearSrgb.z())};
+
+                hdrImage.setPixelValue(ix, iy, recordSrgb);
+            }
+            else {
+                hdrImage.setPixelValue(ix, iy, recordLinearSrgb);
+            }
         }
     }
 

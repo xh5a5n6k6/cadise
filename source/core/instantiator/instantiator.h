@@ -8,13 +8,13 @@ namespace cadise {
 class Accelerator;
 class Bsdf;
 class Camera;
+class EnergyEstimator;
 class Film;
 class Filter;
 class Intersector;
 class Light;
 class LightCluster;
 class Primitive;
-class RadianceEstimator;
 class Renderer;
 class Sampler;
 class Scene;
@@ -33,7 +33,7 @@ std::shared_ptr<Renderer> makeRenderer(
     const std::shared_ptr<SdData>& data);
 
 // implement in core/instantiator/estimatorInstantiator.cpp
-std::shared_ptr<RadianceEstimator> makeEstimator(
+std::shared_ptr<EnergyEstimator> makeEstimator(
     const std::shared_ptr<SdData>& data);
 
 // implement in core/instantiator/filmInstantiator.cpp

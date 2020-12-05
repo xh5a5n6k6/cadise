@@ -2,6 +2,8 @@
 
 namespace cadise {
 
-RadianceEstimator::~RadianceEstimator() = default;
+bool RadianceEstimator::useDirectly() const {
+    return false;
+}
 
 } // namespace cadise
