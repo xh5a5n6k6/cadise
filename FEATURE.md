@@ -7,6 +7,8 @@
     - Photon Mapping
     - AOV Rendering
         - Ambient Occlusion
+        - World-Space Normal Map
+        - UVs Map
 - ### Accelerator
     - BVH (equal, SAH)
     - K-d Tree (SAH)

@@ -2,6 +2,8 @@
 
 // estimator type
 #include "core/estimator/aov/aoEstimator.h"
+#include "core/estimator/aov/uvwEstimator.h"
+#include "core/estimator/aov/wsnEstimator.h"
 #include "core/estimator/ptEstimator.h"
 #include "core/estimator/vptEstimator.h"
 #include "core/estimator/wdlEstimator.h"
@@ -47,6 +49,18 @@ static std::shared_ptr<EnergyEstimator> createAovAo(
     return std::make_shared<AoEstimator>(numSampleRays);
 }
 
+static std::shared_ptr<EnergyEstimator> createAovUvw(
+    const std::shared_ptr<SdData>& data) {
+
+    return std::make_shared<UvwEstimator>();
+}
+
+static std::shared_ptr<EnergyEstimator> createAovWsn(
+    const std::shared_ptr<SdData>& data) {
+
+    return std::make_shared<WsnEstimator>();
+}
+
 std::shared_ptr<EnergyEstimator> makeEstimator(
     const std::shared_ptr<SdData>& data) {
 
@@ -66,6 +80,12 @@ std::shared_ptr<EnergyEstimator> makeEstimator(
     }
     else if (type == "aov-ao") {
         estimator = createAovAo(data);
+    }
+    else if (type == "aov-uvw") {
+        estimator = createAovUvw(data);
+    }
+    else if (type == "aov-wsn") {
+        estimator = createAovWsn(data);
     }
     else {
         // unsupported estimator type
