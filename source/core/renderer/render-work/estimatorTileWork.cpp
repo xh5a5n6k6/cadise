@@ -1,8 +1,8 @@
 #include "core/renderer/render-work/estimatorTileWork.h"
 
 #include "core/camera/camera.h"
-#include "core/film/filmTile.h"
 #include "core/estimator/energyEstimator.h"
+#include "core/film/filmTile.h"
 #include "core/ray.h"
 #include "core/sampler/sampler.h"
 #include "core/sampler/sampleRecord2D.h"
@@ -32,23 +32,20 @@ EstimatorTileWork::EstimatorTileWork(
 void EstimatorTileWork::work() const {
     CADISE_ASSERT(_filmTile);
 
-    const Vector2R realFilmResolution = _filmResolution.asType<real>();
-
     const Vector2I& x0y0 = _filmTile->tileBound().minVertex();
     const Vector2I& x1y1 = _filmTile->tileBound().maxVertex();
 
     for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy) {
         for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix) {
-            const Vector2R filmPosition(static_cast<real>(ix), static_cast<real>(iy));
-
             auto sampleSampler = _sampler->clone(_sampler->sampleNumber());
             auto sample2D      = sampleSampler->requestSample2D();
+
             for (std::size_t in = 0; in < sampleSampler->sampleNumber(); ++in) {
-                const Vector2R filmJitterPosition = filmPosition + sample2D->nextSample();
-                const Vector2R filmNdcPosition    = filmJitterPosition / realFilmResolution;
+                const Vector2R filmJitterPosition 
+                    = Vector2I(ix, iy).asType<real>() + sample2D->nextSample();
 
                 Ray primaryRay;
-                _camera->spawnPrimaryRay(filmNdcPosition, &primaryRay);
+                _camera->spawnPrimaryRay(filmJitterPosition.asType<float64>(), &primaryRay);
 
                 Spectrum sampleRadiance;
                 _estimator->estimate(*_scene, primaryRay, &sampleRadiance);

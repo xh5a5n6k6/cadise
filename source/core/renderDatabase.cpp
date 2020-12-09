@@ -119,9 +119,10 @@ void RenderDatabase::prepareRender() {
         _scene->setBackgroundSphere(_backgroundSphere.get());
     }
 
-    const real rx = static_cast<real>(film->resolution().x());
-    const real ry = static_cast<real>(film->resolution().y());
-    camera->setAspectRatio(rx / ry);
+    //const real rx = static_cast<real>(film->resolution().x());
+    //const real ry = static_cast<real>(film->resolution().y());
+    //camera->setAspectRatio(rx / ry);
+    camera->setResolution(film->resolution().asType<std::size_t>());
     camera->updateTransform();
 
     _renderer->setScene(_scene.get());

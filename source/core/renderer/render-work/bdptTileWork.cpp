@@ -14,8 +14,8 @@
 namespace cadise {
 
 BdptTileWork::BdptTileWork(
-    const Scene* const scene,
-    const Camera* const camera,
+    const Scene* const   scene,
+    const Camera* const  camera,
     const Sampler* const sampler) :
 
     TileWork(),
@@ -38,19 +38,17 @@ void BdptTileWork::work() const {
 
     SubPathConnector subPathConnector;
 
-    const Vector2R realFilmResolution = _filmResolution.asType<real>();
-
     const Vector2I& x0y0 = _filmTile->tileBound().minVertex();
     const Vector2I& x1y1 = _filmTile->tileBound().maxVertex();
+
     for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy) {
         for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix) {
-            const Vector2R filmPosition(static_cast<real>(ix), static_cast<real>(iy));
-
             auto sampleSampler = _sampler->clone(_sampler->sampleNumber());
             auto sample2D      = sampleSampler->requestSample2D();
+
             for (std::size_t in = 0; in < sampleSampler->sampleNumber(); ++in) {
-                const Vector2R filmJitterPosition = filmPosition + sample2D->nextSample();
-                const Vector2R filmNdcPosition    = filmJitterPosition / realFilmResolution;
+                const Vector2R filmJitterPosition 
+                    = Vector2I(ix, iy).asType<real>() + sample2D->nextSample();
 
                 Spectrum accumulatedRadiance(0.0_r);
 
@@ -62,12 +60,14 @@ void BdptTileWork::work() const {
                 // it also calculates s=0 situation radiance
                 SubPath  cameraPath(MAX_PATH_LENGTH);
                 Spectrum zeroBounceRadiance(0.0_r);
-                subPathBuilder.buildCameraPath(*_scene, filmNdcPosition, &cameraPath, &zeroBounceRadiance);
+                subPathBuilder.buildCameraPath(
+                    *_scene, filmJitterPosition.asType<float64>(), &cameraPath, &zeroBounceRadiance);
 
                 accumulatedRadiance += zeroBounceRadiance;
 
                 // step3: light sub-path connects to camera (t=1 situation)
                 std::vector<ConnectEvent> connectEvents;
+                connectEvents.reserve(MAX_PATH_LENGTH);
                 lightPath.connectCamera(*_scene, _camera, _connectEvents);
 
                 // step4: camera sub-path connects to light (s=1 situation)

@@ -3,27 +3,27 @@
 namespace cadise {
 
 ConnectEvent::ConnectEvent() :
-    ConnectEvent(Vector2R(0.0_r), Spectrum(0.0_r)){
+    ConnectEvent(Vector2D(0.0_r), Spectrum(0.0_r)){
 }
 
 ConnectEvent::ConnectEvent(
-    const Vector2R& filmNdcPosition,
+    const Vector2D& filmPosition,
     const Spectrum& splatRadiance) :
 
-    _filmNdcPosition(filmNdcPosition),
+    _filmPosition(filmPosition),
     _splatRadiance(splatRadiance) {
 }
 
-const Vector2R& ConnectEvent::filmNdcPosition() const {
-    return _filmNdcPosition;
+const Vector2D& ConnectEvent::filmPosition() const {
+    return _filmPosition;
 }
 
 const Spectrum& ConnectEvent::splatRadiance() const {
     return _splatRadiance;
 }
 
-void ConnectEvent::setFilmNdcPosition(const Vector2R& filmNdcPosition) {
-    _filmNdcPosition = filmNdcPosition;
+void ConnectEvent::setFilmPosition(const Vector2D& filmPosition) {
+    _filmPosition = filmPosition;
 }
 
 void ConnectEvent::setSplatRadiance(const Spectrum& splatRadiance) {

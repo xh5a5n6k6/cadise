@@ -6,7 +6,7 @@ CameraSample::CameraSample() :
     _targetPosition(),
     _cameraPosition(),
     _cameraNormal(),
-    _filmNdcPosition(),
+    _filmPosition(),
     _importance(0.0_r),
     _pdfW(0.0_r) {
 }
@@ -23,8 +23,8 @@ const Vector3R& CameraSample::cameraNormal() const {
     return _cameraNormal;
 }
 
-const Vector2R& CameraSample::filmNdcPosition() const {
-    return _filmNdcPosition;
+const Vector2D& CameraSample::filmPosition() const {
+    return _filmPosition;
 }
 
 const Spectrum& CameraSample::importance() const {
@@ -47,8 +47,8 @@ void CameraSample::setCameraNormal(const Vector3R& cameraNormal) {
     _cameraNormal = cameraNormal;
 }
 
-void CameraSample::setFilmNdcPosition(const Vector2R& filmNdcPosition) {
-    _filmNdcPosition = filmNdcPosition;
+void CameraSample::setFilmPosition(const Vector2D& filmPosition) {
+    _filmPosition = filmPosition;
 }
 
 void CameraSample::setImportance(const Spectrum& importance) {

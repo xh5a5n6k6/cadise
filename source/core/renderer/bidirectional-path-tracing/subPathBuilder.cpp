@@ -83,7 +83,7 @@ void SubPathBuilder::buildLightPath(
 
 void SubPathBuilder::buildCameraPath(
     const Scene&    scene,
-    const Vector2R& filmNdcPosition,
+    const Vector2D& filmPosition,
     SubPath* const  out_cameraPath,
     Spectrum* const out_zeroBounceRadiance) const {
 
@@ -92,7 +92,7 @@ void SubPathBuilder::buildCameraPath(
     CADISE_ASSERT(_camera);
 
     Ray primaryRay;
-    _camera->spawnPrimaryRay(filmNdcPosition, &primaryRay);
+    _camera->spawnPrimaryRay(filmPosition, &primaryRay);
 
     real pdfA;
     real pdfW;

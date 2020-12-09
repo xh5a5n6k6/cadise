@@ -83,7 +83,7 @@ void SubPath::connectCamera(
 
         const Vector3R& cameraP           = cameraSample.cameraPosition();
         const Vector3R& cameraN           = cameraSample.cameraNormal();
-        const Vector2R& filmNdcPosition   = cameraSample.filmNdcPosition();
+        const Vector2D& filmPosition      = cameraSample.filmPosition();
         const Spectrum& importance        = cameraSample.importance();
         const real      pdfW              = cameraSample.pdfW();
         const real      distance2         = (lightP - cameraP).lengthSquared();
@@ -117,7 +117,7 @@ void SubPath::connectCamera(
         const real misWeight = BdptMis::weight(
             scene, *this, SubPath::oneVertexPath(cameraVertex), s, 1);
 
-        out_events->push_back(ConnectEvent(filmNdcPosition, radiance * misWeight));
+        out_events->push_back(ConnectEvent(filmPosition, radiance * misWeight));
     }
 }
 

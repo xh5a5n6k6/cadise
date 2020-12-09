@@ -48,8 +48,8 @@ void FilmTile::addSample(const Vector2R& filmPosition, const Vector3R& sampleRgb
     // for each effective pixel, accumulate its weight
     for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy) {
         for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix) {
-            const std::size_t sensorIndexOffset = _sensorIndexOffset(ix - _tileBound.minVertex().x(), 
-                                                                     iy - _tileBound.minVertex().y());
+            const std::size_t sensorIndexOffset 
+                = _sensorIndexOffset(ix - _tileBound.minVertex().x(), iy - _tileBound.minVertex().y());
 
             const real x = ix - (filmPosition.x() - 0.5_r);
             const real y = iy - (filmPosition.y() - 0.5_r);

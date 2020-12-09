@@ -15,8 +15,4 @@ void TileWork::setFilmTile(FilmTile* const filmTile) {
     _filmTile = filmTile;
 }
 
-void TileWork::setFilmResolution(const Vector2I& filmResolution) {
-    _filmResolution = filmResolution;
-}
-
 } // namespace cadise

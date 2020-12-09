@@ -16,7 +16,7 @@ public:
     virtual void updateTransform() = 0;
 
     virtual void spawnPrimaryRay(
-        const Vector2R& filmNdcPosition,
+        const Vector2D& filmPosition,
         Ray* const      out_primaryRay) const = 0;
 
     virtual void evaluateCameraSample(
@@ -28,11 +28,13 @@ public:
         real* const out_pdfA,
         real* const out_pdfW) const = 0;
 
-    void setAspectRatio(const real aspectRatio);
+    void setResolution(const Vector2S& resolution);
 
 protected:
+    float64 _getAspectRatio() const;
+
     Vector3R _position;
-    real     _aspectRatio;
+    Vector2S _resolution;
 };
 
 } // namespace cadise

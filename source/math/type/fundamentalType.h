@@ -14,10 +14,10 @@ using uint32 = std::uint32_t;
 using int64  = std::int64_t;
 using uint64 = std::uint64_t;
 
-using real32 = float;
-using real64 = double;
+using float32 = float;
+using float64 = double;
 
-using real = real32;
+using real = float32;
 
 inline constexpr real operator"" _r(const long double value) {
     return static_cast<real>(value);

@@ -15,13 +15,13 @@ public:
         const Vector3R& position, 
         const Vector3R& direction, 
         const Vector3R& up, 
-        const real      fov,
-        const real      sensorWidthMM);
+        const float64   fov,
+        const float64   sensorWidthMM);
 
     void updateTransform() override;
 
     void spawnPrimaryRay(
-        const Vector2R& filmNdcPosition,
+        const Vector2D& filmPosition,
         Ray* const      out_primaryRay) const override;
 
     void evaluateCameraSample(
@@ -34,17 +34,17 @@ public:
         real* const out_pdfW) const override;
 
 private:
-    std::pair<real, real> _getSensorSize() const;
-    real _getSensorArea() const;
+    std::pair<float64, float64> _getSensorSizeXy() const;
+    float64 _getSensorArea() const;
 
-    std::shared_ptr<Transform> _cameraToWorld;
+    std::unique_ptr<Transform> _cameraToWorld;
 
-    // transform from film NDC (not raster) to camera
-    std::shared_ptr<Transform> _filmNdcToCamera;
+    // transform from film (raster) to camera
+    std::unique_ptr<Transform> _filmToCamera;
 
-    real _fov;
-    real _sensorWidthMM;
-    real _sensorOffset;
+    float64 _fov;
+    float64 _sensorWidthMM;
+    float64 _sensorOffset;
 };
 
 } // namespace cadise

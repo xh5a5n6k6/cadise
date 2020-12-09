@@ -104,8 +104,7 @@ void Film::addSplatRadiance(const ConnectEvent& connectEvent) {
     Vector3R splatRgb;
     splatRadiance.transformToRgb(&splatRgb);
 
-    const Vector2R& filmNdcPosition = connectEvent.filmNdcPosition();
-    const Vector2R  filmPosition    = filmNdcPosition * _resolution.asType<real>();
+    const Vector2D& filmPosition = connectEvent.filmPosition();
 
     int32 ix = static_cast<int32>(std::floor(filmPosition.x()));
     int32 iy = static_cast<int32>(std::floor(filmPosition.y()));

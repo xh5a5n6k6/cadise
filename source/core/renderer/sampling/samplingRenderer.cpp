@@ -54,7 +54,6 @@ void SamplingRenderer::render() const {
                 _estimator.get(), 
                 _sampler.get());
             tileWork.setFilmTile(filmTile.get());
-            tileWork.setFilmResolution(_film->resolution());
 
             tileWork.work();
 

@@ -53,7 +53,6 @@ void BdptRenderer::render() const {
                 _camera.get(),
                 _sampler.get());
             tileWork.setFilmTile(filmTile.get());
-            tileWork.setFilmResolution(_film->resolution());
             tileWork.setConnectEvents(&connectEvents);
 
             tileWork.work();

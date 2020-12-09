@@ -22,7 +22,7 @@ public:
 
     void buildCameraPath(
         const Scene&    scene,
-        const Vector2R& filmNdcPosition,
+        const Vector2D& filmPosition,
         SubPath* const  out_cameraPath,
         Spectrum* const out_zeroBounceRadiance) const;
 

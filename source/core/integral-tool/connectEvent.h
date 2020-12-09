@@ -8,17 +8,17 @@ class ConnectEvent {
 public:
     ConnectEvent();
     ConnectEvent(
-        const Vector2R& filmNdcPosition, 
+        const Vector2D& filmPosition, 
         const Spectrum& splatRadiance);
 
-    const Vector2R& filmNdcPosition() const;
+    const Vector2D& filmPosition() const;
     const Spectrum& splatRadiance() const;
 
-    void setFilmNdcPosition(const Vector2R& filmNdcPosition);
+    void setFilmPosition(const Vector2D& filmPosition);
     void setSplatRadiance(const Spectrum& splatRadiance);
 
 private:
-    Vector2R _filmNdcPosition;
+    Vector2D _filmPosition;
     Spectrum _splatRadiance;
 };
 

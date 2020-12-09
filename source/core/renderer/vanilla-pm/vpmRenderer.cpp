@@ -107,7 +107,6 @@ void VpmRenderer::render() const {
                 &estimator,
                 _sampler.get());
             tileWork.setFilmTile(filmTile.get());
-            tileWork.setFilmResolution(_film->resolution());
 
             tileWork.work();
 

@@ -4,13 +4,17 @@ namespace cadise {
 
 Camera::Camera(const Vector3R& position) :
     _position(position),
-    _aspectRatio(16.0_r / 9.0_r) {
+    _resolution(0) {
 }
 
 Camera::~Camera() = default;
 
-void Camera::setAspectRatio(const real aspectRatio) {
-    _aspectRatio = aspectRatio;
+void Camera::setResolution(const Vector2S& resolution) {
+    _resolution = resolution;
+}
+
+float64 Camera::_getAspectRatio() const {
+    return static_cast<float64>(_resolution.x()) / static_cast<float64>(_resolution.y());
 }
 
 } // namespace cadise

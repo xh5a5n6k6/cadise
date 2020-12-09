@@ -15,11 +15,9 @@ public:
     void work() const override = 0;
 
     void setFilmTile(FilmTile* const filmTile);
-    void setFilmResolution(const Vector2I& filmResolution);
 
 protected:
     FilmTile* _filmTile;
-    Vector2I  _filmResolution;
 };
 
 } // namespace cadise
