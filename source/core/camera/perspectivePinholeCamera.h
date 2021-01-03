@@ -37,10 +37,10 @@ private:
     std::pair<float64, float64> _getSensorSizeXy() const;
     float64 _getSensorArea() const;
 
-    std::unique_ptr<Transform> _cameraToWorld;
+    std::shared_ptr<Transform> _cameraToWorld;
 
     // transform from film (raster) to camera
-    std::unique_ptr<Transform> _filmToCamera;
+    std::shared_ptr<Transform> _filmToCamera;
 
     float64 _fov;
     float64 _sensorWidthMM;

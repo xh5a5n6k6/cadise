@@ -24,7 +24,7 @@ PerspectivePinholeCamera::PerspectivePinholeCamera(
     _fov(fov),
     _sensorWidthMM(sensorWidthMM) {
 
-    _cameraToWorld = std::make_unique<Transform>(Matrix4R::lookAt(position, direction, up));
+    _cameraToWorld = std::make_shared<Transform>(Matrix4R::lookAt(position, direction, up));
 
     this->updateTransform();
 }
@@ -46,7 +46,7 @@ void PerspectivePinholeCamera::updateTransform() {
     filmToCameraMatrix *= Matrix4R::scale(
         sensorWidth / realResolution.x(), -sensorHeight / realResolution.y(), 1.0_r);
 
-    _filmToCamera = std::make_unique<Transform>(filmToCameraMatrix);
+    _filmToCamera = std::make_shared<Transform>(filmToCameraMatrix);
 }
 
 void PerspectivePinholeCamera::spawnPrimaryRay(
