@@ -39,6 +39,8 @@ public:
         const TransportInfo&       info,
         const SurfaceIntersection& si) const override;
 
+    ELobe lobe(const BsdfComponents component) const override;
+
 private:
     real _exponent;
     real _pdfFactor;

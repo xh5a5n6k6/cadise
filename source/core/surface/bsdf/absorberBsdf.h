@@ -20,6 +20,8 @@ public:
     real evaluatePdfW(
         const TransportInfo&       info,
         const SurfaceIntersection& si) const override;
+
+    ELobe lobe(const BsdfComponents component) const override;
 };
 
 } // namespace cadise

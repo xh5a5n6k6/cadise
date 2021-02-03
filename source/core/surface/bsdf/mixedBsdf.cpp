@@ -186,4 +186,15 @@ real MixedBsdf::evaluatePdfW(
     return pdfW;
 }
 
+ELobe MixedBsdf::lobe(const BsdfComponents component) const {
+    CADISE_ASSERT_LT(component, _bsdfA->components() + _bsdfB->components());
+
+    if (component < _bsdfA->components()) {
+        return _bsdfA->lobe(component);
+    }
+    else {
+        return _bsdfB->lobe(component - _bsdfA->components());
+    }
+}
+
 } // namespace cadise

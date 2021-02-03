@@ -32,4 +32,10 @@ real AbsorberBsdf::evaluatePdfW(
     return 0.0_r;
 }
 
+ELobe AbsorberBsdf::lobe(const BsdfComponents component) const {
+    CADISE_ASSERT_EQ(component, 0);
+
+    return ELobe::ABSORB;
+}
+
 } // namespace cadise

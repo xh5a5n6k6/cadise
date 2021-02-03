@@ -31,6 +31,8 @@ public:
         const TransportInfo&       info,
         const SurfaceIntersection& si) const override;
 
+    ELobe lobe(const BsdfComponents component) const override;
+
 private:
     std::shared_ptr<Microfacet>       _microfacet;
     std::shared_ptr<ConductorFresnel> _fresnel;

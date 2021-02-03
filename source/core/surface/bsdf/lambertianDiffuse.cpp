@@ -95,4 +95,10 @@ real LambertianDiffuse::evaluatePdfW(
     return L.absDot(Ns) * constant::inv_pi<real>;
 }
 
+ELobe LambertianDiffuse::lobe(const BsdfComponents component) const {
+    CADISE_ASSERT_EQ(component, 0);
+
+    return ELobe::DIFFUSE_REFLECTION;
+}
+
 } // namespace cadise

@@ -133,4 +133,10 @@ real SpecularDielectric::evaluatePdfW(
     return 0.0_r;
 }
 
+ELobe SpecularDielectric::lobe(const BsdfComponents component) const {
+    CADISE_ASSERT(component == 0 || component == 1);
+
+    return component == 0 ? ELobe::SPECULAR_REFLECTION : ELobe::SPECULAR_TRANSMISSION;
+}
+
 } // namespace cadise

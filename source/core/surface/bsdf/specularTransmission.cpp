@@ -83,4 +83,10 @@ real SpecularTransmission::evaluatePdfW(
     return 0.0_r;
 }
 
+ELobe SpecularTransmission::lobe(const BsdfComponents component) const {
+    CADISE_ASSERT_EQ(component, 0);
+
+    return ELobe::SPECULAR_TRANSMISSION;
+}
+
 } // namespace cadise

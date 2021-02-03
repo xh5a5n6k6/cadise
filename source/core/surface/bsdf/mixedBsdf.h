@@ -33,6 +33,8 @@ public:
         const TransportInfo&       info,
         const SurfaceIntersection& si) const override;
 
+    ELobe lobe(const BsdfComponents component) const override;
+
 private:
     std::shared_ptr<Bsdf> _bsdfA;
     std::shared_ptr<Bsdf> _bsdfB;

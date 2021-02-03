@@ -29,6 +29,8 @@ public:
         const TransportInfo&       info,
         const SurfaceIntersection& si) const override;
 
+    ELobe lobe(const BsdfComponents component) const override;
+
 private:
     std::shared_ptr<TTexture<Spectrum>> _albedo;
     std::shared_ptr<DielectricFresnel>  _fresnel;

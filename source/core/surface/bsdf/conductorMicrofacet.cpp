@@ -162,4 +162,10 @@ real ConductorMicrofacet::evaluatePdfW(
     return pdfL;
 }
 
+ELobe ConductorMicrofacet::lobe(const BsdfComponents component) const {
+    CADISE_ASSERT_EQ(component, 0);
+
+    return ELobe::GLOSSY_REFLECTION;
+}
+
 } // namespace cadise

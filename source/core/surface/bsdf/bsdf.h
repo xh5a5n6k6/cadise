@@ -31,6 +31,8 @@ public:
         const TransportInfo&       info,
         const SurfaceIntersection& si) const = 0;
 
+    virtual ELobe lobe(const BsdfComponents component) const = 0;
+
     const BsdfLobes& lobes() const;
     BsdfComponents components() const;
 
