@@ -29,7 +29,8 @@ void FilmTile::addSample(const Vector2R& filmPosition, const Spectrum& sampleSpe
 
     Vector3R rgb;
     sampleSpectrum.transformToRgb(&rgb);
-    addSample(filmPosition, rgb);
+    
+    this->addSample(filmPosition, rgb);
 }
 
 void FilmTile::addSample(const Vector2R& filmPosition, const Vector3R& sampleRgb) {
@@ -37,13 +38,15 @@ void FilmTile::addSample(const Vector2R& filmPosition, const Vector3R& sampleRgb
     Vector2R filmMinPosition = filmPosition - _filter->filterHalfSize();
     Vector2R filmMaxPosition = filmPosition + _filter->filterHalfSize();
 
-    filmMinPosition = Vector2R::max(filmMinPosition, Vector2R(_tileBound.minVertex()));
-    filmMaxPosition = Vector2R::min(filmMaxPosition, Vector2R(_tileBound.maxVertex()));
+    filmMinPosition = Vector2R::max(filmMinPosition, _tileBound.minVertex().asType<real>());
+    filmMaxPosition = Vector2R::min(filmMaxPosition, _tileBound.maxVertex().asType<real>());
 
-    const Vector2I x0y0(static_cast<int32>(std::ceil(filmMinPosition.x() - 0.5_r)),
-                        static_cast<int32>(std::ceil(filmMinPosition.y() - 0.5_r)));
-    const Vector2I x1y1(static_cast<int32>(std::floor(filmMaxPosition.x() - 0.5_r) + 1),
-                        static_cast<int32>(std::floor(filmMaxPosition.y() - 0.5_r) + 1));
+    const Vector2I x0y0(
+        static_cast<int32>(std::ceil(filmMinPosition.x() - 0.5_r)),
+        static_cast<int32>(std::ceil(filmMinPosition.y() - 0.5_r)));
+    const Vector2I x1y1(
+        static_cast<int32>(std::floor(filmMaxPosition.x() - 0.5_r) + 1),
+        static_cast<int32>(std::floor(filmMaxPosition.y() - 0.5_r) + 1));
 
     // for each effective pixel, accumulate its weight
     for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy) {
@@ -66,8 +69,9 @@ const AABB2I& FilmTile::tileBound() const {
     return _tileBound;
 }
 
-const FilmSensor& FilmTile::getSensor(const int32 x, const int32 y) const {
+const RgbRadianceSensor& FilmTile::getSensor(const int32 x, const int32 y) const {
     const std::size_t sensorIndexOffset = _sensorIndexOffset(x, y);
+
     return _sensors[sensorIndexOffset];
 }
 

@@ -23,48 +23,57 @@ Film::Film(
     _tileSize(tileSize),
     _filename(filename),
     _filter(filter),
-    _pixels(),
+    _sensorPixels(),
     _splatPixels() {
 
     CADISE_ASSERT(filter);
 
     const std::size_t numPixels = _resolution.asType<std::size_t>().product();
 
-    _pixels.resize(numPixels);
+    _sensorPixels.resize(numPixels);
     _splatPixels.resize(numPixels);
+
+    for (std::size_t i = 0; i < numPixels; ++i) {
+        _sensorPixels[i] = RgbRadianceSensor();
+        _splatPixels[i]  = Vector3R(0.0_r);
+    }
+}
+
+std::unique_ptr<Film> Film::generateEmptyFilm() const {
+    return std::make_unique<Film>(_resolution, _tileSize, _filename, _filter);
+}
+
+void Film::mergeWithFilm(std::unique_ptr<Film> other) {
+    // TODO: use valid film bound rather than the whole film
+    for (int32 iy = 0; iy < _resolution.y(); ++iy) {
+        for (int32 ix = 0; ix < _resolution.x(); ++ix) {
+            const std::size_t        sensorIndex = other->_pixelIndexOffset(ix, iy);
+            const RgbRadianceSensor& sensor      = other->_sensorPixels[sensorIndex];
+
+            _sensorPixels[sensorIndex].addValue(sensor.r(), sensor.g(), sensor.b());
+            _sensorPixels[sensorIndex].addWeight(sensor.weight());
+        }
+    }
+}
+
+void Film::replaceWithFilm(std::unique_ptr<Film> other) {
+    // TODO: use valid film bound rather than the whole film
+    for (int32 iy = 0; iy < _resolution.y(); ++iy) {
+        for (int32 ix = 0; ix < _resolution.x(); ++ix) {
+            const std::size_t        sensorIndex = other->_pixelIndexOffset(ix, iy);
+            const RgbRadianceSensor& sensor = other->_sensorPixels[sensorIndex];
+
+            _sensorPixels[sensorIndex] = sensor;
+        }
+    }
 }
 
 std::unique_ptr<FilmTile> Film::generateFilmTile(const std::size_t tileIndex) const {
     CADISE_ASSERT_LT(tileIndex, this->numTilesXy().product());
 
-    const auto tileIndicesXy = _getTileXyIndices(tileIndex);
-    
-    return this->generateFilmTile(tileIndicesXy);
-}
+    const AABB2I tileBound = this->getTileBound(tileIndex);
 
-std::unique_ptr<FilmTile> Film::generateFilmTile(const Vector2I& tileIndicesXy) const {
-    const Vector2I minIndicesXy = tileIndicesXy * _tileSize;
-    const Vector2I maxIndicesXy = Vector2I::min(minIndicesXy + _tileSize, _resolution);
-
-    return std::make_unique<FilmTile>(
-        AABB2I(minIndicesXy, maxIndicesXy),
-        _filter.get());
-
-    /*
-        origin source code calculates x/y index respectively
-
-        const int32 minIndexX = tileX * _tileSize.x();
-        const int32 minIndexY = tileY * _tileSize.y();
-        const int32 maxIndexX = math::min(minIndexX + _tileSize.x(), _resolution.x());
-        const int32 maxIndexY = math::min(minIndexY + _tileSize.y(), _resolution.y());
-
-        const Vector2I minBound = Vector2I(tileX, tileY) * _tileSize;
-        const Vector2I maxBound = Vector2I::min(minBound + _tileSize, _resolution); 
-
-        return std::make_unique<FilmTile>(
-            AABB2I({minIndexX, minIndexY}, {maxIndexX, maxIndexY}),
-            _filter.get());
-    */
+    return std::make_unique<FilmTile>(tileBound, _filter.get());
 }
 
 void Film::mergeWithFilmTile(std::unique_ptr<FilmTile> filmTile) {
@@ -78,23 +87,55 @@ void Film::mergeWithFilmTile(std::unique_ptr<FilmTile> filmTile) {
     // add each pixel value recording in filmTile
     for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy) {
         for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix) {
-            const FilmSensor& sensor 
+            const RgbRadianceSensor& sensor 
                 = filmTile->getSensor(ix - x0y0.x(), iy - x0y0.y());
 
             const std::size_t pixelIndexOffset = _pixelIndexOffset(ix, iy);
-            const Vector3R totalRadiance(sensor.r(), sensor.g(), sensor.b());
-            const real inverseWeight = (sensor.weight() > 0.0_r) ? 1.0_r / sensor.weight() : 1.0_r;
 
-            _pixels[pixelIndexOffset] = totalRadiance * inverseWeight;
+            _sensorPixels[pixelIndexOffset].addValue(sensor.r(), sensor.g(), sensor.b());
+            _sensorPixels[pixelIndexOffset].addWeight(sensor.weight());
         }
     }
 }
 
-Vector2S Film::numTilesXy() const {
-    return {
-        static_cast<std::size_t>((_resolution.x() + _tileSize.x() - 1) / _tileSize.x()), // number of width tiles
-        static_cast<std::size_t>((_resolution.y() + _tileSize.y() - 1) / _tileSize.y())  // number of height tiles
-    };
+void Film::addSampleRadiance(const Vector2D& filmPosition, const Spectrum& radiance) {
+    if (radiance.hasNaN() || radiance.hasInfinite()) {
+        return;
+    }
+
+    Vector3R rgb;
+    radiance.transformToRgb(&rgb);
+
+    const Vector2R realFilmPosition = filmPosition.asType<real>();
+
+    // calculate filter bound for given film position
+    Vector2R filmMinPosition = realFilmPosition - _filter->filterHalfSize();
+    Vector2R filmMaxPosition = realFilmPosition + _filter->filterHalfSize();
+
+    filmMinPosition = Vector2R::max(filmMinPosition, Vector2R(0.0_r));
+    filmMaxPosition = Vector2R::min(filmMaxPosition, _resolution.asType<real>());
+
+    const Vector2I x0y0(
+        static_cast<int32>(std::ceil(filmMinPosition.x() - 0.5_r)),
+        static_cast<int32>(std::ceil(filmMinPosition.y() - 0.5_r)));
+    const Vector2I x1y1(
+        static_cast<int32>(std::floor(filmMaxPosition.x() - 0.5_r) + 1),
+        static_cast<int32>(std::floor(filmMaxPosition.y() - 0.5_r) + 1));
+
+    // for each effective pixel, accumulate its weight
+    for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy) {
+        for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix) {
+            const std::size_t sensorIndexOffset = _pixelIndexOffset(ix , iy);
+
+            const real x = ix - (realFilmPosition.x() - 0.5_r);
+            const real y = iy - (realFilmPosition.y() - 0.5_r);
+
+            const real filterWeight = _filter->evaluate(x, y);
+
+            _sensorPixels[sensorIndexOffset].addValue(rgb * filterWeight);
+            _sensorPixels[sensorIndexOffset].addWeight(filterWeight);
+        }
+    }
 }
 
 void Film::addSplatRadiance(const ConnectEvent& connectEvent) {
@@ -127,11 +168,16 @@ void Film::save(
         for (int32 ix = 0; ix < _resolution.x(); ++ix) {
             const std::size_t pixelOffset = _pixelIndexOffset(ix, iy);
 
-            const Vector3R& pixel      = _pixels[pixelOffset];
-            const Vector3R& splatPixel = _splatPixels[pixelOffset];
+            const RgbRadianceSensor& sensorPixel = _sensorPixels[pixelOffset];
+            const Vector3R&          splatPixel  = _splatPixels[pixelOffset];
+
+            const real inverseWeight 
+                = (sensorPixel.weight() == 0.0_r) ? 0.0_r : 1.0_r / sensorPixel.weight();
+            const Vector3R pixel 
+                = Vector3R(sensorPixel.r(), sensorPixel.g(), sensorPixel.b()) * inverseWeight;
 
             const Vector3R recordLinearSrgb = pixel + splatPixel * inverseSpp;
-            
+
             if (usePostProcessing) {
                 const Vector3R recordSrgb = {
                     math::forward_gamma_correction(recordLinearSrgb.x()),
@@ -149,15 +195,35 @@ void Film::save(
     PictureSaver::save(_filename, hdrImage);
 }
 
-const Vector2I& Film::resolution() const {
-    return _resolution;
+Vector2S Film::numTilesXy() const {
+    return {
+        static_cast<std::size_t>((_resolution.x() + _tileSize.x() - 1) / _tileSize.x()), // number of width tiles
+        static_cast<std::size_t>((_resolution.y() + _tileSize.y() - 1) / _tileSize.y())  // number of height tiles
+    };
+}
+
+AABB2I Film::getTileBound(const std::size_t tileIndex) const {
+    const auto tileIndicesXy = _getTileIndicesXy(tileIndex);
+    
+    const Vector2I minIndicesXy = tileIndicesXy * _tileSize;
+    const Vector2I maxIndicesXy = Vector2I::min(minIndicesXy + _tileSize, _resolution);
+
+    return AABB2I(minIndicesXy, maxIndicesXy);
 }
 
 const Path& Film::filename() const {
     return _filename;
 }
 
-Vector2I Film::_getTileXyIndices(const std::size_t tileIndex) const {
+const Vector2I& Film::resolution() const {
+    return _resolution;
+}
+
+const Vector2I& Film::tileSize() const {
+    return _tileSize;
+}
+
+Vector2I Film::_getTileIndicesXy(const std::size_t tileIndex) const {
     const std::size_t numTilesX = this->numTilesXy().x();
 
     return {

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "core/film/rgbRadianceSensor.h"
 #include "core/spectrum/spectrum.h"
 #include "file-io/path.h"
 
@@ -21,27 +22,29 @@ public:
         const Path&                    filename,
         const std::shared_ptr<Filter>& filter);
 
-    // TODO: add these two method ?
-    //std::unique_ptr<Film> cloneEmpty() const;
-    //void mergeWithFilm(std::unique_ptr<Film> other);
-
-    void addSplatRadiance(const ConnectEvent& connectEvent);
+    std::unique_ptr<Film> generateEmptyFilm() const;
+    void mergeWithFilm(std::unique_ptr<Film> other);
+    void replaceWithFilm(std::unique_ptr<Film> other);
 
     std::unique_ptr<FilmTile> generateFilmTile(const std::size_t tileIndex) const;
-    std::unique_ptr<FilmTile> generateFilmTile(const Vector2I& tileIndicesXy) const;
     void mergeWithFilmTile(std::unique_ptr<FilmTile> filmTile);
 
-    Vector2S numTilesXy() const;
+    void addSampleRadiance(const Vector2D& filmPosition, const Spectrum& radiance);
+    void addSplatRadiance(const ConnectEvent& connectEvent);
 
     void save(
         const std::size_t samplesPerPixel,
         const bool        usePostProcessing = true);
 
-    const Vector2I& resolution() const;
+    Vector2S numTilesXy() const;
+    AABB2I getTileBound(const std::size_t tileIndex) const;
+
     const Path& filename() const;
+    const Vector2I& resolution() const;
+    const Vector2I& tileSize() const;
 
 private:
-    Vector2I _getTileXyIndices(const std::size_t tileIndex) const;
+    Vector2I _getTileIndicesXy(const std::size_t tileIndex) const;
     std::size_t _pixelIndexOffset(const int32 x, const int32 y) const;
 
     Path                    _filename;
@@ -49,8 +52,8 @@ private:
     Vector2I                _tileSize;
     std::shared_ptr<Filter> _filter;
 
-    std::vector<Vector3R> _pixels;
-    std::vector<Vector3R> _splatPixels;
+    std::vector<RgbRadianceSensor> _sensorPixels;
+    std::vector<Vector3R>          _splatPixels;
 
     std::mutex _filmMutex;
 };

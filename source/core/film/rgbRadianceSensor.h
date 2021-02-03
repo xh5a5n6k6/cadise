@@ -4,9 +4,12 @@
 
 namespace cadise {
 
-class FilmSensor {
+/*
+    It stores radiance as rgb value rather than origin spectrum.
+*/
+class RgbRadianceSensor {
 public:
-    FilmSensor();
+    RgbRadianceSensor();
 
     void addValue(const Vector3R& value);
     void addValue(const real r, const real g, const real b);
