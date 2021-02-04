@@ -9,16 +9,16 @@ public:
     Photon();
 
     const Vector3R& position() const;
-    const Vector3R& inDirection() const;
+    const Vector3R& fromDirection() const;
     const Spectrum& throughputRadiance() const;
 
     void setPosition(const Vector3R& position);
-    void setInDirection(const Vector3R& inDirection);
+    void setFromDirection(const Vector3R& fromDirection);
     void setThroughputRadiance(const Spectrum& throughputRadiance);
 
 private:
     Vector3R _position;
-    Vector3R _inDirection;
+    Vector3R _fromDirection;
     Spectrum _throughputRadiance;
 };
 

@@ -73,12 +73,11 @@ void VpmEstimator::estimate(
             std::vector<Photon> nearPhotons;
             _photonMap->findWithRange(P, _searchRadius, &nearPhotons);
 
-            for (std::size_t i = 0; i < nearPhotons.size(); ++i) {
-                const Photon&   photon             = nearPhotons[i];
-                const Vector3R& inDirection        = photon.inDirection();
+            for (const auto& photon : nearPhotons) {
+                const Vector3R& fromDirection      = photon.fromDirection();
                 const Spectrum& throughputRadiance = photon.throughputRadiance();
 
-                intersection.setWo(inDirection);
+                intersection.setWo(fromDirection);
 
                 Spectrum reflectance = bsdf->evaluate(transportInfo, intersection.reverse());
                 if (reflectance.isZero()) {

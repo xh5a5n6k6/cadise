@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/renderer/vanilla-pm/photon.h"
+#include "core/renderer/photon-mapping/photon.h"
 
 namespace cadise {
 

@@ -5,6 +5,7 @@
     - Unidirectional Path Tracing with Next Event Estimation
     - Bidirectional Path Tracing
     - Photon Mapping
+    - Progressive Photon Mapping
     - AOV Rendering
         - Ambient Occlusion
         - World-Space Normal Map

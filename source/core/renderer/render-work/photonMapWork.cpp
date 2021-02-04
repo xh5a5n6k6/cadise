@@ -6,7 +6,7 @@
 #include "core/intersector/primitive/primitive.h"
 #include "core/light/light.h"
 #include "core/ray.h"
-#include "core/renderer/vanilla-pm/photon.h"
+#include "core/renderer/photon-mapping/photon.h"
 #include "core/scene.h"
 #include "core/surface/bsdf/bsdf.h"
 #include "core/surface/transportInfo.h"
@@ -91,7 +91,7 @@ void PhotonMapWork::work() const {
 
                 Photon photon;
                 photon.setPosition(P);
-                photon.setInDirection(traceRay.direction().reverse());
+                photon.setFromDirection(traceRay.direction().reverse());
                 photon.setThroughputRadiance(throughputRadiance);
 
                 _photons->push_back(std::move(photon));

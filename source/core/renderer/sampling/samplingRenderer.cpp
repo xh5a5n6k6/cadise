@@ -45,21 +45,21 @@ void SamplingRenderer::render() const {
                const std::size_t workBegin,
                const std::size_t workEnd) {
 
-        for (std::size_t workIndex = workBegin; workIndex < workEnd; ++workIndex) {
-            auto filmTile = _film->generateFilmTile(workIndex);
+            for (std::size_t workIndex = workBegin; workIndex < workEnd; ++workIndex) {
+                auto filmTile = _film->generateFilmTile(workIndex);
 
-            EstimatorTileWork tileWork(
-                _scene, 
-                _camera.get(), 
-                _estimator.get(), 
-                _sampler.get());
-            tileWork.setFilmTile(filmTile.get());
+                EstimatorTileWork tileWork(
+                    _scene, 
+                    _camera.get(), 
+                    _estimator.get(), 
+                    _sampler.get());
+                tileWork.setFilmTile(filmTile.get());
 
-            tileWork.work();
+                tileWork.work();
 
-            _film->mergeWithFilmTile(std::move(filmTile));
-        }
-    });
+                _film->mergeWithFilmTile(std::move(filmTile));
+            }
+        });
 
     _film->save(_sampler->sampleNumber(), !_estimator->useDirectly());
 

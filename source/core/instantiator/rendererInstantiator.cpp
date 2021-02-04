@@ -4,10 +4,11 @@
 //#include "core/renderer/bdpg-renderer/bdpgRenderer.h"
 //#include "core/renderer/bdpg-renderer/ppgRenderer.h"
 #include "core/renderer/bidirectional-path-tracing/bdptRenderer.h"
-#include "core/renderer/vanilla-pm/vpmRenderer.h"
+#include "core/renderer/photon-mapping/progressive-pm/ppmRenderer.h"
+#include "core/renderer/photon-mapping/vanilla-pm/vpmRenderer.h"
 #include "core/renderer/sampling/samplingRenderer.h"
 
-#include "core/renderer/vanilla-pm/vpmSetting.h"
+#include "core/renderer/photon-mapping/pmSetting.h"
 #include "file-io/scene-description/sdData.h"
 #include "fundamental/assertion.h"
 
@@ -35,14 +36,27 @@ static std::shared_ptr<Renderer> createBdpt(
 static std::shared_ptr<Renderer> createVpm(
     const std::shared_ptr<SdData>& data) {
 
-    const std::size_t numPhotons    = static_cast<std::size_t>(data->findInt32("num-photons", 200000));
-    const real        searchRadius  = data->findReal("search-radius", 0.15_r);
+    const std::size_t numPhotons    = static_cast<std::size_t>(data->findInt32("num-photons", 250000));
+    const real        searchRadius  = data->findReal("search-radius", 0.01_r);
 
     const auto sampler = makeSampler(data);
-    const auto setting = std::make_shared<VpmSetting>(numPhotons, searchRadius);
+    const auto setting = PmSetting(numPhotons, searchRadius);
 
+    return std::make_shared<VpmRenderer>(std::move(sampler), setting);
+}
 
-    return std::make_shared<VpmRenderer>(std::move(sampler), std::move(setting));
+static std::shared_ptr<Renderer> createPpm(
+    const std::shared_ptr<SdData>& data) {
+
+    const std::size_t numPhotons    = static_cast<std::size_t>(data->findInt32("num-photons", 250000));
+    const real        searchRadius  = data->findReal("search-radius", 0.01_r);
+    const std::size_t numIterations = static_cast<std::size_t>(data->findInt32("num-iterations", 4));
+    const real        alpha         = data->findReal("alpha", 2.0_r / 3.0_r);
+
+    const auto sampler = makeSampler(data);
+    const auto setting = PmSetting(numPhotons, searchRadius, numIterations, alpha);
+
+    return std::make_shared<PpmRenderer>(std::move(sampler), setting);
 }
 
 //static std::shared_ptr<Renderer> createPpg(
@@ -87,6 +101,9 @@ std::shared_ptr<Renderer> makeRenderer(
     }
     else if (type == "vpm") {
         renderer = createVpm(data);
+    }
+    else if (type == "ppm") {
+        renderer = createPpm(data);
     }
     //else if (type == "ppg") {
     //    renderer = createPpg(data);

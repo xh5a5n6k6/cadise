@@ -40,30 +40,30 @@ void BdptRenderer::render() const {
                const std::size_t workBegin,
                const std::size_t workEnd) {
 
-        for (std::size_t workIndex = workBegin; workIndex < workEnd; ++workIndex) {
-            // pre-allocate a fixed number of events,
-            // maybe allocate a sample-sensitive number of events instead?
-            std::vector<ConnectEvent> connectEvents;
-            connectEvents.reserve(_film->resolution().product());
+            for (std::size_t workIndex = workBegin; workIndex < workEnd; ++workIndex) {
+                // pre-allocate a fixed number of events,
+                // maybe allocate a sample-sensitive number of events instead?
+                std::vector<ConnectEvent> connectEvents;
+                connectEvents.reserve(_film->resolution().product());
 
-            auto filmTile = _film->generateFilmTile(workIndex);
+                auto filmTile = _film->generateFilmTile(workIndex);
             
-            BdptTileWork tileWork(
-                _scene,
-                _camera.get(),
-                _sampler.get());
-            tileWork.setFilmTile(filmTile.get());
-            tileWork.setConnectEvents(&connectEvents);
+                BdptTileWork tileWork(
+                    _scene,
+                    _camera.get(),
+                    _sampler.get());
+                tileWork.setFilmTile(filmTile.get());
+                tileWork.setConnectEvents(&connectEvents);
 
-            tileWork.work();
+                tileWork.work();
 
-            _film->mergeWithFilmTile(std::move(filmTile));
+                _film->mergeWithFilmTile(std::move(filmTile));
 
-            for (std::size_t i = 0; i < connectEvents.size(); ++i) {
-                _film->addSplatRadiance(connectEvents[i]);
+                for (std::size_t i = 0; i < connectEvents.size(); ++i) {
+                    _film->addSplatRadiance(connectEvents[i]);
+                }
             }
-        }
-    });
+        });
 
     _film->save(_sampler->sampleNumber());
 

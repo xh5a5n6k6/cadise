@@ -2,7 +2,7 @@
 
 #include "core/estimator/radianceEstimator.h"
 
-#include "core/renderer/vanilla-pm/photonMap.h"
+#include "core/renderer/photon-mapping/photonMap.h"
 
 namespace cadise {
 
@@ -21,7 +21,7 @@ public:
     std::string toString() const override;
 
 private:
-    const PhotonMap*  _photonMap;
+    const PhotonMap* _photonMap;
 
     // kernelFactor is the pre-calculated normalization term 
     // used in photon radiance estimation

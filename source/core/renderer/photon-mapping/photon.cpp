@@ -1,4 +1,4 @@
-#include "core/renderer/vanilla-pm/photon.h"
+#include "core/renderer/photon-mapping/photon.h"
 
 namespace cadise {
 
@@ -8,8 +8,8 @@ const Vector3R& Photon::position() const {
     return _position;
 }
 
-const Vector3R& Photon::inDirection() const {
-    return _inDirection;
+const Vector3R& Photon::fromDirection() const {
+    return _fromDirection;
 }
 
 const Spectrum& Photon::throughputRadiance() const {
@@ -20,8 +20,8 @@ void Photon::setPosition(const Vector3R& position) {
     _position = position;
 }
 
-void Photon::setInDirection(const Vector3R& inDirection) {
-    _inDirection = inDirection;
+void Photon::setFromDirection(const Vector3R& fromDirection) {
+    _fromDirection = fromDirection;
 }
 
 void Photon::setThroughputRadiance(const Spectrum& throughputRadiance) {
