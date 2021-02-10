@@ -1,7 +1,6 @@
 #include "core/surface/microfacet/isotropicGgx.h"
 
 #include "core/integral-tool/tSurfaceSampler.h"
-#include "core/surface/microfacet/tRoughnessMapper.h"
 #include "fundamental/assertion.h"
 #include "math/constant.h"
 #include "math/tVector.h"
@@ -27,7 +26,7 @@ real IsotropicGgx::distributionD(
     real sampleRoughness;
     TSurfaceSampler<real>().sample(si, _roughness.get(), &sampleRoughness);
 
-    const real alpha  = TRoughnessMapper<ERoughnessMapMode::SQUARE>::map(sampleRoughness);
+    const real alpha  = _roughnessToAlpha(sampleRoughness);
     const real alpha2 = alpha * alpha;
     const real NdotH2 = NdotH * NdotH;
     const real NdotH4 = NdotH2 * NdotH2;
@@ -56,7 +55,7 @@ real IsotropicGgx::shadowingMaskingG(
     real sampleRoughness;
     TSurfaceSampler<real>().sample(si, _roughness.get(), &sampleRoughness);
 
-    const real alpha  = TRoughnessMapper<ERoughnessMapMode::SQUARE>::map(sampleRoughness);
+    const real alpha  = _roughnessToAlpha(sampleRoughness);
     const real alpha2 = alpha * alpha;
 
     const real VdotN  = V.dot(N);
@@ -87,7 +86,7 @@ void IsotropicGgx::sampleHalfVectorH(
     real sampleRoughness;
     TSurfaceSampler<real>().sample(si, _roughness.get(), &sampleRoughness);
 
-    const real alpha = TRoughnessMapper<ERoughnessMapMode::SQUARE>::map(sampleRoughness);
+    const real alpha = _roughnessToAlpha(sampleRoughness);
 
     const real phi   = constant::two_pi<real> * safeSample.x();
     const real theta = std::atan(alpha * std::sqrt(safeSample.y() / (1.0_r - safeSample.y())));

@@ -1,5 +1,6 @@
 #include "core/surface/microfacet/microfacet.h"
 
+#include "core/surface/microfacet/tRoughnessMapper.h"
 #include "math/tVector.h"
 
 namespace cadise {
@@ -24,6 +25,11 @@ bool Microfacet::_isShadowingMaskingValid(
     const real LdotN = L.dot(N);
 
     return (VdotH * VdotN > 0.0_r) && (LdotH * LdotN > 0.0_r);
+}
+
+real Microfacet::_roughnessToAlpha(const real roughness) const {
+    // TODO: make mapping mode an user-control variable
+    return TRoughnessMapper<ERoughnessMapMode::SQUARE>().map(roughness);
 }
 
 } // namespace cadise

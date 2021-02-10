@@ -1,6 +1,7 @@
 #include "core/surface/bsdf/mixedBsdf.h"
 
 #include "core/integral-tool/sample/bsdfSample.h"
+#include "core/integral-tool/tSurfaceSampler.h"
 #include "core/surfaceIntersection.h"
 #include "core/surface/transportInfo.h"
 #include "core/texture/category/tConstantTexture.h"
@@ -36,9 +37,8 @@ Spectrum MixedBsdf::evaluate(
     const TransportInfo&       info,
     const SurfaceIntersection& si) const {
     
-    const Vector3R& uvw = si.surfaceDetail().uvw();
     Spectrum sampleRatio;
-    _ratio->evaluate(uvw, &sampleRatio);
+    TSurfaceSampler<Spectrum>().sample(si, _ratio.get(), &sampleRatio);
 
     Spectrum scatterValue(0.0_r);
     if(info.components() == BSDF_ALL_COMPONENTS){
@@ -73,9 +73,8 @@ void MixedBsdf::evaluateSample(
     Vector3R            scatterDirection(0.0_r);
     real                scatterPdfW = 0.0_r;
 
-    const Vector3R& uvw = si.surfaceDetail().uvw();
     Spectrum sampleRatio;
-    _ratio->evaluate(uvw, &sampleRatio);
+    TSurfaceSampler<Spectrum>().sample(si, _ratio.get(), &sampleRatio);
 
     const real averageRatio = sampleRatio.average();
     const real sample       = Random::nextReal();
@@ -158,9 +157,8 @@ real MixedBsdf::evaluatePdfW(
     const TransportInfo&       info, 
     const SurfaceIntersection& si) const {
     
-    const Vector3R& uvw = si.surfaceDetail().uvw();
     Spectrum sampleRatio;
-    _ratio->evaluate(uvw, &sampleRatio);
+    TSurfaceSampler<Spectrum>().sample(si, _ratio.get(), &sampleRatio);
     
     real pdfW = 0.0_r;
     if (info.components() == BSDF_ALL_COMPONENTS) {

@@ -1,9 +1,9 @@
 #include "core/surface/bsdf/lambertianDiffuse.h"
 
 #include "core/integral-tool/sample/bsdfSample.h"
+#include "core/integral-tool/tSurfaceSampler.h"
 #include "core/surfaceIntersection.h"
 #include "core/texture/category/tConstantTexture.h"
-#include "core/texture/tTexture.h"
 #include "fundamental/assertion.h"
 #include "math/constant.h"
 #include "math/math.h"
@@ -36,9 +36,8 @@ Spectrum LambertianDiffuse::evaluate(
         return Spectrum(0.0_r);
     }
 
-    const Vector3R& uvw = si.surfaceDetail().uvw();
     Spectrum sampleAlbedo;
-    _albedo->evaluate(uvw, &sampleAlbedo);
+    TSurfaceSampler<Spectrum>().sample(si, _albedo.get(), &sampleAlbedo);
 
     return sampleAlbedo * constant::inv_pi<real>;
 }
@@ -71,9 +70,8 @@ void LambertianDiffuse::evaluateSample(
         L = L.reverse();
     }
 
-    const Vector3R& uvw = si.surfaceDetail().uvw();
     Spectrum sampleAlbedo;
-    _albedo->evaluate(uvw, &sampleAlbedo);
+    TSurfaceSampler<Spectrum>().sample(si, _albedo.get(), &sampleAlbedo);
 
     out_sample->setScatterValue(sampleAlbedo * constant::inv_pi<real>);
     out_sample->setScatterDirection(L);

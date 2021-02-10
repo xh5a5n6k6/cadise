@@ -9,7 +9,7 @@ namespace cadise {
 template<EMisMode Mode>
 class TMis {
 public:
-    static real weight(
+    real weight(
         const real  pdfA, 
         const real  pdfB,
         const int32 nA = 1, 
@@ -19,7 +19,7 @@ public:
 // template header implementation
 
 template<EMisMode Mode>
-real TMis<Mode>::weight(
+inline real TMis<Mode>::weight(
     const real  pdfA,
     const real  pdfB,
     const int32 nA,

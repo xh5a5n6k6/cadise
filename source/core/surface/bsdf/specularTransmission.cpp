@@ -1,10 +1,10 @@
 #include "core/surface/bsdf/specularTransmission.h"
 
 #include "core/integral-tool/sample/bsdfSample.h"
+#include "core/integral-tool/tSurfaceSampler.h"
 #include "core/surface/fresnel/dielectricFresnel.h"
 #include "core/surface/transportInfo.h"
 #include "core/surfaceIntersection.h"
-#include "core/texture/tTexture.h"
 #include "fundamental/assertion.h"
 #include "math/math.h"
 
@@ -67,9 +67,8 @@ void SpecularTransmission::evaluateSample(
     const real     LdotN         = std::abs(cosThetaI);
     const Spectrum transmittance = reflectance.complement();
 
-    const Vector3R& uvw = si.surfaceDetail().uvw();
     Spectrum sampleAlbedo;
-    _albedo->evaluate(uvw, &sampleAlbedo);
+    TSurfaceSampler<Spectrum>().sample(si, _albedo.get(), &sampleAlbedo);
 
     out_sample->setScatterValue(sampleAlbedo * transmittance * btdfFactor / LdotN);
     out_sample->setScatterDirection(L);

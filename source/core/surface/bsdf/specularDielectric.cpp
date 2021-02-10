@@ -1,10 +1,10 @@
 #include "core/surface/bsdf/specularDielectric.h"
 
 #include "core/integral-tool/sample/bsdfSample.h"
+#include "core/integral-tool/tSurfaceSampler.h"
 #include "core/surface/fresnel/dielectricFresnel.h"
 #include "core/surface/transportInfo.h"
 #include "core/surfaceIntersection.h"
-#include "core/texture/tTexture.h"
 #include "fundamental/assertion.h"
 #include "math/math.h"
 #include "math/random.h"
@@ -69,11 +69,10 @@ void SpecularDielectric::evaluateSample(
         const Vector3R L       = V.reflect(Ns * Nfactor);
         const real     LdotN   = L.absDot(Ns);
 
-        const Vector3R& uvw = si.surfaceDetail().uvw();
-        Spectrum sampleSpectrum;
-        _albedo->evaluate(uvw, &sampleSpectrum);
+        Spectrum sampleAlbedo;
+        TSurfaceSampler<Spectrum>().sample(si, _albedo.get(), &sampleAlbedo);
 
-        scatterValue     = sampleSpectrum * reflectance / LdotN;
+        scatterValue     = sampleAlbedo * reflectance / LdotN;
         scatterDirection = L;
 
         if (info.components() == BSDF_ALL_COMPONENTS) {
@@ -105,11 +104,10 @@ void SpecularDielectric::evaluateSample(
         const real     LdotN         = std::abs(cosThetaI);
         const Spectrum transmittance = refractDirectionReflectance.complement();
 
-        const Vector3R& uvw = si.surfaceDetail().uvw();
-        Spectrum sampleSpectrum;
-        _albedo->evaluate(uvw, &sampleSpectrum);
+        Spectrum sampleAlbedo;
+        TSurfaceSampler<Spectrum>().sample(si, _albedo.get(), &sampleAlbedo);
 
-        scatterValue     = sampleSpectrum * transmittance * btdfFactor / LdotN;
+        scatterValue     = sampleAlbedo * transmittance * btdfFactor / LdotN;
         scatterDirection = L;
 
         if (info.components() == BSDF_ALL_COMPONENTS) {

@@ -1,7 +1,6 @@
 #include "core/surface/microfacet/isotropicBeckmann.h"
 
 #include "core/integral-tool/tSurfaceSampler.h"
-#include "core/surface/microfacet/tRoughnessMapper.h"
 #include "fundamental/assertion.h"
 #include "math/constant.h"
 #include "math/tVector.h"
@@ -27,7 +26,7 @@ real IsotropicBeckmann::distributionD(
     real sampleRoughness;
     TSurfaceSampler<real>().sample(si, _roughness.get(), &sampleRoughness);
 
-    const real alpha  = TRoughnessMapper<ERoughnessMapMode::SQUARE>::map(sampleRoughness);
+    const real alpha  = _roughnessToAlpha(sampleRoughness);
     const real alpha2 = alpha * alpha;
     const real NdotH2 = NdotH * NdotH;
     const real NdotH4 = NdotH2 * NdotH2;
@@ -55,7 +54,7 @@ real IsotropicBeckmann::shadowingMaskingG(
     real sampleRoughness;
     TSurfaceSampler<real>().sample(si, _roughness.get(), &sampleRoughness);
 
-    const real alpha = TRoughnessMapper<ERoughnessMapMode::SQUARE>::map(sampleRoughness);
+    const real alpha = _roughnessToAlpha(sampleRoughness);
 
     const real VdotN  = V.dot(N);
     const real VdotN2 = VdotN * VdotN;
@@ -101,7 +100,7 @@ void IsotropicBeckmann::sampleHalfVectorH(
     real sampleRoughness;
     TSurfaceSampler<real>().sample(si, _roughness.get(), &sampleRoughness);
 
-    const real alpha  = TRoughnessMapper<ERoughnessMapMode::SQUARE>::map(sampleRoughness);
+    const real alpha  = _roughnessToAlpha(sampleRoughness);
     const real alpha2 = alpha * alpha;
     
     const real phi   = constant::two_pi<real> * safeSample.x();

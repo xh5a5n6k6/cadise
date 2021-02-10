@@ -1,7 +1,6 @@
 #include "core/surface/microfacet/isotropicBlinnPhong.h"
 
 #include "core/integral-tool/tSurfaceSampler.h"
-#include "core/surface/microfacet/tRoughnessMapper.h"
 #include "fundamental/assertion.h"
 #include "math/constant.h"
 #include "math/tVector.h"
@@ -27,7 +26,7 @@ real IsotropicBlinnPhong::distributionD(
     real sampleRoughness;
     TSurfaceSampler<real>().sample(si, _roughness.get(), &sampleRoughness);
 
-    const real alpha  = TRoughnessMapper<ERoughnessMapMode::SQUARE>::map(sampleRoughness);
+    const real alpha  = _roughnessToAlpha(sampleRoughness);
     const real alpha2 = alpha * alpha;
     const real alphaP = 2.0_r / alpha2 - 2.0_r;
 
@@ -51,7 +50,7 @@ real IsotropicBlinnPhong::shadowingMaskingG(
     real sampleRoughness;
     TSurfaceSampler<real>().sample(si, _roughness.get(), &sampleRoughness);
 
-    const real alpha  = TRoughnessMapper<ERoughnessMapMode::SQUARE>::map(sampleRoughness);
+    const real alpha  = _roughnessToAlpha(sampleRoughness);
     const real alpha2 = alpha * alpha;
     const real alphaP = 2.0_r / alpha2 - 2.0_r;
 
@@ -96,7 +95,7 @@ void IsotropicBlinnPhong::sampleHalfVectorH(
     real sampleRoughness;
     TSurfaceSampler<real>().sample(si, _roughness.get(), &sampleRoughness);
 
-    const real alpha  = TRoughnessMapper<ERoughnessMapMode::SQUARE>::map(sampleRoughness);
+    const real alpha  = _roughnessToAlpha(sampleRoughness);
     const real alpha2 = alpha * alpha;
     const real alphaP = 2.0_r / alpha2 - 2.0_r;
 

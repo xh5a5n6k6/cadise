@@ -10,7 +10,7 @@ namespace cadise {
 template<ERoughnessMapMode Mode>
 class TRoughnessMapper {
 public:
-    static real map(const real roughness);
+    real map(const real roughness);
 };
 
 // template header implementation

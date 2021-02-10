@@ -4,7 +4,6 @@
 #include "core/surface/fresnel/conductorFresnel.h"
 #include "core/surface/microfacet/microfacet.h"
 #include "core/surfaceIntersection.h"
-#include "core/texture/tTexture.h"
 #include "fundamental/assertion.h"
 #include "math/math.h"
 #include "math/random.h"

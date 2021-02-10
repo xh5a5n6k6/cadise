@@ -1,9 +1,9 @@
 #include "core/surface/bsdf/specularReflection.h"
 
 #include "core/integral-tool/sample/bsdfSample.h"
+#include "core/integral-tool/tSurfaceSampler.h"
 #include "core/surface/fresnel/fresnel.h"
 #include "core/surfaceIntersection.h"
-#include "core/texture/tTexture.h"
 #include "fundamental/assertion.h"
 
 #include <cmath>
@@ -48,9 +48,8 @@ void SpecularReflection::evaluateSample(
     Spectrum reflectance;
     _fresnel->evaluateReflectance(LdotN, &reflectance);
 
-    const Vector3R& uvw = si.surfaceDetail().uvw();
     Spectrum sampleAlbedo;
-    _albedo->evaluate(uvw, &sampleAlbedo);
+    TSurfaceSampler<Spectrum>().sample(si, _albedo.get(), &sampleAlbedo);
 
     out_sample->setScatterValue(reflectance * sampleAlbedo / std::abs(LdotN));
     out_sample->setScatterDirection(L);

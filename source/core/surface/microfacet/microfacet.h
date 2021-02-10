@@ -51,6 +51,8 @@ protected:
         const Vector3R& N,
         const Vector3R& H) const;
 
+    real _roughnessToAlpha(const real roughness) const;
+
     std::shared_ptr<TTexture<real>> _roughness;
 };
 

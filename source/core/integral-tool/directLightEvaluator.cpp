@@ -67,7 +67,7 @@ Spectrum DirectLightEvaluator::evaluate(
                 }
                 else {
                     const real bsdfPdfW  = bsdf->evaluatePdfW(TransportInfo(), intersection);
-                    const real misWeight = TMis<EMisMode::POWER>::weight(lightPdfW, bsdfPdfW);
+                    const real misWeight = TMis<EMisMode::POWER>().weight(lightPdfW, bsdfPdfW);
 
                     directLightRadiance += misWeight * radiance * directLightFactor / lightPdfW;
                 }
@@ -96,7 +96,7 @@ Spectrum DirectLightEvaluator::evaluate(
 
                         const real bsdfPdfW  = bsdfSample.pdfW();
                         const real lightPdfW = areaLight->evaluateDirectPdfW(localIntersection, P);
-                        const real misWeight = TMis<EMisMode::POWER>::weight(bsdfPdfW, lightPdfW);
+                        const real misWeight = TMis<EMisMode::POWER>().weight(bsdfPdfW, lightPdfW);
 
                         directLightRadiance += misWeight * radiance * directLightFactor / bsdfPdfW;
                     }
