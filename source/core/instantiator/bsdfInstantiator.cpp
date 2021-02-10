@@ -149,16 +149,16 @@ static std::shared_ptr<Bsdf> createConductorMicrofacet(
 
     std::shared_ptr<Microfacet> microfacet = nullptr;
     if (microfacetType == "beckmann") {
-        microfacet = std::make_shared<IsotropicBeckmann>();
+        microfacet = std::make_shared<IsotropicBeckmann>(roughness);
     }
     else if (microfacetType == "ggx") {
-        microfacet = std::make_shared<IsotropicGgx>();
+        microfacet = std::make_shared<IsotropicGgx>(roughness);
     }
     else if (microfacetType == "blinn-phong") {
-        microfacet = std::make_shared<IsotropicBlinnPhong>();
+        microfacet = std::make_shared<IsotropicBlinnPhong>(roughness);
     }
     else {
-        microfacet = std::make_shared<IsotropicGgx>();
+        microfacet = std::make_shared<IsotropicGgx>(roughness);
     }
 
     std::shared_ptr<ConductorFresnel> fresnel = nullptr;
@@ -171,7 +171,7 @@ static std::shared_ptr<Bsdf> createConductorMicrofacet(
         fresnel = std::make_shared<SchlickConductorFresnel>(Spectrum(f0));
     }
 
-    return std::make_shared<ConductorMicrofacet>(microfacet, fresnel, roughness);
+    return std::make_shared<ConductorMicrofacet>(microfacet, fresnel);
 }
 
 std::shared_ptr<Bsdf> makeBsdf(

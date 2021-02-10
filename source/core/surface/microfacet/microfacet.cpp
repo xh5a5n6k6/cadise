@@ -4,7 +4,11 @@
 
 namespace cadise {
 
-Microfacet::Microfacet() = default;
+Microfacet::Microfacet(const std::shared_ptr<TTexture<real>>& roughness) :
+    _roughness(roughness) {
+
+    CADISE_ASSERT(roughness);
+}
 
 Microfacet::~Microfacet() = default;
 

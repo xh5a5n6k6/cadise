@@ -11,27 +11,24 @@ namespace cadise {
 */
 class IsotropicBeckmann : public Microfacet {
 public:
-    using Microfacet::Microfacet;
+    IsotropicBeckmann(const std::shared_ptr<TTexture<real>>& roughness);
 
     real distributionD(
-        const real      alphaX,
-        const real      alphaY,
-        const Vector3R& N,
-        const Vector3R& H) const override;
+        const SurfaceIntersection& si,
+        const Vector3R&            N,
+        const Vector3R&            H) const override;
 
     real shadowingMaskingG(
-        const real      alphaX,
-        const real      alphaY,
-        const Vector3R& V,
-        const Vector3R& L,
-        const Vector3R& N,
-        const Vector3R& H) const override;
+        const SurfaceIntersection& si,
+        const Vector3R&            V,
+        const Vector3R&            L,
+        const Vector3R&            N,
+        const Vector3R&            H) const override;
 
     void sampleHalfVectorH(
-        const real      alphaX,
-        const real      alphaY,
-        const Vector2R& sample,
-        Vector3R* const out_H) const override;
+        const SurfaceIntersection& si,
+        const Vector2R&            sample,
+        Vector3R* const            out_H) const override;
 };
 
 } // namespace cadise

@@ -1,5 +1,7 @@
 #include "core/surface/microfacet/isotropicBlinnPhong.h"
 
+#include "core/integral-tool/tSurfaceSampler.h"
+#include "core/surface/microfacet/tRoughnessMapper.h"
 #include "fundamental/assertion.h"
 #include "math/constant.h"
 #include "math/tVector.h"
@@ -8,20 +10,24 @@
 
 namespace cadise {
 
+IsotropicBlinnPhong::IsotropicBlinnPhong(const std::shared_ptr<TTexture<real>>& roughness) :
+    Microfacet(roughness) {
+}
+
 real IsotropicBlinnPhong::distributionD(
-    const real      alphaX,
-    const real      alphaY,
-    const Vector3R& N,
-    const Vector3R& H) const {
+    const SurfaceIntersection& si,
+    const Vector3R&            N,
+    const Vector3R&            H) const {
 
     const real NdotH = N.dot(H);
     if (NdotH <= 0.0_r) {
         return 0.0_r;
     }
 
-    // for isotropic microfacet alphaX is equal to alphaY,
-    // we can use either of them as alpha.
-    const real alpha  = alphaX;
+    real sampleRoughness;
+    TSurfaceSampler<real>().sample(si, _roughness.get(), &sampleRoughness);
+
+    const real alpha  = TRoughnessMapper<ERoughnessMapMode::SQUARE>::map(sampleRoughness);
     const real alpha2 = alpha * alpha;
     const real alphaP = 2.0_r / alpha2 - 2.0_r;
 
@@ -29,12 +35,11 @@ real IsotropicBlinnPhong::distributionD(
 }
 
 real IsotropicBlinnPhong::shadowingMaskingG(
-    const real      alphaX,
-    const real      alphaY,
-    const Vector3R& V,
-    const Vector3R& L,
-    const Vector3R& N,
-    const Vector3R& H) const {
+    const SurfaceIntersection& si,
+    const Vector3R&            V,
+    const Vector3R&            L,
+    const Vector3R&            N,
+    const Vector3R&            H) const {
 
     if (!_isShadowingMaskingValid(V, L, N, H)) {
         return 0.0_r;
@@ -43,9 +48,10 @@ real IsotropicBlinnPhong::shadowingMaskingG(
     real G1V;
     real G1L;
 
-    // for isotropic microfacet alphaX is equal to alphaY,
-    // we can use either of them as alpha.
-    const real alpha  = alphaX;
+    real sampleRoughness;
+    TSurfaceSampler<real>().sample(si, _roughness.get(), &sampleRoughness);
+
+    const real alpha  = TRoughnessMapper<ERoughnessMapMode::SQUARE>::map(sampleRoughness);
     const real alpha2 = alpha * alpha;
     const real alphaP = 2.0_r / alpha2 - 2.0_r;
 
@@ -81,16 +87,16 @@ real IsotropicBlinnPhong::shadowingMaskingG(
 }
 
 void IsotropicBlinnPhong::sampleHalfVectorH(
-    const real      alphaX,
-    const real      alphaY,
-    const Vector2R& sample,
-    Vector3R* const out_H) const {
+    const SurfaceIntersection& si,
+    const Vector2R&            sample,
+    Vector3R* const            out_H) const {
 
     CADISE_ASSERT(out_H);
 
-    // for isotropic microfacet alphaX is equal to alphaY,
-    // we can use either of them as alpha.
-    const real alpha  = alphaX;
+    real sampleRoughness;
+    TSurfaceSampler<real>().sample(si, _roughness.get(), &sampleRoughness);
+
+    const real alpha  = TRoughnessMapper<ERoughnessMapMode::SQUARE>::map(sampleRoughness);
     const real alpha2 = alpha * alpha;
     const real alphaP = 2.0_r / alpha2 - 2.0_r;
 

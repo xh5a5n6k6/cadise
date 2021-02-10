@@ -3,7 +3,6 @@
 #include "core/integral-tool/sample/bsdfSample.h"
 #include "core/surface/fresnel/conductorFresnel.h"
 #include "core/surface/microfacet/microfacet.h"
-#include "core/surface/microfacet/tRoughnessMapper.h"
 #include "core/surfaceIntersection.h"
 #include "core/texture/tTexture.h"
 #include "fundamental/assertion.h"
@@ -16,17 +15,14 @@ namespace cadise {
 
 ConductorMicrofacet::ConductorMicrofacet(
     const std::shared_ptr<Microfacet>&       microfacet,
-    const std::shared_ptr<ConductorFresnel>& fresnel,
-    const std::shared_ptr<TTexture<real>>&   roughness) :
+    const std::shared_ptr<ConductorFresnel>& fresnel) :
     
     Bsdf(BsdfLobes({ ELobe::GLOSSY_REFLECTION })),
     _microfacet(microfacet),
-    _fresnel(fresnel),
-    _roughness(roughness) {
+    _fresnel(fresnel) {
 
     CADISE_ASSERT(microfacet);
     CADISE_ASSERT(fresnel);
-    CADISE_ASSERT(roughness);
 }
 
 Spectrum ConductorMicrofacet::evaluate(
@@ -50,17 +46,12 @@ Spectrum ConductorMicrofacet::evaluate(
     }
     H = H.normalize();
 
-    const Vector3R& uvw = si.surfaceDetail().uvw();
-    real sampleRoughness;
-    _roughness->evaluate(uvw, &sampleRoughness);
-    const real alpha = TRoughnessMapper<ERoughnessMapMode::SQUARE>::map(sampleRoughness);
-
     const real LdotH = L.dot(H);
     Spectrum F;
     _fresnel->evaluateReflectance(LdotH, &F);
 
-    const real D = _microfacet->distributionD(alpha, alpha, Ns, H);
-    const real G = _microfacet->shadowingMaskingG(alpha, alpha, V, L, Ns, H);
+    const real D = _microfacet->distributionD(si, Ns, H);
+    const real G = _microfacet->shadowingMaskingG(si, V, L, Ns, H);
 
     return F * G * D / (4.0_r * std::abs(VdotN * LdotN));
 }
@@ -76,11 +67,6 @@ void ConductorMicrofacet::evaluateSample(
     const Vector3R& V       = si.wi();
     const real      Nfactor = (V.dot(Ns) > 0.0_r) ? 1.0_r : -1.0_r;
 
-    const Vector3R& uvw = si.surfaceDetail().uvw();
-    real sampleRoughness;
-    _roughness->evaluate(uvw, &sampleRoughness);
-    const real alpha = TRoughnessMapper<ERoughnessMapMode::SQUARE>::map(sampleRoughness);
-
     // build local coordinate system (shading normal as y-axis)
     const Vector3R yAxis(Ns);
     Vector3R zAxis;
@@ -89,7 +75,7 @@ void ConductorMicrofacet::evaluateSample(
 
     const Vector2R sample(Random::nextReal(), Random::nextReal());
     Vector3R H;
-    _microfacet->sampleHalfVectorH(alpha, alpha, sample, &H);
+    _microfacet->sampleHalfVectorH(si, sample, &H);
 
     // transform H to world coordinate
     H = xAxis * H.x() + yAxis * H.y() + zAxis * H.z();
@@ -109,8 +95,8 @@ void ConductorMicrofacet::evaluateSample(
     Spectrum F;
     _fresnel->evaluateReflectance(LdotH, &F);
 
-    const real D = _microfacet->distributionD(alpha, alpha, Ns, H);
-    const real G = _microfacet->shadowingMaskingG(alpha, alpha, V, L, Ns, H);
+    const real D = _microfacet->distributionD(si, Ns, H);
+    const real G = _microfacet->shadowingMaskingG(si, V, L, Ns, H);
 
     const real pdfH = std::abs(D * NdotH);
     const real pdfL = std::abs(pdfH / (4.0_r * LdotH));
@@ -144,12 +130,7 @@ real ConductorMicrofacet::evaluatePdfW(
     }
     H = H.normalize();
 
-    const Vector3R& uvw = si.surfaceDetail().uvw();
-    real sampleRoughness;
-    _roughness->evaluate(uvw, &sampleRoughness);
-    const real alpha = TRoughnessMapper<ERoughnessMapMode::SQUARE>::map(sampleRoughness);
-
-    const real D     = _microfacet->distributionD(alpha, alpha, Ns, H);
+    const real D     = _microfacet->distributionD(si, Ns, H);
     const real NdotH = Ns.dot(H);
     const real LdotH = L.dot(H);
 
