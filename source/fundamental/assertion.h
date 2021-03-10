@@ -14,6 +14,7 @@
 */
 #ifdef CADISE_DEBUG
     #include <iostream>
+    #include <string>
 
     namespace cadise {
         void assertionFailed();
@@ -24,8 +25,14 @@
             if(!(condition)) { \
                 std::cerr << "ASSERT FAIL. It occurs at " \
                           << __FILE__ << ", line: " << __LINE__ \
-                          << ", condition: " << #condition \
-                          << std::endl; \
+                          << ", condition: " << #condition; \
+                \
+                if(!std::string((message)).empty()) { \
+                    std::cerr << ", message: " << ((message)); \
+                } \
+                \
+                std::cerr << std::endl; \
+                \
                 cadise::assertionFailed(); \
             } \
         } while(0)
