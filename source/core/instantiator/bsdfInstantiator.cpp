@@ -12,7 +12,7 @@
 
 #include "core/surface/fresnel/schlickConductorFresnel.h"
 #include "core/surface/fresnel/vanillaDielectricFresnel.h"
-//#include "core/surface/microfacet/anisotropicGgx.h"
+#include "core/surface/microfacet/anisotropicGgx.h"
 #include "core/surface/microfacet/isotropicBeckmann.h"
 #include "core/surface/microfacet/isotropicBlinnPhong.h"
 #include "core/surface/microfacet/isotropicGgx.h"
@@ -160,9 +160,9 @@ static std::shared_ptr<Bsdf> createConductorMicrofacet(
     else if (microfacetType == "blinn-phong") {
         microfacet = std::make_shared<IsotropicBlinnPhong>(roughness);
     }
-    //else if (microfacetType == "anisotropic-ggx") {
-    //    microfacet = std::make_shared<AnisotropicGgx>(roughnessU, roughnessV);
-    //}
+    else if (microfacetType == "anisotropic-ggx") {
+        microfacet = std::make_shared<AnisotropicGgx>(roughnessU, roughnessV);
+    }
     else {
         microfacet = std::make_shared<IsotropicGgx>(roughness);
     }

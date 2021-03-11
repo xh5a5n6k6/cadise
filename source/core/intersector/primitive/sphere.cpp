@@ -155,17 +155,17 @@ void Sphere::evaluateSurfaceDetail(
             rSinTheta,
             -1.0_r * N.y() * cosPhi);
 
-        const Vector3R dPdUU = -1.0_r * constant::two_pi<real> * constant::two_pi<real> * Vector3R(
+        const Vector3R d2PdUU = -1.0_r * constant::two_pi<real> * constant::two_pi<real> * Vector3R(
             NVector.x(),
             0.0_r,
             NVector.z());
 
-        const Vector3R dPdUV = constant::pi<real> * NVector.y() * constant::two_pi<real> * Vector3R(
+        const Vector3R d2PdUV = constant::pi<real> * NVector.y() * constant::two_pi<real> * Vector3R(
             -cosPhi,
             0.0_r,
             sinPhi);
 
-        const Vector3R dPdVV = -1.0_r * constant::pi<real> * constant::pi<real> * Vector3R(
+        const Vector3R d2PdVV = -1.0_r * constant::pi<real> * constant::pi<real> * Vector3R(
             NVector.x(),
             NVector.y(),
             NVector.z());
@@ -173,9 +173,9 @@ void Sphere::evaluateSurfaceDetail(
         const real E = dPdU.dot(dPdU);
         const real F = dPdU.dot(dPdV);
         const real G = dPdV.dot(dPdV);
-        const real e = N.dot(dPdUU);
-        const real f = N.dot(dPdUV);
-        const real g = N.dot(dPdVV);
+        const real e = N.dot(d2PdUU);
+        const real f = N.dot(d2PdUV);
+        const real g = N.dot(d2PdVV);
 
         const real EGsubF2     = E * G - F * F;
         const real inverseEGF2 = (EGsubF2 != 0.0_r) ? 1.0_r / EGsubF2 : 1.0_r;

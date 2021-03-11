@@ -22,7 +22,8 @@
     - Modified Phong
     - Mixed
     - Microfacet (conductor)
-        - NDF: Beckmann, GGX, Blinn-Phong
+        - isotropic NDF: Beckmann, GGX, Blinn-Phong
+        - anisotropic NDF: GGX
 - ### Primitive
     - Sphere
     - Triangle
