@@ -40,6 +40,8 @@ bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) c
 
         const Primitive* hitPrimitive = surfaceIntersection.primitiveInfo().primitive();
         hitPrimitive->evaluateSurfaceDetail(primitiveInfo, &surfaceDetail);
+
+        surfaceDetail.computeCoordinateSystem();
         surfaceIntersection.setSurfaceDetail(surfaceDetail);
 
         return true;
@@ -56,6 +58,8 @@ bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) c
 
         const Primitive* hitPrimitive = surfaceIntersection.primitiveInfo().primitive();
         hitPrimitive->evaluateSurfaceDetail(primitiveInfo, &surfaceDetail);
+
+        surfaceDetail.computeCoordinateSystem();
         surfaceIntersection.setSurfaceDetail(surfaceDetail);
 
         return true;

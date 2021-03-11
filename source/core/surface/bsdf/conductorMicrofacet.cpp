@@ -52,7 +52,7 @@ Spectrum ConductorMicrofacet::evaluate(
     const real D = _microfacet->distributionD(si, Ns, H);
     const real G = _microfacet->shadowingMaskingG(si, V, L, Ns, H);
 
-    return F * G * D / (4.0_r * std::abs(VdotN * LdotN));
+    return F * (G * D / (4.0_r * std::abs(VdotN * LdotN)));
 }
 
 void ConductorMicrofacet::evaluateSample(
@@ -64,23 +64,13 @@ void ConductorMicrofacet::evaluateSample(
 
     const Vector3R& Ns      = si.surfaceDetail().shadingNormal();
     const Vector3R& V       = si.wi();
-    const real      Nfactor = (V.dot(Ns) > 0.0_r) ? 1.0_r : -1.0_r;
-
-    // build local coordinate system (shading normal as y-axis)
-    const Vector3R yAxis(Ns);
-    Vector3R zAxis;
-    Vector3R xAxis;
-    math::build_coordinate_system(yAxis, &zAxis, &xAxis);
+    const real      NFactor = (V.dot(Ns) > 0.0_r) ? 1.0_r : -1.0_r;
 
     const Vector2R sample(Random::nextReal(), Random::nextReal());
     Vector3R H;
     _microfacet->sampleHalfVectorH(si, sample, &H);
 
-    // transform H to world coordinate
-    H = xAxis * H.x() + yAxis * H.y() + zAxis * H.z();
-    H = H.normalize();
-
-    const Vector3R L = V.reflect(H * Nfactor);
+    const Vector3R L = V.reflect(H * NFactor);
 
     const real VdotN = V.dot(Ns);
     const real LdotN = L.dot(Ns);
@@ -103,7 +93,7 @@ void ConductorMicrofacet::evaluateSample(
         return;
     }
 
-    out_sample->setScatterValue(F * G * D / (4.0_r * std::abs(VdotN * LdotN)));
+    out_sample->setScatterValue(F * (G * D / (4.0_r * std::abs(VdotN * LdotN))));
     out_sample->setScatterDirection(L);
     out_sample->setPdfW(pdfL);
 }

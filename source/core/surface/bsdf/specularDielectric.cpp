@@ -65,8 +65,8 @@ void SpecularDielectric::evaluateSample(
     Spectrum scatterValue(0.0_r);
 
     if (canReflection) {
-        const real     Nfactor = (VdotN > 0.0_r) ? 1.0_r : -1.0_r;
-        const Vector3R L       = V.reflect(Ns * Nfactor);
+        const real     NFactor = (VdotN > 0.0_r) ? 1.0_r : -1.0_r;
+        const Vector3R L       = V.reflect(Ns * NFactor);
         const real     LdotN   = L.absDot(Ns);
 
         Spectrum sampleAlbedo;
@@ -89,7 +89,7 @@ void SpecularDielectric::evaluateSample(
         }
     
         const real cosThetaI = L.dot(Ns);
-        Spectrum   refractDirectionReflectance;
+        Spectrum refractDirectionReflectance;
         _fresnel->evaluateReflectance(cosThetaI, &refractDirectionReflectance);
 
         real btdfFactor = 1.0_r;

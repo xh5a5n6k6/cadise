@@ -16,8 +16,8 @@ void Hemisphere::uniformSampling(
     CADISE_ASSERT(out_direction);
     CADISE_ASSERT(out_pdfW);
 
-    const real phi      = constant::two_pi<real> * sample.x();
-    const real cosTheta = sample.y();
+    const real phi      = constant::two_pi<real> * sample[0];
+    const real cosTheta = sample[1];
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
 
     *out_direction =  Vector3R(std::sin(phi) * sinTheta,
@@ -35,8 +35,8 @@ void Hemisphere::cosineWeightedSampling(
     CADISE_ASSERT(out_direction);
     CADISE_ASSERT(out_pdfW);
 
-    const real phi      = constant::two_pi<real> * sample.x();
-    const real theta    = std::acos(1.0_r - 2.0_r * sample.y()) * 0.5_r;
+    const real phi      = constant::two_pi<real> * sample[0];
+    const real theta    = std::acos(1.0_r - 2.0_r * sample[1]) * 0.5_r;
     const real cosTheta = std::cos(theta);
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
 
@@ -56,8 +56,8 @@ void Hemisphere::cosineExpWeightedSampling(
     CADISE_ASSERT(out_direction);
     CADISE_ASSERT(out_pdfW);
 
-    const real phi      = constant::two_pi<real> * sample.x();
-    const real cosTheta = std::pow(sample.y(), 1.0_r / (exponent + 1.0_r));
+    const real phi      = constant::two_pi<real> * sample[0];
+    const real cosTheta = std::pow(sample[1], 1.0_r / (exponent + 1.0_r));
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
 
     *out_direction = Vector3R(std::sin(phi) * sinTheta,

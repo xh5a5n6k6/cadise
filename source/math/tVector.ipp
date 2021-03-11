@@ -454,8 +454,8 @@ inline TVector<T, N> TVector<T, N>::cross(const TVector<T, N>& v) const {
     static_assert(N == 3, "Error in vector's cross, this vector doesn't support cross method\n");
 
     return TVector<T, N>(_v[1] * v._v[2] - _v[2] * v._v[1],
-                        _v[2] * v._v[0] - _v[0] * v._v[2],
-                        _v[0] * v._v[1] - _v[1] * v._v[0]);
+                         _v[2] * v._v[0] - _v[0] * v._v[2],
+                         _v[0] * v._v[1] - _v[1] * v._v[0]);
 }
 
 template<typename T, std::size_t N>

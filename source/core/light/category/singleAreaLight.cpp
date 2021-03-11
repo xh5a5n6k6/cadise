@@ -33,7 +33,7 @@ SingleAreaLight::SingleAreaLight(
     const Spectrum totalWattColor = unitWattColor * watt;
 
     _emitRadiance = std::make_shared<TConstantTexture<Spectrum>>(
-        totalWattColor / primitive->area() * constant::inv_pi<real>);
+        (totalWattColor / primitive->area()) * constant::inv_pi<real>);
 }
 
 Spectrum SingleAreaLight::emittance(const SurfaceIntersection& emitIntersection) const {

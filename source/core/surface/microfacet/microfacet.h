@@ -2,18 +2,12 @@
 
 #include "math/type/mathType.h"
 
-#include <memory>
-
 namespace cadise {
 
 class SurfaceIntersection;
-template<typename T>
-class TTexture;
 
 class Microfacet {
 public:
-    Microfacet(const std::shared_ptr<TTexture<real>>& roughness);
-
     virtual ~Microfacet();
 
     virtual real distributionD(
@@ -52,8 +46,6 @@ protected:
         const Vector3R& H) const;
 
     real _roughnessToAlpha(const real roughness) const;
-
-    std::shared_ptr<TTexture<real>> _roughness;
 };
 
 } // namespace cadise

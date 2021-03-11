@@ -10,7 +10,10 @@
 namespace cadise {
 
 IsotropicBeckmann::IsotropicBeckmann(const std::shared_ptr<TTexture<real>>& roughness) :
-    Microfacet(roughness) {
+    Microfacet(),
+    _roughness(roughness) {
+
+    CADISE_ASSERT(roughness);
 }
 
 real IsotropicBeckmann::distributionD(
@@ -28,6 +31,7 @@ real IsotropicBeckmann::distributionD(
 
     const real alpha  = _roughnessToAlpha(sampleRoughness);
     const real alpha2 = alpha * alpha;
+
     const real NdotH2 = NdotH * NdotH;
     const real NdotH4 = NdotH2 * NdotH2;
 
@@ -103,20 +107,20 @@ void IsotropicBeckmann::sampleHalfVectorH(
     const real alpha  = _roughnessToAlpha(sampleRoughness);
     const real alpha2 = alpha * alpha;
     
-    const real phi   = constant::two_pi<real> * safeSample.x();
-    const real theta = std::atan(std::sqrt(-alpha2 * std::log(1.0_r - safeSample.y())));
-    if (!std::isfinite(theta)) {
-        *out_H = Vector3R(0.0_r, 1.0_r, 0.0_r);
+    const real phi       = constant::two_pi<real> * safeSample[0];
+    const real tan2Theta = -alpha2 * std::log(1.0_r - safeSample[1]);
+    const real cosTheta  = math::clamp(1.0_r / std::sqrt(1.0_r + tan2Theta), -1.0_r, 1.0_r);
+    const real sinTheta  = std::sqrt(1.0_r - cosTheta * cosTheta);
 
-        return;
-    }
+    const Vector3R localH = Vector3R(
+        std::sin(phi) * sinTheta,
+        cosTheta,
+        std::cos(phi) * sinTheta);
 
-    const real cosTheta = std::cos(theta);
-    const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
+    // transform H to world coordinate
+    const Vector3R worldH = si.surfaceDetail().shadingLcs().localToWorld(localH);
 
-    *out_H = Vector3R(std::sin(phi) * sinTheta,
-                      cosTheta,
-                      std::cos(phi) * sinTheta);
+    *out_H = worldH.normalize();
 }
 
 } // namespace cadise

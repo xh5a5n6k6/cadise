@@ -2,7 +2,12 @@
 
 #include "core/surface/microfacet/microfacet.h"
 
+#include <memory>
+
 namespace cadise {
+
+template<typename T>
+class TTexture;
 
 /*
     Reference Paper:
@@ -29,6 +34,9 @@ public:
         const SurfaceIntersection& si,
         const Vector2R&            sample,
         Vector3R* const            out_H) const override;
+
+private:
+    std::shared_ptr<TTexture<real>> _roughness;
 };
 
 } // namespace cadise

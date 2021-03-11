@@ -86,6 +86,9 @@ template<typename T>
 inline constant::Sign sign(const T& value);
 
 template<typename T>
+inline T squared(const T& value);
+
+template<typename T>
 inline T min(const T& a, const T& b);
 
 template<typename T>
@@ -110,7 +113,12 @@ inline T map_to_non_zero(const T& value);
 template<typename T>
 inline constant::Sign sign(const T& value) {
     return static_cast<constant::Sign>(
-        static_cast<T>(0) < value) - (value < static_cast<T>(0));
+        (static_cast<T>(0) < value) - (value < static_cast<T>(0)));
+}
+
+template<typename T>
+inline T squared(const T& value) {
+    return value * value;
 }
 
 template<typename T>

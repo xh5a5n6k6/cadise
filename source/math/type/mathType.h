@@ -45,4 +45,12 @@ using AABB3S = TAABB<std::size_t, 3>;
 using AABB2D = TAABB<float64, 2>;
 using AABB3D = TAABB<float64, 3>;
 
+
+///////////////////////////////////////////////////////////
+//
+template<typename T>
+class TLocalCoordinateSystem3;
+
+using LCS3R = TLocalCoordinateSystem3<real>;
+
 } // namespace cadise

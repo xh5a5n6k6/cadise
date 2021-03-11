@@ -10,7 +10,10 @@
 namespace cadise {
 
 IsotropicBlinnPhong::IsotropicBlinnPhong(const std::shared_ptr<TTexture<real>>& roughness) :
-    Microfacet(roughness) {
+    Microfacet(),
+    _roughness(roughness) {
+
+    CADISE_ASSERT(roughness);
 }
 
 real IsotropicBlinnPhong::distributionD(
@@ -22,7 +25,7 @@ real IsotropicBlinnPhong::distributionD(
     if (NdotH <= 0.0_r) {
         return 0.0_r;
     }
-
+    
     real sampleRoughness;
     TSurfaceSampler<real>().sample(si, _roughness.get(), &sampleRoughness);
 
@@ -99,13 +102,19 @@ void IsotropicBlinnPhong::sampleHalfVectorH(
     const real alpha2 = alpha * alpha;
     const real alphaP = 2.0_r / alpha2 - 2.0_r;
 
-    const real phi      = constant::two_pi<real> * sample.x();
-    const real cosTheta = std::pow(sample.y(), 1.0_r / (alphaP + 2.0_r));
+    const real phi      = constant::two_pi<real> * sample[0];
+    const real cosTheta = std::pow(sample[1], 1.0_r / (alphaP + 2.0_r));
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
 
-    *out_H = Vector3R(std::sin(phi) * sinTheta,
-                      cosTheta,
-                      std::cos(phi) * sinTheta);
+    const Vector3R localH = Vector3R(
+        std::sin(phi) * sinTheta,
+        cosTheta,
+        std::cos(phi) * sinTheta);
+
+    // transform H to world coordinate
+    const Vector3R worldH = si.surfaceDetail().shadingLcs().localToWorld(localH);
+
+    *out_H = worldH.normalize();
 }
 
 } // namespace cadise

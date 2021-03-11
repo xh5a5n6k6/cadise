@@ -48,19 +48,13 @@ void PhongBsdf::evaluateSample(
     const Vector3R& Ns = si.surfaceDetail().shadingNormal();
     const Vector3R& V  = si.wi();
 
-    // build local coordinate system (shading normal as y-axis)
-    const Vector3R yAxis(Ns);
-    Vector3R zAxis;
-    Vector3R xAxis;
-    math::build_coordinate_system(yAxis, &zAxis, &xAxis);
-
     const Vector2R sample(Random::nextReal(), Random::nextReal());
     Vector3R L;
     real pdfW;
     Hemisphere::cosineExpWeightedSampling(sample, _exponent, &L, &pdfW);
 
     // transform L to world coordinate
-    L = xAxis * L.x() + yAxis * L.y() + zAxis * L.z();
+    L = si.surfaceDetail().shadingLcs().localToWorld(L);
     L = L.normalize();
 
     if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) {

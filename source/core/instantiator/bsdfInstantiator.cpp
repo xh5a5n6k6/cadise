@@ -12,6 +12,7 @@
 
 #include "core/surface/fresnel/schlickConductorFresnel.h"
 #include "core/surface/fresnel/vanillaDielectricFresnel.h"
+//#include "core/surface/microfacet/anisotropicGgx.h"
 #include "core/surface/microfacet/isotropicBeckmann.h"
 #include "core/surface/microfacet/isotropicBlinnPhong.h"
 #include "core/surface/microfacet/isotropicGgx.h"
@@ -146,6 +147,8 @@ static std::shared_ptr<Bsdf> createConductorMicrofacet(
     const auto microfacetType = data->findString("microfacet-type", "ggx");
     const auto fresnelType    = data->findString("fresnel-type", "schlick");
     const auto roughness      = data->getRealTexture("roughness", realTextures);
+    const auto roughnessU     = data->getRealTexture("roughness-u", realTextures);
+    const auto roughnessV     = data->getRealTexture("roughness-v", realTextures);
 
     std::shared_ptr<Microfacet> microfacet = nullptr;
     if (microfacetType == "beckmann") {
@@ -157,6 +160,9 @@ static std::shared_ptr<Bsdf> createConductorMicrofacet(
     else if (microfacetType == "blinn-phong") {
         microfacet = std::make_shared<IsotropicBlinnPhong>(roughness);
     }
+    //else if (microfacetType == "anisotropic-ggx") {
+    //    microfacet = std::make_shared<AnisotropicGgx>(roughnessU, roughnessV);
+    //}
     else {
         microfacet = std::make_shared<IsotropicGgx>(roughness);
     }
