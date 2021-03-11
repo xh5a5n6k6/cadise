@@ -1,5 +1,5 @@
 #include "core/surfaceDetail.h"
-#include <string>
+
 namespace cadise {
 
 SurfaceDetail::SurfaceDetail() :
@@ -16,8 +16,8 @@ void SurfaceDetail::computeCoordinateSystem() {
         const Vector3R unitY = this->geometryNormal();
         const Vector3R xAxis = unitY.cross(_differentialGeometry.dPdU());
         if (!xAxis.isZero()) {
-            Vector3R unitX = xAxis.normalize();
-            Vector3R unitZ = unitX.cross(unitY);
+            const Vector3R unitX = xAxis.normalize();
+            const Vector3R unitZ = unitX.cross(unitY);
 
             _geometryLcs.setAxes(
                 unitX,
@@ -34,8 +34,8 @@ void SurfaceDetail::computeCoordinateSystem() {
         const Vector3R unitY = this->shadingNormal();
         const Vector3R xAxis = unitY.cross(_differentialGeometry.dNdU());
         if (!xAxis.isZero()) {
-            Vector3R unitX = xAxis.normalize();
-            Vector3R unitZ = unitX.cross(unitY);
+            const Vector3R unitX = xAxis.normalize();
+            const Vector3R unitZ = unitX.cross(unitY);
 
             _shadingLcs.setAxes(
                 unitX,

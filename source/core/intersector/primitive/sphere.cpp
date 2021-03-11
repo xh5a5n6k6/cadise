@@ -112,8 +112,9 @@ void Sphere::evaluateSurfaceDetail(
 
     CADISE_ASSERT(out_surface);
 
-    const Vector3R& P = out_surface->position();
-    const Vector3R  N = (P - _center).normalize();
+    const Vector3R& P       = out_surface->position();
+    const Vector3R  NVector = P - _center;
+    const Vector3R  N       = NVector.normalize();
 
     out_surface->setGeometryNormal(N);
     out_surface->setShadingNormal(N);
@@ -127,6 +128,65 @@ void Sphere::evaluateSurfaceDetail(
         _tmptextureMapper->mappingToUvw(out_surface->shadingNormal(), &uvw);
         out_surface->setUvw(uvw);
     }
+
+    /*
+        calculate differential geometry properties.
+        
+        implementation follows PBRT-v3's solution
+        Reference: PBRT-v3 e-book (Sphere)
+    */
+    Vector3R dPdU;
+    Vector3R dPdV;
+    Vector3R dNdU;
+    Vector3R dNdV;
+    {
+        const real xzProjection = math::max(_radius * _radius - NVector.y() * NVector.y(), 0.0_r);
+        const real rSinTheta    = std::sqrt(xzProjection);
+        const real cosPhi       = (rSinTheta != 0.0_r) ? NVector.z() / rSinTheta : 1.0_r;
+        const real sinPhi       = (rSinTheta != 0.0_r) ? NVector.x() / rSinTheta : 0.0_r;
+
+        dPdU = Vector3R(
+            constant::two_pi<real> * NVector.z(),
+            0.0_r,
+            -1.0_r * constant::two_pi<real> * NVector.x());
+
+        dPdV = constant::pi<real> * Vector3R(
+            -1.0_r * N.y() * sinPhi,
+            rSinTheta,
+            -1.0_r * N.y() * cosPhi);
+
+        const Vector3R dPdUU = -1.0_r * constant::two_pi<real> * constant::two_pi<real> * Vector3R(
+            NVector.x(),
+            0.0_r,
+            NVector.z());
+
+        const Vector3R dPdUV = constant::pi<real> * NVector.y() * constant::two_pi<real> * Vector3R(
+            -cosPhi,
+            0.0_r,
+            sinPhi);
+
+        const Vector3R dPdVV = -1.0_r * constant::pi<real> * constant::pi<real> * Vector3R(
+            NVector.x(),
+            NVector.y(),
+            NVector.z());
+
+        const real E = dPdU.dot(dPdU);
+        const real F = dPdU.dot(dPdV);
+        const real G = dPdV.dot(dPdV);
+        const real e = N.dot(dPdUU);
+        const real f = N.dot(dPdUV);
+        const real g = N.dot(dPdVV);
+
+        const real EGsubF2     = E * G - F * F;
+        const real inverseEGF2 = (EGsubF2 != 0.0_r) ? 1.0_r / EGsubF2 : 1.0_r;
+
+        dNdU = (f * F - e * G) * inverseEGF2 * dPdU +
+               (e * F - f * E) * inverseEGF2 * dPdV;
+        dNdV = (g * F - f * G) * inverseEGF2 * dPdU +
+               (f * F - g * E) * inverseEGF2 * dPdV;
+    }
+
+    out_surface->setDifferentialGeometry({ dPdU, dPdV, dNdU, dNdV });
 }
 
 void Sphere::evaluatePositionSample(PositionSample* const out_sample) const {

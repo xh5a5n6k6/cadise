@@ -51,9 +51,7 @@ inline void TLocalCoordinateSystem3<T>::initializeViaUnitY(const TVector<T, 3>& 
         unitX = unitY.cross(unitZ);
     }
 
-    _xAxis = unitX;
-    _yAxis = unitY;
-    _zAxis = unitZ;
+    this->setAxes(unitX, unitY, unitZ);
 }
 
 template<typename T>

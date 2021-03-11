@@ -47,10 +47,12 @@ using AABB3D = TAABB<float64, 3>;
 
 
 ///////////////////////////////////////////////////////////
-//
+// three-dimensional local coordinate system with 
+// arbitrary type
 template<typename T>
 class TLocalCoordinateSystem3;
 
 using LCS3R = TLocalCoordinateSystem3<real>;
+using LCS3D = TLocalCoordinateSystem3<float64>;
 
 } // namespace cadise
