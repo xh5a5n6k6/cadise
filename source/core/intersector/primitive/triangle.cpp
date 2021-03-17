@@ -127,36 +127,74 @@ void Triangle::evaluateSurfaceDetail(
     SurfaceDetail* const out_surface) const {
     
     CADISE_ASSERT(out_surface);
-    
-    // TODO: refactor here
+
     const Vector3R& P = out_surface->position();
-    Vector3R Ng = _eAB.cross(_eAC);
-    Ng = (Ng.isZero()) ? Vector3R(0.0_r, 1.0_r, 0.0_r) : Ng.normalize();
 
+    Vector3R barycentric;
+    _positionToBarycentric(P, &barycentric);
+
+    Vector3R Ng;
+    Vector3R Ns;
     Vector3R uvw;
-    if (_textureMapper) {
-        _textureMapper->mappingToUvw(Ng, &uvw);
+    {
+        // Ng
+        // TODO: refactor here
+        Ng = _eAB.cross(_eAC);
+        Ng = (Ng.isZero()) ? Vector3R(0.0_r, 1.0_r, 0.0_r) : Ng.normalize();
 
-        out_surface->setUvw(uvw);
-    }
-    else {
-        Vector3R barycentric;
-        _positionToBarycentric(P, &barycentric);
+        // Ns
+        Ns = barycentric.x() * _nA +
+             barycentric.y() * _nB +
+             barycentric.z() * _nC;
 
-        uvw = barycentric.x() * _uvwA +
-              barycentric.y() * _uvwB +
-              barycentric.z() * _uvwC;
-
-        // HACK
-        Vector3R Ns = barycentric.x() * _nA +
-                      barycentric.y() * _nB +
-                      barycentric.z() * _nC;
         Ns = (Ns.isZero()) ? Ng : Ns.normalize();
 
-        out_surface->setShadingNormal(Ns);
-        out_surface->setGeometryNormal(Ng);
-        out_surface->setUvw(uvw);
+        // uvw
+        if (_textureMapper) {
+            _textureMapper->mappingToUvw(Ng, &uvw);
+        }
+        else {
+            uvw = barycentric.x() * _uvwA +
+                  barycentric.y() * _uvwB +
+                  barycentric.z() * _uvwC;
+        }
     }
+
+    out_surface->setGeometryNormal(Ng);
+    out_surface->setShadingNormal(Ns);
+    out_surface->setUvw(uvw);
+
+    /*
+        calculate differential geometry properties.
+
+        implementation follows PBRT-v3's solution
+        Reference: PBRT-v3 e-book (Triangle Meshes)
+    */
+    Vector3R dPdU(0.0_r);
+    Vector3R dPdV(0.0_r);
+    Vector3R dNdU(0.0_r);
+    Vector3R dNdV(0.0_r);
+    {
+        const Vector2R dUVab(_uvwB[0] - _uvwA[0], _uvwB[1] - _uvwA[1]);
+        const Vector2R dUVac(_uvwC[0] - _uvwA[0], _uvwC[1] - _uvwA[1]);
+
+        const real determinant = dUVab[0] * dUVac[1] - dUVab[1] * dUVac[0];
+        if (determinant != 0.0_r) {
+            const real inverseDeterminant = 1.0_r / determinant;
+
+            const Vector3R dPab = _eAB;
+            const Vector3R dPac = _eAC;
+            const Vector3R dNab = _nB - _nA;
+            const Vector3R dNac = _nC - _nA;
+
+            dPdU = Vector3R( dUVac[1] * dPab - dUVab[1] * dPac) * inverseDeterminant;
+            dPdV = Vector3R(-dUVac[0] * dPab + dUVab[0] * dPac) * inverseDeterminant;
+            dNdU = Vector3R( dUVac[1] * dNab - dUVab[1] * dNac) * inverseDeterminant;
+            dNdV = Vector3R(-dUVac[0] * dNab + dUVab[0] * dNac) * inverseDeterminant;
+        }
+    }
+
+    out_surface->setDifferentialGeometry({ dPdU, dPdV, dNdU, dNdV });
 }
 
 void Triangle::evaluatePositionSample(PositionSample* const out_sample) const {
@@ -168,7 +206,7 @@ void Triangle::evaluatePositionSample(PositionSample* const out_sample) const {
 
     const Vector3R eAB = _eAB;
     const Vector3R eAC = _eAC;
-    const Vector3R P   = _vA + sampleSt.x() * eAB + sampleSt.y() * eAC;
+    const Vector3R P   = _vA + sampleSt[0] * eAB + sampleSt[1] * eAC;
 
     Vector3R barycentric;
     _positionToBarycentric(P, &barycentric);
@@ -252,8 +290,8 @@ void Triangle::_positionToBarycentric(
     }
     else {
         const real inverseDenominator = 1.0_r / denominator;
-        const real u = (d11 * d20 - d01 * d21) * inverseDenominator;
-        const real v = (d00 * d21 - d01 * d20) * inverseDenominator;
+        const real u = ( d11 * d20 - d01 * d21) * inverseDenominator;
+        const real v = (-d01 * d20 + d00 * d21) * inverseDenominator;
 
         *out_barycentric = Vector3R(1.0_r - u - v, 
                                     u, 

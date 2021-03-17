@@ -13,9 +13,9 @@ void SampleWarp::uniformTriangleUv(
 
     CADISE_ASSERT(out_uv);
 
-    const real sqrtSeedA = std::sqrt(sample.x());
+    const real sqrtSeedA = std::sqrt(sample[0]);
 
-    *out_uv = Vector2R(1.0_r - sqrtSeedA, sqrtSeedA * sample.y());
+    *out_uv = Vector2R(1.0_r - sqrtSeedA, sqrtSeedA * sample[1]);
 }
 
 } // namespace cadise

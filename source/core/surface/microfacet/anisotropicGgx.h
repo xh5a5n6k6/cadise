@@ -13,6 +13,9 @@ class TTexture;
     Reference Paper:
     "Microfacet Models for Refraction through Rough Surfaces"
     Walter et al., EGSR 2007
+
+    "Understanding the Masking-Shadowing Function in Microfacet-Based BRDFs"
+    Eric Heitz, JCGT 2014
 */
 class AnisotropicGgx : public Microfacet {
 public:

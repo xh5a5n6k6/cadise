@@ -27,7 +27,7 @@ real AnisotropicGgx::distributionD(
     const Vector3R&            N,
     const Vector3R&            H) const {
 
-    const real cosTheta = N.dot(H);
+    const real cosTheta = math::clamp(N.dot(H), -1.0_r, 1.0_r);
     if (cosTheta <= 0.0_r) {
         return 0.0_r;
     }

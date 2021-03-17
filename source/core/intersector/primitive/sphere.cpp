@@ -151,9 +151,9 @@ void Sphere::evaluateSurfaceDetail(
             -1.0_r * constant::two_pi<real> * NVector.x());
 
         dPdV = constant::pi<real> * Vector3R(
-            -1.0_r * N.y() * sinPhi,
+            -1.0_r * NVector.y() * sinPhi,
             rSinTheta,
-            -1.0_r * N.y() * cosPhi);
+            -1.0_r * NVector.y() * cosPhi);
 
         const Vector3R d2PdUU = -1.0_r * constant::two_pi<real> * constant::two_pi<real> * Vector3R(
             NVector.x(),
