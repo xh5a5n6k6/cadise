@@ -3,9 +3,9 @@
 #include "core/integral-tool/sample/bsdfSample.h"
 #include "core/surface/fresnel/conductorFresnel.h"
 #include "core/surface/microfacet/microfacet.h"
+#include "core/surface/microfacet/microfacetHelper.h"
 #include "core/surfaceIntersection.h"
 #include "fundamental/assertion.h"
-#include "math/math.h"
 #include "math/random.h"
 
 #include <cmath>
@@ -34,25 +34,26 @@ Spectrum ConductorMicrofacet::evaluate(
 
     const real VdotN = V.dot(Ns);
     const real LdotN = L.dot(Ns);
-
     if (VdotN * LdotN <= 0.0_r) {
         return Spectrum(0.0_r);
     }
 
-    Vector3R H  = static_cast<real>(math::sign(VdotN)) * (V + L);
-    if (H.isZero()) {
+    Vector3R H;
+    if (!MicrofacetHelper::canMakeReflectionH(V, L, Ns, &H)) {
         return Spectrum(0.0_r);
     }
-    H = H.normalize();
 
     const real LdotH = L.dot(H);
+    const real NdotH = Ns.dot(H);
+
     Spectrum F;
     _fresnel->evaluateReflectance(LdotH, &F);
 
-    const real D = _microfacet->distributionD(si, Ns, H);
-    const real G = _microfacet->shadowingMaskingG(si, V, L, Ns, H);
+    const real D         = _microfacet->distributionD(si, Ns, H);
+    const real G         = _microfacet->shadowingMaskingG(si, V, L, Ns, H);
+    const real modelTerm = G * D / (4.0_r * std::abs(VdotN * LdotN));
 
-    return F * (G * D / (4.0_r * std::abs(VdotN * LdotN)));
+    return F * modelTerm;
 }
 
 void ConductorMicrofacet::evaluateSample(
@@ -76,7 +77,6 @@ void ConductorMicrofacet::evaluateSample(
     const real LdotN = L.dot(Ns);
     const real LdotH = L.dot(H);
     const real NdotH = Ns.dot(H);
-
     if (VdotN * LdotN <= 0.0_r) {
         return;
     }
@@ -84,8 +84,9 @@ void ConductorMicrofacet::evaluateSample(
     Spectrum F;
     _fresnel->evaluateReflectance(LdotH, &F);
 
-    const real D = _microfacet->distributionD(si, Ns, H);
-    const real G = _microfacet->shadowingMaskingG(si, V, L, Ns, H);
+    const real D         = _microfacet->distributionD(si, Ns, H);
+    const real G         = _microfacet->shadowingMaskingG(si, V, L, Ns, H);
+    const real modelTerm = G * D / (4.0_r * std::abs(VdotN * LdotN));
 
     const real pdfH = std::abs(D * NdotH);
     const real pdfL = std::abs(pdfH / (4.0_r * LdotH));
@@ -93,7 +94,7 @@ void ConductorMicrofacet::evaluateSample(
         return;
     }
 
-    out_sample->setScatterValue(F * (G * D / (4.0_r * std::abs(VdotN * LdotN))));
+    out_sample->setScatterValue(F * modelTerm);
     out_sample->setScatterDirection(L);
     out_sample->setPdfW(pdfL);
 }
@@ -108,16 +109,14 @@ real ConductorMicrofacet::evaluatePdfW(
 
     const real VdotN = V.dot(Ns);
     const real LdotN = L.dot(Ns);
-
     if (VdotN * LdotN <= 0.0_r) {
         return 0.0_r;
     }
 
-    Vector3R H = static_cast<real>(math::sign(VdotN)) * (V + L);
-    if (H.isZero()) {
+    Vector3R H;
+    if (!MicrofacetHelper::canMakeReflectionH(V, L, Ns, &H)) {
         return 0.0_r;
     }
-    H = H.normalize();
 
     const real D     = _microfacet->distributionD(si, Ns, H);
     const real NdotH = Ns.dot(H);

@@ -352,7 +352,7 @@ inline TVector<T, N> TVector<T, N>::normalize() const {
 
 template<typename T, std::size_t N>
 inline TVector<T, N> TVector<T, N>::reverse() const {
-    return -*this;
+    return -(*this);
 }
 
 template<typename T, std::size_t N>
