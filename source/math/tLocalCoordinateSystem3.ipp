@@ -19,9 +19,9 @@ inline TLocalCoordinateSystem3<T>::TLocalCoordinateSystem3() :
 
 template<typename T>
 inline TLocalCoordinateSystem3<T>::TLocalCoordinateSystem3(
-    const TVector<T, 3>& xAxis,
-    const TVector<T, 3>& yAxis,
-    const TVector<T, 3>& zAxis) :
+    const TVector3<T>& xAxis,
+    const TVector3<T>& yAxis,
+    const TVector3<T>& zAxis) :
     
     _xAxis(xAxis),
     _yAxis(yAxis),
@@ -29,21 +29,21 @@ inline TLocalCoordinateSystem3<T>::TLocalCoordinateSystem3(
 }
 
 template<typename T>
-inline void TLocalCoordinateSystem3<T>::initializeViaUnitY(const TVector<T, 3>& unitY) {
+inline void TLocalCoordinateSystem3<T>::initializeViaUnitY(const TVector3<T>& unitY) {
     CADISE_ASSERT_RANGE_INCLUSIVE(unitY.lengthSquared(), T(0.999), T(1.001));
 
-    TVector<T, 3> unitX;
-    TVector<T, 3> unitZ;
+    TVector3<T> unitX;
+    TVector3<T> unitZ;
     {
         if (std::abs(unitY.x()) > std::abs(unitY.y())) {
-            TVector<T, 3> zAxis(-unitY.z(), 0.0_r, unitY.x());
-            zAxis /= std::sqrt(unitY.x() * unitY.x() + unitY.z() * unitY.z());
+            TVector3<T> zAxis(-unitY.z(), T(0), unitY.x());
+            zAxis.divLocal(std::sqrt(unitY.x() * unitY.x() + unitY.z() * unitY.z()));
 
             unitZ = zAxis;
         }
         else {
-            TVector<T, 3> zAxis(0.0_r, unitY.z(), -unitY.y());
-            zAxis /= std::sqrt(unitY.y() * unitY.y() + unitY.z() * unitY.z());
+            TVector3<T> zAxis(T(0), unitY.z(), -unitY.y());
+            zAxis.divLocal(std::sqrt(unitY.y() * unitY.y() + unitY.z() * unitY.z()));
 
             unitZ = zAxis;
         }
@@ -55,43 +55,42 @@ inline void TLocalCoordinateSystem3<T>::initializeViaUnitY(const TVector<T, 3>& 
 }
 
 template<typename T>
-inline TVector<T, 3> TLocalCoordinateSystem3<T>::worldToLocal(const TVector<T, 3>& unitVector) const {
-    return {
-        unitVector.dot(_xAxis), // x-axis projection
-        unitVector.dot(_yAxis), // y-axis projection
-        unitVector.dot(_zAxis)  // z-axis projection
-    };
+inline TVector3<T> TLocalCoordinateSystem3<T>::worldToLocal(const TVector3<T>& unitVector) const {
+    return TVector3<T>(
+        unitVector.dot(_xAxis),  // x-axis projection
+        unitVector.dot(_yAxis),  // y-axis projection
+        unitVector.dot(_zAxis)); // z-axis projection
 }
 
 template<typename T>
-inline TVector<T, 3> TLocalCoordinateSystem3<T>::localToWorld(const TVector<T, 3>& unitVector) const {
-    return _xAxis * unitVector.x() +
-           _yAxis * unitVector.y() +
-           _zAxis * unitVector.z();
+inline TVector3<T> TLocalCoordinateSystem3<T>::localToWorld(const TVector3<T>& unitVector) const {
+    return _xAxis.mul(unitVector.x()).add(
+           _yAxis.mul(unitVector.y())).add(
+           _zAxis.mul(unitVector.z()));
 }
 
 template<typename T>
-inline T TLocalCoordinateSystem3<T>::cosTheta(const TVector<T, 3>& unitVector) const {
+inline T TLocalCoordinateSystem3<T>::cosTheta(const TVector3<T>& unitVector) const {
     return math::clamp(unitVector.dot(_yAxis), T(-1), T(1));
 }
 
 template<typename T>
-inline T TLocalCoordinateSystem3<T>::cos2Theta(const TVector<T, 3>& unitVector) const {
+inline T TLocalCoordinateSystem3<T>::cos2Theta(const TVector3<T>& unitVector) const {
     return math::squared(this->cosTheta(unitVector));
 }
 
 template<typename T>
-inline T TLocalCoordinateSystem3<T>::sinTheta(const TVector<T, 3>& unitVector) const {
+inline T TLocalCoordinateSystem3<T>::sinTheta(const TVector3<T>& unitVector) const {
     return std::sqrt(this->sin2Theta(unitVector));
 }
 
 template<typename T>
-inline T TLocalCoordinateSystem3<T>::sin2Theta(const TVector<T, 3>& unitVector) const {
-    return 1.0_r - this->cos2Theta(unitVector);
+inline T TLocalCoordinateSystem3<T>::sin2Theta(const TVector3<T>& unitVector) const {
+    return T(1) - this->cos2Theta(unitVector);
 }
 
 template<typename T>
-inline T TLocalCoordinateSystem3<T>::tanTheta(const TVector<T, 3>& unitVector) const {
+inline T TLocalCoordinateSystem3<T>::tanTheta(const TVector3<T>& unitVector) const {
     const T cosTheta = this->cosTheta(unitVector);
     const T sinTheta = this->sinTheta(unitVector);
 
@@ -118,7 +117,7 @@ inline T TLocalCoordinateSystem3<T>::tanTheta(const TVector<T, 3>& unitVector) c
 }
 
 template<typename T>
-inline T TLocalCoordinateSystem3<T>::tan2Theta(const TVector<T, 3>& unitVector) const {
+inline T TLocalCoordinateSystem3<T>::tan2Theta(const TVector3<T>& unitVector) const {
     const T cos2Theta = this->cos2Theta(unitVector);
     const T sin2Theta = T(1) - cos2Theta;
 
@@ -134,7 +133,7 @@ inline T TLocalCoordinateSystem3<T>::tan2Theta(const TVector<T, 3>& unitVector) 
 }
 
 template<typename T>
-inline T TLocalCoordinateSystem3<T>::cosPhi(const TVector<T, 3>& unitVector) const {
+inline T TLocalCoordinateSystem3<T>::cosPhi(const TVector3<T>& unitVector) const {
     const T sin2Theta = this->sin2Theta(unitVector);
     
     if (sin2Theta != T(0)) {
@@ -146,12 +145,12 @@ inline T TLocalCoordinateSystem3<T>::cosPhi(const TVector<T, 3>& unitVector) con
 }
 
 template<typename T>
-inline T TLocalCoordinateSystem3<T>::cos2Phi(const TVector<T, 3>& unitVector) const {
+inline T TLocalCoordinateSystem3<T>::cos2Phi(const TVector3<T>& unitVector) const {
     return math::squared(this->cosPhi(unitVector));
 }
 
 template<typename T>
-inline T TLocalCoordinateSystem3<T>::sinPhi(const TVector<T, 3>& unitVector) const {
+inline T TLocalCoordinateSystem3<T>::sinPhi(const TVector3<T>& unitVector) const {
     const T sin2Theta = this->sin2Theta(unitVector);
 
     if (sin2Theta != T(0)) {
@@ -163,12 +162,12 @@ inline T TLocalCoordinateSystem3<T>::sinPhi(const TVector<T, 3>& unitVector) con
 }
 
 template<typename T>
-inline T TLocalCoordinateSystem3<T>::sin2Phi(const TVector<T, 3>& unitVector) const {
+inline T TLocalCoordinateSystem3<T>::sin2Phi(const TVector3<T>& unitVector) const {
     return math::squared(this->sinPhi(unitVector));
 }
 
 template<typename T>
-inline T TLocalCoordinateSystem3<T>::tanPhi(const TVector<T, 3>& unitVector) const {
+inline T TLocalCoordinateSystem3<T>::tanPhi(const TVector3<T>& unitVector) const {
     const T zProjection = unitVector.dot(_zAxis);
     const T xProjection = unitVector.dot(_xAxis);
 
@@ -195,7 +194,7 @@ inline T TLocalCoordinateSystem3<T>::tanPhi(const TVector<T, 3>& unitVector) con
 }
 
 template<typename T>
-inline T TLocalCoordinateSystem3<T>::tan2Phi(const TVector<T, 3>& unitVector) const {
+inline T TLocalCoordinateSystem3<T>::tan2Phi(const TVector3<T>& unitVector) const {
     const T zProjection2 = math::squared(unitVector.dot(_zAxis));
     const T xProjection2 = math::squared(unitVector.dot(_xAxis));
 
@@ -211,25 +210,25 @@ inline T TLocalCoordinateSystem3<T>::tan2Phi(const TVector<T, 3>& unitVector) co
 }
 
 template<typename T>
-inline const TVector<T, 3>& TLocalCoordinateSystem3<T>::xAxis() const {
+inline const TVector3<T>& TLocalCoordinateSystem3<T>::xAxis() const {
     return _xAxis;
 }
 
 template<typename T>
-inline const TVector<T, 3>& TLocalCoordinateSystem3<T>::yAxis() const {
+inline const TVector3<T>& TLocalCoordinateSystem3<T>::yAxis() const {
     return _yAxis;
 }
 
 template<typename T>
-inline const TVector<T, 3>& TLocalCoordinateSystem3<T>::zAxis() const {
+inline const TVector3<T>& TLocalCoordinateSystem3<T>::zAxis() const {
     return _zAxis;
 }
 
 template<typename T>
 inline void TLocalCoordinateSystem3<T>::setAxes(
-    const TVector<T, 3>& xAxis,
-    const TVector<T, 3>& yAxis,
-    const TVector<T, 3>& zAxis) {
+    const TVector3<T>& xAxis,
+    const TVector3<T>& yAxis,
+    const TVector3<T>& zAxis) {
 
     this->setXAxis(xAxis);
     this->setYAxis(yAxis);
@@ -237,17 +236,17 @@ inline void TLocalCoordinateSystem3<T>::setAxes(
 }
 
 template<typename T>
-inline void TLocalCoordinateSystem3<T>::setXAxis(const TVector<T, 3>& xAxis) {
+inline void TLocalCoordinateSystem3<T>::setXAxis(const TVector3<T>& xAxis) {
     _xAxis = xAxis;
 }
 
 template<typename T>
-inline void TLocalCoordinateSystem3<T>::setYAxis(const TVector<T, 3>& yAxis) {
+inline void TLocalCoordinateSystem3<T>::setYAxis(const TVector3<T>& yAxis) {
     _yAxis = yAxis;
 }
 
 template<typename T>
-inline void TLocalCoordinateSystem3<T>::setZAxis(const TVector<T, 3>& zAxis) {
+inline void TLocalCoordinateSystem3<T>::setZAxis(const TVector3<T>& zAxis) {
     _zAxis = zAxis;
 }
 

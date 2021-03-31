@@ -26,7 +26,7 @@ KdTreeAccelerator::KdTreeAccelerator(
         _intersectors[i]->evaluateBound(&bound);
 
         intersectorBounds[i] = bound;
-        _bound.unionWith(bound);
+        _bound.unionWithLocal(bound);
     }
 
     KdTreeBuilder builder(traversalCost, intersectionCost, emptyBonus);
@@ -40,20 +40,20 @@ KdTreeAccelerator::KdTreeAccelerator(
 void KdTreeAccelerator::evaluateBound(AABB3R* const out_bound) const {
     CADISE_ASSERT(out_bound);
 
-    *out_bound = _bound;
+    out_bound->set(_bound);
 }
 
 bool KdTreeAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
     bool result = false;
 
-    const Vector3R& origin           = ray.origin();
-    const Vector3R& direction        = ray.direction();
-    const Vector3R  inverseDirection = direction.reciprocal();
+    const Vector3R& origin       = ray.origin();
+    const Vector3R& direction    = ray.direction();
+    const Vector3R  rcpDirection = direction.reciprocal();
 
     real boundMinT;
     real boundMaxT;
     if (!_bound.isIntersectingAABB(origin, 
-                                   inverseDirection, 
+                                   rcpDirection, 
                                    ray.minT(), 
                                    ray.maxT(), 
                                    &boundMinT, 
@@ -98,7 +98,7 @@ bool KdTreeAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) c
         else {
             const std::size_t splitAxis = currentNode.splitAxis();
             const real splitPlaneT 
-                = (currentNode.splitPosition() - origin[splitAxis]) * inverseDirection[splitAxis];
+                = (currentNode.splitPosition() - origin[splitAxis]) * rcpDirection[splitAxis];
 
             std::size_t nearChildIndex;
             std::size_t farChildIndex;
@@ -148,14 +148,14 @@ bool KdTreeAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) c
 }
 
 bool KdTreeAccelerator::isOccluded(const Ray& ray) const {
-    const Vector3R& origin           = ray.origin();
-    const Vector3R& direction        = ray.direction();
-    const Vector3R  inverseDirection = direction.reciprocal();
+    const Vector3R& origin       = ray.origin();
+    const Vector3R& direction    = ray.direction();
+    const Vector3R  rcpDirection = direction.reciprocal();
 
     real boundMinT;
     real boundMaxT;
     if (!_bound.isIntersectingAABB(origin,
-                                   inverseDirection,
+                                   rcpDirection,
                                    ray.minT(),
                                    ray.maxT(),
                                    &boundMinT,
@@ -202,7 +202,7 @@ bool KdTreeAccelerator::isOccluded(const Ray& ray) const {
         else {
             const std::size_t splitAxis = currentNode.splitAxis();
             const real splitPlaneT 
-                = (currentNode.splitPosition() - origin[splitAxis]) * inverseDirection[splitAxis];
+                = (currentNode.splitPosition() - origin[splitAxis]) * rcpDirection[splitAxis];
 
             std::size_t nearChildIndex;
             std::size_t farChildIndex;

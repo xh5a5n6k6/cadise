@@ -68,7 +68,7 @@ void SubPathBuilder::buildLightPath(
 
     const real     numerator   = emitDirection.absDot(emitN);
     const real     denominator = pickLightPdf * emitPdfA * emitPdfW;
-    const Spectrum throughput  = emittance * (numerator / denominator);
+    const Spectrum throughput  = emittance.mul(numerator / denominator);
 
     // it will not used in light sub-path construction
     Spectrum localRadiance;
@@ -163,7 +163,7 @@ void SubPathBuilder::_buildSubPathCompletely(
         const real distance          = traceRay.maxT();
         const real distance2         = distance * distance;
         const real previousToNewDotN = traceRay.direction().absDot(previousNs);
-        const real newToPreviousDotN = traceRay.direction().reverse().absDot(newNs);
+        const real newToPreviousDotN = traceRay.direction().negate().absDot(newNs);
 
         newVertex.setSurfaceDetail(intersection.surfaceDetail());
         newVertex.setPdfAForward(pdfWForward * newToPreviousDotN / distance2);
@@ -181,7 +181,7 @@ void SubPathBuilder::_buildSubPathCompletely(
             const Spectrum emittance = areaLight->emittance(intersection);
             const real     misWeight = BdptMis::weight(scene, SubPath::emptyPath(), *out_subPath, 0, currentLength);
 
-            *out_zeroBounceRadiance += misWeight * emittance * throughput;
+            out_zeroBounceRadiance->addLocal(throughput.mul(emittance.mul(misWeight)));
         }
 
         if (currentLength == _maxPathLength) {
@@ -203,9 +203,9 @@ void SubPathBuilder::_buildSubPathCompletely(
         intersection.setWo(L);
 
         // for non-symmetric scattering correction
-        throughput *= reflectance * LdotN / pdfW;
+        throughput.mulLocal(reflectance.mul(LdotN / pdfW));
         if (mode == ETransportMode::IMPORTANCE) {
-            throughput *= 1.0_r;
+            throughput.mulLocal(1.0_r);
         }
 
         pdfWForward = pdfW;

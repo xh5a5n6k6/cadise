@@ -23,12 +23,12 @@ void UvwEstimator::estimate(
     localScene.unsetBackgroundSphere();
 
     if (!localScene.isIntersecting(traceRay, si)) {
-        *out_radiance = Spectrum(0.0_r);
+        out_radiance->set(0.0_r);
     }
     else {
         const Vector3R& uvw = si.surfaceDetail().uvw();
 
-        *out_radiance = Spectrum({
+        out_radiance->set({
             math::fractional(uvw.x()),
             math::fractional(uvw.y()),
             math::fractional(uvw.z())});

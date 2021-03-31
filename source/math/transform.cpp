@@ -1,7 +1,7 @@
 #include "math/transform.h"
 
 #include "fundamental/assertion.h"
-#include "math/tVector.h"
+#include "math/tVector3.h"
 
 namespace cadise {
 

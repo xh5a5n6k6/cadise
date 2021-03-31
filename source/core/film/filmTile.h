@@ -2,7 +2,7 @@
 
 #include "core/film/rgbRadianceSensor.h"
 #include "core/spectrum/spectrum.h"
-#include "math/tAabb.h"
+#include "math/tAabb2.h"
 
 #include <vector>
 
@@ -14,8 +14,8 @@ class FilmTile {
 public:
     FilmTile(const AABB2I& tileBound, const Filter* const filter);
 
-    void addSample(const Vector2R& filmPosition, const Spectrum& sampleSpectrum);
-    void addSample(const Vector2R& filmPosition, const Vector3R& sampleRgb);
+    void addSample(const Vector2R& filmPosition, const Spectrum& value);
+    void addSample(const Vector2R& filmPosition, const Vector3R& value);
 
     const AABB2I& tileBound() const;
     const RgbRadianceSensor& getSensor(const int32 x, const int32 y) const;

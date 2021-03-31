@@ -3,6 +3,8 @@
 #include "core/film/rgbRadianceSensor.h"
 #include "core/spectrum/spectrum.h"
 #include "file-io/path.h"
+#include "math/tVector2.h"
+#include "math/tVector3.h"
 
 #include <memory>
 #include <mutex>

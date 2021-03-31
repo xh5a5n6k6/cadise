@@ -3,7 +3,7 @@
 #include "core/intersector/accelerator/accelerator.h"
 
 #include "core/intersector/accelerator/kd-tree/tKdTreeNode.h"
-#include "math/tAabb.h"
+#include "math/tAabb3.h"
 
 #include <memory>
 #include <vector>

@@ -3,7 +3,7 @@
 #include "core/integral-tool/tSurfaceSampler.h"
 #include "fundamental/assertion.h"
 #include "math/constant.h"
-#include "math/tVector.h"
+#include "math/tVector3.h"
 
 #include <cmath>
 
@@ -33,7 +33,7 @@ real IsotropicBlinnPhong::distributionD(
     const real alpha2 = alpha * alpha;
     const real alphaP = 2.0_r / alpha2 - 2.0_r;
 
-    return (alphaP + 2.0_r) * std::pow(NdotH, alphaP) * constant::inv_two_pi<real>;
+    return (alphaP + 2.0_r) * std::pow(NdotH, alphaP) * constant::rcp_two_pi<real>;
 }
 
 real IsotropicBlinnPhong::shadowingMaskingG(
@@ -90,7 +90,7 @@ real IsotropicBlinnPhong::shadowingMaskingG(
 
 void IsotropicBlinnPhong::sampleHalfVectorH(
     const SurfaceIntersection& si,
-    const Vector2R&            sample,
+    const std::array<real, 2>& sample,
     Vector3R* const            out_H) const {
 
     CADISE_ASSERT(out_H);
@@ -106,7 +106,7 @@ void IsotropicBlinnPhong::sampleHalfVectorH(
     const real cosTheta = std::pow(sample[1], 1.0_r / (alphaP + 2.0_r));
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
 
-    const Vector3R localH = Vector3R(
+    const Vector3R localH(
         std::sin(phi) * sinTheta,
         cosTheta,
         std::cos(phi) * sinTheta);
@@ -114,7 +114,7 @@ void IsotropicBlinnPhong::sampleHalfVectorH(
     // transform H to world coordinate
     const Vector3R worldH = si.surfaceDetail().shadingLcs().localToWorld(localH);
 
-    *out_H = worldH.normalize();
+    out_H->set(worldH.normalize());
 }
 
 } // namespace cadise

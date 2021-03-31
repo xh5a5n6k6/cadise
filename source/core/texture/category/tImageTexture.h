@@ -2,9 +2,9 @@
 
 #include "core/texture/tTexture.h"
 
-#include "core/imaging/tImage.h"
 #include "core/texture/eTextureSampleMode.h"
 #include "core/texture/eTextureWrapMode.h"
+#include "math/type/imageType.h"
 
 #include <memory>
 
@@ -24,7 +24,6 @@ public:
     void evaluate(const Vector3R& uvw, T* const out_value) const override = 0;
 
 protected:
-    TImage<ImageType, N> _image;
     std::unique_ptr<TPixelSampler<ImageType, N>> _pixelSampler;
 };
 

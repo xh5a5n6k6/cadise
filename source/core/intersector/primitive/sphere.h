@@ -2,6 +2,8 @@
 
 #include "core/intersector/primitive/primitive.h"
 
+#include "math/tVector3.h"
+
 namespace cadise {
 
 class Transform;

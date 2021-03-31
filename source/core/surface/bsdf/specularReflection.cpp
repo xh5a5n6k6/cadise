@@ -41,7 +41,7 @@ void SpecularReflection::evaluateSample(
     const real      VdotN   = V.dot(Ns);
     const real      NFactor = (VdotN > 0.0_r) ? 1.0_r : -1.0_r;
     
-    const Vector3R L     = V.reflect(Ns * NFactor);
+    const Vector3R L     = V.reflect(Ns.mul(NFactor));
     const real     LdotN = L.dot(Ns);
     const real     pdfW  = 1.0_r;
 
@@ -51,7 +51,7 @@ void SpecularReflection::evaluateSample(
     Spectrum sampleAlbedo;
     TSurfaceSampler<Spectrum>().sample(si, _albedo.get(), &sampleAlbedo);
 
-    out_sample->setScatterValue(reflectance * sampleAlbedo / std::abs(LdotN));
+    out_sample->setScatterValue(reflectance.mul(sampleAlbedo).div(std::abs(LdotN)));
     out_sample->setScatterDirection(L);
     out_sample->setPdfW(pdfW);
 }

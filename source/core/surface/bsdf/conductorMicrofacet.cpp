@@ -53,7 +53,7 @@ Spectrum ConductorMicrofacet::evaluate(
     const real G         = _microfacet->shadowingMaskingG(si, V, L, Ns, H);
     const real modelTerm = G * D / (4.0_r * std::abs(VdotN * LdotN));
 
-    return F * modelTerm;
+    return F.mul(modelTerm);
 }
 
 void ConductorMicrofacet::evaluateSample(
@@ -67,11 +67,11 @@ void ConductorMicrofacet::evaluateSample(
     const Vector3R& V       = si.wi();
     const real      NFactor = (V.dot(Ns) > 0.0_r) ? 1.0_r : -1.0_r;
 
-    const Vector2R sample(Random::nextReal(), Random::nextReal());
+    const std::array<real, 2> sample = { Random::nextReal(), Random::nextReal() };
     Vector3R H;
     _microfacet->sampleHalfVectorH(si, sample, &H);
 
-    const Vector3R L = V.reflect(H * NFactor);
+    const Vector3R L = V.reflect(H.mul(NFactor));
 
     const real VdotN = V.dot(Ns);
     const real LdotN = L.dot(Ns);
@@ -94,7 +94,7 @@ void ConductorMicrofacet::evaluateSample(
         return;
     }
 
-    out_sample->setScatterValue(F * modelTerm);
+    out_sample->setScatterValue(F.mul(modelTerm));
     out_sample->setScatterDirection(L);
     out_sample->setPdfW(pdfL);
 }

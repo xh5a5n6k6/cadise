@@ -2,22 +2,24 @@
 
 #include "math/type/mathType.h"
 
+#include <array>
+
 namespace cadise {
 
 class Hemisphere {
 public:
     static void uniformSampling(
-        const Vector2R& sample, 
-        Vector3R* const out_direction,
-        real* const     out_pdfW);
+        const std::array<real, 2>& sample, 
+        Vector3R* const            out_direction,
+        real* const                out_pdfW);
 
     static void cosineWeightedSampling(
-        const Vector2R& sample, 
-        Vector3R* const out_direction,
-        real* const     out_pdfW);
+        const std::array<real, 2>& sample,
+        Vector3R* const            out_direction,
+        real* const                out_pdfW);
 
     static void cosineExpWeightedSampling(
-        const Vector2R& sample,
+        const std::array<real, 2>& sample,
         const real      exponent,                                          
         Vector3R* const out_direction,
         real* const     out_pdfW);

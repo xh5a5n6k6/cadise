@@ -54,10 +54,10 @@ void PtEstimator::estimate(
 
         // add emitter's emittance only at first hit-point (0 bounce)
         // or previous hit surface is specular
-        const AreaLight* areaLight = primitive->areaLight();
-        if (areaLight && isCountForEmittance) {
-            const Spectrum emittance = areaLight->emittance(intersection);
-            totalRadiance += pathThroughput * emittance;
+        if (primitive->areaLight() && isCountForEmittance) {
+            const Spectrum emittance = primitive->areaLight()->emittance(intersection);
+
+            totalRadiance.addLocal(pathThroughput.mul(emittance));
         }
 
 
@@ -78,9 +78,9 @@ void PtEstimator::estimate(
             CADISE_ASSERT_GT(lightPdf, 0.0_r);
 
             const Spectrum directLightRadiance 
-                = DirectLightEvaluator::evaluate(scene, intersection, bsdf, sampleLight) / lightPdf;
+                = DirectLightEvaluator::evaluate(scene, intersection, bsdf, sampleLight).div(lightPdf);
             
-            totalRadiance += pathThroughput * directLightRadiance;
+            totalRadiance.addLocal(pathThroughput.mul(directLightRadiance));
         }
         else {
             isCountForEmittance = true;
@@ -98,7 +98,7 @@ void PtEstimator::estimate(
         const real      pdfW        = bsdfSample.pdfW();
         const real      LdotN       = L.absDot(Ns);
 
-        pathThroughput *= reflectance * LdotN / pdfW;
+        pathThroughput.mulLocal(reflectance.mul(LdotN / pdfW));
 
         // use russian roulette to decide if the ray needs to be kept tracking
         if (bounceTimes > 2) {
@@ -119,7 +119,7 @@ void PtEstimator::estimate(
         traceRay.setDirection(L);
     }
 
-    *out_radiance = totalRadiance;
+    out_radiance->set(totalRadiance);
 }
 
 } // namespace cadise

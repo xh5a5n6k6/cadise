@@ -1,6 +1,7 @@
 #pragma once
 
-#include "math/tVector.h"
+#include "math/tVector2.h"
+#include "math/tVector3.h"
 
 namespace cadise {
 

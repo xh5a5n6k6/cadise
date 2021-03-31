@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/tAabb.h"
+#include "math/tAabb3.h"
 
 #include <memory>
 
@@ -11,14 +11,16 @@ public:
     BvhBinaryNode();
     ~BvhBinaryNode();
 
-    void initializeInternalNode(const AABB3R&                  bound,
-                                std::unique_ptr<BvhBinaryNode> firstChild, 
-                                std::unique_ptr<BvhBinaryNode> secondChild, 
-                                const std::size_t              splitAxis);
+    void initializeInternalNode(
+        const AABB3R&                  bound,
+        std::unique_ptr<BvhBinaryNode> firstChild, 
+        std::unique_ptr<BvhBinaryNode> secondChild, 
+        const std::size_t              splitAxis);
 
-    void initializeLeafNode(const AABB3R&     bound, 
-                            const std::size_t intersectorIndex, 
-                            const std::size_t intersectorCounts);
+    void initializeLeafNode(
+        const AABB3R&     bound, 
+        const std::size_t intersectorIndex, 
+        const std::size_t intersectorCounts);
 
     // for leaf node
     std::size_t intersectorIndex() const;

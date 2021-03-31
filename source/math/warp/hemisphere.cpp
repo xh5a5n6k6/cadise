@@ -2,16 +2,16 @@
 
 #include "fundamental/assertion.h"
 #include "math/constant.h"
-#include "math/tVector.h"
+#include "math/tVector3.h"
 
 #include <cmath>
 
 namespace cadise {
 
 void Hemisphere::uniformSampling(
-    const Vector2R& sample, 
-    Vector3R* const out_direction,
-    real* const     out_pdfW) {
+    const std::array<real, 2>& sample,
+    Vector3R* const            out_direction,
+    real* const                out_pdfW) {
 
     CADISE_ASSERT(out_direction);
     CADISE_ASSERT(out_pdfW);
@@ -20,17 +20,18 @@ void Hemisphere::uniformSampling(
     const real cosTheta = sample[1];
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
 
-    *out_direction =  Vector3R(std::sin(phi) * sinTheta,
-                               cosTheta,
-                               std::cos(phi) * sinTheta);
+    out_direction->set(
+        std::sin(phi) * sinTheta,
+        cosTheta,
+        std::cos(phi) * sinTheta);
 
-    *out_pdfW = constant::inv_two_pi<real>;
+    *out_pdfW = constant::rcp_two_pi<real>;
 }
 
 void Hemisphere::cosineWeightedSampling(
-    const Vector2R& sample, 
-    Vector3R* const out_direction,
-    real* const     out_pdfW) {
+    const std::array<real, 2>& sample,
+    Vector3R* const            out_direction,
+    real* const                out_pdfW) {
 
     CADISE_ASSERT(out_direction);
     CADISE_ASSERT(out_pdfW);
@@ -40,18 +41,19 @@ void Hemisphere::cosineWeightedSampling(
     const real cosTheta = std::cos(theta);
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
 
-    *out_direction = Vector3R(std::sin(phi) * sinTheta,
-                              cosTheta,
-                              std::cos(phi) * sinTheta);
+    out_direction->set(
+        std::sin(phi) * sinTheta,
+        cosTheta,
+        std::cos(phi) * sinTheta);
 
-    *out_pdfW = cosTheta * constant::inv_pi<real>;
+    *out_pdfW = cosTheta * constant::rcp_pi<real>;
 }
 
 void Hemisphere::cosineExpWeightedSampling(
-    const Vector2R& sample,
-    const real      exponent,
-    Vector3R* const out_direction,
-    real* const     out_pdfW) {
+    const std::array<real, 2>& sample,
+    const real                 exponent,
+    Vector3R* const            out_direction,
+    real* const                out_pdfW) {
 
     CADISE_ASSERT(out_direction);
     CADISE_ASSERT(out_pdfW);
@@ -60,11 +62,12 @@ void Hemisphere::cosineExpWeightedSampling(
     const real cosTheta = std::pow(sample[1], 1.0_r / (exponent + 1.0_r));
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
 
-    *out_direction = Vector3R(std::sin(phi) * sinTheta,
-                              cosTheta,
-                              std::cos(phi) * sinTheta);
+    out_direction->set(
+        std::sin(phi) * sinTheta,
+        cosTheta,
+        std::cos(phi) * sinTheta);
 
-    *out_pdfW = (exponent + 1.0_r) * constant::inv_two_pi<real> * std::pow(cosTheta, exponent);
+    *out_pdfW = (exponent + 1.0_r) * constant::rcp_two_pi<real> * std::pow(cosTheta, exponent);
 }
 
 } // namespace cadise

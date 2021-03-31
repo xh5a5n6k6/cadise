@@ -8,9 +8,10 @@ BvhLinearNode::BvhLinearNode() :
 
 BvhLinearNode::~BvhLinearNode() = default;
 
-void BvhLinearNode::initializeInternalNode(const AABB3R&     bound, 
-                                           const std::size_t secondChildIndex, 
-                                           const std::size_t splitAxis) {
+void BvhLinearNode::initializeInternalNode(
+    const AABB3R&     bound, 
+    const std::size_t secondChildIndex, 
+    const std::size_t splitAxis) {
 
     _bound            = bound;
     _secondChildIndex = secondChildIndex;
@@ -18,9 +19,10 @@ void BvhLinearNode::initializeInternalNode(const AABB3R&     bound,
     _isLeaf           = false;
 }
 
-void BvhLinearNode::initializeLeafNode(const AABB3R&     bound, 
-                                       const std::size_t intersectorIndex, 
-                                       const std::size_t intersectorCounts) {
+void BvhLinearNode::initializeLeafNode(
+    const AABB3R&     bound, 
+    const std::size_t intersectorIndex, 
+    const std::size_t intersectorCounts) {
 
     _bound             = bound;
     _intersectorIndex  = intersectorIndex;

@@ -45,7 +45,7 @@ void SubPathConnector::connect(
     const Spectrum  reflectanceA = lightPathEndpoint.evaluate(ETransportMode::IMPORTANCE, lightPath[s - 2], cameraPathEndpoint);
     const Spectrum  reflectanceB = cameraPathEndpoint.evaluate(ETransportMode::RADIANCE, cameraPath[t - 2], lightPathEndpoint);
 
-    Spectrum radiance = throughputA * reflectanceA * throughputB * reflectanceB;
+    Spectrum radiance = throughputA.mul(reflectanceA).mul(throughputB).mul(reflectanceB);
     if (radiance.isZero()) {
         return;
     }
@@ -58,7 +58,7 @@ void SubPathConnector::connect(
 
     const real misWeight = BdptMis::weight(scene, lightPath, cameraPath, s, t);
 
-    *out_radiance = radiance * connectGTerm * misWeight;
+    out_radiance->set(radiance.mul(connectGTerm * misWeight));
 }
 
 bool SubPathConnector::_canConnect(
@@ -74,12 +74,12 @@ bool SubPathConnector::_canConnect(
     const Vector3R& lightP   = lightEndpoint.surfaceDetail().position();
     const Vector3R& lightNs  = lightEndpoint.surfaceDetail().shadingNormal();
 
-    const Vector3R cameraToLightVector = lightP - cameraP;
+    const Vector3R cameraToLightVector = lightP.sub(cameraP);
     const real     distance            = cameraToLightVector.length();
 
     CADISE_ASSERT_GT(distance, 0.0_r);
 
-    const Vector3R cameraToLightDirection = cameraToLightVector / distance;
+    const Vector3R cameraToLightDirection = cameraToLightVector.div(distance);
 
     // visibility test
     Ray testRay(cameraP, cameraToLightDirection);
@@ -90,7 +90,7 @@ bool SubPathConnector::_canConnect(
     }
     
     const real cameraToLightDotN = cameraToLightDirection.absDot(cameraNs);
-    const real lightToCameraDotN = cameraToLightDirection.reverse().absDot(lightNs);
+    const real lightToCameraDotN = cameraToLightDirection.negate().absDot(lightNs);
 
     *out_connectG = cameraToLightDotN * lightToCameraDotN / (distance * distance);
 

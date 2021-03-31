@@ -2,6 +2,7 @@
 
 #include "core/spectrum/spectrum.h"
 #include "core/surfaceDetail.h"
+#include "math/tVector2.h"
 
 namespace cadise {
 

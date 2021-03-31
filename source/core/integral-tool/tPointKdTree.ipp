@@ -36,7 +36,7 @@ inline void TPointKdTree<Index, Object, ObjectCenterCalculator>::
         const Vector3R center = _centerCalculator(objects[i]);
 
         objectCenters[i] = center;
-        _bound.unionWith(center);
+        _bound.unionWithLocal(center);
     }
 
     std::vector<Index> objectIndices(objects.size());
@@ -79,7 +79,7 @@ inline void TPointKdTree<Index, Object, ObjectCenterCalculator>::
                 const Object& object      = _objects[objectIndex];
 
                 const Vector3R center    = _centerCalculator(object);
-                const real     distance2 = (center - position).lengthSquared();
+                const real     distance2 = center.sub(position).lengthSquared();
                 if (distance2 < searchRadius2) {
                     out_objects->push_back(object);
                 }

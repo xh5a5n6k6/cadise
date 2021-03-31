@@ -1,7 +1,8 @@
 #include "math/math.h"
 
 #include "fundamental/assertion.h"
-#include "math/tVector.h"
+#include "math/tVector2.h"
+#include "math/tVector3.h"
 
 #include <cmath>
 
@@ -43,18 +44,18 @@ void build_coordinate_system(
 
     if (std::abs(yAxis.x()) > std::abs(yAxis.y())) {
         Vector3R zAxis(-yAxis.z(), 0.0_r, yAxis.x());
-        zAxis /= std::sqrt(yAxis.x() * yAxis.x() + yAxis.z() * yAxis.z());
+        zAxis.divLocal(std::sqrt(yAxis.x() * yAxis.x() + yAxis.z() * yAxis.z()));
 
-        *out_zAxis = zAxis;
+        out_zAxis->set(zAxis);
     }
     else {
         Vector3R zAxis(0.0_r, yAxis.z(), -yAxis.y());
-        zAxis /= std::sqrt(yAxis.y() * yAxis.y() + yAxis.z() * yAxis.z());
+        zAxis.divLocal(std::sqrt(yAxis.y() * yAxis.y() + yAxis.z() * yAxis.z()));
 
-        *out_zAxis = zAxis;
+        out_zAxis->set(zAxis);
     }
 
-    *out_xAxis = yAxis.cross(*out_zAxis);
+    out_xAxis->set(yAxis.cross(*out_zAxis));
 }
 
 void direction_to_canonical(
@@ -70,8 +71,9 @@ void direction_to_canonical(
     const real rawPhi   = std::atan2(unitDirection.x(), unitDirection.z());
     const real phi      = (rawPhi < 0.0_r) ? rawPhi + constant::two_pi<real> : rawPhi;
 
-    *out_canonical = Vector2R(phi * constant::inv_two_pi<real>,
-                              (cosTheta + 1.0_r) * 0.5_r);
+    out_canonical->set(
+        phi * constant::rcp_two_pi<real>,
+        (cosTheta + 1.0_r) * 0.5_r);
 }
 
 void canonical_to_direction(
@@ -84,9 +86,10 @@ void canonical_to_direction(
     const real phi      = canonical.x() * constant::two_pi<real>;
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
 
-    *out_direction = Vector3R(std::sin(phi) * sinTheta,
-                              cosTheta,
-                              std::cos(phi) * sinTheta);
+    out_direction->set(
+        std::sin(phi) * sinTheta,
+        cosTheta,
+        std::cos(phi) * sinTheta);
 }
 
 real forward_gamma_correction(const real value) {

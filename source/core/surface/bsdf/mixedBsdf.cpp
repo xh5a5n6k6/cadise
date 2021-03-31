@@ -42,20 +42,20 @@ Spectrum MixedBsdf::evaluate(
 
     Spectrum scatterValue(0.0_r);
     if(info.components() == BSDF_ALL_COMPONENTS){
-        scatterValue = _bsdfA->evaluate(info, si) * sampleRatio +
-                       _bsdfB->evaluate(info, si) * sampleRatio.complement();
+        scatterValue = _bsdfA->evaluate(info, si).mul(sampleRatio).add(
+                       _bsdfB->evaluate(info, si).mul(sampleRatio.complement()));
     }
     else {
         CADISE_ASSERT_LT(info.components(), _bsdfA->components() + _bsdfB->components());
 
         if (info.components() < _bsdfA->components()) {
-            scatterValue = _bsdfA->evaluate(info, si) * sampleRatio;
+            scatterValue = _bsdfA->evaluate(info, si).mul(sampleRatio);
         }
         else {
             TransportInfo localInfo(info);
             localInfo.setComponents(info.components() - _bsdfA->components());
 
-            scatterValue = _bsdfB->evaluate(localInfo, si) * sampleRatio.complement();
+            scatterValue = _bsdfB->evaluate(localInfo, si).mul(sampleRatio.complement());
         }
     }
 
@@ -95,7 +95,7 @@ void MixedBsdf::evaluateSample(
 
             const Spectrum& fBsdfA = localSample.scatterValue();
             const Spectrum  fBsdfB = _bsdfB->evaluate(info, localSi);
-            scatterValue = sampleRatio * fBsdfA + sampleRatio.complement() * fBsdfB;
+            scatterValue = sampleRatio.mul(fBsdfA).add(sampleRatio.complement().mul(fBsdfB));
 
             const real pdfWbsdfA = localSample.pdfW();
             const real pdfWbsdfB = _bsdfB->evaluatePdfW(info, localSi);
@@ -115,7 +115,7 @@ void MixedBsdf::evaluateSample(
 
             const Spectrum& fBsdfB = localSample.scatterValue();
             const Spectrum  fBsdfA = _bsdfA->evaluate(info, localSi);
-            scatterValue = sampleRatio * fBsdfB + sampleRatio.complement() * fBsdfA;
+            scatterValue = sampleRatio.mul(fBsdfB).add(sampleRatio.complement().mul(fBsdfA));
 
             const real pdfWbsdfB = localSample.pdfW();
             const real pdfWbsdfA = _bsdfA->evaluatePdfW(info, localSi);
@@ -143,7 +143,7 @@ void MixedBsdf::evaluateSample(
             return;
         }
 
-        scatterValue     = localSample.scatterValue() * localRatio;
+        scatterValue     = localSample.scatterValue().mul(localRatio);
         scatterDirection = localSample.scatterDirection();
         scatterPdfW      = localSample.pdfW();
     }

@@ -1,67 +1,81 @@
 #pragma once
 
-#include "math/tVector.h"
+#include "math/tArithmeticArray.h"
+#include "math/type/mathType.h"
 
 namespace cadise {
 
 // TODO: refactor as CRTP (curiously recurring template pattern)
-template<std::size_t N>
+template<typename T, std::size_t N>
 class TConceptualSpectrum {
-protected:
-    using SpectralArray = TVector<real, N>;
-
 public:
     TConceptualSpectrum();
-    explicit TConceptualSpectrum(const real v);
-    explicit TConceptualSpectrum(const SpectralArray& sa);
-    TConceptualSpectrum(const TConceptualSpectrum& cs);
+    explicit TConceptualSpectrum(const T value);
+    explicit TConceptualSpectrum(const TArithmeticArray<T, N>& value);
+    TConceptualSpectrum(const TConceptualSpectrum& other);
 
     virtual ~TConceptualSpectrum();
 
-    TConceptualSpectrum operator - () const;
-    TConceptualSpectrum operator + (const real s) const;
-    TConceptualSpectrum operator - (const real s) const;
-    TConceptualSpectrum operator * (const real s) const;
-    TConceptualSpectrum operator / (const real s) const;
-    TConceptualSpectrum operator + (const TConceptualSpectrum& cs) const;
-    TConceptualSpectrum operator - (const TConceptualSpectrum& cs) const;
-    TConceptualSpectrum operator * (const TConceptualSpectrum& cs) const;
-    TConceptualSpectrum operator / (const TConceptualSpectrum& cs) const;
-    TConceptualSpectrum& operator += (const real s);
-    TConceptualSpectrum& operator -= (const real s);
-    TConceptualSpectrum& operator *= (const real s);
-    TConceptualSpectrum& operator /= (const real s);
-    TConceptualSpectrum& operator += (const TConceptualSpectrum& cs);
-    TConceptualSpectrum& operator -= (const TConceptualSpectrum& cs);
-    TConceptualSpectrum& operator *= (const TConceptualSpectrum& cs);
-    TConceptualSpectrum& operator /= (const TConceptualSpectrum& cs);
-    TConceptualSpectrum& operator  = (const TConceptualSpectrum& cs);
+    TConceptualSpectrum operator + (const T rhs) const;
+    TConceptualSpectrum operator - (const T rhs) const;
+    TConceptualSpectrum operator * (const T rhs) const;
+    TConceptualSpectrum operator / (const T rhs) const;
+    TConceptualSpectrum operator + (const TConceptualSpectrum& rhs) const;
+    TConceptualSpectrum operator - (const TConceptualSpectrum& rhs) const;
+    TConceptualSpectrum operator * (const TConceptualSpectrum& rhs) const;
+    TConceptualSpectrum operator / (const TConceptualSpectrum& rhs) const;
+    
+    TConceptualSpectrum  add(const TConceptualSpectrum& rhs) const;
+    TConceptualSpectrum  add(const T rhs) const;
+    TConceptualSpectrum& addLocal(const TConceptualSpectrum& rhs);
+    TConceptualSpectrum& addLocal(const T rhs);
+
+    TConceptualSpectrum  sub(const TConceptualSpectrum& rhs) const;
+    TConceptualSpectrum  sub(const T rhs) const;
+    TConceptualSpectrum& subLocal(const TConceptualSpectrum& rhs);
+    TConceptualSpectrum& subLocal(const T rhs);
+
+    TConceptualSpectrum  mul (const TConceptualSpectrum& rhs) const;
+    TConceptualSpectrum  mul(const T rhs) const;
+    TConceptualSpectrum& mulLocal(const TConceptualSpectrum& rhs);
+    TConceptualSpectrum& mulLocal(const T rhs);
+
+    TConceptualSpectrum  div(const TConceptualSpectrum& rhs) const;
+    TConceptualSpectrum  div(const T rhs) const;
+    TConceptualSpectrum& divLocal(const TConceptualSpectrum& rhs);
+    TConceptualSpectrum& divLocal(const T rhs);
 
     bool isZero() const;
     bool hasNegative() const;
     bool hasNaN() const;
     bool hasInfinite() const;
-    real sum() const;
-    real average() const;
-    real maxComponent() const;
+    T sum() const;
+    T average() const;
+    T maxComponent() const;
 
-    TConceptualSpectrum square() const;
-    TConceptualSpectrum complement() const;
+    TConceptualSpectrum  squared() const;
+    TConceptualSpectrum& squaredLocal();
+    TConceptualSpectrum  complement() const;
+    TConceptualSpectrum& complementLocal();
 
+    void set(const TConceptualSpectrum& other);
+    void set(const TArithmeticArray<T, N>& value);
+    void set(const T value);
+    
 protected:
-    SpectralArray _values;
+    TArithmeticArray<T, N> _values;
 };
 
 // template header implementation
 
-template<std::size_t N>
-inline TConceptualSpectrum<N> operator + (const real s, const TConceptualSpectrum<N>& cs) {
-    return cs + s;
+template<typename T, std::size_t N>
+inline TConceptualSpectrum<T, N> operator + (const T scalar, const TConceptualSpectrum<T, N>& lhs) {
+    return lhs.add(scalar);
 }
 
-template<std::size_t N>
-inline TConceptualSpectrum<N> operator * (const real s, const TConceptualSpectrum<N>& cs) {
-    return cs * s;
+template<typename T, std::size_t N>
+inline TConceptualSpectrum<T, N> operator * (const T scalar, const TConceptualSpectrum<T, N>& lhs) {
+    return lhs.mul(scalar);
 }
 
 } // namespace cadise

@@ -2,6 +2,8 @@
 
 #include "math/type/mathType.h"
 
+#include <array>
+
 namespace cadise {
 
 class SurfaceIntersection;
@@ -24,7 +26,7 @@ public:
 
     virtual void sampleHalfVectorH(
         const SurfaceIntersection& si,
-        const Vector2R&            sample,
+        const std::array<real, 2>& sample,
         Vector3R* const            out_H) const = 0;
 
 protected:

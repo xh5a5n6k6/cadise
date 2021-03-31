@@ -39,7 +39,7 @@ Spectrum LambertianDiffuse::evaluate(
     Spectrum sampleAlbedo;
     TSurfaceSampler<Spectrum>().sample(si, _albedo.get(), &sampleAlbedo);
 
-    return sampleAlbedo * constant::inv_pi<real>;
+    return sampleAlbedo.mul(constant::rcp_pi<real>);
 }
 
 void LambertianDiffuse::evaluateSample(
@@ -52,23 +52,23 @@ void LambertianDiffuse::evaluateSample(
     const Vector3R& Ns = si.surfaceDetail().shadingNormal();
     const Vector3R& V  = si.wi();
 
-    const Vector2R sample(Random::nextReal(), Random::nextReal());
+    const std::array<real, 2> sample = { Random::nextReal(), Random::nextReal() };
     Vector3R L;
     real pdfW;
     Hemisphere::cosineWeightedSampling(sample, &L, &pdfW);
 
     // transform L to world coordinate
     L = si.surfaceDetail().shadingLcs().localToWorld(L);
-    L = L.normalize();
+    L.normalizeLocal();
 
     if (V.dot(Ns) <= 0.0_r) {
-        L = L.reverse();
+        L.negateLocal();
     }
 
     Spectrum sampleAlbedo;
     TSurfaceSampler<Spectrum>().sample(si, _albedo.get(), &sampleAlbedo);
 
-    out_sample->setScatterValue(sampleAlbedo * constant::inv_pi<real>);
+    out_sample->setScatterValue(sampleAlbedo.mul(constant::rcp_pi<real>));
     out_sample->setScatterDirection(L);
     out_sample->setPdfW(pdfW);
 }
@@ -85,7 +85,7 @@ real LambertianDiffuse::evaluatePdfW(
         return 0.0_r;
     }
 
-    return L.absDot(Ns) * constant::inv_pi<real>;
+    return L.absDot(Ns) * constant::rcp_pi<real>;
 }
 
 ELobe LambertianDiffuse::lobe(const BsdfComponents component) const {

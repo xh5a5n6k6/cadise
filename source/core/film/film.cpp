@@ -61,7 +61,7 @@ void Film::replaceWithFilm(std::unique_ptr<Film> other) {
     for (int32 iy = 0; iy < _resolution.y(); ++iy) {
         for (int32 ix = 0; ix < _resolution.x(); ++ix) {
             const std::size_t        sensorIndex = other->_pixelIndexOffset(ix, iy);
-            const RgbRadianceSensor& sensor = other->_sensorPixels[sensorIndex];
+            const RgbRadianceSensor& sensor      = other->_sensorPixels[sensorIndex];
 
             _sensorPixels[sensorIndex] = sensor;
         }
@@ -103,14 +103,14 @@ void Film::addSampleRadiance(const Vector2D& filmPosition, const Spectrum& radia
         return;
     }
 
-    Vector3R rgb;
-    radiance.transformToRgb(&rgb);
+    Vector3R linearSrgb;
+    radiance.transformToLinearSrgb(&linearSrgb);
 
     const Vector2R realFilmPosition = filmPosition.asType<real>();
 
     // calculate filter bound for given film position
-    Vector2R filmMinPosition = realFilmPosition - _filter->filterHalfSize();
-    Vector2R filmMaxPosition = realFilmPosition + _filter->filterHalfSize();
+    Vector2R filmMinPosition = realFilmPosition.sub(_filter->filterHalfSize());
+    Vector2R filmMaxPosition = realFilmPosition.add(_filter->filterHalfSize());
 
     filmMinPosition = Vector2R::max(filmMinPosition, Vector2R(0.0_r));
     filmMaxPosition = Vector2R::min(filmMaxPosition, _resolution.asType<real>());
@@ -132,7 +132,7 @@ void Film::addSampleRadiance(const Vector2D& filmPosition, const Spectrum& radia
 
             const real filterWeight = _filter->evaluate(x, y);
 
-            _sensorPixels[sensorIndexOffset].addValue(rgb * filterWeight);
+            _sensorPixels[sensorIndexOffset].addValue(linearSrgb.mul(filterWeight));
             _sensorPixels[sensorIndexOffset].addWeight(filterWeight);
         }
     }
@@ -142,8 +142,8 @@ void Film::addSplatRadiance(const ConnectEvent& connectEvent) {
     std::lock_guard<std::mutex> lock(_filmMutex);
 
     const Spectrum& splatRadiance = connectEvent.splatRadiance();
-    Vector3R splatRgb;
-    splatRadiance.transformToRgb(&splatRgb);
+    Vector3R splatLinearSrgb;
+    splatRadiance.transformToLinearSrgb(&splatLinearSrgb);
 
     const Vector2D& filmPosition = connectEvent.filmPosition();
 
@@ -153,7 +153,8 @@ void Film::addSplatRadiance(const ConnectEvent& connectEvent) {
     iy = (iy < _resolution.y()) ? iy : _resolution.y() - 1;
 
     const std::size_t pixelIndexOffset = _pixelIndexOffset(ix, iy);
-    _splatPixels[pixelIndexOffset] += splatRgb;
+    
+    _splatPixels[pixelIndexOffset].addLocal(splatLinearSrgb);
 }
 
 void Film::save(
@@ -162,7 +163,7 @@ void Film::save(
 
     // TODO: refactor here
     HdrImage hdrImage(_resolution);
-    const real inverseSpp = 1.0_r / static_cast<real>(samplesPerPixel);
+    const real rcpSpp = 1.0_r / static_cast<real>(samplesPerPixel);
 
     for (int32 iy = 0; iy < _resolution.y(); ++iy) {
         for (int32 ix = 0; ix < _resolution.x(); ++ix) {
@@ -171,23 +172,24 @@ void Film::save(
             const RgbRadianceSensor& sensorPixel = _sensorPixels[pixelOffset];
             const Vector3R&          splatPixel  = _splatPixels[pixelOffset];
 
-            const real inverseWeight 
+            const real rcpWeight 
                 = (sensorPixel.weight() == 0.0_r) ? 0.0_r : 1.0_r / sensorPixel.weight();
             const Vector3R pixel 
-                = Vector3R(sensorPixel.r(), sensorPixel.g(), sensorPixel.b()) * inverseWeight;
+                = Vector3R(sensorPixel.r(), sensorPixel.g(), sensorPixel.b()).mul(rcpWeight);
 
-            const Vector3R recordLinearSrgb = pixel + splatPixel * inverseSpp;
+            const Vector3R recordLinearSrgb = pixel.add(splatPixel.mul(rcpSpp));
 
             if (usePostProcessing) {
-                const Vector3R recordSrgb = {
+                hdrImage.setPixelValue(ix, iy, {
                     math::forward_gamma_correction(recordLinearSrgb.x()),
                     math::forward_gamma_correction(recordLinearSrgb.y()),
-                    math::forward_gamma_correction(recordLinearSrgb.z())};
-
-                hdrImage.setPixelValue(ix, iy, recordSrgb);
+                    math::forward_gamma_correction(recordLinearSrgb.z()) });
             }
             else {
-                hdrImage.setPixelValue(ix, iy, recordLinearSrgb);
+                hdrImage.setPixelValue(ix, iy, {
+                    recordLinearSrgb.x(),
+                    recordLinearSrgb.y(),
+                    recordLinearSrgb.z() });
             }
         }
     }
@@ -205,8 +207,8 @@ Vector2S Film::numTilesXy() const {
 AABB2I Film::getTileBound(const std::size_t tileIndex) const {
     const auto tileIndicesXy = _getTileIndicesXy(tileIndex);
     
-    const Vector2I minIndicesXy = tileIndicesXy * _tileSize;
-    const Vector2I maxIndicesXy = Vector2I::min(minIndicesXy + _tileSize, _resolution);
+    const Vector2I minIndicesXy = tileIndicesXy.mul(_tileSize);
+    const Vector2I maxIndicesXy = Vector2I::min(minIndicesXy.add(_tileSize), _resolution);
 
     return AABB2I(minIndicesXy, maxIndicesXy);
 }

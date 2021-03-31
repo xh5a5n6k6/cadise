@@ -21,9 +21,8 @@ public:
     using Parent::_uvwWrapper;
 
     void sample(
-        const Vector3R&      uvw,
-        const TImage<T, N>&  image,
-        TVector<T, N>* const out_value) const override;
+        const Vector3R&               uvw,
+        TArithmeticArray<T, N>* const out_value) const override;
 };
 
 } // namespace cadise

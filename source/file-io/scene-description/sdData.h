@@ -3,6 +3,7 @@
 #include "core/spectrum/spectrum.h"
 #include "file-io/scene-description/eSdClassType.h"
 #include "file-io/scene-description/tSdDataUnit.h"
+#include "math/tVector3.h"
 #include "math/type/mapType.h"
 
 #include <vector>

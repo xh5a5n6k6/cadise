@@ -12,7 +12,7 @@ BvhSahBucket::BvhSahBucket(const AABB3R& bound, const std::size_t intersectorCou
 }
 
 void BvhSahBucket::addOneBoundAndCount(const AABB3R& bound) {
-    _bound.unionWith(bound);
+    _bound.unionWithLocal(bound);
     ++_intersectorCounts;
 }
 

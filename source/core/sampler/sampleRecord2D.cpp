@@ -3,7 +3,7 @@
 #include "fundamental/assertion.h"
 #include "math/math.h"
 #include "math/random.h"
-#include "math/tVector.h"
+#include "math/tVector2.h"
 
 namespace cadise {
 

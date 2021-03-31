@@ -22,15 +22,15 @@ void PointLight::evaluateDirectSample(DirectLightSample* const out_sample) const
     CADISE_ASSERT(out_sample);
 
     const Vector3R emitPosition = _position;
-    const Vector3R emitVector   = out_sample->targetPosition() - emitPosition;
+    const Vector3R emitVector   = out_sample->targetPosition().sub(emitPosition);
     
     CADISE_ASSERT(!emitVector.isZero());
 
     const real distance2 = emitVector.lengthSquared();
 
     out_sample->setEmitPosition(emitPosition);
-    out_sample->setEmitNormal(emitVector / std::sqrt(distance2));
-    out_sample->setRadiance(_intensity / distance2);
+    out_sample->setEmitNormal(emitVector.div(std::sqrt(distance2)));
+    out_sample->setRadiance(_intensity.div(distance2));
     out_sample->setPdfW(1.0_r);
 }
 
@@ -44,7 +44,7 @@ real PointLight::evaluateDirectPdfW(
 void PointLight::evaluateEmitSample(EmitLightSample* const out_sample) const {
     CADISE_ASSERT(out_sample);
 
-
+    // TODO: implement here
 }
 
 void PointLight::evaluateEmitPdf(

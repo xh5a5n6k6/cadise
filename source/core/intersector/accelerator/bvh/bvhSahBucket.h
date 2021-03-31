@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/tAabb.h"
+#include "math/tAabb3.h"
 
 namespace cadise {
 

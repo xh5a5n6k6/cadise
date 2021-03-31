@@ -51,9 +51,10 @@ void WdlEstimator::estimate(
             ELobe::SPECULAR_TRANSMISSION });
 
         // add radiance if hitting area light
-        const AreaLight* areaLight = primitive->areaLight();
-        if (areaLight) {
-            totalRadiance += areaLight->emittance(intersection);
+        if (primitive->areaLight()) {
+            const Spectrum emittance = primitive->areaLight()->emittance(intersection);
+
+            totalRadiance.addLocal(pathThroughput.mul(emittance));
         }
 
         // add direct light only at non-specular surface
@@ -66,12 +67,12 @@ void WdlEstimator::estimate(
 
             sampleLight->evaluateDirectSample(&directLightSample);
             if (directLightSample.isValid()) {
-                const Vector3R LVector  = directLightSample.emitPosition() - P;
+                const Vector3R LVector  = directLightSample.emitPosition().sub(P);
                 const real     distance = LVector.length();
 
                 CADISE_ASSERT_GT(distance, 0.0_r);
 
-                const Vector3R L = LVector / distance;
+                const Vector3R L = LVector.div(distance);
                 intersection.setWo(L);
 
                 // generate shadow ray to do occluded test
@@ -83,10 +84,10 @@ void WdlEstimator::estimate(
                     const real      lightPdfW = directLightSample.pdfW();
 
                     const Spectrum reflectance         = bsdf->evaluate(TransportInfo(), intersection);
-                    const Spectrum directLightFactor   = reflectance * L.absDot(Ns);
-                    const Spectrum directLightRadiance = radiance * directLightFactor / lightPdfW;
+                    const Spectrum directLightFactor   = reflectance.mul(L.absDot(Ns) / lightPdfW);
+                    const Spectrum directLightRadiance = radiance.mul(directLightFactor);
 
-                    totalRadiance += pathThroughput * directLightRadiance / lightPdf;
+                    totalRadiance.addLocal(pathThroughput.mul(directLightRadiance.div(lightPdf)));
                 }
             }
 
@@ -109,7 +110,7 @@ void WdlEstimator::estimate(
             const real      pdfW        = bsdfSample.pdfW();
             const real      LdotN       = L.absDot(Ns);
                 
-            pathThroughput *= reflectance * LdotN / pdfW;
+            pathThroughput.mulLocal(reflectance.mul(LdotN / pdfW));
             if (pathThroughput.isZero()) {
                 break;
             }
@@ -120,7 +121,7 @@ void WdlEstimator::estimate(
         }
     }
 
-    *out_radiance = totalRadiance;
+    out_radiance->set(totalRadiance);
 }
 
 } // namespace cadise

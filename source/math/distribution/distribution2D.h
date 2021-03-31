@@ -3,6 +3,8 @@
 #include "math/distribution/distribution1D.h"
 #include "math/type/mathType.h"
 
+#include <array>
+
 namespace cadise {
 
 class Distribution2D {
@@ -10,13 +12,14 @@ public:
     Distribution2D();
     Distribution2D(const real* const value, const Vector2S& resolution);
 
-    Vector2R sampleContinuous(const Vector2R& seed,
-                              real* const     out_pdf) const;
+    Vector2R sampleContinuous(
+        const std::array<real, 2>& seed,
+        real* const                out_pdf) const;
 
-    real pdfContinuous(const Vector2R& sample) const;
+    real pdfContinuous(const std::array<real, 2>& sample) const;
 
 private:
-    Distribution1D _marginalY;
+    Distribution1D              _marginalY;
     std::vector<Distribution1D> _conditionalX;
 };
 

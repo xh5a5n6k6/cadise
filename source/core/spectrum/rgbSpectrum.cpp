@@ -1,15 +1,17 @@
 #include "core/spectrum/rgbSpectrum.h"
 
 #include "fundamental/assertion.h"
+#include "math/math.h"
+#include "math/tVector3.h"
 
 namespace cadise {
 
 RgbSpectrum::RgbSpectrum() :
-    TConceptualSpectrum<3>() {
+    TConceptualSpectrum<real, 3>() {
 }
 
 RgbSpectrum::RgbSpectrum(const real value) :
-    TConceptualSpectrum<3>(value) {
+    TConceptualSpectrum<real, 3>(value) {
 }
 
 RgbSpectrum::RgbSpectrum(const Vector3R& value) {
@@ -18,16 +20,31 @@ RgbSpectrum::RgbSpectrum(const Vector3R& value) {
     _values[2] = value.z();
 }
 
-RgbSpectrum::RgbSpectrum(const TConceptualSpectrum<3>& other) :
-    TConceptualSpectrum<3>(other) {
+RgbSpectrum::RgbSpectrum(const TConceptualSpectrum<real, 3>& other) :
+    TConceptualSpectrum<real, 3>(other) {
 }
 
 RgbSpectrum::RgbSpectrum(const RgbSpectrum& other) = default;
 
-void RgbSpectrum::transformToRgb(Vector3R* const out_rgb) const {
-    CADISE_ASSERT(out_rgb);
+void RgbSpectrum::setSrgb(const Vector3R& srgb) {
+    const Vector3R linearSrgb(
+        math::inverse_gamma_correction(srgb.x()),
+        math::inverse_gamma_correction(srgb.y()),
+        math::inverse_gamma_correction(srgb.z()));
 
-    *out_rgb = Vector3R(_values.x(), _values.y(), _values.z());
+    this->setLinearSrgb(linearSrgb);
+}
+
+void RgbSpectrum::setLinearSrgb(const Vector3R& linearSrgb) {
+    _values[0] = linearSrgb.x();
+    _values[1] = linearSrgb.y();
+    _values[2] = linearSrgb.z();
+}
+
+void RgbSpectrum::transformToLinearSrgb(Vector3R* const out_linearSrgb) const {
+    CADISE_ASSERT(out_linearSrgb);
+
+    out_linearSrgb->set(_values[0], _values[1], _values[2]);
 }
 
 real RgbSpectrum::luminance() const {

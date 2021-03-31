@@ -13,7 +13,7 @@ const Vector2R& Filter::filterSize() const {
 }
 
 Vector2R Filter::filterHalfSize() const {
-    return _filterSize / 2.0_r;
+    return _filterSize.mul(0.5_r);
 }
 
 } // namespace cadise

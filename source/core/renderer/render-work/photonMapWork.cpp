@@ -65,7 +65,7 @@ void PhotonMapWork::work() const {
         const real numerator   = emitDirection.absDot(emitN);
         const real denominator = pickLightPdf * emitPdfA * emitPdfW;
 
-        Spectrum      throughputRadiance(emittance * (numerator / denominator));
+        Spectrum      throughputRadiance(emittance.mul(numerator / denominator));
         TransportInfo transportInfo(ETransportMode::IMPORTANCE);
         Ray           traceRay(emitPosition, emitDirection);
 
@@ -91,7 +91,7 @@ void PhotonMapWork::work() const {
 
                 Photon photon;
                 photon.setPosition(P);
-                photon.setFromDirection(traceRay.direction().reverse());
+                photon.setFromDirection(traceRay.direction().negate());
                 photon.setThroughputRadiance(throughputRadiance);
 
                 _photons->push_back(std::move(photon));
@@ -114,10 +114,10 @@ void PhotonMapWork::work() const {
             const real      pdfW        = bsdfSample.pdfW();
             const real      LdotN       = L.absDot(Ns);
 
-            throughputRadiance *= reflectance * LdotN / pdfW;
+            throughputRadiance.mulLocal(reflectance.mul(LdotN / pdfW));
             // TODO: for non-symmetric scattering correction
             //       when using shading normal
-            throughputRadiance *= 1.0_r;
+            throughputRadiance.mulLocal(1.0_r);
 
             // use russian roulette to decide if the ray needs to be kept tracking
             Spectrum newThroughputRadiance;

@@ -6,8 +6,8 @@
 #include "core/surfaceDetail.h"
 #include "core/texture/mapper/textureMapper.h"
 #include "fundamental/assertion.h"
-#include "math/tAabb.h"
 #include "math/random.h"
+#include "math/tAabb3.h"
 
 #include <limits>
 
@@ -26,10 +26,10 @@ Rectangle::Rectangle(
     
     CADISE_ASSERT(bsdf);
 
-    _eA = _vA - _vB;
-    _eB = _vC - _vB;
+    _eA = _vA.sub(_vB);
+    _eB = _vC.sub(_vB);
 
-    _vD = _vB + _eA + _eB;
+    _vD = _vB.add(_eA).add(_eB);
     
     _uvwA = Vector3R(1.0_r, 0.0_r, 0.0_r);
     _uvwB = Vector3R(0.0_r, 0.0_r, 0.0_r);
@@ -41,9 +41,9 @@ void Rectangle::evaluateBound(AABB3R* const out_bound) const {
     CADISE_ASSERT(out_bound);
 
     AABB3R bound(_vA);
-    bound.unionWith(_vB).unionWith(_vC).unionWith(_vD).expand(0.0001_r);
+    bound.unionWithLocal(_vB).unionWithLocal(_vC).unionWithLocal(_vD).expandLocal(0.0001_r);
 
-    *out_bound = bound;
+    out_bound->set(bound);
 }
 
 bool Rectangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
@@ -54,16 +54,16 @@ bool Rectangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
     }
 
     const Vector3R normal = eA.cross(eB).normalize();
-    const real t = normal.dot(_vB - ray.origin()) / normal.dot(ray.direction());
+    const real     t      = normal.dot(_vB.sub(ray.origin())) / normal.dot(ray.direction());
     if (t < ray.minT() || t > ray.maxT()) {
         return false;
     }
 
-    const Vector3R vectorOnPlane = ray.at(t) - _vB;
-    const real projection1 = vectorOnPlane.dot(_eA.normalize());
-    const real projection2 = vectorOnPlane.dot(_eB.normalize());
-    if (projection1 < 0.0_r || projection1 > _eA.length() ||
-        projection2 < 0.0_r || projection2 > _eB.length()) {
+    const Vector3R vectorOnPlane = ray.at(t).sub(_vB);
+    const real     projectionA   = vectorOnPlane.dot(_eA.normalize());
+    const real     projectionB   = vectorOnPlane.dot(_eB.normalize());
+    if (projectionA < 0.0_r || projectionA > _eA.length() ||
+        projectionB < 0.0_r || projectionB > _eB.length()) {
 
         return false;
     }
@@ -82,16 +82,16 @@ bool Rectangle::isOccluded(const Ray& ray) const {
     }
 
     const Vector3R normal = eA.cross(eB).normalize();
-    const real t = normal.dot(_vB - ray.origin()) / normal.dot(ray.direction());
+    const real     t      = normal.dot(_vB.sub(ray.origin())) / normal.dot(ray.direction());
     if (t < ray.minT() || t > ray.maxT()) {
         return false;
     }
 
-    const Vector3R vectorOnPlane = ray.at(t) - _vB;
-    const real projection1 = vectorOnPlane.dot(_eA.normalize());
-    const real projection2 = vectorOnPlane.dot(_eB.normalize());
-    if (projection1 < 0.0_r || projection1 > _eA.length() ||
-        projection2 < 0.0_r || projection2 > _eB.length()) {
+    const Vector3R vectorOnPlane = ray.at(t).sub(_vB);
+    const real     projectionA   = vectorOnPlane.dot(_eA.normalize());
+    const real     projectionB   = vectorOnPlane.dot(_eB.normalize());
+    if (projectionA < 0.0_r || projectionA > _eA.length() ||
+        projectionB < 0.0_r || projectionB > _eB.length()) {
 
         return false;
     }
@@ -118,14 +118,15 @@ void Rectangle::evaluateSurfaceDetail(
         out_surface->setUvw(uvw);
     }
     else {
-        const Vector3R& P = out_surface->position();
-        const Vector3R  vectorOnPlane = P - _vB;
-        const real projection1 = vectorOnPlane.dot(_eA.normalize()) / _eA.length();
-        const real projection2 = vectorOnPlane.dot(_eB.normalize()) / _eA.length();
+        const Vector3R& P             = out_surface->position();
+        const Vector3R  vectorOnPlane = P.sub(_vB);
+        const real      projectionA   = vectorOnPlane.dot(_eA.normalize()) / _eA.length();
+        const real      projectionB   = vectorOnPlane.dot(_eB.normalize()) / _eB.length();
 
-        const Vector3R xUvwLerp1 = _uvwB.lerp(_uvwC, projection2);
-        const Vector3R xUvwLerp2 = _uvwA.lerp(_uvwD, projection2);
-        uvw = xUvwLerp1.lerp(xUvwLerp2, projection1);
+        const Vector3R xUvwLerpA = _uvwB.lerp(_uvwC, projectionB);
+        const Vector3R xUvwLerpB = _uvwA.lerp(_uvwD, projectionB);
+        
+        uvw = xUvwLerpA.lerp(xUvwLerpB, projectionA);
 
         out_surface->setUvw(uvw);
     }
@@ -155,7 +156,7 @@ void Rectangle::evaluatePositionSample(PositionSample* const out_sample) const {
         t = Random::nextReal();
     } while (t > shortWidth / longWidth);
 
-    const Vector3R P = _vB + s * eA + t * eA.length() * eB.normalize();
+    const Vector3R P = _vB.add(eA.mul(s)).add(eB.normalize().mul(t * eA.length()));
 
     Vector3R N = _eA.cross(_eB);
     N = (N.isZero()) ? Vector3R(0.0_r, 1.0_r, 0.0_r) : N.normalize();

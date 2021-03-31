@@ -37,7 +37,7 @@ public:
 
     void sampleHalfVectorH(
         const SurfaceIntersection& si,
-        const Vector2R&            sample,
+        const std::array<real, 2>& sample,
         Vector3R* const            out_H) const override;
 
 private:

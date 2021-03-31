@@ -2,8 +2,6 @@
 
 #include "core/renderer/renderWork.h"
 
-#include "math/tVector.h"
-
 namespace cadise {
 
 class FilmTile;

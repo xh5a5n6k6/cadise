@@ -3,8 +3,6 @@
 #include "math/constant.h"
 #include "math/type/mathType.h"
 
-#include <utility>
-
 /*
     some math utilities here
 */
@@ -83,7 +81,7 @@ real inverse_gamma_correction(const real value);
     https://stackoverflow.com/questions/1903954/is-there-a-standard-sign-function-signum-sgn-in-c-c
 */
 template<typename T>
-inline constant::Sign sign(const T& value);
+inline constant::SignType sign(const T& value);
 
 template<typename T>
 inline T squared(const T& value);
@@ -111,8 +109,8 @@ inline T map_to_non_zero(const T& value);
 // template header implementation
 
 template<typename T>
-inline constant::Sign sign(const T& value) {
-    return static_cast<constant::Sign>(
+inline constant::SignType sign(const T& value) {
+    return static_cast<constant::SignType>(
         (static_cast<T>(0) < value) - (value < static_cast<T>(0)));
 }
 
@@ -139,8 +137,8 @@ inline T clamp(const T& value, const T& lowerBound, const T& upperBound) {
 template<typename T>
 inline void swap(T& a, T& b) {
     T tmp = std::move(a);
-    a = std::move(b);
-    b = std::move(tmp);
+    a     = std::move(b);
+    b     = std::move(tmp);
 }
 
 template<typename T>

@@ -9,15 +9,15 @@ namespace cadise {
 template<typename T>
 class TMatrix4 {
 public:
-    static TMatrix4 identity();
-    static TMatrix4 scale(const TVector<T, 3>& scaleVector);
-    static TMatrix4 scale(const T sx, const T sy, const T sz);  
-    static TMatrix4 translate(const TVector<T, 3>& translateVector);
-    static TMatrix4 translate(const T tx, const T ty, const T tz);
-    static TMatrix4 lookAt(
-        const TVector<T, 3>& position, 
-        const TVector<T, 3>& direction, 
-        const TVector<T, 3>& up);
+    static TMatrix4 makeIdentity();
+    static TMatrix4 makeScale(const TVector3<T>& scaleVector);
+    static TMatrix4 makeScale(const T sx, const T sy, const T sz);  
+    static TMatrix4 makeTranslate(const TVector3<T>& translateVector);
+    static TMatrix4 makeTranslate(const T tx, const T ty, const T tz);
+    static TMatrix4 makeLookAt(
+        const TVector3<T>& position, 
+        const TVector3<T>& direction, 
+        const TVector3<T>& up);
 
 public:
     TMatrix4();
@@ -29,27 +29,30 @@ public:
     TMatrix4(const TMatrix4& other);
 
     TMatrix4 operator * (const TMatrix4& rhs) const;
-    TMatrix4& operator *= (const TMatrix4& rhs);
-    TMatrix4& operator  = (const TMatrix4& rhs);
+
+    TMatrix4  mul(const TMatrix4& rhs) const;
+    TMatrix4& mulLocal(const TMatrix4& rhs);
 
     TMatrix4 transpose() const;
     TMatrix4 inverse() const;
 
-    void transformPoint(const TVector<T, 3>& p, TVector<T, 3>* const out_point) const;
-    void transformVector(const TVector<T, 3>& v, TVector<T, 3>* const out_vector) const;
+    void transformPoint(
+        const TVector3<T>& point, 
+        TVector3<T>* const out_point) const;
+    
+    void transformVector(
+        const TVector3<T>& vector, 
+        TVector3<T>* const out_vector) const;
 
     T n(const std::size_t row, const std::size_t col) const;
 
 private:
-    // swap two rows
-    void _swapRows(const std::size_t r1, const std::size_t r2);
+    void _swapRows(const std::size_t rowA, const std::size_t rowB);
+    void _divideRow(const std::size_t row, const T scalar);
 
-    // divide row r with scalar s
-    void _divideRow(const std::size_t r, const T s);
-
-    // substract row r1 with row r2 multiplied by scalar s
+    // substract rowA with rowB multiplied by scalar
     // i.e. r1 -= r2*s
-    void _substractRow(const std::size_t r1, const std::size_t r2, const T s);
+    void _substractRow(const std::size_t rowA, const std::size_t rowB, const T scalar);
 
     std::array<std::array<T, 4>, 4> _n;
 };

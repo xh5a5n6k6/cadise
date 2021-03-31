@@ -3,7 +3,8 @@
 #include "core/integral-tool/tSurfaceSampler.h"
 #include "fundamental/assertion.h"
 #include "math/constant.h"
-#include "math/tVector.h"
+#include "math/math.h"
+#include "math/tVector3.h"
 
 #include <cmath>
 
@@ -79,13 +80,15 @@ real IsotropicGgx::shadowingMaskingG(
 
 void IsotropicGgx::sampleHalfVectorH(
     const SurfaceIntersection& si,
-    const Vector2R&            sample,
+    const std::array<real, 2>& sample,
     Vector3R* const            out_H) const {
 
     CADISE_ASSERT(out_H);
 
     // to avoid random sample with 1 value
-    const Vector2R safeSample = sample.clamp(0.0_r, 0.9999_r);
+    const std::array<real, 2> safeSample = {
+        math::clamp(sample[0], 0.0_r, 0.9999_r),
+        math::clamp(sample[1], 0.0_r, 0.9999_r) };
 
     real sampleRoughness;
     TSurfaceSampler<real>().sample(si, _roughness.get(), &sampleRoughness);
@@ -97,7 +100,7 @@ void IsotropicGgx::sampleHalfVectorH(
     const real cosTheta  = math::clamp(1.0_r / std::sqrt(1.0_r + tan2Theta), -1.0_r, 1.0_r);
     const real sinTheta  = std::sqrt(1.0_r - cosTheta * cosTheta);
 
-    const Vector3R localH = Vector3R(
+    const Vector3R localH(
         std::sin(phi) * sinTheta,
         cosTheta,
         std::cos(phi) * sinTheta);
@@ -105,7 +108,7 @@ void IsotropicGgx::sampleHalfVectorH(
     // transform H to world coordinate
     const Vector3R worldH = si.surfaceDetail().shadingLcs().localToWorld(localH);
 
-    *out_H = worldH.normalize();
+    out_H->set(worldH.normalize());
 }
 
 } // namespace cadise

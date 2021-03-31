@@ -35,7 +35,7 @@ void AoEstimator::estimate(
     localScene.unsetBackgroundSphere();
 
     if (!localScene.isIntersecting(traceRay, si)) {
-        *out_radiance = Spectrum(1.0_r);
+        out_radiance->set(1.0_r);
 
         return;
     }
@@ -44,23 +44,17 @@ void AoEstimator::estimate(
     const Vector3R& P  = si.surfaceDetail().position();
     const Vector3R& Ng = si.surfaceDetail().geometryNormal();
 
-    // build local coordinate system (geometry normal as y-axis)
-    const Vector3R yAxis(Ng);
-    Vector3R zAxis;
-    Vector3R xAxis;
-    math::build_coordinate_system(yAxis, &zAxis, &xAxis);
-
     for (std::size_t i = 0; i < _numSampleRays; ++i) {
-        const Vector2R sample(Random::nextReal(), Random::nextReal());
+        const std::array<real, 2> sample = { Random::nextReal(), Random::nextReal() };
         Vector3R L;
         real pdfW;
         Hemisphere::cosineWeightedSampling(sample, &L, &pdfW);
 
         // transform L to world coordinate
-        L = xAxis * L.x() + yAxis * L.y() + zAxis * L.z();
-        L = L.normalize();
+        L = si.surfaceDetail().geometryLcs().localToWorld(L);
+        L.normalizeLocal();
         if (V.dot(Ng) <= 0.0_r) {
-            L = L.reverse();
+            L.negateLocal();
         }
 
         traceRay.reset();
@@ -68,13 +62,13 @@ void AoEstimator::estimate(
         traceRay.setDirection(L);
 
         if (!localScene.isOccluded(traceRay)) {
-            totalValue += Spectrum(1.0_r);
+            totalValue.addLocal(1.0_r);
         }
     }
 
-    totalValue /= static_cast<real>(_numSampleRays);
+    totalValue.divLocal(static_cast<real>(_numSampleRays));
 
-    *out_radiance = totalValue;
+    out_radiance->set(totalValue);
 }
 
 } // namespace cadise

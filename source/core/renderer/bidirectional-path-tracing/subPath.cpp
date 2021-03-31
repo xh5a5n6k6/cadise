@@ -86,15 +86,15 @@ void SubPath::connectCamera(
         const Vector2D& filmPosition      = cameraSample.filmPosition();
         const Spectrum& importance        = cameraSample.importance();
         const real      pdfW              = cameraSample.pdfW();
-        const real      distance2         = (lightP - cameraP).lengthSquared();
-        const real      cameraToLightDotN = toCameraRay.direction().reverse().absDot(cameraN);
+        const real      distance2         = lightP.sub(cameraP).lengthSquared();
+        const real      cameraToLightDotN = toCameraRay.direction().negate().absDot(cameraN);
 
         SurfaceDetail surfaceDetail;
         surfaceDetail.setPosition(cameraP);
         surfaceDetail.setGeometryNormal(cameraN);
         surfaceDetail.setShadingNormal(cameraN);
 
-        PathVertex cameraVertex(EVertexType::CAMERA_END, importance /  pdfW);
+        PathVertex cameraVertex(EVertexType::CAMERA_END, importance.div(pdfW));
         cameraVertex.setSurfaceDetail(surfaceDetail);
         cameraVertex.setCamera(camera);
         cameraVertex.setPdfAForward(cameraVertex.evaluateOriginPdfA(scene, lightEndpoint));
@@ -104,7 +104,7 @@ void SubPath::connectCamera(
         const Spectrum  reflectance = lightEndpoint.evaluate(ETransportMode::IMPORTANCE, _vertices[s - 2], cameraVertex);
         const real      LdotN       = toCameraRay.direction().absDot(lightNs);
 
-        Spectrum radiance = throughputA * reflectance * LdotN * throughputB;
+        Spectrum radiance = throughputA.mul(reflectance.mul(throughputB.mul(LdotN)));
         if (radiance.isZero()) {
             continue;
         }
@@ -117,7 +117,7 @@ void SubPath::connectCamera(
         const real misWeight = BdptMis::weight(
             scene, *this, SubPath::oneVertexPath(cameraVertex), s, 1);
 
-        out_events->push_back(ConnectEvent(filmPosition, radiance * misWeight));
+        out_events->push_back(ConnectEvent(filmPosition, radiance.mul(misWeight)));
     }
 }
 
@@ -161,12 +161,12 @@ void SubPath::connectLight(
         const Vector3R& emitN    = directLightSample.emitNormal();
         const Spectrum& radiance = directLightSample.radiance();
         const real      pdfW     = directLightSample.pdfW();
-        const Vector3R  LVector  = emitP - cameraP;
+        const Vector3R  LVector  = emitP.sub(cameraP);
         const real      distance = LVector.length();
 
         CADISE_ASSERT_GT(distance, 0.0_r);
 
-        const Vector3R L     = LVector / distance;
+        const Vector3R L     = LVector.div(distance);
         const real     LdotN = L.absDot(cameraNs);
 
         SurfaceDetail surfaceDetail;
@@ -175,7 +175,7 @@ void SubPath::connectLight(
         surfaceDetail.setGeometryNormal(emitN);
         surfaceDetail.setShadingNormal(emitN);
 
-        PathVertex lightVertex(EVertexType::LIGHT_END, radiance / (pickLightPdf * pdfW));
+        PathVertex lightVertex(EVertexType::LIGHT_END, radiance.div(pickLightPdf * pdfW));
         lightVertex.setSurfaceDetail(surfaceDetail);
         lightVertex.setLight(sampleLight);
         lightVertex.setPdfAForward(lightVertex.evaluateOriginPdfA(scene, cameraEndpoint));
@@ -184,7 +184,7 @@ void SubPath::connectLight(
         const Spectrum& throughputB = cameraEndpoint.throughput();
         const Spectrum  reflectance = cameraEndpoint.evaluate(ETransportMode::RADIANCE, _vertices[t - 2], lightVertex);
 
-        const Spectrum contributeRadiance = throughputA * reflectance * LdotN * throughputB;
+        const Spectrum contributeRadiance = throughputA.mul(reflectance.mul(throughputB.mul(LdotN)));
         if (contributeRadiance.isZero()) {
             continue;
         }
@@ -200,10 +200,10 @@ void SubPath::connectLight(
         const real misWeight = BdptMis::weight(
             scene, SubPath::oneVertexPath(lightVertex), *this, 1, t);
 
-        totalRadiance += contributeRadiance * misWeight;
+        totalRadiance.addLocal(contributeRadiance.mul(misWeight));
     }
 
-    *out_radiance = totalRadiance;
+    out_radiance->set(totalRadiance);
 }
 
 std::size_t SubPath::length() const {

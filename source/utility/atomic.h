@@ -4,7 +4,9 @@
 
 #include <atomic>
 
-namespace cadise::utility {
+namespace cadise {
+    
+namespace utility {
 
 enum class EOps {
     ADD,
@@ -49,4 +51,6 @@ inline void atomic_operate(
     while (!out_variable->compare_exchange_weak(currentValue, targetValue));
 }
 
-} // namespace cadise::utility
+} // namespace utility
+
+} // namespace cadise

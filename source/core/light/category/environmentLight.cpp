@@ -7,6 +7,7 @@
 #include "fundamental/assertion.h"
 #include "math/constant.h"
 #include "math/random.h"
+#include "math/tVector2.h"
 
 #include <cmath>
 #include <vector>
@@ -32,7 +33,7 @@ EnvironmentLight::EnvironmentLight(
     std::vector<real> weightedSampleRadiances(resolution.x() * resolution.y());
     for (std::size_t iy = 0; iy < resolution.y(); ++iy) {
         const std::size_t rowIndex = iy * resolution.x();
-        const real sampleV = (static_cast<real>(iy) + 0.5_r) / static_cast<real>(resolution.y());
+        const real        sampleV  = (static_cast<real>(iy) + 0.5_r) / static_cast<real>(resolution.y());
         
         // image's y coordinate is from bottom to top, but
         // spherical theta is from top to bottom.
@@ -42,7 +43,7 @@ EnvironmentLight::EnvironmentLight(
             const real sampleU = (static_cast<real>(ix) + 0.5_r) / static_cast<real>(resolution.x());
 
             Spectrum sampleRadiance;
-            environmentRadiance->evaluate({sampleU, sampleV, 0.0_r}, &sampleRadiance);
+            environmentRadiance->evaluate({ sampleU, sampleV, 0.0_r }, &sampleRadiance);
 
             weightedSampleRadiances[rowIndex + ix] = sampleRadiance.luminance() * sinTheta;
 
@@ -67,21 +68,20 @@ Spectrum EnvironmentLight::emittance(const SurfaceIntersection& emitIntersection
 void EnvironmentLight::evaluateDirectSample(DirectLightSample* const out_sample) const {
     CADISE_ASSERT(out_sample);
 
-    const Vector2R sample(Random::nextReal(), Random::nextReal());
+    const std::array<real, 2> sample = { Random::nextReal(), Random::nextReal() };
     real uvPdf;
     const Vector2R uvSample = _distribution.sampleContinuous(sample, &uvPdf);
 
     Vector3R samplePosition;
-    _primitive->uvwToPosition({uvSample.x(), uvSample.y(), 0.0_r}, &samplePosition);
+    _primitive->uvwToPosition({ uvSample.x(), uvSample.y(), 0.0_r }, &samplePosition);
 
     const real sinTheta = std::sin((1.0_r - uvSample.y()) * constant::pi<real>);
     if (sinTheta <= 0.0_r) {
-
         return;
     }
 
     Spectrum sampleRadiance;
-    _environmentRadiance->evaluate({uvSample.x(), uvSample.y(), 0.0_r}, &sampleRadiance);
+    _environmentRadiance->evaluate({ uvSample.x(), uvSample.y(), 0.0_r }, &sampleRadiance);
 
     out_sample->setEmitPosition(samplePosition);
     out_sample->setPdfW(uvPdf / (2.0_r * constant::pi<real> * constant::pi<real> * sinTheta));
@@ -92,14 +92,13 @@ real EnvironmentLight::evaluateDirectPdfW(
     const SurfaceIntersection& emitIntersection, 
     const Vector3R&            targetPosition) const {
 
-    const Vector3R& uvw = emitIntersection.surfaceDetail().uvw();
-    const real sinTheta = std::sin((1.0_r - uvw.y()) * constant::pi<real>);
+    const Vector3R& uvw      = emitIntersection.surfaceDetail().uvw();
+    const real      sinTheta = std::sin((1.0_r - uvw.y()) * constant::pi<real>);
     if (sinTheta <= 0.0_r) {
-
         return 0.0_r;
     }
 
-    const real uvPdf = _distribution.pdfContinuous({uvw.x(), uvw.y()});
+    const real uvPdf = _distribution.pdfContinuous({ uvw.x(), uvw.y() });
 
     return uvPdf / (2.0_r * constant::pi<real> * constant::pi<real> * sinTheta);
 }
@@ -107,7 +106,7 @@ real EnvironmentLight::evaluateDirectPdfW(
 void EnvironmentLight::evaluateEmitSample(EmitLightSample* const out_sample) const {
     CADISE_ASSERT(out_sample);
 
-
+    // TODO: implement here
 }
 
 void EnvironmentLight::evaluateEmitPdf(
@@ -119,7 +118,7 @@ void EnvironmentLight::evaluateEmitPdf(
     CADISE_ASSERT(out_pdfA);
     CADISE_ASSERT(out_pdfW);
 
-
+    // TODO: implement here
 }
 
 real EnvironmentLight::approximateFlux() const {

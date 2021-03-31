@@ -24,7 +24,7 @@ PerspectivePinholeCamera::PerspectivePinholeCamera(
     _fov(fov),
     _sensorWidthMM(sensorWidthMM) {
 
-    _cameraToWorld = std::make_shared<Transform>(Matrix4R::lookAt(position, direction, up));
+    _cameraToWorld = std::make_shared<Transform>(Matrix4R::makeLookAt(position, direction, up));
 
     this->updateTransform();
 }
@@ -41,10 +41,10 @@ void PerspectivePinholeCamera::updateTransform() {
     //
     // translate needs to be multiplied last, it means
     // we need to multiply it first (it will be the leftmost part).
-    Matrix4R filmToCameraMatrix = Matrix4R::identity();
-    filmToCameraMatrix *= Matrix4R::translate(-(sensorWidth * 0.5_r), sensorHeight * 0.5_r, -_sensorOffset);
-    filmToCameraMatrix *= Matrix4R::scale(
-        sensorWidth / realResolution.x(), -sensorHeight / realResolution.y(), 1.0_r);
+    Matrix4R filmToCameraMatrix = Matrix4R::makeIdentity();
+    filmToCameraMatrix.mulLocal(Matrix4R::makeTranslate(-(sensorWidth * 0.5_r), sensorHeight * 0.5_r, -_sensorOffset));
+    filmToCameraMatrix.mulLocal(Matrix4R::makeScale(
+        sensorWidth / realResolution.x(), -sensorHeight / realResolution.y(), 1.0_r));
 
     _filmToCamera = std::make_shared<Transform>(filmToCameraMatrix);
 }
@@ -57,7 +57,7 @@ void PerspectivePinholeCamera::spawnPrimaryRay(
 
     Vector3R sampleCameraPosition;
     _filmToCamera->transformPoint(
-        Vector3D(filmPosition.x(), filmPosition.y(), 0.0_r).asType<real>(), 
+        Vector3D(filmPosition.x(), filmPosition.y(), 0.0).asType<real>(), 
         &sampleCameraPosition);
 
     // calculate parameter in camera space
@@ -83,13 +83,13 @@ void PerspectivePinholeCamera::evaluateCameraSample(
     _cameraToWorld->transformVector(Vector3R(0.0_r, 0.0_r, -1.0_r), &cameraRayN);
 
     const Vector3R targetPosition  = out_sample->targetPosition();
-    const Vector3R cameraRayVector = targetPosition - _position;
+    const Vector3R cameraRayVector = targetPosition.sub(_position);
 
     CADISE_ASSERT(!cameraRayVector.isZero());
 
     const real     sensorArea         = _getSensorArea();
     const real     distance           = cameraRayVector.length();
-    const Vector3R cameraRayDirection = cameraRayVector / distance;
+    const Vector3R cameraRayDirection = cameraRayVector.div(distance);
     const real     cosTheta           = cameraRayDirection.dot(cameraRayN);
     if (cosTheta <= 0.0_r) {
         return;
@@ -103,7 +103,7 @@ void PerspectivePinholeCamera::evaluateCameraSample(
     // transform to focus (film) plane in camera space
     const real     cameraToImagePointDistance  = _sensorOffset / cosTheta;
     const real     cameraToImagePointDistance2 = cameraToImagePointDistance * cameraToImagePointDistance;
-    const Vector3R targetFocusPosition         = (targetCameraPosition / distance) * cameraToImagePointDistance;
+    const Vector3R targetFocusPosition         = targetCameraPosition.mul(cameraToImagePointDistance / distance);
 
     // transform from camera space to film (raster) space
     Vector3R filmPosition;
@@ -142,7 +142,7 @@ void PerspectivePinholeCamera::evaluateCameraSample(
     // shooting from targetPosition
     out_toCameraRay->reset();
     out_toCameraRay->setOrigin(targetPosition);
-    out_toCameraRay->setDirection(cameraRayDirection.reverse());
+    out_toCameraRay->setDirection(cameraRayDirection.negate());
     out_toCameraRay->setMaxT(distance - constant::ray_epsilon<real>);
 }
 

@@ -9,8 +9,8 @@
 #include "core/texture/category/tConstantTexture.h"
 #include "fundamental/assertion.h"
 #include "math/constant.h"
-#include "math/math.h"
 #include "math/random.h"
+#include "math/tLocalCoordinateSystem3.h"
 #include "math/warp/hemisphere.h"
 
 #include <cmath>
@@ -29,11 +29,11 @@ SingleAreaLight::SingleAreaLight(
     CADISE_ASSERT(primitive);
     CADISE_ASSERT_GT(primitive->area(), 0.0_r);
 
-    const Spectrum unitWattColor  = color / color.sum();
-    const Spectrum totalWattColor = unitWattColor * watt;
+    const Spectrum unitWattColor  = color.div(color.sum());
+    const Spectrum totalWattColor = unitWattColor.mul(watt);
 
     _emitRadiance = std::make_shared<TConstantTexture<Spectrum>>(
-        (totalWattColor / primitive->area()) * constant::inv_pi<real>);
+        totalWattColor.div(primitive->area() * constant::pi<real>));
 }
 
 Spectrum SingleAreaLight::emittance(const SurfaceIntersection& emitIntersection) const {
@@ -61,14 +61,14 @@ void SingleAreaLight::evaluateDirectSample(DirectLightSample* const out_sample) 
     }
 
     const Vector3R& emitPosition = positionSample.position();
-    const Vector3R  emitVector   = out_sample->targetPosition() - emitPosition;
+    const Vector3R  emitVector   = out_sample->targetPosition().sub(emitPosition);
     const Vector3R& emitNs       = positionSample.shadingNormal();
     if (!_canEmit(emitVector, emitNs)) {
         return;
     }
 
     const real distance2              = emitVector.lengthSquared();
-    const real emitDirectionDotEmitNs = (emitVector / std::sqrt(distance2)).absDot(emitNs);
+    const real emitDirectionDotEmitNs = emitVector.div(std::sqrt(distance2)).absDot(emitNs);
     if (emitDirectionDotEmitNs <= 0.0_r) {
         return;
     }
@@ -91,7 +91,7 @@ real SingleAreaLight::evaluateDirectPdfW(
     const Vector3R& emitPosition  = emitIntersection.surfaceDetail().position();
     const Vector3R& emitNs        = emitIntersection.surfaceDetail().shadingNormal();
     const Vector3R& emitDirection = emitIntersection.wi();
-    const Vector3R  emitVector    = targetPosition - emitPosition;
+    const Vector3R  emitVector    = targetPosition.sub(emitPosition);
 
     if (!_canEmit(emitDirection, emitNs)) {
         return 0.0_r;
@@ -119,26 +119,21 @@ void SingleAreaLight::evaluateEmitSample(EmitLightSample* const out_sample) cons
 
     const Vector3R& Ns = positionSample.shadingNormal();
 
-    const Vector3R yAxis(Ns);
-    Vector3R zAxis;
-    Vector3R xAxis;
-    math::build_coordinate_system(yAxis, &zAxis, &xAxis);
+    LCS3R lcs;
+    lcs.initializeViaUnitY(Ns);
 
-    const Vector2R sample = Vector2R(Random::nextReal(), Random::nextReal());
+    const std::array<real, 2> sample = { Random::nextReal(), Random::nextReal() };
     Vector3R emitDirection;
     real pdfW;
     Hemisphere::cosineWeightedSampling(sample, &emitDirection, &pdfW);
 
     // transform emitDirection to world coordinate
-    emitDirection = xAxis * emitDirection.x() +
-                    yAxis * emitDirection.y() +
-                    zAxis * emitDirection.z();
-
-    emitDirection = emitDirection.normalize();
+    emitDirection = lcs.localToWorld(emitDirection);
+    emitDirection.normalizeLocal();
 
     // if backFaceEmit, emitDirection needs to be reverse
     if (!_canEmit(emitDirection, Ns)) {
-        emitDirection = emitDirection.reverse();
+        emitDirection.negateLocal();
     }
 
     Spectrum sampleRadiance;
@@ -164,7 +159,7 @@ void SingleAreaLight::evaluateEmitPdf(
     const real cosTheta = emitRay.direction().absDot(emitN);
 
     *out_pdfA = _primitive->evaluatePositionPdfA(emitRay.origin());
-    *out_pdfW = cosTheta * constant::inv_pi<real>;
+    *out_pdfW = cosTheta * constant::rcp_pi<real>;
 }
 
 real SingleAreaLight::approximateFlux() const {

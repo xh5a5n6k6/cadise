@@ -1,7 +1,7 @@
 #include "math/distribution/distribution2D.h"
 
 #include "fundamental/assertion.h"
-#include "math/tVector.h"
+#include "math/tVector2.h"
 
 namespace cadise {
 
@@ -27,27 +27,29 @@ Distribution2D::Distribution2D(const real* const value, const Vector2S& resoluti
     _marginalY = Distribution1D(rowValues.data(), resolution.y());
 }
 
-Vector2R Distribution2D::sampleContinuous(const Vector2R& seed,
-                                          real* const     out_pdf) const {
+Vector2R Distribution2D::sampleContinuous(
+    const std::array<real, 2>& seed,
+    real* const                out_pdf) const {
+    
     CADISE_ASSERT(out_pdf);
 
     real pdfXconditionalY;
     real pdfY;
     std::size_t indexY;
 
-    const real sampleY = _marginalY.sampleContinuous(seed.y(), &pdfY, &indexY);
-    const real sampleX = _conditionalX[indexY].sampleContinuous(seed.x(), &pdfXconditionalY);
+    const real sampleY = _marginalY.sampleContinuous(seed[1], &pdfY, &indexY);
+    const real sampleX = _conditionalX[indexY].sampleContinuous(seed[0], &pdfXconditionalY);
 
     *out_pdf = pdfXconditionalY * pdfY;
 
     return Vector2R(sampleX, sampleY);
 }
 
-real Distribution2D::pdfContinuous(const Vector2R& sample) const {
-    const std::size_t indexY = _marginalY.continuousToDiscrete(sample.y());
+real Distribution2D::pdfContinuous(const std::array<real, 2>& sample) const {
+    const std::size_t indexY = _marginalY.continuousToDiscrete(sample[1]);
 
-    const real pdfY = _marginalY.pdfContinuous(indexY);
-    const real pdfXconditionalY = _conditionalX[indexY].pdfContinuous(sample.x());
+    const real pdfY             = _marginalY.pdfContinuous(indexY);
+    const real pdfXconditionalY = _conditionalX[indexY].pdfContinuous(sample[0]);
 
     return pdfXconditionalY * pdfY;
 }

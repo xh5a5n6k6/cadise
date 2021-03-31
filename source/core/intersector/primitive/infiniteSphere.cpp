@@ -6,7 +6,7 @@
 #include "core/surfaceDetail.h"
 #include "core/texture/mapper/sphericalMapper.h"
 #include "fundamental/assertion.h"
-#include "math/tAabb.h"
+#include "math/tAabb3.h"
 #include "math/constant.h"
 
 #include <cmath>
@@ -29,7 +29,7 @@ void InfiniteSphere::evaluateBound(AABB3R* const out_bound) const {
 
     AABB3R bound(Vector3R(-_radius), Vector3R(_radius));
     
-    *out_bound = bound;
+    out_bound->set(bound);
 }
 
 bool InfiniteSphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
@@ -70,11 +70,12 @@ void InfiniteSphere::uvwToPosition(
     const real cosTheta = std::cos(theta);
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
 
-    const Vector3R direction(std::cos(phi) * sinTheta,
-                             std::sin(phi) * sinTheta,
-                             cosTheta);
+    const Vector3R direction(
+        std::sin(phi) * sinTheta,
+        cosTheta,
+        std::cos(phi) * sinTheta);
 
-    *out_position = direction.normalize() * _radius;
+    out_position->set(direction.normalize().mul(_radius));
 }
 
 } // namespace cadise

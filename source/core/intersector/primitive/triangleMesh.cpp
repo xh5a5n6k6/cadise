@@ -5,10 +5,12 @@
 
 namespace cadise {
 
-TriangleMesh::TriangleMesh(const std::shared_ptr<Bsdf>& bsdf, 
-                           const std::vector<Vector3R>& positions,
-                           const std::vector<Vector3R>& normals, 
-                           const std::vector<Vector3R>& uvws) :
+TriangleMesh::TriangleMesh(
+    const std::shared_ptr<Bsdf>& bsdf, 
+    const std::vector<Vector3R>& positions,
+    const std::vector<Vector3R>& normals, 
+    const std::vector<Vector3R>& uvws) :
+    
     _bsdf(bsdf),
     _positions(positions),
     _normals(normals),

@@ -18,7 +18,7 @@ bool RussianRoulette::isSurvivedOnNextRound(
     // it survives on next round
     if (sample > q) {
         const real weightScale = 1.0_r / (1.0_r - q);
-        *out_newWeight = weight * weightScale;
+        out_newWeight->set(weight.mul(weightScale));
 
         return true;
     }

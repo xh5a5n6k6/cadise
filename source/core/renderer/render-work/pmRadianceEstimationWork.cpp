@@ -80,13 +80,13 @@ void PmRadianceEstimationWork::work() const {
 
                 const Spectrum f = bsdf->evaluate(transportInfo, si);
                 if (!f.isZero()) {
-                    TauM += f * photon.throughputRadiance();
+                    TauM.addLocal(f.mul(photon.throughputRadiance()));
                 }
             }
         }
 
         const Spectrum& TauN    = viewpoint.tau();
-        const Spectrum  newTauN = (TauN + TauM) * multiplier;
+        const Spectrum  newTauN = TauN.add(TauM).mul(multiplier);
 
         // radiance evaluation
         // PPM paper section 4.3
@@ -94,7 +94,7 @@ void PmRadianceEstimationWork::work() const {
             = 1.0_r / (constant::pi<real> * newR * newR * static_cast<real>(_numPhotonPaths));
 
         const Spectrum radiance 
-            = (newTauN * kernelFactor + emittedRadiance) * throughputImportance;
+            = newTauN.mul(kernelFactor).add(emittedRadiance).mul(throughputImportance);
 
         _film->addSampleRadiance(filmPosition, radiance);
 

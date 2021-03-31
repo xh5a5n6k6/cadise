@@ -41,7 +41,7 @@ public:
     void setAreaLight(const AreaLight* const areaLight);
 
 protected:
-    std::shared_ptr<Bsdf> _bsdf;
+    std::shared_ptr<Bsdf>          _bsdf;
     std::shared_ptr<TextureMapper> _textureMapper;
     
     const AreaLight* _areaLight;

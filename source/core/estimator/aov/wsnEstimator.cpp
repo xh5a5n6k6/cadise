@@ -22,12 +22,12 @@ void WsnEstimator::estimate(
     localScene.unsetBackgroundSphere();
 
     if (!localScene.isIntersecting(traceRay, si)) {
-        *out_radiance = Spectrum(0.0_r);
+        out_radiance->set(0.0_r);
     }
     else {
         const Vector3R& Ns = si.surfaceDetail().shadingNormal();
 
-        *out_radiance = Spectrum(Ns * 0.5_r + 0.5_r);
+        out_radiance->set(Spectrum(Ns.mul(0.5_r).add(0.5_r)));
     }
 }
 

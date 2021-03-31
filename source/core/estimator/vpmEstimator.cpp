@@ -60,9 +60,10 @@ void VpmEstimator::estimate(
             ELobe::SPECULAR_TRANSMISSION });
 
         // add radiance if hitting area light
-        const AreaLight* areaLight = primitive->areaLight();
-        if (areaLight) {
-            totalRadiance += pathThroughput * areaLight->emittance(intersection);
+        if (primitive->areaLight()) {
+            const Spectrum emittance = primitive->areaLight()->emittance(intersection);
+
+            totalRadiance.addLocal(pathThroughput.mul(emittance));
         }
 
         // collect photons near the non-specular surface,
@@ -87,12 +88,12 @@ void VpmEstimator::estimate(
                 // TODO:
                 // for non-symmetric scattering correction
                 // when using shading normal
-                reflectance *= 1.0_r;
+                reflectance.mulLocal(1.0_r);
 
-                radiance += pathThroughput * reflectance * throughputRadiance;
+                radiance.addLocal(pathThroughput.mul(reflectance.mul(throughputRadiance)));
             }
 
-            totalRadiance += radiance * _kernelFactor;
+            totalRadiance.addLocal(radiance.mul(_kernelFactor));
 
             // once hitting non-specular surface, we
             // use near photons to estimate radiance and then exit
@@ -115,7 +116,7 @@ void VpmEstimator::estimate(
             const real      pdfW        = bsdfSample.pdfW();
             const real      LdotN       = L.absDot(Ns);
 
-            pathThroughput *= reflectance * LdotN / pdfW;
+            pathThroughput.mulLocal(reflectance.mul(LdotN / pdfW));
             if (pathThroughput.isZero()) {
                 break;
             }
@@ -126,7 +127,7 @@ void VpmEstimator::estimate(
         }
     }
 
-    *out_radiance = totalRadiance;
+    out_radiance->set(totalRadiance);
 }
 
 } // namespace cadise

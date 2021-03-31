@@ -70,7 +70,7 @@ static std::shared_ptr<Light> createEnvironment(
     std::shared_ptr<EnvironmentLight> environmentLight
         = std::make_shared<EnvironmentLight>(out_backgroundSphere.get(), 
                                              radiance, 
-                                             hdrImage.resolution());
+                                             hdrImage.resolution().asType<std::size_t>());
 
     out_backgroundSphere->setAreaLight(environmentLight.get());
 

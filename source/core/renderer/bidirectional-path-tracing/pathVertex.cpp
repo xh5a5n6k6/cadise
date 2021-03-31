@@ -72,8 +72,8 @@ Spectrum PathVertex::evaluate(
         return Spectrum(0.0_r);
     }
 
-    const Vector3R toPrevious = previous.surfaceDetail().position() - _surfaceDetail.position();
-    const Vector3R toNext     = next.surfaceDetail().position() - _surfaceDetail.position();
+    const Vector3R toPrevious = previous.surfaceDetail().position().sub(_surfaceDetail.position());
+    const Vector3R toNext     = next.surfaceDetail().position().sub(_surfaceDetail.position());
 
     CADISE_ASSERT(!toPrevious.isZero());
     CADISE_ASSERT(!toNext.isZero());
@@ -85,7 +85,7 @@ Spectrum PathVertex::evaluate(
 
     Spectrum reflectance = _bsdf->evaluate(TransportInfo(mode), intersection);
     if (mode == ETransportMode::IMPORTANCE) {
-        reflectance *= 1.0_r;
+        reflectance.mulLocal(1.0_r);
     }
 
     return reflectance;
@@ -95,9 +95,10 @@ real PathVertex::evaluateOriginPdfA(
     const Scene&      scene,
     const PathVertex& next) const {
     
-    const Vector3R& nowP  = _surfaceDetail.position();
-    const Vector3R& nextP = next.surfaceDetail().position();
-    if (nowP.isEqualTo(nextP)) {
+    const Vector3R& nowP      = _surfaceDetail.position();
+    const Vector3R& nextP     = next.surfaceDetail().position();
+    const Vector3R  nowToNext = nextP.sub(nowP);
+    if (nowToNext.isZero()) {
         return 0.0_r;
     }
 
@@ -106,7 +107,7 @@ real PathVertex::evaluateOriginPdfA(
     if (_camera) {
         real pdfA;
         real pdfW;
-        _camera->evaluateCameraPdf(Ray(nowP, nextP - nowP), &pdfA, &pdfW);
+        _camera->evaluateCameraPdf(Ray(nowP, nowToNext), &pdfA, &pdfW);
 
         return pdfA;
     }
@@ -115,7 +116,7 @@ real PathVertex::evaluateOriginPdfA(
 
         real pdfA;
         real pdfW;
-        _light->evaluateEmitPdf(Ray(nowP, nextP - nowP), 
+        _light->evaluateEmitPdf(Ray(nowP, nowToNext), 
                                 _surfaceDetail.shadingNormal(),
                                 &pdfA, 
                                 &pdfW);
@@ -140,22 +141,22 @@ real PathVertex::evaluateDirectPdfA(
     CADISE_ASSERT(!(_camera && _light));
 
     const Vector3R& nextNs    = next.surfaceDetail().shadingNormal();
-    const Vector3R  nowToNext = nextP - nowP;
+    const Vector3R  nowToNext = nextP.sub(nowP);
     
     const real distance2     = nowToNext.lengthSquared();
-    const real nextToNowDotN = (nowToNext / std::sqrt(distance2)).reverse().absDot(nextNs);
+    const real nextToNowDotN = nowToNext.div(std::sqrt(distance2)).negate().absDot(nextNs);
 
     if (_camera) {
         real pdfA;
         real pdfW;
-        _camera->evaluateCameraPdf(Ray(nowP, nextP - nowP), &pdfA, &pdfW);
+        _camera->evaluateCameraPdf(Ray(nowP, nowToNext), &pdfA, &pdfW);
 
         return pdfW * nextToNowDotN / distance2;
     }
     else if (_light) {
         real pdfA;
         real pdfW;
-        _light->evaluateEmitPdf(Ray(nowP, nextP - nowP), 
+        _light->evaluateEmitPdf(Ray(nowP, nowToNext), 
                                 _surfaceDetail.shadingNormal(),
                                 &pdfA,
                                 &pdfW);
@@ -182,11 +183,11 @@ real PathVertex::evaluateConnectPdfA(
     CADISE_ASSERT(_bsdf);
 
     const Vector3R& nextNs        = next.surfaceDetail().shadingNormal();
-    const Vector3R  nowToPrevious = previousP - nowP;
-    const Vector3R  nowToNext     = nextP - nowP;
+    const Vector3R  nowToPrevious = previousP.sub(nowP);
+    const Vector3R  nowToNext     = nextP.sub(nowP);
 
     const real distance2     = nowToNext.lengthSquared();
-    const real nextToNowDotN = (nowToNext / std::sqrt(distance2)).reverse().absDot(nextNs);
+    const real nextToNowDotN = nowToNext.div(std::sqrt(distance2)).negate().absDot(nextNs);
 
     // TODO: refactor here
     SurfaceIntersection intersection;

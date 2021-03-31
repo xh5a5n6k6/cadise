@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/spectrum/spectrum.h"
+#include "math/tVector3.h"
 
 namespace cadise {
 

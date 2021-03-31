@@ -27,7 +27,7 @@ Ray::Ray(const Vector3R& origin, const Vector3R& direction, const real minT, con
 }
 
 Vector3R Ray::at(const real t) const {
-    return _origin + _direction * t;
+    return _origin.add(_direction.mul(t));
 }
 
 void Ray::reset() {

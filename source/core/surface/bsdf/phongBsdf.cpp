@@ -15,8 +15,8 @@ PhongBsdf::PhongBsdf(const real exponent) :
     Bsdf(BsdfLobes({ ELobe::GLOSSY_REFLECTION })),
     _exponent(exponent) {
 
-    _pdfFactor  = (exponent + 1.0_r) * constant::inv_two_pi<real>;
-    _brdfFactor = (exponent + 2.0_r) * constant::inv_two_pi<real>;
+    _pdfFactor  = (exponent + 1.0_r) * constant::rcp_two_pi<real>;
+    _brdfFactor = (exponent + 2.0_r) * constant::rcp_two_pi<real>;
 }
 
 Spectrum PhongBsdf::evaluate(
@@ -48,14 +48,14 @@ void PhongBsdf::evaluateSample(
     const Vector3R& Ns = si.surfaceDetail().shadingNormal();
     const Vector3R& V  = si.wi();
 
-    const Vector2R sample(Random::nextReal(), Random::nextReal());
+    const std::array<real, 2> sample = { Random::nextReal(), Random::nextReal() };
     Vector3R L;
     real pdfW;
     Hemisphere::cosineExpWeightedSampling(sample, _exponent, &L, &pdfW);
 
     // transform L to world coordinate
     L = si.surfaceDetail().shadingLcs().localToWorld(L);
-    L = L.normalize();
+    L.normalizeLocal();
 
     if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) {
         return;

@@ -4,7 +4,8 @@
 
 #include "fundamental/assertion.h"
 #include "math/math.h"
-#include "math/tVector.h"
+#include "math/tArithmeticArray.h"
+#include "math/tVector2.h"
 
 namespace cadise {
 
@@ -24,12 +25,13 @@ inline TImage<T, N>::TImage(const int32 width, const int32 height) :
     _height(height),
     _data() {
 
-    const std::size_t dataNumber = static_cast<std::size_t>(width * height * N);
-    setDataSize(dataNumber);
+    const std::size_t dataSize = static_cast<std::size_t>(width * height * N);
+    
+    this->setDataSize(dataSize);
 }
 
 template<typename T, std::size_t N>
-inline TImage<T, N>::TImage(const TImage<T, N>& rhs) = default;
+inline TImage<T, N>::TImage(const TImage<T, N>& other) = default;
 
 template<typename T, std::size_t N>
 inline void TImage<T, N>::flipHorizontal() {
@@ -57,8 +59,9 @@ inline void TImage<T, N>::setImageSize(const int32 width, const int32 height) {
     _width  = width;
     _height = height;
 
-    const std::size_t dataNumber = static_cast<std::size_t>(width * height * N);
-    this->setDataSize(dataNumber);
+    const std::size_t dataSize = static_cast<std::size_t>(width * height * N);
+
+    this->setDataSize(dataSize);
 }
 
 template<typename T, std::size_t N>
@@ -67,11 +70,15 @@ inline void TImage<T, N>::setDataSize(const std::size_t dataSize) {
 }
 
 template<typename T, std::size_t N>
-inline void TImage<T, N>::setPixelValue(const int32 x, const int32 y, const TVector<T, N>& pixelValue) {
+inline void TImage<T, N>::setPixelValue(
+    const int32                   x, 
+    const int32                   y, 
+    const TArithmeticArray<T, N>& pixelValue) {
+
     const std::size_t dataIndexOffset = _pixelDataOffset(x, y);
 
     for (std::size_t i = 0; i < N; ++i) {
-        _data[dataIndexOffset + i] = pixelValue[i];
+        this->setDataValue(dataIndexOffset + i, pixelValue[i]);
     }
 }
 
@@ -81,7 +88,11 @@ inline void TImage<T, N>::setDataValue(const std::size_t index, const T value) {
 }
 
 template<typename T, std::size_t N>
-inline void TImage<T, N>::getImagePixel(const int32 x, const int32 y, TVector<T, N>* const out_pixel) const {
+inline void TImage<T, N>::getImagePixel(
+    const int32                   x, 
+    const int32                   y, 
+    TArithmeticArray<T, N>* const out_pixel) const {
+    
     CADISE_ASSERT(out_pixel);
     CADISE_ASSERT_RANGE_INCLUSIVE(x, 0, _width - 1);
     CADISE_ASSERT_RANGE_INCLUSIVE(y, 0, _height - 1);
@@ -104,8 +115,8 @@ inline int32 TImage<T, N>::height() const {
 }
 
 template<typename T, std::size_t N>
-inline Vector2S TImage<T, N>::resolution() const {
-    return Vector2S(_width, _height);
+inline Vector2I TImage<T, N>::resolution() const {
+    return Vector2I(_width, _height);
 }
 
 template<typename T, std::size_t N>

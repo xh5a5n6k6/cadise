@@ -31,7 +31,7 @@ bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) c
     // TODO: Refactor here
     PrimitiveInfo primitiveInfo;
     if(_topAccelerator->isIntersecting(ray, primitiveInfo)) {
-        surfaceIntersection.setWi(ray.direction().reverse());
+        surfaceIntersection.setWi(ray.direction().negate());
         surfaceIntersection.setPrimitiveInfo(primitiveInfo);
 
         // calculate intersection surface details
@@ -49,7 +49,7 @@ bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) c
     else if (_backgroundSphere && 
              _backgroundSphere->isIntersecting(ray, primitiveInfo)) {
 
-        surfaceIntersection.setWi(ray.direction().reverse());
+        surfaceIntersection.setWi(ray.direction().negate());
         surfaceIntersection.setPrimitiveInfo(primitiveInfo);
 
         // calculate intersection surface details

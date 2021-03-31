@@ -1,6 +1,6 @@
 #include "core/film/rgbRadianceSensor.h"
 
-#include "math/tVector.h"
+#include "math/tVector3.h"
 
 namespace cadise {
 

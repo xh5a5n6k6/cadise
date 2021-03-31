@@ -13,11 +13,11 @@ SchlickConductorFresnel::SchlickConductorFresnel(
     
     ConductorFresnel(iorOuter, eta, k) {
 
-    const Spectrum k2          = k.square();
-    const Spectrum numerator   = (eta - Spectrum(iorOuter)).square() + k2;
-    const Spectrum denominator = (eta + Spectrum(iorOuter)).square() + k2;
+    const Spectrum k2          = k.squared();
+    const Spectrum numerator   = eta.sub(iorOuter).squared().add(k2);
+    const Spectrum denominator = eta.add(iorOuter).squared().add(k2);
 
-    _f0 = numerator / denominator;
+    _f0 = numerator.div(denominator);
 }
 
 SchlickConductorFresnel::SchlickConductorFresnel(const Spectrum& f0) :
@@ -35,9 +35,12 @@ void SchlickConductorFresnel::evaluateReflectance(
     const real     cosIComplement = 1.0_r - absCosThetaI;
     const Spectrum f0Complement   = _f0.complement();
 
-    *out_reflectance = _f0 + f0Complement * cosIComplement 
-                                          * (cosIComplement * cosIComplement) 
-                                          * (cosIComplement * cosIComplement);
+    const Spectrum addFactor = f0Complement.mul(
+        cosIComplement *
+        (cosIComplement * cosIComplement) *
+        (cosIComplement * cosIComplement));
+
+    out_reflectance->set(_f0.add(addFactor));
 }
 
 } // namespace cadise

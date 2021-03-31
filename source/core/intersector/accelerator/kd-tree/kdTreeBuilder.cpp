@@ -3,7 +3,7 @@
 #include "core/intersector/accelerator/kd-tree/endpoint.h"
 #include "core/intersector/intersector.h"
 #include "fundamental/assertion.h"
-#include "math/tAabb.h"
+#include "math/tAabb3.h"
 
 #include <algorithm>
 #include <cmath>
@@ -179,10 +179,10 @@ bool KdTreeBuilder::_canSplitWithSah(
     out_subIntersectorIndicesB->clear();
     out_subIntersectorIndicesB->shrink_to_fit();
 
-    const std::size_t intersectorCounts  = intersectorIndices.size();
-    const Vector3R    boundExtent        = entireBound.extent();
-    const real        noSplitCost        = _intersectionCost * intersectorCounts;
-    const real        inverseSurfaceArea = 1.0_r / entireBound.surfaceArea();
+    const std::size_t intersectorCounts = intersectorIndices.size();
+    const Vector3R    boundExtent       = entireBound.extent();
+    const real        noSplitCost       = _intersectionCost * intersectorCounts;
+    const real        rcpSurfaceArea    = 1.0_r / entireBound.surfaceArea();
 
     std::size_t bestAxis          = std::numeric_limits<std::size_t>::max();
     std::size_t bestEndpointIndex = std::numeric_limits<std::size_t>::max();
@@ -204,7 +204,7 @@ bool KdTreeBuilder::_canSplitWithSah(
         // build split candidate lists
         for (std::size_t i = 0; i < intersectorCounts; ++i) {
             const std::size_t intersectorIndex = intersectorIndices[i];
-            const AABB3R& bound = intersectorBounds[intersectorIndex];
+            const AABB3R&     bound            = intersectorBounds[intersectorIndex];
 
             const std::size_t endpointBaseIndex = 2 * i;
             endpoints[axis][endpointBaseIndex + 0] = Endpoint(intersectorIndex, 
@@ -250,9 +250,9 @@ bool KdTreeBuilder::_canSplitWithSah(
                 splitBoundMaxVertex[axis] = splitPosition;
 
                 const real probabilitySplitBoundA
-                    = AABB3R(entireBound.minVertex(), splitBoundMaxVertex).surfaceArea() * inverseSurfaceArea;
+                    = AABB3R(entireBound.minVertex(), splitBoundMaxVertex).surfaceArea() * rcpSurfaceArea;
                 const real probabilitySplitBoundB
-                    = AABB3R(splitBoundMinVertex, entireBound.maxVertex()).surfaceArea() * inverseSurfaceArea;
+                    = AABB3R(splitBoundMinVertex, entireBound.maxVertex()).surfaceArea() * rcpSurfaceArea;
 
                 const real emptyBonus = (subIntersectorCountsA == 0 || subIntersectorCountsB == 0) ?
                                         _emptyBonus : 0.0_r;
@@ -291,7 +291,7 @@ bool KdTreeBuilder::_canSplitWithSah(
     }
 
     *out_newBadRefines = newBadRefines;
-    *out_splitInfo = std::make_tuple(bestAxis, endpoints[bestAxis][bestEndpointIndex].position());
+    *out_splitInfo     = std::make_tuple(bestAxis, endpoints[bestAxis][bestEndpointIndex].position());
 
     for (std::size_t i = 0; i < bestEndpointIndex; ++i) {
         if (endpoints[bestAxis][i].type() == EEndpointType::MIN) {

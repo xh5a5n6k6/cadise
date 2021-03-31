@@ -4,6 +4,7 @@
 #include "file-io/path.h"
 #include "fundamental/assertion.h"
 #include "math/math.h"
+#include "math/tVector3.h"
 #include "third-party/tp-stb-load.h"
 #include "utility/imageUtils.h"
 
@@ -97,7 +98,7 @@ void PictureLoader::loadLdrImage(const Path& path, LdrImage* const out_ldrImage)
                                    math::inverse_gamma_correction(g),
                                    math::inverse_gamma_correction(b));
 
-                linearRgb = linearRgb * 255.0_r + 0.5_r;
+                linearRgb.mulLocal(255.0_r).addLocal(0.5_r);
 
                 const uint8 linearR = static_cast<uint8>(math::clamp(linearRgb.x(), 0.0_r, 255.0_r));
                 const uint8 linearG = static_cast<uint8>(math::clamp(linearRgb.y(), 0.0_r, 255.0_r));
@@ -151,9 +152,9 @@ void PictureLoader::loadHdrImage(const Path& path, HdrImage* const out_hdrImage)
         for (int32 iy = 0; iy < height; ++iy) {
             for (int32 ix = 0; ix < width; ++ix) {
                 const std::size_t indexOffset = static_cast<std::size_t>(ix + iy * width);
+                const real        pixelValue  = imageData[indexOffset];
 
-                const Vector3R pixelValue(imageData[indexOffset]);
-                out_hdrImage->setPixelValue(ix, iy, pixelValue);
+                out_hdrImage->setPixelValue(ix, iy, { pixelValue, pixelValue, pixelValue });
             }
         }
     }
@@ -163,11 +164,10 @@ void PictureLoader::loadHdrImage(const Path& path, HdrImage* const out_hdrImage)
             for (int32 ix = 0; ix < width; ++ix) {
                 const std::size_t indexOffset = static_cast<std::size_t>((ix + iy * width) * 3);
 
-                const Vector3R pixelValue(static_cast<real>(imageData[indexOffset + 0]),
-                                          static_cast<real>(imageData[indexOffset + 1]),
-                                          static_cast<real>(imageData[indexOffset + 2]));
-
-                out_hdrImage->setPixelValue(ix, iy, pixelValue);
+                out_hdrImage->setPixelValue(ix, iy, { 
+                    static_cast<real>(imageData[indexOffset + 0]),
+                    static_cast<real>(imageData[indexOffset + 1]),
+                    static_cast<real>(imageData[indexOffset + 2]) });
             }
         }
     }

@@ -14,7 +14,7 @@
 #include "fundamental/assertion.h"
 #include "fundamental/logger/logger.h"
 #include "fundamental/time/stopwatch.h"
-#include "math/tAabb.h"
+#include "math/tAabb3.h"
 
 #include <limits>
 
@@ -43,33 +43,43 @@ void RenderDatabase::setUpData(const std::shared_ptr<SdData>& data) {
         case ESdClassType::FILM:
             _setUpFilm(data);
             break;
+
         case ESdClassType::CAMERA:
             _setUpCamera(data);
             break;
+
         case ESdClassType::RENDERER:
             _setUpRenderer(data);
             break;
+
         case ESdClassType::ACCELERATOR:
             _setUpAccelerator(data);
             break;
+
         case ESdClassType::LIGHT_CLUSTER:
             _setUpLightCluster(data);
             break;
+
         case ESdClassType::TEXTURE_REAL:
             _setUpRealTexture(data);
             break;
+
         case ESdClassType::TEXTURE_SPECTRUM:
             _setUpSpectrumTexture(data);
             break;
+
         case ESdClassType::MATERIAL:
             _setUpBsdf(data);
             break;
+
         case ESdClassType::LIGHT:
             _setUpLight(data);
             break;
+
         case ESdClassType::PRIMITIVE:
             _setUpPrimitive(data);
             break;
+
         default: 
             break;    
     }
@@ -83,7 +93,7 @@ void RenderDatabase::prepareRender() {
 
     logger.log("Finished loading scene objects (" + std::to_string(_intersectors.size()) + " primitives)");
 
-    const std::shared_ptr<Film> film = instantiator::makeFilm(_filmData);
+    const std::shared_ptr<Film>   film   = instantiator::makeFilm(_filmData);
     const std::shared_ptr<Camera> camera = instantiator::makeCamera(_cameraData);
 
     logger.log("Building primitive accelerator");
@@ -112,16 +122,13 @@ void RenderDatabase::prepareRender() {
 
     const std::shared_ptr<LightCluster> lightCluster = instantiator::makeLightCluster(_lightClusterData, _lights);
 
-    _scene = std::make_shared<Scene>(accelerator, lightCluster);
+    _scene    = std::make_shared<Scene>(accelerator, lightCluster);
     _renderer = std::move(instantiator::makeRenderer(_rendererData));
     
     if (_backgroundSphere) {
         _scene->setBackgroundSphere(_backgroundSphere.get());
     }
 
-    //const real rx = static_cast<real>(film->resolution().x());
-    //const real ry = static_cast<real>(film->resolution().y());
-    //camera->setAspectRatio(rx / ry);
     camera->setResolution(film->resolution().asType<std::size_t>());
     camera->updateTransform();
 

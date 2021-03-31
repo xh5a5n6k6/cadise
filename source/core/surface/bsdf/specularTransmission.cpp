@@ -70,7 +70,7 @@ void SpecularTransmission::evaluateSample(
     Spectrum sampleAlbedo;
     TSurfaceSampler<Spectrum>().sample(si, _albedo.get(), &sampleAlbedo);
 
-    out_sample->setScatterValue(sampleAlbedo * transmittance * btdfFactor / LdotN);
+    out_sample->setScatterValue(sampleAlbedo.mul(transmittance).mul(btdfFactor / LdotN));
     out_sample->setScatterDirection(L);
     out_sample->setPdfW(pdfW);
 }

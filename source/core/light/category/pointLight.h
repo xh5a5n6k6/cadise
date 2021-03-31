@@ -2,6 +2,8 @@
 
 #include "core/light/light.h"
 
+#include "math/tVector3.h"
+
 namespace cadise {
 
 class PointLight : public Light {

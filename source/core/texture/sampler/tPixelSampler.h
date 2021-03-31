@@ -1,28 +1,30 @@
 #pragma once
 
-#include "math/type/imageType.h"
+#include "core/imaging/tImage.h"
 #include "math/type/mathType.h"
 
 #include <memory>
 
 namespace cadise {
 
-enum class ETextureWrapMode;
 class UvwWrapper;
+enum class ETextureWrapMode;
 
 template<typename T, std::size_t N>
 class TPixelSampler {
 public:
-    explicit TPixelSampler(const ETextureWrapMode& mode);
+    TPixelSampler(
+        const TImage<T, N>&     image,
+        const ETextureWrapMode& mode);
 
     virtual ~TPixelSampler();
 
     virtual void sample(
-        const Vector3R&      uvw, 
-        const TImage<T, N>&  image, 
-        TVector<T, N>* const out_value) const = 0;
+        const Vector3R&               uvw, 
+        TArithmeticArray<T, N>* const out_value) const = 0;
 
 protected:
+    TImage<T, N>                _image;
     std::unique_ptr<UvwWrapper> _uvwWrapper;
 };
 

@@ -129,11 +129,11 @@ std::shared_ptr<TTexture<Spectrum>> SdData::getSpectrumTexture(
     }
     else {
         // it now only support rgb spectrum
-        Vector3R defaultRgb;
-        defaultValue.transformToRgb(&defaultRgb);
+        Vector3R defaultLinearSrgb;
+        defaultValue.transformToLinearSrgb(&defaultLinearSrgb);
 
-        const Vector3R rgb = this->findVector3r(name, defaultRgb);
-        spectrumTexture = std::make_shared<TConstantTexture<Spectrum>>(Spectrum(rgb));
+        const Vector3R linearSrgb = this->findVector3r(name, defaultLinearSrgb);
+        spectrumTexture = std::make_shared<TConstantTexture<Spectrum>>(Spectrum(linearSrgb));
     }
 
     return spectrumTexture;

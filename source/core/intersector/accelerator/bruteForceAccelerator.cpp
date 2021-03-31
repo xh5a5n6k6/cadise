@@ -1,7 +1,7 @@
 #include "core/intersector/accelerator/bruteForceAccelerator.h"
 
 #include "fundamental/assertion.h"
-#include "math/tAabb.h"
+#include "math/tAabb3.h"
 
 namespace cadise {
 
@@ -17,10 +17,10 @@ void BruteForceAccelerator::evaluateBound(AABB3R* const out_bound) const {
     AABB3R tmpBound;
     for (std::size_t i = 0; i < _intersectors.size(); ++i) {
         _intersectors[i]->evaluateBound(&tmpBound);
-        bound.unionWith(tmpBound);
+        bound.unionWithLocal(tmpBound);
     }
 
-    *out_bound = bound;
+    out_bound->set(bound);
 }
 
 bool BruteForceAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {

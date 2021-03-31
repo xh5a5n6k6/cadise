@@ -72,7 +72,7 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
 
     AABB3R nodeBound;
     for (std::size_t i = 0; i < intersectorCounts; ++i) {
-        nodeBound.unionWith(boundInfos[i].bound());
+        nodeBound.unionWithLocal(boundInfos[i].bound());
     }
 
     // make leaf node
@@ -89,7 +89,7 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
     else {
         AABB3R centroidBound;
         for (std::size_t i = 0; i < intersectorCounts; ++i) {
-            centroidBound.unionWith(boundInfos[i].centroid());
+            centroidBound.unionWithLocal(boundInfos[i].centroid());
         }
 
         const std::size_t splitAxis = centroidBound.maxAxis();
@@ -265,9 +265,9 @@ bool BvhBuilder::_canSplitWithSah(
     out_subBoundInfosB->clear();
     out_subBoundInfosB->shrink_to_fit();
 
-    const std::size_t intersectorCounts  = boundInfos.size();
-    const Vector3R&   splitMinVertex     = centroidBound.minVertex();
-    const real        inverseSplitExtent = 1.0_r / centroidBound.extent()[splitAxis];
+    const std::size_t intersectorCounts = boundInfos.size();
+    const Vector3R&   splitMinVertex    = centroidBound.minVertex();
+    const real        rcpSplitExtent    = 1.0_r / centroidBound.extent()[splitAxis];
 
     // use equal split instead
     if (intersectorCounts <= 2) {
@@ -282,7 +282,7 @@ bool BvhBuilder::_canSplitWithSah(
     for (std::size_t i = 0; i < intersectorCounts; ++i) {
         const AABB3R&   bound    = boundInfos[i].bound();
         const Vector3R& centroid = boundInfos[i].centroid();
-        const real      offset   = (centroid[splitAxis] - splitMinVertex[splitAxis]) * inverseSplitExtent;
+        const real      offset   = (centroid[splitAxis] - splitMinVertex[splitAxis]) * rcpSplitExtent;
 
         const std::size_t bucketIndex     = static_cast<std::size_t>(offset * NUM_BUCKETS);
         const std::size_t safeBucketIndex = (bucketIndex == NUM_BUCKETS) ? NUM_BUCKETS - 1 : bucketIndex;
@@ -290,10 +290,10 @@ bool BvhBuilder::_canSplitWithSah(
         buckets[safeBucketIndex].addOneBoundAndCount(bound);
     }
 
-    constexpr real traversalCost      = 0.125_r;
-    constexpr real intersectionCost   = 1.0_r;
-    const     real noSplitCost        = intersectionCost * intersectorCounts;
-    const     real inverseSurfaceArea = 1.0_r / intersectorBound.surfaceArea();
+    constexpr real traversalCost    = 0.125_r;
+    constexpr real intersectionCost = 1.0_r;
+    const     real noSplitCost      = intersectionCost * intersectorCounts;
+    const     real rcpSurfaceArea   = 1.0_r / intersectorBound.surfaceArea();
 
     std::size_t bestSplitBucketIndex = std::numeric_limits<std::size_t>::max();
     real        bestCost             = std::numeric_limits<real>::max();
@@ -305,24 +305,24 @@ bool BvhBuilder::_canSplitWithSah(
         AABB3R      subBoundB;
 
         for (std::size_t i = 0; i <= split; ++i) {
-            subBoundA.unionWith(buckets[i].bound());
+            subBoundA.unionWithLocal(buckets[i].bound());
             subIntersectorCountsA += buckets[i].intersectorCounts();
         }
 
         for (std::size_t i = split + 1; i < NUM_BUCKETS; ++i) {
-            subBoundB.unionWith(buckets[i].bound());
+            subBoundB.unionWithLocal(buckets[i].bound());
             subIntersectorCountsB += buckets[i].intersectorCounts();
         }
 
-        const real probabilitySplitBoundA = subBoundA.surfaceArea() * inverseSurfaceArea;
-        const real probabilitySplitBoundB = subBoundB.surfaceArea() * inverseSurfaceArea;
+        const real probabilitySplitBoundA = subBoundA.surfaceArea() * rcpSurfaceArea;
+        const real probabilitySplitBoundB = subBoundB.surfaceArea() * rcpSurfaceArea;
 
         const real splitCost 
             = traversalCost + intersectionCost * 
               (probabilitySplitBoundA * subIntersectorCountsA + probabilitySplitBoundB * subIntersectorCountsB);
 
         if (splitCost < bestCost) {
-            bestCost = splitCost;
+            bestCost             = splitCost;
             bestSplitBucketIndex = split;
         }
     }
@@ -338,7 +338,7 @@ bool BvhBuilder::_canSplitWithSah(
         sortedBoundInfos.end(),
         [=](const BvhBoundInfo& b) {
             const Vector3R& centroid = b.centroid();
-            const real      offset   = (centroid[splitAxis] - splitMinVertex[splitAxis]) * inverseSplitExtent;
+            const real      offset   = (centroid[splitAxis] - splitMinVertex[splitAxis]) * rcpSplitExtent;
 
             const std::size_t bucketIndex     = static_cast<std::size_t>(offset * NUM_BUCKETS);
             const std::size_t safeBucketIndex = (bucketIndex == NUM_BUCKETS) ? NUM_BUCKETS - 1 : bucketIndex;

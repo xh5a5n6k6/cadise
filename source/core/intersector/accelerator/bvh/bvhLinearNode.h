@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/tAabb.h"
+#include "math/tAabb3.h"
 
 namespace cadise {
 
@@ -9,13 +9,15 @@ public:
     BvhLinearNode();
     ~BvhLinearNode();
 
-    void initializeInternalNode(const AABB3R&     bound, 
-                                const std::size_t secondChildIndex, 
-                                const std::size_t splitAxis);
+    void initializeInternalNode(
+        const AABB3R&     bound, 
+        const std::size_t secondChildIndex, 
+        const std::size_t splitAxis);
 
-    void initializeLeafNode(const AABB3R&     bound, 
-                            const std::size_t intersectorIndex, 
-                            const std::size_t intersectorCounts);
+    void initializeLeafNode(
+        const AABB3R&     bound, 
+        const std::size_t intersectorIndex, 
+        const std::size_t intersectorCounts);
     
     // for leaf node
     std::size_t intersectorIndex() const;

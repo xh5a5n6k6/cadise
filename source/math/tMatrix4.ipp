@@ -4,12 +4,12 @@
 
 #include "fundamental/assertion.h"
 #include "math/math.h"
-#include "math/tVector.h"
+#include "math/tVector3.h"
 
 namespace cadise {
 
 template<typename T>
-inline TMatrix4<T> TMatrix4<T>::identity() {
+inline TMatrix4<T> TMatrix4<T>::makeIdentity() {
     return TMatrix4<T>(T(1), T(0), T(0), T(0),
                        T(0), T(1), T(0), T(0),
                        T(0), T(0), T(1), T(0),
@@ -17,12 +17,12 @@ inline TMatrix4<T> TMatrix4<T>::identity() {
 }
 
 template<typename T>
-inline TMatrix4<T> TMatrix4<T>::scale(const TVector<T, 3>& scaleVector) {
-    return scale(scaleVector.x(), scaleVector.y(), scaleVector.z());
+inline TMatrix4<T> TMatrix4<T>::makeScale(const TVector3<T>& scaleVector) {
+    return TMatrix4<T>::makeScale(scaleVector.x(), scaleVector.y(), scaleVector.z());
 }
 
 template<typename T>
-inline TMatrix4<T> TMatrix4<T>::scale(const T sx, const T sy, const T sz) {
+inline TMatrix4<T> TMatrix4<T>::makeScale(const T sx, const T sy, const T sz) {
     return TMatrix4<T>(  sx, T(0), T(0), T(0),
                        T(0),   sy, T(0), T(0),
                        T(0), T(0),   sz, T(0),
@@ -30,12 +30,12 @@ inline TMatrix4<T> TMatrix4<T>::scale(const T sx, const T sy, const T sz) {
 }
 
 template<typename T>
-inline TMatrix4<T> TMatrix4<T>::translate(const TVector<T, 3>& translateVector) {
-    return translate(translateVector.x(), translateVector.y(), translateVector.z());
+inline TMatrix4<T> TMatrix4<T>::makeTranslate(const TVector3<T>& translateVector) {
+    return TMatrix4<T>::makeTranslate(translateVector.x(), translateVector.y(), translateVector.z());
 }
 
 template<typename T>
-inline TMatrix4<T> TMatrix4<T>::translate(const T tx, const T ty, const T tz) {
+inline TMatrix4<T> TMatrix4<T>::makeTranslate(const T tx, const T ty, const T tz) {
     return TMatrix4<T>(T(1), T(0), T(0),   tx,
                        T(0), T(1), T(0),   ty,
                        T(0), T(0), T(1),   tz,
@@ -44,14 +44,14 @@ inline TMatrix4<T> TMatrix4<T>::translate(const T tx, const T ty, const T tz) {
 
 // Return cameraToWorld matrix
 template<typename T>
-inline TMatrix4<T> TMatrix4<T>::lookAt(
-    const TVector<T, 3>& position, 
-    const TVector<T, 3>& direction, 
-    const TVector<T, 3>& up) {
+inline TMatrix4<T> TMatrix4<T>::makeLookAt(
+    const TVector3<T>& position, 
+    const TVector3<T>& direction, 
+    const TVector3<T>& up) {
     
-    const TVector<T, 3> newZ = direction.reverse().normalize();
-    const TVector<T, 3> newX = up.cross(newZ).normalize();
-    const TVector<T, 3> newY = newZ.cross(newX);
+    const TVector3<T> newZ = direction.negate().normalize();
+    const TVector3<T> newX = up.cross(newZ).normalize();
+    const TVector3<T> newY = newZ.cross(newX);
 
     return TMatrix4<T>(newX.x(), newY.x(), newZ.x(), position.x(),
                        newX.y(), newY.y(), newZ.y(), position.y(),
@@ -62,9 +62,7 @@ inline TMatrix4<T> TMatrix4<T>::lookAt(
 template<typename T>
 inline TMatrix4<T>::TMatrix4() {
     for (std::size_t row = 0; row < 4; ++row) {
-        for (std::size_t col = 0; col < 4; ++col) {
-            _n[row][col] = T(0);
-        }
+        _n[row].fill(static_cast<T>(0));
     }
 }
 
@@ -86,6 +84,11 @@ inline TMatrix4<T>::TMatrix4(const TMatrix4<T>& other) = default;
 
 template<typename T>
 inline TMatrix4<T> TMatrix4<T>::operator * (const TMatrix4<T>& rhs) const {
+    return this->mul(rhs);
+}
+
+template<typename T>
+inline TMatrix4<T> TMatrix4<T>::mul(const TMatrix4<T>& rhs) const {
     TMatrix4<T> result;
     for (std::size_t row = 0; row < 4; ++row) {
         for (std::size_t col = 0; col < 4; ++col) {
@@ -99,7 +102,7 @@ inline TMatrix4<T> TMatrix4<T>::operator * (const TMatrix4<T>& rhs) const {
 }
 
 template<typename T>
-inline TMatrix4<T>& TMatrix4<T>::operator *= (const TMatrix4<T>& rhs) {
+inline TMatrix4<T>& TMatrix4<T>::mulLocal(const TMatrix4<T>& rhs) {
     TMatrix4<T> tmp;
     for (std::size_t row = 0; row < 4; ++row) {
         for (std::size_t col = 0; col < 4; ++col) {
@@ -115,17 +118,6 @@ inline TMatrix4<T>& TMatrix4<T>::operator *= (const TMatrix4<T>& rhs) {
 }
 
 template<typename T>
-inline TMatrix4<T>& TMatrix4<T>::operator = (const TMatrix4<T>& rhs) {
-    for (std::size_t row = 0; row < 4; ++row) {
-        for (std::size_t col = 0; col < 4; ++col) {
-            _n[row][col] = rhs._n[row][col];
-        }
-    }
-
-    return *this;
-}
-
-template<typename T>
 inline TMatrix4<T> TMatrix4<T>::transpose() const {
     return TMatrix4<T>(_n[0][0], _n[1][0], _n[2][0], _n[3][0],
                        _n[0][1], _n[1][1], _n[2][1], _n[3][1],
@@ -136,7 +128,7 @@ inline TMatrix4<T> TMatrix4<T>::transpose() const {
 template<typename T>
 inline TMatrix4<T> TMatrix4<T>::inverse() const {
     TMatrix4<T> mat = *this;
-    TMatrix4<T> inv = TMatrix4<T>::identity();
+    TMatrix4<T> inv = TMatrix4<T>::makeIdentity();
 
     // use Gauss-Jordan elimination method
     // for each column find a non-zero value to be the diagonal value
@@ -153,7 +145,7 @@ inline TMatrix4<T> TMatrix4<T>::inverse() const {
 
         if (head == 4) {
             // TODO: logging
-            return TMatrix4<T>::identity();
+            return TMatrix4<T>::makeIdentity();
         }
 
         // swap two rows, let pivot be diagonal 
@@ -177,21 +169,29 @@ inline TMatrix4<T> TMatrix4<T>::inverse() const {
 }
 
 template<typename T>
-inline void TMatrix4<T>::transformPoint(const TVector<T, 3>& p, TVector<T, 3>* const out_point) const {
+inline void TMatrix4<T>::transformPoint(
+    const TVector3<T>& point, 
+    TVector3<T>* const out_point) const {
+    
     CADISE_ASSERT(out_point);
 
-    *out_point = TVector<T, 3>(_n[0][0] * p.x() + _n[0][1] * p.y() + _n[0][2] * p.z() + _n[0][3],
-                               _n[1][0] * p.x() + _n[1][1] * p.y() + _n[1][2] * p.z() + _n[1][3],
-                               _n[2][0] * p.x() + _n[2][1] * p.y() + _n[2][2] * p.z() + _n[2][3]);
+    out_point->set(
+        _n[0][0] * point.x() + _n[0][1] * point.y() + _n[0][2] * point.z() + _n[0][3],
+        _n[1][0] * point.x() + _n[1][1] * point.y() + _n[1][2] * point.z() + _n[1][3],
+        _n[2][0] * point.x() + _n[2][1] * point.y() + _n[2][2] * point.z() + _n[2][3]);
 }
 
 template<typename T>
-inline void TMatrix4<T>::transformVector(const TVector<T, 3>& v, TVector<T, 3>* const out_vector) const {
+inline void TMatrix4<T>::transformVector(
+    const TVector3<T>& vector, 
+    TVector3<T>* const out_vector) const {
+    
     CADISE_ASSERT(out_vector);
 
-    *out_vector = TVector<T, 3>(_n[0][0] * v.x() + _n[0][1] * v.y() + _n[0][2] * v.z(),
-                                _n[1][0] * v.x() + _n[1][1] * v.y() + _n[1][2] * v.z(),
-                                _n[2][0] * v.x() + _n[2][1] * v.y() + _n[2][2] * v.z());
+    out_vector->set(
+        _n[0][0] * vector.x() + _n[0][1] * vector.y() + _n[0][2] * vector.z(),
+        _n[1][0] * vector.x() + _n[1][1] * vector.y() + _n[1][2] * vector.z(),
+        _n[2][0] * vector.x() + _n[2][1] * vector.y() + _n[2][2] * vector.z());
 }
 
 template<typename T>
@@ -200,25 +200,25 @@ inline T TMatrix4<T>::n(const std::size_t row, const std::size_t col) const {
 }
 
 template<typename T>
-inline void TMatrix4<T>::_swapRows(const std::size_t r1, const std::size_t r2) {
+inline void TMatrix4<T>::_swapRows(const std::size_t rowA, const std::size_t rowB) {
     for (std::size_t col = 0; col < 4; ++col) {
-        math::swap(_n[r1][col], _n[r2][col]);
+        math::swap(_n[rowA][col], _n[rowB][col]);
     }
 }
 
 template<typename T>
-inline void TMatrix4<T>::_divideRow(const std::size_t r, const T s) {
-    const T inverseS = T(1) / s;
+inline void TMatrix4<T>::_divideRow(const std::size_t row, const T scalar) {
+    const T rcpScalar = T(1) / scalar;
 
     for (std::size_t col = 0; col < 4; ++col) {
-        _n[r][col] *= inverseS;
+        _n[row][col] *= rcpScalar;
     }
 }
 
 template<typename T>
-inline void TMatrix4<T>::_substractRow(const std::size_t r1, const std::size_t r2, const T s) {
+inline void TMatrix4<T>::_substractRow(const std::size_t rowA, const std::size_t rowB, const T scalar) {
     for (std::size_t col = 0; col < 4; ++col) {
-        _n[r1][col] -= _n[r2][col] * s;
+        _n[rowA][col] -= _n[rowB][col] * scalar;
     }
 }
 

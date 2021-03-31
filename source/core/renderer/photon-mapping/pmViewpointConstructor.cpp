@@ -124,7 +124,7 @@ void PmViewpointConstructor::construct(
                 const real      LdotN       = L.absDot(Ns);
 
                 const Spectrum newPathThroughput 
-                    = currentSampleRay.pathThroughput() * reflectance * LdotN / pdfW;
+                    = currentSampleRay.pathThroughput().mul(reflectance).mul(LdotN / pdfW);
 
                 rayBufferStack[currentStackSize] = { Ray(P, L), newPathThroughput, currentSampleRay.depth() + 1 };
                 ++currentStackSize;
@@ -151,7 +151,7 @@ void PmViewpointConstructor::construct(
             const Spectrum& unnormalizeThroughput = (*out_viewpoints)[i].throughputImportance();
 
             (*out_viewpoints)[i].setThroughputImportance(
-                unnormalizeThroughput * realSampleViewpointCount);
+                unnormalizeThroughput.mul(realSampleViewpointCount));
         }
     }
     else {

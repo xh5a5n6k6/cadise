@@ -42,7 +42,7 @@ void EstimatorTileWork::work() const {
 
             for (std::size_t in = 0; in < sampleSampler->sampleNumber(); ++in) {
                 const Vector2R filmJitterPosition 
-                    = Vector2I(ix, iy).asType<real>() + sample2D->nextSample();
+                    = Vector2I(ix, iy).asType<real>().add(sample2D->nextSample());
 
                 Ray primaryRay;
                 _camera->spawnPrimaryRay(filmJitterPosition.asType<float64>(), &primaryRay);

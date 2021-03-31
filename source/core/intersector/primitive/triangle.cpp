@@ -6,9 +6,10 @@
 #include "core/surfaceDetail.h"
 #include "core/texture/mapper/textureMapper.h"
 #include "fundamental/assertion.h"
-#include "math/tAabb.h"
 #include "math/constant.h"
 #include "math/random.h"
+#include "math/tAabb3.h"
+#include "math/tVector2.h"
 #include "math/warp/sampleWarp.h"
 
 namespace cadise {
@@ -26,8 +27,8 @@ Triangle::Triangle(
 
     CADISE_ASSERT(bsdf);
 
-    _eAB = _vB - _vA;
-    _eAC = _vC - _vA;
+    _eAB = _vB.sub(_vA);
+    _eAC = _vC.sub(_vA);
 
     // TODO: refactor here
     Vector3R N = _eAB.cross(_eAC);
@@ -46,9 +47,9 @@ void Triangle::evaluateBound(AABB3R* const out_bound) const {
     CADISE_ASSERT(out_bound);
 
     AABB3R bound(_vA);
-    bound.unionWith(_vB).unionWith(_vC).expand(0.0001_r);
+    bound.unionWithLocal(_vB).unionWithLocal(_vC).expandLocal(0.0001_r);
 
-    *out_bound = bound;
+    out_bound->set(bound);
 }
 
 bool Triangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
@@ -60,7 +61,7 @@ bool Triangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
         eAB.swap(eAC);
     }
 
-    const Vector3R T = ray.origin() - _vA;
+    const Vector3R T = ray.origin().sub(_vA);
     const Vector3R Q = T.cross(eAB);
     const Vector3R P = D.cross(eAC);
 
@@ -69,10 +70,10 @@ bool Triangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
         return false;
     }
 
-    const real invDenominator = 1.0_r / denominator;
-    const real t = Q.dot(eAC) * invDenominator;
-    const real u = P.dot(T) * invDenominator;
-    const real v = Q.dot(D) * invDenominator;
+    const real mulFactor = 1.0_r / denominator;
+    const real t         = Q.dot(eAC) * mulFactor;
+    const real u         = P.dot(T) * mulFactor;
+    const real v         = Q.dot(D) * mulFactor;
 
     if (u < 0.0_r || v < 0.0_r || u + v > 1.0_r) {
         return false;
@@ -97,7 +98,7 @@ bool Triangle::isOccluded(const Ray& ray) const {
         eAB.swap(eAC);
     }
 
-    const Vector3R T = ray.origin() - _vA;
+    const Vector3R T = ray.origin().sub(_vA);
     const Vector3R Q = T.cross(eAB);
     const Vector3R P = D.cross(eAC);
 
@@ -106,10 +107,10 @@ bool Triangle::isOccluded(const Ray& ray) const {
         return false;
     }
 
-    const real invDenominator = 1.0_r / denominator;
-    const real t = Q.dot(eAC) * invDenominator;
-    const real u = P.dot(T) * invDenominator;
-    const real v = Q.dot(D) * invDenominator;
+    const real mulFactor = 1.0_r / denominator;
+    const real t         = Q.dot(eAC) * mulFactor;
+    const real u         = P.dot(T) * mulFactor;
+    const real v         = Q.dot(D) * mulFactor;
 
     if (u < 0.0_r || v < 0.0_r || u + v > 1.0_r) {
         return false;
@@ -143,9 +144,9 @@ void Triangle::evaluateSurfaceDetail(
         Ng = (Ng.isZero()) ? Vector3R(0.0_r, 1.0_r, 0.0_r) : Ng.normalize();
 
         // Ns
-        Ns = barycentric.x() * _nA +
-             barycentric.y() * _nB +
-             barycentric.z() * _nC;
+        Ns = _nA.mul(barycentric.x()).add(
+             _nB.mul(barycentric.y())).add(
+             _nC.mul(barycentric.z()));
 
         Ns = (Ns.isZero()) ? Ng : Ns.normalize();
 
@@ -154,9 +155,9 @@ void Triangle::evaluateSurfaceDetail(
             _textureMapper->mappingToUvw(Ng, &uvw);
         }
         else {
-            uvw = barycentric.x() * _uvwA +
-                  barycentric.y() * _uvwB +
-                  barycentric.z() * _uvwC;
+            uvw = _uvwA.mul(barycentric.x()).add(
+                  _uvwB.mul(barycentric.y())).add(
+                  _uvwC.mul(barycentric.z()));
         }
     }
 
@@ -180,17 +181,17 @@ void Triangle::evaluateSurfaceDetail(
 
         const real determinant = dUVab[0] * dUVac[1] - dUVab[1] * dUVac[0];
         if (determinant != 0.0_r) {
-            const real inverseDeterminant = 1.0_r / determinant;
+            const real rcpDeterminant = 1.0_r / determinant;
 
             const Vector3R dPab = _eAB;
             const Vector3R dPac = _eAC;
-            const Vector3R dNab = _nB - _nA;
-            const Vector3R dNac = _nC - _nA;
+            const Vector3R dNab = _nB.sub(_nA);
+            const Vector3R dNac = _nC.sub(_nA);
 
-            dPdU = Vector3R( dUVac[1] * dPab - dUVab[1] * dPac) * inverseDeterminant;
-            dPdV = Vector3R(-dUVac[0] * dPab + dUVab[0] * dPac) * inverseDeterminant;
-            dNdU = Vector3R( dUVac[1] * dNab - dUVab[1] * dNac) * inverseDeterminant;
-            dNdV = Vector3R(-dUVac[0] * dNab + dUVab[0] * dNac) * inverseDeterminant;
+            dPdU = dPab.mul( dUVac[1]).sub(dPac.mul(dUVab[1])).mul(rcpDeterminant);
+            dPdV = dPab.mul(-dUVac[0]).add(dPac.mul(dUVab[0])).mul(rcpDeterminant);
+            dNdU = dNab.mul( dUVac[1]).sub(dNac.mul(dUVab[1])).mul(rcpDeterminant);
+            dNdV = dNab.mul(-dUVac[0]).add(dNac.mul(dUVab[0])).mul(rcpDeterminant);
         }
     }
 
@@ -200,13 +201,13 @@ void Triangle::evaluateSurfaceDetail(
 void Triangle::evaluatePositionSample(PositionSample* const out_sample) const {
     CADISE_ASSERT(out_sample);
 
-    const Vector2R sample(Random::nextReal(), Random::nextReal());
+    const std::array<real, 2> sample = { Random::nextReal(), Random::nextReal() };
     Vector2R sampleSt;
     SampleWarp::uniformTriangleUv(sample, &sampleSt);
 
     const Vector3R eAB = _eAB;
     const Vector3R eAC = _eAC;
-    const Vector3R P   = _vA + sampleSt[0] * eAB + sampleSt[1] * eAC;
+    const Vector3R P   = _vA.add(eAB.mul(sampleSt[0])).add(eAC.mul(sampleSt[1]));
 
     Vector3R barycentric;
     _positionToBarycentric(P, &barycentric);
@@ -214,14 +215,14 @@ void Triangle::evaluatePositionSample(PositionSample* const out_sample) const {
     Vector3R Ng = eAB.cross(eAC);
     Ng = (Ng.isZero()) ? Vector3R(0.0_r, 1.0_r, 0.0_r) : Ng.normalize();
 
-    Vector3R Ns = barycentric.x() * _nA +
-                  barycentric.y() * _nB +
-                  barycentric.z() * _nC;
+    Vector3R Ns = _nA.mul(barycentric.x()).add(
+                  _nB.mul(barycentric.y())).add(
+                  _nC.mul(barycentric.z()));
     Ns = (Ns.isZero()) ? Ng : Ns;
 
-    const Vector3R uvw = barycentric.x() * _uvwA +
-                         barycentric.y() * _uvwB +
-                         barycentric.z() * _uvwC;
+    const Vector3R uvw = _uvwA.mul(barycentric.x()).add(
+                         _uvwB.mul(barycentric.y())).add(
+                         _uvwC.mul(barycentric.z()));
 
     out_sample->setPosition(P);
     out_sample->setGeometryNormal(Ng);
@@ -274,9 +275,9 @@ void Triangle::_positionToBarycentric(
     
     CADISE_ASSERT(out_barycentric);
 
-    const Vector3R v0 = _vB - _vA;
-    const Vector3R v1 = _vC - _vA;
-    const Vector3R v2 = position - _vA;
+    const Vector3R v0 = _eAB;
+    const Vector3R v1 = _eAC;
+    const Vector3R v2 = position.sub(_vA);
 
     const real d00 = v0.dot(v0);
     const real d01 = v0.dot(v1);
@@ -286,16 +287,18 @@ void Triangle::_positionToBarycentric(
     const real denominator = d00 * d11 - d01 * d01;
 
     if (denominator == 0.0_r) {
-        *out_barycentric = Vector3R(0.0_r, 0.0_r, 0.0_r);
+        out_barycentric->set(0.0_r);
     }
     else {
-        const real inverseDenominator = 1.0_r / denominator;
-        const real u = ( d11 * d20 - d01 * d21) * inverseDenominator;
-        const real v = (-d01 * d20 + d00 * d21) * inverseDenominator;
+        const real mulFactor = 1.0_r / denominator;
+        
+        const real u = ( d11 * d20 - d01 * d21) * mulFactor;
+        const real v = (-d01 * d20 + d00 * d21) * mulFactor;
 
-        *out_barycentric = Vector3R(1.0_r - u - v, 
-                                    u, 
-                                    v);
+        out_barycentric->set(
+            1.0_r - u - v, 
+            u, 
+            v);
     }
 }
 

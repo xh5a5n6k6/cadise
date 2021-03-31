@@ -1,7 +1,7 @@
 #pragma once
 
 #include "core/intersector/accelerator/kd-tree/tKdTreeNode.h"
-#include "math/tAabb.h"
+#include "math/tAabb3.h"
 
 #include <tuple>
 #include <vector>

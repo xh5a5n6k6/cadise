@@ -66,13 +66,13 @@ void SpecularDielectric::evaluateSample(
 
     if (canReflection) {
         const real     NFactor = (VdotN > 0.0_r) ? 1.0_r : -1.0_r;
-        const Vector3R L       = V.reflect(Ns * NFactor);
+        const Vector3R L       = V.reflect(Ns.mul(NFactor));
         const real     LdotN   = L.absDot(Ns);
 
         Spectrum sampleAlbedo;
         TSurfaceSampler<Spectrum>().sample(si, _albedo.get(), &sampleAlbedo);
 
-        scatterValue     = sampleAlbedo * reflectance / LdotN;
+        scatterValue     = sampleAlbedo.mul(reflectance).div(LdotN);
         scatterDirection = L;
 
         if (info.components() == BSDF_ALL_COMPONENTS) {
@@ -107,7 +107,7 @@ void SpecularDielectric::evaluateSample(
         Spectrum sampleAlbedo;
         TSurfaceSampler<Spectrum>().sample(si, _albedo.get(), &sampleAlbedo);
 
-        scatterValue     = sampleAlbedo * transmittance * btdfFactor / LdotN;
+        scatterValue     = sampleAlbedo.mul(transmittance).mul(btdfFactor / LdotN);
         scatterDirection = L;
 
         if (info.components() == BSDF_ALL_COMPONENTS) {

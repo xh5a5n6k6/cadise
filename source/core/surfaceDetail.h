@@ -2,7 +2,7 @@
 
 #include "core/intersector/differentialGeometry.h"
 #include "math/tLocalCoordinateSystem3.h"
-#include "math/tVector.h"
+#include "math/tVector3.h"
 
 namespace cadise {
 

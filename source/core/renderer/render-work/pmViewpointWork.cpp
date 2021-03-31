@@ -36,7 +36,7 @@ void PmViewpointWork::work() const {
 
             for (std::size_t in = 0; in < sampleSampler->sampleNumber(); ++in) {
                 const Vector2R filmJitterPosition
-                    = Vector2I(ix, iy).asType<real>() + sample2D->nextSample();
+                    = Vector2I(ix, iy).asType<real>().add(sample2D->nextSample());
 
                 _viewpointConstructor->construct(
                     filmJitterPosition.asType<float64>(), 

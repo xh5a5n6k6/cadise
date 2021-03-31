@@ -48,7 +48,7 @@ void BdptTileWork::work() const {
 
             for (std::size_t in = 0; in < sampleSampler->sampleNumber(); ++in) {
                 const Vector2R filmJitterPosition 
-                    = Vector2I(ix, iy).asType<real>() + sample2D->nextSample();
+                    = Vector2I(ix, iy).asType<real>().add(sample2D->nextSample());
 
                 Spectrum accumulatedRadiance(0.0_r);
 
@@ -63,7 +63,7 @@ void BdptTileWork::work() const {
                 subPathBuilder.buildCameraPath(
                     *_scene, filmJitterPosition.asType<float64>(), &cameraPath, &zeroBounceRadiance);
 
-                accumulatedRadiance += zeroBounceRadiance;
+                accumulatedRadiance.addLocal(zeroBounceRadiance);
 
                 // step3: light sub-path connects to camera (t=1 situation)
                 std::vector<ConnectEvent> connectEvents;
@@ -74,7 +74,7 @@ void BdptTileWork::work() const {
                 Spectrum neeRadiance(0.0_r);
                 cameraPath.connectLight(*_scene, &neeRadiance);
 
-                accumulatedRadiance += neeRadiance;
+                accumulatedRadiance.addLocal(neeRadiance);
 
                 // it means number of vertices, rather than edges, of the subpath
                 const std::size_t lightPathLength  = lightPath.length();
@@ -86,7 +86,7 @@ void BdptTileWork::work() const {
                         Spectrum connectRadiance(0.0_r);
                         subPathConnector.connect(*_scene, lightPath, cameraPath, s, t, &connectRadiance);
 
-                        accumulatedRadiance += connectRadiance;
+                        accumulatedRadiance.addLocal(connectRadiance);
                     }
                 }
 

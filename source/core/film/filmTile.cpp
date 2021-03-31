@@ -2,7 +2,7 @@
 
 #include "core/film/filter/filter.h"
 #include "fundamental/assertion.h"
-#include "math/tVector.h"
+#include "math/tVector3.h"
 
 namespace cadise {
 
@@ -15,28 +15,29 @@ FilmTile::FilmTile(const AABB2I& tileBound, const Filter* const filter) :
     CADISE_ASSERT(filter);
 
     const std::size_t sensorSize = static_cast<std::size_t>(_resolution.x() * _resolution.y());
-    setSensorSize(sensorSize);
+    
+    this->setSensorSize(sensorSize);
 }
 
-void FilmTile::addSample(const Vector2R& filmPosition, const Spectrum& sampleSpectrum) {
+void FilmTile::addSample(const Vector2R& filmPosition, const Spectrum& value) {
     // TODO: do this check
     //CADISE_ASSERT(sampleSpectrum.hasNaN());
     //CADISE_ASSERT(sampleSpectrum.hasInfinite());
 
-    if (sampleSpectrum.hasNaN() || sampleSpectrum.hasInfinite()) {
+    if (value.hasNaN() || value.hasInfinite()) {
         return;
     }
 
-    Vector3R rgb;
-    sampleSpectrum.transformToRgb(&rgb);
+    Vector3R linearSrgb;
+    value.transformToLinearSrgb(&linearSrgb);
     
-    this->addSample(filmPosition, rgb);
+    this->addSample(filmPosition, linearSrgb);
 }
 
-void FilmTile::addSample(const Vector2R& filmPosition, const Vector3R& sampleRgb) {
+void FilmTile::addSample(const Vector2R& filmPosition, const Vector3R& value) {
     // calculate filter bound for given film position
-    Vector2R filmMinPosition = filmPosition - _filter->filterHalfSize();
-    Vector2R filmMaxPosition = filmPosition + _filter->filterHalfSize();
+    Vector2R filmMinPosition = filmPosition.sub(_filter->filterHalfSize());
+    Vector2R filmMaxPosition = filmPosition.add(_filter->filterHalfSize());
 
     filmMinPosition = Vector2R::max(filmMinPosition, _tileBound.minVertex().asType<real>());
     filmMaxPosition = Vector2R::min(filmMaxPosition, _tileBound.maxVertex().asType<real>());
@@ -59,7 +60,7 @@ void FilmTile::addSample(const Vector2R& filmPosition, const Vector3R& sampleRgb
 
             const real filterWeight = _filter->evaluate(x, y);
 
-            _sensors[sensorIndexOffset].addValue(sampleRgb * filterWeight);
+            _sensors[sensorIndexOffset].addValue(value.mul(filterWeight));
             _sensors[sensorIndexOffset].addWeight(filterWeight);
         }
     }

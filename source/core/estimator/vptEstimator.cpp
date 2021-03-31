@@ -46,10 +46,10 @@ void VptEstimator::estimate(
         const Vector3R& P  = intersection.surfaceDetail().position();
         const Vector3R& Ns = intersection.surfaceDetail().shadingNormal();
 
-        const AreaLight* areaLight = primitive->areaLight();
-        if (areaLight) {
-            const Spectrum emittance = areaLight->emittance(intersection);
-            totalRadiance += pathThroughput * emittance;
+        if (primitive->areaLight()) {
+            const Spectrum emittance = primitive->areaLight()->emittance(intersection);
+
+            totalRadiance.addLocal(pathThroughput.mul(emittance));
         }
 
         BsdfSample bsdfSample;
@@ -63,7 +63,7 @@ void VptEstimator::estimate(
         const real      pdfW        = bsdfSample.pdfW();
         const real      LdotN       = L.absDot(Ns);
 
-        pathThroughput *= reflectance * LdotN / pdfW;
+        pathThroughput.mulLocal(reflectance.mul(LdotN / pdfW));
 
         // use russian roulette to decide if the ray needs to be kept tracking
         if (bounceTimes > 2) {
@@ -84,7 +84,7 @@ void VptEstimator::estimate(
         traceRay.setDirection(L);
     }
     
-    *out_radiance = totalRadiance;
+    out_radiance->set(totalRadiance);
 }
 
 } // namespace cadise

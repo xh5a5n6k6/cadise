@@ -12,10 +12,11 @@ BvhBinaryNode::~BvhBinaryNode() {
     _children[1].release();
 }
 
-void BvhBinaryNode::initializeInternalNode(const AABB3R&                  bound,
-                                           std::unique_ptr<BvhBinaryNode> firstChild, 
-                                           std::unique_ptr<BvhBinaryNode> secondChild, 
-                                           const std::size_t              splitAxis) {
+void BvhBinaryNode::initializeInternalNode(
+    const AABB3R&                  bound,
+    std::unique_ptr<BvhBinaryNode> firstChild, 
+    std::unique_ptr<BvhBinaryNode> secondChild, 
+    const std::size_t              splitAxis) {
 
     _bound       = bound;
     _children[0] = std::move(firstChild);
@@ -24,9 +25,10 @@ void BvhBinaryNode::initializeInternalNode(const AABB3R&                  bound,
     _isLeaf      = false;
 }
 
-void BvhBinaryNode::initializeLeafNode(const AABB3R&     bound, 
-                                       const std::size_t intersectorIndex, 
-                                       const std::size_t intersectorCounts) {
+void BvhBinaryNode::initializeLeafNode(
+    const AABB3R&     bound, 
+    const std::size_t intersectorIndex, 
+    const std::size_t intersectorCounts) {
 
     _bound             = bound;
     _intersectorIndex  = intersectorIndex;

@@ -6,9 +6,9 @@
 #include "core/surfaceDetail.h"
 #include "core/texture/mapper/sphericalMapper.h"
 #include "fundamental/assertion.h"
-#include "math/tAabb.h"
 #include "math/constant.h"
 #include "math/random.h"
+#include "math/tAabb3.h"
 #include "math/transform.h"
 
 #include <cmath>
@@ -26,17 +26,17 @@ Sphere::Sphere(
 
     CADISE_ASSERT(bsdf);
 
-    _worldToLocal     = std::make_shared<Transform>(Matrix4R::translate(center.reverse()));
+    _worldToLocal     = std::make_shared<Transform>(Matrix4R::makeTranslate(center.negate()));
     _tmptextureMapper = std::make_shared<SphericalMapper>();
 }
 
 void Sphere::evaluateBound(AABB3R* const out_bound) const {
     CADISE_ASSERT(out_bound);
 
-    AABB3R bound(_center - _radius, _center + _radius);
-    bound.expand(0.0001_r);
+    AABB3R bound(_center.sub(_radius), _center.add(_radius));
+    bound.expandLocal(0.0001_r);
 
-    *out_bound = bound;
+    out_bound->set(bound);
 }
 
 bool Sphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
@@ -48,12 +48,12 @@ bool Sphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
     */
     const Vector3R& O = ray.origin();
     const Vector3R  G = _center;
-    const Vector3R  f = O - G;
+    const Vector3R  f = O.sub(G);
     const Vector3R& d = ray.direction();
-    const real      b = -f.dot(d);
+    const real      b = f.negate().dot(d);
     const real      r = _radius;
 
-    const Vector3R l = f + b * d;
+    const Vector3R l = f.add(d.mul(b));
     const real discriminant = r * r - l.absDot(l);
     if (discriminant < 0.0_r) {
         return false;
@@ -80,12 +80,12 @@ bool Sphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
 bool Sphere::isOccluded(const Ray& ray) const {
     const Vector3R& O = ray.origin();
     const Vector3R  G = _center;
-    const Vector3R  f = O - G;
+    const Vector3R  f = O.sub(G);
     const Vector3R& d = ray.direction();
-    const real      b = -f.dot(d);
+    const real      b = f.negate().dot(d);
     const real      r = _radius;
 
-    const Vector3R l = f + b * d;
+    const Vector3R l = f.add(d.mul(b));
     const real discriminant = r * r - l.absDot(l);
     if (discriminant < 0.0_r) {
         return false;
@@ -113,7 +113,7 @@ void Sphere::evaluateSurfaceDetail(
     CADISE_ASSERT(out_surface);
 
     const Vector3R& P       = out_surface->position();
-    const Vector3R  NVector = P - _center;
+    const Vector3R  NVector = P.sub(_center);
     const Vector3R  N       = NVector.normalize();
 
     out_surface->setGeometryNormal(N);
@@ -150,25 +150,25 @@ void Sphere::evaluateSurfaceDetail(
             0.0_r,
             -1.0_r * constant::two_pi<real> * NVector.x());
 
-        dPdV = constant::pi<real> * Vector3R(
+        dPdV = Vector3R(
             -1.0_r * NVector.y() * sinPhi,
             rSinTheta,
-            -1.0_r * NVector.y() * cosPhi);
+            -1.0_r * NVector.y() * cosPhi).mul(constant::pi<real>);
 
-        const Vector3R d2PdUU = -1.0_r * constant::two_pi<real> * constant::two_pi<real> * Vector3R(
+        const Vector3R d2PdUU = Vector3R(
             NVector.x(),
             0.0_r,
-            NVector.z());
+            NVector.z()).mul(-1.0_r * constant::two_pi<real> * constant::two_pi<real>);
 
-        const Vector3R d2PdUV = constant::pi<real> * NVector.y() * constant::two_pi<real> * Vector3R(
+        const Vector3R d2PdUV = Vector3R(
             -cosPhi,
             0.0_r,
-            sinPhi);
+            sinPhi).mul(constant::pi<real> * NVector.y() * constant::two_pi<real>);
 
-        const Vector3R d2PdVV = -1.0_r * constant::pi<real> * constant::pi<real> * Vector3R(
+        const Vector3R d2PdVV = Vector3R(
             NVector.x(),
             NVector.y(),
-            NVector.z());
+            NVector.z()).mul(-1.0_r * constant::pi<real> * constant::pi<real>);
 
         const real E = dPdU.dot(dPdU);
         const real F = dPdU.dot(dPdV);
@@ -180,10 +180,10 @@ void Sphere::evaluateSurfaceDetail(
         const real EGsubF2     = E * G - F * F;
         const real inverseEGF2 = (EGsubF2 != 0.0_r) ? 1.0_r / EGsubF2 : 1.0_r;
 
-        dNdU = (f * F - e * G) * inverseEGF2 * dPdU +
-               (e * F - f * E) * inverseEGF2 * dPdV;
-        dNdV = (g * F - f * G) * inverseEGF2 * dPdU +
-               (f * F - g * E) * inverseEGF2 * dPdV;
+        dNdU = dPdU.mul((f * F - e * G) * inverseEGF2).add(
+               dPdV.mul((e * F - f * E) * inverseEGF2));
+        dNdV = dPdU.mul((g * F - f * G) * inverseEGF2).add(
+               dPdV.mul((f * F - g * E) * inverseEGF2));
     }
 
     out_surface->setDifferentialGeometry({ dPdU, dPdV, dNdU, dNdV });

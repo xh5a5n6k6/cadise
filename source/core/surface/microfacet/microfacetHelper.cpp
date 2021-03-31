@@ -2,7 +2,7 @@
 
 #include "fundamental/assertion.h"
 #include "math/math.h"
-#include "math/tVector.h"
+#include "math/tVector3.h"
 
 namespace cadise {
 
@@ -14,7 +14,7 @@ bool MicrofacetHelper::canMakeReflectionH(
 
     CADISE_ASSERT(out_H);
 
-    const Vector3R HVector = V + L;
+    const Vector3R HVector = V.add(L);
     if (HVector.isZero()) {
         return false;
     }
@@ -23,11 +23,11 @@ bool MicrofacetHelper::canMakeReflectionH(
     const Vector3R H = HVector.normalize();
     switch (math::sign(H.dot(N))) {
         case constant::SIGN_POSITIVE:
-            *out_H = H;
+            out_H->set(H);
             return true;
 
         case constant::SIGN_NEGATIVE:
-            *out_H = -H;
+            out_H->set(H.negate());
             return true;
 
         case constant::SIGN_ZERO:
