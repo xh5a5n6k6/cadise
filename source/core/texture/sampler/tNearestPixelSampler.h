@@ -18,6 +18,7 @@ public:
         Reference Note:
         https://stackoverflow.com/questions/6592512/templates-parent-class-member-variables-not-visible-in-inherited-class
     */
+    using Parent::_image;
     using Parent::_uvwWrapper;
 
     void sample(
