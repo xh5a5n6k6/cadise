@@ -11,7 +11,7 @@ public:
     using Parent::Parent;
     
     /*
-        When it needs to use template parent's attribute, it need to tell 
+        When it needs to use template parent's attribute, it needs to tell 
         the compiler explicitly that the names are in fact dependent on 
         the instantiation of the parent.
 

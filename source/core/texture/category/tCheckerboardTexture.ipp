@@ -3,6 +3,7 @@
 #include "core/texture/category/tCheckerboardTexture.h"
 
 #include "fundamental/assertion.h"
+#include "math/tVector3.h"
 
 #include <cmath>
 
