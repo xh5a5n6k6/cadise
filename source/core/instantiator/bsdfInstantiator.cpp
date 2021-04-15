@@ -3,6 +3,7 @@
 // bsdf type
 #include "core/surface/bsdf/absorberBsdf.h"
 #include "core/surface/bsdf/conductorMicrofacet.h"
+#include "core/surface/bsdf/dielectricMicrofacet.h"
 #include "core/surface/bsdf/phongBsdf.h"
 #include "core/surface/bsdf/lambertianDiffuse.h"
 #include "core/surface/bsdf/mixedBsdf.h"
@@ -180,6 +181,51 @@ static std::shared_ptr<Bsdf> createConductorMicrofacet(
     return std::make_shared<ConductorMicrofacet>(microfacet, fresnel);
 }
 
+static std::shared_ptr<Bsdf> createDielectricMicrofacet(
+    const std::shared_ptr<SdData>&          data,
+    const StringKeyMap<TTexture<real>>&     realTextures,
+    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures) {
+
+    const auto microfacetType = data->findString("microfacet-type", "ggx");
+    const auto fresnelType    = data->findString("fresnel-type", "vanilla");
+    const auto roughness      = data->getRealTexture("roughness", realTextures);
+    const auto roughnessU     = data->getRealTexture("roughness-u", realTextures);
+    const auto roughnessV     = data->getRealTexture("roughness-v", realTextures);
+
+    std::shared_ptr<Microfacet> microfacet = nullptr;
+    if (microfacetType == "beckmann") {
+        microfacet = std::make_shared<IsotropicBeckmann>(roughness);
+    }
+    else if (microfacetType == "ggx") {
+        microfacet = std::make_shared<IsotropicGgx>(roughness);
+    }
+    else if (microfacetType == "blinn-phong") {
+        microfacet = std::make_shared<IsotropicBlinnPhong>(roughness);
+    }
+    else if (microfacetType == "anisotropic-ggx") {
+        microfacet = std::make_shared<AnisotropicGgx>(roughnessU, roughnessV);
+    }
+    else {
+        microfacet = std::make_shared<IsotropicGgx>(roughness);
+    }
+
+    std::shared_ptr<DielectricFresnel> fresnel = nullptr;
+    if (fresnelType == "vanilla") {
+        const real iorOuter = data->findReal("ior-outer", 1.0_r);
+        const real iorInner = data->findReal("ior-inner", 1.5_r);
+
+        fresnel = std::make_shared<VanillaDielectricFresnel>(iorOuter, iorInner);
+    }
+    else {
+        const real iorOuter = data->findReal("ior-outer", 1.0_r);
+        const real iorInner = data->findReal("ior-inner", 1.5_r);
+
+        fresnel = std::make_shared<VanillaDielectricFresnel>(iorOuter, iorInner);
+    }
+
+    return std::make_shared<DielectricMicrofacet>(microfacet, fresnel);
+}
+
 std::shared_ptr<Bsdf> makeBsdf(
     const std::shared_ptr<SdData>&          data,
     const StringKeyMap<TTexture<real>>&     realTextures,
@@ -214,6 +260,9 @@ std::shared_ptr<Bsdf> makeBsdf(
     }
     else if (type == "conductor-microfacet") {
         bsdf = createConductorMicrofacet(data, realTextures, spectrumTextures);
+    }
+    else if (type == "dielectric-microfacet") {
+        bsdf = createDielectricMicrofacet(data, realTextures, spectrumTextures);
     }
     else if (type == "absorb") {
         bsdf = std::make_shared<AbsorberBsdf>();

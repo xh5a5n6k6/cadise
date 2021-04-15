@@ -63,23 +63,23 @@ void ConductorMicrofacet::evaluateSample(
 
     CADISE_ASSERT(out_sample);
 
-    const Vector3R& Ns      = si.surfaceDetail().shadingNormal();
-    const Vector3R& V       = si.wi();
-    const real      NFactor = (V.dot(Ns) > 0.0_r) ? 1.0_r : -1.0_r;
+    const Vector3R& Ns    = si.surfaceDetail().shadingNormal();
+    const Vector3R& V     = si.wi();
+    const real      VdotN = V.dot(Ns);
 
     const std::array<real, 2> sample = { Random::nextReal(), Random::nextReal() };
     Vector3R H;
     _microfacet->sampleHalfVectorH(si, sample, &H);
 
-    const Vector3R L = V.reflect(H.mul(NFactor));
-
-    const real VdotN = V.dot(Ns);
-    const real LdotN = L.dot(Ns);
-    const real LdotH = L.dot(H);
-    const real NdotH = Ns.dot(H);
+    const real     NSign = static_cast<real>(math::sign(VdotN));
+    const Vector3R L     = V.reflect(H.mul(NSign));
+    const real     LdotN = L.dot(Ns);
     if (VdotN * LdotN <= 0.0_r) {
         return;
     }
+
+    const real LdotH = L.dot(H);
+    const real NdotH = Ns.dot(H);
 
     Spectrum F;
     _fresnel->evaluateReflectance(LdotH, &F);

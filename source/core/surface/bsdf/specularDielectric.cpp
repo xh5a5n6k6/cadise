@@ -39,6 +39,12 @@ void SpecularDielectric::evaluateSample(
 
     CADISE_ASSERT(out_sample);
 
+    bool canReflection = (info.components() == BSDF_ALL_COMPONENTS) || (info.components() == 0);
+    bool canRefraction = (info.components() == BSDF_ALL_COMPONENTS) || (info.components() == 1);
+    if (!canReflection && !canRefraction) {
+        return;
+    }
+
     const Vector3R& Ns    = si.surfaceDetail().shadingNormal();
     const Vector3R& V     = si.wi();
     const real      VdotN = V.dot(Ns);
@@ -46,12 +52,10 @@ void SpecularDielectric::evaluateSample(
     Spectrum reflectance;
     _fresnel->evaluateReflectance(VdotN, &reflectance);
     const real reflectionProbability = reflectance.average();
-    const real sampleProbability     = Random::nextReal();
     
-    bool canReflection = (info.components() == BSDF_ALL_COMPONENTS) || (info.components() == 0);
-    bool canRefraction = (info.components() == BSDF_ALL_COMPONENTS) || (info.components() == 1);
-
     if (canReflection && canRefraction) {
+        const real sampleProbability = Random::nextReal();
+
         if (sampleProbability < reflectionProbability) {
             canRefraction = false;
         }
@@ -60,14 +64,19 @@ void SpecularDielectric::evaluateSample(
         }
     }
 
+    CADISE_ASSERT(canReflection || canRefraction);
+
     real     scatterPdfW = 1.0_r;
     Vector3R scatterDirection(0.0_r);
     Spectrum scatterValue(0.0_r);
 
     if (canReflection) {
-        const real     NFactor = (VdotN > 0.0_r) ? 1.0_r : -1.0_r;
-        const Vector3R L       = V.reflect(Ns.mul(NFactor));
-        const real     LdotN   = L.absDot(Ns);
+        const real     NSign = static_cast<real>(VdotN);
+        const Vector3R L     = V.reflect(Ns.mul(NSign));
+        const real     LdotN = L.absDot(Ns);
+        if (VdotN * LdotN <= 0.0_r) {
+            return;
+        }
 
         Spectrum sampleAlbedo;
         TSurfaceSampler<Spectrum>().sample(si, _albedo.get(), &sampleAlbedo);
@@ -79,7 +88,7 @@ void SpecularDielectric::evaluateSample(
             scatterPdfW = reflectionProbability;
         }
     }
-    else if (canRefraction) {
+    else {
         real etaI = _fresnel->iorOuter();
         real etaT = _fresnel->iorInner();
         
@@ -113,10 +122,6 @@ void SpecularDielectric::evaluateSample(
         if (info.components() == BSDF_ALL_COMPONENTS) {
             scatterPdfW = 1.0_r - reflectionProbability;
         }
-    }
-    else {
-        // something wrong
-        CADISE_ASSERT(false);
     }
 
     out_sample->setScatterValue(scatterValue);

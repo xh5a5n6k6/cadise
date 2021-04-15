@@ -20,8 +20,9 @@ void VanillaDielectricFresnel::evaluateReflectance(
     
     CADISE_ASSERT(out_reflectance);
 
-    real etaI = iorOuter();
-    real etaT = iorInner();
+    real etaI = this->iorOuter();
+    real etaT = this->iorInner();
+
     real cosI = cosThetaI;
     if (cosI < 0.0_r) {
         math::swap(etaI, etaT);
@@ -33,7 +34,7 @@ void VanillaDielectricFresnel::evaluateReflectance(
 
     // handle TIR condition
     if (sinT2 >= 1.0_r) {
-        *out_reflectance = Spectrum(1.0_r);
+        out_reflectance->set(1.0_r);
 
         return;
     }
@@ -44,7 +45,7 @@ void VanillaDielectricFresnel::evaluateReflectance(
     const real rPerpendicular = (etaI * cosI - etaT * cosT) / (etaI * cosI + etaT * cosT);
     const real rTotal         = 0.5_r * (rParallel * rParallel + rPerpendicular * rPerpendicular);
 
-    *out_reflectance = Spectrum(rTotal);
+    out_reflectance->set(rTotal);
 }
 
 } // namespace cadise

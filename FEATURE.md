@@ -21,7 +21,7 @@
     - Specular Dielectric
     - Modified Phong
     - Mixed
-    - Microfacet (conductor)
+    - Microfacet (conductor, dielectric)
         - isotropic NDF: Beckmann, GGX, Blinn-Phong
         - anisotropic NDF: GGX
 - ### Primitive
