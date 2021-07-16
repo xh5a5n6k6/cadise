@@ -23,5 +23,6 @@ bld/
 # cmake related
 [Bb]uild/
 
-# Visual Studio Cache/Options Directory
+# VS & VS Code Cache/Options Directory
 .vs/
+.vscode/
