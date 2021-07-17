@@ -72,7 +72,7 @@ static std::shared_ptr<Bsdf> createSpecularTransmission(
 
     const auto albedo   = data->getSpectrumTexture("albedo", spectrumTextures);
     const real iorOuter = data->findReal("ior-outer", 1.0_r);
-    const real iorInner = data->findReal("ior-inner", 1.0_r);
+    const real iorInner = data->findReal("ior-inner", 1.5_r);
     
     const auto fresnel = std::make_shared<VanillaDielectricFresnel>(iorOuter, iorInner);
     
