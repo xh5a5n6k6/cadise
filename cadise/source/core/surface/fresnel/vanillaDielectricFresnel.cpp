@@ -1,9 +1,9 @@
 #include "core/surface/fresnel/vanillaDielectricFresnel.h"
 
 #include "fundamental/assertion.h"
-#include "math/math.h"
 
 #include <algorithm>
+#include <utility>
 
 namespace cadise {
 
@@ -25,7 +25,7 @@ void VanillaDielectricFresnel::evaluateReflectance(
 
     real cosI = cosThetaI;
     if (cosI < 0.0_r) {
-        math::swap(etaI, etaT);
+        std::swap(etaI, etaT);
         cosI *= -1.0_r;
     }
 

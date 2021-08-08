@@ -3,7 +3,6 @@
 #include "math/tAabb2.h"
 
 #include "fundamental/assertion.h"
-#include "math/math.h"
 
 #include <limits>
 #include <type_traits>

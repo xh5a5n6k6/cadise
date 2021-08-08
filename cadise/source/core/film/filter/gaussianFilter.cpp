@@ -1,7 +1,6 @@
 #include "core/film/filter/gaussianFilter.h"
 
-#include "math/math.h"
-
+#include <algorithm>
 #include <cmath>
 
 namespace cadise {
@@ -29,7 +28,7 @@ real GaussianFilter::evaluate(const real locationX, const real locationY) const 
     const real value = _amplitude * std::exp(_expX * locationX * locationX
                                              + _expY * locationY * locationY);
 
-    return math::max(0.0_r, value - _edgeValue);
+    return std::max(0.0_r, value - _edgeValue);
 }
 
 } // namespace cadise

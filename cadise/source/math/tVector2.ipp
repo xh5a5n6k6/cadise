@@ -3,24 +3,25 @@
 #include "math/tVector2.h"
 
 #include "fundamental/assertion.h"
-#include "math/math.h"
 
 #include <cmath>
+#include <type_traits>
+#include <utility>
 
 namespace cadise {
 
 template<typename T>
 inline TVector2<T> TVector2<T>::min(const TVector2<T>& vectorA, const TVector2<T>& vectorB) {
     return TVector2<T>(
-        math::min(vectorA._x, vectorB._x),
-        math::min(vectorA._y, vectorB._y));
+        std::min(vectorA._x, vectorB._x),
+        std::min(vectorA._y, vectorB._y));
 }
 
 template<typename T>
 inline TVector2<T> TVector2<T>::max(const TVector2<T>& vectorA, const TVector2<T>& vectorB) {
     return TVector2<T>(
-        math::max(vectorA._x, vectorB._x),
-        math::max(vectorA._y, vectorB._y));
+        std::max(vectorA._x, vectorB._x),
+        std::max(vectorA._y, vectorB._y));
 }
 
 template<typename T>
@@ -271,6 +272,9 @@ inline bool TVector2<T>::hasNaN() const {
 
 template<typename T>
 inline bool TVector2<T>::hasNegative() const {
+    static_assert(std::is_signed_v<T>,
+        "TVector2<T>'s hasNegative function only works with signed type\n");
+
     return _x < static_cast<T>(0) ||
            _y < static_cast<T>(0);
 }
@@ -307,7 +311,7 @@ inline T TVector2<T>::product() const {
 
 template<typename T>
 inline T TVector2<T>::maxComponent() const {
-    return math::max(_x, _y);
+    return std::max(_x, _y);
 }
 
 template<typename T>
@@ -317,8 +321,8 @@ inline constant::AxisType TVector2<T>::maxDimension() const {
 
 template<typename T>
 inline void TVector2<T>::swap(TVector2<T>& rhs) {
-    math::swap(_x, rhs._x);
-    math::swap(_y, rhs._y);
+    std::swap(_x, rhs._x);
+    std::swap(_y, rhs._y);
 }
 
 template<typename T>

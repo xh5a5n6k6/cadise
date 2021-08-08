@@ -1,9 +1,10 @@
 #include "core/sampler/sampleRecord2D.h"
 
 #include "fundamental/assertion.h"
-#include "math/math.h"
 #include "math/random.h"
 #include "math/tVector2.h"
+
+#include <utility>
 
 namespace cadise {
 
@@ -21,7 +22,7 @@ void SampleRecord2D::shuffle() {
         const std::size_t randomIndexOffset = 2 * randomIndex;
 
         for (std::size_t id = 0; id < 2; ++id) {
-            math::swap(_data[indexOffset + id], _data[randomIndexOffset + id]);
+            std::swap(_data[indexOffset + id], _data[randomIndexOffset + id]);
         }
     }
 }

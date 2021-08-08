@@ -3,9 +3,10 @@
 #include "core/imaging/tImage.h"
 
 #include "fundamental/assertion.h"
-#include "math/math.h"
 #include "math/tArithmeticArray.h"
 #include "math/tVector2.h"
+
+#include <utility>
 
 namespace cadise {
 
@@ -43,7 +44,7 @@ inline void TImage<T, N>::flipHorizontal() {
             const std::size_t rightIndex = _pixelDataOffset(_width - 1 - ix, iy);
 
             for (std::size_t i = 0; i < N; ++i) {
-                math::swap(_data[leftIndex + i], _data[rightIndex + i]);
+                std::swap(_data[leftIndex + i], _data[rightIndex + i]);
             }
         }
     }

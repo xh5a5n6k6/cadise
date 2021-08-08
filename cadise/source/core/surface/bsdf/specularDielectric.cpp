@@ -9,7 +9,7 @@
 #include "math/math.h"
 #include "math/random.h"
 
-#include <cmath>
+#include <utility>
 
 namespace cadise {
 
@@ -104,7 +104,7 @@ void SpecularDielectric::evaluateSample(
         real btdfFactor = 1.0_r;
         if (info.mode() == ETransportMode::RADIANCE) {
             if (cosThetaI < 0.0_r) {
-                math::swap(etaI, etaT);
+                std::swap(etaI, etaT);
             }
 
             btdfFactor = (etaT * etaT) / (etaI * etaI);

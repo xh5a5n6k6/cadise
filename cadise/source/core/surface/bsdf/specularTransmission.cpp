@@ -6,9 +6,9 @@
 #include "core/surface/transportInfo.h"
 #include "core/surfaceIntersection.h"
 #include "fundamental/assertion.h"
-#include "math/math.h"
 
 #include <cmath>
+#include <utility>
 
 namespace cadise {
 
@@ -57,7 +57,7 @@ void SpecularTransmission::evaluateSample(
     real btdfFactor = 1.0_r;
     if (info.mode() == ETransportMode::RADIANCE) {
         if (cosThetaI < 0.0_r) {
-            math::swap(etaI, etaT);
+            std::swap(etaI, etaT);
         }
 
         btdfFactor = (etaT * etaT) / (etaI * etaI);

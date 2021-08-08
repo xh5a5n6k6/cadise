@@ -3,7 +3,8 @@
 #include "math/constant.h"
 #include "math/type/mathType.h"
 
-#include <utility>
+#include <algorithm>
+#include <cmath>
 
 /*
     some math utilities here
@@ -83,34 +84,6 @@ real inverse_gamma_correction(const real value);
     https://stackoverflow.com/questions/1903954/is-there-a-standard-sign-function-signum-sgn-in-c-c
 */
 template<typename T>
-inline constant::SignType sign(const T& value);
-
-template<typename T>
-inline T squared(const T& value);
-
-template<typename T>
-inline T min(const T& a, const T& b);
-
-template<typename T>
-inline T max(const T& a, const T& b);
-
-template<typename T>
-inline T clamp(const T& value, const T& lowerBound, const T& upperBound);
-
-template<typename T>
-inline void swap(T& a, T& b);
-
-/*
-    zero maps to one and the others remain the same
-*/
-template<typename T>
-inline T map_to_non_zero(const T& value);
-
-
-
-// template header implementation
-
-template<typename T>
 inline constant::SignType sign(const T& value) {
     return static_cast<constant::SignType>(
         (static_cast<T>(0) < value) - (value < static_cast<T>(0)));
@@ -121,28 +94,17 @@ inline T squared(const T& value) {
     return value * value;
 }
 
-template<typename T>
-inline T min(const T& a, const T& b) {
-    return (a < b) ? a : b;
-}
-
-template<typename T>
-inline T max(const T& a, const T& b) {
-    return (a > b) ? a : b;
-}
-
+/*
+    if value is NaN, return lowerBound, otherwise return normal clamp result
+*/
 template<typename T>
 inline T clamp(const T& value, const T& lowerBound, const T& upperBound) {
-    return min(max(value, lowerBound), upperBound);
+    return std::isnan(value) ? lowerBound : std::clamp(value, lowerBound, upperBound);
 }
 
-template<typename T>
-inline void swap(T& a, T& b) {
-    T tmp = std::move(a);
-    a     = std::move(b);
-    b     = std::move(tmp);
-}
-
+/*
+    zero maps to one and the others remain the same
+*/
 template<typename T>
 inline T map_to_non_zero(const T& value) {
     return (value == static_cast<T>(0)) ? static_cast<T>(1) : value;

@@ -1,7 +1,5 @@
 #include "math/random.h"
 
-#include "math/math.h"
-
 #include <atomic>
 #include <random>
 
@@ -22,7 +20,9 @@ std::size_t Random::nextIndex(const std::size_t minIndex, const std::size_t maxI
     const std::size_t interval    = maxIndex - minIndex;
     const std::size_t sampleIndex = static_cast<std::size_t>(minIndex + nextReal() * interval);
 
-    return math::clamp(sampleIndex, minIndex, maxIndex - 1);
+    return 
+        (sampleIndex < minIndex) ? minIndex : 
+        (sampleIndex > maxIndex - 1) ? maxIndex - 1 : sampleIndex;
 }
 
 } // namespace cadise

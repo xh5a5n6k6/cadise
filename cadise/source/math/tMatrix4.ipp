@@ -3,8 +3,9 @@
 #include "math/tMatrix4.h"
 
 #include "fundamental/assertion.h"
-#include "math/math.h"
 #include "math/tVector3.h"
+
+#include <utility>
 
 namespace cadise {
 
@@ -202,7 +203,7 @@ inline T TMatrix4<T>::n(const std::size_t row, const std::size_t col) const {
 template<typename T>
 inline void TMatrix4<T>::_swapRows(const std::size_t rowA, const std::size_t rowB) {
     for (std::size_t col = 0; col < 4; ++col) {
-        math::swap(_n[rowA][col], _n[rowB][col]);
+        std::swap(_n[rowA][col], _n[rowB][col]);
     }
 }
 

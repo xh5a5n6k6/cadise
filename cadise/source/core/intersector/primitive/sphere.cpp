@@ -140,7 +140,7 @@ void Sphere::evaluateSurfaceDetail(
     Vector3R dNdU;
     Vector3R dNdV;
     {
-        const real xzProjection = math::max(_radius * _radius - NVector.y() * NVector.y(), 0.0_r);
+        const real xzProjection = std::max(_radius * _radius - NVector.y() * NVector.y(), 0.0_r);
         const real rSinTheta    = std::sqrt(xzProjection);
         const real cosPhi       = (rSinTheta != 0.0_r) ? NVector.z() / rSinTheta : 1.0_r;
         const real sinPhi       = (rSinTheta != 0.0_r) ? NVector.x() / rSinTheta : 0.0_r;

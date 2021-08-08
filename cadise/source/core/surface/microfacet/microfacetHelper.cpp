@@ -4,6 +4,8 @@
 #include "math/math.h"
 #include "math/tVector3.h"
 
+#include <utility>
+
 namespace cadise {
 
 bool MicrofacetHelper::canMakeReflectionH(
@@ -52,7 +54,7 @@ bool MicrofacetHelper::canMakeRefractionH(
     real etaI = iorOuter;
     real etaT = iorInner;
     if (L.dot(N) < 0.0_r) {
-        math::swap(etaI, etaT);
+        std::swap(etaI, etaT);
     }
 
     const Vector3R HVector = V.mul(-etaT).add(L.mul(-etaI));

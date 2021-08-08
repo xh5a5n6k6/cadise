@@ -1,8 +1,8 @@
 #include "utility/parallel.h"
 
 #include "fundamental/assertion.h"
-#include "math/math.h"
 
+#include <algorithm>
 #include <thread>
 #include <vector>
 
@@ -18,7 +18,7 @@ void Parallel::execute(
     std::vector<std::thread> workers(numWorkers);
     for (std::size_t i = 0; i < numWorkers; ++i) {
         const std::size_t beginIndex = averageWorkload * i;
-        const std::size_t endIndex   = math::min(averageWorkload * (i + 1), numWorks);
+        const std::size_t endIndex   = std::min(averageWorkload * (i + 1), numWorks);
 
         workers[i] = std::thread(work, i, beginIndex, endIndex);
     }

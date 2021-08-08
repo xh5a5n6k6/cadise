@@ -5,8 +5,6 @@
 #include "math/math.h"
 #include "math/tVector3.h"
 
-#include <cmath>
-
 namespace cadise {
 
 SphericalMapper::SphericalMapper() = default;

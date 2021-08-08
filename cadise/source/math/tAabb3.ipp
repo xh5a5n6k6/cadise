@@ -3,8 +3,8 @@
 #include "math/tAabb3.h"
 
 #include "fundamental/assertion.h"
-#include "math/math.h"
 
+#include <algorithm>
 #include <limits>
 #include <type_traits>
 
@@ -78,32 +78,32 @@ inline bool TAABB3<T>::isIntersectingAABB(
 
     // calculate x-slab interval
     if (rayRcpDirection.x() > static_cast<T>(0)) {
-        minT = math::max(minT, nearT.x());
-        maxT = math::min(maxT, farT.x());
+        minT = std::max(minT, nearT.x());
+        maxT = std::min(maxT, farT.x());
     }
     else {
-        minT = math::max(minT, farT.x());
-        maxT = math::min(maxT, nearT.x());
+        minT = std::max(minT, farT.x());
+        maxT = std::min(maxT, nearT.x());
     }
 
     // calculate y-slab interval
     if (rayRcpDirection.y() > static_cast<T>(0)) {
-        minT = math::max(minT, nearT.y());
-        maxT = math::min(maxT, farT.y());
+        minT = std::max(minT, nearT.y());
+        maxT = std::min(maxT, farT.y());
     }
     else {
-        minT = math::max(minT, farT.y());
-        maxT = math::min(maxT, nearT.y());
+        minT = std::max(minT, farT.y());
+        maxT = std::min(maxT, nearT.y());
     }
 
     // calculate z-slab interval
     if (rayRcpDirection.z() > static_cast<T>(0)) {
-        minT = math::max(minT, nearT.z());
-        maxT = math::min(maxT, farT.z());
+        minT = std::max(minT, nearT.z());
+        maxT = std::min(maxT, farT.z());
     }
     else {
-        minT = math::max(minT, farT.z());
-        maxT = math::min(maxT, nearT.z());
+        minT = std::max(minT, farT.z());
+        maxT = std::min(maxT, nearT.z());
     }
 
     // check if intersection exists

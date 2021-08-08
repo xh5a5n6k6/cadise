@@ -3,9 +3,9 @@
 #include "math/tArithmeticArray.h"
 
 #include "fundamental/assertion.h"
-#include "math/math.h"
 
 #include <cmath>
+#include <utility>
 
 namespace cadise {
 
@@ -320,7 +320,7 @@ template<typename T, std::size_t N>
 inline T TArithmeticArray<T, N>::maxComponent() const {
     T result = _values[0];
     for (std::size_t i = 1; i < N; ++i) {
-        result = math::max(result, _values[i]);
+        result = std::max(result, _values[i]);
     }
 
     return result;

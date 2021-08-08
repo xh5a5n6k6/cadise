@@ -10,7 +10,7 @@
 #include "math/math.h"
 #include "math/random.h"
 
-#include <cmath>
+#include <utility>
 
 namespace cadise {
 
@@ -89,7 +89,7 @@ Spectrum DielectricMicrofacet::evaluate(
         real etaI = _fresnel->iorOuter();
         real etaT = _fresnel->iorInner();
         if (LdotN < 0.0_r) {
-            math::swap(etaI, etaT);
+            std::swap(etaI, etaT);
         }
 
         const real btdfFactor = (info.mode() == ETransportMode::RADIANCE) ? etaT / etaI : 1.0_r;
@@ -191,7 +191,7 @@ void DielectricMicrofacet::evaluateSample(
         real btdfFactor = 1.0_r;
         if (info.mode() == ETransportMode::RADIANCE) {
             if (LdotH < 0.0_r) {
-                math::swap(etaI, etaT);
+                std::swap(etaI, etaT);
             }
 
             btdfFactor = (etaT * etaT) / (etaI * etaI);
@@ -294,7 +294,7 @@ real DielectricMicrofacet::evaluatePdfW(
         real etaI = _fresnel->iorOuter();
         real etaT = _fresnel->iorInner();
         if (LdotN < 0.0_r) {
-            math::swap(etaI, etaT);
+            std::swap(etaI, etaT);
         }
         
         const real sqrtTerm = etaI / (etaT * VdotH + etaI * LdotH);

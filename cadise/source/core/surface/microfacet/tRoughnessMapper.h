@@ -1,8 +1,8 @@
 #pragma once
 
 #include "core/surface/microfacet/eRoughnessMapMode.h"
-#include "math/math.h"
 
+#include <algorithm>
 #include <cmath>
 
 namespace cadise {
@@ -19,7 +19,7 @@ template<ERoughnessMapMode Mode>
 inline real TRoughnessMapper<Mode>::map(const real roughness) {
     real alpha;
     
-    const real safeRoughness = math::max(roughness, 0.001_r);
+    const real safeRoughness = std::max(roughness, 0.001_r);
     if constexpr (Mode == ERoughnessMapMode::SQUARE) {
         alpha = safeRoughness * safeRoughness;
     }
@@ -36,7 +36,7 @@ inline real TRoughnessMapper<Mode>::map(const real roughness) {
         alpha = safeRoughness;
     }
 
-    return math::max(alpha, 0.001_r);
+    return std::max(alpha, 0.001_r);
 }
 
 } // namespace cadise

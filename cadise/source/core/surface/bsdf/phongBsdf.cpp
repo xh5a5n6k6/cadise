@@ -7,7 +7,7 @@
 #include "math/random.h"
 #include "math/warp/hemisphere.h"
 
-#include <cmath>
+#include <algorithm>
 
 namespace cadise {
 
@@ -32,8 +32,9 @@ Spectrum PhongBsdf::evaluate(
         return Spectrum(0.0_r);
     }
 
-    const real RdotV         = math::max(R.dot(V), 0.0_r);
-    const real specularValue = std::pow(RdotV, _exponent) * _brdfFactor;
+    const real RdotV         = R.dot(V);
+    const real safeRdotV     = (RdotV > 0.0_r) ? RdotV : 0.0_r;
+    const real specularValue = std::pow(safeRdotV, _exponent) * _brdfFactor;
 
     return Spectrum(specularValue);
 }
@@ -62,8 +63,9 @@ void PhongBsdf::evaluateSample(
     }
 
     const Vector3R R         = L.reflect(Ns);
-    const real     RdotV     = math::max(R.dot(V), 0.0_r);
-    const real     powerTerm = std::pow(RdotV, _exponent);
+    const real     RdotV     = R.dot(V);
+    const real     safeRdotV = (RdotV > 0.0_r) ? RdotV : 0.0_r;
+    const real     powerTerm = std::pow(safeRdotV, _exponent);
 
     // TODO: use pdfW instead ?
     const real pdfL          = powerTerm * _pdfFactor;
@@ -87,8 +89,9 @@ real PhongBsdf::evaluatePdfW(
         return 0.0_r;
     }
 
-    const real RdotV = math::max(R.dot(V), 0.0_r);
-    const real pdfL  = std::pow(RdotV, _exponent) * _pdfFactor;
+    const real RdotV     = R.dot(V);
+    const real safeRdotV = (RdotV > 0.0_r) ? RdotV : 0.0_r;
+    const real pdfL      = std::pow(safeRdotV, _exponent) * _pdfFactor;
 
     return pdfL;
 }
