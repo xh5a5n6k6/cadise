@@ -18,8 +18,8 @@ class TImageTexture : public TTexture<T> {
 public:
     TImageTexture(
         const TImage<ImageType, N>& image, 
-        const ETextureSampleMode&   sampleMode,
-        const ETextureWrapMode&     wrapMode);
+        const ETextureSampleMode    sampleMode,
+        const ETextureWrapMode      wrapMode);
 
     void evaluate(const Vector3R& uvw, T* const out_value) const override = 0;
 

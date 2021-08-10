@@ -14,7 +14,7 @@ class Intersector;
 
 class BvhBuilder {
 public:
-    explicit BvhBuilder(const EBvhSplitMode& splitMode);
+    explicit BvhBuilder(const EBvhSplitMode splitMode);
 
     std::unique_ptr<BvhBinaryNode> buildBinaryNodes(
         const std::vector<std::shared_ptr<Intersector>>& intersectors, 

@@ -6,13 +6,13 @@ TransportInfo::TransportInfo() :
     TransportInfo(ETransportMode::RADIANCE) {
 }
 
-TransportInfo::TransportInfo(const ETransportMode& mode) :
+TransportInfo::TransportInfo(const ETransportMode mode) :
     TransportInfo(mode, BSDF_ALL_COMPONENTS) {
 }
 
 TransportInfo::TransportInfo(
-    const ETransportMode& mode,
-    const BsdfComponents  components) :
+    const ETransportMode mode,
+    const BsdfComponents components) :
 
     _mode(mode),
     _components(components) {
@@ -22,7 +22,7 @@ void TransportInfo::setComponents(const BsdfComponents components) {
     _components = components;
 }
 
-const ETransportMode& TransportInfo::mode() const {
+ETransportMode TransportInfo::mode() const {
     return _mode;
 }
 

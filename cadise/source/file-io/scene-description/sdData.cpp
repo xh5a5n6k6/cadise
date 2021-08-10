@@ -139,47 +139,47 @@ std::shared_ptr<TTexture<Spectrum>> SdData::getSpectrumTexture(
     return spectrumTexture;
 }
 
-const ESdClassType& SdData::classType() const {
+ESdClassType SdData::classType() const {
     return _classType;
 }
 
 void SdData::setClassType(const std::string_view& classType) {
     if (classType == "film") {
-        setClassType(ESdClassType::FILM);
+        this->setClassType(ESdClassType::FILM);
     }
     else if (classType == "camera") {
-        setClassType(ESdClassType::CAMERA);
+        this->setClassType(ESdClassType::CAMERA);
     }
     else if (classType == "renderer") {
-        setClassType(ESdClassType::RENDERER);
+        this->setClassType(ESdClassType::RENDERER);
     }
     else if (classType == "accelerator") {
-        setClassType(ESdClassType::ACCELERATOR);
+        this->setClassType(ESdClassType::ACCELERATOR);
     }
     else if (classType == "light-cluster") {
-        setClassType(ESdClassType::LIGHT_CLUSTER);
+        this->setClassType(ESdClassType::LIGHT_CLUSTER);
     }
     else if (classType == "texture-real") {
-        setClassType(ESdClassType::TEXTURE_REAL);
+        this->setClassType(ESdClassType::TEXTURE_REAL);
     }
     else if (classType == "texture-spectrum") {
-        setClassType(ESdClassType::TEXTURE_SPECTRUM);
+        this->setClassType(ESdClassType::TEXTURE_SPECTRUM);
     }
     else if (classType == "material") {
-        setClassType(ESdClassType::MATERIAL);
+        this->setClassType(ESdClassType::MATERIAL);
     }
     else if (classType == "light") {
-        setClassType(ESdClassType::LIGHT);
+        this->setClassType(ESdClassType::LIGHT);
     }
     else if (classType == "primitive") {
-        setClassType(ESdClassType::PRIMITIVE);
+        this->setClassType(ESdClassType::PRIMITIVE);
     }
     else {
         // unsupported type
     }
 }
 
-void SdData::setClassType(const ESdClassType& classType) {
+void SdData::setClassType(const ESdClassType classType) {
     _classType = classType;
 }
 

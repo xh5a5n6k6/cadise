@@ -11,7 +11,7 @@
 
 namespace cadise {
 
-BvhBuilder::BvhBuilder(const EBvhSplitMode& splitMode) :
+BvhBuilder::BvhBuilder(const EBvhSplitMode splitMode) :
     _splitMode(splitMode) {
 }
 

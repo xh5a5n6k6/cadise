@@ -3,11 +3,11 @@
 #include "core/integral-tool/sample/bsdfSample.h"
 #include "core/surfaceIntersection.h"
 #include "math/constant.h"
-#include "math/math.h"
 #include "math/random.h"
 #include "math/warp/hemisphere.h"
 
 #include <algorithm>
+#include <cmath>
 
 namespace cadise {
 
@@ -33,7 +33,7 @@ Spectrum PhongBsdf::evaluate(
     }
 
     const real RdotV         = R.dot(V);
-    const real safeRdotV     = (RdotV > 0.0_r) ? RdotV : 0.0_r;
+    const real safeRdotV     = std::max(RdotV, 0.0_r);
     const real specularValue = std::pow(safeRdotV, _exponent) * _brdfFactor;
 
     return Spectrum(specularValue);
@@ -64,7 +64,7 @@ void PhongBsdf::evaluateSample(
 
     const Vector3R R         = L.reflect(Ns);
     const real     RdotV     = R.dot(V);
-    const real     safeRdotV = (RdotV > 0.0_r) ? RdotV : 0.0_r;
+    const real     safeRdotV = std::max(RdotV, 0.0_r);
     const real     powerTerm = std::pow(safeRdotV, _exponent);
 
     // TODO: use pdfW instead ?
@@ -90,7 +90,7 @@ real PhongBsdf::evaluatePdfW(
     }
 
     const real RdotV     = R.dot(V);
-    const real safeRdotV = (RdotV > 0.0_r) ? RdotV : 0.0_r;
+    const real safeRdotV = std::max(RdotV, 0.0_r);
     const real pdfL      = std::pow(safeRdotV, _exponent) * _pdfFactor;
 
     return pdfL;

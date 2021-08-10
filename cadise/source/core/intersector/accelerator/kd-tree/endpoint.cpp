@@ -7,9 +7,9 @@ Endpoint::Endpoint() :
 }
 
 Endpoint::Endpoint(
-    const std::size_t    intersectorIndex,
-    const real           position,
-    const EEndpointType& type) :
+    const std::size_t   intersectorIndex,
+    const real          position,
+    const EEndpointType type) :
 
     _intersectorIndex(intersectorIndex),
     _position(position),
@@ -24,7 +24,7 @@ real Endpoint::position() const {
     return _position;
 }
 
-const EEndpointType& Endpoint::type() const {
+EEndpointType Endpoint::type() const {
     return _type;
 }
 

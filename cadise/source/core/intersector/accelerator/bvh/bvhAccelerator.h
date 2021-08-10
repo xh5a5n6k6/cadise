@@ -15,7 +15,7 @@ class BvhAccelerator : public Accelerator {
 public:
     BvhAccelerator(
         const std::vector<std::shared_ptr<Intersector>>& intersectors,
-        const EBvhSplitMode&                             splitMode);
+        const EBvhSplitMode                              splitMode);
 
     void evaluateBound(AABB3R* const out_bound) const override;
 

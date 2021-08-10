@@ -14,8 +14,8 @@ template<typename T, std::size_t N>
 class TPixelSampler {
 public:
     TPixelSampler(
-        const TImage<T, N>&     image,
-        const ETextureWrapMode& mode);
+        const TImage<T, N>&    image,
+        const ETextureWrapMode mode);
 
     virtual ~TPixelSampler();
 

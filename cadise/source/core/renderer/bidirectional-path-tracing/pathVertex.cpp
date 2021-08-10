@@ -13,13 +13,13 @@
 
 namespace cadise {
 
-PathVertex::PathVertex(const EVertexType& type) :
+PathVertex::PathVertex(const EVertexType type) :
     PathVertex(type, Spectrum(0.0_r)) {
 }
 
 PathVertex::PathVertex(
-    const EVertexType& type,
-    const Spectrum&    throughput) :
+    const EVertexType type,
+    const Spectrum&   throughput) :
 
     _type(type),
     _throughput(throughput),
@@ -62,9 +62,9 @@ bool PathVertex::isConnectible() const {
 }
 
 Spectrum PathVertex::evaluate(
-    const ETransportMode& mode,
-    const PathVertex&     previous, 
-    const PathVertex&     next) const {
+    const ETransportMode mode,
+    const PathVertex&    previous, 
+    const PathVertex&    next) const {
 
     CADISE_ASSERT(_bsdf);
 
@@ -169,9 +169,9 @@ real PathVertex::evaluateDirectPdfA(
 }
 
 real PathVertex::evaluateConnectPdfA(
-    const ETransportMode& mode,
-    const PathVertex&     previous,
-    const PathVertex&     next) const {
+    const ETransportMode mode,
+    const PathVertex&    previous,
+    const PathVertex&    next) const {
 
     const Vector3R& nowP      = _surfaceDetail.position();
     const Vector3R& previousP = previous.surfaceDetail().position();
@@ -205,7 +205,7 @@ real PathVertex::evaluateConnectPdfA(
     return pdfA;
 }
 
-const EVertexType& PathVertex::type() const {
+EVertexType PathVertex::type() const {
     return _type;
 }
 

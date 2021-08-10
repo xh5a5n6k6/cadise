@@ -9,7 +9,7 @@ namespace cadise {
 
 BvhAccelerator::BvhAccelerator(
     const std::vector<std::shared_ptr<Intersector>>& intersectors,
-    const EBvhSplitMode&                             splitMode) :
+    const EBvhSplitMode                              splitMode) :
     
     Accelerator(),
     _intersectors(),
@@ -40,11 +40,13 @@ void BvhAccelerator::evaluateBound(AABB3R* const out_bound) const {
 bool BvhAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
     bool result = false;
 
-    const Vector3R& origin           = ray.origin();
-    const Vector3R  inverseDirection = ray.direction().reciprocal();
-    const int32 directionIsNegative[3] = { inverseDirection.x() < 0.0_r, 
-                                           inverseDirection.y() < 0.0_r, 
-                                           inverseDirection.z() < 0.0_r };
+    const Vector3R& origin                 = ray.origin();
+    const Vector3R  inverseDirection       = ray.direction().reciprocal();
+    const int32     directionIsNegative[3] = { 
+        inverseDirection.x() < 0.0_r, 
+        inverseDirection.y() < 0.0_r, 
+        inverseDirection.z() < 0.0_r 
+    };
     
     std::size_t currentNodeIndex = 0;
     std::size_t currentStackSize = 0;
@@ -97,11 +99,13 @@ bool BvhAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) cons
 }
 
 bool BvhAccelerator::isOccluded(const Ray& ray) const {
-    const Vector3R& origin           = ray.origin();
-    const Vector3R  inverseDirection = ray.direction().reciprocal();
-    const int32 directionIsNegative[3] = { inverseDirection.x() < 0.0_r,
-                                           inverseDirection.y() < 0.0_r,
-                                           inverseDirection.z() < 0.0_r };
+    const Vector3R& origin                 = ray.origin();
+    const Vector3R  inverseDirection       = ray.direction().reciprocal();
+    const int32     directionIsNegative[3] = { 
+        inverseDirection.x() < 0.0_r,
+        inverseDirection.y() < 0.0_r,
+        inverseDirection.z() < 0.0_r 
+    };
 
     std::size_t currentNodeIndex = 0;
     std::size_t currentStackSize = 0;

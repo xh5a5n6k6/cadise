@@ -9,8 +9,8 @@ namespace cadise {
 template<typename T, typename ImageType, std::size_t N>
 TImageTexture<T, ImageType, N>::TImageTexture(
     const TImage<ImageType, N>& image,
-    const ETextureSampleMode&   sampleMode,
-    const ETextureWrapMode&     wrapMode) :
+    const ETextureSampleMode    sampleMode,
+    const ETextureWrapMode      wrapMode) :
 
     _pixelSampler(nullptr) {
 

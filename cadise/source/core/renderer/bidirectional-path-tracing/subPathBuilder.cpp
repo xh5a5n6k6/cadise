@@ -122,13 +122,13 @@ void SubPathBuilder::buildCameraPath(
 }
 
 void SubPathBuilder::_buildSubPathCompletely(
-    const ETransportMode& mode,
-    const Scene&          scene,
-    const Ray&            firstRay,
-    const Spectrum&       secondVertexThroughput,
-    const real            secondVertexForwardPdfW,
-    SubPath* const        out_subPath,
-    Spectrum* const       out_zeroBounceRadiance) const {
+    const ETransportMode mode,
+    const Scene&         scene,
+    const Ray&           firstRay,
+    const Spectrum&      secondVertexThroughput,
+    const real           secondVertexForwardPdfW,
+    SubPath* const       out_subPath,
+    Spectrum* const      out_zeroBounceRadiance) const {
 
     CADISE_ASSERT(out_subPath);
     CADISE_ASSERT(out_zeroBounceRadiance);

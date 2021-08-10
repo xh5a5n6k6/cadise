@@ -9,13 +9,13 @@ class Endpoint {
 public:
     Endpoint();
     Endpoint(
-        const std::size_t    intersectorIndex, 
-        const real           position,
-        const EEndpointType& type);
+        const std::size_t   intersectorIndex, 
+        const real          position,
+        const EEndpointType type);
 
     std::size_t intersectorIndex() const;
     real position() const;
-    const EEndpointType& type() const;
+    EEndpointType type() const;
 
 private:
     std::size_t   _intersectorIndex;

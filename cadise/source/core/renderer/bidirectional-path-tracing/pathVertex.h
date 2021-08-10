@@ -14,17 +14,17 @@ enum class ETransportMode;
 
 class PathVertex {
 public:
-    explicit PathVertex(const EVertexType& type);
+    explicit PathVertex(const EVertexType type);
     PathVertex(
-        const EVertexType& type,
-        const Spectrum&    throughput);
+        const EVertexType type,
+        const Spectrum&   throughput);
 
     bool isConnectible() const;
 
     Spectrum evaluate(
-        const ETransportMode& mode,
-        const PathVertex&     previous, 
-        const PathVertex&     next) const;
+        const ETransportMode mode,
+        const PathVertex&    previous, 
+        const PathVertex&    next) const;
 
     real evaluateOriginPdfA(
         const Scene&      scene,
@@ -33,11 +33,11 @@ public:
         const Scene&      scene,
         const PathVertex& next) const;
     real evaluateConnectPdfA(
-        const ETransportMode& mode,
-        const PathVertex&     previous,
-        const PathVertex&     next) const;
+        const ETransportMode mode,
+        const PathVertex&    previous,
+        const PathVertex&    next) const;
 
-    const EVertexType& type() const;
+    EVertexType type() const;
     const Spectrum& throughput() const;
     const SurfaceDetail& surfaceDetail() const;
     real pdfAForward() const;

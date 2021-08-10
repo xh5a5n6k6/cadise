@@ -63,10 +63,10 @@ public:
         const StringKeyMap<TTexture<Spectrum>>& spectrumTextures,
         const Spectrum&                         defaultValue = Spectrum(0.0_r)) const;
 
-    const ESdClassType& classType() const;
+    ESdClassType classType() const;
 
     void setClassType(const std::string_view& classType);
-    void setClassType(const ESdClassType& classType);
+    void setClassType(const ESdClassType classType);
 
 private:
     template<typename T>

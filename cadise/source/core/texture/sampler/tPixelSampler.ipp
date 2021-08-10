@@ -10,8 +10,8 @@ namespace cadise {
 
 template<typename T, std::size_t N>
 TPixelSampler<T, N>::TPixelSampler(
-    const TImage<T, N>&     image,
-    const ETextureWrapMode& mode) :
+    const TImage<T, N>&    image,
+    const ETextureWrapMode mode) :
 
     _image(image),
     _uvwWrapper(nullptr) {

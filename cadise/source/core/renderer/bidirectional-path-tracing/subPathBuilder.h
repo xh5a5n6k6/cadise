@@ -28,13 +28,13 @@ public:
 
 private:
     void _buildSubPathCompletely(
-        const ETransportMode& mode,
-        const Scene&          scene,
-        const Ray&            firstRay,
-        const Spectrum&       secondVertexThroughput,
-        const real            secondVertexForwardPdfW,
-        SubPath* const        out_subPath,
-        Spectrum* const       out_zeroBoundRadiance) const;
+        const ETransportMode mode,
+        const Scene&         scene,
+        const Ray&           firstRay,
+        const Spectrum&      secondVertexThroughput,
+        const real           secondVertexForwardPdfW,
+        SubPath* const       out_subPath,
+        Spectrum* const      out_zeroBoundRadiance) const;
 
     std::size_t   _maxPathLength;
     const Camera* _camera;
