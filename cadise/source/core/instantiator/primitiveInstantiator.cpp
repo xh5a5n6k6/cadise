@@ -4,8 +4,10 @@
 #include "core/intersector/primitive/rectangle.h"
 #include "core/intersector/primitive/sphere.h"
 #include "core/intersector/primitive/triangle.h"
+#include "core/intersector/primitive/triangleBuffer.h"
 #include "core/intersector/primitive/triangleMesh.h"
 
+#include "core/intersector/accelerator/kd-tree/kdTreeAccelerator.h"
 #include "core/surface/bsdf/lambertianDiffuse.h"
 #include "file-io/scene-description/sdData.h"
 #include "fundamental/assertion.h"
@@ -50,15 +52,11 @@ static std::shared_ptr<Primitive> createRectangle(
     const auto v3       = data->findVector3r("v3");
     const auto bsdfName = data->findString("bsdf");
 
-    const auto&& bsdf = bsdfs.find(bsdfName);
+    const auto&& mapResult = bsdfs.find(bsdfName);
+    const auto   bsdf      = (mapResult != bsdfs.end()) ? 
+        mapResult->second : std::make_shared<LambertianDiffuse>();
 
-    if (bsdf != bsdfs.end()) {
-        return std::make_shared<Rectangle>(bsdf->second, v1, v2, v3);
-    }
-    else {
-        return std::make_shared<Rectangle>(
-            std::make_shared<LambertianDiffuse>(), v1, v2, v3);
-    }
+    return std::make_shared<Rectangle>(bsdf, v1, v2, v3);
 }
 
 static std::vector<std::shared_ptr<Primitive>> createTriangleMesh(
@@ -70,23 +68,43 @@ static std::vector<std::shared_ptr<Primitive>> createTriangleMesh(
     const auto uvws      = data->findVector3rArray("uvws");
     const auto bsdfName  = data->findString("bsdf");
 
-    const auto&& bsdf = bsdfs.find(bsdfName);
+    const auto&& mapResult = bsdfs.find(bsdfName);
+    const auto   bsdf      = (mapResult != bsdfs.end()) ?
+        mapResult->second : std::make_shared<LambertianDiffuse>();
 
-    const std::size_t triangleNumber = positions.size() / 3;
+    const std::size_t numTriangles = positions.size() / 3;
+
     std::vector<std::shared_ptr<Primitive>> triangles;
-    triangles.reserve(triangleNumber);
+    triangles.reserve(numTriangles);
 
-    if (bsdf != bsdfs.end()) {
-        TriangleMesh triangleMesh(bsdf->second, positions, normals, uvws);
-        triangleMesh.transformToTriangles(&triangles);
-    }
-    else {
-        TriangleMesh triangleMesh(
-            std::make_shared<LambertianDiffuse>(), positions, normals, uvws);
-        triangleMesh.transformToTriangles(&triangles);
-    }
+    TriangleBuffer triangleBuffer(bsdf, positions, normals, uvws);
+    triangleBuffer.transformToTriangles(&triangles);
 
-    return triangles;
+    return std::move(triangles);
+}
+
+static std::vector<std::shared_ptr<Primitive>> createTriangleMeshKdTree(
+    const std::shared_ptr<SdData>& data,
+    const StringKeyMap<Bsdf>&      bsdfs) {
+
+    const auto positions = data->findVector3rArray("positions");
+    const auto normals = data->findVector3rArray("normals");
+    const auto uvws = data->findVector3rArray("uvws");
+    const auto bsdfName = data->findString("bsdf");
+
+    const auto&& mapResult = bsdfs.find(bsdfName);
+    const auto   bsdf = (mapResult != bsdfs.end()) ?
+        mapResult->second : std::make_shared<LambertianDiffuse>();
+
+    const std::size_t numTriangles = positions.size() / 3;
+
+    std::vector<std::shared_ptr<Primitive>> triangles;
+    triangles.reserve(numTriangles);
+
+    TriangleBuffer triangleBuffer(bsdf, positions, normals, uvws);
+    triangleBuffer.transformToTriangles(&triangles);
+
+    return std::move(triangles);
 }
 
 void makePrimitive(
@@ -117,8 +135,8 @@ void makePrimitive(
         out_primitives->insert(std::pair<std::string, std::shared_ptr<Primitive>>(primitiveName, rectangle));
     }
     else if (type == "triangle-mesh") {
-        const auto triangleMesh = createTriangleMesh(data, bsdfs);
-        for (auto& triangle : triangleMesh) {
+        const auto triangleBuffer = createTriangleMesh(data, bsdfs);
+        for (auto& triangle : triangleBuffer) {
             out_intersectors->push_back(triangle);
             out_primitives->insert(std::pair<std::string, std::shared_ptr<Primitive>>(primitiveName, triangle));
         }

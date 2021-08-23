@@ -11,13 +11,6 @@ namespace cadise {
 ClParser::ClParser() = default;
 
 int32 ClParser::parse(int32 argc, char* argv[]) const {
-    if (argc < 2) {
-        std::cerr << "Please type \"cadise --help\" for further information."
-                  << std::endl;
-
-        return EXIT_SUCCESS;
-    }
-
     // TODO : add some argument commands
 
     std::vector<std::string> args;
