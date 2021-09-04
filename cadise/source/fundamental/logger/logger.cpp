@@ -15,7 +15,7 @@ void Logger::log(const std::string& message) const {
     this->log(ELogLevel::INFO, message);
 }
 
-void Logger::log(const ELogLevel& logLevel, const std::string& message) const {
+void Logger::log(const ELogLevel logLevel, const std::string& message) const {
     const Timestamp timestamp;
 
     std::stringstream stringStream;
@@ -41,7 +41,7 @@ void Logger::log(const ELogLevel& logLevel, const std::string& message) const {
 
     stringStream << "[" << _senderName << "] " << message;
 
-    std::cerr << stringStream.str() << std::endl;
+    std::cout << stringStream.str() << std::endl;
 }
 
 } // namespace cadise

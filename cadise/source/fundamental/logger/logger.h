@@ -1,6 +1,6 @@
 #pragma once
 
-#include "fundamental/logger/logLevel.h"
+#include "fundamental/logger/eLogLevel.h"
 
 #include <string>
 
@@ -11,7 +11,7 @@ public:
     explicit Logger(const std::string& senderName);
 
     void log(const std::string& message) const;
-    void log(const ELogLevel& logLevel, const std::string& message) const;
+    void log(const ELogLevel logLevel, const std::string& message) const;
 
 private:
     std::string _senderName;
