@@ -19,7 +19,7 @@ VptEstimator::VptEstimator(const int32 maxDepth) :
     RadianceEstimator(),
     _maxDepth(maxDepth)
 {
-    CADISE_ASSERT_GE(maxDepth, 0);
+    CS_ASSERT_GE(maxDepth, 0);
 }
 
 void VptEstimator::estimate(
@@ -27,7 +27,7 @@ void VptEstimator::estimate(
     const Ray&      ray,
     Spectrum* const out_radiance) const
 {
-    CADISE_ASSERT(out_radiance);
+    CS_ASSERT(out_radiance);
 
     const TransportInfo transportInfo(ETransportMode::RADIANCE);
     

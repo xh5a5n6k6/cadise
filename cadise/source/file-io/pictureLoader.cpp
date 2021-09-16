@@ -43,7 +43,7 @@ HdrAlphaImage PictureLoader::loadRgbaImage(const Path& path)
 
 void PictureLoader::loadLdrImage(const Path& path, LdrImage* const out_ldrImage)
 {
-    CADISE_ASSERT(out_ldrImage);
+    CS_ASSERT(out_ldrImage);
 
     int32 width;
     int32 height;
@@ -139,7 +139,7 @@ void PictureLoader::loadLdrImage(const Path& path, LdrImage* const out_ldrImage)
 
 void PictureLoader::loadHdrImage(const Path& path, HdrImage* const out_hdrImage)
 {
-    CADISE_ASSERT(out_hdrImage);
+    CS_ASSERT(out_hdrImage);
 
     int32 width;
     int32 height;
@@ -203,13 +203,13 @@ void PictureLoader::loadHdrImage(const Path& path, HdrImage* const out_hdrImage)
 
 void PictureLoader::loadLdrAlphaImage(const Path& path, LdrAlphaImage* const out_ldrAlphaImage)
 {
-    CADISE_ASSERT(out_ldrAlphaImage);
+    CS_ASSERT(out_ldrAlphaImage);
     // TODO: implement here
 }
 
 void PictureLoader::loadHdrAlphaImage(const Path& path, HdrAlphaImage* const out_hdrAlphaImage)
 {
-    CADISE_ASSERT(out_hdrAlphaImage);
+    CS_ASSERT(out_hdrAlphaImage);
     // TODO: implement here
 }
 

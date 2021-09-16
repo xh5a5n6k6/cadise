@@ -22,12 +22,12 @@ Spectrum PointLight::emittance(const SurfaceIntersection& emitIntersection) cons
 
 void PointLight::evaluateDirectSample(DirectLightSample* const out_sample) const 
 {
-    CADISE_ASSERT(out_sample);
+    CS_ASSERT(out_sample);
 
     const Vector3R emitPosition = _position;
     const Vector3R emitVector   = out_sample->targetPosition().sub(emitPosition);
     
-    CADISE_ASSERT(!emitVector.isZero());
+    CS_ASSERT(!emitVector.isZero());
 
     const real distance2 = emitVector.lengthSquared();
 
@@ -46,7 +46,7 @@ real PointLight::evaluateDirectPdfW(
 
 void PointLight::evaluateEmitSample(EmitLightSample* const out_sample) const 
 {
-    CADISE_ASSERT(out_sample);
+    CS_ASSERT(out_sample);
 
     // TODO: implement here
 }
@@ -57,8 +57,8 @@ void PointLight::evaluateEmitPdf(
     real* const     out_pdfA,
     real* const     out_pdfW) const 
 {
-    CADISE_ASSERT(out_pdfA);
-    CADISE_ASSERT(out_pdfW);
+    CS_ASSERT(out_pdfA);
+    CS_ASSERT(out_pdfW);
 
     *out_pdfA = 0.0_r;
     // TODO: sphere sample pdf

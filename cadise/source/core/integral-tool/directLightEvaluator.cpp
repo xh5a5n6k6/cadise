@@ -22,8 +22,8 @@ Spectrum DirectLightEvaluator::evaluate(
     const Bsdf*                bsdf, 
     const Light*               light) 
 {
-    CADISE_ASSERT(bsdf);
-    CADISE_ASSERT(light);
+    CS_ASSERT(bsdf);
+    CS_ASSERT(light);
 
     SurfaceIntersection intersection(surfaceIntersection);
     Spectrum directLightRadiance(0.0_r);
@@ -48,7 +48,7 @@ Spectrum DirectLightEvaluator::evaluate(
             const Vector3R LVector  = directLightSample.emitPosition().sub(P);
             const real     distance = LVector.length();
 
-            CADISE_ASSERT_GT(distance, 0.0_r);
+            CS_ASSERT_GT(distance, 0.0_r);
 
             const Vector3R L = LVector.div(distance);
             intersection.setWo(L);
@@ -92,7 +92,7 @@ Spectrum DirectLightEvaluator::evaluate(
                 const Spectrum& reflectance = bsdfSample.scatterValue();
                 const Vector3R& L           = bsdfSample.scatterDirection();
 
-                CADISE_ASSERT(!L.isZero());
+                CS_ASSERT(!L.isZero());
 
                 Ray sampleRay(P, L);
                 SurfaceIntersection localIntersection;

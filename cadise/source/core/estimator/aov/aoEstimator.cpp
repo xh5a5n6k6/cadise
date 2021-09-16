@@ -25,7 +25,7 @@ void AoEstimator::estimate(
     const Ray&      ray,
     Spectrum* const out_radiance) const
 {
-    CADISE_ASSERT(out_radiance);
+    CS_ASSERT(out_radiance);
 
     Spectrum            totalValue(0.0_r);
     Scene               localScene(scene);

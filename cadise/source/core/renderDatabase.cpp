@@ -40,7 +40,7 @@ RenderDatabase::RenderDatabase() :
 
 void RenderDatabase::setUpData(const std::shared_ptr<SdData>& data) 
 {
-    CADISE_ASSERT(data);
+    CS_ASSERT(data);
 
     switch (data->classType()) 
     {

@@ -25,15 +25,15 @@ BdptTileWork::BdptTileWork(
     _sampler(sampler),
     _connectEvents(nullptr)
 {
-    CADISE_ASSERT(scene);
-    CADISE_ASSERT(camera);
-    CADISE_ASSERT(sampler);
+    CS_ASSERT(scene);
+    CS_ASSERT(camera);
+    CS_ASSERT(sampler);
 }
 
 void BdptTileWork::work() const 
 {
-    CADISE_ASSERT(_filmTile);
-    CADISE_ASSERT(_connectEvents);
+    CS_ASSERT(_filmTile);
+    CS_ASSERT(_connectEvents);
 
     SubPathBuilder subPathBuilder(MAX_PATH_LENGTH);
     subPathBuilder.setCamera(_camera);
@@ -109,7 +109,7 @@ void BdptTileWork::work() const
 
 void BdptTileWork::setConnectEvents(std::vector<ConnectEvent>* const connectEvents) 
 {
-    CADISE_ASSERT(connectEvents);
+    CS_ASSERT(connectEvents);
 
     _connectEvents = connectEvents;
 }

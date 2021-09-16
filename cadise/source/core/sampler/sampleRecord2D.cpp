@@ -32,7 +32,7 @@ void SampleRecord2D::shuffle()
 
 Vector2R SampleRecord2D::nextSample() 
 {
-    CADISE_ASSERT_LT(_currentSampleIndex, _sampleNumber);
+    CS_ASSERT_LT(_currentSampleIndex, _sampleNumber);
 
     const std::size_t indexOffset = 2 * _currentSampleIndex;
     _currentSampleIndex += 1;

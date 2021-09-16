@@ -26,7 +26,7 @@ SubPathBuilder::SubPathBuilder(const std::size_t maxPathLength) :
 
 void SubPathBuilder::setCamera(const Camera* const camera)
 {
-    CADISE_ASSERT(camera);
+    CS_ASSERT(camera);
 
     _camera = camera;
 }
@@ -35,12 +35,12 @@ void SubPathBuilder::buildLightPath(
     const Scene&   scene,
     SubPath* const out_lightPath) const
 {
-    CADISE_ASSERT(out_lightPath);
+    CS_ASSERT(out_lightPath);
 
     real pickLightPdf;
     const Light* sampleLight = scene.sampleOneLight(&pickLightPdf);
 
-    CADISE_ASSERT(sampleLight);
+    CS_ASSERT(sampleLight);
 
     EmitLightSample emitLightSample;
     sampleLight->evaluateEmitSample(&emitLightSample);
@@ -91,9 +91,9 @@ void SubPathBuilder::buildCameraPath(
     SubPath* const  out_cameraPath,
     Spectrum* const out_zeroBounceRadiance) const
 {
-    CADISE_ASSERT(out_cameraPath);
-    CADISE_ASSERT(out_zeroBounceRadiance);
-    CADISE_ASSERT(_camera);
+    CS_ASSERT(out_cameraPath);
+    CS_ASSERT(out_zeroBounceRadiance);
+    CS_ASSERT(_camera);
 
     Ray primaryRay;
     _camera->spawnPrimaryRay(filmPosition, &primaryRay);
@@ -135,8 +135,8 @@ void SubPathBuilder::_buildSubPathCompletely(
     SubPath* const       out_subPath,
     Spectrum* const      out_zeroBounceRadiance) const 
 {
-    CADISE_ASSERT(out_subPath);
-    CADISE_ASSERT(out_zeroBounceRadiance);
+    CS_ASSERT(out_subPath);
+    CS_ASSERT(out_zeroBounceRadiance);
 
     std::size_t currentLength = out_subPath->length();
     if (currentLength == _maxPathLength) 

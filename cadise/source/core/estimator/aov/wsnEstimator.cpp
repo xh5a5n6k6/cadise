@@ -13,7 +13,7 @@ void WsnEstimator::estimate(
     const Ray&      ray,
     Spectrum* const out_radiance) const 
 {
-    CADISE_ASSERT(out_radiance);
+    CS_ASSERT(out_radiance);
 
     Scene               localScene(scene);
     SurfaceIntersection si;

@@ -25,7 +25,7 @@ Rectangle::Rectangle(
     _vB(vB),
     _vC(vC)
 {
-    CADISE_ASSERT(bsdf);
+    CS_ASSERT(bsdf);
 
     _eA = _vA.sub(_vB);
     _eB = _vC.sub(_vB);
@@ -40,7 +40,7 @@ Rectangle::Rectangle(
 
 void Rectangle::evaluateBound(AABB3R* const out_bound) const
 {
-    CADISE_ASSERT(out_bound);
+    CS_ASSERT(out_bound);
 
     AABB3R bound(_vA);
     bound.unionWithLocal(_vB).unionWithLocal(_vC).unionWithLocal(_vD).expandLocal(0.0001_r);
@@ -111,7 +111,7 @@ void Rectangle::evaluateSurfaceDetail(
     const PrimitiveInfo& primitiveInfo, 
     SurfaceDetail* const out_surface) const
 {
-    CADISE_ASSERT(out_surface);
+    CS_ASSERT(out_surface);
 
     Vector3R N = _eA.cross(_eB);
     N = (N.isZero()) ? Vector3R(0.0_r, 1.0_r, 0.0_r) : N.normalize();
@@ -144,7 +144,7 @@ void Rectangle::evaluateSurfaceDetail(
 
 void Rectangle::evaluatePositionSample(PositionSample* const out_sample) const
 {
-    CADISE_ASSERT(out_sample);
+    CS_ASSERT(out_sample);
 
     Vector3R eA = _eA;
     Vector3R eB = _eB;

@@ -96,7 +96,7 @@ inline TArithmeticArray<T, N> TArithmeticArray<T, N>::operator / (const TArithme
 template<typename T, std::size_t N>
 inline T& TArithmeticArray<T, N>::operator [] (const std::size_t i)
 {
-    CADISE_ASSERT_LT(i, N);
+    CS_ASSERT_LT(i, N);
 
     return _values[i];
 }
@@ -104,7 +104,7 @@ inline T& TArithmeticArray<T, N>::operator [] (const std::size_t i)
 template<typename T, std::size_t N>
 inline const T& TArithmeticArray<T, N>::operator [] (const std::size_t i) const
 {
-    CADISE_ASSERT_LT(i, N);
+    CS_ASSERT_LT(i, N);
 
     return _values[i];
 }

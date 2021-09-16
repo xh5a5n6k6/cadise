@@ -16,7 +16,7 @@ inline void TNearestPixelSampler<T, N>::sample(
     const Vector3R&               uvw,
     TArithmeticArray<T, N>* const out_value) const
 {
-    CADISE_ASSERT(out_value);
+    CS_ASSERT(out_value);
 
     Vector3R wrapUvw;
     _uvwWrapper->wrap(uvw, &wrapUvw);

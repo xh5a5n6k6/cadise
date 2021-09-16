@@ -23,8 +23,8 @@ DielectricMicrofacet::DielectricMicrofacet(
     _microfacet(microfacet),
     _fresnel(fresnel) 
 {
-    CADISE_ASSERT(microfacet);
-    CADISE_ASSERT(fresnel);
+    CS_ASSERT(microfacet);
+    CS_ASSERT(fresnel);
 }
 
 Spectrum DielectricMicrofacet::evaluate(
@@ -117,7 +117,7 @@ void DielectricMicrofacet::evaluateSample(
     const SurfaceIntersection& si,
     BsdfSample* const          out_sample) const 
 {
-    CADISE_ASSERT(out_sample);
+    CS_ASSERT(out_sample);
 
     bool canReflection = (info.components() == BSDF_ALL_COMPONENTS) || (info.components() == 0);
     bool canRefraction = (info.components() == BSDF_ALL_COMPONENTS) || (info.components() == 1);
@@ -154,7 +154,7 @@ void DielectricMicrofacet::evaluateSample(
         }
     }
 
-    CADISE_ASSERT(canReflection || canRefraction);
+    CS_ASSERT(canReflection || canRefraction);
 
     real     scatterPdfW = 1.0_r;
     Vector3R scatterDirection(0.0_r);
@@ -351,7 +351,7 @@ real DielectricMicrofacet::evaluatePdfW(
 
 ELobe DielectricMicrofacet::lobe(const BsdfComponents component) const 
 {
-    CADISE_ASSERT(component == 0 || component == 1);
+    CS_ASSERT(component == 0 || component == 1);
 
     return component == 0 ? ELobe::GLOSSY_REFLECTION : ELobe::GLOSSY_TRANSMISSION;
 }

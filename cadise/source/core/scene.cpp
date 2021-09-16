@@ -19,13 +19,13 @@ Scene::Scene(
     _lightCluster(lightCluster),
     _backgroundSphere(nullptr) 
 {
-    CADISE_ASSERT(topAccelerator);
-    CADISE_ASSERT(lightCluster);
+    CS_ASSERT(topAccelerator);
+    CS_ASSERT(lightCluster);
 }
 
 void Scene::evaluateBound(AABB3R* const out_bound) const
 {
-    CADISE_ASSERT(out_bound);
+    CS_ASSERT(out_bound);
 
     _topAccelerator->evaluateBound(out_bound);
 }
@@ -90,21 +90,21 @@ bool Scene::isOccluded(const Ray& ray) const
 
 const Light* Scene::sampleOneLight(real* const out_pdf) const 
 {
-    CADISE_ASSERT(out_pdf);
+    CS_ASSERT(out_pdf);
 
     return _lightCluster->sampleOneLight(out_pdf);
 }
 
 real Scene::evaluatePickLightPdf(const Light* const light) const
 {
-    CADISE_ASSERT(light);
+    CS_ASSERT(light);
 
     return _lightCluster->evaluatePickLightPdf(light);
 }
 
 void Scene::setBackgroundSphere(const Primitive* const backgroundSphere)
 {
-    CADISE_ASSERT(backgroundSphere);
+    CS_ASSERT(backgroundSphere);
 
     _backgroundSphere = backgroundSphere;
 }

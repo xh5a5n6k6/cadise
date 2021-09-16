@@ -24,9 +24,9 @@ void SubPathConnector::connect(
     const std::size_t t,
     Spectrum* const   out_radiance) const 
 {
-    CADISE_ASSERT(out_radiance);
-    CADISE_ASSERT_GE(s, 2);
-    CADISE_ASSERT_GE(t, 2);
+    CS_ASSERT(out_radiance);
+    CS_ASSERT_GE(s, 2);
+    CS_ASSERT_GE(t, 2);
 
     if (s + t - 1 > 16) 
     {
@@ -71,7 +71,7 @@ bool SubPathConnector::_canConnect(
     const PathVertex& cameraEndpoint,
     real* const       out_connectG) const 
 {
-    CADISE_ASSERT(out_connectG);
+    CS_ASSERT(out_connectG);
 
     const Vector3R& cameraP  = cameraEndpoint.surfaceDetail().position();
     const Vector3R& cameraNs = cameraEndpoint.surfaceDetail().shadingNormal();
@@ -81,7 +81,7 @@ bool SubPathConnector::_canConnect(
     const Vector3R cameraToLightVector = lightP.sub(cameraP);
     const real     distance            = cameraToLightVector.length();
 
-    CADISE_ASSERT_GT(distance, 0.0_r);
+    CS_ASSERT_GT(distance, 0.0_r);
 
     const Vector3R cameraToLightDirection = cameraToLightVector.div(distance);
 

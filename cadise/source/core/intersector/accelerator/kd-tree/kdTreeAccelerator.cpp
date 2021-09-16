@@ -42,7 +42,7 @@ KdTreeAccelerator::KdTreeAccelerator(
 
 void KdTreeAccelerator::evaluateBound(AABB3R* const out_bound) const 
 {
-    CADISE_ASSERT(out_bound);
+    CS_ASSERT(out_bound);
 
     out_bound->set(_bound);
 }

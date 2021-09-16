@@ -27,7 +27,7 @@ void Parallel::execute(
 
     for (std::size_t i = 0; i < numWorkers; ++i)
     {
-        CADISE_ASSERT(workers[i].joinable());
+        CS_ASSERT(workers[i].joinable());
 
         workers[i].join();
     }

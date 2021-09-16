@@ -19,7 +19,7 @@ void VanillaDielectricFresnel::evaluateReflectance(
     const real      cosThetaI,
     Spectrum* const out_reflectance) const
 {
-    CADISE_ASSERT(out_reflectance);
+    CS_ASSERT(out_reflectance);
 
     real etaI = this->iorOuter();
     real etaT = this->iorInner();

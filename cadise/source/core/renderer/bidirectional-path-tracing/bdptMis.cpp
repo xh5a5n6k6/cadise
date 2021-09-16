@@ -25,8 +25,8 @@ real BdptMis::weight(
         return 1.0_r;
     }
 
-    CADISE_ASSERT_GE(lightPath.length(), s);
-    CADISE_ASSERT_GE(cameraPath.length(), t);
+    CS_ASSERT_GE(lightPath.length(), s);
+    CS_ASSERT_GE(cameraPath.length(), t);
 
     // build another two sub-paths
     // which won't effect origin ones.

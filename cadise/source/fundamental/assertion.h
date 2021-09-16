@@ -12,7 +12,7 @@
     Reference Code: 
     https://github.com/TzuChieh/Photon-v2/blob/master/Engine/Source/Common/assertion.h
 */
-#ifdef CADISE_DEBUG
+#ifdef CS_DEBUG
     #include <iostream>
     #include <string>
 
@@ -21,7 +21,7 @@
         void assertionFailed();
     } // namespace cadise
 
-    #define CADISE_ASSERT_MSG(condition, message)\
+    #define CS_ASSERT_MSG(condition, message)\
         do\
         {\
             if(!(condition))\
@@ -41,38 +41,38 @@
             }\
         } while(0)
 #else
-    #define CADISE_ASSERT_MSG(condition, message)
+    #define CS_ASSERT_MSG(condition, message)
 #endif
 
-#define CADISE_ASSERT(condition)\
-    CADISE_ASSERT_MSG(condition, "")
+#define CS_ASSERT(condition)\
+    CS_ASSERT_MSG(condition, "")
 
 // check if a is equal to b
-#define CADISE_ASSERT_EQ(a, b)\
-    CADISE_ASSERT(a == b)
+#define CS_ASSERT_EQ(a, b)\
+    CS_ASSERT(a == b)
 
 // check if a is not equal to b
-#define CADISE_ASSERT_NE(a, b)\
-    CADISE_ASSERT(a != b)
+#define CS_ASSERT_NE(a, b)\
+    CS_ASSERT(a != b)
 
 // check if a is less than b
-#define CADISE_ASSERT_LT(a, b)\
-    CADISE_ASSERT(a < b)
+#define CS_ASSERT_LT(a, b)\
+    CS_ASSERT(a < b)
 
 // check if a is not greater than b
-#define CADISE_ASSERT_LE(a, b)\
-    CADISE_ASSERT(a <= b)
+#define CS_ASSERT_LE(a, b)\
+    CS_ASSERT(a <= b)
 
 // check if a is greater than b
-#define CADISE_ASSERT_GT(a, b)\
-    CADISE_ASSERT(a > b)
+#define CS_ASSERT_GT(a, b)\
+    CS_ASSERT(a > b)
 
 // check if a is not less than b
-#define CADISE_ASSERT_GE(a, b)\
-    CADISE_ASSERT(a >= b)
+#define CS_ASSERT_GE(a, b)\
+    CS_ASSERT(a >= b)
 
 // check if a is not less than b
 // and not greater than c
-#define CADISE_ASSERT_RANGE_INCLUSIVE(a, b, c)\
-    CADISE_ASSERT_GE(a, b);\
-    CADISE_ASSERT_LE(a, c)
+#define CS_ASSERT_RANGE_INCLUSIVE(a, b, c)\
+    CS_ASSERT_GE(a, b);\
+    CS_ASSERT_LE(a, c)

@@ -13,7 +13,7 @@ BruteForceAccelerator::BruteForceAccelerator(const std::vector<std::shared_ptr<I
 
 void BruteForceAccelerator::evaluateBound(AABB3R* const out_bound) const 
 {
-    CADISE_ASSERT(out_bound);
+    CS_ASSERT(out_bound);
 
     AABB3R bound;
     AABB3R tmpBound;

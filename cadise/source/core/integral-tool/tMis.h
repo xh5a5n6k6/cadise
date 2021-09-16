@@ -27,8 +27,8 @@ inline real TMis<Mode>::weight(
     const int32 nA,
     const int32 nB)
 {
-    CADISE_ASSERT_GE(pdfA, 0.0_r);
-    CADISE_ASSERT_GE(pdfB, 0.0_r);
+    CS_ASSERT_GE(pdfA, 0.0_r);
+    CS_ASSERT_GE(pdfB, 0.0_r);
 
     const real mulA = nA * pdfA;
     const real mulB = nB * pdfB;

@@ -22,7 +22,7 @@ Ray::Ray(const Vector3R& origin, const Vector3R& direction, const real minT, con
     _minT(minT),
     _maxT(maxT) 
 {
-    CADISE_ASSERT(!direction.isZero());
+    CS_ASSERT(!direction.isZero());
 
     _direction = direction.normalize();
 }
@@ -67,7 +67,7 @@ void Ray::setOrigin(const Vector3R& origin)
 
 void Ray::setDirection(const Vector3R& direction) 
 {
-    CADISE_ASSERT(!direction.isZero());
+    CS_ASSERT(!direction.isZero());
 
     _direction = direction.normalize();
 }

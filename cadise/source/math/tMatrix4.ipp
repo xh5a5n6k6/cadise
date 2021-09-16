@@ -210,7 +210,7 @@ inline void TMatrix4<T>::transformPoint(
     const TVector3<T>& point, 
     TVector3<T>* const out_point) const 
 {
-    CADISE_ASSERT(out_point);
+    CS_ASSERT(out_point);
 
     out_point->set(
         _n[0][0] * point.x() + _n[0][1] * point.y() + _n[0][2] * point.z() + _n[0][3],
@@ -223,7 +223,7 @@ inline void TMatrix4<T>::transformVector(
     const TVector3<T>& vector, 
     TVector3<T>* const out_vector) const
 {
-    CADISE_ASSERT(out_vector);
+    CS_ASSERT(out_vector);
 
     out_vector->set(
         _n[0][0] * vector.x() + _n[0][1] * vector.y() + _n[0][2] * vector.z(),

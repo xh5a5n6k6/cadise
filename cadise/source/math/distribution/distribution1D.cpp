@@ -11,7 +11,7 @@ Distribution1D::Distribution1D() = default;
 Distribution1D::Distribution1D(const real* const value, const std::size_t sizeNumber) :
     _cdf(sizeNumber + 1)
 {
-    CADISE_ASSERT(value);
+    CS_ASSERT(value);
 
     _delta = 1.0_r / static_cast<real>(sizeNumber);
 
@@ -58,7 +58,7 @@ real Distribution1D::sampleContinuous(
     const real  seed, 
     real* const out_pdf) const 
 {
-    CADISE_ASSERT(out_pdf);
+    CS_ASSERT(out_pdf);
 
     std::size_t localIndex;
 
@@ -70,12 +70,12 @@ real Distribution1D::sampleContinuous(
     real* const        out_pdf, 
     std::size_t* const out_index) const 
 {
-    CADISE_ASSERT(out_pdf);
-    CADISE_ASSERT(out_index);
+    CS_ASSERT(out_pdf);
+    CS_ASSERT(out_index);
 
     const std::size_t sampleIndex = this->continuousToDiscrete(seed);
     
-    CADISE_ASSERT_RANGE_INCLUSIVE(sampleIndex, 0, _cdf.size() - 2);
+    CS_ASSERT_RANGE_INCLUSIVE(sampleIndex, 0, _cdf.size() - 2);
 
     *out_index = sampleIndex;
     *out_pdf   = this->pdfContinuous(sampleIndex);
@@ -102,7 +102,7 @@ std::size_t Distribution1D::sampleDiscrete(
     const real  seed,
     real* const out_pdf) const 
 {
-    CADISE_ASSERT(out_pdf);
+    CS_ASSERT(out_pdf);
 
     const std::size_t sampleIndex = this->continuousToDiscrete(seed);
     *out_pdf = this->pdfDiscrete(sampleIndex);
@@ -124,14 +124,14 @@ real Distribution1D::pdfContinuous(const std::size_t sampleIndex) const
 
 real Distribution1D::pdfDiscrete(const std::size_t sampleIndex) const 
 {
-    CADISE_ASSERT_RANGE_INCLUSIVE(sampleIndex, 0, _cdf.size() - 2);
+    CS_ASSERT_RANGE_INCLUSIVE(sampleIndex, 0, _cdf.size() - 2);
 
     return _cdf[sampleIndex + 1] - _cdf[sampleIndex];
 }
 
 std::size_t Distribution1D::continuousToDiscrete(const real seed) const 
 {
-    CADISE_ASSERT_RANGE_INCLUSIVE(seed, 0.0_r, 1.0_r);
+    CS_ASSERT_RANGE_INCLUSIVE(seed, 0.0_r, 1.0_r);
 
     for (std::size_t i = 0; i < _cdf.size() - 1; ++i) 
     {

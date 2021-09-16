@@ -12,7 +12,7 @@ namespace cadise::instantiator
 std::shared_ptr<Film> makeFilm(
     const std::shared_ptr<SdData>& data)
 {
-    CADISE_ASSERT(data);
+    CS_ASSERT(data);
 
     std::shared_ptr<Film> film = nullptr;
 

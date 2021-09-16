@@ -16,7 +16,7 @@ const Primitive* PrimitiveInfo::primitive() const
 
 void PrimitiveInfo::setPrimitive(const Primitive* const primitive)
 {
-    CADISE_ASSERT(primitive);
+    CS_ASSERT(primitive);
 
     _primitive = primitive;
 }

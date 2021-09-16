@@ -27,7 +27,7 @@ void AreaLight::setIsBackFaceEmit(const bool isBackFaceEmit)
 
 bool AreaLight::_canEmit(const Vector3R& direction, const Vector3R& N) const 
 {
-    CADISE_ASSERT_GT(N.length(), 0.0_r);
+    CS_ASSERT_GT(N.length(), 0.0_r);
 
     return (direction.dot(N) >= 0.0_r) != _isBackFaceEmit;
 }

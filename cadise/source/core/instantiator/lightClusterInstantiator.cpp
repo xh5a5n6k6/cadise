@@ -28,7 +28,7 @@ std::shared_ptr<LightCluster> makeLightCluster(
     const std::shared_ptr<SdData>&             data,
     const std::vector<std::shared_ptr<Light>>& lights)
 {
-    CADISE_ASSERT(data);
+    CS_ASSERT(data);
 
     std::shared_ptr<LightCluster> lightCluster = nullptr;
 

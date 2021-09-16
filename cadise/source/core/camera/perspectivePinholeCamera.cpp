@@ -55,7 +55,7 @@ void PerspectivePinholeCamera::spawnPrimaryRay(
     const Vector2D& filmPosition,
     Ray* const      out_primaryRay) const
 {
-    CADISE_ASSERT(out_primaryRay);
+    CS_ASSERT(out_primaryRay);
 
     Vector3R sampleCameraPosition;
     _filmToCamera->transformPoint(
@@ -66,7 +66,7 @@ void PerspectivePinholeCamera::spawnPrimaryRay(
     Vector3R direction;
     _cameraToWorld->transformVector(sampleCameraPosition, &direction);
 
-    CADISE_ASSERT(!direction.isZero());
+    CS_ASSERT(!direction.isZero());
 
     // generate ray in world space
     out_primaryRay->reset();
@@ -78,8 +78,8 @@ void PerspectivePinholeCamera::evaluateCameraSample(
     CameraSample* const out_sample, 
     Ray* const          out_toCameraRay) const
 {
-    CADISE_ASSERT(out_sample);
-    CADISE_ASSERT(out_toCameraRay);
+    CS_ASSERT(out_sample);
+    CS_ASSERT(out_toCameraRay);
 
     Vector3R cameraRayN;
     _cameraToWorld->transformVector(Vector3R(0.0_r, 0.0_r, -1.0_r), &cameraRayN);
@@ -87,7 +87,7 @@ void PerspectivePinholeCamera::evaluateCameraSample(
     const Vector3R targetPosition  = out_sample->targetPosition();
     const Vector3R cameraRayVector = targetPosition.sub(_position);
 
-    CADISE_ASSERT(!cameraRayVector.isZero());
+    CS_ASSERT(!cameraRayVector.isZero());
 
     const real     sensorArea         = _getSensorArea();
     const real     distance           = cameraRayVector.length();
@@ -101,7 +101,7 @@ void PerspectivePinholeCamera::evaluateCameraSample(
     Vector3R targetCameraPosition;
     _cameraToWorld->inverseMatrix().transformPoint(targetPosition, &targetCameraPosition);
 
-    CADISE_ASSERT(!targetCameraPosition.isZero());
+    CS_ASSERT(!targetCameraPosition.isZero());
 
     // transform to focus (film) plane in camera space
     const real     cameraToImagePointDistance  = _sensorOffset / cosTheta;
@@ -155,8 +155,8 @@ void PerspectivePinholeCamera::evaluateCameraPdf(
     real* const out_pdfA,
     real* const out_pdfW) const 
 {
-    CADISE_ASSERT(out_pdfA);
-    CADISE_ASSERT(out_pdfW);
+    CS_ASSERT(out_pdfA);
+    CS_ASSERT(out_pdfW);
 
     Vector3R cameraRayN;
     _cameraToWorld->transformVector(Vector3R(0.0_r, 0.0_r, -1.0_r), &cameraRayN);

@@ -26,12 +26,12 @@ BdptRenderer::BdptRenderer(const std::shared_ptr<Sampler>& sampler) :
     Renderer(),
     _sampler(sampler)
 {
-    CADISE_ASSERT(sampler);
+    CS_ASSERT(sampler);
 }
 
 void BdptRenderer::render() const 
 {
-    CADISE_ASSERT(_scene);
+    CS_ASSERT(_scene);
 
     Stopwatch stopwatch;
     stopwatch.start();

@@ -21,8 +21,8 @@ ConductorMicrofacet::ConductorMicrofacet(
     _microfacet(microfacet),
     _fresnel(fresnel) 
 {
-    CADISE_ASSERT(microfacet);
-    CADISE_ASSERT(fresnel);
+    CS_ASSERT(microfacet);
+    CS_ASSERT(fresnel);
 }
 
 Spectrum ConductorMicrofacet::evaluate(
@@ -64,7 +64,7 @@ void ConductorMicrofacet::evaluateSample(
     const SurfaceIntersection& si,
     BsdfSample* const          out_sample) const
 {
-    CADISE_ASSERT(out_sample);
+    CS_ASSERT(out_sample);
 
     const Vector3R& Ns    = si.surfaceDetail().shadingNormal();
     const Vector3R& V     = si.wi();
@@ -141,7 +141,7 @@ real ConductorMicrofacet::evaluatePdfW(
 
 ELobe ConductorMicrofacet::lobe(const BsdfComponents component) const 
 {
-    CADISE_ASSERT_EQ(component, 0);
+    CS_ASSERT_EQ(component, 0);
 
     return ELobe::GLOSSY_REFLECTION;
 }

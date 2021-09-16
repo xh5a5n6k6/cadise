@@ -19,8 +19,8 @@ AnisotropicGgx::AnisotropicGgx(
     _roughnessU(roughnessU),
     _roughnessV(roughnessV)
 {
-    CADISE_ASSERT(roughnessU);
-    CADISE_ASSERT(roughnessV);
+    CS_ASSERT(roughnessU);
+    CS_ASSERT(roughnessV);
 }
 
 real AnisotropicGgx::distributionD(
@@ -88,7 +88,7 @@ void AnisotropicGgx::sampleHalfVectorH(
     const std::array<real, 2>& sample,
     Vector3R* const            out_H) const 
 {
-    CADISE_ASSERT(out_H);
+    CS_ASSERT(out_H);
 
     // to avoid random sample with 1 value
     const std::array<real, 2> safeSample = {

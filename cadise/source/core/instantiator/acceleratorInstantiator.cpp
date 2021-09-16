@@ -61,7 +61,7 @@ std::shared_ptr<Accelerator> makeAccelerator(
     const std::shared_ptr<SdData>& data,
     const std::vector<std::shared_ptr<Intersector>>& intersectors)
 {
-    CADISE_ASSERT(data);
+    CS_ASSERT(data);
 
     std::shared_ptr<Accelerator> accelerator = nullptr;
     

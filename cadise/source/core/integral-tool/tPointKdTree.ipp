@@ -61,7 +61,7 @@ inline void TPointKdTree<Index, Object, ObjectCenterCalculator>::
         const real                 searchRadius,
         std::vector<Object>* const out_objects) const
 {
-    CADISE_ASSERT(out_objects);
+    CS_ASSERT(out_objects);
 
     if (!_bound.isInside(position)) 
     {
@@ -245,8 +245,8 @@ inline bool TPointKdTree<Index, Object, ObjectCenterCalculator>::
         std::vector<Index>* const            out_subObjectIndicesA,
         std::vector<Index>* const            out_subObjectIndicesB)
 {
-    CADISE_ASSERT(out_subObjectIndicesA);
-    CADISE_ASSERT(out_subObjectIndicesB);
+    CS_ASSERT(out_subObjectIndicesA);
+    CS_ASSERT(out_subObjectIndicesB);
 
     const std::size_t splitAxis = entireBound.maxAxis();
 

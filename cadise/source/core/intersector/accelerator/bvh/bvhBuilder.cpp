@@ -21,8 +21,8 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::buildBinaryNodes(
     std::vector<std::shared_ptr<Intersector>>* const out_orderedIntersectors,
     std::size_t* const                               out_totalNodeSize) const 
 {
-    CADISE_ASSERT(out_orderedIntersectors);
-    CADISE_ASSERT(out_totalNodeSize);
+    CS_ASSERT(out_orderedIntersectors);
+    CS_ASSERT(out_totalNodeSize);
 
     const std::size_t intersectorCounts = intersectors.size();
 
@@ -50,7 +50,7 @@ void BvhBuilder::buildLinearNodes(
     const std::size_t                 totalNodeSize,
     std::vector<BvhLinearNode>* const out_linearNodes) const 
 {
-    CADISE_ASSERT(out_linearNodes);
+    CS_ASSERT(out_linearNodes);
     
     std::vector<BvhLinearNode> nodes;
     nodes.reserve(totalNodeSize);
@@ -66,8 +66,8 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
     std::vector<std::shared_ptr<Intersector>>* const out_orderedIntersectors,
     std::size_t* const                               out_totalNodeSize) const 
 {
-    CADISE_ASSERT(out_orderedIntersectors);
-    CADISE_ASSERT(out_totalNodeSize);
+    CS_ASSERT(out_orderedIntersectors);
+    CS_ASSERT(out_totalNodeSize);
 
     std::unique_ptr<BvhBinaryNode> node = std::make_unique<BvhBinaryNode>();
 
@@ -192,7 +192,7 @@ void BvhBuilder::_buildLinearNodesRecursively(
     std::vector<BvhLinearNode>* const out_linearNodes,
     std::size_t* const                out_secondChildNodeIndex) const 
 {
-    CADISE_ASSERT(out_linearNodes);
+    CS_ASSERT(out_linearNodes);
     
     BvhLinearNode linearNode;
     const std::size_t nodeIndex = out_linearNodes->size();
@@ -241,8 +241,8 @@ bool BvhBuilder::_canSplitWithEqual(
     std::vector<BvhBoundInfo>* const out_subBoundInfosA,
     std::vector<BvhBoundInfo>* const out_subBoundInfosB) const
 {
-    CADISE_ASSERT(out_subBoundInfosA);
-    CADISE_ASSERT(out_subBoundInfosB);
+    CS_ASSERT(out_subBoundInfosA);
+    CS_ASSERT(out_subBoundInfosB);
 
     // clear buffer first
     out_subBoundInfosA->clear();
@@ -285,8 +285,8 @@ bool BvhBuilder::_canSplitWithSah(
     std::vector<BvhBoundInfo>* const out_subBoundInfosA,
     std::vector<BvhBoundInfo>* const out_subBoundInfosB) const 
 {
-    CADISE_ASSERT(out_subBoundInfosA);
-    CADISE_ASSERT(out_subBoundInfosB);
+    CS_ASSERT(out_subBoundInfosA);
+    CS_ASSERT(out_subBoundInfosB);
 
     // clear buffer first
     out_subBoundInfosA->clear();

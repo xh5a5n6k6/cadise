@@ -25,7 +25,7 @@ Sphere::Sphere(
     _center(center),
     _radius(radius) 
 {
-    CADISE_ASSERT(bsdf);
+    CS_ASSERT(bsdf);
 
     _worldToLocal     = std::make_shared<Transform>(Matrix4R::makeTranslate(center.negate()));
     _tmptextureMapper = std::make_shared<SphericalMapper>();
@@ -33,7 +33,7 @@ Sphere::Sphere(
 
 void Sphere::evaluateBound(AABB3R* const out_bound) const 
 {
-    CADISE_ASSERT(out_bound);
+    CS_ASSERT(out_bound);
 
     AABB3R bound(_center.sub(_radius), _center.add(_radius));
     bound.expandLocal(0.0001_r);
@@ -118,7 +118,7 @@ void Sphere::evaluateSurfaceDetail(
     const PrimitiveInfo& primitiveInfo, 
     SurfaceDetail* const out_surface) const 
 {
-    CADISE_ASSERT(out_surface);
+    CS_ASSERT(out_surface);
 
     const Vector3R& P       = out_surface->position();
     const Vector3R  NVector = P.sub(_center);
@@ -201,7 +201,7 @@ void Sphere::evaluateSurfaceDetail(
 
 void Sphere::evaluatePositionSample(PositionSample* const out_sample) const
 {
-    CADISE_ASSERT(out_sample);
+    CS_ASSERT(out_sample);
 
     // TODO: implement here
 }
@@ -223,7 +223,7 @@ bool Sphere::_isSolutionValid(
     const real  maxT,
     real* const out_finalT) const
 {
-    CADISE_ASSERT(out_finalT);
+    CS_ASSERT(out_finalT);
 
     if (t0 > maxT || t1 < minT)
     {

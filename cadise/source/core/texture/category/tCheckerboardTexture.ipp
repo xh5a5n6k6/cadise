@@ -20,8 +20,8 @@ inline TCheckerboardTexture<T>::TCheckerboardTexture(
     _oddTexture(oddTexture), 
     _evenTexture(evenTexture) 
 {
-    CADISE_ASSERT(oddTexture);
-    CADISE_ASSERT(evenTexture);
+    CS_ASSERT(oddTexture);
+    CS_ASSERT(evenTexture);
 
     _oddTextureSize  = 1.0_r / oddTextureNumber;
     _evenTextureSize = 1.0_r / evenTextureNumber;
@@ -30,7 +30,7 @@ inline TCheckerboardTexture<T>::TCheckerboardTexture(
 template<typename T>
 inline void TCheckerboardTexture<T>::evaluate(const Vector3R& uvw, T* const out_value) const
 {
-    CADISE_ASSERT(out_value);
+    CS_ASSERT(out_value);
 
     const int32 uCast = static_cast<int32>(std::floor(uvw.x() / _oddTextureSize));
     const int32 vCast = static_cast<int32>(std::floor(uvw.y() / _evenTextureSize));

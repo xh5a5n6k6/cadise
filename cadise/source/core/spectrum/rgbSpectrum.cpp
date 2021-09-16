@@ -47,7 +47,7 @@ void RgbSpectrum::setLinearSrgb(const Vector3R& linearSrgb)
 
 void RgbSpectrum::transformToLinearSrgb(Vector3R* const out_linearSrgb) const
 {
-    CADISE_ASSERT(out_linearSrgb);
+    CS_ASSERT(out_linearSrgb);
 
     out_linearSrgb->set(_values[0], _values[1], _values[2]);
 }

@@ -104,9 +104,9 @@ inline void TImage<T, N>::getImagePixel(
     const int32                   y, 
     TArithmeticArray<T, N>* const out_pixel) const
 {
-    CADISE_ASSERT(out_pixel);
-    CADISE_ASSERT_RANGE_INCLUSIVE(x, 0, _width - 1);
-    CADISE_ASSERT_RANGE_INCLUSIVE(y, 0, _height - 1);
+    CS_ASSERT(out_pixel);
+    CS_ASSERT_RANGE_INCLUSIVE(x, 0, _width - 1);
+    CS_ASSERT_RANGE_INCLUSIVE(y, 0, _height - 1);
 
     const std::size_t dataIndexOffset = _pixelDataOffset(x, y);
 

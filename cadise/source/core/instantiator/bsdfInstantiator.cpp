@@ -128,12 +128,12 @@ static std::shared_ptr<Bsdf> createMixed(
     const auto   bsdfAName = data->findString("bsdf-a");
     const auto&& bsdfA     = bsdfs.find(bsdfAName);
 
-    CADISE_ASSERT_NE(bsdfA, bsdfs.end());
+    CS_ASSERT_NE(bsdfA, bsdfs.end());
 
     const auto   bsdfBName = data->findString("bsdf-b");
     const auto&& bsdfB     = bsdfs.find(bsdfBName);
 
-    CADISE_ASSERT_NE(bsdfB, bsdfs.end());
+    CS_ASSERT_NE(bsdfB, bsdfs.end());
 
     const real ratio = data->findReal("ratio", 0.5_r);
 
@@ -248,7 +248,7 @@ std::shared_ptr<Bsdf> makeBsdf(
     const StringKeyMap<TTexture<Spectrum>>& spectrumTextures,
     const StringKeyMap<Bsdf>&               bsdfs)
 {
-    CADISE_ASSERT(data);
+    CS_ASSERT(data);
 
     std::shared_ptr<Bsdf> bsdf = nullptr;
 

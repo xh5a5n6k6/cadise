@@ -115,7 +115,7 @@ inline TVector3<T> TVector3<T>::operator / (const TVector3<T>& rhs) const
 template<typename T>
 inline T& TVector3<T>::operator [] (const constant::AxisType index)
 {
-    CADISE_ASSERT_LT(index, 3);
+    CS_ASSERT_LT(index, 3);
 
     switch (index) 
     {
@@ -129,7 +129,7 @@ inline T& TVector3<T>::operator [] (const constant::AxisType index)
             return _z;
     }
 
-    CADISE_ASSERT(false);
+    CS_ASSERT(false);
 
     return _x;
 }
@@ -137,7 +137,7 @@ inline T& TVector3<T>::operator [] (const constant::AxisType index)
 template<typename T>
 inline const T& TVector3<T>::operator [] (const constant::AxisType index) const
 {
-    CADISE_ASSERT_LT(index, 3);
+    CS_ASSERT_LT(index, 3);
 
     switch (index) 
     {
@@ -151,7 +151,7 @@ inline const T& TVector3<T>::operator [] (const constant::AxisType index) const
             return _z;
     }
 
-    CADISE_ASSERT(false);
+    CS_ASSERT(false);
 
     return _x;
 }
@@ -391,7 +391,7 @@ inline constant::AxisType TVector3<T>::maxDimension() const
 template<typename T>
 inline TVector3<T> TVector3<T>::normalize() const
 {
-    CADISE_ASSERT_GT(this->length(), static_cast<T>(0));
+    CS_ASSERT_GT(this->length(), static_cast<T>(0));
 
     const T rcpLength = static_cast<T>(1) / this->length();
 
@@ -401,7 +401,7 @@ inline TVector3<T> TVector3<T>::normalize() const
 template<typename T>
 inline TVector3<T>& TVector3<T>::normalizeLocal() 
 {
-    CADISE_ASSERT_GT(this->length(), static_cast<T>(0));
+    CS_ASSERT_GT(this->length(), static_cast<T>(0));
 
     const T rcpLength = static_cast<T>(1) / this->length();
 
@@ -531,7 +531,7 @@ inline bool TVector3<T>::canRefract(
     const real         iorInner,
     TVector3<T>* const out_vector) const 
 {
-    CADISE_ASSERT(out_vector);
+    CS_ASSERT(out_vector);
 
     real etaI       = iorOuter;
     real etaT       = iorInner;

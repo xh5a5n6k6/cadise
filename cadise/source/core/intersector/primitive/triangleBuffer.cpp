@@ -17,13 +17,13 @@ TriangleBuffer::TriangleBuffer(
     _normals(normals),
     _uvws(uvws)
 {
-    CADISE_ASSERT(bsdf);
+    CS_ASSERT(bsdf);
 }
 
 void TriangleBuffer::transformToTriangles(
     std::vector<std::shared_ptr<Primitive>>* const out_triangles) const
 {
-    CADISE_ASSERT(out_triangles);
+    CS_ASSERT(out_triangles);
 
     for (std::size_t i = 0; i < _positions.size(); i += 3)
     {

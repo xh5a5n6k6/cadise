@@ -26,7 +26,7 @@ static std::shared_ptr<Camera> createPerspectivePinhole(
 std::shared_ptr<Camera> makeCamera(
     const std::shared_ptr<SdData>& data) 
 {
-    CADISE_ASSERT(data);
+    CS_ASSERT(data);
 
     std::shared_ptr<Camera> camera = nullptr;
 

@@ -21,7 +21,7 @@ void AbsorberBsdf::evaluateSample(
     const SurfaceIntersection& si,
     BsdfSample* const          out_sample) const
 {
-    CADISE_ASSERT(out_sample);
+    CS_ASSERT(out_sample);
 
     return;
 }
@@ -35,7 +35,7 @@ real AbsorberBsdf::evaluatePdfW(
 
 ELobe AbsorberBsdf::lobe(const BsdfComponents component) const 
 {
-    CADISE_ASSERT_EQ(component, 0);
+    CS_ASSERT_EQ(component, 0);
 
     return ELobe::ABSORB;
 }

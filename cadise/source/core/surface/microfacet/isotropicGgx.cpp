@@ -15,7 +15,7 @@ IsotropicGgx::IsotropicGgx(const std::shared_ptr<TTexture<real>>& roughness) :
     Microfacet(),
     _roughness(roughness)
 {
-    CADISE_ASSERT(roughness);
+    CS_ASSERT(roughness);
 }
 
 real IsotropicGgx::distributionD(
@@ -86,7 +86,7 @@ void IsotropicGgx::sampleHalfVectorH(
     const std::array<real, 2>& sample,
     Vector3R* const            out_H) const 
 {
-    CADISE_ASSERT(out_H);
+    CS_ASSERT(out_H);
 
     // to avoid random sample with 1 value
     const std::array<real, 2> safeSample = {

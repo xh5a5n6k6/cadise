@@ -14,7 +14,7 @@ IsotropicBlinnPhong::IsotropicBlinnPhong(const std::shared_ptr<TTexture<real>>& 
     Microfacet(),
     _roughness(roughness)
 {
-    CADISE_ASSERT(roughness);
+    CS_ASSERT(roughness);
 }
 
 real IsotropicBlinnPhong::distributionD(
@@ -100,7 +100,7 @@ void IsotropicBlinnPhong::sampleHalfVectorH(
     const std::array<real, 2>& sample,
     Vector3R* const            out_H) const 
 {
-    CADISE_ASSERT(out_H);
+    CS_ASSERT(out_H);
 
     real sampleRoughness;
     TSurfaceSampler<real>().sample(si, _roughness.get(), &sampleRoughness);

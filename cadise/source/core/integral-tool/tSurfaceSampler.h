@@ -24,8 +24,8 @@ inline void TSurfaceSampler<T>::sample(
     const TTexture<T>* const   texture,
     T* const                   out_value) const 
 {
-    CADISE_ASSERT(texture);
-    CADISE_ASSERT(out_value);
+    CS_ASSERT(texture);
+    CS_ASSERT(out_value);
 
     const Vector3R& uvw = si.surfaceDetail().uvw();
     texture->evaluate(uvw, out_value);

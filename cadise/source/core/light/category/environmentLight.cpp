@@ -28,8 +28,8 @@ EnvironmentLight::EnvironmentLight(
     _approximateFlux(0.0_r),
     _sceneBoundRadius(0.0_r)
 {
-    CADISE_ASSERT(primitive);
-    CADISE_ASSERT(environmentRadiance);
+    CS_ASSERT(primitive);
+    CS_ASSERT(environmentRadiance);
 
     std::vector<real> weightedSampleRadiances(resolution.x() * resolution.y());
     for (std::size_t iy = 0; iy < resolution.y(); ++iy) 
@@ -71,7 +71,7 @@ Spectrum EnvironmentLight::emittance(const SurfaceIntersection& emitIntersection
 
 void EnvironmentLight::evaluateDirectSample(DirectLightSample* const out_sample) const 
 {
-    CADISE_ASSERT(out_sample);
+    CS_ASSERT(out_sample);
 
     const std::array<real, 2> sample = { Random::nextReal(), Random::nextReal() };
     real uvPdf;
@@ -112,7 +112,7 @@ real EnvironmentLight::evaluateDirectPdfW(
 
 void EnvironmentLight::evaluateEmitSample(EmitLightSample* const out_sample) const
 {
-    CADISE_ASSERT(out_sample);
+    CS_ASSERT(out_sample);
 
     // TODO: implement here
 }
@@ -123,8 +123,8 @@ void EnvironmentLight::evaluateEmitPdf(
     real* const     out_pdfA,
     real* const     out_pdfW) const 
 {
-    CADISE_ASSERT(out_pdfA);
-    CADISE_ASSERT(out_pdfW);
+    CS_ASSERT(out_pdfA);
+    CS_ASSERT(out_pdfW);
 
     // TODO: implement here
 }
@@ -136,7 +136,7 @@ real EnvironmentLight::approximateFlux() const
 
 void EnvironmentLight::setSceneBoundRadius(const real sceneBoundRadius) 
 {
-    CADISE_ASSERT_GE(sceneBoundRadius, 0.0_r);
+    CS_ASSERT_GE(sceneBoundRadius, 0.0_r);
 
     _sceneBoundRadius = sceneBoundRadius;
 

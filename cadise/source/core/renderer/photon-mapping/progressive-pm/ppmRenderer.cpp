@@ -34,12 +34,12 @@ PpmRenderer::PpmRenderer(
     _sampler(sampler),
     _setting(setting)
 {
-    CADISE_ASSERT(sampler);
+    CS_ASSERT(sampler);
 }
 
 void PpmRenderer::render() const 
 {
-    CADISE_ASSERT(_scene);
+    CS_ASSERT(_scene);
 
     Stopwatch stopwatch;
     stopwatch.start();

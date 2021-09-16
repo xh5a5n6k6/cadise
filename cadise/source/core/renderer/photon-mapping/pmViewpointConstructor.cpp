@@ -26,16 +26,16 @@ PmViewpointConstructor::PmViewpointConstructor(
     _camera(camera),
     _initialRadius(initialRadius) 
 {
-    CADISE_ASSERT(scene);
-    CADISE_ASSERT(camera);
-    CADISE_ASSERT_GT(initialRadius, 0.0_r);
+    CS_ASSERT(scene);
+    CS_ASSERT(camera);
+    CS_ASSERT_GT(initialRadius, 0.0_r);
 }
 
 void PmViewpointConstructor::construct(
     const Vector2D&                 filmPosition,
     std::vector<PmViewpoint>* const out_viewpoints) const
 {
-    CADISE_ASSERT(out_viewpoints);
+    CS_ASSERT(out_viewpoints);
 
     const int32 MAX_PATH_LENGTH = 6;
 

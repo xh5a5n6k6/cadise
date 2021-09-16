@@ -21,9 +21,9 @@ PmViewpointWork::PmViewpointWork(
     _viewpointConstructor(viewpointConstructor),
     _viewpoints(viewpoints)
 {
-    CADISE_ASSERT(sampler);
-    CADISE_ASSERT(viewpointConstructor);
-    CADISE_ASSERT(viewpoints);
+    CS_ASSERT(sampler);
+    CS_ASSERT(viewpointConstructor);
+    CS_ASSERT(viewpoints);
 }
 
 void PmViewpointWork::work() const

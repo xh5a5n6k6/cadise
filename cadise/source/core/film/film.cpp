@@ -27,7 +27,7 @@ Film::Film(
     _sensorPixels(),
     _splatPixels() 
 {
-    CADISE_ASSERT(filter);
+    CS_ASSERT(filter);
 
     const std::size_t numPixels = _resolution.asType<std::size_t>().product();
 
@@ -79,7 +79,7 @@ void Film::replaceWithFilm(std::unique_ptr<Film> other)
 
 std::unique_ptr<FilmTile> Film::generateFilmTile(const std::size_t tileIndex) const 
 {
-    CADISE_ASSERT_LT(tileIndex, this->numTilesXy().product());
+    CS_ASSERT_LT(tileIndex, this->numTilesXy().product());
 
     const AABB2I tileBound = this->getTileBound(tileIndex);
 

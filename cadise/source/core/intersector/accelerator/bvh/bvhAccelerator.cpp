@@ -34,7 +34,7 @@ BvhAccelerator::BvhAccelerator(
 
 void BvhAccelerator::evaluateBound(AABB3R* const out_bound) const
 {
-    CADISE_ASSERT(out_bound);
+    CS_ASSERT(out_bound);
 
     out_bound->set(_nodes[0].bound());
 }

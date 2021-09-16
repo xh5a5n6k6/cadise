@@ -27,7 +27,7 @@ InfiniteSphere::InfiniteSphere(const real radius) :
 
 void InfiniteSphere::evaluateBound(AABB3R* const out_bound) const 
 {
-    CADISE_ASSERT(out_bound);
+    CS_ASSERT(out_bound);
 
     AABB3R bound(Vector3R(-_radius), Vector3R(_radius));
     
@@ -56,7 +56,7 @@ void InfiniteSphere::evaluateSurfaceDetail(
     const PrimitiveInfo& primitiveInfo, 
     SurfaceDetail* const out_surface) const
 {
-    CADISE_ASSERT(out_surface);
+    CS_ASSERT(out_surface);
 
     Vector3R uvw;
     SphericalMapper().mappingToUvw(out_surface->position(), &uvw);
@@ -68,7 +68,7 @@ void InfiniteSphere::uvwToPosition(
     const Vector3R& uvw, 
     Vector3R* const out_position) const
 {
-    CADISE_ASSERT(out_position);
+    CS_ASSERT(out_position);
 
     const real theta    = (1.0_r - uvw.y()) * constant::pi<real>;
     const real phi      = uvw.x() * constant::two_pi<real>;

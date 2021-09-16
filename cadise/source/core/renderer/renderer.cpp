@@ -19,21 +19,21 @@ Renderer::~Renderer() = default;
 
 void Renderer::setScene(const Scene* const scene)
 {
-    CADISE_ASSERT(scene);
+    CS_ASSERT(scene);
 
     _scene = scene;
 }
 
 void Renderer::setCamera(const std::shared_ptr<Camera>& camera) 
 {
-    CADISE_ASSERT(camera);
+    CS_ASSERT(camera);
 
     _camera = camera;
 }
 
 void Renderer::setFilm(const std::shared_ptr<Film>& film)
 {
-    CADISE_ASSERT(film);
+    CS_ASSERT(film);
 
     _film = film;
 }

@@ -29,9 +29,9 @@ MixedBsdf::MixedBsdf(
     _bsdfB(bsdfB),
     _ratio(ratio) 
 {
-    CADISE_ASSERT(bsdfA);
-    CADISE_ASSERT(bsdfB);
-    CADISE_ASSERT(ratio);
+    CS_ASSERT(bsdfA);
+    CS_ASSERT(bsdfB);
+    CS_ASSERT(ratio);
 }
 
 Spectrum MixedBsdf::evaluate(
@@ -49,7 +49,7 @@ Spectrum MixedBsdf::evaluate(
     }
     else 
     {
-        CADISE_ASSERT_LT(info.components(), _bsdfA->components() + _bsdfB->components());
+        CS_ASSERT_LT(info.components(), _bsdfA->components() + _bsdfB->components());
 
         if (info.components() < _bsdfA->components())
         {
@@ -72,7 +72,7 @@ void MixedBsdf::evaluateSample(
     const SurfaceIntersection& si,
     BsdfSample* const          out_sample) const 
 {
-    CADISE_ASSERT(out_sample);
+    CS_ASSERT(out_sample);
 
     Spectrum            scatterValue(0.0_r);
     Vector3R            scatterDirection(0.0_r);
@@ -134,7 +134,7 @@ void MixedBsdf::evaluateSample(
     }
     else
     {
-        CADISE_ASSERT_LT(info.components(), _bsdfA->components() + _bsdfB->components());
+        CS_ASSERT_LT(info.components(), _bsdfA->components() + _bsdfB->components());
 
         Spectrum   localRatio(0.0_r);
         BsdfSample localSample;
@@ -184,7 +184,7 @@ real MixedBsdf::evaluatePdfW(
     }
     else
     {
-        CADISE_ASSERT_LT(info.components(), _bsdfA->components() + _bsdfB->components());
+        CS_ASSERT_LT(info.components(), _bsdfA->components() + _bsdfB->components());
 
         if (info.components() < _bsdfA->components())
         {
@@ -204,7 +204,7 @@ real MixedBsdf::evaluatePdfW(
 
 ELobe MixedBsdf::lobe(const BsdfComponents component) const
 {
-    CADISE_ASSERT_LT(component, _bsdfA->components() + _bsdfB->components());
+    CS_ASSERT_LT(component, _bsdfA->components() + _bsdfB->components());
 
     if (component < _bsdfA->components())
     {

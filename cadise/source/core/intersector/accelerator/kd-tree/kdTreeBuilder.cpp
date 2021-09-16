@@ -30,8 +30,8 @@ void KdTreeBuilder::buildNodes(
     std::vector<KdTreeNode>* const                   out_nodes,
     std::vector<std::size_t>* const                  out_intersectorIndices) 
 {
-    CADISE_ASSERT(out_nodes);
-    CADISE_ASSERT(out_intersectorIndices);
+    CS_ASSERT(out_nodes);
+    CS_ASSERT(out_intersectorIndices);
 
     if (intersectors.empty())
     {
@@ -66,8 +66,8 @@ void KdTreeBuilder::_buildNodesRecursively(
     std::vector<KdTreeNode>* const  out_nodes,
     std::vector<std::size_t>* const out_intersectorIndices) const
 {
-    CADISE_ASSERT(out_nodes);
-    CADISE_ASSERT(out_intersectorIndices);
+    CS_ASSERT(out_nodes);
+    CS_ASSERT(out_intersectorIndices);
 
     KdTreeNode node;
     const std::size_t nodeIndex                    = out_nodes->size();
@@ -179,10 +179,10 @@ bool KdTreeBuilder::_canSplitWithSah(
     std::vector<std::size_t>* const      out_subIntersectorIndicesA,
     std::vector<std::size_t>* const      out_subIntersectorIndicesB) const 
 {
-    CADISE_ASSERT(out_newBadRefines);
-    CADISE_ASSERT(out_splitInfo);
-    CADISE_ASSERT(out_subIntersectorIndicesA);
-    CADISE_ASSERT(out_subIntersectorIndicesB);
+    CS_ASSERT(out_newBadRefines);
+    CS_ASSERT(out_splitInfo);
+    CS_ASSERT(out_subIntersectorIndicesA);
+    CS_ASSERT(out_subIntersectorIndicesB);
 
     // clear buffer first
     out_subIntersectorIndicesA->clear();

@@ -49,7 +49,7 @@ void SubPath::addVertex(const PathVertex& vertex)
     // we take _vertices as a fixed size array,
     // so it needs to check the number of elements
     // is less than the capacity.
-    CADISE_ASSERT_LT(_vertices.size(), _vertices.capacity());
+    CS_ASSERT_LT(_vertices.size(), _vertices.capacity());
 
     _vertices.push_back(vertex);
 }
@@ -59,8 +59,8 @@ void SubPath::connectCamera(
     const Camera* const              camera,
     std::vector<ConnectEvent>* const out_events) const 
 {
-    CADISE_ASSERT(camera);
-    CADISE_ASSERT(out_events);
+    CS_ASSERT(camera);
+    CS_ASSERT(out_events);
 
     const std::size_t pathLength = this->length();
     if (pathLength < 2)
@@ -68,7 +68,7 @@ void SubPath::connectCamera(
         return;
     }
 
-    CADISE_ASSERT_EQ(_vertices[0].type(), EVertexType::LIGHT_END);
+    CS_ASSERT_EQ(_vertices[0].type(), EVertexType::LIGHT_END);
 
     for (std::size_t s = 2; s <= pathLength; ++s)
     {
@@ -137,7 +137,7 @@ void SubPath::connectLight(
     const Scene&    scene,
     Spectrum* const out_radiance) const
 {
-    CADISE_ASSERT(out_radiance);
+    CS_ASSERT(out_radiance);
 
     const std::size_t pathLength = this->length();
     if (pathLength < 2) 
@@ -145,7 +145,7 @@ void SubPath::connectLight(
         return;
     }
 
-    CADISE_ASSERT_EQ(_vertices[0].type(), EVertexType::CAMERA_END);
+    CS_ASSERT_EQ(_vertices[0].type(), EVertexType::CAMERA_END);
 
     Spectrum totalRadiance(0.0_r);
     for (std::size_t t = 2; t <= pathLength; ++t)
@@ -162,7 +162,7 @@ void SubPath::connectLight(
         real pickLightPdf;
         const Light* sampleLight = scene.sampleOneLight(&pickLightPdf);
 
-        CADISE_ASSERT(sampleLight);
+        CS_ASSERT(sampleLight);
 
         DirectLightSample directLightSample;
         directLightSample.setTargetPosition(cameraP);
@@ -180,7 +180,7 @@ void SubPath::connectLight(
         const Vector3R  LVector  = emitP.sub(cameraP);
         const real      distance = LVector.length();
 
-        CADISE_ASSERT_GT(distance, 0.0_r);
+        CS_ASSERT_GT(distance, 0.0_r);
 
         const Vector3R L     = LVector.div(distance);
         const real     LdotN = L.absDot(cameraNs);

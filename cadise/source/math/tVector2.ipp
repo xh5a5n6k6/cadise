@@ -105,7 +105,7 @@ inline TVector2<T> TVector2<T>::operator / (const TVector2<T>& rhs) const
 template<typename T>
 inline T& TVector2<T>::operator [] (const constant::AxisType index) 
 {
-    CADISE_ASSERT_LT(index, 2);
+    CS_ASSERT_LT(index, 2);
 
     switch (index) 
     {
@@ -116,7 +116,7 @@ inline T& TVector2<T>::operator [] (const constant::AxisType index)
             return _y;
     }
 
-    CADISE_ASSERT(false);
+    CS_ASSERT(false);
 
     return _x;
 }
@@ -124,7 +124,7 @@ inline T& TVector2<T>::operator [] (const constant::AxisType index)
 template<typename T>
 inline const T& TVector2<T>::operator [] (const constant::AxisType index) const 
 {
-    CADISE_ASSERT_LT(index, 2);
+    CS_ASSERT_LT(index, 2);
 
     switch (index) 
     {
@@ -135,7 +135,7 @@ inline const T& TVector2<T>::operator [] (const constant::AxisType index) const
             return _y;
     }
 
-    CADISE_ASSERT(false);
+    CS_ASSERT(false);
 
     return _x;
 }

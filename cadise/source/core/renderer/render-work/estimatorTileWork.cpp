@@ -24,15 +24,15 @@ EstimatorTileWork::EstimatorTileWork(
     _estimator(estimator),
     _sampler(sampler)
 {
-    CADISE_ASSERT(scene);
-    CADISE_ASSERT(camera);
-    CADISE_ASSERT(estimator);
-    CADISE_ASSERT(sampler);
+    CS_ASSERT(scene);
+    CS_ASSERT(camera);
+    CS_ASSERT(estimator);
+    CS_ASSERT(sampler);
 }
 
 void EstimatorTileWork::work() const 
 {
-    CADISE_ASSERT(_filmTile);
+    CS_ASSERT(_filmTile);
 
     const Vector2I& x0y0 = _filmTile->tileBound().minVertex();
     const Vector2I& x1y1 = _filmTile->tileBound().maxVertex();

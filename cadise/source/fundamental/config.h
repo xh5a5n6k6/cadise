@@ -1,6 +1,6 @@
 #pragma once
 
-#define CADISE_DEBUG
+#define CS_DEBUG
 
-#define CADISE_ASSERT_STACK_TRACE
-#define CADISE_ASSERT_ABORT
+#define CS_ASSERT_STACK_TRACE
+#define CS_ASSERT_ABORT

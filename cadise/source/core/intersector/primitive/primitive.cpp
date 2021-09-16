@@ -12,12 +12,12 @@ Primitive::Primitive(const std::shared_ptr<Bsdf>& bsdf) :
     _textureMapper(nullptr),
     _areaLight(nullptr) 
 {
-    CADISE_ASSERT(bsdf);
+    CS_ASSERT(bsdf);
 }
 
 void Primitive::evaluatePositionSample(PositionSample* const out_sample) const 
 {
-    CADISE_ASSERT(out_sample);
+    CS_ASSERT(out_sample);
 
     return;
 }
@@ -36,7 +36,7 @@ void Primitive::uvwToPosition(
     const Vector3R& uvw, 
     Vector3R* const out_position) const 
 {
-    CADISE_ASSERT(out_position);
+    CS_ASSERT(out_position);
 
     return;
 }
@@ -53,7 +53,7 @@ const AreaLight* Primitive::areaLight() const
 
 void Primitive::setAreaLight(const AreaLight* const areaLight)
 {
-    CADISE_ASSERT(areaLight);
+    CS_ASSERT(areaLight);
 
     _areaLight = areaLight;
 }

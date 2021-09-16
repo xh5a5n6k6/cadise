@@ -37,17 +37,17 @@ bool PathVertex::isConnectible() const
     switch (_type) 
     {
         case EVertexType::CAMERA_END:
-            CADISE_ASSERT(_camera);
+            CS_ASSERT(_camera);
 
             return true;
 
         case EVertexType::LIGHT_END:
-            CADISE_ASSERT(_light);
+            CS_ASSERT(_light);
 
             return !_light->isDeltaLight();
 
         case EVertexType::SURFACE:
-            CADISE_ASSERT(_bsdf);
+            CS_ASSERT(_bsdf);
 
             return _bsdf->lobes().hasAtLeastOne({
                 ELobe::DIFFUSE_REFLECTION,
@@ -69,7 +69,7 @@ Spectrum PathVertex::evaluate(
     const PathVertex&    previous, 
     const PathVertex&    next) const 
 {
-    CADISE_ASSERT(_bsdf);
+    CS_ASSERT(_bsdf);
 
     if (!this->isConnectible())
     {
@@ -79,8 +79,8 @@ Spectrum PathVertex::evaluate(
     const Vector3R toPrevious = previous.surfaceDetail().position().sub(_surfaceDetail.position());
     const Vector3R toNext     = next.surfaceDetail().position().sub(_surfaceDetail.position());
 
-    CADISE_ASSERT(!toPrevious.isZero());
-    CADISE_ASSERT(!toNext.isZero());
+    CS_ASSERT(!toPrevious.isZero());
+    CS_ASSERT(!toNext.isZero());
 
     SurfaceIntersection intersection;
     intersection.setSurfaceDetail(_surfaceDetail);
@@ -108,7 +108,7 @@ real PathVertex::evaluateOriginPdfA(
         return 0.0_r;
     }
 
-    CADISE_ASSERT(!(_camera && _light));
+    CS_ASSERT(!(_camera && _light));
 
     if (_camera) 
     {
@@ -147,7 +147,7 @@ real PathVertex::evaluateDirectPdfA(
         return 0.0_r;
     }
 
-    CADISE_ASSERT(!(_camera && _light));
+    CS_ASSERT(!(_camera && _light));
 
     const Vector3R& nextNs    = next.surfaceDetail().shadingNormal();
     const Vector3R  nowToNext = nextP.sub(nowP);
@@ -192,7 +192,7 @@ real PathVertex::evaluateConnectPdfA(
         return 0.0_r;
     }
 
-    CADISE_ASSERT(_bsdf);
+    CS_ASSERT(_bsdf);
 
     const Vector3R& nextNs        = next.surfaceDetail().shadingNormal();
     const Vector3R  nowToPrevious = previousP.sub(nowP);
@@ -275,21 +275,21 @@ void PathVertex::setPdfAReverse(const real pdfAReverse)
 
 void PathVertex::setCamera(const Camera* const camera)
 {
-    CADISE_ASSERT(camera);
+    CS_ASSERT(camera);
 
     _camera = camera;
 }
 
 void PathVertex::setLight(const Light* const light)
 {
-    CADISE_ASSERT(light);
+    CS_ASSERT(light);
 
     _light = light;
 }
 
 void PathVertex::setBsdf(const Bsdf* const bsdf) 
 {
-    CADISE_ASSERT(bsdf);
+    CS_ASSERT(bsdf);
 
     _bsdf = bsdf;
 }

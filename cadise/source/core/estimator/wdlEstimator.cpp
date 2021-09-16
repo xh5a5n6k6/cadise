@@ -19,7 +19,7 @@ WdlEstimator::WdlEstimator(const int32 maxDepth) :
     RadianceEstimator(),
     _maxDepth(maxDepth) 
 {
-    CADISE_ASSERT_GE(maxDepth, 0);
+    CS_ASSERT_GE(maxDepth, 0);
 }
 
 void WdlEstimator::estimate(
@@ -27,7 +27,7 @@ void WdlEstimator::estimate(
     const Ray&      ray,
     Spectrum* const out_radiance) const 
 {
-    CADISE_ASSERT(out_radiance);
+    CS_ASSERT(out_radiance);
 
     const TransportInfo transportInfo(ETransportMode::RADIANCE);
 
@@ -76,7 +76,7 @@ void WdlEstimator::estimate(
                 const Vector3R LVector  = directLightSample.emitPosition().sub(P);
                 const real     distance = LVector.length();
 
-                CADISE_ASSERT_GT(distance, 0.0_r);
+                CS_ASSERT_GT(distance, 0.0_r);
 
                 const Vector3R L = LVector.div(distance);
                 intersection.setWo(L);

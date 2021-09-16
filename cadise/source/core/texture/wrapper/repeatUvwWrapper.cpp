@@ -11,7 +11,7 @@ void RepeatUvwWrapper::wrap(
     const Vector3R& uvw, 
     Vector3R* const out_wrapUvw) const 
 {
-    CADISE_ASSERT(out_wrapUvw);
+    CS_ASSERT(out_wrapUvw);
 
     out_wrapUvw->set(
         math::fractional(uvw.x()),

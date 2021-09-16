@@ -20,7 +20,7 @@ PtEstimator::PtEstimator(const int32 maxDepth) :
     RadianceEstimator(),
     _maxDepth(maxDepth) 
 {
-        CADISE_ASSERT_GE(maxDepth, 0);
+        CS_ASSERT_GE(maxDepth, 0);
 }
 
 void PtEstimator::estimate(
@@ -28,7 +28,7 @@ void PtEstimator::estimate(
     const Ray&      ray,
     Spectrum* const out_radiance) const 
 {
-    CADISE_ASSERT(out_radiance);
+    CS_ASSERT(out_radiance);
 
     const TransportInfo transportInfo(ETransportMode::RADIANCE);
 
@@ -78,8 +78,8 @@ void PtEstimator::estimate(
             real lightPdf;
             const Light* sampleLight = scene.sampleOneLight(&lightPdf);
 
-            CADISE_ASSERT(sampleLight);
-            CADISE_ASSERT_GT(lightPdf, 0.0_r);
+            CS_ASSERT(sampleLight);
+            CS_ASSERT_GT(lightPdf, 0.0_r);
 
             const Spectrum directLightRadiance 
                 = DirectLightEvaluator::evaluate(scene, intersection, bsdf, sampleLight).div(lightPdf);

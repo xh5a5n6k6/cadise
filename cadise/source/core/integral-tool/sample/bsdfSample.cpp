@@ -33,7 +33,7 @@ void BsdfSample::setScatterValue(const Spectrum& scatterValue)
 
 void BsdfSample::setScatterDirection(const Vector3R& scatterDirection)
 {
-    CADISE_ASSERT(!scatterDirection.isZero());
+    CS_ASSERT(!scatterDirection.isZero());
 
     _scatterDirection = scatterDirection;
 }

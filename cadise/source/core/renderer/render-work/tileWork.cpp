@@ -12,7 +12,7 @@ TileWork::TileWork() :
 
 void TileWork::setFilmTile(FilmTile* const filmTile)
 {
-    CADISE_ASSERT(filmTile);
+    CS_ASSERT(filmTile);
     
     _filmTile = filmTile;
 }

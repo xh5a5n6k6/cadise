@@ -112,9 +112,9 @@ void makePrimitive(
     std::vector<std::shared_ptr<Intersector>>* const out_intersectors,
     StringKeyMap<Primitive>* const                   out_primitives) 
 {
-    CADISE_ASSERT(data);
-    CADISE_ASSERT(out_intersectors);
-    CADISE_ASSERT(out_primitives);
+    CS_ASSERT(data);
+    CS_ASSERT(out_intersectors);
+    CS_ASSERT(out_primitives);
 
     const auto type          = data->findString("type");
     const auto primitiveName = data->findString("name");

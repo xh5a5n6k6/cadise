@@ -25,9 +25,9 @@ VpmEstimator::VpmEstimator(
     _photonMap(photonMap),
     _searchRadius(searchRadius) 
 {
-    CADISE_ASSERT(photonMap);
-    CADISE_ASSERT_GT(numPhotonPaths, 0);
-    CADISE_ASSERT_GT(searchRadius, 0.0_r);
+    CS_ASSERT(photonMap);
+    CS_ASSERT_GT(numPhotonPaths, 0);
+    CS_ASSERT_GT(searchRadius, 0.0_r);
 
     _kernelFactor = 1.0_r / (constant::pi<real> * _searchRadius * _searchRadius * numPhotonPaths);
 }
@@ -37,7 +37,7 @@ void VpmEstimator::estimate(
     const Ray&      ray,
     Spectrum* const out_radiance) const 
 {
-    CADISE_ASSERT(out_radiance);
+    CS_ASSERT(out_radiance);
 
     const TransportInfo transportInfo(ETransportMode::IMPORTANCE);
     Spectrum totalRadiance(0.0_r);

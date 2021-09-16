@@ -11,12 +11,12 @@ UniformLightCluster::UniformLightCluster(const std::vector<std::shared_ptr<Light
     LightCluster(),
     _lights(std::move(lights))
 {
-    CADISE_ASSERT(!_lights.empty());
+    CS_ASSERT(!_lights.empty());
 }
 
 const Light* UniformLightCluster::sampleOneLight(real* const out_pdf) const 
 {
-    CADISE_ASSERT(out_pdf);
+    CS_ASSERT(out_pdf);
     
     const std::size_t numLights   = _lights.size();
     const std::size_t sampleIndex = Random::nextIndex(0, numLights);
@@ -28,7 +28,7 @@ const Light* UniformLightCluster::sampleOneLight(real* const out_pdf) const
 
 real UniformLightCluster::evaluatePickLightPdf(const Light* const light) const
 {
-    CADISE_ASSERT(light);
+    CS_ASSERT(light);
 
     return 1.0_r / static_cast<real>(_lights.size());
 }

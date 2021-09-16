@@ -21,8 +21,8 @@ SpecularTransmission::SpecularTransmission(
     _albedo(albedo),
     _fresnel(fresnel)
 {
-    CADISE_ASSERT(albedo);
-    CADISE_ASSERT(fresnel);
+    CS_ASSERT(albedo);
+    CS_ASSERT(fresnel);
 }
 
 Spectrum SpecularTransmission::evaluate(
@@ -37,7 +37,7 @@ void SpecularTransmission::evaluateSample(
     const SurfaceIntersection& si,
     BsdfSample* const          out_sample) const
 {
-    CADISE_ASSERT(out_sample);
+    CS_ASSERT(out_sample);
 
     const Vector3R& Ns = si.surfaceDetail().shadingNormal();
     const Vector3R& V  = si.wi();
@@ -87,7 +87,7 @@ real SpecularTransmission::evaluatePdfW(
 
 ELobe SpecularTransmission::lobe(const BsdfComponents component) const 
 {
-    CADISE_ASSERT_EQ(component, 0);
+    CS_ASSERT_EQ(component, 0);
 
     return ELobe::SPECULAR_TRANSMISSION;
 }

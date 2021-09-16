@@ -32,7 +32,7 @@ inline TLocalCoordinateSystem3<T>::TLocalCoordinateSystem3(
 template<typename T>
 inline void TLocalCoordinateSystem3<T>::initializeViaUnitY(const TVector3<T>& unitY)
 {
-    CADISE_ASSERT_RANGE_INCLUSIVE(unitY.lengthSquared(), T(0.999), T(1.001));
+    CS_ASSERT_RANGE_INCLUSIVE(unitY.lengthSquared(), T(0.999), T(1.001));
 
     TVector3<T> unitX;
     TVector3<T> unitZ;
@@ -124,7 +124,7 @@ inline T TLocalCoordinateSystem3<T>::tanTheta(const TVector3<T>& unitVector) con
                 return std::numeric_limits<T>::min();
         }
 
-        CADISE_ASSERT(false);
+        CS_ASSERT(false);
 
         return T(0);
     }
@@ -216,7 +216,7 @@ inline T TLocalCoordinateSystem3<T>::tanPhi(const TVector3<T>& unitVector) const
                 return std::numeric_limits<T>::min();
         }
 
-        CADISE_ASSERT(false);
+        CS_ASSERT(false);
 
         return T(0);
     }

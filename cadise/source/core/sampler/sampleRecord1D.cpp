@@ -25,7 +25,7 @@ void SampleRecord1D::shuffle()
 
 real SampleRecord1D::nextSample() 
 {
-    CADISE_ASSERT_LT(_currentSampleIndex, _sampleNumber);
+    CS_ASSERT_LT(_currentSampleIndex, _sampleNumber);
 
     const std::size_t indexOffset = _currentSampleIndex;
     _currentSampleIndex += 1;

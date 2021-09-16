@@ -11,7 +11,7 @@ Distribution2D::Distribution2D() = default;
 Distribution2D::Distribution2D(const real* const value, const Vector2S& resolution) :
     _conditionalX(resolution.y())
 {
-    CADISE_ASSERT(value);
+    CS_ASSERT(value);
 
     std::vector<real> rowValues(resolution.y());
     for (std::size_t iy = 0; iy < resolution.y(); ++iy) 
@@ -33,7 +33,7 @@ Vector2R Distribution2D::sampleContinuous(
     const std::array<real, 2>& seed,
     real* const                out_pdf) const 
 {
-    CADISE_ASSERT(out_pdf);
+    CS_ASSERT(out_pdf);
 
     real pdfXconditionalY;
     real pdfY;

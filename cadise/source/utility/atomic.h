@@ -23,7 +23,7 @@ inline void atomic_operate(
     const T               value,
     std::atomic<T>* const out_variable) 
 {
-    CADISE_ASSERT(out_variable);
+    CS_ASSERT(out_variable);
 
     T currentValue = out_variable->load();
     T targetValue;

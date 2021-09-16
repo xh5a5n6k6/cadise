@@ -22,7 +22,7 @@ LambertianDiffuse::LambertianDiffuse(const std::shared_ptr<TTexture<Spectrum>>& 
     Bsdf(BsdfLobes({ ELobe::DIFFUSE_REFLECTION })),
     _albedo(albedo) 
 {
-    CADISE_ASSERT(albedo);
+    CS_ASSERT(albedo);
 }
 
 Spectrum LambertianDiffuse::evaluate(
@@ -49,7 +49,7 @@ void LambertianDiffuse::evaluateSample(
     const SurfaceIntersection& si,
     BsdfSample* const          out_sample) const
 {
-    CADISE_ASSERT(out_sample);
+    CS_ASSERT(out_sample);
 
     const Vector3R& Ns = si.surfaceDetail().shadingNormal();
     const Vector3R& V  = si.wi();
@@ -94,7 +94,7 @@ real LambertianDiffuse::evaluatePdfW(
 
 ELobe LambertianDiffuse::lobe(const BsdfComponents component) const 
 {
-    CADISE_ASSERT_EQ(component, 0);
+    CS_ASSERT_EQ(component, 0);
 
     return ELobe::DIFFUSE_REFLECTION;
 }

@@ -45,8 +45,8 @@ void build_coordinate_system(
     Vector3R* const out_zAxis, 
     Vector3R* const out_xAxis)
 {
-    CADISE_ASSERT(out_zAxis);
-    CADISE_ASSERT(out_xAxis);
+    CS_ASSERT(out_zAxis);
+    CS_ASSERT(out_xAxis);
 
     if (std::abs(yAxis.x()) > std::abs(yAxis.y())) 
     {
@@ -70,8 +70,8 @@ void direction_to_canonical(
     const Vector3R& direction,
     Vector2R* const out_canonical)
 {
-    CADISE_ASSERT(out_canonical);
-    CADISE_ASSERT(!direction.isZero());
+    CS_ASSERT(out_canonical);
+    CS_ASSERT(!direction.isZero());
 
     const Vector3R unitDirection = direction.normalize();
 
@@ -88,7 +88,7 @@ void canonical_to_direction(
     const Vector2R& canonical,
     Vector3R* const out_direction)
 {
-    CADISE_ASSERT(out_direction);
+    CS_ASSERT(out_direction);
 
     const real cosTheta = canonical.y() * 2.0_r - 1.0_r;
     const real phi      = canonical.x() * constant::two_pi<real>;

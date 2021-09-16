@@ -28,13 +28,13 @@ SamplingRenderer::SamplingRenderer(
     _estimator(estimator),
     _sampler(sampler) 
 {
-    CADISE_ASSERT(estimator);
-    CADISE_ASSERT(sampler);
+    CS_ASSERT(estimator);
+    CS_ASSERT(sampler);
 }
 
 void SamplingRenderer::render() const 
 {
-    CADISE_ASSERT(_scene);
+    CS_ASSERT(_scene);
 
     logger.log("Begin rendering, estimator type: " + _estimator->toString());
 

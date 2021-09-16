@@ -30,14 +30,14 @@ PhotonMapWork::PhotonMapWork(
     _maxNumPhotons(std::numeric_limits<std::size_t>::max()),
     _maxNumPhotonPaths(std::numeric_limits<std::size_t>::max()) 
 {
-    CADISE_ASSERT(scene);
-    CADISE_ASSERT(photons);
-    CADISE_ASSERT(numPhotonPaths);
+    CS_ASSERT(scene);
+    CS_ASSERT(photons);
+    CS_ASSERT(numPhotonPaths);
 }
 
 void PhotonMapWork::work() const 
 {
-    CADISE_ASSERT(
+    CS_ASSERT(
         !(_maxNumPhotons     == std::numeric_limits<std::size_t>::max() &&
           _maxNumPhotonPaths == std::numeric_limits<std::size_t>::max()));
 
@@ -50,7 +50,7 @@ void PhotonMapWork::work() const
         real pickLightPdf;
         const Light* sampleLight = _scene->sampleOneLight(&pickLightPdf);
 
-        CADISE_ASSERT(sampleLight);
+        CS_ASSERT(sampleLight);
 
         EmitLightSample emitLightSample;
         sampleLight->evaluateEmitSample(&emitLightSample);

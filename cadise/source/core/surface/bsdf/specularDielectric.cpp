@@ -22,8 +22,8 @@ SpecularDielectric::SpecularDielectric(
     _albedo(albedo),
     _fresnel(fresnel)
 {
-    CADISE_ASSERT(albedo);
-    CADISE_ASSERT(fresnel);
+    CS_ASSERT(albedo);
+    CS_ASSERT(fresnel);
 }
 
 Spectrum SpecularDielectric::evaluate(
@@ -38,7 +38,7 @@ void SpecularDielectric::evaluateSample(
     const SurfaceIntersection& si,
     BsdfSample* const          out_sample) const 
 {
-    CADISE_ASSERT(out_sample);
+    CS_ASSERT(out_sample);
 
     bool canReflection = (info.components() == BSDF_ALL_COMPONENTS) || (info.components() == 0);
     bool canRefraction = (info.components() == BSDF_ALL_COMPONENTS) || (info.components() == 1);
@@ -69,7 +69,7 @@ void SpecularDielectric::evaluateSample(
         }
     }
 
-    CADISE_ASSERT(canReflection || canRefraction);
+    CS_ASSERT(canReflection || canRefraction);
 
     real     scatterPdfW = 1.0_r;
     Vector3R scatterDirection(0.0_r);
@@ -151,7 +151,7 @@ real SpecularDielectric::evaluatePdfW(
 
 ELobe SpecularDielectric::lobe(const BsdfComponents component) const 
 {
-    CADISE_ASSERT(component == 0 || component == 1);
+    CS_ASSERT(component == 0 || component == 1);
 
     return component == 0 ? ELobe::SPECULAR_REFLECTION : ELobe::SPECULAR_TRANSMISSION;
 }

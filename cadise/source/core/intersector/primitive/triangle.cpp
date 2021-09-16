@@ -26,7 +26,7 @@ Triangle::Triangle(
     _vB(vB), 
     _vC(vC)
 {
-    CADISE_ASSERT(bsdf);
+    CS_ASSERT(bsdf);
 
     _eAB = _vB.sub(_vA);
     _eAC = _vC.sub(_vA);
@@ -46,7 +46,7 @@ Triangle::Triangle(
 
 void Triangle::evaluateBound(AABB3R* const out_bound) const
 {
-    CADISE_ASSERT(out_bound);
+    CS_ASSERT(out_bound);
 
     AABB3R bound(_vA);
     bound.unionWithLocal(_vB).unionWithLocal(_vC).expandLocal(0.0001_r);
@@ -139,7 +139,7 @@ void Triangle::evaluateSurfaceDetail(
     const PrimitiveInfo& primitiveInfo, 
     SurfaceDetail* const out_surface) const 
 {
-    CADISE_ASSERT(out_surface);
+    CS_ASSERT(out_surface);
 
     const Vector3R& P = out_surface->position();
 
@@ -215,7 +215,7 @@ void Triangle::evaluateSurfaceDetail(
 
 void Triangle::evaluatePositionSample(PositionSample* const out_sample) const
 {
-    CADISE_ASSERT(out_sample);
+    CS_ASSERT(out_sample);
 
     const std::array<real, 2> sample = { Random::nextReal(), Random::nextReal() };
     Vector2R sampleSt;
@@ -300,7 +300,7 @@ void Triangle::_positionToBarycentric(
     const Vector3R& position, 
     Vector3R* const out_barycentric) const 
 {
-    CADISE_ASSERT(out_barycentric);
+    CS_ASSERT(out_barycentric);
 
     const Vector3R v0 = _eAB;
     const Vector3R v1 = _eAC;

@@ -14,7 +14,7 @@ void SphericalMapper::mappingToUvw(
     const Vector3R& direction, 
     Vector3R* const out_uvw) const
 {
-    CADISE_ASSERT(out_uvw);
+    CS_ASSERT(out_uvw);
 
     const Vector3R unitVector = direction.normalize();
 

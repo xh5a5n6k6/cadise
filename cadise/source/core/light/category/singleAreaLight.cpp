@@ -27,8 +27,8 @@ SingleAreaLight::SingleAreaLight(
     AreaLight(isBackFaceEmit),
     _primitive(primitive)
 {
-    CADISE_ASSERT(primitive);
-    CADISE_ASSERT_GT(primitive->area(), 0.0_r);
+    CS_ASSERT(primitive);
+    CS_ASSERT_GT(primitive->area(), 0.0_r);
 
     const Spectrum unitWattColor  = color.div(color.sum());
     const Spectrum totalWattColor = unitWattColor.mul(watt);
@@ -56,7 +56,7 @@ Spectrum SingleAreaLight::emittance(const SurfaceIntersection& emitIntersection)
 
 void SingleAreaLight::evaluateDirectSample(DirectLightSample* const out_sample) const
 {
-    CADISE_ASSERT(out_sample);
+    CS_ASSERT(out_sample);
 
     PositionSample positionSample;
     _primitive->evaluatePositionSample(&positionSample);
@@ -119,7 +119,7 @@ real SingleAreaLight::evaluateDirectPdfW(
 
 void SingleAreaLight::evaluateEmitSample(EmitLightSample* const out_sample) const 
 {
-    CADISE_ASSERT(out_sample);
+    CS_ASSERT(out_sample);
 
     PositionSample positionSample;
     _primitive->evaluatePositionSample(&positionSample);
@@ -165,8 +165,8 @@ void SingleAreaLight::evaluateEmitPdf(
     real* const     out_pdfA,
     real* const     out_pdfW) const 
 {
-    CADISE_ASSERT(out_pdfA);
-    CADISE_ASSERT(out_pdfW);
+    CS_ASSERT(out_pdfA);
+    CS_ASSERT(out_pdfW);
 
     const real cosTheta = emitRay.direction().absDot(emitN);
 
@@ -198,7 +198,7 @@ real SingleAreaLight::approximateFlux() const
 
 void SingleAreaLight::setEmitRadiance(const std::shared_ptr<TTexture<Spectrum>>& emitRadiance) 
 {
-    CADISE_ASSERT(emitRadiance);
+    CS_ASSERT(emitRadiance);
 
     _emitRadiance = emitRadiance;
 }

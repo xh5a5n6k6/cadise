@@ -23,9 +23,9 @@ PmSetting::PmSetting(
     _numIterations(numIterations),
     _alpha(alpha)
 {
-    CADISE_ASSERT_GT(numPhotons, 0);
-    CADISE_ASSERT_GT(searchRadius, 0.0_r);
-    CADISE_ASSERT_RANGE_INCLUSIVE(alpha, 0.0_r, 1.0_r);
+    CS_ASSERT_GT(numPhotons, 0);
+    CS_ASSERT_GT(searchRadius, 0.0_r);
+    CS_ASSERT_RANGE_INCLUSIVE(alpha, 0.0_r, 1.0_r);
 }
 
 std::size_t PmSetting::numPhotons() const

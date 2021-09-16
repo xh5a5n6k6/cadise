@@ -29,7 +29,7 @@ static std::shared_ptr<Sampler> createStratified(
 std::shared_ptr<Sampler> makeSampler(
     const std::shared_ptr<SdData>& data) 
 {
-    CADISE_ASSERT(data);
+    CS_ASSERT(data);
 
     std::shared_ptr<Sampler> sampler = nullptr;
     

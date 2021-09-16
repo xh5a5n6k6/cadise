@@ -13,7 +13,7 @@ FilmTile::FilmTile(const AABB2I& tileBound, const Filter* const filter) :
     _filter(filter),
     _sensors() 
 {
-    CADISE_ASSERT(filter);
+    CS_ASSERT(filter);
 
     const std::size_t sensorSize = static_cast<std::size_t>(_resolution.x() * _resolution.y());
     
@@ -23,8 +23,8 @@ FilmTile::FilmTile(const AABB2I& tileBound, const Filter* const filter) :
 void FilmTile::addSample(const Vector2R& filmPosition, const Spectrum& value)
 {
     // TODO: do this check
-    //CADISE_ASSERT(sampleSpectrum.hasNaN());
-    //CADISE_ASSERT(sampleSpectrum.hasInfinite());
+    //CS_ASSERT(sampleSpectrum.hasNaN());
+    //CS_ASSERT(sampleSpectrum.hasInfinite());
 
     if (value.hasNaN() || value.hasInfinite()) 
     {

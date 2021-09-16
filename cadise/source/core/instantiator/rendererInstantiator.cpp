@@ -87,7 +87,7 @@ static std::shared_ptr<Renderer> createPpm(
 std::shared_ptr<Renderer> makeRenderer(
     const std::shared_ptr<SdData>& data) 
 {
-    CADISE_ASSERT(data);
+    CS_ASSERT(data);
 
     std::shared_ptr<Renderer> renderer = nullptr;
     

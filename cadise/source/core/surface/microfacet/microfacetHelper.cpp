@@ -15,7 +15,7 @@ bool MicrofacetHelper::canMakeReflectionH(
     const Vector3R& N,
     Vector3R* const out_H) 
 {
-    CADISE_ASSERT(out_H);
+    CS_ASSERT(out_H);
 
     const Vector3R HVector = V.add(L);
     if (HVector.isZero()) 
@@ -39,7 +39,7 @@ bool MicrofacetHelper::canMakeReflectionH(
             return false;
     }
 
-    CADISE_ASSERT(false);
+    CS_ASSERT(false);
 
     return false;
 }
@@ -52,7 +52,7 @@ bool MicrofacetHelper::canMakeRefractionH(
     const real      iorInner,
     Vector3R* const out_H) 
 {
-    CADISE_ASSERT(out_H);
+    CS_ASSERT(out_H);
 
     real etaI = iorOuter;
     real etaT = iorInner;
@@ -83,7 +83,7 @@ bool MicrofacetHelper::canMakeRefractionH(
             return false;
     }
 
-    CADISE_ASSERT(false);
+    CS_ASSERT(false);
 
     return false;
 }

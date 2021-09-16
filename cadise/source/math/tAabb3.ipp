@@ -71,8 +71,8 @@ inline bool TAABB3<T>::isIntersectingAABB(
     T* const           out_boundMinT,
     T* const           out_boundMaxT) const
 {
-    CADISE_ASSERT(out_boundMinT);
-    CADISE_ASSERT(out_boundMaxT);
+    CS_ASSERT(out_boundMinT);
+    CS_ASSERT(out_boundMaxT);
 
     T minT = rayMinT;
     T maxT = rayMaxT;

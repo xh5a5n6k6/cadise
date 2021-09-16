@@ -28,9 +28,9 @@ PmRadianceEstimationWork::PmRadianceEstimationWork(
     _workBeginIndex(),
     _workEndIndex() 
 {
-    CADISE_ASSERT(photonMap);
-    CADISE_ASSERT(viewpoints);
-    CADISE_ASSERT(film);
+    CS_ASSERT(photonMap);
+    CS_ASSERT(viewpoints);
+    CS_ASSERT(film);
 }
 
 void PmRadianceEstimationWork::work() const

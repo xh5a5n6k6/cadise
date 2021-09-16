@@ -38,7 +38,7 @@ static std::shared_ptr<Light> createSingleArea(
     const auto   primitiveName = data->findString("primitive");
     const auto&& primitive     = primitives.find(primitiveName);
 
-    CADISE_ASSERT_NE(primitive, primitives.end());
+    CS_ASSERT_NE(primitive, primitives.end());
 
     std::shared_ptr<SingleAreaLight> areaLight
         = std::make_shared<SingleAreaLight>(primitive->second.get(), Spectrum(color), watt, isBackFaceEmit);
@@ -55,7 +55,7 @@ static std::shared_ptr<Light> createEnvironment(
 {
     const auto hdrFilename = data->findString("hdr-filename");
 
-    CADISE_ASSERT_NE(hdrFilename, "");
+    CS_ASSERT_NE(hdrFilename, "");
 
     HdrImage hdrImage = PictureLoader::loadRgbImage(Path(hdrFilename));
     hdrImage.flipHorizontal();
@@ -81,7 +81,7 @@ std::shared_ptr<Light> makeLight(
     const StringKeyMap<Primitive>& primitives,
     std::shared_ptr<Primitive>&    out_backgroundSphere) 
 {
-    CADISE_ASSERT(data);
+    CS_ASSERT(data);
 
     std::shared_ptr<Light> light = nullptr;
     const auto type = data->findString("type");

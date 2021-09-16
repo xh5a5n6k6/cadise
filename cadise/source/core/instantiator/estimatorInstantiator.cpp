@@ -63,7 +63,7 @@ static std::shared_ptr<EnergyEstimator> createAovWsn(
 std::shared_ptr<EnergyEstimator> makeEstimator(
     const std::shared_ptr<SdData>& data) 
 {
-    CADISE_ASSERT(data);
+    CS_ASSERT(data);
 
     std::shared_ptr<EnergyEstimator> estimator = nullptr;
 

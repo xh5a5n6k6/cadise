@@ -11,7 +11,7 @@ bool RussianRoulette::isSurvivedOnNextRound(
     const Spectrum& weight,
     Spectrum* const out_newWeight)
 {
-    CADISE_ASSERT(out_newWeight);
+    CS_ASSERT(out_newWeight);
 
     const real q      = math::clamp(1.0_r - weight.maxComponent(), 0.05_r, 1.0_r);
     const real sample = Random::nextReal();

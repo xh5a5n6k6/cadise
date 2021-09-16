@@ -123,7 +123,7 @@ std::shared_ptr<TTexture<real>> makeRealTexture(
     const StringKeyMap<TTexture<real>>&     realTextures,
     const StringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
-    CADISE_ASSERT(data);
+    CS_ASSERT(data);
 
     std::shared_ptr<TTexture<real>> realTexture = nullptr;
 
@@ -160,7 +160,7 @@ std::shared_ptr<TTexture<Spectrum>> makeSpectrumTexture(
     const StringKeyMap<TTexture<real>>&     realTextures,
     const StringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
-    CADISE_ASSERT(data);
+    CS_ASSERT(data);
 
     std::shared_ptr<TTexture<Spectrum>> spectrumTexture = nullptr;
 
