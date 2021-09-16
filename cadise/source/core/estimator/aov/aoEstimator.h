@@ -2,7 +2,8 @@
 
 #include "core/estimator/aov/aovEstimator.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 /*
     AoEstimator: Ambient Occlusion Estimator
@@ -11,7 +12,8 @@ namespace cadise {
     evaluating global illumination. It is preferred to use 
     this estimator at outdoor scene.
 */
-class AoEstimator : public AovEstimator {
+class AoEstimator : public AovEstimator 
+{
 public:
     AoEstimator();
     explicit AoEstimator(const std::size_t numSampleRays);
@@ -29,7 +31,8 @@ private:
 
 // header implementation
 
-inline std::string AoEstimator::toString() const {
+inline std::string AoEstimator::toString() const 
+{
     return "AOV-AO Estimator";
 }
 

@@ -1,10 +1,12 @@
 #include "cadise/cadise.h"
 
-int csInit() {
+int csInit()
+{
     return CS_TRUE;
 }
 
-int csExit() {
+int csExit()
+{
     return CS_TRUE;
 }
 

@@ -2,9 +2,7 @@
 
 #include <type_traits>
 
-namespace cadise {
-
-namespace constant {
+namespace cadise::constant {
 
 template<typename T>
 inline constexpr T ray_epsilon
@@ -85,7 +83,8 @@ inline constexpr AxisType AXIS_UNKNOWN = -1;
     |   1   |   1   |   1   |   z > y > x |   z  |
     +-------+-------+-------+-------------+------+
 */
-inline static constexpr constant::AxisType compareMaxTable[8] = {
+inline constexpr constant::AxisType compareMaxTable[8] = 
+{
     constant::AXIS_X,
     constant::AXIS_X,
     constant::AXIS_UNKNOWN,
@@ -93,8 +92,7 @@ inline static constexpr constant::AxisType compareMaxTable[8] = {
     constant::AXIS_Y,
     constant::AXIS_UNKNOWN,
     constant::AXIS_Y,
-    constant::AXIS_Z };
+    constant::AXIS_Z 
+};
 
-} // namespace constant
-
-} // namespace cadise
+} // namespace cadise::constant

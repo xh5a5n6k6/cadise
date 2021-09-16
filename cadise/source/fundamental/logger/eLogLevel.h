@@ -1,8 +1,10 @@
 #pragma once
 
-namespace cadise {
+namespace cadise 
+{
 
-enum class ELogLevel {
+enum class ELogLevel 
+{
     INFO,
     WARN,
     ERROR,

@@ -5,9 +5,11 @@
 #include <memory>
 #include <vector>
 
-namespace cadise {
+namespace cadise 
+{
 
-class UniformLightCluster : public LightCluster {
+class UniformLightCluster : public LightCluster 
+{
 public:
     explicit UniformLightCluster(const std::vector<std::shared_ptr<Light>>& lights);
 

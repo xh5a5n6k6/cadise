@@ -2,9 +2,11 @@
 
 #include "math/tVector3.h"
 
-namespace cadise {
+namespace cadise
+{
 
-class Ray {
+class Ray
+{
 public:
     Ray();
     Ray(const Vector3R& origin, const Vector3R& direction);

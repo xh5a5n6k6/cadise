@@ -2,9 +2,11 @@
 
 #include "core/spectrum/spectrum.h"
 
-namespace cadise {
+namespace cadise
+{
 
-class RussianRoulette {
+class RussianRoulette 
+{
 public:
     static bool isSurvivedOnNextRound(
         const Spectrum& weight,

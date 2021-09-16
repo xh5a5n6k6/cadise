@@ -4,10 +4,12 @@
 
 #include <memory>
 
-namespace cadise {
+namespace cadise 
+{
 
 template<typename T>
-class TCheckerboardTexture : public TTexture<T> {
+class TCheckerboardTexture : public TTexture<T>
+{
 public:
     TCheckerboardTexture(
         const real                          oddTextureNumber, 

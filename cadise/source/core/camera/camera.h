@@ -3,12 +3,14 @@
 #include "math/tVector2.h"
 #include "math/tVector3.h"
 
-namespace cadise {
+namespace cadise { class CameraSample; }
+namespace cadise { class Ray; }
 
-class CameraSample;
-class Ray;
+namespace cadise 
+{
 
-class Camera {
+class Camera 
+{
 public:
     explicit Camera(const Vector3R& position);
 

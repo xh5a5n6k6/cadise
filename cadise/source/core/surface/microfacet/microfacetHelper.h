@@ -2,9 +2,11 @@
 
 #include "math/type/mathType.h"
 
-namespace cadise {
+namespace cadise 
+{
 
-class MicrofacetHelper {
+class MicrofacetHelper 
+{
 public:
     static bool canMakeReflectionH(
         const Vector3R& V,

@@ -6,11 +6,13 @@
 
 #include <vector>
 
-namespace cadise {
+namespace cadise { class Filter; }
 
-class Filter;
+namespace cadise 
+{
 
-class FilmTile {
+class FilmTile 
+{
 public:
     FilmTile(const AABB2I& tileBound, const Filter* const filter);
 

@@ -2,9 +2,11 @@
 
 #include "core/sampler/sampler.h"
 
-namespace cadise {
+namespace cadise
+{
 
-class StratifiedSampler : public Sampler {
+class StratifiedSampler : public Sampler
+{
 public:
     explicit StratifiedSampler(const std::size_t sampleNumber);
 

@@ -6,19 +6,20 @@
 #include <memory>
 #include <vector>
 
-namespace cadise {
+namespace cadise { class Bsdf; }
+namespace cadise { class Intersector; }
+namespace cadise { class Light; }
+namespace cadise { class Primitive; }
+namespace cadise { class Renderer; }
+namespace cadise { class Scene; }
+namespace cadise { class SdData; }
+namespace cadise { template<typename T> class TTexture; }
 
-class Bsdf;
-class Intersector;
-class Light;
-class Primitive;
-class Renderer;
-class Scene;
-class SdData;
-template<typename T>
-class TTexture;
+namespace cadise 
+{
 
-class RenderDatabase {
+class RenderDatabase
+{
 public:
     RenderDatabase();
 

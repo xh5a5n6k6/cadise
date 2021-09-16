@@ -11,7 +11,8 @@
 
 #include <limits>
 
-namespace cadise {
+namespace cadise
+{
 
 Rectangle::Rectangle(
     const std::shared_ptr<Bsdf>& bsdf, 
@@ -22,8 +23,8 @@ Rectangle::Rectangle(
     Primitive(bsdf),
     _vA(vA),
     _vB(vB),
-    _vC(vC) {
-    
+    _vC(vC)
+{
     CADISE_ASSERT(bsdf);
 
     _eA = _vA.sub(_vB);
@@ -37,7 +38,8 @@ Rectangle::Rectangle(
     _uvwD = Vector3R(1.0_r, 1.0_r, 0.0_r);
 }
 
-void Rectangle::evaluateBound(AABB3R* const out_bound) const {
+void Rectangle::evaluateBound(AABB3R* const out_bound) const
+{
     CADISE_ASSERT(out_bound);
 
     AABB3R bound(_vA);
@@ -46,16 +48,19 @@ void Rectangle::evaluateBound(AABB3R* const out_bound) const {
     out_bound->set(bound);
 }
 
-bool Rectangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
+bool Rectangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const 
+{
     Vector3R eA = _eA;
     Vector3R eB = _eB;
-    if (ray.direction().dot(eA.cross(eB)) > 0.0_r) {
+    if (ray.direction().dot(eA.cross(eB)) > 0.0_r) 
+    {
         eA.swap(eB);
     }
 
     const Vector3R normal = eA.cross(eB).normalize();
     const real     t      = normal.dot(_vB.sub(ray.origin())) / normal.dot(ray.direction());
-    if (t < ray.minT() || t > ray.maxT()) {
+    if (t < ray.minT() || t > ray.maxT())
+    {
         return false;
     }
 
@@ -63,8 +68,8 @@ bool Rectangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
     const real     projectionA   = vectorOnPlane.dot(_eA.normalize());
     const real     projectionB   = vectorOnPlane.dot(_eB.normalize());
     if (projectionA < 0.0_r || projectionA > _eA.length() ||
-        projectionB < 0.0_r || projectionB > _eB.length()) {
-
+        projectionB < 0.0_r || projectionB > _eB.length()) 
+    {
         return false;
     }
 
@@ -74,16 +79,19 @@ bool Rectangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
     return true;
 }
 
-bool Rectangle::isOccluded(const Ray& ray) const {
+bool Rectangle::isOccluded(const Ray& ray) const 
+{
     Vector3R eA = _eA;
     Vector3R eB = _eB;
-    if (ray.direction().dot(eA.cross(eB)) > 0.0_r) {
+    if (ray.direction().dot(eA.cross(eB)) > 0.0_r) 
+    {
         eA.swap(eB);
     }
 
     const Vector3R normal = eA.cross(eB).normalize();
     const real     t      = normal.dot(_vB.sub(ray.origin())) / normal.dot(ray.direction());
-    if (t < ray.minT() || t > ray.maxT()) {
+    if (t < ray.minT() || t > ray.maxT())
+    {
         return false;
     }
 
@@ -91,8 +99,8 @@ bool Rectangle::isOccluded(const Ray& ray) const {
     const real     projectionA   = vectorOnPlane.dot(_eA.normalize());
     const real     projectionB   = vectorOnPlane.dot(_eB.normalize());
     if (projectionA < 0.0_r || projectionA > _eA.length() ||
-        projectionB < 0.0_r || projectionB > _eB.length()) {
-
+        projectionB < 0.0_r || projectionB > _eB.length()) 
+    {
         return false;
     }
 
@@ -101,8 +109,8 @@ bool Rectangle::isOccluded(const Ray& ray) const {
 
 void Rectangle::evaluateSurfaceDetail(
     const PrimitiveInfo& primitiveInfo, 
-    SurfaceDetail* const out_surface) const {
-
+    SurfaceDetail* const out_surface) const
+{
     CADISE_ASSERT(out_surface);
 
     Vector3R N = _eA.cross(_eB);
@@ -112,12 +120,14 @@ void Rectangle::evaluateSurfaceDetail(
     out_surface->setShadingNormal(N);
 
     Vector3R uvw;
-    if (_textureMapper) {
+    if (_textureMapper) 
+    {
         _textureMapper->mappingToUvw(out_surface->shadingNormal(), &uvw);
 
         out_surface->setUvw(uvw);
     }
-    else {
+    else 
+    {
         const Vector3R& P             = out_surface->position();
         const Vector3R  vectorOnPlane = P.sub(_vB);
         const real      projectionA   = vectorOnPlane.dot(_eA.normalize()) / _eA.length();
@@ -132,13 +142,15 @@ void Rectangle::evaluateSurfaceDetail(
     }
 }
 
-void Rectangle::evaluatePositionSample(PositionSample* const out_sample) const {
+void Rectangle::evaluatePositionSample(PositionSample* const out_sample) const
+{
     CADISE_ASSERT(out_sample);
 
     Vector3R eA = _eA;
     Vector3R eB = _eB;
 
-    if (eA.length() < eB.length()) {
+    if (eA.length() < eB.length())
+    {
         eA.swap(eB);
     }
 
@@ -151,7 +163,8 @@ void Rectangle::evaluatePositionSample(PositionSample* const out_sample) const {
     real t;
 
     // use rejection method
-    do {
+    do
+    {
         s = Random::nextReal();
         t = Random::nextReal();
     } while (t > shortWidth / longWidth);
@@ -169,27 +182,33 @@ void Rectangle::evaluatePositionSample(PositionSample* const out_sample) const {
     out_sample->setPdfA(this->evaluatePositionPdfA(P));
 }
 
-real Rectangle::evaluatePositionPdfA(const Vector3R& position) const {
+real Rectangle::evaluatePositionPdfA(const Vector3R& position) const
+{
     return 1.0_r / this->area();
 }
 
-real Rectangle::area() const {
+real Rectangle::area() const 
+{
     return _eA.length() * _eB.length();
 }
 
-void Rectangle::setUvwA(const Vector3R& uvwA) {
+void Rectangle::setUvwA(const Vector3R& uvwA)
+{
     _uvwA = uvwA;
 }
 
-void Rectangle::setUvwB(const Vector3R& uvwB) {
+void Rectangle::setUvwB(const Vector3R& uvwB) 
+{
     _uvwB = uvwB;
 }
 
-void Rectangle::setUvwC(const Vector3R& uvwC) {
+void Rectangle::setUvwC(const Vector3R& uvwC) 
+{
     _uvwC = uvwC;
 }
 
-void Rectangle::setUvwD(const Vector3R& uvwD) {
+void Rectangle::setUvwD(const Vector3R& uvwD) 
+{
     _uvwD = uvwD;
 }
 

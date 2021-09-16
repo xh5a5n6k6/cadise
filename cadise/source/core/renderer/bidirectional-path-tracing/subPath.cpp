@@ -12,13 +12,16 @@
 #include "fundamental/assertion.h"
 #include "math/constant.h"
 
-namespace cadise {
+namespace cadise
+{
 
-SubPath SubPath::emptyPath() {
+SubPath SubPath::emptyPath() 
+{
     return SubPath(0);
 }
 
-SubPath SubPath::oneVertexPath(const PathVertex& vertex) {
+SubPath SubPath::oneVertexPath(const PathVertex& vertex) 
+{
     SubPath path(1);
     path.addVertex(vertex);
 
@@ -26,20 +29,23 @@ SubPath SubPath::oneVertexPath(const PathVertex& vertex) {
 }
 
 SubPath::SubPath(const std::size_t maxPathLength) :
-    _vertices() {
-
+    _vertices()
+{
     _vertices.reserve(maxPathLength);
 }
 
-PathVertex& SubPath::operator[](const std::size_t index) {
+PathVertex& SubPath::operator[] (const std::size_t index) 
+{
     return _vertices[index];
 }
 
-const PathVertex& SubPath::operator[](const std::size_t index) const {
+const PathVertex& SubPath::operator[] (const std::size_t index) const 
+{
     return _vertices[index];
 }
 
-void SubPath::addVertex(const PathVertex& vertex) {
+void SubPath::addVertex(const PathVertex& vertex) 
+{
     // we take _vertices as a fixed size array,
     // so it needs to check the number of elements
     // is less than the capacity.
@@ -51,21 +57,24 @@ void SubPath::addVertex(const PathVertex& vertex) {
 void SubPath::connectCamera(
     const Scene&                     scene,
     const Camera* const              camera,
-    std::vector<ConnectEvent>* const out_events) const {
-
+    std::vector<ConnectEvent>* const out_events) const 
+{
     CADISE_ASSERT(camera);
     CADISE_ASSERT(out_events);
 
     const std::size_t pathLength = this->length();
-    if (pathLength < 2) {
+    if (pathLength < 2)
+    {
         return;
     }
 
     CADISE_ASSERT_EQ(_vertices[0].type(), EVertexType::LIGHT_END);
 
-    for (std::size_t s = 2; s <= pathLength; ++s) {
+    for (std::size_t s = 2; s <= pathLength; ++s)
+    {
         const PathVertex& lightEndpoint = _vertices[s - 1];
-        if (!lightEndpoint.isConnectible()) {
+        if (!lightEndpoint.isConnectible())
+        {
             continue;
         }
 
@@ -77,7 +86,8 @@ void SubPath::connectCamera(
         cameraSample.setTargetPosition(lightP);
 
         camera->evaluateCameraSample(&cameraSample, &toCameraRay);
-        if (!cameraSample.isValid()) {
+        if (!cameraSample.isValid())
+        {
             continue;
         }
 
@@ -105,12 +115,14 @@ void SubPath::connectCamera(
         const real      LdotN       = toCameraRay.direction().absDot(lightNs);
 
         Spectrum radiance = throughputA.mul(reflectance.mul(throughputB.mul(LdotN)));
-        if (radiance.isZero()) {
+        if (radiance.isZero()) 
+        {
             continue;
         }
 
         // visibility test
-        if (scene.isOccluded(toCameraRay)) {
+        if (scene.isOccluded(toCameraRay)) 
+        {
             continue;
         }
 
@@ -123,21 +135,24 @@ void SubPath::connectCamera(
 
 void SubPath::connectLight(
     const Scene&    scene,
-    Spectrum* const out_radiance) const {
-    
+    Spectrum* const out_radiance) const
+{
     CADISE_ASSERT(out_radiance);
 
     const std::size_t pathLength = this->length();
-    if (pathLength < 2) {
+    if (pathLength < 2) 
+    {
         return;
     }
 
     CADISE_ASSERT_EQ(_vertices[0].type(), EVertexType::CAMERA_END);
 
     Spectrum totalRadiance(0.0_r);
-    for (std::size_t t = 2; t <= pathLength; ++t) {
+    for (std::size_t t = 2; t <= pathLength; ++t)
+    {
         const PathVertex& cameraEndpoint = _vertices[t - 1];
-        if (!cameraEndpoint.isConnectible()) {
+        if (!cameraEndpoint.isConnectible()) 
+        {
             continue;
         }
 
@@ -153,7 +168,8 @@ void SubPath::connectLight(
         directLightSample.setTargetPosition(cameraP);
 
         sampleLight->evaluateDirectSample(&directLightSample);
-        if (!directLightSample.isValid()) {
+        if (!directLightSample.isValid()) 
+        {
             continue;
         }
 
@@ -185,7 +201,8 @@ void SubPath::connectLight(
         const Spectrum  reflectance = cameraEndpoint.evaluate(ETransportMode::RADIANCE, _vertices[t - 2], lightVertex);
 
         const Spectrum contributeRadiance = throughputA.mul(reflectance.mul(throughputB.mul(LdotN)));
-        if (contributeRadiance.isZero()) {
+        if (contributeRadiance.isZero())
+        {
             continue;
         }
 
@@ -193,7 +210,8 @@ void SubPath::connectLight(
         Ray testRay(cameraP, L);
         testRay.setMaxT(distance - constant::ray_epsilon<real>);
 
-        if (scene.isOccluded(testRay)) {
+        if (scene.isOccluded(testRay))
+        {
             continue;
         }
 
@@ -206,7 +224,8 @@ void SubPath::connectLight(
     out_radiance->set(totalRadiance);
 }
 
-std::size_t SubPath::length() const {
+std::size_t SubPath::length() const 
+{
     return _vertices.size();
 }
 

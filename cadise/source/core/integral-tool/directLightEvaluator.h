@@ -2,14 +2,16 @@
 
 #include "core/spectrum/spectrum.h"
 
-namespace cadise {
+namespace cadise { class Bsdf; }
+namespace cadise { class Light; }
+namespace cadise { class Scene; }
+namespace cadise { class SurfaceIntersection; }
 
-class Bsdf;
-class Light;
-class Scene;
-class SurfaceIntersection;
+namespace cadise 
+{
 
-class DirectLightEvaluator {
+class DirectLightEvaluator 
+{
 public:
     static Spectrum evaluate(
         const Scene&               scene, 

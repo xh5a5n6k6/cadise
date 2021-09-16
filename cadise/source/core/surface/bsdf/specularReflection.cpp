@@ -8,7 +8,8 @@
 
 #include <cmath>
 
-namespace cadise {
+namespace cadise 
+{
 
 SpecularReflection::SpecularReflection(
     const std::shared_ptr<TTexture<Spectrum>>& albedo,
@@ -16,24 +17,24 @@ SpecularReflection::SpecularReflection(
     
     Bsdf(BsdfLobes({ ELobe::SPECULAR_REFLECTION })),
     _albedo(albedo),
-    _fresnel(fresnel) {
-
+    _fresnel(fresnel)
+{
     CADISE_ASSERT(albedo);
     CADISE_ASSERT(fresnel);
 }
 
 Spectrum SpecularReflection::evaluate(
     const TransportInfo&       info, 
-    const SurfaceIntersection& si) const {
-
+    const SurfaceIntersection& si) const
+{
     return Spectrum(0.0_r);
 }
 
 void SpecularReflection::evaluateSample(
     const TransportInfo&       info, 
     const SurfaceIntersection& si,
-    BsdfSample* const          out_sample) const {
-    
+    BsdfSample* const          out_sample) const
+{
     CADISE_ASSERT(out_sample);
 
     const Vector3R& Ns      = si.surfaceDetail().shadingNormal();
@@ -58,12 +59,13 @@ void SpecularReflection::evaluateSample(
 
 real SpecularReflection::evaluatePdfW(
     const TransportInfo&       info, 
-    const SurfaceIntersection& si) const {
-
+    const SurfaceIntersection& si) const 
+{
     return 0.0_r;
 }
 
-ELobe SpecularReflection::lobe(const BsdfComponents component) const {
+ELobe SpecularReflection::lobe(const BsdfComponents component) const 
+{
     CADISE_ASSERT_EQ(component, 0);
 
     return ELobe::SPECULAR_REFLECTION;

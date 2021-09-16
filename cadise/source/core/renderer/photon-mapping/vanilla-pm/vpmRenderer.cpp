@@ -15,10 +15,12 @@
 #include <mutex>
 #include <numeric>
 
-namespace cadise {
+namespace cadise 
+{
 
 // local logger declaration
-namespace {
+namespace
+{
     const Logger logger("VPM Renderer");
 } // anonymous namespace
 
@@ -28,12 +30,13 @@ VpmRenderer::VpmRenderer(
 
     Renderer(),
     _sampler(sampler),
-    _setting(setting) {
-
+    _setting(setting) 
+{
     CADISE_ASSERT(sampler);
 }
 
-void VpmRenderer::render() const {
+void VpmRenderer::render() const 
+{
     CADISE_ASSERT(_scene);
 
     Stopwatch stopwatch;
@@ -52,8 +55,8 @@ void VpmRenderer::render() const {
         [this, &photons, &numPhotonPaths, &vpmMutex](
             const std::size_t workerId,
             const std::size_t workBegin,
-            const std::size_t workEnd) {
-
+            const std::size_t workEnd)
+        {
             const std::size_t workload = workEnd - workBegin;
         
             std::vector<Photon> localPhotons;
@@ -92,11 +95,12 @@ void VpmRenderer::render() const {
         [this, &photonMap, totalPhotonPaths](
             const std::size_t workerId,
             const std::size_t workBegin,
-            const std::size_t workEnd) {
-
+            const std::size_t workEnd)
+        {
             const VpmEstimator estimator(&photonMap, totalPhotonPaths, _setting.searchRadius());
 
-            for (std::size_t workIndex = workBegin; workIndex < workEnd; ++workIndex) {
+            for (std::size_t workIndex = workBegin; workIndex < workEnd; ++workIndex) 
+            {
                 auto filmTile = _film->generateFilmTile(workIndex);
 
                 EstimatorTileWork tileWork(

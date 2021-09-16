@@ -4,12 +4,14 @@
 
 #include <memory>
 
-namespace cadise {
+namespace cadise { class ConductorFresnel; }
+namespace cadise { class Microfacet; }
 
-class ConductorFresnel;
-class Microfacet;
+namespace cadise 
+{
 
-class ConductorMicrofacet : public Bsdf {
+class ConductorMicrofacet : public Bsdf 
+{
 public:
     ConductorMicrofacet(
         const std::shared_ptr<Microfacet>&       microfacet,

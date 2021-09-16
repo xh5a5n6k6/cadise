@@ -12,14 +12,13 @@
 #include "file-io/scene-description/sdData.h"
 #include "fundamental/assertion.h"
 
-namespace cadise {
-
-namespace instantiator {
+namespace cadise::instantiator 
+{
 
 static std::shared_ptr<Primitive> createSphere(
     const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Bsdf>&      bsdfs) {
-
+    const StringKeyMap<Bsdf>&      bsdfs)
+{
     const auto center   = data->findVector3r("center");
     const real radius   = data->findReal("radius");
     const auto bsdfName = data->findString("bsdf");
@@ -31,8 +30,8 @@ static std::shared_ptr<Primitive> createSphere(
 
 static std::shared_ptr<Primitive> createTriangle(
     const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Bsdf>&      bsdfs) {
-
+    const StringKeyMap<Bsdf>&      bsdfs) 
+{
     const auto v1       = data->findVector3r("v1");
     const auto v2       = data->findVector3r("v2");
     const auto v3       = data->findVector3r("v3");
@@ -45,8 +44,8 @@ static std::shared_ptr<Primitive> createTriangle(
 
 static std::shared_ptr<Primitive> createRectangle(
     const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Bsdf>&      bsdfs) {
-
+    const StringKeyMap<Bsdf>&      bsdfs) 
+{
     const auto v1       = data->findVector3r("v1");
     const auto v2       = data->findVector3r("v2");
     const auto v3       = data->findVector3r("v3");
@@ -61,8 +60,8 @@ static std::shared_ptr<Primitive> createRectangle(
 
 static std::vector<std::shared_ptr<Primitive>> createTriangleMesh(
     const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Bsdf>&      bsdfs) {
-
+    const StringKeyMap<Bsdf>&      bsdfs) 
+{
     const auto positions = data->findVector3rArray("positions");
     const auto normals   = data->findVector3rArray("normals");
     const auto uvws      = data->findVector3rArray("uvws");
@@ -85,8 +84,8 @@ static std::vector<std::shared_ptr<Primitive>> createTriangleMesh(
 
 static std::vector<std::shared_ptr<Primitive>> createTriangleMeshKdTree(
     const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Bsdf>&      bsdfs) {
-
+    const StringKeyMap<Bsdf>&      bsdfs)
+{
     const auto positions = data->findVector3rArray("positions");
     const auto normals = data->findVector3rArray("normals");
     const auto uvws = data->findVector3rArray("uvws");
@@ -111,41 +110,45 @@ void makePrimitive(
     const std::shared_ptr<SdData>&                   data,
     const StringKeyMap<Bsdf>&                        bsdfs,
     std::vector<std::shared_ptr<Intersector>>* const out_intersectors,
-    StringKeyMap<Primitive>* const                   out_primitives) {
-
+    StringKeyMap<Primitive>* const                   out_primitives) 
+{
     CADISE_ASSERT(data);
     CADISE_ASSERT(out_intersectors);
     CADISE_ASSERT(out_primitives);
 
     const auto type          = data->findString("type");
     const auto primitiveName = data->findString("name");
-    if (type == "sphere") {
+    if (type == "sphere") 
+    {
         const auto sphere = createSphere(data, bsdfs);
         out_intersectors->push_back(sphere);
         out_primitives->insert(std::pair<std::string, std::shared_ptr<Primitive>>(primitiveName, sphere));
     }
-    else if (type == "triangle") {
+    else if (type == "triangle") 
+    {
         const auto triangle = createTriangle(data, bsdfs);
         out_intersectors->push_back(triangle);
         out_primitives->insert(std::pair<std::string, std::shared_ptr<Primitive>>(primitiveName, triangle));
     }
-    else if (type == "rectangle") {
+    else if (type == "rectangle") 
+    {
         const auto rectangle = createRectangle(data, bsdfs);
         out_intersectors->push_back(rectangle);
         out_primitives->insert(std::pair<std::string, std::shared_ptr<Primitive>>(primitiveName, rectangle));
     }
-    else if (type == "triangle-mesh") {
+    else if (type == "triangle-mesh") 
+    {
         const auto triangleBuffer = createTriangleMesh(data, bsdfs);
-        for (auto& triangle : triangleBuffer) {
+        for (auto& triangle : triangleBuffer)
+        {
             out_intersectors->push_back(triangle);
             out_primitives->insert(std::pair<std::string, std::shared_ptr<Primitive>>(primitiveName, triangle));
         }
     }
-    else {
+    else 
+    {
         // unsupported primitive type
     }
 }
 
-} // namespace instantiator
-
-} // namespace cadise
+} // namespace cadise::instantiator

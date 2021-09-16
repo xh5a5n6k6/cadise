@@ -4,15 +4,17 @@
 #include "core/spectrum/spectrum.h"
 #include "core/surfaceDetail.h"
 
-namespace cadise {
+namespace cadise { class Bsdf; }
+namespace cadise { class Camera; }
+namespace cadise { class Light; }
+namespace cadise { class Scene; }
+namespace cadise { enum class ETransportMode; }
 
-class Bsdf;
-class Camera;
-class Light;
-class Scene;
-enum class ETransportMode;
+namespace cadise 
+{
 
-class PathVertex {
+class PathVertex 
+{
 public:
     explicit PathVertex(const EVertexType type);
     PathVertex(

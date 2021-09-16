@@ -5,9 +5,11 @@
 #include "core/intersector/primitiveInfo.h"
 #include "core/surfaceDetail.h"
 
-namespace cadise {
+namespace cadise
+{
 
-class SurfaceIntersection : public Intersection {
+class SurfaceIntersection : public Intersection
+{
 public:
     SurfaceIntersection();
 

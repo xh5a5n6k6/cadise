@@ -1,8 +1,10 @@
 #pragma once
 
-namespace cadise {
+namespace cadise 
+{
 
-enum class EVertexType {
+enum class EVertexType 
+{
     LIGHT_END,
     CAMERA_END,
     SURFACE,

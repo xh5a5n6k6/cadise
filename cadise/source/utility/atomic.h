@@ -4,11 +4,11 @@
 
 #include <atomic>
 
-namespace cadise {
-    
-namespace utility {
+namespace cadise::utility 
+{
 
-enum class EOps {
+enum class EOps 
+{
     ADD,
     SUB,
     MUL,
@@ -21,26 +21,31 @@ enum class EOps {
 template<EOps OPERATOR, typename T>
 inline void atomic_operate(
     const T               value,
-    std::atomic<T>* const out_variable) {
-
+    std::atomic<T>* const out_variable) 
+{
     CADISE_ASSERT(out_variable);
 
     T currentValue = out_variable->load();
     T targetValue;
 
-    if constexpr (OPERATOR == EOps::ADD) {
+    if constexpr (OPERATOR == EOps::ADD) 
+    {
         targetValue = currentValue + value;
     }
-    else if constexpr (OPERATOR == EOps::SUB) {
+    else if constexpr (OPERATOR == EOps::SUB) 
+    {
         targetValue = currentValue - value;
     }
-    else if constexpr (OPERATOR == EOps::MUL) {
+    else if constexpr (OPERATOR == EOps::MUL) 
+    {
         targetValue = currentValue * value;
     }
-    else if constexpr (OPERATOR == EOps::DIV) {
+    else if constexpr (OPERATOR == EOps::DIV) 
+    {
         targetValue = currentValue / value;
     }
-    else {
+    else 
+    {
         // unreachable place
     }
 
@@ -51,6 +56,4 @@ inline void atomic_operate(
     while (!out_variable->compare_exchange_weak(currentValue, targetValue));
 }
 
-} // namespace utility
-
-} // namespace cadise
+} // namespace cadise::utility

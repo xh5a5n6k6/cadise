@@ -5,13 +5,14 @@
 #include "core/surfaceIntersection.h"
 #include "fundamental/assertion.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 void WsnEstimator::estimate(
     const Scene&    scene,
     const Ray&      ray,
-    Spectrum* const out_radiance) const {
-
+    Spectrum* const out_radiance) const 
+{
     CADISE_ASSERT(out_radiance);
 
     Scene               localScene(scene);
@@ -21,10 +22,12 @@ void WsnEstimator::estimate(
     // HACK: manually unset environment light 
     localScene.unsetBackgroundSphere();
 
-    if (!localScene.isIntersecting(traceRay, si)) {
+    if (!localScene.isIntersecting(traceRay, si)) 
+    {
         out_radiance->set(0.0_r);
     }
-    else {
+    else 
+    {
         const Vector3R& Ns = si.surfaceDetail().shadingNormal();
 
         out_radiance->set(Spectrum(Ns.mul(0.5_r).add(0.5_r)));

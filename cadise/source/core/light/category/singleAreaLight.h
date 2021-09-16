@@ -4,13 +4,14 @@
 
 #include <memory>
 
-namespace cadise {
+namespace cadise { class Primitive; }
+namespace cadise { template<typename T> class TTexture; }
 
-class Primitive;
-template<typename T>
-class TTexture;
+namespace cadise
+{
 
-class SingleAreaLight : public AreaLight {
+class SingleAreaLight : public AreaLight 
+{
 public:
     SingleAreaLight(
         const Primitive* const primitive,
@@ -18,11 +19,11 @@ public:
         const real             watt, 
         const bool             isBackFaceEmit);
 
-    Spectrum emittance(const SurfaceIntersection& emitIntersection) const override;
+    Spectrum emittance(const SurfaceIntersection& emitSi) const override;
 
     void evaluateDirectSample(DirectLightSample* const out_sample) const override;
     real evaluateDirectPdfW(
-        const SurfaceIntersection& emitIntersection, 
+        const SurfaceIntersection& emitSi, 
         const Vector3R&            targetPosition) const override;
 
     void evaluateEmitSample(EmitLightSample* const out_sample) const override;

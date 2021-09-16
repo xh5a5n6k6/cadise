@@ -13,14 +13,15 @@
 #include "fundamental/assertion.h"
 #include "math/constant.h"
 
-namespace cadise {
+namespace cadise
+{
 
 Spectrum DirectLightEvaluator::evaluate(
     const Scene&               scene, 
     const SurfaceIntersection& surfaceIntersection,
     const Bsdf*                bsdf, 
-    const Light*               light) {
-
+    const Light*               light) 
+{
     CADISE_ASSERT(bsdf);
     CADISE_ASSERT(light);
 
@@ -31,7 +32,8 @@ Spectrum DirectLightEvaluator::evaluate(
     const Vector3R Ns = intersection.surfaceDetail().shadingNormal();
     const Vector3R Ng = intersection.surfaceDetail().geometryNormal();
 
-    if (bsdf->lobes().hasExactly({ ELobe::ABSORB })) {
+    if (bsdf->lobes().hasExactly({ ELobe::ABSORB })) 
+    {
         return directLightRadiance;
     }
 
@@ -41,7 +43,8 @@ Spectrum DirectLightEvaluator::evaluate(
         directLightSample.setTargetPosition(P);
 
         light->evaluateDirectSample(&directLightSample);
-        if (directLightSample.isValid()) {
+        if (directLightSample.isValid()) 
+        {
             const Vector3R LVector  = directLightSample.emitPosition().sub(P);
             const real     distance = LVector.length();
 
@@ -54,7 +57,8 @@ Spectrum DirectLightEvaluator::evaluate(
             Ray shadowRay(P, L);
             shadowRay.setMaxT(distance - constant::ray_epsilon<real>);
 
-            if (!scene.isOccluded(shadowRay)) {
+            if (!scene.isOccluded(shadowRay)) 
+            {
                 const Spectrum& radiance  = directLightSample.radiance();
                 const real      lightPdfW = directLightSample.pdfW();
 
@@ -62,10 +66,12 @@ Spectrum DirectLightEvaluator::evaluate(
                 const Spectrum directLightFactor = reflectance.mul(L.absDot(Ns) / lightPdfW);
 
                 // if light is delta light, not using mis technique
-                if (light->isDeltaLight()) {
+                if (light->isDeltaLight()) 
+                {
                     directLightRadiance.addLocal(radiance.mul(directLightFactor));
                 }
-                else {
+                else
+                {
                     const real bsdfPdfW  = bsdf->evaluatePdfW(TransportInfo(), intersection);
                     const real misWeight = TMis<EMisMode::POWER>().weight(lightPdfW, bsdfPdfW);
 
@@ -77,10 +83,12 @@ Spectrum DirectLightEvaluator::evaluate(
 
     // mis using bsdf sampling
     {
-        if (!light->isDeltaLight()) {
+        if (!light->isDeltaLight())
+        {
             BsdfSample bsdfSample;
             bsdf->evaluateSample(TransportInfo(), intersection, &bsdfSample);
-            if (bsdfSample.isValid()) {
+            if (bsdfSample.isValid())
+            {
                 const Spectrum& reflectance = bsdfSample.scatterValue();
                 const Vector3R& L           = bsdfSample.scatterDirection();
 
@@ -88,9 +96,11 @@ Spectrum DirectLightEvaluator::evaluate(
 
                 Ray sampleRay(P, L);
                 SurfaceIntersection localIntersection;
-                if (scene.isIntersecting(sampleRay, localIntersection)) {
+                if (scene.isIntersecting(sampleRay, localIntersection))
+                {
                     const AreaLight* areaLight = localIntersection.primitiveInfo().primitive()->areaLight();
-                    if (areaLight == light) {
+                    if (areaLight == light) 
+                    {
                         const real bsdfPdfW  = bsdfSample.pdfW();
                         const real lightPdfW = areaLight->evaluateDirectPdfW(localIntersection, P);
                         const real misWeight = TMis<EMisMode::POWER>().weight(bsdfPdfW, lightPdfW);

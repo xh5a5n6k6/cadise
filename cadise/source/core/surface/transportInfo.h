@@ -3,9 +3,11 @@
 #include "core/surface/bsdfComponents.h"
 #include "core/surface/eTransportMode.h"
 
-namespace cadise {
+namespace cadise
+{
 
-class TransportInfo {
+class TransportInfo
+{
 public:
     TransportInfo();
     explicit TransportInfo(const ETransportMode mode);

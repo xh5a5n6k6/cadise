@@ -2,12 +2,14 @@
 
 #include "core/renderer/renderer.h"
 
-namespace cadise {
+namespace cadise { class EnergyEstimator; }
+namespace cadise { class Sampler; }
 
-class EnergyEstimator;
-class Sampler;
+namespace cadise
+{
 
-class SamplingRenderer : public Renderer {
+class SamplingRenderer : public Renderer
+{
 public:
     SamplingRenderer(
         const std::shared_ptr<EnergyEstimator>& estimator,

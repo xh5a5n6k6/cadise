@@ -4,17 +4,18 @@
 
 #include <memory>
 
-namespace cadise {
+namespace cadise { template<typename T> class TTexture; }
 
-template<typename T>
-class TTexture;
+namespace cadise 
+{
 
 /*
     Reference Paper:
     "Microfacet Models for Refraction through Rough Surfaces"
     Walter et al., EGSR 2007
 */
-class IsotropicBlinnPhong : public Microfacet {
+class IsotropicBlinnPhong : public Microfacet 
+{
 public:
     IsotropicBlinnPhong(const std::shared_ptr<TTexture<real>>& roughness);
 

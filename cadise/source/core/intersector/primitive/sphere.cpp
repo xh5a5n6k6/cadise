@@ -13,7 +13,8 @@
 
 #include <cmath>
 
-namespace cadise {
+namespace cadise 
+{
 
 Sphere::Sphere(
     const std::shared_ptr<Bsdf>& bsdf, 
@@ -22,15 +23,16 @@ Sphere::Sphere(
     
     Primitive(bsdf), 
     _center(center),
-    _radius(radius) {
-
+    _radius(radius) 
+{
     CADISE_ASSERT(bsdf);
 
     _worldToLocal     = std::make_shared<Transform>(Matrix4R::makeTranslate(center.negate()));
     _tmptextureMapper = std::make_shared<SphericalMapper>();
 }
 
-void Sphere::evaluateBound(AABB3R* const out_bound) const {
+void Sphere::evaluateBound(AABB3R* const out_bound) const 
+{
     CADISE_ASSERT(out_bound);
 
     AABB3R bound(_center.sub(_radius), _center.add(_radius));
@@ -39,7 +41,8 @@ void Sphere::evaluateBound(AABB3R* const out_bound) const {
     out_bound->set(bound);
 }
 
-bool Sphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
+bool Sphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const
+{
     /*
         Reference Note:
         Ray Tracing Gems, p.87 ~ p.94
@@ -55,7 +58,8 @@ bool Sphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
 
     const Vector3R l = f.add(d.mul(b));
     const real discriminant = r * r - l.absDot(l);
-    if (discriminant < 0.0_r) {
+    if (discriminant < 0.0_r)
+    {
         return false;
     }
 
@@ -67,7 +71,8 @@ bool Sphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
     const real t1 = q;
 
     real t;
-    if (!_isSolutionValid(t0, t1, ray.minT(), ray.maxT(), &t)) {
+    if (!_isSolutionValid(t0, t1, ray.minT(), ray.maxT(), &t)) 
+    {
         return false;
     }
 
@@ -77,7 +82,8 @@ bool Sphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
     return true;
 }
 
-bool Sphere::isOccluded(const Ray& ray) const {
+bool Sphere::isOccluded(const Ray& ray) const 
+{
     const Vector3R& O = ray.origin();
     const Vector3R  G = _center;
     const Vector3R  f = O.sub(G);
@@ -87,7 +93,8 @@ bool Sphere::isOccluded(const Ray& ray) const {
 
     const Vector3R l = f.add(d.mul(b));
     const real discriminant = r * r - l.absDot(l);
-    if (discriminant < 0.0_r) {
+    if (discriminant < 0.0_r)
+    {
         return false;
     }
 
@@ -99,7 +106,8 @@ bool Sphere::isOccluded(const Ray& ray) const {
     const real t1 = q;
 
     real t;
-    if (!_isSolutionValid(t0, t1, ray.minT(), ray.maxT(), &t)) {
+    if (!_isSolutionValid(t0, t1, ray.minT(), ray.maxT(), &t))
+    {
         return false;
     }
 
@@ -108,8 +116,8 @@ bool Sphere::isOccluded(const Ray& ray) const {
 
 void Sphere::evaluateSurfaceDetail(
     const PrimitiveInfo& primitiveInfo, 
-    SurfaceDetail* const out_surface) const {
-
+    SurfaceDetail* const out_surface) const 
+{
     CADISE_ASSERT(out_surface);
 
     const Vector3R& P       = out_surface->position();
@@ -120,11 +128,13 @@ void Sphere::evaluateSurfaceDetail(
     out_surface->setShadingNormal(N);
 
     Vector3R uvw;
-    if (_textureMapper) {
+    if (_textureMapper)
+    {
         _textureMapper->mappingToUvw(out_surface->shadingNormal(), &uvw);
         out_surface->setUvw(uvw);
     }
-    else {
+    else 
+    {
         _tmptextureMapper->mappingToUvw(out_surface->shadingNormal(), &uvw);
         out_surface->setUvw(uvw);
     }
@@ -189,17 +199,20 @@ void Sphere::evaluateSurfaceDetail(
     out_surface->setDifferentialGeometry({ dPdU, dPdV, dNdU, dNdV });
 }
 
-void Sphere::evaluatePositionSample(PositionSample* const out_sample) const {
+void Sphere::evaluatePositionSample(PositionSample* const out_sample) const
+{
     CADISE_ASSERT(out_sample);
 
     // TODO: implement here
 }
 
-real Sphere::evaluatePositionPdfA(const Vector3R& position) const {
+real Sphere::evaluatePositionPdfA(const Vector3R& position) const
+{
     return 1.0_r / this->area();
 }
 
-real Sphere::area() const {
+real Sphere::area() const
+{
     return constant::four_pi<real> * _radius * _radius;
 }
 
@@ -208,19 +221,22 @@ bool Sphere::_isSolutionValid(
     const real  t1,
     const real  minT,
     const real  maxT,
-    real* const out_finalT) const {
-
+    real* const out_finalT) const
+{
     CADISE_ASSERT(out_finalT);
 
-    if (t0 > maxT || t1 < minT) {
+    if (t0 > maxT || t1 < minT)
+    {
         return false;
     }
 
     real localT = t0;
-    if (localT < minT) {
+    if (localT < minT) 
+    {
         localT = t1;
 
-        if (localT > maxT) {
+        if (localT > maxT)
+        {
             return false;
         }
     }

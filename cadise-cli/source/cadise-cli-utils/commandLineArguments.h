@@ -3,9 +3,11 @@
 #include <string>
 #include <vector>
 
-namespace cadise_cli {
+namespace cadise_cli 
+{
 
-class CommandLineArguments {
+class CommandLineArguments 
+{
 public:
     CommandLineArguments(int argc, char* argv[]);
 

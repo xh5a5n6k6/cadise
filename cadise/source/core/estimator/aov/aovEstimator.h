@@ -2,9 +2,11 @@
 
 #include "core/estimator/energyEstimator.h"
 
-namespace cadise {
+namespace cadise 
+{
 
-class AovEstimator : public EnergyEstimator {
+class AovEstimator : public EnergyEstimator 
+{
 public:
     void estimate(
         const Scene&    scene,

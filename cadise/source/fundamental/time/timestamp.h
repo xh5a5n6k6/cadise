@@ -4,9 +4,11 @@
 #include <mutex>
 #include <string>
 
-namespace cadise {
+namespace cadise
+{
 
-class Timestamp {
+class Timestamp
+{
 public:
     Timestamp();
 

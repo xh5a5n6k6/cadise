@@ -1,6 +1,7 @@
 #include "core/light/cluster/lightCluster.h"
 
-namespace cadise {
+namespace cadise
+{
 
 LightCluster::~LightCluster() = default;
 

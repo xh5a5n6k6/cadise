@@ -4,9 +4,11 @@
 
 #include "math/tVector3.h"
 
-namespace cadise {
+namespace cadise 
+{
 
-class Triangle : public Primitive {
+class Triangle : public Primitive 
+{
 public:
     Triangle(
         const std::shared_ptr<Bsdf>& bsdf, 

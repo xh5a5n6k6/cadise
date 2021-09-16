@@ -5,10 +5,12 @@
 #include <algorithm>
 #include <cmath>
 
-namespace cadise {
+namespace cadise 
+{
 
 template<ERoughnessMapMode Mode>
-class TRoughnessMapper {
+class TRoughnessMapper 
+{
 public:
     real map(const real roughness);
 };
@@ -16,14 +18,17 @@ public:
 // template header implementation
 
 template<ERoughnessMapMode Mode>
-inline real TRoughnessMapper<Mode>::map(const real roughness) {
+inline real TRoughnessMapper<Mode>::map(const real roughness) 
+{
     real alpha;
     
     const real safeRoughness = std::max(roughness, 0.001_r);
-    if constexpr (Mode == ERoughnessMapMode::SQUARE) {
+    if constexpr (Mode == ERoughnessMapMode::SQUARE) 
+    {
         alpha = safeRoughness * safeRoughness;
     }
-    else if constexpr (Mode == ERoughnessMapMode::PBRT) {
+    else if constexpr (Mode == ERoughnessMapMode::PBRT) 
+    {
         const real x = std::log(safeRoughness);
 
         alpha = 1.621420000_r +
@@ -32,7 +37,8 @@ inline real TRoughnessMapper<Mode>::map(const real roughness) {
                 0.017120100_r * x * x * x +
                 0.000640711_r * x * x * x * x;
     }
-    else {
+    else 
+    {
         alpha = safeRoughness;
     }
 

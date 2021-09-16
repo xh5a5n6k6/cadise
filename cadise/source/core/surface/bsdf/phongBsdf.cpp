@@ -9,26 +9,28 @@
 #include <algorithm>
 #include <cmath>
 
-namespace cadise {
+namespace cadise 
+{
 
 PhongBsdf::PhongBsdf(const real exponent) :
     Bsdf(BsdfLobes({ ELobe::GLOSSY_REFLECTION })),
-    _exponent(exponent) {
-
+    _exponent(exponent) 
+{
     _pdfFactor  = (exponent + 1.0_r) * constant::rcp_two_pi<real>;
     _brdfFactor = (exponent + 2.0_r) * constant::rcp_two_pi<real>;
 }
 
 Spectrum PhongBsdf::evaluate(
     const TransportInfo&       info,
-    const SurfaceIntersection& si) const {
-
+    const SurfaceIntersection& si) const 
+{
     const Vector3R& Ns = si.surfaceDetail().shadingNormal();
     const Vector3R& V  = si.wi();
     const Vector3R& L  = si.wo();
     const Vector3R  R  = L.reflect(Ns);
 
-    if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) {
+    if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) 
+    {
         return Spectrum(0.0_r);
     }
 
@@ -42,8 +44,8 @@ Spectrum PhongBsdf::evaluate(
 void PhongBsdf::evaluateSample(
     const TransportInfo&       info,
     const SurfaceIntersection& si,
-    BsdfSample* const          out_sample) const {
-
+    BsdfSample* const          out_sample) const
+{
     CADISE_ASSERT(out_sample);
 
     const Vector3R& Ns = si.surfaceDetail().shadingNormal();
@@ -58,7 +60,8 @@ void PhongBsdf::evaluateSample(
     L = si.surfaceDetail().shadingLcs().localToWorld(L);
     L.normalizeLocal();
 
-    if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) {
+    if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) 
+    {
         return;
     }
 
@@ -78,14 +81,15 @@ void PhongBsdf::evaluateSample(
 
 real PhongBsdf::evaluatePdfW(
     const TransportInfo&       info,
-    const SurfaceIntersection& si) const {
-
+    const SurfaceIntersection& si) const 
+{
     const Vector3R& Ns = si.surfaceDetail().shadingNormal();
     const Vector3R& V  = si.wi();
     const Vector3R& L  = si.wo();
     const Vector3R  R  = L.reflect(Ns);
 
-    if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) {
+    if (V.dot(Ns) * L.dot(Ns) <= 0.0_r)
+    {
         return 0.0_r;
     }
 
@@ -96,7 +100,8 @@ real PhongBsdf::evaluatePdfW(
     return pdfL;
 }
 
-ELobe PhongBsdf::lobe(const BsdfComponents component) const {
+ELobe PhongBsdf::lobe(const BsdfComponents component) const 
+{
     CADISE_ASSERT_EQ(component, 0);
 
     return ELobe::GLOSSY_REFLECTION;

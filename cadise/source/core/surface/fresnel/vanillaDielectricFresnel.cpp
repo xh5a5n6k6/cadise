@@ -5,26 +5,28 @@
 #include <algorithm>
 #include <utility>
 
-namespace cadise {
+namespace cadise
+{
 
 VanillaDielectricFresnel::VanillaDielectricFresnel(
     const real iorOuter, 
     const real iorInner) :
     
-    DielectricFresnel(iorOuter, iorInner) {
-}
+    DielectricFresnel(iorOuter, iorInner)
+{}
 
 void VanillaDielectricFresnel::evaluateReflectance(
     const real      cosThetaI,
-    Spectrum* const out_reflectance) const {
-    
+    Spectrum* const out_reflectance) const
+{
     CADISE_ASSERT(out_reflectance);
 
     real etaI = this->iorOuter();
     real etaT = this->iorInner();
 
     real cosI = cosThetaI;
-    if (cosI < 0.0_r) {
+    if (cosI < 0.0_r) 
+    {
         std::swap(etaI, etaT);
         cosI *= -1.0_r;
     }
@@ -33,7 +35,8 @@ void VanillaDielectricFresnel::evaluateReflectance(
     const real sinT2    = etaRatio * etaRatio * (1.0_r - cosI * cosI);
 
     // handle TIR condition
-    if (sinT2 >= 1.0_r) {
+    if (sinT2 >= 1.0_r)
+    {
         out_reflectance->set(1.0_r);
 
         return;

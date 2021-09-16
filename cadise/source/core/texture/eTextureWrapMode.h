@@ -1,8 +1,10 @@
 #pragma once
 
-namespace cadise {
+namespace cadise 
+{
 
-enum class ETextureWrapMode {
+enum class ETextureWrapMode 
+{
     CLAMP,
     REPEAT,
 };

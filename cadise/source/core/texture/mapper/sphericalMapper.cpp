@@ -5,11 +5,15 @@
 #include "math/math.h"
 #include "math/tVector3.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 SphericalMapper::SphericalMapper() = default;
 
-void SphericalMapper::mappingToUvw(const Vector3R& direction, Vector3R* const out_uvw) const {
+void SphericalMapper::mappingToUvw(
+    const Vector3R& direction, 
+    Vector3R* const out_uvw) const
+{
     CADISE_ASSERT(out_uvw);
 
     const Vector3R unitVector = direction.normalize();

@@ -14,7 +14,8 @@
 
 #include <vector>
 
-namespace cadise {
+namespace cadise 
+{
 
 VpmEstimator::VpmEstimator(
     const PhotonMap* const photonMap,
@@ -22,8 +23,8 @@ VpmEstimator::VpmEstimator(
     const real             searchRadius) :
 
     _photonMap(photonMap),
-    _searchRadius(searchRadius) {
-
+    _searchRadius(searchRadius) 
+{
     CADISE_ASSERT(photonMap);
     CADISE_ASSERT_GT(numPhotonPaths, 0);
     CADISE_ASSERT_GT(searchRadius, 0.0_r);
@@ -34,8 +35,8 @@ VpmEstimator::VpmEstimator(
 void VpmEstimator::estimate(
     const Scene&    scene,
     const Ray&      ray,
-    Spectrum* const out_radiance) const {
-
+    Spectrum* const out_radiance) const 
+{
     CADISE_ASSERT(out_radiance);
 
     const TransportInfo transportInfo(ETransportMode::IMPORTANCE);
@@ -43,9 +44,11 @@ void VpmEstimator::estimate(
     Spectrum pathThroughput(1.0_r);
     Ray      traceRay(ray);
 
-    for (int32 bounceTimes = 0;; ++bounceTimes) {
+    for (int32 bounceTimes = 0;; ++bounceTimes) 
+    {
         SurfaceIntersection intersection;
-        if (!scene.isIntersecting(traceRay, intersection)) {
+        if (!scene.isIntersecting(traceRay, intersection)) 
+        {
             break;
         }
 
@@ -60,7 +63,8 @@ void VpmEstimator::estimate(
             ELobe::SPECULAR_TRANSMISSION });
 
         // add radiance if hitting area light
-        if (primitive->areaLight()) {
+        if (primitive->areaLight()) 
+        {
             const Spectrum emittance = primitive->areaLight()->emittance(intersection);
 
             totalRadiance.addLocal(pathThroughput.mul(emittance));
@@ -68,20 +72,23 @@ void VpmEstimator::estimate(
 
         // collect photons near the non-specular surface,
         // then use them to do radiance estimation
-        if (!isSpecular) {
+        if (!isSpecular)
+        {
             Spectrum radiance(0.0_r);
 
             std::vector<Photon> nearPhotons;
             _photonMap->findWithRange(P, _searchRadius, &nearPhotons);
 
-            for (const auto& photon : nearPhotons) {
+            for (const auto& photon : nearPhotons) 
+            {
                 const Vector3R& fromDirection      = photon.fromDirection();
                 const Spectrum& throughputRadiance = photon.throughputRadiance();
 
                 intersection.setWo(fromDirection);
 
                 Spectrum reflectance = bsdf->evaluate(transportInfo, intersection.reverse());
-                if (reflectance.isZero()) {
+                if (reflectance.isZero())
+                {
                     continue;
                 }
 
@@ -102,12 +109,14 @@ void VpmEstimator::estimate(
 
         // only trace next ray at specular surface
         // according to bsdf sampling
-        else {
+        else 
+        {
             // TODO: sample two directions if encountering
             //       dielectric bsdf
             BsdfSample bsdfSample;
             bsdf->evaluateSample(TransportInfo(), intersection, &bsdfSample);
-            if (!bsdfSample.isValid()) {
+            if (!bsdfSample.isValid()) 
+            {
                 break;
             }
 
@@ -117,7 +126,8 @@ void VpmEstimator::estimate(
             const real      LdotN       = L.absDot(Ns);
 
             pathThroughput.mulLocal(reflectance.mul(LdotN / pdfW));
-            if (pathThroughput.isZero()) {
+            if (pathThroughput.isZero()) 
+            {
                 break;
             }
 

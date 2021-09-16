@@ -4,9 +4,11 @@
 
 #include <string>
 
-namespace cadise {
+namespace cadise 
+{
 
-class Logger {
+class Logger 
+{
 public:
     explicit Logger(const std::string& senderName);
 

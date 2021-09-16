@@ -4,17 +4,19 @@
 
 #include "math/tVector3.h"
 
-namespace cadise {
+namespace cadise
+{
 
-class PointLight : public Light {
+class PointLight : public Light 
+{
 public:
     PointLight(const Vector3R& position, const Spectrum& intensity);
 
-    Spectrum emittance(const SurfaceIntersection& emitIntersection) const override;
+    Spectrum emittance(const SurfaceIntersection& emitSi) const override;
 
     void evaluateDirectSample(DirectLightSample* const out_sample) const override;
     real evaluateDirectPdfW(
-        const SurfaceIntersection& emitIntersection,
+        const SurfaceIntersection& emitSi,
         const Vector3R&            targetPosition) const override;
 
     void evaluateEmitSample(EmitLightSample* const out_sample) const override;

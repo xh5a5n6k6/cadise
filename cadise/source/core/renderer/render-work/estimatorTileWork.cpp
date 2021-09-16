@@ -9,7 +9,8 @@
 #include "core/scene.h"
 #include "fundamental/assertion.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 EstimatorTileWork::EstimatorTileWork(
     const Scene* const           scene,
@@ -21,26 +22,30 @@ EstimatorTileWork::EstimatorTileWork(
     _scene(scene),
     _camera(camera),
     _estimator(estimator),
-    _sampler(sampler) {
-
+    _sampler(sampler)
+{
     CADISE_ASSERT(scene);
     CADISE_ASSERT(camera);
     CADISE_ASSERT(estimator);
     CADISE_ASSERT(sampler);
 }
 
-void EstimatorTileWork::work() const {
+void EstimatorTileWork::work() const 
+{
     CADISE_ASSERT(_filmTile);
 
     const Vector2I& x0y0 = _filmTile->tileBound().minVertex();
     const Vector2I& x1y1 = _filmTile->tileBound().maxVertex();
 
-    for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy) {
-        for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix) {
+    for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy) 
+    {
+        for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix) 
+        {
             auto sampleSampler = _sampler->clone(_sampler->sampleNumber());
             auto sample2D      = sampleSampler->requestSample2D();
 
-            for (std::size_t in = 0; in < sampleSampler->sampleNumber(); ++in) {
+            for (std::size_t in = 0; in < sampleSampler->sampleNumber(); ++in) 
+            {
                 const Vector2R filmJitterPosition 
                     = Vector2I(ix, iy).asType<real>().add(sample2D->nextSample());
 

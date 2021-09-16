@@ -2,9 +2,11 @@
 
 #include "core/surface/fresnel/conductorFresnel.h"
 
-namespace cadise {
+namespace cadise
+{
 
-class SchlickConductorFresnel : public ConductorFresnel {
+class SchlickConductorFresnel : public ConductorFresnel
+{
 public:
     SchlickConductorFresnel(
         const real      iorOuter, 

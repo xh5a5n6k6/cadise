@@ -3,10 +3,12 @@
 #include "core/surfaceIntersection.h"
 #include "core/texture/tTexture.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 template<typename T>
-class TSurfaceSampler {
+class TSurfaceSampler 
+{
 public:
     void sample(
         const SurfaceIntersection& si,
@@ -20,8 +22,8 @@ template<typename T>
 inline void TSurfaceSampler<T>::sample(
     const SurfaceIntersection& si,
     const TTexture<T>* const   texture,
-    T* const                   out_value) const {
-
+    T* const                   out_value) const 
+{
     CADISE_ASSERT(texture);
     CADISE_ASSERT(out_value);
 

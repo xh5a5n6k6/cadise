@@ -2,9 +2,11 @@
 
 #include "math/type/fundamentalType.h"
 
-namespace cadise {
+namespace cadise 
+{
 
-class KdTreeNodeInfo {
+class KdTreeNodeInfo 
+{
 public:
     KdTreeNodeInfo();
     KdTreeNodeInfo(const std::size_t nodeIndex,

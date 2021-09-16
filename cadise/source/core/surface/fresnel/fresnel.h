@@ -2,9 +2,11 @@
 
 #include "core/spectrum/spectrum.h"
 
-namespace cadise {
+namespace cadise 
+{
 
-class Fresnel {
+class Fresnel 
+{
 public:
     virtual ~Fresnel();
 

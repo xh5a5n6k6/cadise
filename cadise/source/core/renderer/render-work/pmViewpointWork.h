@@ -6,13 +6,15 @@
 
 #include <vector>
 
-namespace cadise {
+namespace cadise { class PmViewpoint; }
+namespace cadise { class PmViewpointConstructor; }
+namespace cadise { class Sampler; }
 
-class PmViewpoint;
-class PmViewpointConstructor;
-class Sampler;
+namespace cadise
+{
 
-class PmViewpointWork : public RenderWork {
+class PmViewpointWork : public RenderWork
+{
 public:
     PmViewpointWork(
         const AABB2I&                       sampleBound,

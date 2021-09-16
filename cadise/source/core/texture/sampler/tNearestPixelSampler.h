@@ -2,10 +2,12 @@
 
 #include "core/texture/sampler/tPixelSampler.h"
 
-namespace cadise {
+namespace cadise
+{
 
 template<typename T, std::size_t N>
-class TNearestPixelSampler : public TPixelSampler<T, N> {
+class TNearestPixelSampler : public TPixelSampler<T, N>
+{
 public:
     using Parent = TPixelSampler<T, N>;
     using Parent::Parent;

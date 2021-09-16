@@ -3,11 +3,13 @@
 #include <atomic>
 #include <random>
 
-namespace cadise {
+namespace cadise
+{
 
 static std::atomic<int32> seed = 81;
 
-real Random::nextReal() {
+real Random::nextReal()
+{
     static thread_local std::random_device randomDevice;
     static thread_local std::mt19937 generator(seed += randomDevice());
 
@@ -16,7 +18,10 @@ real Random::nextReal() {
     return distribution(generator);
 }
 
-std::size_t Random::nextIndex(const std::size_t minIndex, const std::size_t maxIndex) {
+std::size_t Random::nextIndex(
+    const std::size_t minIndex, 
+    const std::size_t maxIndex) 
+{
     const std::size_t interval    = maxIndex - minIndex;
     const std::size_t sampleIndex = static_cast<std::size_t>(minIndex + nextReal() * interval);
 

@@ -2,10 +2,12 @@
 
 #include <array>
 
-namespace cadise {
+namespace cadise
+{
 
 template<typename T, std::size_t N>
-class TArithmeticArray {
+class TArithmeticArray
+{
 public:
     TArithmeticArray();
     explicit TArithmeticArray(const T value);
@@ -77,12 +79,14 @@ private:
 // template header implementation
 
 template<typename T, std::size_t N>
-inline TArithmeticArray<T, N> operator + (const T scalar, const TArithmeticArray<T, N>& lhs) {
+inline TArithmeticArray<T, N> operator + (const T scalar, const TArithmeticArray<T, N>& lhs)
+{
     return lhs.add(scalar);
 }
 
 template<typename T, std::size_t N>
-inline TArithmeticArray<T, N> operator * (const T scalar, const TArithmeticArray<T, N>& lhs) {
+inline TArithmeticArray<T, N> operator * (const T scalar, const TArithmeticArray<T, N>& lhs)
+{
     return lhs.mul(scalar);
 }
 

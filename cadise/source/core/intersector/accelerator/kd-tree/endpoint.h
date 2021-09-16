@@ -3,9 +3,11 @@
 #include "core/intersector/accelerator/kd-tree/eEndpointType.h"
 #include "math/type/fundamentalType.h"
 
-namespace cadise {
+namespace cadise 
+{
 
-class Endpoint {
+class Endpoint 
+{
 public:
     Endpoint();
     Endpoint(

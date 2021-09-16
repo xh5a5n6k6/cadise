@@ -8,29 +8,34 @@
 #include "core/surfaceIntersection.h"
 #include "fundamental/assertion.h"
 
-namespace cadise {
+namespace cadise 
+{
 
-Scene::Scene(const std::shared_ptr<Accelerator>&  topAccelerator,
-             const std::shared_ptr<LightCluster>& lightCluster) :
+Scene::Scene(
+    const std::shared_ptr<Accelerator>&  topAccelerator,
+    const std::shared_ptr<LightCluster>& lightCluster) :
 
     _topAccelerator(topAccelerator),
     _lightCluster(lightCluster),
-    _backgroundSphere(nullptr) {
-
+    _backgroundSphere(nullptr) 
+{
     CADISE_ASSERT(topAccelerator);
     CADISE_ASSERT(lightCluster);
 }
 
-void Scene::evaluateBound(AABB3R* const out_bound) const {
+void Scene::evaluateBound(AABB3R* const out_bound) const
+{
     CADISE_ASSERT(out_bound);
 
     _topAccelerator->evaluateBound(out_bound);
 }
 
-bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) const {
+bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) const
+{
     // TODO: Refactor here
     PrimitiveInfo primitiveInfo;
-    if(_topAccelerator->isIntersecting(ray, primitiveInfo)) {
+    if(_topAccelerator->isIntersecting(ray, primitiveInfo)) 
+    {
         surfaceIntersection.setWi(ray.direction().negate());
         surfaceIntersection.setPrimitiveInfo(primitiveInfo);
 
@@ -47,8 +52,8 @@ bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) c
         return true;
     }
     else if (_backgroundSphere && 
-             _backgroundSphere->isIntersecting(ray, primitiveInfo)) {
-
+             _backgroundSphere->isIntersecting(ray, primitiveInfo))
+    {
         surfaceIntersection.setWi(ray.direction().negate());
         surfaceIntersection.setPrimitiveInfo(primitiveInfo);
 
@@ -68,37 +73,44 @@ bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) c
     return false;
 }
 
-bool Scene::isOccluded(const Ray& ray) const {
+bool Scene::isOccluded(const Ray& ray) const 
+{
     // TODO: Refactor here
-    if (_topAccelerator->isOccluded(ray)) {
+    if (_topAccelerator->isOccluded(ray))
+    {
         return true;
     }
-    else if (_backgroundSphere && _backgroundSphere->isOccluded(ray)) {
+    else if (_backgroundSphere && _backgroundSphere->isOccluded(ray))
+    {
         return true;
     }
 
     return false;
 }
 
-const Light* Scene::sampleOneLight(real* const out_pdf) const {
+const Light* Scene::sampleOneLight(real* const out_pdf) const 
+{
     CADISE_ASSERT(out_pdf);
 
     return _lightCluster->sampleOneLight(out_pdf);
 }
 
-real Scene::evaluatePickLightPdf(const Light* const light) const {
+real Scene::evaluatePickLightPdf(const Light* const light) const
+{
     CADISE_ASSERT(light);
 
     return _lightCluster->evaluatePickLightPdf(light);
 }
 
-void Scene::setBackgroundSphere(const Primitive* const backgroundSphere) {
+void Scene::setBackgroundSphere(const Primitive* const backgroundSphere)
+{
     CADISE_ASSERT(backgroundSphere);
 
     _backgroundSphere = backgroundSphere;
 }
 
-void Scene::unsetBackgroundSphere() {
+void Scene::unsetBackgroundSphere() 
+{
     _backgroundSphere = nullptr;
 }
 

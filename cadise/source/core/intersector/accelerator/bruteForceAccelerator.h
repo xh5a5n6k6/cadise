@@ -5,11 +5,13 @@
 #include <memory>
 #include <vector>
 
-namespace cadise {
+namespace cadise 
+{
 
 // BruteForceAccelerator is for no acceleration. 
 // It is for debugging usage compared to other accelerators.
-class BruteForceAccelerator : public Accelerator {
+class BruteForceAccelerator : public Accelerator 
+{
 public:
     explicit BruteForceAccelerator(const std::vector<std::shared_ptr<Intersector>>& intersectors);
 

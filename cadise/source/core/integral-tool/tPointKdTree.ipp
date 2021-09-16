@@ -6,7 +6,8 @@
 
 #include <algorithm>
 
-namespace cadise {
+namespace cadise 
+{
 
 template<typename Index, typename Object, typename ObjectCenterCalculator>
 inline TPointKdTree<Index, Object, ObjectCenterCalculator>::
@@ -16,13 +17,13 @@ inline TPointKdTree<Index, Object, ObjectCenterCalculator>::
     _nodes(),
     _objectIndices(),
     _bound(),
-    _centerCalculator(centerCalculator) {
-}
+    _centerCalculator(centerCalculator)
+{}
 
 template<typename Index, typename Object, typename ObjectCenterCalculator>
 inline void TPointKdTree<Index, Object, ObjectCenterCalculator>::
-    buildNodes(const std::vector<Object>& objects) {
-
+    buildNodes(const std::vector<Object>& objects)
+{
     // clear buffer first
     _objects.clear();
     _nodes.clear();
@@ -32,7 +33,8 @@ inline void TPointKdTree<Index, Object, ObjectCenterCalculator>::
     _objects = std::move(objects);
 
     std::vector<Vector3R> objectCenters(objects.size());
-    for (std::size_t i = 0; i < objects.size(); ++i) {
+    for (std::size_t i = 0; i < objects.size(); ++i)
+    {
         const Vector3R center = _centerCalculator(objects[i]);
 
         objectCenters[i] = center;
@@ -40,14 +42,16 @@ inline void TPointKdTree<Index, Object, ObjectCenterCalculator>::
     }
 
     std::vector<Index> objectIndices(objects.size());
-    for (std::size_t i = 0; i < objects.size(); ++i) {
+    for (std::size_t i = 0; i < objects.size(); ++i)
+    {
         objectIndices[i] = static_cast<Index>(i);
     }
 
-    _buildNodesRecursively(objectCenters,
-                           objectIndices,
-                           _bound,
-                           0);
+    _buildNodesRecursively(
+        objectCenters,
+        objectIndices,
+        _bound,
+        0);
 }
 
 template<typename Index, typename Object, typename ObjectCenterCalculator>
@@ -55,11 +59,12 @@ inline void TPointKdTree<Index, Object, ObjectCenterCalculator>::
     findWithRange(
         const Vector3R&            position,
         const real                 searchRadius,
-        std::vector<Object>* const out_objects) const {
-
+        std::vector<Object>* const out_objects) const
+{
     CADISE_ASSERT(out_objects);
 
-    if (!_bound.isInside(position)) {
+    if (!_bound.isInside(position)) 
+    {
         return;
     }
 
@@ -69,26 +74,32 @@ inline void TPointKdTree<Index, Object, ObjectCenterCalculator>::
     std::size_t currentStackSize = 0;
     std::size_t nodeStack[MAX_STACK_SIZE];
 
-    while (true) {
+    while (true)
+    {
         const Node& currentNode = _nodes[currentNodeIndex];
 
         // leaf node traversal
-        if (currentNode.isLeaf()) {
-            for (std::size_t i = 0; i < currentNode.numObjects(); ++i) {
+        if (currentNode.isLeaf())
+        {
+            for (std::size_t i = 0; i < currentNode.numObjects(); ++i)
+            {
                 const Index   objectIndex = _objectIndices[currentNode.objectIndex() + i];
                 const Object& object      = _objects[objectIndex];
 
                 const Vector3R center    = _centerCalculator(object);
                 const real     distance2 = center.sub(position).lengthSquared();
-                if (distance2 < searchRadius2) {
+                if (distance2 < searchRadius2)
+                {
                     out_objects->push_back(object);
                 }
             }
 
-            if (currentStackSize == 0) {
+            if (currentStackSize == 0) 
+            {
                 break;
             }
-            else {
+            else 
+            {
                 --currentStackSize;
                 currentNodeIndex = nodeStack[currentStackSize];
             }
@@ -96,7 +107,8 @@ inline void TPointKdTree<Index, Object, ObjectCenterCalculator>::
         } // end leaf node traversal
 
         // internal node traversal
-        else {
+        else
+        {
             const std::size_t splitAxis = currentNode.splitAxis();
             const real splitDifferenceT 
                 = position[splitAxis] - currentNode.splitPosition();
@@ -107,18 +119,21 @@ inline void TPointKdTree<Index, Object, ObjectCenterCalculator>::
             // decide which child is near/far node
             //
             // near child is first node
-            if (splitDifferenceT < 0.0_r) {
+            if (splitDifferenceT < 0.0_r)
+            {
                 nearChildIndex = currentNodeIndex + 1;
                 farChildIndex  = currentNode.secondChildIndex();
             }
             // near child is second node
-            else {
+            else
+            {
                 nearChildIndex = currentNode.secondChildIndex();
                 farChildIndex  = currentNodeIndex + 1;
             }
 
             // check if it needs to put farChildIndex in the stack
-            if (splitDifferenceT * splitDifferenceT <= searchRadius2) {
+            if (splitDifferenceT * splitDifferenceT <= searchRadius2) 
+            {
                 nodeStack[currentStackSize] = farChildIndex;
                 ++currentStackSize;
             }
@@ -134,16 +149,18 @@ inline void TPointKdTree<Index, Object, ObjectCenterCalculator>::
         const std::vector<Vector3R>& objectCenters,
         const std::vector<Index>&    objectIndices,
         const AABB3R&                entireBound,
-        const std::size_t            currentDepth) {
-
+        const std::size_t            currentDepth) 
+{
     Node node;
     const std::size_t nodeIndex               = _nodes.size();
     const std::size_t objectIndicesBeginIndex = _objectIndices.size();
 
     // make leaf node
     const std::size_t numObjects = objectIndices.size();
-    if (numObjects <= MAX_OBJECT_SIZE) {
-        for (std::size_t i = 0; i < numObjects; ++i) {
+    if (numObjects <= MAX_OBJECT_SIZE)
+    {
+        for (std::size_t i = 0; i < numObjects; ++i)
+        {
             _objectIndices.push_back(objectIndices[i]);
         }
 
@@ -152,7 +169,8 @@ inline void TPointKdTree<Index, Object, ObjectCenterCalculator>::
     }
 
     // make internal node
-    else {
+    else
+    {
         // if split succeeds, objectIndices will be split 
         // into two sub-arrays.
         std::vector<Index> subObjectIndicesA;
@@ -167,9 +185,10 @@ inline void TPointKdTree<Index, Object, ObjectCenterCalculator>::
                                 entireBound,
                                 &splitInfo,
                                 &subObjectIndicesA,
-                                &subObjectIndicesB)) {
-
-            for (std::size_t i = 0; i < numObjects; ++i) {
+                                &subObjectIndicesB)) 
+        {
+            for (std::size_t i = 0; i < numObjects; ++i)
+            {
                 _objectIndices.push_back(objectIndices[i]);
             }
 
@@ -178,7 +197,8 @@ inline void TPointKdTree<Index, Object, ObjectCenterCalculator>::
         }
 
         // make internal node
-        else {
+        else 
+        {
             std::size_t splitAxis;
             real        splitPosition;
             std::tie(splitAxis, splitPosition) = splitInfo;
@@ -194,20 +214,23 @@ inline void TPointKdTree<Index, Object, ObjectCenterCalculator>::
             // make node first, and then initialize its data (internal node data)
             _nodes.push_back(std::move(node));
 
-            _buildNodesRecursively(objectCenters,
-                                   subObjectIndicesA,
-                                   splitBoundA,
-                                   currentDepth + 1);
+            _buildNodesRecursively(
+                objectCenters,
+                subObjectIndicesA,
+                splitBoundA,
+                currentDepth + 1);
 
             const std::size_t secondChildIndex = _nodes.size();
-            _nodes[nodeIndex].initializInternalNode(secondChildIndex,
-                                                    splitAxis,
-                                                    splitPosition);
+            _nodes[nodeIndex].initializInternalNode(
+                secondChildIndex,
+                splitAxis,
+                splitPosition);
 
-            _buildNodesRecursively(objectCenters,
-                                   subObjectIndicesB,
-                                   splitBoundB,
-                                   currentDepth + 1);
+            _buildNodesRecursively(
+                objectCenters,
+                subObjectIndicesB,
+                splitBoundB,
+                currentDepth + 1);
         }
     }
 }
@@ -220,8 +243,8 @@ inline bool TPointKdTree<Index, Object, ObjectCenterCalculator>::
         const AABB3R&                        entireBound,
         std::tuple<std::size_t, real>* const out_splitInfo,
         std::vector<Index>* const            out_subObjectIndicesA,
-        std::vector<Index>* const            out_subObjectIndicesB) {
-
+        std::vector<Index>* const            out_subObjectIndicesB)
+{
     CADISE_ASSERT(out_subObjectIndicesA);
     CADISE_ASSERT(out_subObjectIndicesB);
 
@@ -236,17 +259,20 @@ inline bool TPointKdTree<Index, Object, ObjectCenterCalculator>::
         sortedObjectIndices.begin(),
         sortedObjectIndices.begin() + size,
         sortedObjectIndices.end(),
-        [splitAxis, &objectCenters](const Index& iA, const Index& iB) {
+        [splitAxis, &objectCenters](const Index& iA, const Index& iB)
+        {
             return objectCenters[iA][splitAxis] < objectCenters[iB][splitAxis];
         });
 
-    out_subObjectIndicesA->insert(out_subObjectIndicesA->end(),
-                                 sortedObjectIndices.begin(),
-                                 sortedObjectIndices.begin() + size);
+    out_subObjectIndicesA->insert(
+        out_subObjectIndicesA->end(),
+        sortedObjectIndices.begin(),
+        sortedObjectIndices.begin() + size);
 
-    out_subObjectIndicesB->insert(out_subObjectIndicesB->end(),
-                                 sortedObjectIndices.begin() + size,
-                                 sortedObjectIndices.end());
+    out_subObjectIndicesB->insert(
+        out_subObjectIndicesB->end(),
+        sortedObjectIndices.begin() + size,
+        sortedObjectIndices.end());
 
     *out_splitInfo = std::make_tuple(splitAxis, objectCenters[sortedObjectIndices[size]][splitAxis]);
 

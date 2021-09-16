@@ -2,7 +2,8 @@
 
 #include "core/estimator/radianceEstimator.h"
 
-namespace cadise {
+namespace cadise
+{
 
 /*
      PtEstimator: Path Tracing Estimator
@@ -14,7 +15,8 @@ namespace cadise {
      Reference Note:
      http://www.cs.uu.nl/docs/vakken/magr/portfolio/INFOMAGR/lecture8.pdf
 */
-class PtEstimator : public RadianceEstimator {
+class PtEstimator : public RadianceEstimator
+{
 public:
     explicit PtEstimator(const int32 maxDepth);
 
@@ -31,7 +33,8 @@ private:
 
 // header implementation
 
-inline std::string PtEstimator::toString() const {
+inline std::string PtEstimator::toString() const 
+{
     return "PT Estimator";
 }
 

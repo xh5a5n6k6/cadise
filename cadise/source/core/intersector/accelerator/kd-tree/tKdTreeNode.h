@@ -2,10 +2,12 @@
 
 #include "math/type/fundamentalType.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 template<typename Index = std::size_t>
-class TKdTreeNode {
+class TKdTreeNode
+{
 public:
     TKdTreeNode();
 
@@ -30,14 +32,16 @@ public:
     bool isLeaf() const;
 
 private:
-    union {
+    union
+    {
         // for leaf node
         Index _objectIndex;
         // for internal node
         real  _splitPosition;
     };
 
-    union {
+    union
+    {
         /*
             use last two bits to recognize if it is leaf node,
             remaining bits store object count in leaf node

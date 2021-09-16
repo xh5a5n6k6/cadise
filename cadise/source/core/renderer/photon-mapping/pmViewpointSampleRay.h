@@ -3,9 +3,11 @@
 #include "core/ray.h"
 #include "core/spectrum/spectrum.h"
 
-namespace cadise {
+namespace cadise
+{
 
-class PmViewpointSampleRay {
+class PmViewpointSampleRay
+{
 public:
     PmViewpointSampleRay();
     PmViewpointSampleRay(

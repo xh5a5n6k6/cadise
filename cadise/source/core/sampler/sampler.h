@@ -2,12 +2,14 @@
 
 #include <memory>
 
-namespace cadise {
+namespace cadise { class SampleRecord1D; }
+namespace cadise { class SampleRecord2D; }
 
-class SampleRecord1D;
-class SampleRecord2D;
+namespace cadise
+{
 
-class Sampler {
+class Sampler 
+{
 public:
     explicit Sampler(const std::size_t sampleNumber);
 

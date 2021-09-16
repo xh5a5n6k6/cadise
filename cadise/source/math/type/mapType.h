@@ -5,7 +5,8 @@
 #include <string>
 #include <map>
 
-namespace cadise {
+namespace cadise 
+{
 
 // TODO: replace map to unordered_map when STL supports heterogeneous lookup
 //       in unordered_map

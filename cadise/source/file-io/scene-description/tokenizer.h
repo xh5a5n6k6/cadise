@@ -5,11 +5,13 @@
 #include <memory>
 #include <string_view>
 
-namespace cadise {
+namespace cadise { class SdData; }
 
-class SdData;
+namespace cadise
+{
 
-class Tokenizer {
+class Tokenizer
+{
 public:
     Tokenizer();
 
@@ -27,9 +29,12 @@ private:
     std::unique_ptr<std::string_view[]> _parseString(const std::string_view& value) const;
 
     std::unique_ptr<real[]>     _parseRealArray(
-        const std::string_view& value, int32* const out_valueNumber) const;
+        const std::string_view& value, 
+        int32* const            out_valueNumber) const;
+
     std::unique_ptr<Vector3R[]> _parseVector3rArray(
-        const std::string_view& value, int32* const out_valueNumber) const;
+        const std::string_view& value, 
+        int32* const            out_valueNumber) const;
 };
 
 } // namespace cadise

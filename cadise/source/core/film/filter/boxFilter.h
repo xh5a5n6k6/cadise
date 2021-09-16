@@ -2,9 +2,11 @@
 
 #include "core/film/filter/filter.h"
 
-namespace cadise {
+namespace cadise 
+{
 
-class BoxFilter : public Filter {
+class BoxFilter : public Filter 
+{
 public:
     BoxFilter(const real filterWidth, const real filterHeight);
     

@@ -12,13 +12,12 @@
 #include "file-io/scene-description/sdData.h"
 #include "fundamental/assertion.h"
 
-namespace cadise {
-
-namespace instantiator {
+namespace cadise::instantiator
+{
 
 static std::shared_ptr<Renderer> createSampling(
-    const std::shared_ptr<SdData>& data) {
-
+    const std::shared_ptr<SdData>& data) 
+{
     const auto estimator = makeEstimator(data);
     const auto sampler   = makeSampler(data);
 
@@ -26,16 +25,16 @@ static std::shared_ptr<Renderer> createSampling(
 }
 
 static std::shared_ptr<Renderer> createBdpt(
-    const std::shared_ptr<SdData>& data) {
-
+    const std::shared_ptr<SdData>& data) 
+{
     const auto sampler = makeSampler(data);
 
     return std::make_shared<BdptRenderer>(std::move(sampler));
 }
 
 static std::shared_ptr<Renderer> createVpm(
-    const std::shared_ptr<SdData>& data) {
-
+    const std::shared_ptr<SdData>& data)
+{
     const std::size_t numPhotons    = static_cast<std::size_t>(data->findInt32("num-photons", 250000));
     const real        searchRadius  = data->findReal("search-radius", 0.01_r);
 
@@ -46,8 +45,8 @@ static std::shared_ptr<Renderer> createVpm(
 }
 
 static std::shared_ptr<Renderer> createPpm(
-    const std::shared_ptr<SdData>& data) {
-
+    const std::shared_ptr<SdData>& data) 
+{
     const std::size_t numPhotons    = static_cast<std::size_t>(data->findInt32("num-photons", 250000));
     const real        searchRadius  = data->findReal("search-radius", 0.01_r);
     const std::size_t numIterations = static_cast<std::size_t>(data->findInt32("num-iterations", 4));
@@ -86,23 +85,27 @@ static std::shared_ptr<Renderer> createPpm(
 //}
 
 std::shared_ptr<Renderer> makeRenderer(
-    const std::shared_ptr<SdData>& data) {
-
+    const std::shared_ptr<SdData>& data) 
+{
     CADISE_ASSERT(data);
 
     std::shared_ptr<Renderer> renderer = nullptr;
     
     const auto type = data->findString("type");
-    if (type == "sampling") {
+    if (type == "sampling") 
+    {
         renderer = createSampling(data);
     }
-    else if (type == "bdpt") {
+    else if (type == "bdpt")
+    {
         renderer = createBdpt(data);
     }
-    else if (type == "vpm") {
+    else if (type == "vpm") 
+    {
         renderer = createVpm(data);
     }
-    else if (type == "ppm") {
+    else if (type == "ppm")
+    {
         renderer = createPpm(data);
     }
     //else if (type == "ppg") {
@@ -111,7 +114,8 @@ std::shared_ptr<Renderer> makeRenderer(
     //else if (type == "bdpg") {
     //    renderer = createBdpg(data);
     //}
-    else {
+    else 
+    {
         // unsupported renderer type
         std::cerr << "Unsupported renderer type: <" << type << ">" << std::endl;
     }
@@ -119,6 +123,4 @@ std::shared_ptr<Renderer> makeRenderer(
     return renderer;
 }
 
-} // namespace instantiator
-
-} // namespace cadise
+} // namespace cadise::instantiator

@@ -4,12 +4,13 @@
 
 #include <memory>
 
-namespace cadise {
+namespace cadise { template<typename T> class TTexture; }
 
-template<typename T>
-class TTexture;
+namespace cadise
+{
 
-class MixedBsdf : public Bsdf {
+class MixedBsdf : public Bsdf
+{
 public:
     MixedBsdf(
         const std::shared_ptr<Bsdf>& bsdfA, 

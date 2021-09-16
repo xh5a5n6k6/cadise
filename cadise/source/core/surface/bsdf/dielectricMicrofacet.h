@@ -4,12 +4,14 @@
 
 #include <memory>
 
-namespace cadise {
+namespace cadise { class DielectricFresnel; }
+namespace cadise { class Microfacet; }
 
-class DielectricFresnel;
-class Microfacet;
+namespace cadise 
+{
 
-class DielectricMicrofacet : public Bsdf {
+class DielectricMicrofacet : public Bsdf 
+{
 public:
     DielectricMicrofacet(
         const std::shared_ptr<Microfacet>&        microfacet,

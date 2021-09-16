@@ -7,47 +7,47 @@
 #include "file-io/scene-description/sdData.h"
 #include "fundamental/assertion.h"
 
-namespace cadise {
-
-namespace instantiator {
+namespace cadise::instantiator 
+{
 
 static std::shared_ptr<Sampler> createRandom(
-    const std::shared_ptr<SdData>& data) {
-
+    const std::shared_ptr<SdData>& data) 
+{
     const int32 sampleNumber = data->findInt32("sample-number", 4);
 
     return std::make_shared<RandomSampler>(static_cast<std::size_t>(sampleNumber));
 }
 
 static std::shared_ptr<Sampler> createStratified(
-    const std::shared_ptr<SdData>& data) {
-
+    const std::shared_ptr<SdData>& data)
+{
     const int32 sampleNumber = data->findInt32("sample-number", 4);
 
     return std::make_shared<StratifiedSampler>(static_cast<std::size_t>(sampleNumber));
 }
 
 std::shared_ptr<Sampler> makeSampler(
-    const std::shared_ptr<SdData>& data) {
-
+    const std::shared_ptr<SdData>& data) 
+{
     CADISE_ASSERT(data);
 
     std::shared_ptr<Sampler> sampler = nullptr;
     
     const auto type = data->findString("sampler");
-    if (type == "random") {
+    if (type == "random") 
+    {
         sampler = createRandom(data);
     }
-    else if (type == "stratified") {
+    else if (type == "stratified")
+    {
         sampler = createStratified(data);
     }
-    else {
+    else
+    {
         // unsupported sampler type
     }
 
     return sampler;
 }
 
-} // namespace instantiator
-
-} // namespace cadise
+} // namespace cadise::instantiator

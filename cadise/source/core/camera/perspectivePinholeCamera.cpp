@@ -9,7 +9,8 @@
 #include <cmath>
 #include <limits>
 
-namespace cadise {
+namespace cadise
+{
 
 PerspectivePinholeCamera::PerspectivePinholeCamera(
     const Vector3R& position,
@@ -22,14 +23,15 @@ PerspectivePinholeCamera::PerspectivePinholeCamera(
     _cameraToWorld(nullptr),
     _filmToCamera(nullptr),
     _fov(fov),
-    _sensorWidthMM(sensorWidthMM) {
-
+    _sensorWidthMM(sensorWidthMM)
+{
     _cameraToWorld = std::make_shared<Transform>(Matrix4R::makeLookAt(position, direction, up));
 
     this->updateTransform();
 }
 
-void PerspectivePinholeCamera::updateTransform() {
+void PerspectivePinholeCamera::updateTransform()
+{
     const auto [sensorWidth, sensorHeight] = _getSensorSizeXy();
     const auto realResolution              = _resolution.asType<real>();
 
@@ -51,8 +53,8 @@ void PerspectivePinholeCamera::updateTransform() {
 
 void PerspectivePinholeCamera::spawnPrimaryRay(
     const Vector2D& filmPosition,
-    Ray* const      out_primaryRay) const {
-
+    Ray* const      out_primaryRay) const
+{
     CADISE_ASSERT(out_primaryRay);
 
     Vector3R sampleCameraPosition;
@@ -74,8 +76,8 @@ void PerspectivePinholeCamera::spawnPrimaryRay(
 
 void PerspectivePinholeCamera::evaluateCameraSample(
     CameraSample* const out_sample, 
-    Ray* const          out_toCameraRay) const {
-
+    Ray* const          out_toCameraRay) const
+{
     CADISE_ASSERT(out_sample);
     CADISE_ASSERT(out_toCameraRay);
 
@@ -91,7 +93,8 @@ void PerspectivePinholeCamera::evaluateCameraSample(
     const real     distance           = cameraRayVector.length();
     const Vector3R cameraRayDirection = cameraRayVector.div(distance);
     const real     cosTheta           = cameraRayDirection.dot(cameraRayN);
-    if (cosTheta <= 0.0_r) {
+    if (cosTheta <= 0.0_r)
+    {
         return;
     }
 
@@ -113,11 +116,12 @@ void PerspectivePinholeCamera::evaluateCameraSample(
     if (filmPosition.x() <  0.0_r || 
         filmPosition.y() <  0.0_r ||
         filmPosition.x() >= static_cast<real>(_resolution.x()) || 
-        filmPosition.y() >= static_cast<real>(_resolution.y())) {
-
+        filmPosition.y() >= static_cast<real>(_resolution.y()))
+    {
         // temporary hack for BDPG radiance estimator
         // TODO: remove this situation
-        if (out_toCameraRay->origin().isEqualTo(targetPosition)) {
+        if (out_toCameraRay->origin().isEqualTo(targetPosition)) 
+        {
             fprintf(stdout, "filmPosition error\n");
             fprintf(stdout, "cos: %f, x: %lf, y: %f\n", cosTheta, double(filmPosition.x()), filmPosition.y());
 
@@ -149,8 +153,8 @@ void PerspectivePinholeCamera::evaluateCameraSample(
 void PerspectivePinholeCamera::evaluateCameraPdf(
     const Ray&  cameraRay,
     real* const out_pdfA,
-    real* const out_pdfW) const {
-
+    real* const out_pdfW) const 
+{
     CADISE_ASSERT(out_pdfA);
     CADISE_ASSERT(out_pdfW);
 
@@ -158,7 +162,8 @@ void PerspectivePinholeCamera::evaluateCameraPdf(
     _cameraToWorld->transformVector(Vector3R(0.0_r, 0.0_r, -1.0_r), &cameraRayN);
 
     const real cosTheta = cameraRay.direction().dot(cameraRayN);
-    if (cosTheta <= 0.0_r) {
+    if (cosTheta <= 0.0_r) 
+    {
         return;
     }
 
@@ -177,8 +182,8 @@ void PerspectivePinholeCamera::evaluateCameraPdf(
     if (filmPosition.x() <  0.0_r ||
         filmPosition.y() <  0.0_r ||
         filmPosition.x() >= static_cast<real>(_resolution.x()) ||
-        filmPosition.y() >= static_cast<real>(_resolution.y())) {
-
+        filmPosition.y() >= static_cast<real>(_resolution.y())) 
+    {
         return;
     }
 
@@ -186,10 +191,12 @@ void PerspectivePinholeCamera::evaluateCameraPdf(
     *out_pdfW = cameraToImagePointDistance2 / (sensorArea * cosTheta);
 }
 
-std::pair<float64, float64> PerspectivePinholeCamera::_getSensorSizeXy() const {
+std::pair<float64, float64> PerspectivePinholeCamera::_getSensorSizeXy() const 
+{
     const float64 aspectRatio = _getAspectRatio();
 
-    return {
+    return 
+    {
         _sensorWidthMM,              // sensorWidth
         _sensorWidthMM / aspectRatio // sensorHeight
     };

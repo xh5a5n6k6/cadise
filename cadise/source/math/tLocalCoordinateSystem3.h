@@ -2,10 +2,12 @@
 
 #include "math/tVector3.h"
 
-namespace cadise {
+namespace cadise
+{
 
 template<typename T>
-class TLocalCoordinateSystem3 {
+class TLocalCoordinateSystem3
+{
 public:
     TLocalCoordinateSystem3();
     TLocalCoordinateSystem3(

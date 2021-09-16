@@ -4,9 +4,11 @@
 
 #include "core/spectrum/spectrum.h"
 
-namespace cadise {
+namespace cadise 
+{
 
-class RgbImageTexture : public TImageTexture<Spectrum, real, 3> {
+class RgbImageTexture : public TImageTexture<Spectrum, real, 3>
+{
 public:
     using Parent = TImageTexture<Spectrum, real, 3>;
     using Parent::Parent;

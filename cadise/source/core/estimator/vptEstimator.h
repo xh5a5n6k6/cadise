@@ -2,7 +2,8 @@
 
 #include "core/estimator/radianceEstimator.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 /*
      VptEstimator: Vanilla Path Tracing Estimator
@@ -12,7 +13,8 @@ namespace cadise {
      It may be the most fundamental global illumination technique yet 
      still unbiased, so it is a good reference for ground truth rendering.
 */
-class VptEstimator : public RadianceEstimator {
+class VptEstimator : public RadianceEstimator 
+{
 public:
     explicit VptEstimator(const int32 maxDepth);
 
@@ -29,7 +31,8 @@ private:
 
 // header implementation
 
-inline std::string VptEstimator::toString() const {
+inline std::string VptEstimator::toString() const 
+{
     return "VPT Estimator";
 }
 

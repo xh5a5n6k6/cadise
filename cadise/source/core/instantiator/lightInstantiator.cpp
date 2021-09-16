@@ -14,14 +14,13 @@
 #include "file-io/scene-description/sdData.h"
 #include "fundamental/assertion.h"
 
-namespace cadise {
-
-namespace instantiator {
+namespace cadise::instantiator
+{
 
 static std::shared_ptr<Light> createPoint(
     const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Primitive>& primitives) {
-
+    const StringKeyMap<Primitive>& primitives)
+{
     const auto position  = data->findVector3r("position");
     const auto intensity = data->findVector3r("intensity");
 
@@ -30,8 +29,8 @@ static std::shared_ptr<Light> createPoint(
 
 static std::shared_ptr<Light> createSingleArea(
     const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Primitive>& primitives) {
-
+    const StringKeyMap<Primitive>& primitives)
+{
     const auto color          = data->findVector3r("color");
     const real watt           = data->findReal("watt");
     const bool isBackFaceEmit = data->findBool("is-back-face-emit");
@@ -52,8 +51,8 @@ static std::shared_ptr<Light> createSingleArea(
 static std::shared_ptr<Light> createEnvironment(
     const std::shared_ptr<SdData>& data,
     const StringKeyMap<Primitive>& primitives,
-    std::shared_ptr<Primitive>&    out_backgroundSphere) {
-    
+    std::shared_ptr<Primitive>&    out_backgroundSphere) 
+{
     const auto hdrFilename = data->findString("hdr-filename");
 
     CADISE_ASSERT_NE(hdrFilename, "");
@@ -80,28 +79,30 @@ static std::shared_ptr<Light> createEnvironment(
 std::shared_ptr<Light> makeLight(
     const std::shared_ptr<SdData>& data,
     const StringKeyMap<Primitive>& primitives,
-    std::shared_ptr<Primitive>&    out_backgroundSphere) {
-
+    std::shared_ptr<Primitive>&    out_backgroundSphere) 
+{
     CADISE_ASSERT(data);
 
     std::shared_ptr<Light> light = nullptr;
     const auto type = data->findString("type");
-    if (type == "point") {
+    if (type == "point") 
+    {
         light = createPoint(data, primitives);
     }
-    else if (type == "area") {
+    else if (type == "area")
+    {
         light = createSingleArea(data, primitives);
     }
-    else if (type == "environment") {
+    else if (type == "environment") 
+    {
         light = createEnvironment(data, primitives, out_backgroundSphere);
     }
-    else {
+    else 
+    {
         // unsupported light type
     }
 
     return light;
 }
 
-} // namespace instantiator
-
-} // namespace cadise
+} // namespace cadise::instantiator

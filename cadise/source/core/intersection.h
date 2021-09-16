@@ -1,8 +1,10 @@
 #pragma once
 
-namespace cadise {
+namespace cadise 
+{
 
-class Intersection {
+class Intersection 
+{
 public:
     virtual ~Intersection();
 };

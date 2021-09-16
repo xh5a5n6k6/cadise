@@ -1,10 +1,11 @@
 #include "core/intersector/accelerator/kd-tree/endpoint.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 Endpoint::Endpoint() :
-    Endpoint(0, 0.0_r, EEndpointType::NONE) {
-}
+    Endpoint(0, 0.0_r, EEndpointType::NONE)
+{}
 
 Endpoint::Endpoint(
     const std::size_t   intersectorIndex,
@@ -13,18 +14,21 @@ Endpoint::Endpoint(
 
     _intersectorIndex(intersectorIndex),
     _position(position),
-    _type(type) {
-}
+    _type(type) 
+{}
 
-std::size_t Endpoint::intersectorIndex() const {
+std::size_t Endpoint::intersectorIndex() const 
+{
     return _intersectorIndex;
 }
 
-real Endpoint::position() const {
+real Endpoint::position() const
+{
     return _position;
 }
 
-EEndpointType Endpoint::type() const {
+EEndpointType Endpoint::type() const 
+{
     return _type;
 }
 

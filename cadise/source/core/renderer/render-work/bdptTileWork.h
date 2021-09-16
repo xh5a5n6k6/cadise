@@ -6,13 +6,15 @@
 
 #include <vector>
 
-namespace cadise {
+namespace cadise { class Camera; }
+namespace cadise { class Sampler; }
+namespace cadise { class Scene; }
 
-class Camera;
-class Sampler;
-class Scene;
+namespace cadise 
+{
 
-class BdptTileWork : public TileWork {
+class BdptTileWork : public TileWork 
+{
 public:
     BdptTileWork(
         const Scene* const   scene,

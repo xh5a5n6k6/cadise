@@ -1,6 +1,7 @@
 #include "core/texture/mapper/textureMapper.h"
 
-namespace cadise {
+namespace cadise
+{
 
 TextureMapper::~TextureMapper() = default;
 

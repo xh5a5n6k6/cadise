@@ -12,7 +12,8 @@
 
 #include <utility>
 
-namespace cadise {
+namespace cadise 
+{
 
 DielectricMicrofacet::DielectricMicrofacet(
     const std::shared_ptr<Microfacet>&        microfacet,
@@ -20,19 +21,20 @@ DielectricMicrofacet::DielectricMicrofacet(
 
     Bsdf(BsdfLobes({ ELobe::GLOSSY_REFLECTION, ELobe::GLOSSY_TRANSMISSION })),
     _microfacet(microfacet),
-    _fresnel(fresnel) {
-
+    _fresnel(fresnel) 
+{
     CADISE_ASSERT(microfacet);
     CADISE_ASSERT(fresnel);
 }
 
 Spectrum DielectricMicrofacet::evaluate(
     const TransportInfo&       info,
-    const SurfaceIntersection& si) const {
-
+    const SurfaceIntersection& si) const
+{
     bool canReflection = (info.components() == BSDF_ALL_COMPONENTS) || (info.components() == 0);
     bool canRefraction = (info.components() == BSDF_ALL_COMPONENTS) || (info.components() == 1);
-    if (!canReflection && !canRefraction) {
+    if (!canReflection && !canRefraction)
+    {
         return Spectrum(0.0_r);
     }
 
@@ -42,28 +44,32 @@ Spectrum DielectricMicrofacet::evaluate(
 
     const real VdotN = V.dot(Ns);
     const real LdotN = L.dot(Ns);
-    if (VdotN * LdotN == 0.0_r) {
+    if (VdotN * LdotN == 0.0_r) 
+    {
         return Spectrum(0.0_r);
     }
 
     // check scattering event occured at which side (reflection or refraction)
     const bool isReflection = VdotN * LdotN > 0.0_r;
     if (( isReflection && !canReflection) ||
-        (!isReflection && !canRefraction)) {
-
+        (!isReflection && !canRefraction)) 
+    {
         return Spectrum(0.0_r);
     }
 
     Vector3R H;
-    if (isReflection) {
-        if (!MicrofacetHelper::canMakeReflectionH(V, L, Ns, &H)) {
+    if (isReflection) 
+    {
+        if (!MicrofacetHelper::canMakeReflectionH(V, L, Ns, &H)) 
+        {
             return Spectrum(0.0_r);
         }
     }
-    else {
+    else 
+    {
         if (!MicrofacetHelper::canMakeRefractionH(
-            V, L, Ns, _fresnel->iorOuter(), _fresnel->iorInner(), &H)) {
-            
+            V, L, Ns, _fresnel->iorOuter(), _fresnel->iorInner(), &H))
+        {
             return Spectrum(0.0_r);
         }
     }
@@ -74,7 +80,8 @@ Spectrum DielectricMicrofacet::evaluate(
 
     Spectrum F;
     _fresnel->evaluateReflectance(LdotH, &F);
-    if (!isReflection) {
+    if (!isReflection)
+    {
         F.complementLocal();
     }
 
@@ -82,13 +89,16 @@ Spectrum DielectricMicrofacet::evaluate(
     const real G = _microfacet->shadowingMaskingG(si, V, L, Ns, H);
 
     real modelTerm;
-    if (isReflection) {
+    if (isReflection) 
+    {
         modelTerm = G * D / (4.0_r * std::abs(VdotN * LdotN));
     }
-    else {
+    else 
+    {
         real etaI = _fresnel->iorOuter();
         real etaT = _fresnel->iorInner();
-        if (LdotN < 0.0_r) {
+        if (LdotN < 0.0_r) 
+        {
             std::swap(etaI, etaT);
         }
 
@@ -105,13 +115,14 @@ Spectrum DielectricMicrofacet::evaluate(
 void DielectricMicrofacet::evaluateSample(
     const TransportInfo&       info,
     const SurfaceIntersection& si,
-    BsdfSample* const          out_sample) const {
-
+    BsdfSample* const          out_sample) const 
+{
     CADISE_ASSERT(out_sample);
 
     bool canReflection = (info.components() == BSDF_ALL_COMPONENTS) || (info.components() == 0);
     bool canRefraction = (info.components() == BSDF_ALL_COMPONENTS) || (info.components() == 1);
-    if (!canReflection && !canRefraction) {
+    if (!canReflection && !canRefraction)
+    {
         return;
     }
     
@@ -129,13 +140,16 @@ void DielectricMicrofacet::evaluateSample(
     _fresnel->evaluateReflectance(VdotH, &reflectance);
     const real reflectionProbability = reflectance.average();
 
-    if (canReflection && canRefraction) {
+    if (canReflection && canRefraction) 
+    {
         const real sampleProbability = Random::nextReal();
 
-        if (sampleProbability < reflectionProbability) {
+        if (sampleProbability < reflectionProbability) 
+        {
             canRefraction = false;
         }
-        else {
+        else 
+        {
             canReflection = false;
         }
     }
@@ -146,13 +160,15 @@ void DielectricMicrofacet::evaluateSample(
     Vector3R scatterDirection(0.0_r);
     Spectrum scatterValue(0.0_r);
 
-    if (canReflection) {
+    if (canReflection)
+    {
         const real      NSign = static_cast<real>(math::sign(VdotN));
         const Vector3R  L     = V.reflect(H.mul(NSign));
 
         const real LdotN = L.dot(Ns);
         const real LdotH = L.dot(H);
-        if (VdotN * LdotN <= 0.0_r) {
+        if (VdotN * LdotN <= 0.0_r)
+        {
             return;
         }
 
@@ -164,7 +180,8 @@ void DielectricMicrofacet::evaluateSample(
 
         const real pdfH = std::abs(D * NdotH);
         const real pdfL = std::abs(pdfH / (4.0_r * LdotH));
-        if (!std::isfinite(pdfL)) {
+        if (!std::isfinite(pdfL)) 
+        {
             return;
         }
 
@@ -172,16 +189,19 @@ void DielectricMicrofacet::evaluateSample(
         scatterDirection = L;
         scatterPdfW      = pdfL;
 
-        if (info.components() == BSDF_ALL_COMPONENTS) {
+        if (info.components() == BSDF_ALL_COMPONENTS)
+        {
             scatterPdfW *= reflectionProbability;
         }
     }
-    else {
+    else 
+    {
         real etaI = _fresnel->iorOuter();
         real etaT = _fresnel->iorInner();
 
         Vector3R L;
-        if (!V.canRefract(H, etaI, etaT, &L)) {
+        if (!V.canRefract(H, etaI, etaT, &L))
+        {
             return;
         }
 
@@ -189,8 +209,10 @@ void DielectricMicrofacet::evaluateSample(
         const real LdotH = L.dot(H);
 
         real btdfFactor = 1.0_r;
-        if (info.mode() == ETransportMode::RADIANCE) {
-            if (LdotH < 0.0_r) {
+        if (info.mode() == ETransportMode::RADIANCE) 
+        {
+            if (LdotH < 0.0_r)
+            {
                 std::swap(etaI, etaT);
             }
 
@@ -210,7 +232,8 @@ void DielectricMicrofacet::evaluateSample(
 
         const real pdfH = std::abs(D * NdotH);
         const real pdfL = std::abs(pdfH * LdotH * sqrtTerm * sqrtTerm);
-        if (!std::isfinite(pdfL)) {
+        if (!std::isfinite(pdfL))
+        {
             return;
         }
 
@@ -218,7 +241,8 @@ void DielectricMicrofacet::evaluateSample(
         scatterDirection = L;
         scatterPdfW      = pdfL;
 
-        if (info.components() == BSDF_ALL_COMPONENTS) {
+        if (info.components() == BSDF_ALL_COMPONENTS)
+        {
             scatterPdfW *= 1.0_r - reflectionProbability;
         }
     }
@@ -230,11 +254,12 @@ void DielectricMicrofacet::evaluateSample(
 
 real DielectricMicrofacet::evaluatePdfW(
     const TransportInfo&       info,
-    const SurfaceIntersection& si) const {
-
+    const SurfaceIntersection& si) const 
+{
     bool canReflection = (info.components() == BSDF_ALL_COMPONENTS) || (info.components() == 0);
     bool canRefraction = (info.components() == BSDF_ALL_COMPONENTS) || (info.components() == 1);
-    if (!canReflection && !canRefraction) {
+    if (!canReflection && !canRefraction)
+    {
         return 0.0_r;
     }
 
@@ -244,28 +269,32 @@ real DielectricMicrofacet::evaluatePdfW(
 
     const real VdotN = V.dot(Ns);
     const real LdotN = L.dot(Ns);
-    if (VdotN * LdotN == 0.0_r) {
+    if (VdotN * LdotN == 0.0_r)
+    {
         return 0.0_r;
     }
 
     // check scattering event occured at which side (reflection or refraction)
     const bool isReflection = (VdotN * LdotN > 0.0_r) ? true : false;
     if (( isReflection && !canReflection) ||
-        (!isReflection && !canRefraction)) {
-
+        (!isReflection && !canRefraction)) 
+    {
         return 0.0_r;
     }
 
     Vector3R H;
-    if (isReflection) {
-        if (!MicrofacetHelper::canMakeReflectionH(V, L, Ns, &H)) {
+    if (isReflection)
+    {
+        if (!MicrofacetHelper::canMakeReflectionH(V, L, Ns, &H))
+        {
             return 0.0_r;
         }
     }
-    else {
+    else 
+    {
         if (!MicrofacetHelper::canMakeRefractionH(
-            V, L, Ns, _fresnel->iorOuter(), _fresnel->iorInner(), &H)) {
-            
+            V, L, Ns, _fresnel->iorOuter(), _fresnel->iorInner(), &H)) 
+        {
             return 0.0_r;
         }
     }
@@ -283,17 +312,21 @@ real DielectricMicrofacet::evaluatePdfW(
 
     real scatterPdf   = 1.0_r;
     real jacobianTerm = 1.0_r;
-    if (isReflection) {
+    if (isReflection)
+    {
         jacobianTerm = std::abs(1.0_r / (4.0_r * LdotH));
         
-        if (info.components() == BSDF_ALL_COMPONENTS) {
+        if (info.components() == BSDF_ALL_COMPONENTS)
+        {
             scatterPdf = reflectionProbability;
         }
     }
-    else {
+    else
+    {
         real etaI = _fresnel->iorOuter();
         real etaT = _fresnel->iorInner();
-        if (LdotN < 0.0_r) {
+        if (LdotN < 0.0_r) 
+        {
             std::swap(etaI, etaT);
         }
         
@@ -301,20 +334,23 @@ real DielectricMicrofacet::evaluatePdfW(
 
         jacobianTerm = std::abs(LdotH * sqrtTerm * sqrtTerm);
 
-        if (info.components() == BSDF_ALL_COMPONENTS) {
+        if (info.components() == BSDF_ALL_COMPONENTS)
+        {
             scatterPdf = 1.0_r - reflectionProbability;
         }
     }
 
     const real pdfL = pdfH * jacobianTerm * scatterPdf;
-    if (std::isfinite(pdfL)) {
+    if (std::isfinite(pdfL)) 
+    {
         return 0.0_r;
     }
 
     return pdfL;
 }
 
-ELobe DielectricMicrofacet::lobe(const BsdfComponents component) const {
+ELobe DielectricMicrofacet::lobe(const BsdfComponents component) const 
+{
     CADISE_ASSERT(component == 0 || component == 1);
 
     return component == 0 ? ELobe::GLOSSY_REFLECTION : ELobe::GLOSSY_TRANSMISSION;

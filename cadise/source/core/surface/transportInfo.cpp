@@ -1,32 +1,36 @@
 #include "core/surface/transportInfo.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 TransportInfo::TransportInfo() :
-    TransportInfo(ETransportMode::RADIANCE) {
-}
+    TransportInfo(ETransportMode::RADIANCE)
+{}
 
 TransportInfo::TransportInfo(const ETransportMode mode) :
-    TransportInfo(mode, BSDF_ALL_COMPONENTS) {
-}
+    TransportInfo(mode, BSDF_ALL_COMPONENTS)
+{}
 
 TransportInfo::TransportInfo(
     const ETransportMode mode,
     const BsdfComponents components) :
 
     _mode(mode),
-    _components(components) {
-}
+    _components(components)
+{}
 
-void TransportInfo::setComponents(const BsdfComponents components) {
+void TransportInfo::setComponents(const BsdfComponents components) 
+{
     _components = components;
 }
 
-ETransportMode TransportInfo::mode() const {
+ETransportMode TransportInfo::mode() const
+{
     return _mode;
 }
 
-BsdfComponents TransportInfo::components() const {
+BsdfComponents TransportInfo::components() const 
+{
     return _components;
 }
 

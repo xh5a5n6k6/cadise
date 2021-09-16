@@ -9,17 +9,18 @@
 #include <algorithm>
 #include <limits>
 
-namespace cadise {
+namespace cadise 
+{
 
 BvhBuilder::BvhBuilder(const EBvhSplitMode splitMode) :
-    _splitMode(splitMode) {
-}
+    _splitMode(splitMode)
+{}
 
 std::unique_ptr<BvhBinaryNode> BvhBuilder::buildBinaryNodes(
     const std::vector<std::shared_ptr<Intersector>>& intersectors, 
     std::vector<std::shared_ptr<Intersector>>* const out_orderedIntersectors,
-    std::size_t* const                               out_totalNodeSize) const {
-
+    std::size_t* const                               out_totalNodeSize) const 
+{
     CADISE_ASSERT(out_orderedIntersectors);
     CADISE_ASSERT(out_totalNodeSize);
 
@@ -28,24 +29,27 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::buildBinaryNodes(
     std::vector<BvhBoundInfo> boundInfos;
     boundInfos.reserve(intersectorCounts);
     AABB3R bound;
-    for (std::size_t i = 0; i < intersectorCounts; ++i) {
+    for (std::size_t i = 0; i < intersectorCounts; ++i)
+    {
         intersectors[i]->evaluateBound(&bound);
         boundInfos.push_back(BvhBoundInfo(bound, i));
     }
 
     std::unique_ptr<BvhBinaryNode> root = nullptr;
-    root = _buildBinaryNodesRecursively(boundInfos,
-                                        intersectors, 
-                                        out_orderedIntersectors, 
-                                        out_totalNodeSize);
+    root = _buildBinaryNodesRecursively(
+        boundInfos,
+        intersectors, 
+        out_orderedIntersectors, 
+         out_totalNodeSize);
 
     return std::move(root);
 }
 
-void BvhBuilder::buildLinearNodes(std::unique_ptr<BvhBinaryNode>    root, 
-                                  const std::size_t                 totalNodeSize,
-                                  std::vector<BvhLinearNode>* const out_linearNodes) const {
-    
+void BvhBuilder::buildLinearNodes(
+    std::unique_ptr<BvhBinaryNode>    root, 
+    const std::size_t                 totalNodeSize,
+    std::vector<BvhLinearNode>* const out_linearNodes) const 
+{
     CADISE_ASSERT(out_linearNodes);
     
     std::vector<BvhLinearNode> nodes;
@@ -60,8 +64,8 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
     const std::vector<BvhBoundInfo>&                 boundInfos,
     const std::vector<std::shared_ptr<Intersector>>& intersectors, 
     std::vector<std::shared_ptr<Intersector>>* const out_orderedIntersectors,
-    std::size_t* const                               out_totalNodeSize) const {
-
+    std::size_t* const                               out_totalNodeSize) const 
+{
     CADISE_ASSERT(out_orderedIntersectors);
     CADISE_ASSERT(out_totalNodeSize);
 
@@ -71,13 +75,16 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
     const std::size_t intersectorCounts     = boundInfos.size();
 
     AABB3R nodeBound;
-    for (std::size_t i = 0; i < intersectorCounts; ++i) {
+    for (std::size_t i = 0; i < intersectorCounts; ++i)
+    {
         nodeBound.unionWithLocal(boundInfos[i].bound());
     }
 
     // make leaf node
-    if (intersectorCounts <= MAX_INTERSECTOR_SIZE) {
-        for (std::size_t i = 0; i < intersectorCounts; ++i) {
+    if (intersectorCounts <= MAX_INTERSECTOR_SIZE)
+    {
+        for (std::size_t i = 0; i < intersectorCounts; ++i) 
+        {
             const std::size_t intersectorIndex = boundInfos[i].index();
             out_orderedIntersectors->push_back(intersectors[intersectorIndex]);
         }
@@ -86,17 +93,21 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
     }
 
     // make internal node if split succeeds, or make leaf node
-    else {
+    else 
+    {
         AABB3R centroidBound;
-        for (std::size_t i = 0; i < intersectorCounts; ++i) {
+        for (std::size_t i = 0; i < intersectorCounts; ++i) 
+        {
             centroidBound.unionWithLocal(boundInfos[i].centroid());
         }
 
         const std::size_t splitAxis = centroidBound.maxAxis();
 
         // make leaf node when it couldn't split
-        if (centroidBound.minVertex()[splitAxis] == centroidBound.maxVertex()[splitAxis]) {
-            for (std::size_t i = 0; i < intersectorCounts; ++i) {
+        if (centroidBound.minVertex()[splitAxis] == centroidBound.maxVertex()[splitAxis]) 
+        {
+            for (std::size_t i = 0; i < intersectorCounts; ++i)
+            {
                 const std::size_t intersectorIndex = boundInfos[i].index();
                 out_orderedIntersectors->push_back(intersectors[intersectorIndex]);
             }
@@ -105,12 +116,14 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
         }
 
         // attempt to split
-        else {
+        else 
+        {
             std::vector<BvhBoundInfo> subBoundInfosA;
             std::vector<BvhBoundInfo> subBoundInfosB;
 
             bool canSplit = false;
-            switch (_splitMode) {
+            switch (_splitMode)
+            {
                 case EBvhSplitMode::EQUAL:
                     canSplit = _canSplitWithEqual(boundInfos,
                                                   splitAxis,
@@ -132,8 +145,10 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
             }
 
             // make leaf node
-            if (!canSplit) {
-                for (std::size_t i = 0; i < intersectorCounts; ++i) {
+            if (!canSplit) 
+            {
+                for (std::size_t i = 0; i < intersectorCounts; ++i) 
+                {
                     const std::size_t intersectorIndex = boundInfos[i].index();
                     out_orderedIntersectors->push_back(intersectors[intersectorIndex]);
                 }
@@ -142,23 +157,27 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
             }
 
             // make internal node
-            else {
+            else 
+            {
                 std::unique_ptr<BvhBinaryNode> firstChild = nullptr;
-                firstChild = _buildBinaryNodesRecursively(subBoundInfosA,
-                                                          intersectors,
-                                                          out_orderedIntersectors,
-                                                          out_totalNodeSize);
+                firstChild = _buildBinaryNodesRecursively(
+                    subBoundInfosA,
+                    intersectors,
+                    out_orderedIntersectors,
+                    out_totalNodeSize);
 
                 std::unique_ptr<BvhBinaryNode> secondChild = nullptr;
-                secondChild = _buildBinaryNodesRecursively(subBoundInfosB,
-                                                           intersectors,
-                                                           out_orderedIntersectors,
-                                                           out_totalNodeSize);
+                secondChild = _buildBinaryNodesRecursively(
+                    subBoundInfosB,
+                    intersectors,
+                    out_orderedIntersectors,
+                    out_totalNodeSize);
 
-                node->initializeInternalNode(nodeBound,
-                                             std::move(firstChild),
-                                             std::move(secondChild),
-                                             splitAxis);
+                node->initializeInternalNode(
+                    nodeBound,
+                    std::move(firstChild),
+                    std::move(secondChild),
+                    splitAxis);
             }
         }
     }
@@ -171,41 +190,48 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
 void BvhBuilder::_buildLinearNodesRecursively(
     std::unique_ptr<BvhBinaryNode>    binaryNode, 
     std::vector<BvhLinearNode>* const out_linearNodes,
-    std::size_t* const                out_secondChildNodeIndex) const {
-    
+    std::size_t* const                out_secondChildNodeIndex) const 
+{
     CADISE_ASSERT(out_linearNodes);
     
     BvhLinearNode linearNode;
     const std::size_t nodeIndex = out_linearNodes->size();
-    if (out_secondChildNodeIndex) {
+    if (out_secondChildNodeIndex) 
+    {
         *out_secondChildNodeIndex = nodeIndex;
     }
 
-    if (binaryNode->isLeaf()) {
-        linearNode.initializeLeafNode(binaryNode->bound(), 
-                                      binaryNode->intersectorIndex(), 
-                                      binaryNode->intersectorCounts());
+    if (binaryNode->isLeaf())
+    {
+        linearNode.initializeLeafNode(
+            binaryNode->bound(), 
+            binaryNode->intersectorIndex(), 
+            binaryNode->intersectorCounts());
 
         out_linearNodes->push_back(linearNode);
     }
-    else {
+    else 
+    {
         out_linearNodes->push_back(linearNode);
         
         const AABB3R&     internalNodeBound     = binaryNode->bound();
         const std::size_t internalNodeSplitAxis = binaryNode->splitAxis();
         std::size_t secondChildIndex;
 
-        _buildLinearNodesRecursively(std::move(binaryNode->firstChild()), 
-                                     out_linearNodes, 
-                                     nullptr);
+        _buildLinearNodesRecursively(
+            std::move(binaryNode->firstChild()), 
+            out_linearNodes, 
+            nullptr);
 
-        _buildLinearNodesRecursively(std::move(binaryNode->secondChild()), 
-                                     out_linearNodes, 
-                                     &secondChildIndex);
+        _buildLinearNodesRecursively(
+            std::move(binaryNode->secondChild()), 
+            out_linearNodes, 
+            &secondChildIndex);
 
-        (*out_linearNodes)[nodeIndex].initializeInternalNode(internalNodeBound, 
-                                                             secondChildIndex, 
-                                                             internalNodeSplitAxis);
+        (*out_linearNodes)[nodeIndex].initializeInternalNode(
+            internalNodeBound, 
+            secondChildIndex, 
+            internalNodeSplitAxis);
     }
 }
 
@@ -213,8 +239,8 @@ bool BvhBuilder::_canSplitWithEqual(
     const std::vector<BvhBoundInfo>& boundInfos,
     const std::size_t                splitAxis,
     std::vector<BvhBoundInfo>* const out_subBoundInfosA,
-    std::vector<BvhBoundInfo>* const out_subBoundInfosB) const {
-
+    std::vector<BvhBoundInfo>* const out_subBoundInfosB) const
+{
     CADISE_ASSERT(out_subBoundInfosA);
     CADISE_ASSERT(out_subBoundInfosB);
 
@@ -233,17 +259,20 @@ bool BvhBuilder::_canSplitWithEqual(
         sortedBoundInfos.begin(),
         sortedBoundInfos.begin() + size,
         sortedBoundInfos.end(),
-        [splitAxis](const BvhBoundInfo& bA, const BvhBoundInfo& bB) {
+        [splitAxis](const BvhBoundInfo& bA, const BvhBoundInfo& bB)
+        {
             return bA.centroid()[splitAxis] < bB.centroid()[splitAxis];
         });
 
-    out_subBoundInfosA->insert(out_subBoundInfosA->end(),
-                               sortedBoundInfos.begin(),
-                               sortedBoundInfos.begin() + size);
+    out_subBoundInfosA->insert(
+        out_subBoundInfosA->end(),
+        sortedBoundInfos.begin(),
+        sortedBoundInfos.begin() + size);
 
-    out_subBoundInfosB->insert(out_subBoundInfosB->end(),
-                               sortedBoundInfos.begin() + size,
-                               sortedBoundInfos.end());
+    out_subBoundInfosB->insert(
+        out_subBoundInfosB->end(),
+        sortedBoundInfos.begin() + size,
+        sortedBoundInfos.end());
 
     return true;
 }
@@ -254,8 +283,8 @@ bool BvhBuilder::_canSplitWithSah(
     const AABB3R&                    intersectorBound,
     const AABB3R&                    centroidBound,
     std::vector<BvhBoundInfo>* const out_subBoundInfosA,
-    std::vector<BvhBoundInfo>* const out_subBoundInfosB) const {
-
+    std::vector<BvhBoundInfo>* const out_subBoundInfosB) const 
+{
     CADISE_ASSERT(out_subBoundInfosA);
     CADISE_ASSERT(out_subBoundInfosB);
 
@@ -270,16 +299,19 @@ bool BvhBuilder::_canSplitWithSah(
     const real        rcpSplitExtent    = 1.0_r / centroidBound.extent()[splitAxis];
 
     // use equal split instead
-    if (intersectorCounts <= 2) {
-        return _canSplitWithEqual(boundInfos, 
-                                  splitAxis, 
-                                  out_subBoundInfosA, 
-                                  out_subBoundInfosB);
+    if (intersectorCounts <= 2) 
+    {
+        return _canSplitWithEqual(
+            boundInfos, 
+            splitAxis, 
+            out_subBoundInfosA, 
+            out_subBoundInfosB);
     }
 
     constexpr std::size_t NUM_BUCKETS = 12;
     BvhSahBucket buckets[NUM_BUCKETS];
-    for (std::size_t i = 0; i < intersectorCounts; ++i) {
+    for (std::size_t i = 0; i < intersectorCounts; ++i)
+    {
         const AABB3R&   bound    = boundInfos[i].bound();
         const Vector3R& centroid = boundInfos[i].centroid();
         const real      offset   = (centroid[splitAxis] - splitMinVertex[splitAxis]) * rcpSplitExtent;
@@ -298,18 +330,21 @@ bool BvhBuilder::_canSplitWithSah(
     std::size_t bestSplitBucketIndex = std::numeric_limits<std::size_t>::max();
     real        bestCost             = std::numeric_limits<real>::max();
 
-    for (std::size_t split = 0; split < NUM_BUCKETS - 1; ++split) {
+    for (std::size_t split = 0; split < NUM_BUCKETS - 1; ++split) 
+    {
         std::size_t subIntersectorCountsA = 0;
         std::size_t subIntersectorCountsB = 0;
         AABB3R      subBoundA;
         AABB3R      subBoundB;
 
-        for (std::size_t i = 0; i <= split; ++i) {
+        for (std::size_t i = 0; i <= split; ++i) 
+        {
             subBoundA.unionWithLocal(buckets[i].bound());
             subIntersectorCountsA += buckets[i].intersectorCounts();
         }
 
-        for (std::size_t i = split + 1; i < NUM_BUCKETS; ++i) {
+        for (std::size_t i = split + 1; i < NUM_BUCKETS; ++i) 
+        {
             subBoundB.unionWithLocal(buckets[i].bound());
             subIntersectorCountsB += buckets[i].intersectorCounts();
         }
@@ -321,14 +356,16 @@ bool BvhBuilder::_canSplitWithSah(
             = traversalCost + intersectionCost * 
               (probabilitySplitBoundA * subIntersectorCountsA + probabilitySplitBoundB * subIntersectorCountsB);
 
-        if (splitCost < bestCost) {
+        if (splitCost < bestCost) 
+        {
             bestCost             = splitCost;
             bestSplitBucketIndex = split;
         }
     }
 
     // it could not find good split position
-    if (bestCost >= noSplitCost) {
+    if (bestCost >= noSplitCost)
+    {
         return false;
     }
 
@@ -336,7 +373,8 @@ bool BvhBuilder::_canSplitWithSah(
     const auto middlePointer = std::partition(
         sortedBoundInfos.begin(),
         sortedBoundInfos.end(),
-        [=](const BvhBoundInfo& b) {
+        [=](const BvhBoundInfo& b)
+        {
             const Vector3R& centroid = b.centroid();
             const real      offset   = (centroid[splitAxis] - splitMinVertex[splitAxis]) * rcpSplitExtent;
 
@@ -346,13 +384,15 @@ bool BvhBuilder::_canSplitWithSah(
             return safeBucketIndex <= bestSplitBucketIndex;
         });
 
-    out_subBoundInfosA->insert(out_subBoundInfosA->end(),
-                               sortedBoundInfos.begin(),
-                               middlePointer);
+    out_subBoundInfosA->insert(
+        out_subBoundInfosA->end(),
+        sortedBoundInfos.begin(),
+        middlePointer);
 
-    out_subBoundInfosB->insert(out_subBoundInfosB->end(),
-                               middlePointer,
-                               sortedBoundInfos.end());
+    out_subBoundInfosB->insert(
+        out_subBoundInfosB->end(),
+        middlePointer,
+        sortedBoundInfos.end());
 
     return true;
 }

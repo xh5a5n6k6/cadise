@@ -5,9 +5,11 @@
 
 #include <array>
 
-namespace cadise {
+namespace cadise 
+{
 
-class Distribution2D {
+class Distribution2D 
+{
 public:
     Distribution2D();
     Distribution2D(const real* const value, const Vector2S& resolution);

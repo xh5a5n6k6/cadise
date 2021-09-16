@@ -11,7 +11,8 @@
 
 #include <cmath>
 
-namespace cadise {
+namespace cadise 
+{
 
 SubPathConnector::SubPathConnector() = default;
 
@@ -21,13 +22,14 @@ void SubPathConnector::connect(
     const SubPath&    cameraPath,
     const std::size_t s,
     const std::size_t t,
-    Spectrum* const   out_radiance) const {
-
+    Spectrum* const   out_radiance) const 
+{
     CADISE_ASSERT(out_radiance);
     CADISE_ASSERT_GE(s, 2);
     CADISE_ASSERT_GE(t, 2);
 
-    if (s + t - 1 > 16) {
+    if (s + t - 1 > 16) 
+    {
         return;
     }
 
@@ -35,8 +37,8 @@ void SubPathConnector::connect(
     const PathVertex& cameraPathEndpoint = cameraPath[t - 1];
 
     if (!lightPathEndpoint.isConnectible() ||
-        !cameraPathEndpoint.isConnectible()) {
-
+        !cameraPathEndpoint.isConnectible()) 
+    {
         return;
     }
 
@@ -46,13 +48,15 @@ void SubPathConnector::connect(
     const Spectrum  reflectanceB = cameraPathEndpoint.evaluate(ETransportMode::RADIANCE, cameraPath[t - 2], lightPathEndpoint);
 
     Spectrum radiance = throughputA.mul(reflectanceA).mul(throughputB).mul(reflectanceB);
-    if (radiance.isZero()) {
+    if (radiance.isZero()) 
+    {
         return;
     }
 
     // it includes visibility test
     real connectGTerm;
-    if (!_canConnect(scene, lightPathEndpoint, cameraPathEndpoint, &connectGTerm)) {
+    if (!_canConnect(scene, lightPathEndpoint, cameraPathEndpoint, &connectGTerm)) 
+    {
         return;
     }
 
@@ -65,8 +69,8 @@ bool SubPathConnector::_canConnect(
     const Scene&      scene,
     const PathVertex& lightEndpoint,
     const PathVertex& cameraEndpoint,
-    real* const       out_connectG) const {
-
+    real* const       out_connectG) const 
+{
     CADISE_ASSERT(out_connectG);
 
     const Vector3R& cameraP  = cameraEndpoint.surfaceDetail().position();
@@ -85,7 +89,8 @@ bool SubPathConnector::_canConnect(
     Ray testRay(cameraP, cameraToLightDirection);
     testRay.setMaxT(distance - constant::ray_epsilon<real>);
 
-    if (scene.isOccluded(testRay)) {
+    if (scene.isOccluded(testRay))
+    {
         return false;
     }
     

@@ -3,26 +3,24 @@
 #include "core/spectrum/spectrum.h"
 #include "math/type/mapType.h"
 
-namespace cadise {
+namespace cadise { class Accelerator; }
+namespace cadise { class Bsdf; }
+namespace cadise { class Camera; }
+namespace cadise { class EnergyEstimator; }
+namespace cadise { class Film; }
+namespace cadise { class Filter; }
+namespace cadise { class Intersector; }
+namespace cadise { class Light; }
+namespace cadise { class LightCluster; }
+namespace cadise { class Primitive; }
+namespace cadise { class Renderer; }
+namespace cadise { class Sampler; }
+namespace cadise { class Scene; }
+namespace cadise { class SdData; }
+namespace cadise { template<typename T> class TTexture; }
 
-class Accelerator;
-class Bsdf;
-class Camera;
-class EnergyEstimator;
-class Film;
-class Filter;
-class Intersector;
-class Light;
-class LightCluster;
-class Primitive;
-class Renderer;
-class Sampler;
-class Scene;
-class SdData;
-template<typename T>
-class TTexture;
-
-namespace instantiator {
+namespace cadise::instantiator
+{
 
 // implement in core/instantiator/cameraInstantiator.cpp
 std::shared_ptr<Camera> makeCamera(
@@ -88,6 +86,4 @@ void makePrimitive(
     std::vector<std::shared_ptr<Intersector>>* const out_intersectors,
     StringKeyMap<Primitive>* const                   out_primitives);
 
-} // namespace instantiator
-
-} // namespace cadise
+} // namespace cadise::instantiator

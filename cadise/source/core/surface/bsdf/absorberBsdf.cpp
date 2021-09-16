@@ -2,24 +2,25 @@
 
 #include "fundamental/assertion.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 AbsorberBsdf::AbsorberBsdf() :
-    Bsdf(BsdfLobes({ ELobe::ABSORB })) {
-}
+    Bsdf(BsdfLobes({ ELobe::ABSORB }))
+{}
 
 Spectrum AbsorberBsdf::evaluate(
     const TransportInfo&       transportInfo,
-    const SurfaceIntersection& surfaceIntersection) const {
-
+    const SurfaceIntersection& surfaceIntersection) const
+{
     return Spectrum(0.0_r);
 }
 
 void AbsorberBsdf::evaluateSample(
     const TransportInfo&       info,
     const SurfaceIntersection& si,
-    BsdfSample* const          out_sample) const {
-
+    BsdfSample* const          out_sample) const
+{
     CADISE_ASSERT(out_sample);
 
     return;
@@ -27,12 +28,13 @@ void AbsorberBsdf::evaluateSample(
 
 real AbsorberBsdf::evaluatePdfW(
     const TransportInfo&       info, 
-    const SurfaceIntersection& si) const {
-
+    const SurfaceIntersection& si) const
+{
     return 0.0_r;
 }
 
-ELobe AbsorberBsdf::lobe(const BsdfComponents component) const {
+ELobe AbsorberBsdf::lobe(const BsdfComponents component) const 
+{
     CADISE_ASSERT_EQ(component, 0);
 
     return ELobe::ABSORB;

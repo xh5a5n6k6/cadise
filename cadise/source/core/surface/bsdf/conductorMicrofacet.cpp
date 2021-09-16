@@ -10,7 +10,8 @@
 
 #include <cmath>
 
-namespace cadise {
+namespace cadise 
+{
 
 ConductorMicrofacet::ConductorMicrofacet(
     const std::shared_ptr<Microfacet>&       microfacet,
@@ -18,28 +19,30 @@ ConductorMicrofacet::ConductorMicrofacet(
     
     Bsdf(BsdfLobes({ ELobe::GLOSSY_REFLECTION })),
     _microfacet(microfacet),
-    _fresnel(fresnel) {
-
+    _fresnel(fresnel) 
+{
     CADISE_ASSERT(microfacet);
     CADISE_ASSERT(fresnel);
 }
 
 Spectrum ConductorMicrofacet::evaluate(
     const TransportInfo&       info,
-    const SurfaceIntersection& si) const {
-    
+    const SurfaceIntersection& si) const
+{
     const Vector3R& Ns = si.surfaceDetail().shadingNormal();
     const Vector3R& V  = si.wi();
     const Vector3R& L  = si.wo();
 
     const real VdotN = V.dot(Ns);
     const real LdotN = L.dot(Ns);
-    if (VdotN * LdotN <= 0.0_r) {
+    if (VdotN * LdotN <= 0.0_r) 
+    {
         return Spectrum(0.0_r);
     }
 
     Vector3R H;
-    if (!MicrofacetHelper::canMakeReflectionH(V, L, Ns, &H)) {
+    if (!MicrofacetHelper::canMakeReflectionH(V, L, Ns, &H)) 
+    {
         return Spectrum(0.0_r);
     }
 
@@ -59,8 +62,8 @@ Spectrum ConductorMicrofacet::evaluate(
 void ConductorMicrofacet::evaluateSample(
     const TransportInfo&       info, 
     const SurfaceIntersection& si,
-    BsdfSample* const          out_sample) const {
-
+    BsdfSample* const          out_sample) const
+{
     CADISE_ASSERT(out_sample);
 
     const Vector3R& Ns    = si.surfaceDetail().shadingNormal();
@@ -74,7 +77,8 @@ void ConductorMicrofacet::evaluateSample(
     const real     NSign = static_cast<real>(math::sign(VdotN));
     const Vector3R L     = V.reflect(H.mul(NSign));
     const real     LdotN = L.dot(Ns);
-    if (VdotN * LdotN <= 0.0_r) {
+    if (VdotN * LdotN <= 0.0_r)
+    {
         return;
     }
 
@@ -90,7 +94,8 @@ void ConductorMicrofacet::evaluateSample(
 
     const real pdfH = std::abs(D * NdotH);
     const real pdfL = std::abs(pdfH / (4.0_r * LdotH));
-    if (!std::isfinite(pdfL)) {
+    if (!std::isfinite(pdfL)) 
+    {
         return;
     }
 
@@ -101,20 +106,22 @@ void ConductorMicrofacet::evaluateSample(
 
 real ConductorMicrofacet::evaluatePdfW(
     const TransportInfo&       info, 
-    const SurfaceIntersection& si) const {
-    
+    const SurfaceIntersection& si) const
+{
     const Vector3R& Ns = si.surfaceDetail().shadingNormal();
     const Vector3R& V  = si.wi();
     const Vector3R& L  = si.wo();
 
     const real VdotN = V.dot(Ns);
     const real LdotN = L.dot(Ns);
-    if (VdotN * LdotN <= 0.0_r) {
+    if (VdotN * LdotN <= 0.0_r) 
+    {
         return 0.0_r;
     }
 
     Vector3R H;
-    if (!MicrofacetHelper::canMakeReflectionH(V, L, Ns, &H)) {
+    if (!MicrofacetHelper::canMakeReflectionH(V, L, Ns, &H))
+    {
         return 0.0_r;
     }
 
@@ -124,14 +131,16 @@ real ConductorMicrofacet::evaluatePdfW(
 
     const real pdfH = std::abs(D * NdotH);
     const real pdfL = std::abs(pdfH / (4.0_r * LdotH));
-    if (!std::isfinite(pdfL)) {
+    if (!std::isfinite(pdfL))
+    {
         return 0.0_r;
     }
 
     return pdfL;
 }
 
-ELobe ConductorMicrofacet::lobe(const BsdfComponents component) const {
+ELobe ConductorMicrofacet::lobe(const BsdfComponents component) const 
+{
     CADISE_ASSERT_EQ(component, 0);
 
     return ELobe::GLOSSY_REFLECTION;

@@ -4,10 +4,10 @@
 
 #include <memory>
 
-namespace cadise {
+namespace cadise { template<typename T> class TTexture; }
 
-template<typename T>
-class TTexture;
+namespace cadise 
+{
 
 /*
     Reference Paper:
@@ -17,7 +17,8 @@ class TTexture;
     "Understanding the Masking-Shadowing Function in Microfacet-Based BRDFs"
     Eric Heitz, JCGT 2014
 */
-class AnisotropicGgx : public Microfacet {
+class AnisotropicGgx : public Microfacet 
+{
 public:
     AnisotropicGgx(
         const std::shared_ptr<TTexture<real>>& roughnessU,

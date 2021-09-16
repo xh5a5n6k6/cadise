@@ -3,10 +3,12 @@
 #include "math/constant.h"
 #include "math/type/mathType.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 template<typename T>
-class TVector3 {
+class TVector3 
+{
 public:
     static TVector3 min(const TVector3& vectorA, const TVector3& vectorB);
     static TVector3 max(const TVector3& vectorA, const TVector3& vectorB);
@@ -111,12 +113,14 @@ private:
 // template header implementation
 
 template<typename T>
-inline TVector3<T> operator + (const T scalar, const TVector3<T>& lhs) {
+inline TVector3<T> operator + (const T scalar, const TVector3<T>& lhs) 
+{
     return lhs.add(scalar);
 }
 
 template<typename T>
-inline TVector3<T> operator * (const T scalar, const TVector3<T>& lhs) {
+inline TVector3<T> operator * (const T scalar, const TVector3<T>& lhs) 
+{
     return lhs.mul(scalar);
 }
 

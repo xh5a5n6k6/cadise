@@ -2,42 +2,50 @@
 
 #include "math/tVector3.h"
 
-namespace cadise {
+namespace cadise
+{
 
 RgbRadianceSensor::RgbRadianceSensor() :
     _r(0.0_r),
     _g(0.0_r),
     _b(0.0_r),
-    _weight(0.0_r) {
-}
+    _weight(0.0_r) 
+{}
 
-void RgbRadianceSensor::addValue(const Vector3R& value) {
+void RgbRadianceSensor::addValue(const Vector3R& value)
+{
     this->addValue(value.x(), value.y(), value.z());
 }
 
-void RgbRadianceSensor::addValue(const real r, const real g, const real b) {
+void RgbRadianceSensor::addValue(const real r, const real g, const real b)
+{
     _r += r;
     _g += g;
     _b += b;
 }
 
-void RgbRadianceSensor::addWeight(const real weight) {
+void RgbRadianceSensor::addWeight(const real weight)
+{
     _weight += weight;
 }
 
-real RgbRadianceSensor::r() const {
+real RgbRadianceSensor::r() const
+{
     return _r;
 }
 
-real RgbRadianceSensor::g() const {
+real RgbRadianceSensor::g() const 
+{
     return _g;
 }
 
-real RgbRadianceSensor::b() const {
+real RgbRadianceSensor::b() const 
+{
     return _b;
 }
 
-real RgbRadianceSensor::weight() const {
+real RgbRadianceSensor::weight() const
+{
     return _weight;
 }
 

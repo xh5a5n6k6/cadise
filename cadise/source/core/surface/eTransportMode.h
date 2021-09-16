@@ -1,8 +1,10 @@
 #pragma once
 
-namespace cadise {
+namespace cadise 
+{
 
-enum class ETransportMode {
+enum class ETransportMode 
+{
     RADIANCE,
     IMPORTANCE,
 };

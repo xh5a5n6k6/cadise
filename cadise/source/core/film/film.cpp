@@ -11,7 +11,8 @@
 
 #include <cmath>
 
-namespace cadise {
+namespace cadise 
+{
 
 Film::Film(
     const Vector2I&                resolution,
@@ -24,8 +25,8 @@ Film::Film(
     _filename(filename),
     _filter(filter),
     _sensorPixels(),
-    _splatPixels() {
-
+    _splatPixels() 
+{
     CADISE_ASSERT(filter);
 
     const std::size_t numPixels = _resolution.asType<std::size_t>().product();
@@ -33,20 +34,25 @@ Film::Film(
     _sensorPixels.resize(numPixels);
     _splatPixels.resize(numPixels);
 
-    for (std::size_t i = 0; i < numPixels; ++i) {
+    for (std::size_t i = 0; i < numPixels; ++i) 
+    {
         _sensorPixels[i] = RgbRadianceSensor();
         _splatPixels[i]  = Vector3R(0.0_r);
     }
 }
 
-std::unique_ptr<Film> Film::generateEmptyFilm() const {
+std::unique_ptr<Film> Film::generateEmptyFilm() const 
+{
     return std::make_unique<Film>(_resolution, _tileSize, _filename, _filter);
 }
 
-void Film::mergeWithFilm(std::unique_ptr<Film> other) {
+void Film::mergeWithFilm(std::unique_ptr<Film> other)
+{
     // TODO: use valid film bound rather than the whole film
-    for (int32 iy = 0; iy < _resolution.y(); ++iy) {
-        for (int32 ix = 0; ix < _resolution.x(); ++ix) {
+    for (int32 iy = 0; iy < _resolution.y(); ++iy) 
+    {
+        for (int32 ix = 0; ix < _resolution.x(); ++ix) 
+        {
             const std::size_t        sensorIndex = other->_pixelIndexOffset(ix, iy);
             const RgbRadianceSensor& sensor      = other->_sensorPixels[sensorIndex];
 
@@ -56,10 +62,13 @@ void Film::mergeWithFilm(std::unique_ptr<Film> other) {
     }
 }
 
-void Film::replaceWithFilm(std::unique_ptr<Film> other) {
+void Film::replaceWithFilm(std::unique_ptr<Film> other) 
+{
     // TODO: use valid film bound rather than the whole film
-    for (int32 iy = 0; iy < _resolution.y(); ++iy) {
-        for (int32 ix = 0; ix < _resolution.x(); ++ix) {
+    for (int32 iy = 0; iy < _resolution.y(); ++iy)
+    {
+        for (int32 ix = 0; ix < _resolution.x(); ++ix)
+        {
             const std::size_t        sensorIndex = other->_pixelIndexOffset(ix, iy);
             const RgbRadianceSensor& sensor      = other->_sensorPixels[sensorIndex];
 
@@ -68,7 +77,8 @@ void Film::replaceWithFilm(std::unique_ptr<Film> other) {
     }
 }
 
-std::unique_ptr<FilmTile> Film::generateFilmTile(const std::size_t tileIndex) const {
+std::unique_ptr<FilmTile> Film::generateFilmTile(const std::size_t tileIndex) const 
+{
     CADISE_ASSERT_LT(tileIndex, this->numTilesXy().product());
 
     const AABB2I tileBound = this->getTileBound(tileIndex);
@@ -76,7 +86,8 @@ std::unique_ptr<FilmTile> Film::generateFilmTile(const std::size_t tileIndex) co
     return std::make_unique<FilmTile>(tileBound, _filter.get());
 }
 
-void Film::mergeWithFilmTile(std::unique_ptr<FilmTile> filmTile) {
+void Film::mergeWithFilmTile(std::unique_ptr<FilmTile> filmTile)
+{
     std::lock_guard<std::mutex> lock(_filmMutex);
 
     const AABB2I& tileBound = filmTile->tileBound();
@@ -85,8 +96,10 @@ void Film::mergeWithFilmTile(std::unique_ptr<FilmTile> filmTile) {
     const Vector2I& x1y1 = tileBound.maxVertex();
 
     // add each pixel value recording in filmTile
-    for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy) {
-        for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix) {
+    for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy) 
+    {
+        for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix) 
+        {
             const RgbRadianceSensor& sensor 
                 = filmTile->getSensor(ix - x0y0.x(), iy - x0y0.y());
 
@@ -98,8 +111,10 @@ void Film::mergeWithFilmTile(std::unique_ptr<FilmTile> filmTile) {
     }
 }
 
-void Film::addSampleRadiance(const Vector2D& filmPosition, const Spectrum& radiance) {
-    if (radiance.hasNaN() || radiance.hasInfinite()) {
+void Film::addSampleRadiance(const Vector2D& filmPosition, const Spectrum& radiance) 
+{
+    if (radiance.hasNaN() || radiance.hasInfinite())
+    {
         return;
     }
 
@@ -123,8 +138,10 @@ void Film::addSampleRadiance(const Vector2D& filmPosition, const Spectrum& radia
         static_cast<int32>(std::floor(filmMaxPosition.y() - 0.5_r) + 1));
 
     // for each effective pixel, accumulate its weight
-    for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy) {
-        for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix) {
+    for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy)
+    {
+        for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix) 
+        {
             const std::size_t sensorIndexOffset = _pixelIndexOffset(ix , iy);
 
             const real x = ix - (realFilmPosition.x() - 0.5_r);
@@ -138,7 +155,8 @@ void Film::addSampleRadiance(const Vector2D& filmPosition, const Spectrum& radia
     }
 }
 
-void Film::addSplatRadiance(const ConnectEvent& connectEvent) {
+void Film::addSplatRadiance(const ConnectEvent& connectEvent) 
+{
     std::lock_guard<std::mutex> lock(_filmMutex);
 
     const Spectrum& splatRadiance = connectEvent.splatRadiance();
@@ -159,14 +177,16 @@ void Film::addSplatRadiance(const ConnectEvent& connectEvent) {
 
 void Film::save(
     const std::size_t samplesPerPixel,
-    const bool        usePostProcessing) {
-
+    const bool        usePostProcessing) 
+{
     // TODO: refactor here
     HdrImage hdrImage(_resolution);
     const real rcpSpp = 1.0_r / static_cast<real>(samplesPerPixel);
 
-    for (int32 iy = 0; iy < _resolution.y(); ++iy) {
-        for (int32 ix = 0; ix < _resolution.x(); ++ix) {
+    for (int32 iy = 0; iy < _resolution.y(); ++iy)
+    {
+        for (int32 ix = 0; ix < _resolution.x(); ++ix)
+        {
             const std::size_t pixelOffset = _pixelIndexOffset(ix, iy);
 
             const RgbRadianceSensor& sensorPixel = _sensorPixels[pixelOffset];
@@ -179,13 +199,15 @@ void Film::save(
 
             const Vector3R recordLinearSrgb = pixel.add(splatPixel.mul(rcpSpp));
 
-            if (usePostProcessing) {
+            if (usePostProcessing) 
+            {
                 hdrImage.setPixelValue(ix, iy, {
                     math::forward_gamma_correction(recordLinearSrgb.x()),
                     math::forward_gamma_correction(recordLinearSrgb.y()),
                     math::forward_gamma_correction(recordLinearSrgb.z()) });
             }
-            else {
+            else 
+            {
                 hdrImage.setPixelValue(ix, iy, {
                     recordLinearSrgb.x(),
                     recordLinearSrgb.y(),
@@ -197,14 +219,17 @@ void Film::save(
     PictureSaver::save(_filename, hdrImage);
 }
 
-Vector2S Film::numTilesXy() const {
-    return {
+Vector2S Film::numTilesXy() const 
+{
+    return 
+    {
         static_cast<std::size_t>((_resolution.x() + _tileSize.x() - 1) / _tileSize.x()), // number of width tiles
         static_cast<std::size_t>((_resolution.y() + _tileSize.y() - 1) / _tileSize.y())  // number of height tiles
     };
 }
 
-AABB2I Film::getTileBound(const std::size_t tileIndex) const {
+AABB2I Film::getTileBound(const std::size_t tileIndex) const 
+{
     const auto tileIndicesXy = _getTileIndicesXy(tileIndex);
     
     const Vector2I minIndicesXy = tileIndicesXy.mul(_tileSize);
@@ -213,28 +238,34 @@ AABB2I Film::getTileBound(const std::size_t tileIndex) const {
     return AABB2I(minIndicesXy, maxIndicesXy);
 }
 
-const Path& Film::filename() const {
+const Path& Film::filename() const 
+{
     return _filename;
 }
 
-const Vector2I& Film::resolution() const {
+const Vector2I& Film::resolution() const
+{
     return _resolution;
 }
 
-const Vector2I& Film::tileSize() const {
+const Vector2I& Film::tileSize() const
+{
     return _tileSize;
 }
 
-Vector2I Film::_getTileIndicesXy(const std::size_t tileIndex) const {
+Vector2I Film::_getTileIndicesXy(const std::size_t tileIndex) const 
+{
     const std::size_t numTilesX = this->numTilesXy().x();
 
-    return {
+    return 
+    {
         static_cast<int32>(tileIndex % numTilesX), // tile x index
         static_cast<int32>(tileIndex / numTilesX)  // tile y index
     };
 }
 
-std::size_t Film::_pixelIndexOffset(const int32 x, const int32 y) const {
+std::size_t Film::_pixelIndexOffset(const int32 x, const int32 y) const 
+{
     return static_cast<std::size_t>(x + y * _resolution.x());
 }
 

@@ -10,26 +10,30 @@
 
 #include <iostream>
 
-namespace cadise {
+namespace cadise 
+{
 
-HdrImage PictureLoader::loadRgbImage(const Path& path) {
+HdrImage PictureLoader::loadRgbImage(const Path& path)
+{
     HdrImage hdrImage;
     if (path.isExtendedWith(".jpg") || path.isExtendedWith(".JPG") ||
         path.isExtendedWith(".png") || path.isExtendedWith(".PNG") ||
-        path.isExtendedWith(".tga") || path.isExtendedWith(".TGA")) {
-
+        path.isExtendedWith(".tga") || path.isExtendedWith(".TGA")) 
+    {
         LdrImage ldrImage;
         loadLdrImage(path, &ldrImage);
         ImageUtils::ldrToHdr(ldrImage, &hdrImage);
     }
-    else if (path.isExtendedWith(".hdr") || path.isExtendedWith(".HDR")) {
+    else if (path.isExtendedWith(".hdr") || path.isExtendedWith(".HDR")) 
+    {
         loadHdrImage(path, &hdrImage);
     }
 
     return hdrImage;
 }
 
-HdrAlphaImage PictureLoader::loadRgbaImage(const Path& path) {
+HdrAlphaImage PictureLoader::loadRgbaImage(const Path& path)
+{
     HdrAlphaImage hdrAlphaImage;
 
     // TODO: implement here
@@ -37,7 +41,8 @@ HdrAlphaImage PictureLoader::loadRgbaImage(const Path& path) {
     return hdrAlphaImage;
 }
 
-void PictureLoader::loadLdrImage(const Path& path, LdrImage* const out_ldrImage) {
+void PictureLoader::loadLdrImage(const Path& path, LdrImage* const out_ldrImage)
+{
     CADISE_ASSERT(out_ldrImage);
 
     int32 width;
@@ -55,16 +60,20 @@ void PictureLoader::loadLdrImage(const Path& path, LdrImage* const out_ldrImage)
                                    &componentNumber, 
                                    0);
 
-    if (imageData == NULL) {
+    if (imageData == NULL) 
+    {
         return;
     }
 
     out_ldrImage->setImageSize(width, height);
 
     // gray image, we still store 3 components each pixel with same value
-    if (componentNumber == 1) {
-        for (int32 iy = 0; iy < height; ++iy) {
-            for (int32 ix = 0; ix < width; ++ix) {
+    if (componentNumber == 1)
+    {
+        for (int32 iy = 0; iy < height; ++iy)
+        {
+            for (int32 ix = 0; ix < width; ++ix)
+            {
                 const std::size_t indexOffset     = static_cast<std::size_t>(ix + iy * width);
                 const std::size_t dataIndexOffset = indexOffset * 3;
 
@@ -83,9 +92,12 @@ void PictureLoader::loadLdrImage(const Path& path, LdrImage* const out_ldrImage)
         }
     }
     // rgb image
-    else if (componentNumber == 3) {
-        for (int32 iy = 0; iy < height; ++iy) {
-            for (int32 ix = 0; ix < width; ++ix) {
+    else if (componentNumber == 3) 
+    {
+        for (int32 iy = 0; iy < height; ++iy)
+        {
+            for (int32 ix = 0; ix < width; ++ix) 
+            {
                 const std::size_t indexOffset = static_cast<std::size_t>((ix + iy * width) * 3);
 
                 // TODO: transform input sRGB to linear-sRGB as a function
@@ -111,19 +123,22 @@ void PictureLoader::loadLdrImage(const Path& path, LdrImage* const out_ldrImage)
         }
     }
     // image with alpha channel
-    else if (componentNumber == 2 || componentNumber == 4) {
+    else if (componentNumber == 2 || componentNumber == 4) 
+    {
         std::cerr << "[" << path.path() << "]"
                   << "has alpha channel, please modify CRSD file instead."
                   << std::endl;
     }
-    else {
+    else
+    {
         // Something goes wrong
     }
 
     stbi_image_free(imageData);
 }
 
-void PictureLoader::loadHdrImage(const Path& path, HdrImage* const out_hdrImage) {
+void PictureLoader::loadHdrImage(const Path& path, HdrImage* const out_hdrImage)
+{
     CADISE_ASSERT(out_hdrImage);
 
     int32 width;
@@ -141,16 +156,20 @@ void PictureLoader::loadHdrImage(const Path& path, HdrImage* const out_hdrImage)
                                   &componentNumber,
                                   0);
 
-    if (imageData == NULL) {
+    if (imageData == NULL)
+    {
         return;
     }
 
     out_hdrImage->setImageSize(width, height);
 
     // gray image, we still store 3 components each pixel with same value
-    if (componentNumber == 1) {
-        for (int32 iy = 0; iy < height; ++iy) {
-            for (int32 ix = 0; ix < width; ++ix) {
+    if (componentNumber == 1)
+    {
+        for (int32 iy = 0; iy < height; ++iy) 
+        {
+            for (int32 ix = 0; ix < width; ++ix) 
+            {
                 const std::size_t indexOffset = static_cast<std::size_t>(ix + iy * width);
                 const real        pixelValue  = imageData[indexOffset];
 
@@ -159,9 +178,12 @@ void PictureLoader::loadHdrImage(const Path& path, HdrImage* const out_hdrImage)
         }
     }
     // rgb image
-    else if (componentNumber == 3) {
-        for (int32 iy = 0; iy < height; ++iy) {
-            for (int32 ix = 0; ix < width; ++ix) {
+    else if (componentNumber == 3) 
+    {
+        for (int32 iy = 0; iy < height; ++iy)
+        {
+            for (int32 ix = 0; ix < width; ++ix) 
+            {
                 const std::size_t indexOffset = static_cast<std::size_t>((ix + iy * width) * 3);
 
                 out_hdrImage->setPixelValue(ix, iy, { 
@@ -171,19 +193,22 @@ void PictureLoader::loadHdrImage(const Path& path, HdrImage* const out_hdrImage)
             }
         }
     }
-    else {
+    else 
+    {
 
     }
 
     stbi_image_free(imageData);
 }
 
-void PictureLoader::loadLdrAlphaImage(const Path& path, LdrAlphaImage* const out_ldrAlphaImage) {
+void PictureLoader::loadLdrAlphaImage(const Path& path, LdrAlphaImage* const out_ldrAlphaImage)
+{
     CADISE_ASSERT(out_ldrAlphaImage);
     // TODO: implement here
 }
 
-void PictureLoader::loadHdrAlphaImage(const Path& path, HdrAlphaImage* const out_hdrAlphaImage) {
+void PictureLoader::loadHdrAlphaImage(const Path& path, HdrAlphaImage* const out_hdrAlphaImage)
+{
     CADISE_ASSERT(out_hdrAlphaImage);
     // TODO: implement here
 }

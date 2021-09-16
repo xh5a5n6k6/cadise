@@ -2,7 +2,8 @@
 
 #include "core/spectrum/rgbSpectrum.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 using Spectrum = RgbSpectrum;
 

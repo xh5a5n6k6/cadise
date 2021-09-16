@@ -2,9 +2,11 @@
 
 #include "math/type/fundamentalType.h"
 
-namespace cadise {
+namespace cadise
+{
 
-class StackTracer {
+class StackTracer
+{
 public:
     StackTracer();
 

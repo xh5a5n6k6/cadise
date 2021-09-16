@@ -4,13 +4,15 @@
 #include "core/surface/bsdfLobes.h"
 #include "core/spectrum/spectrum.h"
 
-namespace cadise {
+namespace cadise { class BsdfSample; }
+namespace cadise { class SurfaceIntersection; }
+namespace cadise { class TransportInfo; }
 
-class BsdfSample;
-class SurfaceIntersection;
-class TransportInfo;
+namespace cadise 
+{
 
-class Bsdf {
+class Bsdf 
+{
 public:
     Bsdf();
     explicit Bsdf(const BsdfLobes& lobes);

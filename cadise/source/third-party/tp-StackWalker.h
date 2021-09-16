@@ -7,16 +7,19 @@
 
     #include <iostream>
 
-    namespace cadise {
+    namespace cadise
+    {
 
     // self-defined class for custom output-mechnism
-    class WindowsStackWalker : public StackWalker {
+    class WindowsStackWalker : public StackWalker
+    {
     public:
         WindowsStackWalker() : 
-            StackWalker() {
-        }
+            StackWalker()
+        {}
     protected:
-        void OnOutput(LPCSTR szText) override {
+        void OnOutput(LPCSTR szText) override
+        {
             std::cerr << szText; 
             StackWalker::OnOutput(szText);
         }

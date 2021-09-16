@@ -3,11 +3,13 @@
 #include "math/tArithmeticArray.h"
 #include "math/type/mathType.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 // TODO: refactor as CRTP (curiously recurring template pattern)
 template<typename T, std::size_t N>
-class TConceptualSpectrum {
+class TConceptualSpectrum
+{
 public:
     TConceptualSpectrum();
     explicit TConceptualSpectrum(const T value);
@@ -69,12 +71,14 @@ protected:
 // template header implementation
 
 template<typename T, std::size_t N>
-inline TConceptualSpectrum<T, N> operator + (const T scalar, const TConceptualSpectrum<T, N>& lhs) {
+inline TConceptualSpectrum<T, N> operator + (const T scalar, const TConceptualSpectrum<T, N>& lhs)
+{
     return lhs.add(scalar);
 }
 
 template<typename T, std::size_t N>
-inline TConceptualSpectrum<T, N> operator * (const T scalar, const TConceptualSpectrum<T, N>& lhs) {
+inline TConceptualSpectrum<T, N> operator * (const T scalar, const TConceptualSpectrum<T, N>& lhs)
+{
     return lhs.mul(scalar);
 }
 

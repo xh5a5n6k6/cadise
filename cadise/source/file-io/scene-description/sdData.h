@@ -8,12 +8,13 @@
 
 #include <vector>
 
-namespace cadise {
+namespace cadise { template<typename T> class TTexture; }
 
-template<typename T>
-class TTexture;
+namespace cadise
+{
 
-class SdData {
+class SdData 
+{
 public:
     SdData();
 
@@ -95,10 +96,12 @@ template<typename T>
 inline T SdData::_findData(
     const std::string_view& name,
     const T& defaultValue,
-    const std::vector<std::shared_ptr<TSdDataUnit<T>>>& dataset) const {
-
-    for (std::size_t i = 0; i < dataset.size(); ++i) {
-        if (dataset[i]->variableName() == name) {
+    const std::vector<std::shared_ptr<TSdDataUnit<T>>>& dataset) const
+{
+    for (std::size_t i = 0; i < dataset.size(); ++i) 
+    {
+        if (dataset[i]->variableName() == name) 
+        {
             return dataset[i]->value()[0];
         }
     }
@@ -109,22 +112,26 @@ inline T SdData::_findData(
 template<typename T>
 inline decltype(auto) SdData::_findDataArray(
     const std::string_view& name,
-    const std::vector<std::shared_ptr<TSdDataUnit<T>>>& dataset) const {
-
+    const std::vector<std::shared_ptr<TSdDataUnit<T>>>& dataset) const 
+{
     std::vector<T> dataArray;
     std::shared_ptr<TSdDataUnit<T>> dataUnit = nullptr;
 
-    for (std::size_t i = 0; i < dataset.size(); ++i) {
-        if (dataset[i]->variableName() == name) {
+    for (std::size_t i = 0; i < dataset.size(); ++i)
+    {
+        if (dataset[i]->variableName() == name)
+        {
             dataUnit = dataset[i];
             break;
         }
     }
 
-    if (dataUnit) {
+    if (dataUnit)
+    {
         dataArray.reserve(dataUnit->valueNumber());
         auto values = std::move(dataUnit->value());
-        for (std::size_t i = 0; i < dataUnit->valueNumber(); ++i) {
+        for (std::size_t i = 0; i < dataUnit->valueNumber(); ++i)
+        {
             dataArray.push_back(values[i]);
         }
     }

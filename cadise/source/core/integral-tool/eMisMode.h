@@ -1,8 +1,10 @@
 #pragma once
 
-namespace cadise {
+namespace cadise 
+{
 
-enum class EMisMode {
+enum class EMisMode 
+{
     BALANCE,
     POWER,
 };

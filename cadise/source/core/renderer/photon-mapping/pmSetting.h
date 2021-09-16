@@ -2,9 +2,11 @@
 
 #include "math/type/fundamentalType.h"
 
-namespace cadise {
+namespace cadise
+{
 
-class PmSetting {
+class PmSetting
+{
 public:
     PmSetting(
         const std::size_t numPhotons,

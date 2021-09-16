@@ -2,7 +2,8 @@
 
 #include "math/type/fundamentalType.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 template<typename T, std::size_t N>
 class TImage;

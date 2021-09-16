@@ -2,9 +2,11 @@
 
 #include "core/sampler/sampler.h"
 
-namespace cadise {
+namespace cadise
+{
 
-class RandomSampler : public Sampler {
+class RandomSampler : public Sampler 
+{
 public:
     explicit RandomSampler(const std::size_t sampleNumber);
 

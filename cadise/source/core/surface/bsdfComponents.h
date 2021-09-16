@@ -1,9 +1,10 @@
 #pragma once
 
-namespace cadise {
+namespace cadise 
+{
 
 using BsdfComponents = int;
 
-static inline constexpr BsdfComponents BSDF_ALL_COMPONENTS = -1;
+inline constexpr BsdfComponents BSDF_ALL_COMPONENTS = -1;
 
 } // namespace cadise

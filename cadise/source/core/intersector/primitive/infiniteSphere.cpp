@@ -12,19 +12,21 @@
 #include <cmath>
 #include <limits>
 
-namespace cadise {
+namespace cadise 
+{
 
 InfiniteSphere::InfiniteSphere() :
     // HACK
-    InfiniteSphere(1000000.0_r) {
-}
+    InfiniteSphere(1000000.0_r) 
+{}
 
 InfiniteSphere::InfiniteSphere(const real radius) :
     Primitive(std::make_shared<AbsorberBsdf>()),
-    _radius(radius) {
-}
+    _radius(radius) 
+{}
 
-void InfiniteSphere::evaluateBound(AABB3R* const out_bound) const {
+void InfiniteSphere::evaluateBound(AABB3R* const out_bound) const 
+{
     CADISE_ASSERT(out_bound);
 
     AABB3R bound(Vector3R(-_radius), Vector3R(_radius));
@@ -32,8 +34,10 @@ void InfiniteSphere::evaluateBound(AABB3R* const out_bound) const {
     out_bound->set(bound);
 }
 
-bool InfiniteSphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const {
-    if (ray.maxT() < std::numeric_limits<real>::max()) {
+bool InfiniteSphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const 
+{
+    if (ray.maxT() < std::numeric_limits<real>::max()) 
+    {
         return false;
     }
 
@@ -43,14 +47,15 @@ bool InfiniteSphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) cons
     return true;
 }
 
-bool InfiniteSphere::isOccluded(const Ray& ray) const {
+bool InfiniteSphere::isOccluded(const Ray& ray) const
+{
     return ray.maxT() >= std::numeric_limits<real>::max();
 }
 
 void InfiniteSphere::evaluateSurfaceDetail(
     const PrimitiveInfo& primitiveInfo, 
-    SurfaceDetail* const out_surface) const {
-
+    SurfaceDetail* const out_surface) const
+{
     CADISE_ASSERT(out_surface);
 
     Vector3R uvw;
@@ -61,8 +66,8 @@ void InfiniteSphere::evaluateSurfaceDetail(
 
 void InfiniteSphere::uvwToPosition(
     const Vector3R& uvw, 
-    Vector3R* const out_position) const {
-    
+    Vector3R* const out_position) const
+{
     CADISE_ASSERT(out_position);
 
     const real theta    = (1.0_r - uvw.y()) * constant::pi<real>;

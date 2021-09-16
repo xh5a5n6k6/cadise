@@ -6,13 +6,15 @@
 
 #include <vector>
 
-namespace cadise {
+namespace cadise { class Film; }
+namespace cadise { class PmViewpoint; }
+namespace cadise { class Scene; }
 
-class Film;
-class PmViewpoint;
-class Scene;
+namespace cadise
+{
 
-class PmRadianceEstimationWork : public RenderWork {
+class PmRadianceEstimationWork : public RenderWork
+{
 public:
     PmRadianceEstimationWork(
         const PhotonMap* const    photonMap,

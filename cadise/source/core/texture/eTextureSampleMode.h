@@ -1,8 +1,10 @@
 #pragma once
 
-namespace cadise {
+namespace cadise 
+{
 
-enum class ETextureSampleMode {
+enum class ETextureSampleMode 
+{
     NEAREST,
 
     // TODO:

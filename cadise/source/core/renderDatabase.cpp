@@ -18,10 +18,12 @@
 
 #include <limits>
 
-namespace cadise {
+namespace cadise 
+{
 
 // local logger declaration
-namespace {
+namespace 
+{
     const Logger logger("Database");
 } // anonymous namespace
 
@@ -33,13 +35,15 @@ RenderDatabase::RenderDatabase() :
     _scene(nullptr),
     _renderer(nullptr),
     _backgroundSphere(nullptr),
-    _environmentLightIndex(std::numeric_limits<std::size_t>::max()) {
-}
+    _environmentLightIndex(std::numeric_limits<std::size_t>::max()) 
+{}
 
-void RenderDatabase::setUpData(const std::shared_ptr<SdData>& data) {
+void RenderDatabase::setUpData(const std::shared_ptr<SdData>& data) 
+{
     CADISE_ASSERT(data);
 
-    switch (data->classType()) {
+    switch (data->classType()) 
+    {
         case ESdClassType::FILM:
             _setUpFilm(data);
             break;
@@ -85,7 +89,8 @@ void RenderDatabase::setUpData(const std::shared_ptr<SdData>& data) {
     }
 }
 
-void RenderDatabase::prepareRender() {
+void RenderDatabase::prepareRender() 
+{
     _bsdfs.clear();
     _primitives.clear();
     _realTextures.clear();
@@ -109,11 +114,13 @@ void RenderDatabase::prepareRender() {
 
     // HACK
     // it means there is an environment light
-    if (_environmentLightIndex != std::numeric_limits<std::size_t>::max()) {
+    if (_environmentLightIndex != std::numeric_limits<std::size_t>::max()) 
+    {
         AABB3R sceneBound;
         accelerator->evaluateBound(&sceneBound);
 
-        if (!sceneBound.isEmpty()) {
+        if (!sceneBound.isEmpty()) 
+        {
             const real sceneBoundRadius = sceneBound.extent().length() * 0.5_r;
 
             _lights[_environmentLightIndex]->setSceneBoundRadius(sceneBoundRadius);
@@ -125,7 +132,8 @@ void RenderDatabase::prepareRender() {
     _scene    = std::make_shared<Scene>(accelerator, lightCluster);
     _renderer = std::move(instantiator::makeRenderer(_rendererData));
     
-    if (_backgroundSphere) {
+    if (_backgroundSphere)
+    {
         _scene->setBackgroundSphere(_backgroundSphere.get());
     }
 
@@ -137,31 +145,38 @@ void RenderDatabase::prepareRender() {
     _renderer->setFilm(film);
 }
 
-void RenderDatabase::startRender() const {
+void RenderDatabase::startRender() const
+{
     _renderer->render();
 }
 
-void RenderDatabase::_setUpFilm(const std::shared_ptr<SdData>& data) {
+void RenderDatabase::_setUpFilm(const std::shared_ptr<SdData>& data) 
+{
     _filmData = std::move(data);
 }
 
-void RenderDatabase::_setUpCamera(const std::shared_ptr<SdData>& data) {
+void RenderDatabase::_setUpCamera(const std::shared_ptr<SdData>& data) 
+{
     _cameraData = std::move(data);
 }
 
-void RenderDatabase::_setUpRenderer(const std::shared_ptr<SdData>& data) {
+void RenderDatabase::_setUpRenderer(const std::shared_ptr<SdData>& data)
+{
     _rendererData = std::move(data);
 }
 
-void RenderDatabase::_setUpAccelerator(const std::shared_ptr<SdData>& data) {
+void RenderDatabase::_setUpAccelerator(const std::shared_ptr<SdData>& data) 
+{
     _acceleratorData = std::move(data);
 }
 
-void RenderDatabase::_setUpLightCluster(const std::shared_ptr<SdData>& data) {
+void RenderDatabase::_setUpLightCluster(const std::shared_ptr<SdData>& data) 
+{
     _lightClusterData = std::move(data);
 }
 
-void RenderDatabase::_setUpRealTexture(const std::shared_ptr<SdData>& data) {
+void RenderDatabase::_setUpRealTexture(const std::shared_ptr<SdData>& data) 
+{
     const std::shared_ptr<TTexture<real>> texture
         = instantiator::makeRealTexture(data, _realTextures, _spectrumTextures);
     const std::string_view textureName = data->findString("name");
@@ -170,7 +185,8 @@ void RenderDatabase::_setUpRealTexture(const std::shared_ptr<SdData>& data) {
         std::pair<std::string, std::shared_ptr<TTexture<real>>>(textureName, texture));
 }
 
-void RenderDatabase::_setUpSpectrumTexture(const std::shared_ptr<SdData>& data) {
+void RenderDatabase::_setUpSpectrumTexture(const std::shared_ptr<SdData>& data) 
+{
     const std::shared_ptr<TTexture<Spectrum>> texture
         = instantiator::makeSpectrumTexture(data, _realTextures, _spectrumTextures);
     const std::string_view textureName = data->findString("name");
@@ -179,25 +195,29 @@ void RenderDatabase::_setUpSpectrumTexture(const std::shared_ptr<SdData>& data) 
         std::pair<std::string, std::shared_ptr<TTexture<Spectrum>>>(textureName, texture));
 }
 
-void RenderDatabase::_setUpBsdf(const std::shared_ptr<SdData>& data) {
+void RenderDatabase::_setUpBsdf(const std::shared_ptr<SdData>& data)
+{
     const std::shared_ptr<Bsdf> bsdf = instantiator::makeBsdf(data, _realTextures, _spectrumTextures, _bsdfs);
     const std::string_view bsdfName = data->findString("name");
 
     _bsdfs.insert(std::pair<std::string, std::shared_ptr<Bsdf>>(bsdfName, bsdf));
 }
 
-void RenderDatabase::_setUpLight(const std::shared_ptr<SdData>& data) {
+void RenderDatabase::_setUpLight(const std::shared_ptr<SdData>& data) 
+{
     const std::shared_ptr<Light> light = instantiator::makeLight(data, _primitives, _backgroundSphere);
     
     // HACK
-    if (_backgroundSphere) {
+    if (_backgroundSphere) 
+    {
         _environmentLightIndex = _lights.size();
     }
 
     _lights.push_back(light);
 }
 
-void RenderDatabase::_setUpPrimitive(const std::shared_ptr<SdData>& data) {
+void RenderDatabase::_setUpPrimitive(const std::shared_ptr<SdData>& data) 
+{
     instantiator::makePrimitive(data, _bsdfs, &_intersectors, &_primitives);
 }
 

@@ -12,7 +12,8 @@
 #include <cmath>
 #include <vector>
 
-namespace cadise {
+namespace cadise 
+{
 
 EnvironmentLight::EnvironmentLight(
     const Primitive* const                     primitive,
@@ -25,13 +26,14 @@ EnvironmentLight::EnvironmentLight(
     _distribution(),
     _backgroundFlux(0.0_r),
     _approximateFlux(0.0_r),
-    _sceneBoundRadius(0.0_r) {
-
+    _sceneBoundRadius(0.0_r)
+{
     CADISE_ASSERT(primitive);
     CADISE_ASSERT(environmentRadiance);
 
     std::vector<real> weightedSampleRadiances(resolution.x() * resolution.y());
-    for (std::size_t iy = 0; iy < resolution.y(); ++iy) {
+    for (std::size_t iy = 0; iy < resolution.y(); ++iy) 
+    {
         const std::size_t rowIndex = iy * resolution.x();
         const real        sampleV  = (static_cast<real>(iy) + 0.5_r) / static_cast<real>(resolution.y());
         
@@ -39,7 +41,8 @@ EnvironmentLight::EnvironmentLight(
         // spherical theta is from top to bottom.
         const real sinTheta = std::sin((1.0_r - sampleV) * constant::pi<real>);
 
-        for (std::size_t ix = 0; ix < resolution.x(); ++ix) {
+        for (std::size_t ix = 0; ix < resolution.x(); ++ix) 
+        {
             const real sampleU = (static_cast<real>(ix) + 0.5_r) / static_cast<real>(resolution.x());
 
             Spectrum sampleRadiance;
@@ -57,7 +60,8 @@ EnvironmentLight::EnvironmentLight(
     this->setSceneBoundRadius(5000.0_r);
 }
 
-Spectrum EnvironmentLight::emittance(const SurfaceIntersection& emitIntersection) const {
+Spectrum EnvironmentLight::emittance(const SurfaceIntersection& emitIntersection) const 
+{
     const Vector3R& uvw = emitIntersection.surfaceDetail().uvw();
     Spectrum sampleRadiance;
     _environmentRadiance->evaluate(uvw, &sampleRadiance);
@@ -65,7 +69,8 @@ Spectrum EnvironmentLight::emittance(const SurfaceIntersection& emitIntersection
     return sampleRadiance;
 }
 
-void EnvironmentLight::evaluateDirectSample(DirectLightSample* const out_sample) const {
+void EnvironmentLight::evaluateDirectSample(DirectLightSample* const out_sample) const 
+{
     CADISE_ASSERT(out_sample);
 
     const std::array<real, 2> sample = { Random::nextReal(), Random::nextReal() };
@@ -76,7 +81,8 @@ void EnvironmentLight::evaluateDirectSample(DirectLightSample* const out_sample)
     _primitive->uvwToPosition({ uvSample.x(), uvSample.y(), 0.0_r }, &samplePosition);
 
     const real sinTheta = std::sin((1.0_r - uvSample.y()) * constant::pi<real>);
-    if (sinTheta <= 0.0_r) {
+    if (sinTheta <= 0.0_r)
+    {
         return;
     }
 
@@ -90,11 +96,12 @@ void EnvironmentLight::evaluateDirectSample(DirectLightSample* const out_sample)
 
 real EnvironmentLight::evaluateDirectPdfW(
     const SurfaceIntersection& emitIntersection, 
-    const Vector3R&            targetPosition) const {
-
+    const Vector3R&            targetPosition) const 
+{
     const Vector3R& uvw      = emitIntersection.surfaceDetail().uvw();
     const real      sinTheta = std::sin((1.0_r - uvw.y()) * constant::pi<real>);
-    if (sinTheta <= 0.0_r) {
+    if (sinTheta <= 0.0_r)
+    {
         return 0.0_r;
     }
 
@@ -103,7 +110,8 @@ real EnvironmentLight::evaluateDirectPdfW(
     return uvPdf / (2.0_r * constant::pi<real> * constant::pi<real> * sinTheta);
 }
 
-void EnvironmentLight::evaluateEmitSample(EmitLightSample* const out_sample) const {
+void EnvironmentLight::evaluateEmitSample(EmitLightSample* const out_sample) const
+{
     CADISE_ASSERT(out_sample);
 
     // TODO: implement here
@@ -113,19 +121,21 @@ void EnvironmentLight::evaluateEmitPdf(
     const Ray&      emitRay,
     const Vector3R& emitN,
     real* const     out_pdfA,
-    real* const     out_pdfW) const {
-
+    real* const     out_pdfW) const 
+{
     CADISE_ASSERT(out_pdfA);
     CADISE_ASSERT(out_pdfW);
 
     // TODO: implement here
 }
 
-real EnvironmentLight::approximateFlux() const {
+real EnvironmentLight::approximateFlux() const 
+{
     return _approximateFlux;
 }
 
-void EnvironmentLight::setSceneBoundRadius(const real sceneBoundRadius) {
+void EnvironmentLight::setSceneBoundRadius(const real sceneBoundRadius) 
+{
     CADISE_ASSERT_GE(sceneBoundRadius, 0.0_r);
 
     _sceneBoundRadius = sceneBoundRadius;
@@ -133,8 +143,10 @@ void EnvironmentLight::setSceneBoundRadius(const real sceneBoundRadius) {
     _updateApproxmiatedFlux();
 }
 
-void EnvironmentLight::_updateApproxmiatedFlux() {
-    _approximateFlux = _backgroundFlux * constant::four_pi<real> * _sceneBoundRadius * _sceneBoundRadius;
+void EnvironmentLight::_updateApproxmiatedFlux() 
+{
+    _approximateFlux = 
+        _backgroundFlux * constant::four_pi<real> * _sceneBoundRadius * _sceneBoundRadius;
 }
 
 } // namespace cadise

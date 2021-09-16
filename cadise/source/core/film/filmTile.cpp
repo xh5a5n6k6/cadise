@@ -4,14 +4,15 @@
 #include "fundamental/assertion.h"
 #include "math/tVector3.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 FilmTile::FilmTile(const AABB2I& tileBound, const Filter* const filter) :
     _resolution(tileBound.extent()),
     _tileBound(tileBound),
     _filter(filter),
-    _sensors() {
-
+    _sensors() 
+{
     CADISE_ASSERT(filter);
 
     const std::size_t sensorSize = static_cast<std::size_t>(_resolution.x() * _resolution.y());
@@ -19,12 +20,14 @@ FilmTile::FilmTile(const AABB2I& tileBound, const Filter* const filter) :
     this->setSensorSize(sensorSize);
 }
 
-void FilmTile::addSample(const Vector2R& filmPosition, const Spectrum& value) {
+void FilmTile::addSample(const Vector2R& filmPosition, const Spectrum& value)
+{
     // TODO: do this check
     //CADISE_ASSERT(sampleSpectrum.hasNaN());
     //CADISE_ASSERT(sampleSpectrum.hasInfinite());
 
-    if (value.hasNaN() || value.hasInfinite()) {
+    if (value.hasNaN() || value.hasInfinite()) 
+    {
         return;
     }
 
@@ -34,7 +37,8 @@ void FilmTile::addSample(const Vector2R& filmPosition, const Spectrum& value) {
     this->addSample(filmPosition, linearSrgb);
 }
 
-void FilmTile::addSample(const Vector2R& filmPosition, const Vector3R& value) {
+void FilmTile::addSample(const Vector2R& filmPosition, const Vector3R& value) 
+{
     // calculate filter bound for given film position
     Vector2R filmMinPosition = filmPosition.sub(_filter->filterHalfSize());
     Vector2R filmMaxPosition = filmPosition.add(_filter->filterHalfSize());
@@ -50,8 +54,10 @@ void FilmTile::addSample(const Vector2R& filmPosition, const Vector3R& value) {
         static_cast<int32>(std::floor(filmMaxPosition.y() - 0.5_r) + 1));
 
     // for each effective pixel, accumulate its weight
-    for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy) {
-        for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix) {
+    for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy) 
+    {
+        for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix) 
+        {
             const std::size_t sensorIndexOffset 
                 = _sensorIndexOffset(ix - _tileBound.minVertex().x(), iy - _tileBound.minVertex().y());
 
@@ -66,21 +72,25 @@ void FilmTile::addSample(const Vector2R& filmPosition, const Vector3R& value) {
     }
 }
 
-const AABB2I& FilmTile::tileBound() const {
+const AABB2I& FilmTile::tileBound() const 
+{
     return _tileBound;
 }
 
-const RgbRadianceSensor& FilmTile::getSensor(const int32 x, const int32 y) const {
+const RgbRadianceSensor& FilmTile::getSensor(const int32 x, const int32 y) const
+{
     const std::size_t sensorIndexOffset = _sensorIndexOffset(x, y);
 
     return _sensors[sensorIndexOffset];
 }
 
-void FilmTile::setSensorSize(const std::size_t sensorSize) {
+void FilmTile::setSensorSize(const std::size_t sensorSize)
+{
     _sensors.resize(sensorSize);
 }
 
-std::size_t FilmTile::_sensorIndexOffset(const int32 x, const int32 y) const {
+std::size_t FilmTile::_sensorIndexOffset(const int32 x, const int32 y) const
+{
     return static_cast<std::size_t>(x + y * _resolution.x());
 }
 

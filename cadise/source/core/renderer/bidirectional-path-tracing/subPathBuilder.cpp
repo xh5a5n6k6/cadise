@@ -16,14 +16,16 @@
 #include "core/surfaceIntersection.h"
 #include "fundamental/assertion.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 SubPathBuilder::SubPathBuilder(const std::size_t maxPathLength) :
     _maxPathLength(maxPathLength),
-    _camera(nullptr) {
-}
+    _camera(nullptr) 
+{}
 
-void SubPathBuilder::setCamera(const Camera* const camera) {
+void SubPathBuilder::setCamera(const Camera* const camera)
+{
     CADISE_ASSERT(camera);
 
     _camera = camera;
@@ -31,8 +33,8 @@ void SubPathBuilder::setCamera(const Camera* const camera) {
 
 void SubPathBuilder::buildLightPath(
     const Scene&   scene,
-    SubPath* const out_lightPath) const {
-
+    SubPath* const out_lightPath) const
+{
     CADISE_ASSERT(out_lightPath);
 
     real pickLightPdf;
@@ -42,7 +44,8 @@ void SubPathBuilder::buildLightPath(
 
     EmitLightSample emitLightSample;
     sampleLight->evaluateEmitSample(&emitLightSample);
-    if (!emitLightSample.isValid()) {
+    if (!emitLightSample.isValid())
+    {
         return;
     }
 
@@ -72,21 +75,22 @@ void SubPathBuilder::buildLightPath(
 
     // it will not used in light sub-path construction
     Spectrum localRadiance;
-    _buildSubPathCompletely(ETransportMode::IMPORTANCE,
-                            scene,
-                            Ray(emitPosition, emitDirection),
-                            throughput,
-                            emitPdfW,
-                            out_lightPath,
-                            &localRadiance);
+    _buildSubPathCompletely(
+        ETransportMode::IMPORTANCE,
+        scene,
+        Ray(emitPosition, emitDirection),
+        throughput,
+        emitPdfW,
+        out_lightPath,
+        &localRadiance);
 }
 
 void SubPathBuilder::buildCameraPath(
     const Scene&    scene,
     const Vector2D& filmPosition,
     SubPath* const  out_cameraPath,
-    Spectrum* const out_zeroBounceRadiance) const {
-
+    Spectrum* const out_zeroBounceRadiance) const
+{
     CADISE_ASSERT(out_cameraPath);
     CADISE_ASSERT(out_zeroBounceRadiance);
     CADISE_ASSERT(_camera);
@@ -112,13 +116,14 @@ void SubPathBuilder::buildCameraPath(
 
     out_cameraPath->addVertex(cameraVertex);
 
-    _buildSubPathCompletely(ETransportMode::RADIANCE,
-                            scene,
-                            primaryRay,
-                            Spectrum(1.0_r),
-                            pdfW,
-                            out_cameraPath,
-                            out_zeroBounceRadiance);
+    _buildSubPathCompletely(
+        ETransportMode::RADIANCE,
+        scene,
+        primaryRay,
+        Spectrum(1.0_r),
+        pdfW,
+        out_cameraPath,
+        out_zeroBounceRadiance);
 }
 
 void SubPathBuilder::_buildSubPathCompletely(
@@ -128,13 +133,14 @@ void SubPathBuilder::_buildSubPathCompletely(
     const Spectrum&      secondVertexThroughput,
     const real           secondVertexForwardPdfW,
     SubPath* const       out_subPath,
-    Spectrum* const      out_zeroBounceRadiance) const {
-
+    Spectrum* const      out_zeroBounceRadiance) const 
+{
     CADISE_ASSERT(out_subPath);
     CADISE_ASSERT(out_zeroBounceRadiance);
 
     std::size_t currentLength = out_subPath->length();
-    if (currentLength == _maxPathLength) {
+    if (currentLength == _maxPathLength) 
+    {
         return;
     }
 
@@ -143,9 +149,11 @@ void SubPathBuilder::_buildSubPathCompletely(
     real     pdfWForward = secondVertexForwardPdfW;
     real     pdfWReverse = 0.0_r;
 
-    for (int32 bounceTimes = 0; bounceTimes <= _maxPathLength; ++bounceTimes) {
+    for (int32 bounceTimes = 0; bounceTimes <= _maxPathLength; ++bounceTimes)
+    {
         SurfaceIntersection intersection;
-        if (!scene.isIntersecting(traceRay, intersection)) {
+        if (!scene.isIntersecting(traceRay, intersection))
+        {
             break;
         }
 
@@ -175,7 +183,8 @@ void SubPathBuilder::_buildSubPathCompletely(
         // add s=0 situation radiance when hitting area light
         // (while building camera sub-path)
         const AreaLight* areaLight = primitive->areaLight();
-        if (areaLight && mode == ETransportMode::RADIANCE) {
+        if (areaLight && mode == ETransportMode::RADIANCE) 
+        {
             (*out_subPath)[currentLength - 1].setLight(areaLight);
 
             const Spectrum emittance = areaLight->emittance(intersection);
@@ -184,14 +193,16 @@ void SubPathBuilder::_buildSubPathCompletely(
             out_zeroBounceRadiance->addLocal(throughput.mul(emittance.mul(misWeight)));
         }
 
-        if (currentLength == _maxPathLength) {
+        if (currentLength == _maxPathLength) 
+        {
             break;
         }
 
         // estimate next direction with bsdf sampling
         BsdfSample bsdfSample;
         bsdf->evaluateSample(TransportInfo(mode), intersection, &bsdfSample);
-        if (!bsdfSample.isValid()) {
+        if (!bsdfSample.isValid()) 
+        {
             break;
         }
 
@@ -204,7 +215,8 @@ void SubPathBuilder::_buildSubPathCompletely(
 
         // for non-symmetric scattering correction
         throughput.mulLocal(reflectance.mul(LdotN / pdfW));
-        if (mode == ETransportMode::IMPORTANCE) {
+        if (mode == ETransportMode::IMPORTANCE)
+        {
             throughput.mulLocal(1.0_r);
         }
 
@@ -213,35 +225,40 @@ void SubPathBuilder::_buildSubPathCompletely(
 
         // for specular surface, it is impossible
         // to connect from both sides
-        if (!newVertex.isConnectible()) {
+        if (!newVertex.isConnectible())
+        {
             pdfWForward = 0.0_r;
             pdfWReverse = 0.0_r;
         }
 
         real pdfAReverse = pdfWReverse / distance2;
-        if (previousVertex.camera() == nullptr) {
+        if (previousVertex.camera() == nullptr)
+        {
             pdfAReverse *= previousToNewDotN;
         }
         previousVertex.setPdfAReverse(pdfAReverse);
 
         // use russian roulette to decide if the ray needs to be kept tracking
-        if (bounceTimes > 10) {
+        if (bounceTimes > 10) 
+        {
             Spectrum newThroughput;
-            if (!RussianRoulette::isSurvivedOnNextRound(throughput, &newThroughput)) {
+            if (!RussianRoulette::isSurvivedOnNextRound(throughput, &newThroughput)) 
+            {
                 break;
             }
 
             throughput = newThroughput;
         }
 
-        if (throughput.isZero()) {
+        if (throughput.isZero()) 
+        {
             break;
         }
 
         traceRay.reset();
         traceRay.setOrigin(newP);
         traceRay.setDirection(L);
-    } // end while loop
+    } // end for loop
 }
 
 } // namespace cadise

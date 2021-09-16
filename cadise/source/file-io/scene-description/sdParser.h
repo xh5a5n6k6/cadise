@@ -3,13 +3,15 @@
 #include <memory>
 #include <string>
 
-namespace cadise {
+namespace cadise { class RenderDatabase; }
+namespace cadise { class Tokenizer; }
 
-class RenderDatabase;
-class Tokenizer;
+namespace cadise
+{
 
 // SdParser is for scene description parser
-class SdParser {
+class SdParser
+{
 public:
     SdParser();
     ~SdParser();

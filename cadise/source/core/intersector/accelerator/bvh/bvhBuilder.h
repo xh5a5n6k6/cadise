@@ -6,13 +6,15 @@
 #include <memory>
 #include <vector>
 
-namespace cadise {
+namespace cadise { class BvhBinaryNode; }
+namespace cadise { class BvhBoundInfo; }
+namespace cadise { class Intersector; }
 
-class BvhBinaryNode;
-class BvhBoundInfo;
-class Intersector;
+namespace cadise 
+{
 
-class BvhBuilder {
+class BvhBuilder 
+{
 public:
     explicit BvhBuilder(const EBvhSplitMode splitMode);
 

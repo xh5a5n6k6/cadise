@@ -10,7 +10,8 @@
 
 #include <cmath>
 
-namespace cadise {
+namespace cadise 
+{
 
 PmRadianceEstimationWork::PmRadianceEstimationWork(
     const PhotonMap* const    photonMap,
@@ -25,17 +26,19 @@ PmRadianceEstimationWork::PmRadianceEstimationWork(
     _numPhotonPaths(numPhotonPaths),
     _alpha(alpha),
     _workBeginIndex(),
-    _workEndIndex() {
-
+    _workEndIndex() 
+{
     CADISE_ASSERT(photonMap);
     CADISE_ASSERT(viewpoints);
     CADISE_ASSERT(film);
 }
 
-void PmRadianceEstimationWork::work() const {
+void PmRadianceEstimationWork::work() const
+{
     // for each viewpoint, do progressive radiance estimation
     // PPM paper chapter 4
-    for (std::size_t i = _workBeginIndex; i < _workEndIndex; ++i) {
+    for (std::size_t i = _workBeginIndex; i < _workEndIndex; ++i) 
+    {
         PmViewpoint& viewpoint = (*_viewpoints)[i];
 
         const Bsdf*          bsdf                 = viewpoint.bsdf();
@@ -46,7 +49,8 @@ void PmRadianceEstimationWork::work() const {
         const Spectrum&      emittedRadiance      = viewpoint.emittedRadiance();
 
         // HACK: add zero radiance for non-hit viewpoint
-        if (!bsdf) {
+        if (!bsdf) 
+        {
             _film->addSampleRadiance(filmPosition, Spectrum(0.0_r));
 
             continue;
@@ -75,11 +79,13 @@ void PmRadianceEstimationWork::work() const {
             si.setSurfaceDetail(surfaceDetail);
             si.setWo(fromDirection);
 
-            for (const auto& photon : nearPhotons) {
+            for (const auto& photon : nearPhotons)
+            {
                 si.setWi(photon.fromDirection());
 
                 const Spectrum f = bsdf->evaluate(transportInfo, si);
-                if (!f.isZero()) {
+                if (!f.isZero()) 
+                {
                     TauM.addLocal(f.mul(photon.throughputRadiance()));
                 }
             }
@@ -107,8 +113,8 @@ void PmRadianceEstimationWork::work() const {
 
 void PmRadianceEstimationWork::setWorkBeginEnd(
     const std::size_t beginIndex,
-    const std::size_t endIndex) {
-
+    const std::size_t endIndex) 
+{
     _workBeginIndex = beginIndex;
     _workEndIndex   = endIndex;
 }

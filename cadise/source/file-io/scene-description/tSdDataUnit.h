@@ -5,10 +5,12 @@
 #include <memory>
 #include <string_view>
 
-namespace cadise {
+namespace cadise 
+{
 
 template<typename T>
-class TSdDataUnit {
+class TSdDataUnit 
+{
 public:
     TSdDataUnit();
     TSdDataUnit(const std::string_view& name, std::unique_ptr<T[]> value, const std::size_t valueNumber);

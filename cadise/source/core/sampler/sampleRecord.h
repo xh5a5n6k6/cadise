@@ -2,9 +2,11 @@
 
 #include "math/type/fundamentalType.h"
 
-namespace cadise {
+namespace cadise 
+{
 
-class SampleRecord {
+class SampleRecord
+{
 public:
     explicit SampleRecord(const std::size_t sampleNumber);
 

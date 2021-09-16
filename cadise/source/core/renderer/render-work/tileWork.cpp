@@ -2,14 +2,16 @@
 
 #include "fundamental/assertion.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 TileWork::TileWork() :
     RenderWork(),
-    _filmTile(nullptr) {
-}
+    _filmTile(nullptr)
+{}
 
-void TileWork::setFilmTile(FilmTile* const filmTile) {
+void TileWork::setFilmTile(FilmTile* const filmTile)
+{
     CADISE_ASSERT(filmTile);
     
     _filmTile = filmTile;

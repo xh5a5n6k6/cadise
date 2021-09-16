@@ -8,22 +8,23 @@
 #include "math/random.h"
 #include "math/warp/hemisphere.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 AoEstimator::AoEstimator() :
-    AoEstimator(4) {
-}
+    AoEstimator(4) 
+{}
 
 AoEstimator::AoEstimator(const std::size_t numSampleRays) :
     AovEstimator(),
-    _numSampleRays(numSampleRays) {
-}
+    _numSampleRays(numSampleRays)
+{}
 
 void AoEstimator::estimate(
     const Scene&    scene,
     const Ray&      ray,
-    Spectrum* const out_radiance) const {
-
+    Spectrum* const out_radiance) const
+{
     CADISE_ASSERT(out_radiance);
 
     Spectrum            totalValue(0.0_r);
@@ -34,7 +35,8 @@ void AoEstimator::estimate(
     // HACK: manually unset environment light 
     localScene.unsetBackgroundSphere();
 
-    if (!localScene.isIntersecting(traceRay, si)) {
+    if (!localScene.isIntersecting(traceRay, si)) 
+    {
         out_radiance->set(1.0_r);
 
         return;
@@ -44,7 +46,8 @@ void AoEstimator::estimate(
     const Vector3R& P  = si.surfaceDetail().position();
     const Vector3R& Ng = si.surfaceDetail().geometryNormal();
 
-    for (std::size_t i = 0; i < _numSampleRays; ++i) {
+    for (std::size_t i = 0; i < _numSampleRays; ++i)
+    {
         const std::array<real, 2> sample = { Random::nextReal(), Random::nextReal() };
         Vector3R L;
         real pdfW;
@@ -53,7 +56,8 @@ void AoEstimator::estimate(
         // transform L to world coordinate
         L = si.surfaceDetail().geometryLcs().localToWorld(L);
         L.normalizeLocal();
-        if (V.dot(Ng) <= 0.0_r) {
+        if (V.dot(Ng) <= 0.0_r)
+        {
             L.negateLocal();
         }
 
@@ -61,7 +65,8 @@ void AoEstimator::estimate(
         traceRay.setOrigin(P);
         traceRay.setDirection(L);
 
-        if (!localScene.isOccluded(traceRay)) {
+        if (!localScene.isOccluded(traceRay))
+        {
             totalValue.addLocal(1.0_r);
         }
     }

@@ -3,9 +3,11 @@
 #include "core/spectrum/spectrum.h"
 #include "math/tVector3.h"
 
-namespace cadise {
+namespace cadise 
+{
 
-class EmitLightSample {
+class EmitLightSample 
+{
 public:
     EmitLightSample();
 

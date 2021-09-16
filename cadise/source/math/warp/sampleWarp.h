@@ -4,9 +4,11 @@
 
 #include <array>
 
-namespace cadise {
+namespace cadise 
+{
 
-class SampleWarp {
+class SampleWarp
+{
 public:
     static void uniformTriangleUv(
         const std::array<real, 2>& sample,

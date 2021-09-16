@@ -10,29 +10,31 @@
 #include "math/random.h"
 #include "math/warp/hemisphere.h"
 
-namespace cadise {
+namespace cadise
+{
 
 // Hack
 LambertianDiffuse::LambertianDiffuse() :
-    LambertianDiffuse(std::make_shared<TConstantTexture<Spectrum>>(Spectrum(0.5_r))) {
-}
+    LambertianDiffuse(std::make_shared<TConstantTexture<Spectrum>>(Spectrum(0.5_r)))
+{}
 
 LambertianDiffuse::LambertianDiffuse(const std::shared_ptr<TTexture<Spectrum>>& albedo) :
     Bsdf(BsdfLobes({ ELobe::DIFFUSE_REFLECTION })),
-    _albedo(albedo) {
-
+    _albedo(albedo) 
+{
     CADISE_ASSERT(albedo);
 }
 
 Spectrum LambertianDiffuse::evaluate(
     const TransportInfo&       info,
-    const SurfaceIntersection& si) const {
-
+    const SurfaceIntersection& si) const 
+{
     const Vector3R& Ns = si.surfaceDetail().shadingNormal();
     const Vector3R& V  = si.wi();
     const Vector3R& L  = si.wo();
     
-    if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) {
+    if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) 
+    {
         return Spectrum(0.0_r);
     }
 
@@ -45,8 +47,8 @@ Spectrum LambertianDiffuse::evaluate(
 void LambertianDiffuse::evaluateSample(
     const TransportInfo&       info,
     const SurfaceIntersection& si,
-    BsdfSample* const          out_sample) const {
-
+    BsdfSample* const          out_sample) const
+{
     CADISE_ASSERT(out_sample);
 
     const Vector3R& Ns = si.surfaceDetail().shadingNormal();
@@ -61,7 +63,8 @@ void LambertianDiffuse::evaluateSample(
     L = si.surfaceDetail().shadingLcs().localToWorld(L);
     L.normalizeLocal();
 
-    if (V.dot(Ns) <= 0.0_r) {
+    if (V.dot(Ns) <= 0.0_r)
+    {
         L.negateLocal();
     }
 
@@ -75,20 +78,22 @@ void LambertianDiffuse::evaluateSample(
 
 real LambertianDiffuse::evaluatePdfW(
     const TransportInfo&       info,
-    const SurfaceIntersection& si) const {
-
+    const SurfaceIntersection& si) const
+{
     const Vector3R& Ns = si.surfaceDetail().shadingNormal();
     const Vector3R& V  = si.wi();
     const Vector3R& L  = si.wo();
 
-    if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) {
+    if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) 
+    {
         return 0.0_r;
     }
 
     return L.absDot(Ns) * constant::rcp_pi<real>;
 }
 
-ELobe LambertianDiffuse::lobe(const BsdfComponents component) const {
+ELobe LambertianDiffuse::lobe(const BsdfComponents component) const 
+{
     CADISE_ASSERT_EQ(component, 0);
 
     return ELobe::DIFFUSE_REFLECTION;

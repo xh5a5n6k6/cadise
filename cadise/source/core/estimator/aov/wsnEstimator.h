@@ -2,12 +2,14 @@
 
 #include "core/estimator/aov/aovEstimator.h"
 
-namespace cadise {
+namespace cadise
+{
 
 /*
     WsnEstimator: World-Space Normal Estimator
 */
-class WsnEstimator : public AovEstimator {
+class WsnEstimator : public AovEstimator
+{
 public:
     using AovEstimator::AovEstimator;
 
@@ -21,7 +23,8 @@ public:
 
 // header implementation
 
-inline std::string WsnEstimator::toString() const {
+inline std::string WsnEstimator::toString() const 
+{
     return "AOV-WSN Estimator";
 }
 

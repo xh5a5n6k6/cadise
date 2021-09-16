@@ -11,10 +11,12 @@
 #include "fundamental/time/stopwatch.h"
 #include "utility/parallel.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 // local logger declaration
-namespace {
+namespace 
+{
     const Logger logger("Sampling Renderer");
 } // anonymous namespace
 
@@ -24,13 +26,14 @@ SamplingRenderer::SamplingRenderer(
     
     Renderer(),
     _estimator(estimator),
-    _sampler(sampler) {
-
+    _sampler(sampler) 
+{
     CADISE_ASSERT(estimator);
     CADISE_ASSERT(sampler);
 }
 
-void SamplingRenderer::render() const {
+void SamplingRenderer::render() const 
+{
     CADISE_ASSERT(_scene);
 
     logger.log("Begin rendering, estimator type: " + _estimator->toString());
@@ -43,9 +46,10 @@ void SamplingRenderer::render() const {
         _numWorkers,
         [this](const std::size_t workerId,
                const std::size_t workBegin,
-               const std::size_t workEnd) {
-
-            for (std::size_t workIndex = workBegin; workIndex < workEnd; ++workIndex) {
+               const std::size_t workEnd)
+        {
+            for (std::size_t workIndex = workBegin; workIndex < workEnd; ++workIndex) 
+            {
                 auto filmTile = _film->generateFilmTile(workIndex);
 
                 EstimatorTileWork tileWork(

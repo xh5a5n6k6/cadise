@@ -3,9 +3,11 @@
 #include <string>
 #include <string_view>
 
-namespace cadise {
+namespace cadise 
+{
 
-class Path {
+class Path 
+{
 public:
     explicit Path(const std::string& path);
     explicit Path(const std::string_view& path);

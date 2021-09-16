@@ -2,9 +2,11 @@
 
 #include "core/surface/fresnel/fresnel.h"
 
-namespace cadise {
+namespace cadise 
+{
 
-class DielectricFresnel : public Fresnel {
+class DielectricFresnel : public Fresnel 
+{
 public:
     DielectricFresnel(const real iorOuter, const real iorInner);
 

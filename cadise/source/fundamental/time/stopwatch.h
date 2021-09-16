@@ -4,9 +4,11 @@
 
 #include <chrono>
 
-namespace cadise {
+namespace cadise
+{
 
-class Stopwatch {
+class Stopwatch
+{
 private:
     using Clock = std::chrono::steady_clock;
 

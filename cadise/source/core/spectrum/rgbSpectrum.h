@@ -4,9 +4,11 @@
 
 #include "math/type/mathType.h"
 
-namespace cadise {
+namespace cadise 
+{
 
-class RgbSpectrum : public TConceptualSpectrum<real, 3> {
+class RgbSpectrum : public TConceptualSpectrum<real, 3>
+{
 public:
     RgbSpectrum();
     explicit RgbSpectrum(const real value);

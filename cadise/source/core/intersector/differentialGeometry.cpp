@@ -1,6 +1,7 @@
 #include "core/intersector/differentialGeometry.h"
 
-namespace cadise {
+namespace cadise
+{
 
 DifferentialGeometry::DifferentialGeometry() = default;
 
@@ -13,22 +14,26 @@ DifferentialGeometry::DifferentialGeometry(
     _dPdU(dPdU),
     _dPdV(dPdV),
     _dNdU(dNdU),
-    _dNdV(dNdV) {
-}
+    _dNdV(dNdV) 
+{}
 
-const Vector3R& DifferentialGeometry::dPdU() const {
+const Vector3R& DifferentialGeometry::dPdU() const
+{
     return _dPdU;
 }
 
-const Vector3R& DifferentialGeometry::dPdV() const {
+const Vector3R& DifferentialGeometry::dPdV() const 
+{
     return _dPdV;
 }
 
-const Vector3R& DifferentialGeometry::dNdU() const {
+const Vector3R& DifferentialGeometry::dNdU() const 
+{
     return _dNdU;
 }
 
-const Vector3R& DifferentialGeometry::dNdV() const {
+const Vector3R& DifferentialGeometry::dNdV() const 
+{
     return _dNdV;
 }
 

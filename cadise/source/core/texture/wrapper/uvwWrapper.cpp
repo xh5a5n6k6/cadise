@@ -1,6 +1,7 @@
 #include "core/texture/wrapper/uvwWrapper.h"
 
-namespace cadise {
+namespace cadise
+{
 
 UvwWrapper::~UvwWrapper() = default;
 

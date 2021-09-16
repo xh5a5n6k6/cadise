@@ -2,9 +2,11 @@
 
 #include "math/tAabb3.h"
 
-namespace cadise {
+namespace cadise 
+{
 
-class BvhLinearNode {
+class BvhLinearNode 
+{
 public:
     BvhLinearNode();
     ~BvhLinearNode();
@@ -31,14 +33,16 @@ public:
     bool isLeaf() const;
 
 private:
-    union {
+    union 
+    {
         // for leaf node
         std::size_t _intersectorIndex;
         // for internal node
         std::size_t _secondChildIndex;
     };
 
-    union {
+    union 
+    {
         // for leaf node
         std::size_t _intersectorCounts;
         // for internal node

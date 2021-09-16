@@ -7,18 +7,21 @@
 
 #include <cmath>
 
-namespace cadise {
+namespace cadise 
+{
 
 PointLight::PointLight(const Vector3R& position, const Spectrum& intensity) :
     _position(position), 
-    _intensity(intensity) {
-}
+    _intensity(intensity) 
+{}
 
-Spectrum PointLight::emittance(const SurfaceIntersection& emitIntersection) const {
+Spectrum PointLight::emittance(const SurfaceIntersection& emitIntersection) const 
+{
     return Spectrum(0.0_r);
 }
 
-void PointLight::evaluateDirectSample(DirectLightSample* const out_sample) const {
+void PointLight::evaluateDirectSample(DirectLightSample* const out_sample) const 
+{
     CADISE_ASSERT(out_sample);
 
     const Vector3R emitPosition = _position;
@@ -36,12 +39,13 @@ void PointLight::evaluateDirectSample(DirectLightSample* const out_sample) const
 
 real PointLight::evaluateDirectPdfW(
     const SurfaceIntersection& emitIntersection,
-    const Vector3R&            targetPosition) const {
-
+    const Vector3R&            targetPosition) const 
+{
     return 0.0_r;
 }
 
-void PointLight::evaluateEmitSample(EmitLightSample* const out_sample) const {
+void PointLight::evaluateEmitSample(EmitLightSample* const out_sample) const 
+{
     CADISE_ASSERT(out_sample);
 
     // TODO: implement here
@@ -51,8 +55,8 @@ void PointLight::evaluateEmitPdf(
     const Ray&      emitRay,
     const Vector3R& emitN,
     real* const     out_pdfA,
-    real* const     out_pdfW) const {
-
+    real* const     out_pdfW) const 
+{
     CADISE_ASSERT(out_pdfA);
     CADISE_ASSERT(out_pdfW);
 
@@ -61,11 +65,13 @@ void PointLight::evaluateEmitPdf(
 
 }
 
-real PointLight::approximateFlux() const {
+real PointLight::approximateFlux() const 
+{
     return constant::four_pi<real> * _intensity.luminance();
 }
 
-bool PointLight::isDeltaLight() const {
+bool PointLight::isDeltaLight() const
+{
     return true;
 }
 

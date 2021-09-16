@@ -2,9 +2,11 @@
 
 #include "math/tMatrix4.h"
 
-namespace cadise {
+namespace cadise
+{
 
-class Transform {
+class Transform 
+{
 public:
     explicit Transform(const Matrix4R& matrix);
     Transform(const Matrix4R& matrix, const Matrix4R& inverseMatrix);

@@ -4,13 +4,15 @@
 
 #include <vector>
 
-namespace cadise {
+namespace cadise { class Camera; }
+namespace cadise { class ConnectEvent; }
+namespace cadise { class Scene; }
 
-class Camera;
-class ConnectEvent;
-class Scene;
+namespace cadise 
+{
 
-class SubPath {
+class SubPath 
+{
 public:
     // used for s=0 situation
     // (it doesn't support t=0 situation currently)
@@ -22,8 +24,8 @@ public:
 public:
     explicit SubPath(const std::size_t maxPathLength);
 
-    PathVertex& operator[](const std::size_t index);
-    const PathVertex& operator[](const std::size_t index) const;
+    PathVertex& operator[] (const std::size_t index);
+    const PathVertex& operator[] (const std::size_t index) const;
 
     void addVertex(const PathVertex& vertex);
 

@@ -13,20 +13,21 @@
 #include "fundamental/assertion.h"
 #include "math/constant.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 PtEstimator::PtEstimator(const int32 maxDepth) :
     RadianceEstimator(),
-    _maxDepth(maxDepth) {
-
-    CADISE_ASSERT_GE(maxDepth, 0);
+    _maxDepth(maxDepth) 
+{
+        CADISE_ASSERT_GE(maxDepth, 0);
 }
 
 void PtEstimator::estimate(
     const Scene&    scene, 
     const Ray&      ray,
-    Spectrum* const out_radiance) const {
-
+    Spectrum* const out_radiance) const 
+{
     CADISE_ASSERT(out_radiance);
 
     const TransportInfo transportInfo(ETransportMode::RADIANCE);
@@ -40,9 +41,11 @@ void PtEstimator::estimate(
     // (specular surface for true, non-specular surface for false)
     bool isCountForEmittance = true;
 
-    for (int32 bounceTimes = 0; bounceTimes < _maxDepth; ++bounceTimes) {
+    for (int32 bounceTimes = 0; bounceTimes < _maxDepth; ++bounceTimes)
+    {
         SurfaceIntersection intersection;
-        if (!scene.isIntersecting(traceRay, intersection)) {
+        if (!scene.isIntersecting(traceRay, intersection)) 
+        {
             break;
         }
 
@@ -54,7 +57,8 @@ void PtEstimator::estimate(
 
         // add emitter's emittance only at first hit-point (0 bounce)
         // or previous hit surface is specular
-        if (primitive->areaLight() && isCountForEmittance) {
+        if (primitive->areaLight() && isCountForEmittance) 
+        {
             const Spectrum emittance = primitive->areaLight()->emittance(intersection);
 
             totalRadiance.addLocal(pathThroughput.mul(emittance));
@@ -67,8 +71,8 @@ void PtEstimator::estimate(
         //       use sample bxdfType to do this check instead
         if (!bsdf->lobes().hasAtLeastOne({
             ELobe::SPECULAR_REFLECTION,
-            ELobe::SPECULAR_TRANSMISSION })) {
-
+            ELobe::SPECULAR_TRANSMISSION })) 
+        {
             isCountForEmittance = false;
 
             real lightPdf;
@@ -82,14 +86,16 @@ void PtEstimator::estimate(
             
             totalRadiance.addLocal(pathThroughput.mul(directLightRadiance));
         }
-        else {
+        else 
+        {
             isCountForEmittance = true;
         }
 
         // estimate indirect light with bsdf sampling
         BsdfSample bsdfSample;
         bsdf->evaluateSample(transportInfo, intersection, &bsdfSample);
-        if (!bsdfSample.isValid()) {
+        if (!bsdfSample.isValid()) 
+        {
             break;
         }
 
@@ -101,16 +107,19 @@ void PtEstimator::estimate(
         pathThroughput.mulLocal(reflectance.mul(LdotN / pdfW));
 
         // use russian roulette to decide if the ray needs to be kept tracking
-        if (bounceTimes > 2) {
+        if (bounceTimes > 2) 
+        {
             Spectrum newPathThroughput;
-            if (!RussianRoulette::isSurvivedOnNextRound(pathThroughput, &newPathThroughput)) {
+            if (!RussianRoulette::isSurvivedOnNextRound(pathThroughput, &newPathThroughput))
+            {
                 break;
             }
 
             pathThroughput = newPathThroughput;
         }
 
-        if (pathThroughput.isZero()) {
+        if (pathThroughput.isZero()) 
+        {
             break;
         }
 

@@ -5,11 +5,13 @@
 #include <memory>
 #include <utility>
 
-namespace cadise {
+namespace cadise { class Transform; }
 
-class Transform;
+namespace cadise 
+{
 
-class PerspectivePinholeCamera : public Camera {
+class PerspectivePinholeCamera : public Camera 
+{
 public:
     PerspectivePinholeCamera(
         const Vector3R& position, 

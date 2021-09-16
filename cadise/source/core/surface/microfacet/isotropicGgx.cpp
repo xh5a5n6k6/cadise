@@ -8,22 +8,24 @@
 
 #include <cmath>
 
-namespace cadise {
+namespace cadise 
+{
 
 IsotropicGgx::IsotropicGgx(const std::shared_ptr<TTexture<real>>& roughness) :
     Microfacet(),
-    _roughness(roughness) {
-
+    _roughness(roughness)
+{
     CADISE_ASSERT(roughness);
 }
 
 real IsotropicGgx::distributionD(
     const SurfaceIntersection& si,
     const Vector3R&            N,
-    const Vector3R&            H) const {
-
+    const Vector3R&            H) const 
+{
     const real NdotH = N.dot(H);
-    if (NdotH <= 0.0_r) {
+    if (NdotH <= 0.0_r)
+    {
         return 0.0_r;
     }
 
@@ -48,9 +50,10 @@ real IsotropicGgx::shadowingMaskingG(
     const Vector3R&            V,
     const Vector3R&            L,
     const Vector3R&            N,
-    const Vector3R&            H) const {
-
-    if (!_isShadowingMaskingValid(V, L, N, H)) {
+    const Vector3R&            H) const 
+{
+    if (!_isShadowingMaskingValid(V, L, N, H)) 
+    {
         return 0.0_r;
     }
 
@@ -81,8 +84,8 @@ real IsotropicGgx::shadowingMaskingG(
 void IsotropicGgx::sampleHalfVectorH(
     const SurfaceIntersection& si,
     const std::array<real, 2>& sample,
-    Vector3R* const            out_H) const {
-
+    Vector3R* const            out_H) const 
+{
     CADISE_ASSERT(out_H);
 
     // to avoid random sample with 1 value

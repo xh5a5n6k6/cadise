@@ -6,17 +6,19 @@
 #include "core/texture/wrapper/repeatUvwWrapper.h"
 #include "fundamental/assertion.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 template<typename T, std::size_t N>
-TPixelSampler<T, N>::TPixelSampler(
+inline TPixelSampler<T, N>::TPixelSampler(
     const TImage<T, N>&    image,
     const ETextureWrapMode mode) :
 
     _image(image),
-    _uvwWrapper(nullptr) {
-
-    switch (mode) {
+    _uvwWrapper(nullptr) 
+{
+    switch (mode) 
+    {
         case ETextureWrapMode::CLAMP:
             _uvwWrapper = std::make_unique<ClampUvwWrapper>();
             break;
@@ -32,6 +34,6 @@ TPixelSampler<T, N>::TPixelSampler(
 }
 
 template<typename T, std::size_t N>
-TPixelSampler<T, N>::~TPixelSampler() = default;
+inline TPixelSampler<T, N>::~TPixelSampler() = default;
 
 } // namespace cadise

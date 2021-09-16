@@ -4,12 +4,14 @@
 
 #include <vector>
 
-namespace cadise {
+namespace cadise { class Photon; }
+namespace cadise { class Scene; }
 
-class Photon;
-class Scene;
+namespace cadise
+{
 
-class PhotonMapWork : public RenderWork {
+class PhotonMapWork : public RenderWork
+{
 public:
     PhotonMapWork(
         const Scene* const         scene,

@@ -2,12 +2,14 @@
 
 #include "math/type/mathType.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 /*
     It stores radiance as rgb value rather than origin spectrum.
 */
-class RgbRadianceSensor {
+class RgbRadianceSensor
+{
 public:
     RgbRadianceSensor();
 

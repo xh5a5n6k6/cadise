@@ -4,9 +4,11 @@
 
 #include <vector>
 
-namespace cadise {
+namespace cadise 
+{
 
-class Distribution1D {
+class Distribution1D 
+{
 public:
     Distribution1D();
     Distribution1D(const real* const value, const std::size_t sizeNumber);
@@ -24,7 +26,7 @@ public:
     
     std::size_t sampleDiscrete(const real seed) const;
     std::size_t sampleDiscrete(
-        const real seed,
+        const real  seed,
         real* const out_pdf) const;
 
     // evaulate pdf from the sample generated from the distribution

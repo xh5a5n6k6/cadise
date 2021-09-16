@@ -6,10 +6,12 @@
 #include <tuple>
 #include <vector>
 
-namespace cadise {
+namespace cadise
+{
 
 template<typename Index, typename Object, typename ObjectCenterCalculator>
-class TPointKdTree {
+class TPointKdTree
+{
 private:
     using Node = TKdTreeNode<Index>;
 

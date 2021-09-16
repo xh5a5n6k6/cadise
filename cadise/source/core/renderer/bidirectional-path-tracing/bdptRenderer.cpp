@@ -13,21 +13,24 @@
 
 #include <vector>
 
-namespace cadise {
+namespace cadise
+{
 
 // local logger declaration
-namespace {
+namespace
+{
     const Logger logger("BDPT Renderer");
 } // anonymous namespace
 
 BdptRenderer::BdptRenderer(const std::shared_ptr<Sampler>& sampler) :
     Renderer(),
-    _sampler(sampler) {
-
+    _sampler(sampler)
+{
     CADISE_ASSERT(sampler);
 }
 
-void BdptRenderer::render() const {
+void BdptRenderer::render() const 
+{
     CADISE_ASSERT(_scene);
 
     Stopwatch stopwatch;
@@ -38,9 +41,10 @@ void BdptRenderer::render() const {
         _numWorkers,
         [this](const std::size_t workerId,
                const std::size_t workBegin,
-               const std::size_t workEnd) {
-
-            for (std::size_t workIndex = workBegin; workIndex < workEnd; ++workIndex) {
+               const std::size_t workEnd) 
+        {
+            for (std::size_t workIndex = workBegin; workIndex < workEnd; ++workIndex) 
+            {
                 // pre-allocate a fixed number of events,
                 // maybe allocate a sample-sensitive number of events instead?
                 std::vector<ConnectEvent> connectEvents;
@@ -59,7 +63,8 @@ void BdptRenderer::render() const {
 
                 _film->mergeWithFilmTile(std::move(filmTile));
 
-                for (std::size_t i = 0; i < connectEvents.size(); ++i) {
+                for (std::size_t i = 0; i < connectEvents.size(); ++i) 
+                {
                     _film->addSplatRadiance(connectEvents[i]);
                 }
             }

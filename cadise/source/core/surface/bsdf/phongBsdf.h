@@ -2,7 +2,8 @@
 
 #include "core/surface/bsdf/bsdf.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 /*
     Implement modified Phong model (only specular term).
@@ -22,7 +23,8 @@ namespace cadise {
     http://www.thetenthplanet.de/archives/255
     by christian
 */
-class PhongBsdf : public Bsdf {
+class PhongBsdf : public Bsdf 
+{
 public:
     explicit PhongBsdf(const real exponent);
 

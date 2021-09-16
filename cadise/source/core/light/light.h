@@ -2,24 +2,26 @@
 
 #include "core/spectrum/spectrum.h"
 
-namespace cadise {
+namespace cadise { class DirectLightSample; }
+namespace cadise { class EmitLightSample; }
+namespace cadise { class Ray; }
+namespace cadise { class SurfaceInfo; }
+namespace cadise { class SurfaceIntersection; }
 
-class DirectLightSample;
-class EmitLightSample;
-class Ray;
-class SurfaceInfo;
-class SurfaceIntersection;
+namespace cadise 
+{
 
-class Light {
+class Light 
+{
 public:
     virtual ~Light();
 
-    virtual Spectrum emittance(const SurfaceIntersection& emitIntersection) const = 0;
+    virtual Spectrum emittance(const SurfaceIntersection& emitSi) const = 0;
     
     // light sampling used in next-event estimation (direct light)
     virtual void evaluateDirectSample(DirectLightSample* const out_sample) const = 0;
     virtual real evaluateDirectPdfW(
-        const SurfaceIntersection& emitIntersection,
+        const SurfaceIntersection& emitSi,
         const Vector3R&            targetPosition) const = 0;
 
     // light sampling used in light tracing methods

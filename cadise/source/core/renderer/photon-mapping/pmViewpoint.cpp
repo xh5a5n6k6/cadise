@@ -2,7 +2,8 @@
 
 #include "fundamental/assertion.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 PmViewpoint::PmViewpoint() :
     _bsdf(nullptr),
@@ -13,8 +14,8 @@ PmViewpoint::PmViewpoint() :
     _emittedRadiance(),
     _numPhotons(),
     _radius(),
-    _tau() {
-}
+    _tau() 
+{}
 
 PmViewpoint::PmViewpoint(
     const Bsdf* const    bsdf,
@@ -32,62 +33,76 @@ PmViewpoint::PmViewpoint(
     _emittedRadiance(0.0_r),
     _numPhotons(0.0_r),
     _radius(radius),
-    _tau(0.0_r) {
-}
+    _tau(0.0_r)
+{}
 
-const Bsdf* PmViewpoint::bsdf() const {
+const Bsdf* PmViewpoint::bsdf() const
+{
     return _bsdf;
 }
 
-const SurfaceDetail& PmViewpoint::surfaceDetail() const {
+const SurfaceDetail& PmViewpoint::surfaceDetail() const 
+{
     return _surfaceDetail;
 }
 
-const Vector3R& PmViewpoint::fromDirection() const {
+const Vector3R& PmViewpoint::fromDirection() const 
+{
     return _fromDirection;
 }
 
-const Vector2D& PmViewpoint::filmPosition() const {
+const Vector2D& PmViewpoint::filmPosition() const
+{
     return _filmPosition;
 }
 
-const Spectrum& PmViewpoint::throughputImportance() const {
+const Spectrum& PmViewpoint::throughputImportance() const 
+{
     return _throughputImportance;
 }
 
-const Spectrum& PmViewpoint::emittedRadiance() const {
+const Spectrum& PmViewpoint::emittedRadiance() const 
+{
     return _emittedRadiance;
 }
 
-const real PmViewpoint::numPhotons() const {
+const real PmViewpoint::numPhotons() const
+{
     return _numPhotons;
 }
 
-const real PmViewpoint::radius() const {
+const real PmViewpoint::radius() const
+{
     return _radius;
 }
 
-const Spectrum& PmViewpoint::tau() const {
+const Spectrum& PmViewpoint::tau() const 
+{
     return _tau;
 }
 
-void PmViewpoint::setThroughputImportance(const Spectrum& throughputImportance) {
+void PmViewpoint::setThroughputImportance(const Spectrum& throughputImportance) 
+{
     _throughputImportance = throughputImportance;
 }
 
-void PmViewpoint::setEmittedRadiance(const Spectrum& emittedRadiance) {
+void PmViewpoint::setEmittedRadiance(const Spectrum& emittedRadiance) 
+{
     _emittedRadiance = emittedRadiance;
 }
 
-void PmViewpoint::setNumPhotons(const real numPhotons) {
+void PmViewpoint::setNumPhotons(const real numPhotons)
+{
     _numPhotons = numPhotons;
 }
 
-void PmViewpoint::setRadius(const real radius) {
+void PmViewpoint::setRadius(const real radius) 
+{
     _radius = radius;
 }
 
-void PmViewpoint::setTau(const Spectrum& tau) {
+void PmViewpoint::setTau(const Spectrum& tau) 
+{
     _tau = tau;
 }
 

@@ -1,8 +1,10 @@
 #pragma once
 
-namespace cadise {
+namespace cadise 
+{
 
-enum class ESdClassType {
+enum class ESdClassType 
+{
     NONE,
 
     // global setting

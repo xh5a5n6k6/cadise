@@ -2,11 +2,13 @@
 
 #include "math/tVector3.h"
 
-namespace cadise {
+namespace cadise
+{
 
 // AABB is for axis-aligned bounding box
 template<typename T>
-class TAABB3 {
+class TAABB3
+{
 public:
     TAABB3();
     explicit TAABB3(const TVector3<T>& vertex);

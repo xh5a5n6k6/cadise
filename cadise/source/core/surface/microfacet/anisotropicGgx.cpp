@@ -8,7 +8,8 @@
 
 #include <cmath>
 
-namespace cadise {
+namespace cadise
+{
 
 AnisotropicGgx::AnisotropicGgx(
     const std::shared_ptr<TTexture<real>>& roughnessU,
@@ -16,8 +17,8 @@ AnisotropicGgx::AnisotropicGgx(
 
     Microfacet(),
     _roughnessU(roughnessU),
-    _roughnessV(roughnessV) {
-    
+    _roughnessV(roughnessV)
+{
     CADISE_ASSERT(roughnessU);
     CADISE_ASSERT(roughnessV);
 }
@@ -25,10 +26,11 @@ AnisotropicGgx::AnisotropicGgx(
 real AnisotropicGgx::distributionD(
     const SurfaceIntersection& si,
     const Vector3R&            N,
-    const Vector3R&            H) const {
-
+    const Vector3R&            H) const 
+{
     const real cosTheta = math::clamp(N.dot(H), -1.0_r, 1.0_r);
-    if (cosTheta <= 0.0_r) {
+    if (cosTheta <= 0.0_r) 
+    {
         return 0.0_r;
     }
 
@@ -59,9 +61,10 @@ real AnisotropicGgx::shadowingMaskingG(
     const Vector3R&            V,
     const Vector3R&            L,
     const Vector3R&            N,
-    const Vector3R&            H) const {
-
-    if (!_isShadowingMaskingValid(V, L, N, H)) {
+    const Vector3R&            H) const 
+{
+    if (!_isShadowingMaskingValid(V, L, N, H))
+    {
         return 0.0_r;
     }
 
@@ -83,8 +86,8 @@ real AnisotropicGgx::shadowingMaskingG(
 void AnisotropicGgx::sampleHalfVectorH(
     const SurfaceIntersection& si,
     const std::array<real, 2>& sample,
-    Vector3R* const            out_H) const {
-
+    Vector3R* const            out_H) const 
+{
     CADISE_ASSERT(out_H);
 
     // to avoid random sample with 1 value
@@ -110,10 +113,12 @@ void AnisotropicGgx::sampleHalfVectorH(
     const real phiRaw = std::atan(alphaY / alphaX * std::tan(constant::two_pi<real> * safeSample[0]));
 
     real phi = phiRaw;
-    if (safeSample[0] >= 0.75_r) {
+    if (safeSample[0] >= 0.75_r)
+    {
         phi += constant::two_pi<real>;
     }
-    else if (safeSample[0] > 0.25_r) {
+    else if (safeSample[0] > 0.25_r)
+    {
         phi += constant::pi<real>;
     }
 
@@ -139,8 +144,8 @@ real AnisotropicGgx::_lambda(
     const SurfaceIntersection& si,
     const real                 alphaX,
     const real                 alphaY,
-    const Vector3R&            direction) const {
-
+    const Vector3R&            direction) const
+{
     const real tan2Theta = si.surfaceDetail().shadingLcs().tan2Theta(direction);
     const real cos2Phi   = si.surfaceDetail().shadingLcs().cos2Phi(direction);
     const real sin2Phi   = 1.0_r - cos2Phi;

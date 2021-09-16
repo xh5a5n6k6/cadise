@@ -2,9 +2,11 @@
 
 #include "core/texture/category/tImageTexture.h"
 
-namespace cadise {
+namespace cadise
+{
 
-class RealImageTexture : public TImageTexture<real, real, 3> {
+class RealImageTexture : public TImageTexture<real, real, 3>
+{
 public:
     using Parent = TImageTexture<real, real, 3>;
     using Parent::Parent;

@@ -4,13 +4,15 @@
 
 #include <vector>
 
-namespace cadise {
+namespace cadise { class Camera; }
+namespace cadise { class PmViewpoint; }
+namespace cadise { class Scene; }
 
-class Camera;
-class PmViewpoint;
-class Scene;
+namespace cadise
+{
 
-class PmViewpointConstructor {
+class PmViewpointConstructor 
+{
 public:
     PmViewpointConstructor(
         const Scene* const  scene,

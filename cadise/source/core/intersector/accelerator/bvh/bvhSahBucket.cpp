@@ -1,26 +1,30 @@
 #include "core/intersector/accelerator/bvh/bvhSahBucket.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 BvhSahBucket::BvhSahBucket() :
-    BvhSahBucket(AABB3R(), 0) {
-}
+    BvhSahBucket(AABB3R(), 0) 
+{}
 
 BvhSahBucket::BvhSahBucket(const AABB3R& bound, const std::size_t intersectorCounts) :
     _bound(bound),
-    _intersectorCounts(intersectorCounts) {
-}
+    _intersectorCounts(intersectorCounts) 
+{}
 
-void BvhSahBucket::addOneBoundAndCount(const AABB3R& bound) {
+void BvhSahBucket::addOneBoundAndCount(const AABB3R& bound) 
+{
     _bound.unionWithLocal(bound);
     ++_intersectorCounts;
 }
 
-const AABB3R& BvhSahBucket::bound() const {
+const AABB3R& BvhSahBucket::bound() const 
+{
     return _bound;
 }
 
-std::size_t BvhSahBucket::intersectorCounts() const {
+std::size_t BvhSahBucket::intersectorCounts() const
+{
     return _intersectorCounts;
 }
 

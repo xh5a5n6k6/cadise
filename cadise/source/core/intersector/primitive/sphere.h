@@ -4,11 +4,13 @@
 
 #include "math/tVector3.h"
 
-namespace cadise {
+namespace cadise { class Transform; }
 
-class Transform;
+namespace cadise 
+{
 
-class Sphere : public Primitive {
+class Sphere : public Primitive 
+{
 public:
     Sphere(
         const std::shared_ptr<Bsdf>& bsdf, 

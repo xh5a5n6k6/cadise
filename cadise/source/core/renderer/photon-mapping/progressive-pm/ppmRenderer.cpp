@@ -17,10 +17,12 @@
 #include <mutex>
 #include <numeric>
 
-namespace cadise {
+namespace cadise 
+{
 
 // local logger declaration
-namespace {
+namespace 
+{
     const Logger logger("PPM Renderer");
 } // anonymous namespace
 
@@ -30,12 +32,13 @@ PpmRenderer::PpmRenderer(
 
     Renderer(),
     _sampler(sampler),
-    _setting(setting) {
-
+    _setting(setting)
+{
     CADISE_ASSERT(sampler);
 }
 
-void PpmRenderer::render() const {
+void PpmRenderer::render() const 
+{
     CADISE_ASSERT(_scene);
 
     Stopwatch stopwatch;
@@ -55,8 +58,8 @@ void PpmRenderer::render() const {
         [this, &viewpoints, &ppmMutex](
             const std::size_t workerId,
             const std::size_t workBegin,
-            const std::size_t workEnd) {
-
+            const std::size_t workEnd) 
+        {
             const std::size_t workload = workEnd - workBegin;
 
             std::vector<PmViewpoint> localViewpoints;
@@ -67,7 +70,8 @@ void PpmRenderer::render() const {
                 _camera.get(),
                 _setting.searchRadius());
 
-            for (std::size_t workIndex = workBegin; workIndex < workEnd; ++workIndex) {
+            for (std::size_t workIndex = workBegin; workIndex < workEnd; ++workIndex) 
+            {
                 const AABB2I tileBound = _film->getTileBound(workIndex);
 
                 PmViewpointWork viewpointWork(
@@ -97,7 +101,8 @@ void PpmRenderer::render() const {
     // each iteration has two steps:
     // building photon map and radiance estimation
     std::size_t totalPhotonPaths = 0;
-    for(std::size_t i = 0; i < _setting.numIterations(); ++i) {
+    for(std::size_t i = 0; i < _setting.numIterations(); ++i) 
+    {
         logger.log("Iteration progress: " + 
                    std::to_string(i + 1) + "/" + std::to_string(_setting.numIterations()));
 
@@ -113,8 +118,8 @@ void PpmRenderer::render() const {
             [this, &photons, &numPhotonPaths, &ppmMutex](
                 const std::size_t workerId,
                 const std::size_t workBegin,
-                const std::size_t workEnd) {
-
+                const std::size_t workEnd)
+            {
                 const std::size_t workload = workEnd - workBegin;
 
                 std::vector<Photon> localPhotons;
@@ -149,8 +154,8 @@ void PpmRenderer::render() const {
             [this, &viewpoints, &photonMap, &iterationFilm, &ppmMutex, totalPhotonPaths](
                 const std::size_t workerId,
                 const std::size_t workBegin,
-                const std::size_t workEnd) {
-
+                const std::size_t workEnd) 
+            {
                 auto localFilm = _film->generateEmptyFilm();
 
                 PmRadianceEstimationWork radianceEstimationWork(

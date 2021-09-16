@@ -5,15 +5,17 @@
 #include <memory>
 #include <vector>
 
-namespace cadise {
+namespace cadise { class Bsdf; }
+namespace cadise { class Primitive; }
 
-class Bsdf;
-class Primitive;
+namespace cadise 
+{
 
 /*
     
 */
-class TriangleBuffer {
+class TriangleBuffer
+{
 public:
     TriangleBuffer(
         const std::shared_ptr<Bsdf>& bsdf, 
@@ -21,7 +23,8 @@ public:
         const std::vector<Vector3R>& normals, 
         const std::vector<Vector3R>& uvws);
 
-    void transformToTriangles(std::vector<std::shared_ptr<Primitive>>* const out_triangles) const;
+    void transformToTriangles(
+        std::vector<std::shared_ptr<Primitive>>* const out_triangles) const;
 
 private:
     std::shared_ptr<Bsdf> _bsdf;

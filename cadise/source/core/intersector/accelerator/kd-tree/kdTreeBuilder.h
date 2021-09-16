@@ -7,11 +7,13 @@
 #include <tuple>
 #include <vector>
 
-namespace cadise {
+namespace cadise { class Intersector; }
 
-class Intersector;
+namespace cadise 
+{
 
-class KdTreeBuilder {
+class KdTreeBuilder 
+{
 private:
     using KdTreeNode = TKdTreeNode<std::size_t>;
 

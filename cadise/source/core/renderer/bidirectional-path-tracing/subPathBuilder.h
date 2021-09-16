@@ -2,15 +2,17 @@
 
 #include "core/spectrum/spectrum.h"
 
-namespace cadise {
+namespace cadise { class Camera; }
+namespace cadise { class Ray; }
+namespace cadise { class Scene; }
+namespace cadise { class SubPath; }
+namespace cadise { enum class ETransportMode; }
 
-class Camera;
-class Ray;
-class Scene;
-class SubPath;
-enum class ETransportMode;
+namespace cadise
+{
 
-class SubPathBuilder {
+class SubPathBuilder
+{
 public:
     explicit SubPathBuilder(const std::size_t maxPathLength);
 

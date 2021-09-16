@@ -8,9 +8,11 @@
 #include <memory>
 #include <vector>
 
-namespace cadise {
+namespace cadise 
+{
 
-class KdTreeAccelerator : public Accelerator {
+class KdTreeAccelerator : public Accelerator 
+{
 private:
     using KdTreeNode = TKdTreeNode<std::size_t>;
 

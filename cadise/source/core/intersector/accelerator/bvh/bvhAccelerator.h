@@ -7,11 +7,13 @@
 #include <memory>
 #include <vector>
 
-namespace cadise {
+namespace cadise { enum class EBvhSplitMode; }
 
-enum class EBvhSplitMode;
+namespace cadise 
+{
 
-class BvhAccelerator : public Accelerator {
+class BvhAccelerator : public Accelerator 
+{
 public:
     BvhAccelerator(
         const std::vector<std::shared_ptr<Intersector>>& intersectors,

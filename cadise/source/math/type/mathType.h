@@ -2,7 +2,8 @@
 
 #include "math/type/fundamentalType.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 ///////////////////////////////////////////////////////////
 // 2-dimensional vector with arbitrary type

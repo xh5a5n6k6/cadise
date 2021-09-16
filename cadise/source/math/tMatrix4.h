@@ -4,10 +4,12 @@
 
 #include <array>
 
-namespace cadise {
+namespace cadise
+{
 
 template<typename T>
-class TMatrix4 {
+class TMatrix4
+{
 public:
     static TMatrix4 makeIdentity();
     static TMatrix4 makeScale(const TVector3<T>& scaleVector);

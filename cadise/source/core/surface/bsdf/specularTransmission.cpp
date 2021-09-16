@@ -10,8 +10,8 @@
 #include <cmath>
 #include <utility>
 
-namespace cadise {
-
+namespace cadise 
+{
 
 SpecularTransmission::SpecularTransmission(
     const std::shared_ptr<TTexture<Spectrum>>& albedo,
@@ -19,24 +19,24 @@ SpecularTransmission::SpecularTransmission(
     
     Bsdf(BsdfLobes({ ELobe::SPECULAR_TRANSMISSION })),
     _albedo(albedo),
-    _fresnel(fresnel) {
-
+    _fresnel(fresnel)
+{
     CADISE_ASSERT(albedo);
     CADISE_ASSERT(fresnel);
 }
 
 Spectrum SpecularTransmission::evaluate(
     const TransportInfo&       info, 
-    const SurfaceIntersection& si) const {
-    
+    const SurfaceIntersection& si) const 
+{
     return Spectrum(0.0_r);
 }
 
 void SpecularTransmission::evaluateSample(
     const TransportInfo&       info, 
     const SurfaceIntersection& si,
-    BsdfSample* const          out_sample) const {
-    
+    BsdfSample* const          out_sample) const
+{
     CADISE_ASSERT(out_sample);
 
     const Vector3R& Ns = si.surfaceDetail().shadingNormal();
@@ -46,7 +46,8 @@ void SpecularTransmission::evaluateSample(
     real etaT = _fresnel->iorInner();
 
     Vector3R L;
-    if (!V.canRefract(Ns, etaI, etaT, &L)) {
+    if (!V.canRefract(Ns, etaI, etaT, &L))
+    {
         return;
     }
 
@@ -55,8 +56,10 @@ void SpecularTransmission::evaluateSample(
     _fresnel->evaluateReflectance(cosThetaI, &reflectance);
 
     real btdfFactor = 1.0_r;
-    if (info.mode() == ETransportMode::RADIANCE) {
-        if (cosThetaI < 0.0_r) {
+    if (info.mode() == ETransportMode::RADIANCE)
+    {
+        if (cosThetaI < 0.0_r) 
+        {
             std::swap(etaI, etaT);
         }
 
@@ -77,12 +80,13 @@ void SpecularTransmission::evaluateSample(
 
 real SpecularTransmission::evaluatePdfW(
     const TransportInfo&       info, 
-    const SurfaceIntersection& si) const {
-    
+    const SurfaceIntersection& si) const
+{
     return 0.0_r;
 }
 
-ELobe SpecularTransmission::lobe(const BsdfComponents component) const {
+ELobe SpecularTransmission::lobe(const BsdfComponents component) const 
+{
     CADISE_ASSERT_EQ(component, 0);
 
     return ELobe::SPECULAR_TRANSMISSION;

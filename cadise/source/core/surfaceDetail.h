@@ -4,9 +4,11 @@
 #include "math/tLocalCoordinateSystem3.h"
 #include "math/tVector3.h"
 
-namespace cadise {
+namespace cadise 
+{
 
-class SurfaceDetail {
+class SurfaceDetail
+{
 public:
     SurfaceDetail();
 

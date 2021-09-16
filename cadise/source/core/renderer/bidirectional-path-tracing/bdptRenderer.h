@@ -2,11 +2,13 @@
 
 #include "core/renderer/renderer.h"
 
-namespace cadise {
+namespace cadise { class Sampler; }
 
-class Sampler;
+namespace cadise 
+{
 
-class BdptRenderer : public Renderer {
+class BdptRenderer : public Renderer 
+{
 public:
     explicit BdptRenderer(const std::shared_ptr<Sampler>& sampler);
 

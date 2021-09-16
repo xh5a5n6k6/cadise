@@ -2,9 +2,11 @@
 
 #include "math/tVector3.h"
 
-namespace cadise {
+namespace cadise
+{
 
-class PositionSample {
+class PositionSample
+{
 public:
     PositionSample();
 

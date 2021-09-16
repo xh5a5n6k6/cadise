@@ -1,8 +1,10 @@
 #include "core/estimator/radianceEstimator.h"
 
-namespace cadise {
+namespace cadise
+{
 
-bool RadianceEstimator::useDirectly() const {
+bool RadianceEstimator::useDirectly() const
+{
     return false;
 }
 

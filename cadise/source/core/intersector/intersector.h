@@ -2,16 +2,18 @@
 
 #include "math/type/mathType.h"
 
-namespace cadise {
+namespace cadise { class PrimitiveInfo; }
+namespace cadise { class Ray; }
 
-class Ray;
-class PrimitiveInfo;
+namespace cadise 
+{
 
 /*
     Intersector represents an object that is intersectable, 
     and it includes primitive, accelerator and transformedIntersector.
 */
-class Intersector {
+class Intersector 
+{
 public:
     virtual ~Intersector();
 

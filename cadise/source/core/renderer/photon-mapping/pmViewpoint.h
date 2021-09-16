@@ -4,11 +4,13 @@
 #include "core/surfaceDetail.h"
 #include "math/tVector2.h"
 
-namespace cadise {
+namespace cadise { class Bsdf; }
 
-class Bsdf;
+namespace cadise
+{
 
-class PmViewpoint {
+class PmViewpoint
+{
 public:
     PmViewpoint();
     PmViewpoint(

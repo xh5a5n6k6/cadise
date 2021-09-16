@@ -4,12 +4,14 @@
 
 #include <string>
 
-namespace cadise {
+namespace cadise { class Ray; }
+namespace cadise { class Scene; }
 
-class Ray;
-class Scene;
+namespace cadise 
+{
 
-class EnergyEstimator {
+class EnergyEstimator 
+{
 public:
     virtual ~EnergyEstimator();
 

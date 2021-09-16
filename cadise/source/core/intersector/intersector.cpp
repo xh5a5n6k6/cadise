@@ -1,6 +1,7 @@
 #include "core/intersector/intersector.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 Intersector::~Intersector() = default;
 

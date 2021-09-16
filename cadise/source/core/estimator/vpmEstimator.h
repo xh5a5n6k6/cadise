@@ -4,9 +4,11 @@
 
 #include "core/renderer/photon-mapping/photonMap.h"
 
-namespace cadise {
+namespace cadise 
+{
 
-class VpmEstimator : public RadianceEstimator {
+class VpmEstimator : public RadianceEstimator 
+{
 public:
     VpmEstimator(
         const PhotonMap* const photonMap,
@@ -31,7 +33,8 @@ private:
 
 // header implementation
 
-inline std::string VpmEstimator::toString() const {
+inline std::string VpmEstimator::toString() const 
+{
     return "VPM Estimator";
 }
 

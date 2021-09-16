@@ -3,7 +3,8 @@
 #include <cstddef>
 #include <cstdint>
 
-namespace cadise {
+namespace cadise 
+{
 
 using int8   = std::int8_t;
 using uint8  = std::uint8_t;
@@ -19,7 +20,8 @@ using float64 = double;
 
 using real = float32;
 
-inline constexpr real operator"" _r(const long double value) {
+inline constexpr real operator"" _r(const long double value) 
+{
     return static_cast<real>(value);
 }
 

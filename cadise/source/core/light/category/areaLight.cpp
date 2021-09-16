@@ -3,32 +3,37 @@
 #include "fundamental/assertion.h"
 #include "math/tVector3.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 AreaLight::AreaLight() :
-    AreaLight(false) {
-}
+    AreaLight(false)
+{}
 
 AreaLight::AreaLight(const bool isBackFaceEmit) :
     Light(),
-    _isBackFaceEmit(isBackFaceEmit) {
-}
+    _isBackFaceEmit(isBackFaceEmit)
+{}
 
-bool AreaLight::isDeltaLight() const {
+bool AreaLight::isDeltaLight() const 
+{
     return false;
 }
 
-void AreaLight::setIsBackFaceEmit(const bool isBackFaceEmit) {
+void AreaLight::setIsBackFaceEmit(const bool isBackFaceEmit)
+{
     _isBackFaceEmit = isBackFaceEmit;
 }
 
-bool AreaLight::_canEmit(const Vector3R& direction, const Vector3R& N) const {
+bool AreaLight::_canEmit(const Vector3R& direction, const Vector3R& N) const 
+{
     CADISE_ASSERT_GT(N.length(), 0.0_r);
 
     return (direction.dot(N) >= 0.0_r) != _isBackFaceEmit;
 }
 
-real AreaLight::_defaultFlux() const {
+real AreaLight::_defaultFlux() const
+{
     return 1.0_r;
 }
 

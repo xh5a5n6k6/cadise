@@ -5,23 +5,27 @@
 #include <iostream>
 #include <sstream>
 
-namespace cadise {
+namespace cadise
+{
 
 Logger::Logger(const std::string& senderName) :
-    _senderName(senderName) {
-}
+    _senderName(senderName)
+{}
 
-void Logger::log(const std::string& message) const {
+void Logger::log(const std::string& message) const
+{
     this->log(ELogLevel::INFO, message);
 }
 
-void Logger::log(const ELogLevel logLevel, const std::string& message) const {
+void Logger::log(const ELogLevel logLevel, const std::string& message) const 
+{
     const Timestamp timestamp;
 
     std::stringstream stringStream;
     stringStream << "[" << timestamp.toString() << "] ";
 
-    switch (logLevel) {
+    switch (logLevel)
+    {
         case ELogLevel::INFO:
             stringStream << "[INFO]  ";
             break;

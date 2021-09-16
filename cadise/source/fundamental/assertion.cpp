@@ -9,9 +9,11 @@
         #include <cstdlib>
     #endif
 
-    namespace cadise {
+    namespace cadise
+    {
 
-    void assertionFailed() {
+    void assertionFailed()
+    {
 
     #ifdef CADISE_ASSERT_STACK_TRACE
         StackTracer stackTracer;

@@ -5,13 +5,15 @@
 
 #include <memory>
 
-namespace cadise {
+namespace cadise { class UvwWrapper; }
+namespace cadise { enum class ETextureWrapMode; }
 
-class UvwWrapper;
-enum class ETextureWrapMode;
+namespace cadise 
+{
 
 template<typename T, std::size_t N>
-class TPixelSampler {
+class TPixelSampler 
+{
 public:
     TPixelSampler(
         const TImage<T, N>&    image,

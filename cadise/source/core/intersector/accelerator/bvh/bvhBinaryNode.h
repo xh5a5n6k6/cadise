@@ -4,9 +4,11 @@
 
 #include <memory>
 
-namespace cadise {
+namespace cadise 
+{
 
-class BvhBinaryNode {
+class BvhBinaryNode 
+{
 public:
     BvhBinaryNode();
     ~BvhBinaryNode();
@@ -35,14 +37,16 @@ public:
     bool isLeaf() const;
 
 private:
-    union {
+    union 
+    {
         // for leaf node
         std::size_t _intersectorIndex;
         // for internal node
         std::unique_ptr<BvhBinaryNode> _children[2];
     };
 
-    union {
+    union 
+    {
         // for leaf node
         std::size_t _intersectorCounts;
         // for internal node

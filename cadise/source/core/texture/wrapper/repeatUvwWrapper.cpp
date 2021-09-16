@@ -4,9 +4,13 @@
 #include "math/math.h"
 #include "math/tVector3.h"
 
-namespace cadise {
+namespace cadise 
+{
 
-void RepeatUvwWrapper::wrap(const Vector3R& uvw, Vector3R* const out_wrapUvw) const {
+void RepeatUvwWrapper::wrap(
+    const Vector3R& uvw, 
+    Vector3R* const out_wrapUvw) const 
+{
     CADISE_ASSERT(out_wrapUvw);
 
     out_wrapUvw->set(

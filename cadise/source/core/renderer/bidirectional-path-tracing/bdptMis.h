@@ -2,12 +2,14 @@
 
 #include "math/type/fundamentalType.h"
 
-namespace cadise {
+namespace cadise { class Scene; }
+namespace cadise { class SubPath; }
 
-class Scene;
-class SubPath;
+namespace cadise
+{
 
-class BdptMis {
+class BdptMis
+{
 public:
     static real weight(
         const Scene&      scene,

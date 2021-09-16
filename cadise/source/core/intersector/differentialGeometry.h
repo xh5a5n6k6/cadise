@@ -2,9 +2,11 @@
 
 #include "math/tVector3.h"
 
-namespace cadise {
+namespace cadise 
+{
 
-class DifferentialGeometry {
+class DifferentialGeometry 
+{
 public:
     DifferentialGeometry();
     DifferentialGeometry(

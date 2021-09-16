@@ -4,12 +4,13 @@
 
 #include <memory>
 
-namespace cadise {
+namespace cadise { template<typename T> class TTexture; }
 
-template<typename T>
-class TTexture;
+namespace cadise
+{
 
-class LambertianDiffuse : public Bsdf {
+class LambertianDiffuse : public Bsdf 
+{
 public:
     // Hack
     LambertianDiffuse();

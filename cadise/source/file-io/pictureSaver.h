@@ -2,11 +2,13 @@
 
 #include "math/type/imageType.h"
 
-namespace cadise {
+namespace cadise { class Path; }
 
-class Path;
+namespace cadise 
+{
 
-class PictureSaver {
+class PictureSaver 
+{
 public:
     static void save(const Path& path, const HdrImage& hdrImage);
 

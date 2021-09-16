@@ -4,11 +4,13 @@
 
 #include <array>
 
-namespace cadise {
+namespace cadise { class SurfaceIntersection; }
 
-class SurfaceIntersection;
+namespace cadise 
+{
 
-class Microfacet {
+class Microfacet 
+{
 public:
     virtual ~Microfacet();
 

@@ -8,13 +8,12 @@
 
 #include <iostream>
 
-namespace cadise {
-
-namespace instantiator {
+namespace cadise::instantiator 
+{
 
 static std::shared_ptr<Camera> createPerspectivePinhole(
-    const std::shared_ptr<SdData>& data) {
-
+    const std::shared_ptr<SdData>& data)
+{
     const auto position      = data->findVector3r("position");
     const auto direction     = data->findVector3r("direction");
     const auto up            = data->findVector3r("up");
@@ -25,17 +24,19 @@ static std::shared_ptr<Camera> createPerspectivePinhole(
 }
 
 std::shared_ptr<Camera> makeCamera(
-    const std::shared_ptr<SdData>& data) {
-
+    const std::shared_ptr<SdData>& data) 
+{
     CADISE_ASSERT(data);
 
     std::shared_ptr<Camera> camera = nullptr;
 
     const auto type = data->findString("type");
-    if (type == "perspective-pinhole") {
+    if (type == "perspective-pinhole") 
+    {
         camera = createPerspectivePinhole(data);
     }
-    else {
+    else 
+    {
         // unsupported camera type
         std::cerr << "Unsupported camera type: <" << type
                   << ">" << std::endl;
@@ -44,6 +45,4 @@ std::shared_ptr<Camera> makeCamera(
     return camera;
 }
 
-} // namespace instantiator
-
-} // namespace cadise
+} // namespace cadise::instantiator

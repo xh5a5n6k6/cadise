@@ -1,8 +1,10 @@
 #include "core/estimator/aov/aovEstimator.h"
 
-namespace cadise {
+namespace cadise
+{
 
-bool AovEstimator::useDirectly() const {
+bool AovEstimator::useDirectly() const 
+{
     return true;
 }
 

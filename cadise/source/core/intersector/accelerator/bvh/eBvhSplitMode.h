@@ -1,8 +1,10 @@
 #pragma once
 
-namespace cadise {
+namespace cadise 
+{
 
-enum class EBvhSplitMode {
+enum class EBvhSplitMode 
+{
     EQUAL,
     SAH,
 };

@@ -2,14 +2,16 @@
 
 #include "core/renderer/render-work/tileWork.h"
 
-namespace cadise {
+namespace cadise { class Camera; }
+namespace cadise { class EnergyEstimator; }
+namespace cadise { class Sampler; }
+namespace cadise { class Scene; }
 
-class Camera;
-class EnergyEstimator;
-class Sampler;
-class Scene;
+namespace cadise 
+{
 
-class EstimatorTileWork : public TileWork {
+class EstimatorTileWork : public TileWork 
+{
 public:
     EstimatorTileWork(
         const Scene* const           scene,

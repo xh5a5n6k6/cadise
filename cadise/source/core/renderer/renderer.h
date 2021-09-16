@@ -2,13 +2,15 @@
 
 #include <memory>
 
-namespace cadise {
+namespace cadise { class Camera; }
+namespace cadise { class Film; }
+namespace cadise { class Scene; }
 
-class Camera;
-class Film;
-class Scene;
+namespace cadise
+{
 
-class Renderer {
+class Renderer
+{
 public:
     Renderer();
 

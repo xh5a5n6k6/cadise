@@ -2,9 +2,11 @@
 
 #include <functional>
 
-namespace cadise {
+namespace cadise 
+{
 
-class Parallel {
+class Parallel
+{
 private:
     using Work = 
         std::function<void(

@@ -6,24 +6,25 @@
 
 #include <memory>
 
-namespace cadise {
+namespace cadise { class Primitive;}
+namespace cadise { template<typename T> class TTexture; }
 
-class Primitive;
-template<typename T>
-class TTexture;
+namespace cadise 
+{
 
-class EnvironmentLight : public AreaLight {
+class EnvironmentLight : public AreaLight 
+{
 public:
     EnvironmentLight(
         const Primitive* const                     primitive,
         const std::shared_ptr<TTexture<Spectrum>>& environmentRadiance,
         const Vector2S&                            resolution);
 
-    Spectrum emittance(const SurfaceIntersection& emitIntersection) const override;
+    Spectrum emittance(const SurfaceIntersection& emitSi) const override;
 
     void evaluateDirectSample(DirectLightSample* const out_sample) const override;
     real evaluateDirectPdfW(
-        const SurfaceIntersection& emitIntersection, 
+        const SurfaceIntersection& emitSi, 
         const Vector3R&            targetPosition) const override;
 
     void evaluateEmitSample(EmitLightSample* const out_sample) const override;

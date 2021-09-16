@@ -2,9 +2,11 @@
 
 #include "core/sampler/sampleRecord.h"
 
-namespace cadise {
+namespace cadise
+{
 
-class SampleRecord1D : public SampleRecord {
+class SampleRecord1D : public SampleRecord
+{
 public:
     explicit SampleRecord1D(const std::size_t sampleNumber);
 

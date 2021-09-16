@@ -8,9 +8,11 @@
 #include <unordered_map>
 #include <vector>
 
-namespace cadise {
+namespace cadise 
+{
 
-class PowerLightCluster : public LightCluster {
+class PowerLightCluster : public LightCluster
+{
 public:
     explicit PowerLightCluster(const std::vector<std::shared_ptr<Light>>& lights);
 
@@ -18,8 +20,9 @@ public:
     real evaluatePickLightPdf(const Light* const light) const override;
 
 private:
-    std::vector<std::shared_ptr<Light>> _lights;
+    std::vector<std::shared_ptr<Light>>           _lights;
     std::unordered_map<const Light*, std::size_t> _lightIndexMap;
+
     Distribution1D _distribution;
 };
 

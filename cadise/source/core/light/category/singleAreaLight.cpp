@@ -15,7 +15,8 @@
 
 #include <cmath>
 
-namespace cadise {
+namespace cadise 
+{
 
 SingleAreaLight::SingleAreaLight(
     const Primitive* const primitive,
@@ -24,8 +25,8 @@ SingleAreaLight::SingleAreaLight(
     const bool             isBackFaceEmit) :
     
     AreaLight(isBackFaceEmit),
-    _primitive(primitive) {
-
+    _primitive(primitive)
+{
     CADISE_ASSERT(primitive);
     CADISE_ASSERT_GT(primitive->area(), 0.0_r);
 
@@ -36,10 +37,12 @@ SingleAreaLight::SingleAreaLight(
         totalWattColor.div(primitive->area() * constant::pi<real>));
 }
 
-Spectrum SingleAreaLight::emittance(const SurfaceIntersection& emitIntersection) const {
+Spectrum SingleAreaLight::emittance(const SurfaceIntersection& emitIntersection) const
+{
     const Vector3R& emitDirection = emitIntersection.wi();
     const Vector3R& emitNs        = emitIntersection.surfaceDetail().shadingNormal();
-    if (!_canEmit(emitDirection, emitNs)) {
+    if (!_canEmit(emitDirection, emitNs))
+    {
         return Spectrum(0.0_r);
     }
     
@@ -51,25 +54,29 @@ Spectrum SingleAreaLight::emittance(const SurfaceIntersection& emitIntersection)
     return sampleRadiance;
 }
 
-void SingleAreaLight::evaluateDirectSample(DirectLightSample* const out_sample) const {
+void SingleAreaLight::evaluateDirectSample(DirectLightSample* const out_sample) const
+{
     CADISE_ASSERT(out_sample);
 
     PositionSample positionSample;
     _primitive->evaluatePositionSample(&positionSample);
-    if (!positionSample.isValid()) {
+    if (!positionSample.isValid()) 
+    {
         return;
     }
 
     const Vector3R& emitPosition = positionSample.position();
     const Vector3R  emitVector   = out_sample->targetPosition().sub(emitPosition);
     const Vector3R& emitNs       = positionSample.shadingNormal();
-    if (!_canEmit(emitVector, emitNs)) {
+    if (!_canEmit(emitVector, emitNs))
+    {
         return;
     }
 
     const real distance2              = emitVector.lengthSquared();
     const real emitDirectionDotEmitNs = emitVector.div(std::sqrt(distance2)).absDot(emitNs);
-    if (emitDirectionDotEmitNs <= 0.0_r) {
+    if (emitDirectionDotEmitNs <= 0.0_r)
+    {
         return;
     }
 
@@ -86,19 +93,21 @@ void SingleAreaLight::evaluateDirectSample(DirectLightSample* const out_sample) 
 
 real SingleAreaLight::evaluateDirectPdfW(
     const SurfaceIntersection& emitIntersection, 
-    const Vector3R&            targetPosition) const {
-
+    const Vector3R&            targetPosition) const
+{
     const Vector3R& emitPosition  = emitIntersection.surfaceDetail().position();
     const Vector3R& emitNs        = emitIntersection.surfaceDetail().shadingNormal();
     const Vector3R& emitDirection = emitIntersection.wi();
     const Vector3R  emitVector    = targetPosition.sub(emitPosition);
 
-    if (!_canEmit(emitDirection, emitNs)) {
+    if (!_canEmit(emitDirection, emitNs)) 
+    {
         return 0.0_r;
     }
 
     const real emitDirectionDotEmitNs = emitDirection.absDot(emitNs);
-    if (emitDirectionDotEmitNs <= 0.0_r) {
+    if (emitDirectionDotEmitNs <= 0.0_r)
+    {
         return 0.0_r;
     }
 
@@ -108,12 +117,14 @@ real SingleAreaLight::evaluateDirectPdfW(
     return pdfW;
 }
 
-void SingleAreaLight::evaluateEmitSample(EmitLightSample* const out_sample) const {
+void SingleAreaLight::evaluateEmitSample(EmitLightSample* const out_sample) const 
+{
     CADISE_ASSERT(out_sample);
 
     PositionSample positionSample;
     _primitive->evaluatePositionSample(&positionSample);
-    if (!positionSample.isValid()) {
+    if (!positionSample.isValid())
+    {
         return;
     }
 
@@ -132,7 +143,8 @@ void SingleAreaLight::evaluateEmitSample(EmitLightSample* const out_sample) cons
     emitDirection.normalizeLocal();
 
     // if backFaceEmit, emitDirection needs to be reverse
-    if (!_canEmit(emitDirection, Ns)) {
+    if (!_canEmit(emitDirection, Ns)) 
+    {
         emitDirection.negateLocal();
     }
 
@@ -151,8 +163,8 @@ void SingleAreaLight::evaluateEmitPdf(
     const Ray&      emitRay,
     const Vector3R& emitN,
     real* const     out_pdfA,
-    real* const     out_pdfW) const {
-
+    real* const     out_pdfW) const 
+{
     CADISE_ASSERT(out_pdfA);
     CADISE_ASSERT(out_pdfW);
 
@@ -162,10 +174,12 @@ void SingleAreaLight::evaluateEmitPdf(
     *out_pdfW = cosTheta * constant::rcp_pi<real>;
 }
 
-real SingleAreaLight::approximateFlux() const {
+real SingleAreaLight::approximateFlux() const 
+{
     PositionSample positionSample;
     _primitive->evaluatePositionSample(&positionSample);
-    if (positionSample.pdfA() <= 0.0_r) {
+    if (positionSample.pdfA() <= 0.0_r)
+    {
         return _defaultFlux();
     }
 
@@ -174,14 +188,16 @@ real SingleAreaLight::approximateFlux() const {
     _emitRadiance->evaluate(uvw, &sampleRadiance);
 
     const real approximatedFlux = sampleRadiance.luminance() * _primitive->area() * constant::pi<real>;
-    if (approximatedFlux <= 0.0_r) {
+    if (approximatedFlux <= 0.0_r) 
+    {
         return _defaultFlux();
     }
 
     return approximatedFlux;
 }
 
-void SingleAreaLight::setEmitRadiance(const std::shared_ptr<TTexture<Spectrum>>& emitRadiance) {
+void SingleAreaLight::setEmitRadiance(const std::shared_ptr<TTexture<Spectrum>>& emitRadiance) 
+{
     CADISE_ASSERT(emitRadiance);
 
     _emitRadiance = emitRadiance;

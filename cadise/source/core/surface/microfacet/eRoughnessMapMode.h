@@ -1,8 +1,10 @@
 #pragma once
 
-namespace cadise {
+namespace cadise 
+{
 
-enum class ERoughnessMapMode {
+enum class ERoughnessMapMode 
+{
     SQUARE,
     PBRT,
 };

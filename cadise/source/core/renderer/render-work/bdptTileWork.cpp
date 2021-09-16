@@ -11,7 +11,8 @@
 #include "core/scene.h"
 #include "fundamental/assertion.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 BdptTileWork::BdptTileWork(
     const Scene* const   scene,
@@ -22,14 +23,15 @@ BdptTileWork::BdptTileWork(
     _scene(scene),
     _camera(camera),
     _sampler(sampler),
-    _connectEvents(nullptr) {
-
+    _connectEvents(nullptr)
+{
     CADISE_ASSERT(scene);
     CADISE_ASSERT(camera);
     CADISE_ASSERT(sampler);
 }
 
-void BdptTileWork::work() const {
+void BdptTileWork::work() const 
+{
     CADISE_ASSERT(_filmTile);
     CADISE_ASSERT(_connectEvents);
 
@@ -41,12 +43,15 @@ void BdptTileWork::work() const {
     const Vector2I& x0y0 = _filmTile->tileBound().minVertex();
     const Vector2I& x1y1 = _filmTile->tileBound().maxVertex();
 
-    for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy) {
-        for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix) {
+    for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy)
+    {
+        for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix) 
+        {
             auto sampleSampler = _sampler->clone(_sampler->sampleNumber());
             auto sample2D      = sampleSampler->requestSample2D();
 
-            for (std::size_t in = 0; in < sampleSampler->sampleNumber(); ++in) {
+            for (std::size_t in = 0; in < sampleSampler->sampleNumber(); ++in)
+            {
                 const Vector2R filmJitterPosition 
                     = Vector2I(ix, iy).asType<real>().add(sample2D->nextSample());
 
@@ -81,8 +86,10 @@ void BdptTileWork::work() const {
                 const std::size_t cameraPathLength = cameraPath.length();
 
                 // step5: connect all sub-paths (s>1 & t>1)
-                for (std::size_t s = 2; s <= lightPathLength; ++s) {
-                    for (std::size_t t = 2; t <= cameraPathLength; ++t) {
+                for (std::size_t s = 2; s <= lightPathLength; ++s) 
+                {
+                    for (std::size_t t = 2; t <= cameraPathLength; ++t) 
+                    {
                         Spectrum connectRadiance(0.0_r);
                         subPathConnector.connect(*_scene, lightPath, cameraPath, s, t, &connectRadiance);
 
@@ -100,7 +107,8 @@ void BdptTileWork::work() const {
     }
 }
 
-void BdptTileWork::setConnectEvents(std::vector<ConnectEvent>* const connectEvents) {
+void BdptTileWork::setConnectEvents(std::vector<ConnectEvent>* const connectEvents) 
+{
     CADISE_ASSERT(connectEvents);
 
     _connectEvents = connectEvents;

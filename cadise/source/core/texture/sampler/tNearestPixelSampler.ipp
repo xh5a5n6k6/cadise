@@ -8,13 +8,14 @@
 #include "math/math.h"
 #include "math/tVector3.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 template<typename T, std::size_t N>
 inline void TNearestPixelSampler<T, N>::sample(
     const Vector3R&               uvw,
-    TArithmeticArray<T, N>* const out_value) const {
-
+    TArithmeticArray<T, N>* const out_value) const
+{
     CADISE_ASSERT(out_value);
 
     Vector3R wrapUvw;

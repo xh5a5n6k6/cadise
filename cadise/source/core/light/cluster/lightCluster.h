@@ -2,11 +2,13 @@
 
 #include "math/type/fundamentalType.h"
 
-namespace cadise {
+namespace cadise { class Light; }
 
-class Light;
+namespace cadise 
+{
 
-class LightCluster {
+class LightCluster 
+{
 public:
     virtual ~LightCluster();
 

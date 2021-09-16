@@ -11,7 +11,8 @@
 
 #include <utility>
 
-namespace cadise {
+namespace cadise 
+{
 
 SpecularDielectric::SpecularDielectric(
     const std::shared_ptr<TTexture<Spectrum>>& albedo, 
@@ -19,29 +20,30 @@ SpecularDielectric::SpecularDielectric(
     
     Bsdf(BsdfLobes({ ELobe::SPECULAR_REFLECTION, ELobe::SPECULAR_TRANSMISSION })),
     _albedo(albedo),
-    _fresnel(fresnel) {
-
+    _fresnel(fresnel)
+{
     CADISE_ASSERT(albedo);
     CADISE_ASSERT(fresnel);
 }
 
 Spectrum SpecularDielectric::evaluate(
     const TransportInfo&       info,
-    const SurfaceIntersection& si) const {
-
+    const SurfaceIntersection& si) const
+{
     return Spectrum(0.0_r);
 }
 
 void SpecularDielectric::evaluateSample(
     const TransportInfo&       info,
     const SurfaceIntersection& si,
-    BsdfSample* const          out_sample) const {
-
+    BsdfSample* const          out_sample) const 
+{
     CADISE_ASSERT(out_sample);
 
     bool canReflection = (info.components() == BSDF_ALL_COMPONENTS) || (info.components() == 0);
     bool canRefraction = (info.components() == BSDF_ALL_COMPONENTS) || (info.components() == 1);
-    if (!canReflection && !canRefraction) {
+    if (!canReflection && !canRefraction)
+    {
         return;
     }
 
@@ -53,13 +55,16 @@ void SpecularDielectric::evaluateSample(
     _fresnel->evaluateReflectance(VdotN, &reflectance);
     const real reflectionProbability = reflectance.average();
     
-    if (canReflection && canRefraction) {
+    if (canReflection && canRefraction) 
+    {
         const real sampleProbability = Random::nextReal();
 
-        if (sampleProbability < reflectionProbability) {
+        if (sampleProbability < reflectionProbability) 
+        {
             canRefraction = false;
         }
-        else {
+        else 
+        {
             canReflection = false;
         }
     }
@@ -70,11 +75,13 @@ void SpecularDielectric::evaluateSample(
     Vector3R scatterDirection(0.0_r);
     Spectrum scatterValue(0.0_r);
 
-    if (canReflection) {
+    if (canReflection) 
+    {
         const real     NSign = static_cast<real>(math::sign(VdotN));
         const Vector3R L     = V.reflect(Ns.mul(NSign));
         const real     LdotN = L.dot(Ns);
-        if (VdotN * LdotN <= 0.0_r) {
+        if (VdotN * LdotN <= 0.0_r)
+        {
             return;
         }
 
@@ -84,16 +91,19 @@ void SpecularDielectric::evaluateSample(
         scatterValue     = sampleAlbedo.mul(reflectance).div(std::abs(LdotN));
         scatterDirection = L;
 
-        if (info.components() == BSDF_ALL_COMPONENTS) {
+        if (info.components() == BSDF_ALL_COMPONENTS) 
+        {
             scatterPdfW = reflectionProbability;
         }
     }
-    else {
+    else 
+    {
         real etaI = _fresnel->iorOuter();
         real etaT = _fresnel->iorInner();
         
         Vector3R L;
-        if (!V.canRefract(Ns, etaI, etaT, &L)) {
+        if (!V.canRefract(Ns, etaI, etaT, &L))
+        {
             return;
         }
     
@@ -102,8 +112,10 @@ void SpecularDielectric::evaluateSample(
         _fresnel->evaluateReflectance(cosThetaI, &refractDirectionReflectance);
 
         real btdfFactor = 1.0_r;
-        if (info.mode() == ETransportMode::RADIANCE) {
-            if (cosThetaI < 0.0_r) {
+        if (info.mode() == ETransportMode::RADIANCE) 
+        {
+            if (cosThetaI < 0.0_r) 
+            {
                 std::swap(etaI, etaT);
             }
 
@@ -119,7 +131,8 @@ void SpecularDielectric::evaluateSample(
         scatterValue     = sampleAlbedo.mul(transmittance).mul(btdfFactor / LdotN);
         scatterDirection = L;
 
-        if (info.components() == BSDF_ALL_COMPONENTS) {
+        if (info.components() == BSDF_ALL_COMPONENTS) 
+        {
             scatterPdfW = 1.0_r - reflectionProbability;
         }
     }
@@ -131,12 +144,13 @@ void SpecularDielectric::evaluateSample(
 
 real SpecularDielectric::evaluatePdfW(
     const TransportInfo&       info,
-    const SurfaceIntersection& si) const {
-
+    const SurfaceIntersection& si) const 
+{
     return 0.0_r;
 }
 
-ELobe SpecularDielectric::lobe(const BsdfComponents component) const {
+ELobe SpecularDielectric::lobe(const BsdfComponents component) const 
+{
     CADISE_ASSERT(component == 0 || component == 1);
 
     return component == 0 ? ELobe::SPECULAR_REFLECTION : ELobe::SPECULAR_TRANSMISSION;

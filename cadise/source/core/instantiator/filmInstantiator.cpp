@@ -6,13 +6,12 @@
 #include "file-io/scene-description/sdData.h"
 #include "fundamental/assertion.h"
 
-namespace cadise {
-
-namespace instantiator {
+namespace cadise::instantiator 
+{
 
 std::shared_ptr<Film> makeFilm(
-    const std::shared_ptr<SdData>& data) {
-
+    const std::shared_ptr<SdData>& data)
+{
     CADISE_ASSERT(data);
 
     std::shared_ptr<Film> film = nullptr;
@@ -29,6 +28,4 @@ std::shared_ptr<Film> makeFilm(
         Vector2I(width, height), Vector2I(tileSizeX, tileSizeY), Path(output), filter);
 }
 
-} // namespace instantiator
-
-} // namespace cadise
+} // namespace cadise::instantiator

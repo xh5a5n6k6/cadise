@@ -2,10 +2,12 @@
 
 #include "math/type/mathType.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 template<typename T>
-class TTexture {
+class TTexture 
+{
 public:
     virtual ~TTexture();
 

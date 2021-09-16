@@ -3,9 +3,11 @@
 #include "core/spectrum/spectrum.h"
 #include "math/tVector2.h"
 
-namespace cadise {
+namespace cadise 
+{
 
-class ConnectEvent {
+class ConnectEvent 
+{
 public:
     ConnectEvent();
     ConnectEvent(

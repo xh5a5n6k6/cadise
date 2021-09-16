@@ -9,13 +9,12 @@
 #include "file-io/scene-description/sdData.h"
 #include "fundamental/assertion.h"
 
-namespace cadise {
-
-namespace instantiator {
+namespace cadise::instantiator
+{
 
 static std::shared_ptr<Filter> createBox(
-    const std::shared_ptr<SdData>& data) {
-
+    const std::shared_ptr<SdData>& data) 
+{
     const real filterWidth  = data->findReal("filter-width", 1.0_r);
     const real filterHeight = data->findReal("filter-height", 1.0_r);
 
@@ -23,8 +22,8 @@ static std::shared_ptr<Filter> createBox(
 }
 
 static std::shared_ptr<Filter> createCone(
-    const std::shared_ptr<SdData>& data) {
-
+    const std::shared_ptr<SdData>& data) 
+{
     const real filterWidth  = data->findReal("filter-width", 4.0_r);
     const real filterHeight = data->findReal("filter-height", 4.0_r);
 
@@ -32,8 +31,8 @@ static std::shared_ptr<Filter> createCone(
 }
 
 static std::shared_ptr<Filter> createGaussian(
-    const std::shared_ptr<SdData>& data) {
-
+    const std::shared_ptr<SdData>& data) 
+{
     const real filterWidth  = data->findReal("filter-width", 4.0_r);
     const real filterHeight = data->findReal("filter-height", 4.0_r);
     const real sigmaX       = data->findReal("sigma-x", 0.5_r);
@@ -45,8 +44,8 @@ static std::shared_ptr<Filter> createGaussian(
 }
 
 static std::shared_ptr<Filter> createMitchell(
-    const std::shared_ptr<SdData>& data) {
-
+    const std::shared_ptr<SdData>& data) 
+{
     const real filterWidth  = data->findReal("filter-width", 4.0_r);
     const real filterHeight = data->findReal("filter-height", 4.0_r);
     const real b            = data->findReal("b", 1.0_r / 3.0_r);
@@ -57,32 +56,35 @@ static std::shared_ptr<Filter> createMitchell(
 }
 
 std::shared_ptr<Filter> makeFilter(
-    const std::shared_ptr<SdData>& data) {
-
+    const std::shared_ptr<SdData>& data)
+{
     CADISE_ASSERT(data);
 
     std::shared_ptr<Filter> filter = nullptr;
 
     const auto type = data->findString("filter");
-    if (type == "box") {
+    if (type == "box") 
+    {
         filter = createBox(data);
     }
-    else if (type == "cone") {
+    else if (type == "cone") 
+    {
         filter = createCone(data);
     }
-    else if (type == "gaussian") {
+    else if (type == "gaussian")
+    {
         filter = createGaussian(data);
     }
-    else if (type == "mitchell") {
+    else if (type == "mitchell") 
+    {
         filter = createMitchell(data);
     }
-    else {
+    else 
+    {
         // unsupported filter type
     }
 
     return filter;
 }
 
-} // namespace instantiator
-
-} // namespace cadise
+} // namespace cadise::instantiator

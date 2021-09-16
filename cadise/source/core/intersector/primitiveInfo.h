@@ -1,10 +1,12 @@
 #pragma once
 
-namespace cadise {
+namespace cadise { class Primitive; }
 
-class Primitive;
+namespace cadise
+{
 
-class PrimitiveInfo {
+class PrimitiveInfo
+{
 public:
     PrimitiveInfo();
 

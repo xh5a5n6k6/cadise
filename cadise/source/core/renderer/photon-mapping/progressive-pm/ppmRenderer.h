@@ -4,11 +4,13 @@
 
 #include "core/renderer/photon-mapping/pmSetting.h"
 
-namespace cadise {
+namespace cadise { class Sampler; }
 
-class Sampler;
+namespace cadise
+{
 
-class PpmRenderer : public Renderer {
+class PpmRenderer : public Renderer
+{
 public:
     PpmRenderer(
         const std::shared_ptr<Sampler>& sampler,

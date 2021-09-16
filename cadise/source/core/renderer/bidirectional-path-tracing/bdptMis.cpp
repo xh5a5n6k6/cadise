@@ -6,20 +6,22 @@
 #include "fundamental/assertion.h"
 #include "math/math.h"
 
-namespace cadise {
+namespace cadise
+{
 
 real BdptMis::weight(
     const Scene&      scene,
     const SubPath&    lightPath,
     const SubPath&    cameraPath,
     const std::size_t s,
-    const std::size_t t) {
-
+    const std::size_t t)
+{
     // it currently only supports (t=2, s=0) situation,
     // so just return 1 this time
     //
     // TODO: remove this when supporting (t=0, s=2) situation
-    if (s + t == 2) {
+    if (s + t == 2) 
+    {
         return 1.0_r;
     }
 
@@ -39,16 +41,20 @@ real BdptMis::weight(
     real pdfAReverse = 0.0_r;
 
     // P_t-1
-    if (cameraEndpoint) {
-        if (s == 0) {
+    if (cameraEndpoint)
+    {
+        if (s == 0)
+        {
             pdfAReverse = cameraEndpoint->evaluateOriginPdfA(
                 scene, *cameraEndpointMinus);
         }
-        else if (s == 1) {
+        else if (s == 1) 
+        {
             pdfAReverse = lightEndpoint->evaluateDirectPdfA(
                 scene, *cameraEndpoint);
         }
-        else {
+        else 
+        {
             pdfAReverse = lightEndpoint->evaluateConnectPdfA(
                 ETransportMode::IMPORTANCE, *lightEndpointMinus, *cameraEndpoint);
         }
@@ -57,12 +63,15 @@ real BdptMis::weight(
     }
 
     // P_t-2
-    if (cameraEndpointMinus) {
-        if (s == 0) {
+    if (cameraEndpointMinus) 
+    {
+        if (s == 0) 
+        {
             pdfAReverse = cameraEndpoint->evaluateDirectPdfA(
                 scene, *cameraEndpointMinus);
         }
-        else {
+        else 
+        {
             pdfAReverse = cameraEndpoint->evaluateConnectPdfA(
                 ETransportMode::IMPORTANCE, *lightEndpoint, *cameraEndpointMinus);
         }
@@ -71,16 +80,20 @@ real BdptMis::weight(
     }
 
     // P_s-1
-    if (lightEndpoint) {
-        if (t == 0) {
+    if (lightEndpoint) 
+    {
+        if (t == 0) 
+        {
             pdfAReverse = lightEndpoint->evaluateOriginPdfA(
                 scene, *lightEndpointMinus);
         }
-        else if (t == 1) {
+        else if (t == 1) 
+        {
             pdfAReverse = cameraEndpoint->evaluateDirectPdfA(
                 scene, *lightEndpoint);
         }
-        else {
+        else
+        {
             pdfAReverse = cameraEndpoint->evaluateConnectPdfA(
                 ETransportMode::RADIANCE, *cameraEndpointMinus, *lightEndpoint);
         }
@@ -89,12 +102,15 @@ real BdptMis::weight(
     }
 
     // P_s-2
-    if (lightEndpointMinus) {
-        if (t == 0) {
+    if (lightEndpointMinus) 
+    {
+        if (t == 0)
+        {
             pdfAReverse = lightEndpoint->evaluateDirectPdfA(
                 scene, *lightEndpointMinus);
         }
-        else {
+        else 
+        {
             pdfAReverse = lightEndpoint->evaluateConnectPdfA(
                 ETransportMode::RADIANCE, *cameraEndpoint, *lightEndpointMinus);
         }
@@ -108,20 +124,22 @@ real BdptMis::weight(
 
     // TODO: modify here when supporting t=0 situation
     real cameraPathMisWeight = 0.0_r;
-    for (std::size_t i = t; i > 1; --i) {
+    for (std::size_t i = t; i > 1; --i) 
+    {
         ri *= math::map_to_non_zero<real>(modifiedCameraPath[i - 1].pdfAReverse()) / 
               math::map_to_non_zero<real>(modifiedCameraPath[i - 1].pdfAForward());
         
         if (modifiedCameraPath[i - 1].isConnectible() && 
-            modifiedCameraPath[i - 2].isConnectible()) {
-            
+            modifiedCameraPath[i - 2].isConnectible())
+        { 
             cameraPathMisWeight += ri;
         }
     }
 
     ri = 1.0_r;
     real lightPathMisWeight = 0.0_r;
-    for (std::size_t i = s; i >= 1; --i) {
+    for (std::size_t i = s; i >= 1; --i)
+    {
         ri *= math::map_to_non_zero<real>(modifiedLightPath[i - 1].pdfAReverse()) /
               math::map_to_non_zero<real>(modifiedLightPath[i - 1].pdfAForward());
 
@@ -129,7 +147,8 @@ real BdptMis::weight(
             modifiedLightPath[i - 1].isConnectible() && modifiedLightPath[i - 2].isConnectible() :
             modifiedLightPath[i - 1].isConnectible();
 
-        if (canConnect) {
+        if (canConnect)
+        {
             lightPathMisWeight += ri;
         }
     }

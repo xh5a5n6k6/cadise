@@ -4,9 +4,11 @@
 #include "math/tVector2.h"
 #include "math/tVector3.h"
 
-namespace cadise {
+namespace cadise 
+{
 
-class CameraSample {
+class CameraSample 
+{
 public:
     CameraSample();
 

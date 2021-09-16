@@ -4,10 +4,10 @@
 
 #include <vector>
 
-namespace cadise {
+namespace cadise { template<typename T, std::size_t N> class TArithmeticArray; }
 
-template<typename T, std::size_t N>
-class TArithmeticArray;
+namespace cadise
+{
 
 /*
     TImage represents value array.
@@ -21,7 +21,8 @@ class TArithmeticArray;
         [4] for alpha image (rgba).
 */
 template<typename T, std::size_t N>
-class TImage {
+class TImage
+{
 public:
     TImage();
     explicit TImage(const Vector2I& resolution);

@@ -2,10 +2,12 @@
 
 #include "core/texture/tTexture.h"
 
-namespace cadise {
+namespace cadise
+{
 
 template<typename T>
-class TConstantTexture : public TTexture<T> {
+class TConstantTexture : public TTexture<T>
+{
 public:
     explicit TConstantTexture(const T& value);
 

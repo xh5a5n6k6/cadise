@@ -7,49 +7,63 @@
 
 #include <cstdio>
 
-namespace cadise {
+namespace cadise
+{
 
-void PictureSaver::save(const Path& path, const HdrImage& hdrImage) {
+void PictureSaver::save(const Path& path, const HdrImage& hdrImage) 
+{
     if (path.isExtendedWith(".png") || path.isExtendedWith(".PNG") ||
         path.isExtendedWith(".jpg") || path.isExtendedWith(".JPG") ||
-        path.isExtendedWith(".ppm") || path.isExtendedWith(".PPM")) {
-
+        path.isExtendedWith(".ppm") || path.isExtendedWith(".PPM"))
+    {
         LdrImage ldrImage;
         ImageUtils::hdrToLdr(hdrImage, &ldrImage);
+
         saveLdrImage(path, ldrImage);
     }
-    else if (path.isExtendedWith(".hdr") || path.isExtendedWith(".HDR")) {
+    else if (path.isExtendedWith(".hdr") || path.isExtendedWith(".HDR")) 
+    {
         saveHdrImage(path, hdrImage);
     }
-    else {
+    else 
+    {
         // Unsupported image type
     }
 }
 
-void PictureSaver::saveLdrImage(const Path& path, const LdrImage& ldrImage) {
-    if (path.isExtendedWith(".png") || path.isExtendedWith(".PNG")) {
-        if (!savePNG(path, ldrImage)) {
+void PictureSaver::saveLdrImage(const Path& path, const LdrImage& ldrImage)
+{
+    if (path.isExtendedWith(".png") || path.isExtendedWith(".PNG")) 
+    {
+        if (!savePNG(path, ldrImage)) 
+        {
 
         }
     }
     else if (path.isExtendedWith(".jpg") || path.isExtendedWith(".JPG") ||
-             path.isExtendedWith(".jpeg") || path.isExtendedWith(".JPEG")) {
-        if (!saveJPG(path, ldrImage)) {
+             path.isExtendedWith(".jpeg") || path.isExtendedWith(".JPEG")) 
+    {
+        if (!saveJPG(path, ldrImage))
+        {
 
         }
     }
-    else if (path.isExtendedWith(".ppm") || path.isExtendedWith(".PPM")) {
-        if (!savePPM(path, ldrImage)) {
+    else if (path.isExtendedWith(".ppm") || path.isExtendedWith(".PPM"))
+    {
+        if (!savePPM(path, ldrImage)) 
+        {
 
         }
     }
 }
 
-void PictureSaver::saveHdrImage(const Path& path, const HdrImage& hdrImage) {
+void PictureSaver::saveHdrImage(const Path& path, const HdrImage& hdrImage)
+{
     // TODO: hdr saver
 }
 
-bool PictureSaver::savePNG(const Path& path, const LdrImage& ldrImage) {
+bool PictureSaver::savePNG(const Path& path, const LdrImage& ldrImage) 
+{
     const int32 result = stbi_write_png(path.path().c_str(), 
                                         ldrImage.width(), 
                                         ldrImage.height(),
@@ -60,7 +74,8 @@ bool PictureSaver::savePNG(const Path& path, const LdrImage& ldrImage) {
     return result != 0;
 }
 
-bool PictureSaver::saveJPG(const Path& path, const LdrImage& ldrImage) {
+bool PictureSaver::saveJPG(const Path& path, const LdrImage& ldrImage)
+{
     const int32 result = stbi_write_jpg(path.path().c_str(), 
                                         ldrImage.width(), 
                                         ldrImage.height(), 
@@ -71,7 +86,8 @@ bool PictureSaver::saveJPG(const Path& path, const LdrImage& ldrImage) {
     return result != 0;
 }
 
-bool PictureSaver::savePPM(const Path& path, const LdrImage& ldrImage) {
+bool PictureSaver::savePPM(const Path& path, const LdrImage& ldrImage) 
+{
     FILE *output;
     output = fopen(path.path().c_str(), "wb");
     fprintf(output, "P6 %d %d 255\n", ldrImage.width(), ldrImage.height());

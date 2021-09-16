@@ -1,8 +1,10 @@
 #pragma once
 
-namespace cadise {
+namespace cadise 
+{
 
-enum class EEndpointType {
+enum class EEndpointType 
+{
     NONE,
     MIN,
     MAX,

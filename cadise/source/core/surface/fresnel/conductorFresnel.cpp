@@ -1,6 +1,7 @@
 #include "core/surface/fresnel/conductorFresnel.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 ConductorFresnel::ConductorFresnel(
     const real      iorOuter, 
@@ -9,7 +10,7 @@ ConductorFresnel::ConductorFresnel(
 
     _iorOuter(iorOuter),
     _eta(eta),
-    _k(k) {
-}
+    _k(k) 
+{}
 
 } // namespace cadise

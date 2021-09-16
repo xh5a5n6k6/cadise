@@ -2,9 +2,11 @@
 
 #include "math/tAabb3.h"
 
-namespace cadise {
+namespace cadise 
+{
 
-class BvhSahBucket {
+class BvhSahBucket 
+{
 public:
     BvhSahBucket();
     BvhSahBucket(const AABB3R& bound, const std::size_t intersectorCounts);

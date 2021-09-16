@@ -6,15 +6,17 @@
 
 #include <memory>
 
-namespace cadise {
+namespace cadise { class AreaLight; }
+namespace cadise { class Bsdf; }
+namespace cadise { class PositionSample; }
+namespace cadise { class SurfaceDetail; }
+namespace cadise { class TextureMapper; }
 
-class AreaLight;
-class Bsdf;
-class PositionSample;
-class SurfaceDetail;
-class TextureMapper;
+namespace cadise 
+{
 
-class Primitive : public Intersector {
+class Primitive : public Intersector
+{
 public:
     Primitive();
     explicit Primitive(const std::shared_ptr<Bsdf>& bsdf);

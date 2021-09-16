@@ -2,13 +2,15 @@
 
 #include "core/spectrum/spectrum.h"
 
-namespace cadise {
+namespace cadise { class PathVertex; }
+namespace cadise { class Scene; }
+namespace cadise { class SubPath; }
 
-class PathVertex;
-class Scene;
-class SubPath;
+namespace cadise
+{
 
-class SubPathConnector {
+class SubPathConnector 
+{
 public:
     SubPathConnector();
 

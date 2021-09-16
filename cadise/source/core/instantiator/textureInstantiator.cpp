@@ -15,15 +15,14 @@
 #include "file-io/scene-description/sdData.h"
 #include "fundamental/assertion.h"
 
-namespace cadise {
-
-namespace instantiator {
+namespace cadise::instantiator 
+{
 
 static std::shared_ptr<TTexture<real>> createRealConstant(
     const std::shared_ptr<SdData>&          data,
     const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures) {
-
+    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures)
+{
     const real value = data->findReal("value");
 
     return std::make_shared<TConstantTexture<real>>(value);
@@ -32,8 +31,8 @@ static std::shared_ptr<TTexture<real>> createRealConstant(
 static std::shared_ptr<TTexture<real>> createRealCheckerboard(
     const std::shared_ptr<SdData>&          data,
     const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures) {
-
+    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures)
+{
     const real oddNumber   = data->findReal("odd-number");
     const real evenNumber  = data->findReal("even-number");
     const auto oddTexture  = data->getRealTexture("odd-texture", realTextures);
@@ -46,8 +45,8 @@ static std::shared_ptr<TTexture<real>> createRealCheckerboard(
 static std::shared_ptr<TTexture<Spectrum>> createSpectrumConstant(
     const std::shared_ptr<SdData>&          data,
     const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures) {
-
+    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures)
+{
     // it now only support rgb spectrum
     const auto value = data->findVector3r("value");
 
@@ -57,8 +56,8 @@ static std::shared_ptr<TTexture<Spectrum>> createSpectrumConstant(
 static std::shared_ptr<TTexture<Spectrum>> createSpectrumCheckerboard(
     const std::shared_ptr<SdData>&          data,
     const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures) {
-
+    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures)
+{
     const real oddNumber   = data->findReal("odd-number");
     const real evenNumber  = data->findReal("even-number");
     const auto oddTexture  = data->getSpectrumTexture("odd-texture", spectrumTextures);
@@ -71,8 +70,8 @@ static std::shared_ptr<TTexture<Spectrum>> createSpectrumCheckerboard(
 static std::shared_ptr<TTexture<Spectrum>> createSpectrumImage(
     const std::shared_ptr<SdData>&          data,
     const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures) {
-
+    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures)
+{
     const auto filename = data->findString("filename");
     const auto sMode    = data->findString("sample-mode");
     const auto wMode    = data->findString("wrap-mode");
@@ -80,22 +79,27 @@ static std::shared_ptr<TTexture<Spectrum>> createSpectrumImage(
     HdrImage hdrImage = PictureLoader::loadRgbImage(Path(filename));
 
     ETextureSampleMode sampleMode;
-    if (sMode == "nearest") {
+    if (sMode == "nearest")
+    {
         sampleMode = ETextureSampleMode::NEAREST;
     }
     // TODO: add bilinear sample mode
-    else {
+    else
+    {
         sampleMode = ETextureSampleMode::NEAREST;
     }
 
     ETextureWrapMode wrapMode;
-    if (wMode == "clamp") {
+    if (wMode == "clamp") 
+    {
         wrapMode = ETextureWrapMode::CLAMP;
     }
-    else if (wMode == "repeat") {
+    else if (wMode == "repeat")
+    {
         wrapMode = ETextureWrapMode::REPEAT;
     }
-    else {
+    else 
+    {
         wrapMode = ETextureWrapMode::REPEAT;
     }
 
@@ -117,28 +121,33 @@ static std::shared_ptr<TTexture<Spectrum>> createSpectrumImage(
 std::shared_ptr<TTexture<real>> makeRealTexture(
     const std::shared_ptr<SdData>&          data,
     const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures) {
-
+    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures)
+{
     CADISE_ASSERT(data);
 
     std::shared_ptr<TTexture<real>> realTexture = nullptr;
 
     const auto type = data->findString("type");
-    if (type == "constant") {
+    if (type == "constant")
+    {
         realTexture = createRealConstant(data, realTextures, spectrumTextures);
     }
-    else if (type == "checkerboard") {
+    else if (type == "checkerboard")
+    {
         realTexture = createRealCheckerboard(data, realTextures, spectrumTextures);
     }
-    else if (type == "image") {
+    else if (type == "image") 
+    {
         // TODO: add image texture
         //realTexture = createRealImage(data, realTextures, spectrumTextures);
     }
-    else if (type == "alpha-image") {
+    else if (type == "alpha-image") 
+    {
         // TODO: add alpha image texture
         //realTexture = createRealAlphaImage(data, realTextures, spectrumTextures);
     }
-    else {
+    else 
+    {
         // don't support texture type
         std::cout << "Unsupported texture type: <" << type << ">" << std::endl;
     }
@@ -149,27 +158,32 @@ std::shared_ptr<TTexture<real>> makeRealTexture(
 std::shared_ptr<TTexture<Spectrum>> makeSpectrumTexture(
     const std::shared_ptr<SdData>&          data,
     const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures) {
-
+    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures)
+{
     CADISE_ASSERT(data);
 
     std::shared_ptr<TTexture<Spectrum>> spectrumTexture = nullptr;
 
     const auto type = data->findString("type");
-    if (type == "constant") {
+    if (type == "constant")
+    {
         spectrumTexture = createSpectrumConstant(data, realTextures, spectrumTextures);
     }
-    else if (type == "checkerboard") {
+    else if (type == "checkerboard")
+    {
         spectrumTexture = createSpectrumCheckerboard(data, realTextures, spectrumTextures);
     }
-    else if (type == "image") {
+    else if (type == "image") 
+    {
         spectrumTexture = createSpectrumImage(data, realTextures, spectrumTextures);
     }
-    else if (type == "alpha-image") {
+    else if (type == "alpha-image") 
+    {
         // TODO: add alpha image texture
         //spectrumTexture = createSpectrumAlphaImage(data, realTextures, spectrumTextures);
     }
-    else {
+    else 
+    {
         // unsupported texture type
         std::cout << "Unsupported texture type: <" << type << ">" << std::endl;
     }
@@ -177,6 +191,4 @@ std::shared_ptr<TTexture<Spectrum>> makeSpectrumTexture(
     return spectrumTexture;
 }
 
-} // namespace instantiator
-
-} // namespace cadise
+} // namespace cadise::instantiator

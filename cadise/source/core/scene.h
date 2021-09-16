@@ -5,20 +5,23 @@
 #include <memory>
 #include <vector>
 
-namespace cadise {
+namespace cadise { class Accelerator; }
+namespace cadise { class Intersector; }
+namespace cadise { class Light; }
+namespace cadise { class LightCluster; }
+namespace cadise { class Primitive; }
+namespace cadise { class Ray; }
+namespace cadise { class SurfaceIntersection; }
 
-class Accelerator;
-class Intersector;
-class Light;
-class LightCluster;
-class Primitive;
-class Ray;
-class SurfaceIntersection;
+namespace cadise
+{
 
-class Scene {
+class Scene 
+{
 public:
-    Scene(const std::shared_ptr<Accelerator>&  topAccelerator,
-          const std::shared_ptr<LightCluster>& lightCluster);
+    Scene(
+        const std::shared_ptr<Accelerator>&  topAccelerator,
+        const std::shared_ptr<LightCluster>& lightCluster);
 
     void evaluateBound(AABB3R* const out_bound) const;
 

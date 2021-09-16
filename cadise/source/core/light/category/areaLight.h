@@ -2,18 +2,20 @@
 
 #include "core/light/light.h"
 
-namespace cadise {
+namespace cadise 
+{
 
-class AreaLight : public Light {
+class AreaLight : public Light 
+{
 public:
     AreaLight();
     explicit AreaLight(const bool isBackFaceEmit);
 
-    Spectrum emittance(const SurfaceIntersection& emitIntersection) const override = 0;
+    Spectrum emittance(const SurfaceIntersection& emitSi) const override = 0;
 
     void evaluateDirectSample(DirectLightSample* const out_sample) const override = 0;
     real evaluateDirectPdfW(
-        const SurfaceIntersection& emitIntersection,
+        const SurfaceIntersection& emitSi,
         const Vector3R&            targetPosition) const override = 0;
 
     void evaluateEmitSample(EmitLightSample* const out_sample) const override = 0;

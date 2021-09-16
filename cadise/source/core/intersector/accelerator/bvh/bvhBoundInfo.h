@@ -2,9 +2,11 @@
 
 #include "math/tAabb3.h"
 
-namespace cadise {
+namespace cadise 
+{
 
-class BvhBoundInfo {
+class BvhBoundInfo 
+{
 public:
     BvhBoundInfo();
     BvhBoundInfo(const AABB3R& bound, const std::size_t index);

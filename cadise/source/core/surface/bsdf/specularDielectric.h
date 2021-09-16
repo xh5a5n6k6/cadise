@@ -4,13 +4,14 @@
 
 #include <memory>
 
-namespace cadise {
+namespace cadise { class DielectricFresnel; }
+namespace cadise { template<typename T> class TTexture; }
 
-class DielectricFresnel;
-template<typename T>
-class TTexture;
+namespace cadise
+{
 
-class SpecularDielectric : public Bsdf {
+class SpecularDielectric : public Bsdf 
+{
 public:
     SpecularDielectric(
         const std::shared_ptr<TTexture<Spectrum>>& albedo,

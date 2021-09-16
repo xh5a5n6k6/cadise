@@ -1,11 +1,13 @@
 #pragma once
 
-#include "math/matrix.h"
+#include "math/tMatrix4.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 template<typename T>
-class Quaternion {
+class Quaternion 
+{
 public:
 
     //Matrix4 toRotationMatrix() const;

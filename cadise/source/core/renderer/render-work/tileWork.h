@@ -2,11 +2,13 @@
 
 #include "core/renderer/renderWork.h"
 
-namespace cadise {
+namespace cadise { class FilmTile; }
 
-class FilmTile;
+namespace cadise
+{
 
-class TileWork : public RenderWork {
+class TileWork : public RenderWork 
+{
 public:
     TileWork();
 

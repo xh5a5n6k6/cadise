@@ -5,9 +5,11 @@
 
 namespace cadise_cli { class CommandLineArguments; }
 
-namespace cadise_cli {
+namespace cadise_cli 
+{
 
-class StandaloneRenderer {
+class StandaloneRenderer 
+{
 public:
     explicit StandaloneRenderer(const CommandLineArguments& args);
 

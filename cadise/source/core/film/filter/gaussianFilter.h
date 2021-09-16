@@ -2,9 +2,11 @@
 
 #include "core/film/filter/filter.h"
 
-namespace cadise {
+namespace cadise 
+{
 
-class GaussianFilter : public Filter {
+class GaussianFilter : public Filter 
+{
 public:
     GaussianFilter(
         const real filterWidth, 

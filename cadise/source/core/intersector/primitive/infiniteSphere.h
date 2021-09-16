@@ -2,9 +2,11 @@
 
 #include "core/intersector/primitive/primitive.h"
 
-namespace cadise {
+namespace cadise 
+{
 
-class InfiniteSphere : public Primitive {
+class InfiniteSphere : public Primitive 
+{
 public:
     InfiniteSphere();
     explicit InfiniteSphere(const real radius);

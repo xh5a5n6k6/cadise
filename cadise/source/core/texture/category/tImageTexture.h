@@ -8,13 +8,14 @@
 
 #include <memory>
 
-namespace cadise {
+namespace cadise { template<typename T, std::size_t N> class TPixelSampler; }
 
-template<typename T, std::size_t N>
-class TPixelSampler;
+namespace cadise 
+{
 
 template<typename T, typename ImageType, std::size_t N>
-class TImageTexture : public TTexture<T> {
+class TImageTexture : public TTexture<T>
+{
 public:
     TImageTexture(
         const TImage<ImageType, N>& image, 

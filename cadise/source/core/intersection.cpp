@@ -1,6 +1,7 @@
 #include "core/intersection.h"
 
-namespace cadise {
+namespace cadise
+{
 
 Intersection::~Intersection() = default;
 

@@ -3,35 +3,41 @@
 #include "fundamental/assertion.h"
 #include "math/math.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 Distribution1D::Distribution1D() = default;
 
 Distribution1D::Distribution1D(const real* const value, const std::size_t sizeNumber) :
-    _cdf(sizeNumber + 1) {
-
+    _cdf(sizeNumber + 1)
+{
     CADISE_ASSERT(value);
 
     _delta = 1.0_r / static_cast<real>(sizeNumber);
 
     _cdf[0] = 0.0_r;
-    for (std::size_t i = 1; i <= sizeNumber; ++i) {
+    for (std::size_t i = 1; i <= sizeNumber; ++i)
+    {
         _cdf[i] = _cdf[i - 1] + value[i - 1] * _delta;
     }
 
     const real valueSum = _cdf.back();
     
     // normalize cdf
-    if (valueSum > 0.0_r) {
+    if (valueSum > 0.0_r) 
+    {
         const real inverseValueSum = 1.0_r / valueSum;
 
-        for (std::size_t i = 1; i <= sizeNumber; ++i) {
+        for (std::size_t i = 1; i <= sizeNumber; ++i) 
+        {
             _cdf[i] *= inverseValueSum;
         }
     }
-    else {
+    else 
+    {
         // use linear cdf instead
-        for (std::size_t i = 1; i <= sizeNumber; ++i) {
+        for (std::size_t i = 1; i <= sizeNumber; ++i) 
+        {
             _cdf[i] = static_cast<real>(i) * _delta;
         }
     }
@@ -40,7 +46,8 @@ Distribution1D::Distribution1D(const real* const value, const std::size_t sizeNu
     _cdf[sizeNumber] = 1.0_r;
 }
 
-real Distribution1D::sampleContinuous(const real seed) const {
+real Distribution1D::sampleContinuous(const real seed) const 
+{
     real localPdf;
     std::size_t localIndex;
 
@@ -49,8 +56,8 @@ real Distribution1D::sampleContinuous(const real seed) const {
 
 real Distribution1D::sampleContinuous(
     const real  seed, 
-    real* const out_pdf) const {
-    
+    real* const out_pdf) const 
+{
     CADISE_ASSERT(out_pdf);
 
     std::size_t localIndex;
@@ -61,8 +68,8 @@ real Distribution1D::sampleContinuous(
 real Distribution1D::sampleContinuous(
     const real         seed,   
     real* const        out_pdf, 
-    std::size_t* const out_index) const {
-
+    std::size_t* const out_index) const 
+{
     CADISE_ASSERT(out_pdf);
     CADISE_ASSERT(out_index);
 
@@ -74,7 +81,8 @@ real Distribution1D::sampleContinuous(
     *out_pdf   = this->pdfContinuous(sampleIndex);
 
     real deltaValue = seed - _cdf[sampleIndex];
-    if (_cdf[sampleIndex + 1] > _cdf[sampleIndex]) {
+    if (_cdf[sampleIndex + 1] > _cdf[sampleIndex]) 
+    {
         deltaValue /= _cdf[sampleIndex + 1] - _cdf[sampleIndex];
     }
 
@@ -83,7 +91,8 @@ real Distribution1D::sampleContinuous(
     return math::clamp(sample, 0.0_r, 1.0_r);
 }
 
-std::size_t Distribution1D::sampleDiscrete(const real seed) const {
+std::size_t Distribution1D::sampleDiscrete(const real seed) const 
+{
     real localPdf;
 
     return this->sampleDiscrete(seed, &localPdf);
@@ -91,8 +100,8 @@ std::size_t Distribution1D::sampleDiscrete(const real seed) const {
 
 std::size_t Distribution1D::sampleDiscrete(
     const real  seed,
-    real* const out_pdf) const {
-    
+    real* const out_pdf) const 
+{
     CADISE_ASSERT(out_pdf);
 
     const std::size_t sampleIndex = this->continuousToDiscrete(seed);
@@ -101,27 +110,33 @@ std::size_t Distribution1D::sampleDiscrete(
     return sampleIndex;
 }
 
-real Distribution1D::pdfContinuous(const real sample) const {
+real Distribution1D::pdfContinuous(const real sample) const
+{
     const std::size_t sampleIndex = continuousToDiscrete(sample);
 
     return this->pdfContinuous(sampleIndex);
 }
 
-real Distribution1D::pdfContinuous(const std::size_t sampleIndex) const {
+real Distribution1D::pdfContinuous(const std::size_t sampleIndex) const
+{
     return (_cdf[sampleIndex + 1] - _cdf[sampleIndex]) / _delta;
 }
 
-real Distribution1D::pdfDiscrete(const std::size_t sampleIndex) const {
+real Distribution1D::pdfDiscrete(const std::size_t sampleIndex) const 
+{
     CADISE_ASSERT_RANGE_INCLUSIVE(sampleIndex, 0, _cdf.size() - 2);
 
     return _cdf[sampleIndex + 1] - _cdf[sampleIndex];
 }
 
-std::size_t Distribution1D::continuousToDiscrete(const real seed) const {
+std::size_t Distribution1D::continuousToDiscrete(const real seed) const 
+{
     CADISE_ASSERT_RANGE_INCLUSIVE(seed, 0.0_r, 1.0_r);
 
-    for (std::size_t i = 0; i < _cdf.size() - 1; ++i) {
-        if (_cdf[_cdf.size() - 2 - i] <= seed) {
+    for (std::size_t i = 0; i < _cdf.size() - 1; ++i) 
+    {
+        if (_cdf[_cdf.size() - 2 - i] <= seed)
+        {
             return i;
         }
     }

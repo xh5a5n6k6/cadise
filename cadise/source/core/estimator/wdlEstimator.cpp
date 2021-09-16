@@ -12,20 +12,21 @@
 #include "fundamental/assertion.h"
 #include "math/constant.h"
 
-namespace cadise {
+namespace cadise 
+{
 
 WdlEstimator::WdlEstimator(const int32 maxDepth) :
     RadianceEstimator(),
-    _maxDepth(maxDepth) {
-
+    _maxDepth(maxDepth) 
+{
     CADISE_ASSERT_GE(maxDepth, 0);
 }
 
 void WdlEstimator::estimate(
     const Scene&    scene, 
     const Ray&      ray,
-    Spectrum* const out_radiance) const {
-
+    Spectrum* const out_radiance) const 
+{
     CADISE_ASSERT(out_radiance);
 
     const TransportInfo transportInfo(ETransportMode::RADIANCE);
@@ -34,9 +35,11 @@ void WdlEstimator::estimate(
     Spectrum pathThroughput(1.0_r);
     Ray      traceRay(ray);
 
-    for (int32 bounceTimes = 0; bounceTimes < _maxDepth; ++bounceTimes) {
+    for (int32 bounceTimes = 0; bounceTimes < _maxDepth; ++bounceTimes) 
+    {
         SurfaceIntersection intersection;
-        if (!scene.isIntersecting(traceRay, intersection)) {
+        if (!scene.isIntersecting(traceRay, intersection)) 
+        {
             break;
         }
 
@@ -51,14 +54,16 @@ void WdlEstimator::estimate(
             ELobe::SPECULAR_TRANSMISSION });
 
         // add radiance if hitting area light
-        if (primitive->areaLight()) {
+        if (primitive->areaLight()) 
+        {
             const Spectrum emittance = primitive->areaLight()->emittance(intersection);
 
             totalRadiance.addLocal(pathThroughput.mul(emittance));
         }
 
         // add direct light only at non-specular surface
-        if (!isSpecular) {
+        if (!isSpecular) 
+        {
             real lightPdf;
             const Light* sampleLight = scene.sampleOneLight(&lightPdf);
 
@@ -66,7 +71,8 @@ void WdlEstimator::estimate(
             directLightSample.setTargetPosition(P);
 
             sampleLight->evaluateDirectSample(&directLightSample);
-            if (directLightSample.isValid()) {
+            if (directLightSample.isValid()) 
+            {
                 const Vector3R LVector  = directLightSample.emitPosition().sub(P);
                 const real     distance = LVector.length();
 
@@ -79,7 +85,8 @@ void WdlEstimator::estimate(
                 Ray shadowRay(P, L);
                 shadowRay.setMaxT(distance - constant::ray_epsilon<real>);
 
-                if (!scene.isOccluded(shadowRay)) {
+                if (!scene.isOccluded(shadowRay)) 
+                {
                     const Spectrum& radiance  = directLightSample.radiance();
                     const real      lightPdfW = directLightSample.pdfW();
 
@@ -98,10 +105,12 @@ void WdlEstimator::estimate(
 
         // only trace next ray at specular surface
         // according to bsdf sampling
-        else {
+        else 
+        {
             BsdfSample bsdfSample;
             bsdf->evaluateSample(transportInfo, intersection, &bsdfSample);
-            if (!bsdfSample.isValid()) {
+            if (!bsdfSample.isValid()) 
+            {
                 break;
             }
 
@@ -111,7 +120,8 @@ void WdlEstimator::estimate(
             const real      LdotN       = L.absDot(Ns);
                 
             pathThroughput.mulLocal(reflectance.mul(LdotN / pdfW));
-            if (pathThroughput.isZero()) {
+            if (pathThroughput.isZero()) 
+            {
                 break;
             }
                 

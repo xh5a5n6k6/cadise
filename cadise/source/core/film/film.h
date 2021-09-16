@@ -10,13 +10,15 @@
 #include <mutex>
 #include <vector>
 
-namespace cadise {
+namespace cadise { class ConnectEvent; }
+namespace cadise { class FilmTile; }
+namespace cadise { class Filter; }
 
-class ConnectEvent;
-class FilmTile;
-class Filter;
+namespace cadise 
+{
 
-class Film {
+class Film 
+{
 public:
     Film(
         const Vector2I&                resolution,

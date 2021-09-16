@@ -5,12 +5,13 @@
 
 #include <cmath>
 
-namespace cadise {
+namespace cadise
+{
 
 void SampleWarp::uniformTriangleUv(
     const std::array<real, 2>& sample,
-    Vector2R* const            out_uv) {
-
+    Vector2R* const            out_uv) 
+{
     CADISE_ASSERT(out_uv);
 
     const real sqrtSeedA = std::sqrt(sample[0]);
