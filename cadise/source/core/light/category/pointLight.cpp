@@ -15,7 +15,7 @@ PointLight::PointLight(const Vector3R& position, const Spectrum& intensity) :
     _intensity(intensity) 
 {}
 
-Spectrum PointLight::emittance(const SurfaceIntersection& emitIntersection) const 
+Spectrum PointLight::emittance(const SurfaceIntersection& emitSi) const 
 {
     return Spectrum(0.0_r);
 }
@@ -38,7 +38,7 @@ void PointLight::evaluateDirectSample(DirectLightSample* const out_sample) const
 }
 
 real PointLight::evaluateDirectPdfW(
-    const SurfaceIntersection& emitIntersection,
+    const SurfaceIntersection& emitSi,
     const Vector3R&            targetPosition) const 
 {
     return 0.0_r;

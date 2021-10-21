@@ -18,7 +18,7 @@ namespace cadise
 class PtEstimator : public RadianceEstimator
 {
 public:
-    explicit PtEstimator(const int32 maxDepth);
+    explicit PtEstimator(const int32 maxPathLength);
 
     void estimate(
         const Scene&    scene, 
@@ -28,7 +28,7 @@ public:
     std::string toString() const override;
 
 private:
-    int32 _maxDepth;
+    int32 _maxPathLength;
 };
 
 // header implementation

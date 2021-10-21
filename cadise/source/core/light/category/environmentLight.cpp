@@ -60,9 +60,9 @@ EnvironmentLight::EnvironmentLight(
     this->setSceneBoundRadius(5000.0_r);
 }
 
-Spectrum EnvironmentLight::emittance(const SurfaceIntersection& emitIntersection) const 
+Spectrum EnvironmentLight::emittance(const SurfaceIntersection& emitSi) const 
 {
-    const Vector3R& uvw = emitIntersection.surfaceDetail().uvw();
+    const Vector3R& uvw = emitSi.surfaceDetail().uvw();
     Spectrum sampleRadiance;
     _environmentRadiance->evaluate(uvw, &sampleRadiance);
 
@@ -95,10 +95,10 @@ void EnvironmentLight::evaluateDirectSample(DirectLightSample* const out_sample)
 }
 
 real EnvironmentLight::evaluateDirectPdfW(
-    const SurfaceIntersection& emitIntersection, 
+    const SurfaceIntersection& emitSi, 
     const Vector3R&            targetPosition) const 
 {
-    const Vector3R& uvw      = emitIntersection.surfaceDetail().uvw();
+    const Vector3R& uvw      = emitSi.surfaceDetail().uvw();
     const real      sinTheta = std::sin((1.0_r - uvw.y()) * constant::pi<real>);
     if (sinTheta <= 0.0_r)
     {

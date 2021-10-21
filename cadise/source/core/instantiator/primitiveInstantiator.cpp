@@ -82,29 +82,29 @@ static std::vector<std::shared_ptr<Primitive>> createTriangleMesh(
     return std::move(triangles);
 }
 
-static std::vector<std::shared_ptr<Primitive>> createTriangleMeshKdTree(
-    const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Bsdf>&      bsdfs)
-{
-    const auto positions = data->findVector3rArray("positions");
-    const auto normals = data->findVector3rArray("normals");
-    const auto uvws = data->findVector3rArray("uvws");
-    const auto bsdfName = data->findString("bsdf");
-
-    const auto&& mapResult = bsdfs.find(bsdfName);
-    const auto   bsdf = (mapResult != bsdfs.end()) ?
-        mapResult->second : std::make_shared<LambertianDiffuse>();
-
-    const std::size_t numTriangles = positions.size() / 3;
-
-    std::vector<std::shared_ptr<Primitive>> triangles;
-    triangles.reserve(numTriangles);
-
-    TriangleBuffer triangleBuffer(bsdf, positions, normals, uvws);
-    triangleBuffer.transformToTriangles(&triangles);
-
-    return std::move(triangles);
-}
+//static std::vector<std::shared_ptr<Primitive>> createTriangleMeshKdTree(
+//    const std::shared_ptr<SdData>& data,
+//    const StringKeyMap<Bsdf>&      bsdfs)
+//{
+//    const auto positions = data->findVector3rArray("positions");
+//    const auto normals = data->findVector3rArray("normals");
+//    const auto uvws = data->findVector3rArray("uvws");
+//    const auto bsdfName = data->findString("bsdf");
+//
+//    const auto&& mapResult = bsdfs.find(bsdfName);
+//    const auto   bsdf = (mapResult != bsdfs.end()) ?
+//        mapResult->second : std::make_shared<LambertianDiffuse>();
+//
+//    const std::size_t numTriangles = positions.size() / 3;
+//
+//    std::vector<std::shared_ptr<Primitive>> triangles;
+//    triangles.reserve(numTriangles);
+//
+//    TriangleBuffer triangleBuffer(bsdf, positions, normals, uvws);
+//    triangleBuffer.transformToTriangles(&triangles);
+//
+//    return std::move(triangles);
+//}
 
 void makePrimitive(
     const std::shared_ptr<SdData>&                   data,

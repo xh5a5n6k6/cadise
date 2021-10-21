@@ -26,11 +26,11 @@ Distribution1D::Distribution1D(const real* const value, const std::size_t sizeNu
     // normalize cdf
     if (valueSum > 0.0_r) 
     {
-        const real inverseValueSum = 1.0_r / valueSum;
+        const real rcpValueSum = 1.0_r / valueSum;
 
         for (std::size_t i = 1; i <= sizeNumber; ++i) 
         {
-            _cdf[i] *= inverseValueSum;
+            _cdf[i] *= rcpValueSum;
         }
     }
     else 

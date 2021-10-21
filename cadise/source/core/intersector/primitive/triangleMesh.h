@@ -1,19 +1,22 @@
 //#pragma once
 //
 //#include "core/intersector/primitive/primitive.h"
+//#include "math/distribution/distribution1D.h"
 //
 //#include <memory>
+//#include <vector>
 //
-//namespace cadise {
+//namespace cadise { class KdTreeAccelerator; }
+//namespace cadise { class Triangle; }
 //
-//class KdTreeAccelerator;
+//namespace cadise 
+//{
 //
-//class TriangleMesh : public Primitive {
+//class TriangleMesh : public Primitive 
+//{
 //    TriangleMesh(
-//        const std::shared_ptr<Bsdf>& bsdf,
-//        const Vector3R& vA,
-//        const Vector3R& vB,
-//        const Vector3R& vC);
+//        const std::vector<const Triangle*>& triangles,
+//        std::unique_ptr<KdTreeAccelerator>  triangleKdTree);
 //
 //    void evaluateBound(AABB3R* const out_bound) const override;
 //
@@ -29,9 +32,11 @@
 //    real area() const override;
 //
 //private:
-//    std::vector<std::unique_ptr<Triangle>> _triangles;
-//
+//    std::vector<const Triangle*>       _triangles;
 //    std::unique_ptr<KdTreeAccelerator> _triangleKdTree;
+//
+//    Distribution1D _areaDistribution;
+//    real           _area;
 //};
 //
 //} // namespace cadise

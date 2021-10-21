@@ -1,8 +1,9 @@
 #include "core/estimator/ptEstimator.h"
 
-#include "core/integral-tool/directLightEvaluator.h"
+#include "core/integral-tool/tMis.h"
 #include "core/integral-tool/russianRoulette.h"
 #include "core/integral-tool/sample/bsdfSample.h"
+#include "core/integral-tool/sample/directLightSample.h"
 #include "core/intersector/primitive/primitive.h"
 #include "core/light/category/areaLight.h"
 #include "core/ray.h"
@@ -11,16 +12,29 @@
 #include "core/surface/transportInfo.h"
 #include "core/surfaceIntersection.h"
 #include "fundamental/assertion.h"
+#include "fundamental/logger/logger.h"
 #include "math/constant.h"
 
 namespace cadise 
 {
 
-PtEstimator::PtEstimator(const int32 maxDepth) :
-    RadianceEstimator(),
-    _maxDepth(maxDepth) 
+namespace
 {
-        CS_ASSERT_GE(maxDepth, 0);
+    const Logger logger("PT Estimator");
+}
+
+PtEstimator::PtEstimator(const int32 maxPathLength) :
+    RadianceEstimator(),
+    _maxPathLength(maxPathLength) 
+{
+    if (_maxPathLength <= 0)
+    {
+        logger.log(ELogLevel::WARN,
+            "Invalid value on <maxPathLength>: " + std::to_string(maxPathLength) +
+            ", it should be greater than 0, set fallback value to 1");
+
+        _maxPathLength = 1;
+    }
 }
 
 void PtEstimator::estimate(
@@ -32,82 +46,174 @@ void PtEstimator::estimate(
 
     const TransportInfo transportInfo(ETransportMode::RADIANCE);
 
-    Spectrum totalRadiance(0.0_r);
-    Spectrum pathThroughput(1.0_r);
-    Ray      traceRay(ray);
+    SurfaceIntersection si;
+    Spectrum            totalRadiance(0.0_r);
+    Spectrum            pathThroughput(1.0_r);
+    Ray                 traceRay(ray);
 
-    // set this flag true at 0 bounce,
-    // and update it at each intersection
-    // (specular surface for true, non-specular surface for false)
-    bool isCountForEmittance = true;
-
-    for (int32 bounceTimes = 0; bounceTimes < _maxDepth; ++bounceTimes)
+    if (!scene.isIntersecting(traceRay, si))
     {
-        SurfaceIntersection intersection;
-        if (!scene.isIntersecting(traceRay, intersection)) 
+        out_radiance->set(totalRadiance);
+
+        return;
+    }
+
+    // 0-bounce radiance
+    {
+        const Primitive* prim = si.primitiveInfo().primitive();
+        if (prim->areaLight())
         {
-            break;
-        }
-
-        const Primitive* primitive = intersection.primitiveInfo().primitive();
-        const Bsdf*      bsdf      = primitive->bsdf();
-
-        const Vector3R& P  = intersection.surfaceDetail().position();
-        const Vector3R& Ns = intersection.surfaceDetail().shadingNormal();
-
-        // add emitter's emittance only at first hit-point (0 bounce)
-        // or previous hit surface is specular
-        if (primitive->areaLight() && isCountForEmittance) 
-        {
-            const Spectrum emittance = primitive->areaLight()->emittance(intersection);
+            const Spectrum emittance = prim->areaLight()->emittance(si);
 
             totalRadiance.addLocal(pathThroughput.mul(emittance));
         }
+    }
 
+    // bounce time = path length - 1
+    // 
+    // ex. p_0 ---> p_1 ---> p_2, 
+    //     bounce time = 1
+    //     path length = 2
+    for (int32 bounceTimes = 1; bounceTimes < _maxPathLength; ++bounceTimes)
+    {
+        const Primitive* primitive = si.primitiveInfo().primitive();
+        const Bsdf*      bsdf      = primitive->bsdf();
 
-        // estimate direct light using MIS technique 
-        // (only at non-specular surface)
-        // TODO: FIX HERE
-        //       use sample bxdfType to do this check instead
-        if (!bsdf->lobes().hasAtLeastOne({
-            ELobe::SPECULAR_REFLECTION,
-            ELobe::SPECULAR_TRANSMISSION })) 
-        {
-            isCountForEmittance = false;
+        const Vector3R& P  = si.surfaceDetail().position();
+        const Vector3R& Ns = si.surfaceDetail().shadingNormal();
 
-            real lightPdf;
-            const Light* sampleLight = scene.sampleOneLight(&lightPdf);
-
-            CS_ASSERT(sampleLight);
-            CS_ASSERT_GT(lightPdf, 0.0_r);
-
-            const Spectrum directLightRadiance 
-                = DirectLightEvaluator::evaluate(scene, intersection, bsdf, sampleLight).div(lightPdf);
-            
-            totalRadiance.addLocal(pathThroughput.mul(directLightRadiance));
-        }
-        else 
-        {
-            isCountForEmittance = true;
-        }
-
-        // estimate indirect light with bsdf sampling
-        BsdfSample bsdfSample;
-        bsdf->evaluateSample(transportInfo, intersection, &bsdfSample);
-        if (!bsdfSample.isValid()) 
+        // early break if hitting envrionment light
+        if (bsdf->lobes().hasExactly({ ELobe::ABSORB }))
         {
             break;
         }
 
-        const Spectrum& reflectance = bsdfSample.scatterValue();
-        const Vector3R& L           = bsdfSample.scatterDirection();
-        const real      pdfW        = bsdfSample.pdfW();
-        const real      LdotN       = L.absDot(Ns);
+        // TODO: it should be decided according to sampled bxdf
+        bool canDoMis = false;
+        if (!bsdf->lobes().hasAtLeastOne({
+            ELobe::SPECULAR_REFLECTION,
+            ELobe::SPECULAR_TRANSMISSION }))
+        {
+            canDoMis = true;
+        }
 
-        pathThroughput.mulLocal(reflectance.mul(LdotN / pdfW));
+        // flag used in bsdf sampling
+        bool isSampledDeltaLight = false;
+
+        // sampling from light
+        {
+            if (canDoMis)
+            {
+                real sampleLightPdf;
+                const Light* sampleLight = scene.sampleOneLight(&sampleLightPdf);
+
+                CS_ASSERT(sampleLight);
+
+                DirectLightSample directLightSample;
+                directLightSample.setTargetPosition(P);
+
+                sampleLight->evaluateDirectSample(&directLightSample);
+                if (directLightSample.isValid())
+                {
+                    const Vector3R LVector  = directLightSample.emitPosition().sub(P);
+                    const real     distance = LVector.length();
+
+                    CS_ASSERT_GT(distance, 0.0_r);
+
+                    const Vector3R L = LVector.div(distance);
+                    si.setWo(L);
+
+                    // generate shadow ray to do occluded test
+                    Ray shadowRay(P, L);
+                    shadowRay.setMaxT(distance - constant::ray_epsilon<real>);
+
+                    if (!scene.isOccluded(shadowRay))
+                    {
+                        const Spectrum& radiance       = directLightSample.radiance();
+                        const real      lightPdfW      = directLightSample.pdfW();
+                        const real      totalLightPdfW = sampleLightPdf * lightPdfW;
+
+                        const Spectrum reflectance = bsdf->evaluate(transportInfo, si);
+                        const Spectrum factor      = reflectance.mul(L.absDot(Ns) / totalLightPdfW);
+
+                        // if sample light is delta light, not using mis technique in bsdf sampling
+                        Spectrum misLightRadiance;
+                        if (sampleLight->isDeltaLight())
+                        {
+                            isSampledDeltaLight = true;
+
+                            misLightRadiance = radiance.mul(factor);
+                            totalRadiance.addLocal(pathThroughput.mul(misLightRadiance));
+                        }
+                        else
+                        {
+                            const real bsdfPdfW  = bsdf->evaluatePdfW(transportInfo, si);
+                            const real misWeight = TMis<EMisMode::POWER>().weight(totalLightPdfW, bsdfPdfW);
+
+                            misLightRadiance = radiance.mul(factor).mul(misWeight);
+                            totalRadiance.addLocal(pathThroughput.mul(misLightRadiance));
+                        }
+                    }
+                }
+            }
+        } // end light sampling
+
+        // sampling from bsdf
+        {
+            BsdfSample bsdfSample;
+            bsdf->evaluateSample(transportInfo, si, &bsdfSample);
+            if (!bsdfSample.isValid())
+            {
+                break;
+            }
+
+            const Spectrum& reflectance = bsdfSample.scatterValue();
+            const Vector3R& L           = bsdfSample.scatterDirection();
+            const real      bsdfPdfW    = bsdfSample.pdfW();
+            const real      LdotN       = L.absDot(Ns);
+
+            traceRay.reset();
+            traceRay.setOrigin(P);
+            traceRay.setDirection(L);
+
+            SurfaceIntersection nextSi;
+            if (!scene.isIntersecting(traceRay, nextSi))
+            {
+                break;
+            }
+
+            const Primitive* nextPrimitive = nextSi.primitiveInfo().primitive();
+            if (nextPrimitive->areaLight())
+            {
+                const AreaLight* areaLight = nextPrimitive->areaLight();
+                const Spectrum   radiance  = areaLight->emittance(nextSi);
+                const Spectrum   factor    = reflectance.mul(L.absDot(Ns) / bsdfPdfW);
+
+                Spectrum misBsdfRadiance;
+                if (canDoMis && !isSampledDeltaLight)
+                {
+                    const real sampleLightPdf = scene.evaluatePickLightPdf(areaLight);
+                    const real lightPdfW      = areaLight->evaluateDirectPdfW(nextSi, P);
+                    const real totalLightPdfW = sampleLightPdf * lightPdfW;
+                    const real misWeight      = TMis<EMisMode::POWER>().weight(bsdfPdfW, totalLightPdfW);
+
+                    misBsdfRadiance = radiance.mul(factor).mul(misWeight);
+                    totalRadiance.addLocal(pathThroughput.mul(misBsdfRadiance));
+                }
+                else if (!canDoMis)
+                {
+                    misBsdfRadiance = radiance.mul(factor);
+                    totalRadiance.addLocal(pathThroughput.mul(misBsdfRadiance));
+                }
+            }
+
+            pathThroughput.mulLocal(reflectance.mul(LdotN / bsdfPdfW));
+
+            si = nextSi;
+        } // end bsdf sampling
 
         // use russian roulette to decide if the ray needs to be kept tracking
-        if (bounceTimes > 2) 
+        if (bounceTimes > 2)
         {
             Spectrum newPathThroughput;
             if (!RussianRoulette::isSurvivedOnNextRound(pathThroughput, &newPathThroughput))
@@ -118,14 +224,10 @@ void PtEstimator::estimate(
             pathThroughput = newPathThroughput;
         }
 
-        if (pathThroughput.isZero()) 
+        if (pathThroughput.isZero())
         {
             break;
         }
-
-        traceRay.reset();
-        traceRay.setOrigin(P);
-        traceRay.setDirection(L);
     }
 
     out_radiance->set(totalRadiance);
