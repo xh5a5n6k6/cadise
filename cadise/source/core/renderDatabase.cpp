@@ -5,6 +5,8 @@
 #include "core/instantiator/instantiator.h"
 #include "core/intersector/accelerator/accelerator.h"
 #include "core/intersector/primitive/primitive.h"
+#include "core/intersector/primitive/triangle.h"
+#include "core/intersector/primitive/triangleBuffer.h"
 #include "core/light/light.h"
 #include "core/renderer/renderer.h"
 #include "core/scene.h"
@@ -91,8 +93,24 @@ void RenderDatabase::setUpData(const std::shared_ptr<SdData>& data)
 
 void RenderDatabase::prepareRender() 
 {
+    // make all triangle meshes to triangles
+    if (!_triangleBuffers.empty())
+    {
+        for (const auto& pair : _triangleBuffers)
+        {
+            std::vector<std::shared_ptr<Primitive>> triangles;
+            pair.second->transformToTriangles(&triangles);
+
+            for (std::size_t i = 0; i < triangles.size(); ++i)
+            {
+                _intersectors.push_back(triangles[i]);
+            }
+        }
+    }
+
     _bsdfs.clear();
     _primitives.clear();
+    _triangleBuffers.clear();
     _realTextures.clear();
     _spectrumTextures.clear();
 
@@ -152,27 +170,27 @@ void RenderDatabase::startRender() const
 
 void RenderDatabase::_setUpFilm(const std::shared_ptr<SdData>& data) 
 {
-    _filmData = std::move(data);
+    _filmData = data;
 }
 
 void RenderDatabase::_setUpCamera(const std::shared_ptr<SdData>& data) 
 {
-    _cameraData = std::move(data);
+    _cameraData = data;
 }
 
 void RenderDatabase::_setUpRenderer(const std::shared_ptr<SdData>& data)
 {
-    _rendererData = std::move(data);
+    _rendererData = data;
 }
 
 void RenderDatabase::_setUpAccelerator(const std::shared_ptr<SdData>& data) 
 {
-    _acceleratorData = std::move(data);
+    _acceleratorData = data;
 }
 
 void RenderDatabase::_setUpLightCluster(const std::shared_ptr<SdData>& data) 
 {
-    _lightClusterData = std::move(data);
+    _lightClusterData = data;
 }
 
 void RenderDatabase::_setUpRealTexture(const std::shared_ptr<SdData>& data) 
@@ -205,20 +223,24 @@ void RenderDatabase::_setUpBsdf(const std::shared_ptr<SdData>& data)
 
 void RenderDatabase::_setUpLight(const std::shared_ptr<SdData>& data) 
 {
-    const std::shared_ptr<Light> light = instantiator::makeLight(data, _primitives, _backgroundSphere);
+    instantiator::makeLight(
+        data, 
+        _primitives,
+        _triangleBuffers,
+        _lights,
+        _intersectors,
+        _backgroundSphere);
     
     // HACK
     if (_backgroundSphere) 
     {
         _environmentLightIndex = _lights.size();
     }
-
-    _lights.push_back(light);
 }
 
 void RenderDatabase::_setUpPrimitive(const std::shared_ptr<SdData>& data) 
 {
-    instantiator::makePrimitive(data, _bsdfs, &_intersectors, &_primitives);
+    instantiator::makePrimitive(data, _bsdfs, _intersectors, _primitives, _triangleBuffers);
 }
 
 } // namespace cadise

@@ -35,7 +35,7 @@ public:
 
     real approximateFlux() const override;
 
-    void setEmitRadiance(const std::shared_ptr<TTexture<Spectrum>>& emitRadiance);
+    void setEmitRadiance(const std::shared_ptr<TTexture<Spectrum>>& emitRadiance) override;
 
 private:
     const Primitive* _primitive;

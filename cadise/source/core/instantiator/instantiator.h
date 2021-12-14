@@ -3,6 +3,8 @@
 #include "core/spectrum/spectrum.h"
 #include "math/type/mapType.h"
 
+#include <vector>
+
 namespace cadise { class Accelerator; }
 namespace cadise { class Bsdf; }
 namespace cadise { class Camera; }
@@ -17,8 +19,10 @@ namespace cadise { class Renderer; }
 namespace cadise { class Sampler; }
 namespace cadise { class Scene; }
 namespace cadise { class SdData; }
+namespace cadise { class TriangleBuffer; }
 namespace cadise { template<typename T> class TTexture; }
 
+// TODO: maybe use factory to deal with object instantiation
 namespace cadise::instantiator
 {
 
@@ -74,16 +78,20 @@ std::shared_ptr<Bsdf> makeBsdf(
     const StringKeyMap<Bsdf>&               bsdfs);
 
 // implement in core/instantiator/lightInstantiator.cpp
-std::shared_ptr<Light> makeLight(
-    const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Primitive>& primitives,
-    std::shared_ptr<Primitive>&    out_infiniteSphere);
+void makeLight(
+    const std::shared_ptr<SdData>&             data,
+    const StringKeyMap<Primitive>&             primitives,
+    StringKeyMap<TriangleBuffer>&              out_triangleBuffers,
+    std::vector<std::shared_ptr<Light>>&       out_lights,
+    std::vector<std::shared_ptr<Intersector>>& out_intersectors,
+    std::shared_ptr<Primitive>&                out_backgroundSphere);
 
 // implement in core/instantiator/primitiveInstantiator.cpp
 void makePrimitive(
-    const std::shared_ptr<SdData>&                   data,
-    const StringKeyMap<Bsdf>&                        bsdfs,
-    std::vector<std::shared_ptr<Intersector>>* const out_intersectors,
-    StringKeyMap<Primitive>* const                   out_primitives);
+    const std::shared_ptr<SdData>&             data,
+    const StringKeyMap<Bsdf>&                  bsdfs,
+    std::vector<std::shared_ptr<Intersector>>& out_intersectors,
+    StringKeyMap<Primitive>&                   out_primitives,
+    StringKeyMap<TriangleBuffer>&              out_triangleBuffers);
 
 } // namespace cadise::instantiator

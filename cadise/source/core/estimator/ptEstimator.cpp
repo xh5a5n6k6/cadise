@@ -1,9 +1,9 @@
 #include "core/estimator/ptEstimator.h"
 
-#include "core/integral-tool/tMis.h"
 #include "core/integral-tool/russianRoulette.h"
 #include "core/integral-tool/sample/bsdfSample.h"
 #include "core/integral-tool/sample/directLightSample.h"
+#include "core/integral-tool/tMis.h"
 #include "core/intersector/primitive/primitive.h"
 #include "core/light/category/areaLight.h"
 #include "core/ray.h"
@@ -229,7 +229,7 @@ void PtEstimator::estimate(
             break;
         }
     }
-
+    
     out_radiance->set(totalRadiance);
 }
 

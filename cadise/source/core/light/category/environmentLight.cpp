@@ -134,6 +134,13 @@ real EnvironmentLight::approximateFlux() const
     return _approximateFlux;
 }
 
+void EnvironmentLight::setEmitRadiance(const std::shared_ptr<TTexture<Spectrum>>& emitRadiance)
+{
+    CS_ASSERT(emitRadiance);
+
+    _environmentRadiance = emitRadiance;
+}
+
 void EnvironmentLight::setSceneBoundRadius(const real sceneBoundRadius) 
 {
     CS_ASSERT_GE(sceneBoundRadius, 0.0_r);

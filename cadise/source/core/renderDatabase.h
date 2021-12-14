@@ -13,6 +13,7 @@ namespace cadise { class Primitive; }
 namespace cadise { class Renderer; }
 namespace cadise { class Scene; }
 namespace cadise { class SdData; }
+namespace cadise { class TriangleBuffer; }
 namespace cadise { template<typename T> class TTexture; }
 
 namespace cadise 
@@ -58,6 +59,7 @@ private:
 
     StringKeyMap<Bsdf>               _bsdfs;
     StringKeyMap<Primitive>          _primitives; // for area light
+    StringKeyMap<TriangleBuffer>     _triangleBuffers; // HACK for non-decomposed triangles
     StringKeyMap<TTexture<real>>     _realTextures;
     StringKeyMap<TTexture<Spectrum>> _spectrumTextures;
 };

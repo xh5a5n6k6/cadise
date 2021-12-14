@@ -2,6 +2,10 @@
 
 #include "core/light/light.h"
 
+#include "core/spectrum/spectrum.h"
+
+namespace cadise { template<typename T> class TTexture; }
+
 namespace cadise 
 {
 
@@ -29,6 +33,7 @@ public:
 
     bool isDeltaLight() const override;
 
+    virtual void setEmitRadiance(const std::shared_ptr<TTexture<Spectrum>>& emitRadiance) = 0;
     void setIsBackFaceEmit(const bool isBackFaceEmit);
 
 protected:
