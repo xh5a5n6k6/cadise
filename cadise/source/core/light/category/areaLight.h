@@ -4,6 +4,8 @@
 
 #include "core/spectrum/spectrum.h"
 
+#include <memory>
+
 namespace cadise { template<typename T> class TTexture; }
 
 namespace cadise 
