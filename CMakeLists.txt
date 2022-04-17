@@ -1,4 +1,6 @@
-cmake_minimum_required(VERSION 3.9)
+# Cadise is updated to Visual Studio 2022,
+# and CMake began to support the generator from version 3.21.
+cmake_minimum_required(VERSION 3.21)
 project(Cadise-Render)
 
 set(CADISE_BUILD_DIR "${PROJECT_BINARY_DIR}/bin/")
