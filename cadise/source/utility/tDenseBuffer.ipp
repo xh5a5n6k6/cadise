@@ -13,17 +13,17 @@ template<typename T>
 inline TDenseBuffer<T>::TDenseBuffer() = default;
 
 template<typename T>
-inline uint32 TDenseBuffer<T>::addElement(const T& element)
+inline std::size_t TDenseBuffer<T>::add(const T& element)
 {
-    uint32 id = static_cast<uint32>(_elements.size());
-    if (!_reusedIdStack.empty())
+    std::size_t id = _elements.size();
+    if (!_reusedIds.empty())
     {
-        id = _reusedIdStack.top();
-        _reusedIdStack.pop();
+        id = _reusedIds.back();
+        _reusedIds.pop_back();
     }
 
-    _idToIndexMap[id]               = _elements.size();
-    _indexToIdMap[_elements.size()] = id;
+    _idToElementMap[id] = _elements.size();
+    _elementToIdMap.push_back(id);
 
     // Push element last
     _elements.push_back(element);
@@ -32,41 +32,65 @@ inline uint32 TDenseBuffer<T>::addElement(const T& element)
 }
 
 template<typename T>
-inline T& TDenseBuffer<T>::getElement(const uint32 elementId)
+inline T& TDenseBuffer<T>::get(const std::size_t id)
 {
-    CS_ASSERT(_idToIndexMap.contains(elementId));
+    CS_ASSERT(_idToElementMap.contains(id));
 
-    const std::size_t index = _idToIndexMap[elementId];
+    const std::size_t index = _idToElementMap[id];
     return _elements[index];
 }
 
 template<typename T>
-inline const T& TDenseBuffer<T>::getElement(const uint32 elementId) const
+inline const T& TDenseBuffer<T>::get(const std::size_t id) const
 {
-    CS_ASSERT(_idToIndexMap.contains(elementId));
+    CS_ASSERT(_idToElementMap.contains(id));
 
-    const std::size_t index = _idToIndexMap[elementId];
+    const std::size_t index = _idToElementMap[id];
     return _elements[index];
 }
 
 template<typename T>
-inline void TDenseBuffer<T>::removeElement(const uint32 elementId)
+inline void TDenseBuffer<T>::remove(const std::size_t id)
 {
-    CS_ASSERT(_idToIndexMap.contains(elementId));
+    CS_ASSERT(_idToElementMap.contains(id));
 
-    const std::size_t removeIndex = _idToIndexMap[elementId];
+    const std::size_t removeIndex = _idToElementMap[id];
     std::swap(_elements[removeIndex], _elements.back());
     _elements.pop_back();
 
     // Update elements mapping info
-    const uint32 id = _indexToIdMap[_elements.size()];
-    _idToIndexMap[id]          = removeIndex;
-    _indexToIdMap[removeIndex] = id;
+    const std::size_t swapId = _elementToIdMap.back();
+    _idToElementMap[swapId]      = removeIndex;
+    _elementToIdMap[removeIndex] = swapId;
 
-    _idToIndexMap.erase(elementId);
-    _indexToIdMap.erase(_elements.size());
+    _idToElementMap.erase(id);
+    _elementToIdMap.pop_back();
 
-    _reusedIdStack.push(elementId);
+    _reusedIds.push_back(id);
+}
+
+template<typename T>
+inline std::vector<T>::iterator TDenseBuffer<T>::begin()
+{
+    return _elements.begin();
+}
+
+template<typename T>
+inline std::vector<T>::iterator TDenseBuffer<T>::end()
+{
+    return _elements.end();
+}
+
+template<typename T>
+inline std::vector<T>::const_iterator TDenseBuffer<T>::begin() const
+{
+    return _elements.begin();
+}
+
+template<typename T>
+inline std::vector<T>::const_iterator TDenseBuffer<T>::end() const
+{
+    return _elements.end();
 }
 
 } // namespace cadise

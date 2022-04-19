@@ -1,8 +1,5 @@
 #pragma once
 
-#include "math/type/fundamentalType.h"
-
-#include <stack>
 #include <unordered_map>
 #include <vector>
 
@@ -15,17 +12,22 @@ class TDenseBuffer
 public:
     TDenseBuffer();
 
-    uint32 addElement(const T& element);
+    std::size_t add(const T& element);
 
-    T& getElement(const uint32 elementId);
-    const T& getElement(const uint32 elementId) const;
+    T& get(const std::size_t id);
+    const T& get(const std::size_t id) const;
 
-    void removeElement(const uint32 elementId);
+    void remove(const std::size_t id);
+
+    std::vector<T>::iterator begin();
+    std::vector<T>::iterator end();
+    std::vector<T>::const_iterator begin() const;
+    std::vector<T>::const_iterator end() const;
 
 private:
-    std::unordered_map<uint32, std::size_t> _idToIndexMap;
-    std::unordered_map<std::size_t, uint32> _indexToIdMap;
-    std::stack<uint32> _reusedIdStack;
+    std::unordered_map<std::size_t, std::size_t> _idToElementMap;
+    std::vector<std::size_t> _elementToIdMap;
+    std::vector<std::size_t> _reusedIds;
 
     std::vector<T> _elements;
 };
