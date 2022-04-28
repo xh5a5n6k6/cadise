@@ -1,38 +1,53 @@
+#pragma once
+
 #include "file-io/scene-description/tSdDataUnit.h"
+
+#include "fundamental/assertion.h"
 
 namespace cadise
 {
 
 template<typename T>
-inline TSdDataUnit<T>::TSdDataUnit() :
-    _variableName(""),
-    _value(nullptr),
-    _valueNumber(0) 
+inline TSdDataUnit<T>::TSdDataUnit(
+    const std::string&   name,
+    std::unique_ptr<T[]> value,
+    const std::size_t    numValues) :
+
+    TSdDataUnit(name, TDynamicPointerArray<T>(std::move(value), numValues))
 {}
 
 template<typename T>
-inline TSdDataUnit<T>::TSdDataUnit(const std::string_view& name, std::unique_ptr<T[]> value, const std::size_t valueNumber) :
-    _variableName(name),
+inline TSdDataUnit<T>::TSdDataUnit(
+    const std::string&        name,
+    TDynamicPointerArray<T>&& value) :
+
+    _name(name),
     _value(std::move(value)),
-    _valueNumber(valueNumber)
+    _isLookedUp(false)
 {}
 
 template<typename T>
-inline const std::string_view& TSdDataUnit<T>::variableName() const 
+inline const std::string& TSdDataUnit<T>::name() const 
 {
-    return _variableName;
+    return _name;
 }
 
 template<typename T>
-inline std::unique_ptr<T[]> TSdDataUnit<T>::value()
+inline TDynamicPointerArray<T> TSdDataUnit<T>::value()
 {
+    CS_ASSERT(!_isLookedUp);
+
+    _isLookedUp = true;
+
     return std::move(_value);
 }
 
 template<typename T>
-inline std::size_t TSdDataUnit<T>::valueNumber() const 
+inline std::size_t TSdDataUnit<T>::numValues() const 
 {
-    return _valueNumber;
+    CS_ASSERT(!_isLookedUp);
+
+    return _value.size();
 }
 
 } // namespace cadise
