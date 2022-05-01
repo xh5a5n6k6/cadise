@@ -1,9 +1,8 @@
 #pragma once
 
-#include <string>
-#include <vector>
+#include "commandLineArguments.h"
 
-namespace cadise_cli { class CommandLineArguments; }
+#include <cadise/cadise.h>
 
 namespace cadise_cli 
 {
@@ -12,11 +11,13 @@ class StandaloneRenderer
 {
 public:
     explicit StandaloneRenderer(const CommandLineArguments& args);
+    ~StandaloneRenderer();
 
-    void render();
+    void render() const;
 
 private:
-    std::vector<std::string> _filenames;
+    CommandLineArguments _args;
+    CSuint64             _renderDatabaseId;
 };
 
 } // namespace cadise_cli

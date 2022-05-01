@@ -1,9 +1,6 @@
-#include <cadise/cadise.h>
+#include "cadise-cli-utils/standaloneRenderer.h"
 
 #include <iostream>
-
-#include "cadise-cli-utils/commandLineArguments.h"
-#include "cadise-cli-utils/standaloneRenderer.h"
 
 using namespace cadise_cli;
 
@@ -11,7 +8,7 @@ int main(int argc, char* argv[])
 {
     if (argc < 2) 
     {
-        std::cout << "Use --help for further information." << std::endl;
+        std::cout << "Use --help for further information.\n";
 
         return EXIT_SUCCESS;
     }
@@ -26,7 +23,7 @@ int main(int argc, char* argv[])
 
     if (!csInit()) 
     {
-        std::cout << "Failed to initialize Cadise" << std::endl;
+        std::cout << "Failed to initialize Cadise.\n";
 
         return EXIT_FAILURE;
     }
@@ -36,7 +33,7 @@ int main(int argc, char* argv[])
 
     if (!csExit()) 
     {
-        std::cout << "Failed to exit Cadise" << std::endl;
+        std::cout << "Failed to exit Cadise.\n";
 
         return EXIT_FAILURE;
     }
