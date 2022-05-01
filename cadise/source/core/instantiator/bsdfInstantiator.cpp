@@ -27,9 +27,9 @@ namespace cadise::instantiator
 {
 
 static std::shared_ptr<Bsdf> createLambertianDiffuse(
-    const std::shared_ptr<SdData>&          data,
-    const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures) 
+    const std::shared_ptr<SdData>&           data,
+    const TStringKeyMap<TTexture<real>>&     realTextures,
+    const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures) 
 {
     const auto albedo = data->getSpectrumTexture("albedo", spectrumTextures);
 
@@ -37,9 +37,9 @@ static std::shared_ptr<Bsdf> createLambertianDiffuse(
 }
 
 static std::shared_ptr<Bsdf> createSpecularReflection(
-    const std::shared_ptr<SdData>&          data,
-    const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures)
+    const std::shared_ptr<SdData>&           data,
+    const TStringKeyMap<TTexture<real>>&     realTextures,
+    const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
     const auto albedo      = data->getSpectrumTexture("albedo", spectrumTextures);
     const auto fresnelType = data->findString("fresnel-type", "conductor");
@@ -68,9 +68,9 @@ static std::shared_ptr<Bsdf> createSpecularReflection(
 }
 
 static std::shared_ptr<Bsdf> createSpecularTransmission(
-    const std::shared_ptr<SdData>&          data,
-    const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures)
+    const std::shared_ptr<SdData>&           data,
+    const TStringKeyMap<TTexture<real>>&     realTextures,
+    const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
     const auto albedo   = data->getSpectrumTexture("albedo", spectrumTextures);
     const real iorOuter = data->findReal("ior-outer", 1.0_r);
@@ -82,9 +82,9 @@ static std::shared_ptr<Bsdf> createSpecularTransmission(
 }
 
 static std::shared_ptr<Bsdf> createSpecularDielectric(
-    const std::shared_ptr<SdData>&          data,
-    const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures) 
+    const std::shared_ptr<SdData>&           data,
+    const TStringKeyMap<TTexture<real>>&     realTextures,
+    const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures) 
 {
     const auto albedo   = data->getSpectrumTexture("albedo", spectrumTextures);
     const real iorOuter = data->findReal("ior-outer", 1.0_r);
@@ -96,9 +96,9 @@ static std::shared_ptr<Bsdf> createSpecularDielectric(
 }
 
 static std::shared_ptr<Bsdf> createPhong(
-    const std::shared_ptr<SdData>&          data,
-    const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures) 
+    const std::shared_ptr<SdData>&           data,
+    const TStringKeyMap<TTexture<real>>&     realTextures,
+    const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures) 
 {
     const real exponent = data->findReal("exponent", 32.0_r);
 
@@ -106,9 +106,9 @@ static std::shared_ptr<Bsdf> createPhong(
 }
 
 static std::shared_ptr<Bsdf> createPlastic(
-    const std::shared_ptr<SdData>&          data,
-    const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures) 
+    const std::shared_ptr<SdData>&           data,
+    const TStringKeyMap<TTexture<real>>&     realTextures,
+    const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures) 
 {
     const auto diffuseAlbedo    = data->getSpectrumTexture("diffuse-albedo", spectrumTextures);
     const real specularExponent = data->findReal("specular-exponent", 32.0_r);
@@ -120,10 +120,10 @@ static std::shared_ptr<Bsdf> createPlastic(
 }
 
 static std::shared_ptr<Bsdf> createMixed(
-    const std::shared_ptr<SdData>&          data,
-    const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures,
-    const StringKeyMap<Bsdf>&               bsdfs) 
+    const std::shared_ptr<SdData>&           data,
+    const TStringKeyMap<TTexture<real>>&     realTextures,
+    const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures,
+    const TStringKeyMap<Bsdf>&               bsdfs) 
 {
     const auto   bsdfAName = data->findString("bsdf-a");
     const auto&& bsdfA     = bsdfs.find(bsdfAName);
@@ -143,9 +143,9 @@ static std::shared_ptr<Bsdf> createMixed(
 }
 
 static std::shared_ptr<Bsdf> createConductorMicrofacet(
-    const std::shared_ptr<SdData>&          data,
-    const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures)
+    const std::shared_ptr<SdData>&           data,
+    const TStringKeyMap<TTexture<real>>&     realTextures,
+    const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
     const auto microfacetType = data->findString("microfacet-type", "ggx");
     const auto fresnelType    = data->findString("fresnel-type", "schlick");
@@ -191,9 +191,9 @@ static std::shared_ptr<Bsdf> createConductorMicrofacet(
 }
 
 static std::shared_ptr<Bsdf> createDielectricMicrofacet(
-    const std::shared_ptr<SdData>&          data,
-    const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures)
+    const std::shared_ptr<SdData>&           data,
+    const TStringKeyMap<TTexture<real>>&     realTextures,
+    const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
     const auto microfacetType = data->findString("microfacet-type", "ggx");
     const auto fresnelType    = data->findString("fresnel-type", "vanilla");
@@ -243,10 +243,10 @@ static std::shared_ptr<Bsdf> createDielectricMicrofacet(
 }
 
 std::shared_ptr<Bsdf> makeBsdf(
-    const std::shared_ptr<SdData>&          data,
-    const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures,
-    const StringKeyMap<Bsdf>&               bsdfs)
+    const std::shared_ptr<SdData>&           data,
+    const TStringKeyMap<TTexture<real>>&     realTextures,
+    const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures,
+    const TStringKeyMap<Bsdf>&               bsdfs)
 {
     CS_ASSERT(data);
 

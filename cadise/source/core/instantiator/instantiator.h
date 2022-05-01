@@ -5,22 +5,27 @@
 
 #include <vector>
 
-namespace cadise { class Accelerator; }
-namespace cadise { class Bsdf; }
-namespace cadise { class Camera; }
-namespace cadise { class EnergyEstimator; }
-namespace cadise { class Film; }
-namespace cadise { class Filter; }
-namespace cadise { class Intersector; }
-namespace cadise { class Light; }
-namespace cadise { class LightCluster; }
-namespace cadise { class Primitive; }
-namespace cadise { class Renderer; }
-namespace cadise { class Sampler; }
-namespace cadise { class Scene; }
-namespace cadise { class SdData; }
-namespace cadise { class TriangleBuffer; }
-namespace cadise { template<typename T> class TTexture; }
+// forward declaration
+namespace cadise { 
+    class Accelerator;
+    class Bsdf;
+    class Camera;
+    class EnergyEstimator;
+    class Film;
+    class Filter;
+    class Intersector;
+    class Light;
+    class LightCluster;
+    class Primitive;
+    class Renderer;
+    class Sampler;
+    class Scene;
+    class SdData;
+    class TriangleBuffer;
+
+    template<typename T> 
+    class TTexture; 
+} // end forward declaration
 
 // TODO: maybe use factory to deal with object instantiation
 namespace cadise::instantiator
@@ -62,36 +67,36 @@ std::shared_ptr<LightCluster> makeLightCluster(
 
 // implement in core/instantiator/textureInstantiator.cpp
 std::shared_ptr<TTexture<real>> makeRealTexture(
-    const std::shared_ptr<SdData>&          data,
-    const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures);
+    const std::shared_ptr<SdData>&           data,
+    const TStringKeyMap<TTexture<real>>&     realTextures,
+    const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures);
 std::shared_ptr<TTexture<Spectrum>> makeSpectrumTexture(
-    const std::shared_ptr<SdData>&          data,
-    const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures);
+    const std::shared_ptr<SdData>&           data,
+    const TStringKeyMap<TTexture<real>>&     realTextures,
+    const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures);
 
 // implement in core/instantiator/bsdfInstantiator.cpp
 std::shared_ptr<Bsdf> makeBsdf(
-    const std::shared_ptr<SdData>&          data,
-    const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures,
-    const StringKeyMap<Bsdf>&               bsdfs);
+    const std::shared_ptr<SdData>&           data,
+    const TStringKeyMap<TTexture<real>>&     realTextures,
+    const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures,
+    const TStringKeyMap<Bsdf>&               bsdfs);
 
 // implement in core/instantiator/lightInstantiator.cpp
 void makeLight(
-    const std::shared_ptr<SdData>&             data,
-    const StringKeyMap<Primitive>&             primitives,
-    StringKeyMap<TriangleBuffer>&              out_triangleBuffers,
-    std::vector<std::shared_ptr<Light>>&       out_lights,
-    std::vector<std::shared_ptr<Intersector>>& out_intersectors,
-    std::shared_ptr<Primitive>&                out_backgroundSphere);
+    const std::shared_ptr<SdData>&              data,
+    const TStringKeyMap<Primitive>&             primitives,
+    TStringKeyMap<TriangleBuffer>&              out_triangleBuffers,
+    std::vector<std::shared_ptr<Light>>&        out_lights,
+    std::vector<std::shared_ptr<Intersector>>&  out_intersectors,
+    std::shared_ptr<Primitive>&                 out_backgroundSphere);
 
 // implement in core/instantiator/primitiveInstantiator.cpp
 void makePrimitive(
-    const std::shared_ptr<SdData>&             data,
-    const StringKeyMap<Bsdf>&                  bsdfs,
-    std::vector<std::shared_ptr<Intersector>>& out_intersectors,
-    StringKeyMap<Primitive>&                   out_primitives,
-    StringKeyMap<TriangleBuffer>&              out_triangleBuffers);
+    const std::shared_ptr<SdData>&              data,
+    const TStringKeyMap<Bsdf>&                  bsdfs,
+    std::vector<std::shared_ptr<Intersector>>&  out_intersectors,
+    TStringKeyMap<Primitive>&                   out_primitives,
+    TStringKeyMap<TriangleBuffer>&              out_triangleBuffers);
 
 } // namespace cadise::instantiator

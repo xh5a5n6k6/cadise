@@ -19,9 +19,9 @@ namespace cadise::instantiator
 {
 
 static std::shared_ptr<TTexture<real>> createRealConstant(
-    const std::shared_ptr<SdData>&          data,
-    const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures)
+    const std::shared_ptr<SdData>&           data,
+    const TStringKeyMap<TTexture<real>>&     realTextures,
+    const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
     const real value = data->findReal("value");
 
@@ -29,9 +29,9 @@ static std::shared_ptr<TTexture<real>> createRealConstant(
 }
 
 static std::shared_ptr<TTexture<real>> createRealCheckerboard(
-    const std::shared_ptr<SdData>&          data,
-    const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures)
+    const std::shared_ptr<SdData>&           data,
+    const TStringKeyMap<TTexture<real>>&     realTextures,
+    const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
     const real oddNumber   = data->findReal("odd-number");
     const real evenNumber  = data->findReal("even-number");
@@ -43,9 +43,9 @@ static std::shared_ptr<TTexture<real>> createRealCheckerboard(
 }
 
 static std::shared_ptr<TTexture<Spectrum>> createSpectrumConstant(
-    const std::shared_ptr<SdData>&          data,
-    const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures)
+    const std::shared_ptr<SdData>&           data,
+    const TStringKeyMap<TTexture<real>>&     realTextures,
+    const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
     // it now only support rgb spectrum
     const auto value = data->findVector3r("value");
@@ -54,9 +54,9 @@ static std::shared_ptr<TTexture<Spectrum>> createSpectrumConstant(
 }
 
 static std::shared_ptr<TTexture<Spectrum>> createSpectrumCheckerboard(
-    const std::shared_ptr<SdData>&          data,
-    const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures)
+    const std::shared_ptr<SdData>&           data,
+    const TStringKeyMap<TTexture<real>>&     realTextures,
+    const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
     const real oddNumber   = data->findReal("odd-number");
     const real evenNumber  = data->findReal("even-number");
@@ -68,9 +68,9 @@ static std::shared_ptr<TTexture<Spectrum>> createSpectrumCheckerboard(
 }
 
 static std::shared_ptr<TTexture<Spectrum>> createSpectrumImage(
-    const std::shared_ptr<SdData>&          data,
-    const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures)
+    const std::shared_ptr<SdData>&           data,
+    const TStringKeyMap<TTexture<real>>&     realTextures,
+    const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
     const auto filename = data->findString("filename");
     const auto sMode    = data->findString("sample-mode");
@@ -108,8 +108,8 @@ static std::shared_ptr<TTexture<Spectrum>> createSpectrumImage(
 
 //static std::shared_ptr<Texture<Spectrum>> createSpectrumAlphaImage(
 //    const std::shared_ptr<SdData>& data,
-//    const StringKeyMap<Texture<real>>& realTextures,
-//    const StringKeyMap<Texture<Spectrum>>& spectrumTextures) {
+//    const TStringKeyMap<Texture<real>>& realTextures,
+//    const TStringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 //
 //    const std::string_view filename = data->findString("filename");
 //
@@ -119,9 +119,9 @@ static std::shared_ptr<TTexture<Spectrum>> createSpectrumImage(
 //}
 
 std::shared_ptr<TTexture<real>> makeRealTexture(
-    const std::shared_ptr<SdData>&          data,
-    const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures)
+    const std::shared_ptr<SdData>&           data,
+    const TStringKeyMap<TTexture<real>>&     realTextures,
+    const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
     CS_ASSERT(data);
 
@@ -156,9 +156,9 @@ std::shared_ptr<TTexture<real>> makeRealTexture(
 }
 
 std::shared_ptr<TTexture<Spectrum>> makeSpectrumTexture(
-    const std::shared_ptr<SdData>&          data,
-    const StringKeyMap<TTexture<real>>&     realTextures,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures)
+    const std::shared_ptr<SdData>&           data,
+    const TStringKeyMap<TTexture<real>>&     realTextures,
+    const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
     CS_ASSERT(data);
 

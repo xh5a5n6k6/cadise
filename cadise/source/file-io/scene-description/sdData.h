@@ -64,11 +64,11 @@ public:
 
     std::shared_ptr<TTexture<real>> getRealTexture(
         const std::string&             name, 
-        const StringKeyMap<TTexture<real>>& realTextures,
+        const TStringKeyMap<TTexture<real>>& realTextures,
         const real                          defaultValue = 0.0_r);
     std::shared_ptr<TTexture<Spectrum>> getSpectrumTexture(
         const std::string&                 name,
-        const StringKeyMap<TTexture<Spectrum>>& spectrumTextures,
+        const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures,
         const Spectrum&                         defaultValue = Spectrum(0.0_r));
 
     ESdClassType classType() const;

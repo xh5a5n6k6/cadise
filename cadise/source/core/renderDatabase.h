@@ -9,9 +9,6 @@
 // forward declaration
 namespace cadise 
 { 
-    template<typename T>
-    class TTexture;
-
     class Bsdf;
     class Intersector;
     class Light;
@@ -20,6 +17,9 @@ namespace cadise
     class Scene;
     class SdData;
     class TriangleBuffer;
+
+    template<typename T>
+    class TTexture;
 } // end forward declaration
 
 namespace cadise 
@@ -63,11 +63,11 @@ private:
     std::shared_ptr<Primitive> _backgroundSphere;
     std::size_t                _environmentLightIndex;
 
-    StringKeyMap<Bsdf>               _bsdfs;
-    StringKeyMap<Primitive>          _primitives; // for area light
-    StringKeyMap<TriangleBuffer>     _triangleBuffers; // HACK for non-decomposed triangles
-    StringKeyMap<TTexture<real>>     _realTextures;
-    StringKeyMap<TTexture<Spectrum>> _spectrumTextures;
+    TStringKeyMap<Bsdf>               _bsdfs;
+    TStringKeyMap<Primitive>          _primitives; // for area light
+    TStringKeyMap<TriangleBuffer>     _triangleBuffers; // HACK for non-decomposed triangles
+    TStringKeyMap<TTexture<real>>     _realTextures;
+    TStringKeyMap<TTexture<Spectrum>> _spectrumTextures;
 };
 
 } // namespace cadise

@@ -1,16 +1,13 @@
 #pragma once
 
-#include <functional>
 #include <memory>
 #include <string>
-#include <map>
+#include <unordered_map>
 
 namespace cadise 
 {
 
-// TODO: replace map to unordered_map when STL supports heterogeneous lookup
-//       in unordered_map
 template<typename T>
-using StringKeyMap = std::map<std::string, std::shared_ptr<T>, std::less<>>;
+using TStringKeyMap = std::unordered_map<std::string, std::shared_ptr<T>>;
 
 } // namespace cadise

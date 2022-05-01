@@ -20,8 +20,8 @@ namespace cadise::instantiator
 {
 
 static std::shared_ptr<Light> createPoint(
-    const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Primitive>& primitives)
+    const std::shared_ptr<SdData>&  data,
+    const TStringKeyMap<Primitive>& primitives)
 {
     const auto position  = data->findVector3r("position");
     const auto intensity = data->findVector3r("intensity");
@@ -31,8 +31,8 @@ static std::shared_ptr<Light> createPoint(
 
 static std::vector<std::shared_ptr<AreaLight>> createArea(
     const std::shared_ptr<SdData>&             data,
-    const StringKeyMap<Primitive>&             primitives,
-    StringKeyMap<TriangleBuffer>&              out_triangleBuffers,
+    const TStringKeyMap<Primitive>&            primitives,
+    TStringKeyMap<TriangleBuffer>&             out_triangleBuffers,
     std::vector<std::shared_ptr<Intersector>>& out_intersectors)
 {
     std::vector<std::shared_ptr<AreaLight>> lights;
@@ -102,9 +102,9 @@ static std::vector<std::shared_ptr<AreaLight>> createArea(
 }
 
 static std::shared_ptr<Light> createEnvironment(
-    const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Primitive>& primitives,
-    std::shared_ptr<Primitive>&    out_backgroundSphere) 
+    const std::shared_ptr<SdData>&  data,
+    const TStringKeyMap<Primitive>& primitives,
+    std::shared_ptr<Primitive>&     out_backgroundSphere) 
 {
     const auto hdrFilename = data->findString("hdr-filename");
 
@@ -131,8 +131,8 @@ static std::shared_ptr<Light> createEnvironment(
 
 void makeLight(
     const std::shared_ptr<SdData>&             data,
-    const StringKeyMap<Primitive>&             primitives,
-    StringKeyMap<TriangleBuffer>&              out_triangleBuffers,
+    const TStringKeyMap<Primitive>&            primitives,
+    TStringKeyMap<TriangleBuffer>&             out_triangleBuffers,
     std::vector<std::shared_ptr<Light>>&       out_lights,
     std::vector<std::shared_ptr<Intersector>>& out_intersectors,
     std::shared_ptr<Primitive>&                out_backgroundSphere)

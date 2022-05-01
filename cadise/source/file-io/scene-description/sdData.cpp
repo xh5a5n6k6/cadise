@@ -98,7 +98,7 @@ const std::vector<Vector3R> SdData::findVector3rArray(
 
 std::shared_ptr<TTexture<real>> SdData::getRealTexture(
     const std::string&             name,
-    const StringKeyMap<TTexture<real>>& realTextures,
+    const TStringKeyMap<TTexture<real>>& realTextures,
     const real                          defaultValue)
 {
     std::shared_ptr<TTexture<real>> realTexture = nullptr;
@@ -119,7 +119,7 @@ std::shared_ptr<TTexture<real>> SdData::getRealTexture(
 
 std::shared_ptr<TTexture<Spectrum>> SdData::getSpectrumTexture(
     const std::string&                 name,
-    const StringKeyMap<TTexture<Spectrum>>& spectrumTextures,
+    const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures,
     const Spectrum&                         defaultValue)
 {
     std::shared_ptr<TTexture<Spectrum>> spectrumTexture = nullptr;

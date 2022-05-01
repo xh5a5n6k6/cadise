@@ -17,7 +17,7 @@ namespace cadise::instantiator
 
 static std::shared_ptr<Primitive> createSphere(
     const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Bsdf>&      bsdfs)
+    const TStringKeyMap<Bsdf>&     bsdfs)
 {
     const auto center   = data->findVector3r("center");
     const real radius   = data->findReal("radius");
@@ -30,7 +30,7 @@ static std::shared_ptr<Primitive> createSphere(
 
 static std::shared_ptr<Primitive> createTriangle(
     const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Bsdf>&      bsdfs) 
+    const TStringKeyMap<Bsdf>&     bsdfs) 
 {
     const auto v1       = data->findVector3r("v1");
     const auto v2       = data->findVector3r("v2");
@@ -44,7 +44,7 @@ static std::shared_ptr<Primitive> createTriangle(
 
 static std::shared_ptr<Primitive> createRectangle(
     const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Bsdf>&      bsdfs) 
+    const TStringKeyMap<Bsdf>&     bsdfs) 
 {
     const auto v1       = data->findVector3r("v1");
     const auto v2       = data->findVector3r("v2");
@@ -60,7 +60,7 @@ static std::shared_ptr<Primitive> createRectangle(
 
 static std::shared_ptr<TriangleBuffer> createTriangleMesh(
     const std::shared_ptr<SdData>& data,
-    const StringKeyMap<Bsdf>&      bsdfs) 
+    const TStringKeyMap<Bsdf>&     bsdfs) 
 {
     const auto positions = data->findVector3rArray("positions");
     const auto normals   = data->findVector3rArray("normals");
@@ -78,7 +78,7 @@ static std::shared_ptr<TriangleBuffer> createTriangleMesh(
 
 //static std::vector<std::shared_ptr<Primitive>> createTriangleMeshKdTree(
 //    const std::shared_ptr<SdData>& data,
-//    const StringKeyMap<Bsdf>&      bsdfs)
+//    const TStringKeyMap<Bsdf>&      bsdfs)
 //{
 //    const auto positions = data->findVector3rArray("positions");
 //    const auto normals = data->findVector3rArray("normals");
@@ -102,10 +102,10 @@ static std::shared_ptr<TriangleBuffer> createTriangleMesh(
 
 void makePrimitive(
     const std::shared_ptr<SdData>&             data,
-    const StringKeyMap<Bsdf>&                  bsdfs,
+    const TStringKeyMap<Bsdf>&                 bsdfs,
     std::vector<std::shared_ptr<Intersector>>& out_intersectors,
-    StringKeyMap<Primitive>&                   out_primitives,
-    StringKeyMap<TriangleBuffer>&              out_triangleBuffers) 
+    TStringKeyMap<Primitive>&                  out_primitives,
+    TStringKeyMap<TriangleBuffer>&             out_triangleBuffers) 
 {
     CS_ASSERT(data);
 
