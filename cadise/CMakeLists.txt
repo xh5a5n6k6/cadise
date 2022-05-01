@@ -1,4 +1,4 @@
-# Cadise core library in VS Solution
+# Cadise core library
 
 set(CADISE_LIB_DIR             "${CMAKE_CURRENT_SOURCE_DIR}/")
 set(CADISE_PUBLIC_INCLUDE_DIR  "${CADISE_LIB_DIR}/include/")
@@ -22,10 +22,9 @@ add_library(${CADISE_LIB_NAME}
     ${CADISE_HEADER_FILES} 
     ${CADISE_SOURCE_FILES})
 
-# HACK: set private_include_dir public before finishing Cadise API design
 target_include_directories(${CADISE_LIB_NAME}
-    PUBLIC ${CADISE_PUBLIC_INCLUDE_DIR}
-    PUBLIC ${CADISE_PRIVATE_INCLUDE_DIR})
+    PUBLIC  ${CADISE_PUBLIC_INCLUDE_DIR}
+    PRIVATE ${CADISE_PRIVATE_INCLUDE_DIR})
 
 
 if(WIN32)
