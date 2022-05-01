@@ -10,104 +10,103 @@ SdData::SdData() :
 {}
 
 void SdData::addBool(
-    const std::string_view& name, 
+    const std::string& name, 
     std::unique_ptr<bool[]> value, 
-    const int32 valueNumber)
+    const std::size_t numValues)
 {
-    _bools.push_back(
-        std::make_shared<TSdDataUnit<bool>>(name, std::move(value), valueNumber));
+    _bools.emplace_back(
+        std::make_shared<TSdDataUnit<bool>>(name, std::move(value), numValues));
 }
 
 void SdData::addReal(
-    const std::string_view& name, 
+    const std::string& name, 
     std::unique_ptr<real[]> value, 
-    const int32 valueNumber) 
+    const std::size_t numValues)
 {
-    _reals.push_back(
-        std::make_shared<TSdDataUnit<real>>(name, std::move(value), valueNumber));
+    _reals.emplace_back(
+        std::make_shared<TSdDataUnit<real>>(name, std::move(value), numValues));
 }
 
 void SdData::addInt32(
-    const std::string_view& name,
+    const std::string& name,
     std::unique_ptr<int32[]> value,
-    const int32 valueNumber) 
+    const std::size_t numValues)
 {
-    _int32s.push_back(
-        std::make_shared<TSdDataUnit<int32>>(name, std::move(value), valueNumber));
+    _int32s.emplace_back(
+        std::make_shared<TSdDataUnit<int32>>(name, std::move(value), numValues));
 }
 
 void SdData::addVector3R(
-    const std::string_view& name,
+    const std::string& name,
     std::unique_ptr<Vector3R[]> value,
-    const int32 valueNumber) 
+    const std::size_t numValues)
 {
-    _vector3rs.push_back(
-        std::make_shared<TSdDataUnit<Vector3R>>(name, std::move(value), valueNumber));
+    _vector3rs.emplace_back(
+        std::make_shared<TSdDataUnit<Vector3R>>(name, std::move(value), numValues));
 }
 
 void SdData::addString(
-    const std::string_view& name,
-    std::unique_ptr<std::string_view[]> value,
-    const int32 valueNumber)
+    const std::string& name,
+    std::unique_ptr<std::string[]> value,
+    const std::size_t numValues)
 {
-    _strings.push_back(
-        std::make_shared<TSdDataUnit<std::string_view>>(name, std::move(value), valueNumber));
+    _strings.emplace_back(
+        std::make_shared<TSdDataUnit<std::string>>(name, std::move(value), numValues));
 }
 
 bool SdData::findBool(
-    const std::string_view& name, const bool defaultValue) const
+    const std::string& name, const bool defaultValue)
 {
     return _findData(name, defaultValue, _bools);
 }
 
 real SdData::findReal(
-    const std::string_view& name, const real defaultValue) const
+    const std::string& name, const real defaultValue)
 {
     return _findData(name, defaultValue, _reals);
 }
 
 int32 SdData::findInt32(
-    const std::string_view& name, const int32 defaultValue) const 
+    const std::string& name, const int32 defaultValue)
 {
     return _findData(name, defaultValue, _int32s);
 }
 
 Vector3R SdData::findVector3r(
-    const std::string_view& name, const Vector3R& defaultValue) const
+    const std::string& name, const Vector3R& defaultValue)
 {
     return _findData(name, defaultValue, _vector3rs);
 }
 
-std::string_view SdData::findString(
-    const std::string_view& name, const std::string_view& defaultValue) const 
+std::string SdData::findString(
+    const std::string& name, const std::string& defaultValue)
 {
     return _findData(name, defaultValue, _strings);
 }
 
 const std::vector<real> SdData::findRealArray(
-    const std::string_view& name) const 
+    const std::string& name)
 {
     return _findDataArray(name, _reals);
 }
 
 const std::vector<Vector3R> SdData::findVector3rArray(
-    const std::string_view& name) const
+    const std::string& name)
 {
     return _findDataArray(name, _vector3rs);
 }
 
 std::shared_ptr<TTexture<real>> SdData::getRealTexture(
-    const std::string_view&             name,
+    const std::string&             name,
     const StringKeyMap<TTexture<real>>& realTextures,
-    const real                          defaultValue) const 
+    const real                          defaultValue)
 {
     std::shared_ptr<TTexture<real>> realTexture = nullptr;
 
-    const std::string_view textureName = this->findString(name);
-    if (textureName != "") 
+    const std::string textureName = this->findString(name);
+    if (!textureName.empty()) 
     {
-        auto&& texture = realTextures.find(textureName);
-        realTexture = texture->second;
+        realTexture = realTextures.at(textureName);
     }
     else 
     {
@@ -119,17 +118,16 @@ std::shared_ptr<TTexture<real>> SdData::getRealTexture(
 }
 
 std::shared_ptr<TTexture<Spectrum>> SdData::getSpectrumTexture(
-    const std::string_view&                 name,
+    const std::string&                 name,
     const StringKeyMap<TTexture<Spectrum>>& spectrumTextures,
-    const Spectrum&                         defaultValue) const 
+    const Spectrum&                         defaultValue)
 {
     std::shared_ptr<TTexture<Spectrum>> spectrumTexture = nullptr;
 
-    const std::string_view textureName = this->findString(name);
-    if (textureName != "") 
+    const std::string textureName = this->findString(name);
+    if (!textureName.empty()) 
     {
-        auto&& texture = spectrumTextures.find(textureName);
-        spectrumTexture = texture->second;
+        spectrumTexture = spectrumTextures.at(textureName);
     }
     else 
     {
@@ -149,7 +147,7 @@ ESdClassType SdData::classType() const
     return _classType;
 }
 
-void SdData::setClassType(const std::string_view& classType) 
+void SdData::setClassType(const std::string& classType) 
 {
     if (classType == "film") 
     {

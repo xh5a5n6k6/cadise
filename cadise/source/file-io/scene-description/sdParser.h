@@ -2,28 +2,31 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
-namespace cadise { class RenderDatabase; }
-namespace cadise { class Tokenizer; }
+// forward declaration
+namespace cadise 
+{ 
+    class SdData;
+    class RenderDatabase;
+    class Tokenizer; 
+} // end forward declaration
 
 namespace cadise
 {
 
-// SdParser is for scene description parser
+/*! @brief Scene description file (with .crsd extension) parser.
+*/
 class SdParser
 {
 public:
-    SdParser();
-    ~SdParser();
-
-    void parseSd(const std::string& filename);
+    void parse(
+        const std::string& filename,
+        RenderDatabase* ren,
+        std::vector<std::shared_ptr<SdData>>& out_sdDatas) const;
 
 private:
-    std::string _parseSdToString(const std::string& filename) const;
-    void _parseEnd();
-
-    std::unique_ptr<Tokenizer>      _tokenizer;
-    std::unique_ptr<RenderDatabase> _renderDatabase;
+    std::string _parseRaw(const std::string& filename) const;
 };
 
 } // namespace cadise

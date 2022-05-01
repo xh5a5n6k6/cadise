@@ -1,4 +1,4 @@
-#include "file-io/scene-description/tokenizer.h"
+#include "file-io/scene-description/sdDataParser.h"
 
 #include "file-io/scene-description/sdData.h"
 
@@ -8,9 +8,9 @@
 namespace cadise
 {
 
-Tokenizer::Tokenizer() = default;
+SdDataParser::SdDataParser() = default;
 
-std::shared_ptr<SdData> Tokenizer::tokenize(const std::string_view& data) const
+std::shared_ptr<SdData> SdDataParser::parse(const std::string& data) const
 {
     std::shared_ptr<SdData> sdData = std::make_shared<SdData>();
 
@@ -27,18 +27,18 @@ std::shared_ptr<SdData> Tokenizer::tokenize(const std::string_view& data) const
     {
         endPosition -= 1;
     }
-
-    const std::string_view classType = data.substr(startPosition, endPosition - startPosition + 1);
+    
+    const std::string classType = data.substr(startPosition, endPosition - startPosition + 1);
     sdData->setClassType(classType);
 
     // tokenize each SdDataUnit, which is string enclosed by '[' and ']'
-    while ((startPosition = data.find_first_of('[', endPosition)) != std::string_view::npos)
+    while ((startPosition = data.find_first_of('[', endPosition)) != std::string::npos)
     {
         endPosition = data.find_first_of(']', startPosition);
         const std::size_t dataUnitLength = endPosition - startPosition - 1;
 
         // dataUnitString doesn't include '[' and ']'
-        const std::string_view dataUnitString = data.substr(startPosition + 1, dataUnitLength);
+        const std::string dataUnitString = data.substr(startPosition + 1, dataUnitLength);
         _parseDataUnit(sdData, dataUnitString);
 
         startPosition = endPosition + 1;
@@ -47,7 +47,7 @@ std::shared_ptr<SdData> Tokenizer::tokenize(const std::string_view& data) const
     return sdData;
 }
 
-void Tokenizer::_parseDataUnit(std::shared_ptr<SdData>& sdData, const std::string_view& dataUnitString) const
+void SdDataParser::_parseDataUnit(std::shared_ptr<SdData>& sdData, const std::string& dataUnitString) const
 {
     std::size_t startPosition = 0;
     std::size_t endPosition   = 0;
@@ -55,17 +55,17 @@ void Tokenizer::_parseDataUnit(std::shared_ptr<SdData>& sdData, const std::strin
     // parse variable name
     startPosition = dataUnitString.find_first_not_of(' ', endPosition);
     endPosition   = dataUnitString.find_first_of(' ', startPosition);
-    const std::string_view name = dataUnitString.substr(startPosition, endPosition - startPosition);
+    const std::string name = dataUnitString.substr(startPosition, endPosition - startPosition);
 
     // parse variable type
     startPosition = dataUnitString.find_first_not_of(' ', endPosition + 1);
     endPosition   = dataUnitString.find_first_of(' ', startPosition);
-    const std::string_view type = dataUnitString.substr(startPosition, endPosition - startPosition);
+    const std::string type = dataUnitString.substr(startPosition, endPosition - startPosition);
 
     // parse variable value
     startPosition = dataUnitString.find_first_of('\"', endPosition);
     endPosition   = dataUnitString.find_last_of('\"');
-    const std::string_view valueString = dataUnitString.substr(startPosition + 1, endPosition - startPosition - 1);
+    const std::string valueString = dataUnitString.substr(startPosition + 1, endPosition - startPosition - 1);
 
     // parse value string to corresponding type
     if (type == "bool") 
@@ -95,22 +95,23 @@ void Tokenizer::_parseDataUnit(std::shared_ptr<SdData>& sdData, const std::strin
     }
     else if (type == "string")
     {
-        std::unique_ptr<std::string_view[]> value = std::move(_parseString(valueString));
+        std::unique_ptr<std::string[]> value = std::move(_parseString(valueString));
         sdData->addString(name, std::move(value), 1);
     }
     else if (type == "material") 
     {
-        std::unique_ptr<std::string_view[]> value = std::move(_parseString(valueString));
+        std::unique_ptr<std::string[]> value = std::move(_parseString(valueString));
         sdData->addString(name, std::move(value), 1);
     }
     else if (type == "texture") 
     {
-        std::unique_ptr<std::string_view[]> value = std::move(_parseString(valueString));
+        std::unique_ptr<std::string[]> value = std::move(_parseString(valueString));
         sdData->addString(name, std::move(value), 1);
     }
     else if (type == "primitive") 
     {
-        std::unique_ptr<std::string_view[]> value = std::move(_parseString(valueString));
+        std::unique_ptr<std::string[]> value = std::move(_parseString(valueString));
+        //sdData->addString(name, std::move(value), 1);
         sdData->addString(name, std::move(value), 1);
     }
     else if (type == "real-array") 
@@ -128,12 +129,13 @@ void Tokenizer::_parseDataUnit(std::shared_ptr<SdData>& sdData, const std::strin
     else
     {
         // unknown type
+        std::cout << "Sd data unit unknown type";
     }
 }
 
-std::unique_ptr<bool[]> Tokenizer::_parseBool(const std::string_view& value) const
+std::unique_ptr<bool[]> SdDataParser::_parseBool(const std::string& value) const
 {
-    std::unique_ptr<bool[]> result(new bool);
+    std::unique_ptr<bool[]> result(new bool[1]);
 
     if (value == "true") 
     {
@@ -151,29 +153,29 @@ std::unique_ptr<bool[]> Tokenizer::_parseBool(const std::string_view& value) con
     return std::move(result);
 }
 
-std::unique_ptr<real[]> Tokenizer::_parseReal(const std::string_view& value) const 
+std::unique_ptr<real[]> SdDataParser::_parseReal(const std::string& value) const 
 {
-    std::unique_ptr<real[]> result(new real);
+    std::unique_ptr<real[]> result(new real[1]);
 
-    const real actualValue = static_cast<real>(std::stold(std::string(value)));
+    const real actualValue = static_cast<real>(std::stold(value));
     result[0] = actualValue;
 
     return std::move(result);
 }
 
-std::unique_ptr<int32[]> Tokenizer::_parseInt32(const std::string_view& value) const 
+std::unique_ptr<int32[]> SdDataParser::_parseInt32(const std::string& value) const 
 {
-    std::unique_ptr<int32[]> result(new int32);
+    std::unique_ptr<int32[]> result(new int32[1]);
 
-    const int32 actualValue = static_cast<int32>(std::stoll(std::string(value)));
+    const int32 actualValue = static_cast<int32>(std::stoll(value));
     result[0] = actualValue;
 
     return std::move(result);
 }
 
-std::unique_ptr<Vector3R[]> Tokenizer::_parseVector3r(const std::string_view& value) const 
+std::unique_ptr<Vector3R[]> SdDataParser::_parseVector3r(const std::string& value) const 
 {
-    std::unique_ptr<Vector3R[]> result(new Vector3R);
+    std::unique_ptr<Vector3R[]> result(new Vector3R[1]);
 
     std::size_t startPosition = 0;
     std::size_t endPosition   = 0;
@@ -200,18 +202,18 @@ std::unique_ptr<Vector3R[]> Tokenizer::_parseVector3r(const std::string_view& va
     return std::move(result);
 }
 
-std::unique_ptr<std::string_view[]> Tokenizer::_parseString(const std::string_view& value) const
+std::unique_ptr<std::string[]> SdDataParser::_parseString(const std::string& value) const
 {
-    std::unique_ptr<std::string_view[]> result(new std::string_view);
+    std::unique_ptr<std::string[]> result(new std::string[1]);
 
-    result[0] = value;
+    result[0] = std::string(value);
 
     return std::move(result);
 }
 
-std::unique_ptr<real[]> Tokenizer::_parseRealArray(
-    const std::string_view& value, 
-    int32* const            out_valueNumber) const 
+std::unique_ptr<real[]> SdDataParser::_parseRealArray(
+    const std::string& value, 
+    int32* const       out_valueNumber) const 
 {
     std::vector<real> realVector;
     std::size_t startPosition = 0;
@@ -229,19 +231,19 @@ std::unique_ptr<real[]> Tokenizer::_parseRealArray(
     return std::move(result);
 }
 
-std::unique_ptr<Vector3R[]> Tokenizer::_parseVector3rArray(
-    const std::string_view& value, 
-    int32* const            out_valueNumber) const
+std::unique_ptr<Vector3R[]> SdDataParser::_parseVector3rArray(
+    const std::string& value, 
+    int32* const       out_valueNumber) const
 {
     std::vector<Vector3R> vector3rVector;
     std::size_t startPosition = 0;
     std::size_t endPosition   = 0;
 
     // while vector3r loop
-    while ((startPosition = value.find_first_not_of(' ', startPosition)) != std::string_view::npos)
+    while ((startPosition = value.find_first_not_of(' ', startPosition)) != std::string::npos)
     {
         endPosition = value.find_first_of(',', startPosition);
-        if (endPosition == std::string_view::npos) 
+        if (endPosition == std::string::npos) 
         {
             endPosition = value.find_last_not_of(' ') + 1;
         }
