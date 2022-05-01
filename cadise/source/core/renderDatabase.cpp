@@ -86,8 +86,8 @@ void RenderDatabase::setUpData(const std::shared_ptr<SdData>& data)
             _setUpPrimitive(data);
             break;
 
-        default: 
-            break;    
+        default:
+            break;
     }
 }
 
@@ -163,7 +163,7 @@ void RenderDatabase::prepareRender()
     _renderer->setFilm(film);
 }
 
-void RenderDatabase::startRender() const
+void RenderDatabase::render() const
 {
     _renderer->render();
 }
@@ -197,7 +197,7 @@ void RenderDatabase::_setUpRealTexture(const std::shared_ptr<SdData>& data)
 {
     const std::shared_ptr<TTexture<real>> texture
         = instantiator::makeRealTexture(data, _realTextures, _spectrumTextures);
-    const std::string_view textureName = data->findString("name");
+    const std::string textureName = data->findString("name");
 
     _realTextures.insert(
         std::pair<std::string, std::shared_ptr<TTexture<real>>>(textureName, texture));
@@ -207,7 +207,7 @@ void RenderDatabase::_setUpSpectrumTexture(const std::shared_ptr<SdData>& data)
 {
     const std::shared_ptr<TTexture<Spectrum>> texture
         = instantiator::makeSpectrumTexture(data, _realTextures, _spectrumTextures);
-    const std::string_view textureName = data->findString("name");
+    const std::string textureName = data->findString("name");
 
     _spectrumTextures.insert(
         std::pair<std::string, std::shared_ptr<TTexture<Spectrum>>>(textureName, texture));
@@ -216,7 +216,7 @@ void RenderDatabase::_setUpSpectrumTexture(const std::shared_ptr<SdData>& data)
 void RenderDatabase::_setUpBsdf(const std::shared_ptr<SdData>& data)
 {
     const std::shared_ptr<Bsdf> bsdf = instantiator::makeBsdf(data, _realTextures, _spectrumTextures, _bsdfs);
-    const std::string_view bsdfName = data->findString("name");
+    const std::string bsdfName = data->findString("name");
 
     _bsdfs.insert(std::pair<std::string, std::shared_ptr<Bsdf>>(bsdfName, bsdf));
 }

@@ -6,15 +6,21 @@
 #include <memory>
 #include <vector>
 
-namespace cadise { class Bsdf; }
-namespace cadise { class Intersector; }
-namespace cadise { class Light; }
-namespace cadise { class Primitive; }
-namespace cadise { class Renderer; }
-namespace cadise { class Scene; }
-namespace cadise { class SdData; }
-namespace cadise { class TriangleBuffer; }
-namespace cadise { template<typename T> class TTexture; }
+// forward declaration
+namespace cadise 
+{ 
+    template<typename T>
+    class TTexture;
+
+    class Bsdf;
+    class Intersector;
+    class Light;
+    class Primitive;
+    class Renderer;
+    class Scene;
+    class SdData;
+    class TriangleBuffer;
+} // end forward declaration
 
 namespace cadise 
 {
@@ -27,7 +33,7 @@ public:
     void setUpData(const std::shared_ptr<SdData>& data);
 
     void prepareRender();
-    void startRender() const;
+    void render() const;
 
 private:
     void _setUpFilm(const std::shared_ptr<SdData>& data);
