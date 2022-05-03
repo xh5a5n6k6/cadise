@@ -111,7 +111,6 @@ void SdDataParser::_parseDataUnit(std::shared_ptr<SdData>& sdData, const std::st
     else if (type == "primitive") 
     {
         std::unique_ptr<std::string[]> value = std::move(_parseString(valueString));
-        //sdData->addString(name, std::move(value), 1);
         sdData->addString(name, std::move(value), 1);
     }
     else if (type == "real-array") 

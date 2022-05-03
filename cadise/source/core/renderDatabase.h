@@ -20,7 +20,7 @@ namespace cadise
 
     template<typename T>
     class TTexture;
-} // end forward declaration
+}
 
 namespace cadise 
 {

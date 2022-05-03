@@ -45,11 +45,11 @@ extern CS_API void csDeleteRenderDatabase(const CSuint64 renderDatabaseId);
 */
 extern CS_API CSbool csParseFile(const CSuint64 renderDatabaseId, const CSchar* filename);
 
-/*! @brief Specify an engine to start render progress synchronously.
+/*! @brief Specify an engine to start the render process synchronously.
 */
 extern CS_API void csRender(const CSuint64 renderDatabaseId);
 
-/*! @brief Specify an engine to start render progress asynchronously.
+/*! @brief Specify an engine to start the render process asynchronously.
 
 The only difference between csRender is that it will call another thread
 to do the render job, which means this function won't block the process.

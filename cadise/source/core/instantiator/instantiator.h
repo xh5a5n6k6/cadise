@@ -25,7 +25,7 @@ namespace cadise {
 
     template<typename T> 
     class TTexture; 
-} // end forward declaration
+}
 
 // TODO: maybe use factory to deal with object instantiation
 namespace cadise::instantiator

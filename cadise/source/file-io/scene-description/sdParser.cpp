@@ -2,15 +2,14 @@
 
 #include "core/renderDatabase.h"
 #include "file-io/scene-description/sdDataParser.h"
-
-#include <cstdio>
-#include <cstring>
-#include <iostream>
-
 #include "fundamental/time/stopwatch.h"
 #include "fundamental/logger/logger.h"
 #include "utility/parallel.h"
+
+#include <cstdio>
+#include <cstring>
 #include <fstream>
+#include <iostream>
 
 namespace cadise 
 {

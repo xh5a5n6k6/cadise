@@ -3,8 +3,8 @@
 #include "core/spectrum/spectrum.h"
 #include "file-io/scene-description/eSdClassType.h"
 #include "file-io/scene-description/tSdDataUnit.h"
-#include "math/type/mapType.h"
 #include "math/tVector3.h"
+#include "math/type/mapType.h"
 
 #include <memory>
 #include <type_traits>
@@ -129,7 +129,7 @@ inline std::vector<T> SdData::_findDataArray(
     {
         if (dataset[i]->name() == name)
         {
-            auto values = dataset[i]->value();
+            auto&& values = dataset[i]->value();
             dataset.erase(dataset.begin() + i);
 
             dataArray.reserve(values.size());
