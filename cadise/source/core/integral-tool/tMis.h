@@ -33,12 +33,12 @@ inline real TMis<Mode>::weight(
     const real mulA = nA * pdfA;
     const real mulB = nB * pdfB;
 
-    if constexpr (Mode == EMisMode::BALANCE)
+    if constexpr (Mode == EMisMode::Balance)
     {
         return mulA / (mulA + mulB);
     }
     // using power as 2
-    else if constexpr (Mode == EMisMode::POWER)
+    else if constexpr (Mode == EMisMode::Power)
     {
         const real mulA2 = mulA * mulA;
         const real mulB2 = mulB * mulB;

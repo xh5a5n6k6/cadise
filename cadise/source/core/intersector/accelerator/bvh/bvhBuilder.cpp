@@ -40,7 +40,7 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::buildBinaryNodes(
         boundInfos,
         intersectors, 
         out_orderedIntersectors, 
-         out_totalNodeSize);
+        out_totalNodeSize);
 
     return std::move(root);
 }
@@ -124,20 +124,22 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
             bool canSplit = false;
             switch (_splitMode)
             {
-                case EBvhSplitMode::EQUAL:
-                    canSplit = _canSplitWithEqual(boundInfos,
-                                                  splitAxis,
-                                                  &subBoundInfosA,
-                                                  &subBoundInfosB);
+                case EBvhSplitMode::EqualCounts:
+                    canSplit = _canSplitWithEqualCounts(
+                        boundInfos,
+                        splitAxis,
+                        &subBoundInfosA,
+                        &subBoundInfosB);
                     break;
 
                 case EBvhSplitMode::SAH:
-                    canSplit = _canSplitWithSah(boundInfos,
-                                                splitAxis,
-                                                nodeBound,
-                                                centroidBound,
-                                                &subBoundInfosA,
-                                                &subBoundInfosB);
+                    canSplit = _canSplitWithSah(
+                        boundInfos,
+                        splitAxis,
+                        nodeBound,
+                        centroidBound,
+                        &subBoundInfosA,
+                        &subBoundInfosB);
                     break;
 
                 default:
@@ -235,7 +237,7 @@ void BvhBuilder::_buildLinearNodesRecursively(
     }
 }
 
-bool BvhBuilder::_canSplitWithEqual(
+bool BvhBuilder::_canSplitWithEqualCounts(
     const std::vector<BvhBoundInfo>& boundInfos,
     const std::size_t                splitAxis,
     std::vector<BvhBoundInfo>* const out_subBoundInfosA,
@@ -301,7 +303,7 @@ bool BvhBuilder::_canSplitWithSah(
     // use equal split instead
     if (intersectorCounts <= 2) 
     {
-        return _canSplitWithEqual(
+        return _canSplitWithEqualCounts(
             boundInfos, 
             splitAxis, 
             out_subBoundInfosA, 

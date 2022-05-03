@@ -29,7 +29,7 @@ void VptEstimator::estimate(
 {
     CS_ASSERT(out_radiance);
 
-    const TransportInfo transportInfo(ETransportMode::RADIANCE);
+    const TransportInfo transportInfo(ETransportMode::Radiance);
     
     Spectrum totalRadiance(0.0_r);
     Spectrum pathThroughput(1.0_r);

@@ -28,7 +28,7 @@ static std::shared_ptr<Accelerator> createBvh(
     EBvhSplitMode mode;
     if (splitMode == "equal")
     {
-        mode = EBvhSplitMode::EQUAL;
+        mode = EBvhSplitMode::EqualCounts;
     }
     else if (splitMode == "sah")
     {

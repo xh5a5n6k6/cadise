@@ -36,24 +36,24 @@ bool PathVertex::isConnectible() const
 {
     switch (_type) 
     {
-        case EVertexType::CAMERA_END:
+        case EVertexType::CameraEnd:
             CS_ASSERT(_camera);
 
             return true;
 
-        case EVertexType::LIGHT_END:
+        case EVertexType::LightEnd:
             CS_ASSERT(_light);
 
             return !_light->isDeltaLight();
 
-        case EVertexType::SURFACE:
+        case EVertexType::Surface:
             CS_ASSERT(_bsdf);
 
             return _bsdf->lobes().hasAtLeastOne({
-                ELobe::DIFFUSE_REFLECTION,
-                ELobe::DIFFUSE_TRANSMISSION,
-                ELobe::GLOSSY_REFLECTION,
-                ELobe::GLOSSY_TRANSMISSION });
+                ELobe::DiffuseReflection,
+                ELobe::DiffuseTransmission,
+                ELobe::GlossyReflection,
+                ELobe::GlossyTransmission });
 
         default:
             // unreachable place
@@ -88,7 +88,7 @@ Spectrum PathVertex::evaluate(
     intersection.setWo(toNext.normalize());
 
     Spectrum reflectance = _bsdf->evaluate(TransportInfo(mode), intersection);
-    if (mode == ETransportMode::IMPORTANCE)
+    if (mode == ETransportMode::Importance)
     {
         reflectance.mulLocal(1.0_r);
     }
@@ -124,10 +124,11 @@ real PathVertex::evaluateOriginPdfA(
 
         real pdfA;
         real pdfW;
-        _light->evaluateEmitPdf(Ray(nowP, nowToNext), 
-                                _surfaceDetail.shadingNormal(),
-                                &pdfA, 
-                                &pdfW);
+        _light->evaluateEmitPdf(
+            Ray(nowP, nowToNext), 
+            _surfaceDetail.shadingNormal(),
+            &pdfA, 
+            &pdfW);
 
         return pickLightPdf * pdfA;
     }
@@ -167,10 +168,11 @@ real PathVertex::evaluateDirectPdfA(
     {
         real pdfA;
         real pdfW;
-        _light->evaluateEmitPdf(Ray(nowP, nowToNext), 
-                                _surfaceDetail.shadingNormal(),
-                                &pdfA,
-                                &pdfW);
+        _light->evaluateEmitPdf(
+            Ray(nowP, nowToNext), 
+            _surfaceDetail.shadingNormal(),
+            &pdfA,
+            &pdfW);
 
         return pdfW * nextToNowDotN / distance2;
     }

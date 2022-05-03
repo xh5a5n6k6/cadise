@@ -17,7 +17,7 @@ ConductorMicrofacet::ConductorMicrofacet(
     const std::shared_ptr<Microfacet>&       microfacet,
     const std::shared_ptr<ConductorFresnel>& fresnel) :
     
-    Bsdf(BsdfLobes({ ELobe::GLOSSY_REFLECTION })),
+    Bsdf(BsdfLobes({ ELobe::GlossyReflection })),
     _microfacet(microfacet),
     _fresnel(fresnel) 
 {
@@ -143,7 +143,7 @@ ELobe ConductorMicrofacet::lobe(const BsdfComponents component) const
 {
     CS_ASSERT_EQ(component, 0);
 
-    return ELobe::GLOSSY_REFLECTION;
+    return ELobe::GlossyReflection;
 }
 
 } // namespace cadise

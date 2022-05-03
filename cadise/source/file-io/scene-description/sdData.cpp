@@ -6,7 +6,7 @@ namespace cadise
 {
 
 SdData::SdData() :
-    _classType(ESdClassType::NONE) 
+    _classType(ESdClassType::Undefined) 
 {}
 
 void SdData::addBool(
@@ -151,43 +151,43 @@ void SdData::setClassType(const std::string& classType)
 {
     if (classType == "film") 
     {
-        this->setClassType(ESdClassType::FILM);
+        this->setClassType(ESdClassType::Film);
     }
     else if (classType == "camera")
     {
-        this->setClassType(ESdClassType::CAMERA);
+        this->setClassType(ESdClassType::Camera);
     }
     else if (classType == "renderer")
     {
-        this->setClassType(ESdClassType::RENDERER);
+        this->setClassType(ESdClassType::Renderer);
     }
     else if (classType == "accelerator") 
     {
-        this->setClassType(ESdClassType::ACCELERATOR);
+        this->setClassType(ESdClassType::Accelerator);
     }
     else if (classType == "light-cluster") 
     {
-        this->setClassType(ESdClassType::LIGHT_CLUSTER);
+        this->setClassType(ESdClassType::LightCluster);
     }
     else if (classType == "texture-real") 
     {
-        this->setClassType(ESdClassType::TEXTURE_REAL);
+        this->setClassType(ESdClassType::TextureReal);
     }
     else if (classType == "texture-spectrum")
     {
-        this->setClassType(ESdClassType::TEXTURE_SPECTRUM);
+        this->setClassType(ESdClassType::TextureSpectrum);
     }
     else if (classType == "material") 
     {
-        this->setClassType(ESdClassType::MATERIAL);
+        this->setClassType(ESdClassType::Material);
     }
     else if (classType == "light") 
     {
-        this->setClassType(ESdClassType::LIGHT);
+        this->setClassType(ESdClassType::Light);
     }
     else if (classType == "primitive") 
     {
-        this->setClassType(ESdClassType::PRIMITIVE);
+        this->setClassType(ESdClassType::Primitive);
     }
     else 
     {

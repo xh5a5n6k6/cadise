@@ -19,7 +19,7 @@ DielectricMicrofacet::DielectricMicrofacet(
     const std::shared_ptr<Microfacet>&        microfacet,
     const std::shared_ptr<DielectricFresnel>& fresnel) :
 
-    Bsdf(BsdfLobes({ ELobe::GLOSSY_REFLECTION, ELobe::GLOSSY_TRANSMISSION })),
+    Bsdf(BsdfLobes({ ELobe::GlossyReflection, ELobe::GlossyTransmission })),
     _microfacet(microfacet),
     _fresnel(fresnel) 
 {
@@ -102,7 +102,7 @@ Spectrum DielectricMicrofacet::evaluate(
             std::swap(etaI, etaT);
         }
 
-        const real btdfFactor = (info.mode() == ETransportMode::RADIANCE) ? etaT / etaI : 1.0_r;
+        const real btdfFactor = (info.mode() == ETransportMode::Radiance) ? etaT / etaI : 1.0_r;
         const real sqrtTerm   = btdfFactor * etaI / (etaT * VdotH + etaI * LdotH);
         const real mulTerm    = std::abs(VdotH * LdotH / (VdotN * LdotN));
 
@@ -209,7 +209,7 @@ void DielectricMicrofacet::evaluateSample(
         const real LdotH = L.dot(H);
 
         real btdfFactor = 1.0_r;
-        if (info.mode() == ETransportMode::RADIANCE) 
+        if (info.mode() == ETransportMode::Radiance) 
         {
             if (LdotH < 0.0_r)
             {
@@ -353,7 +353,7 @@ ELobe DielectricMicrofacet::lobe(const BsdfComponents component) const
 {
     CS_ASSERT(component == 0 || component == 1);
 
-    return component == 0 ? ELobe::GLOSSY_REFLECTION : ELobe::GLOSSY_TRANSMISSION;
+    return component == 0 ? ELobe::GlossyReflection : ELobe::GlossyTransmission;
 }
 
 } // namespace cadise

@@ -4,7 +4,7 @@ namespace cadise
 {
 
 TransportInfo::TransportInfo() :
-    TransportInfo(ETransportMode::RADIANCE)
+    TransportInfo(ETransportMode::Radiance)
 {}
 
 TransportInfo::TransportInfo(const ETransportMode mode) :

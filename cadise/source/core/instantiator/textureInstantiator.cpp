@@ -81,26 +81,26 @@ static std::shared_ptr<TTexture<Spectrum>> createSpectrumImage(
     ETextureSampleMode sampleMode;
     if (sMode == "nearest")
     {
-        sampleMode = ETextureSampleMode::NEAREST;
+        sampleMode = ETextureSampleMode::Nearest;
     }
     // TODO: add bilinear sample mode
     else
     {
-        sampleMode = ETextureSampleMode::NEAREST;
+        sampleMode = ETextureSampleMode::Nearest;
     }
 
     ETextureWrapMode wrapMode;
     if (wMode == "clamp") 
     {
-        wrapMode = ETextureWrapMode::CLAMP;
+        wrapMode = ETextureWrapMode::Clamp;
     }
     else if (wMode == "repeat")
     {
-        wrapMode = ETextureWrapMode::REPEAT;
+        wrapMode = ETextureWrapMode::Repeat;
     }
     else 
     {
-        wrapMode = ETextureWrapMode::REPEAT;
+        wrapMode = ETextureWrapMode::Repeat;
     }
 
     return std::make_shared<RgbImageTexture>(hdrImage, sampleMode, wrapMode);

@@ -19,11 +19,11 @@ inline TPixelSampler<T, N>::TPixelSampler(
 {
     switch (mode) 
     {
-        case ETextureWrapMode::CLAMP:
+        case ETextureWrapMode::Clamp:
             _uvwWrapper = std::make_unique<ClampUvwWrapper>();
             break;
 
-        case ETextureWrapMode::REPEAT:
+        case ETextureWrapMode::Repeat:
             _uvwWrapper = std::make_unique<RepeatUvwWrapper>();
             break;
 

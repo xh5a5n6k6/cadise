@@ -4,7 +4,7 @@ namespace cadise
 {
 
 Endpoint::Endpoint() :
-    Endpoint(0, 0.0_r, EEndpointType::NONE)
+    Endpoint(0, 0.0_r, EEndpointType::Undefined)
 {}
 
 Endpoint::Endpoint(

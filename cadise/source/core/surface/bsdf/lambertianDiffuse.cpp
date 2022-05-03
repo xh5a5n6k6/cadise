@@ -19,7 +19,7 @@ LambertianDiffuse::LambertianDiffuse() :
 {}
 
 LambertianDiffuse::LambertianDiffuse(const std::shared_ptr<TTexture<Spectrum>>& albedo) :
-    Bsdf(BsdfLobes({ ELobe::DIFFUSE_REFLECTION })),
+    Bsdf(BsdfLobes({ ELobe::DiffuseReflection })),
     _albedo(albedo) 
 {
     CS_ASSERT(albedo);
@@ -96,7 +96,7 @@ ELobe LambertianDiffuse::lobe(const BsdfComponents component) const
 {
     CS_ASSERT_EQ(component, 0);
 
-    return ELobe::DIFFUSE_REFLECTION;
+    return ELobe::DiffuseReflection;
 }
 
 } // namespace cadise

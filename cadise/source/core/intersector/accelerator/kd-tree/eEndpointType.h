@@ -3,11 +3,14 @@
 namespace cadise 
 {
 
+/*! @brief Vertex type used in K-d tree space partition process.
+*/
 enum class EEndpointType 
 {
-    NONE,
-    MIN,
-    MAX,
+    Undefined = 0,
+
+    Min,
+    Max,
 };
 
 } // namespace cadise

@@ -13,7 +13,7 @@ namespace cadise
 {
 
 PhongBsdf::PhongBsdf(const real exponent) :
-    Bsdf(BsdfLobes({ ELobe::GLOSSY_REFLECTION })),
+    Bsdf(BsdfLobes({ ELobe::GlossyReflection })),
     _exponent(exponent) 
 {
     _pdfFactor  = (exponent + 1.0_r) * constant::rcp_two_pi<real>;
@@ -104,7 +104,7 @@ ELobe PhongBsdf::lobe(const BsdfComponents component) const
 {
     CS_ASSERT_EQ(component, 0);
 
-    return ELobe::GLOSSY_REFLECTION;
+    return ELobe::GlossyReflection;
 }
 
 } // namespace cadise

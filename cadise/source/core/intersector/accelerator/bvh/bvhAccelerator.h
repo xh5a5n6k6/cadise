@@ -7,7 +7,11 @@
 #include <memory>
 #include <vector>
 
-namespace cadise { enum class EBvhSplitMode; }
+// forward declration
+namespace cadise 
+{ 
+    enum class EBvhSplitMode; 
+}
 
 namespace cadise 
 {

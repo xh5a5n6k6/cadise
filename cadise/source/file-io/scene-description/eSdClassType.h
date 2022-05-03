@@ -3,23 +3,25 @@
 namespace cadise 
 {
 
+/*! @brief Scene description class type.
+*/
 enum class ESdClassType 
 {
-    NONE,
+    Undefined = 0,
 
     // global setting
-    FILM,
-    CAMERA,
-    RENDERER,
-    ACCELERATOR,
-    LIGHT_CLUSTER,
+    Film,
+    Camera,
+    Renderer,
+    Accelerator,
+    LightCluster,
 
     // world setting
-    TEXTURE_REAL,
-    TEXTURE_SPECTRUM,
-    MATERIAL,
-    LIGHT,
-    PRIMITIVE,
+    TextureReal,
+    TextureSpectrum,
+    Material,
+    Light,
+    Primitive,
 };
 
 } // namespace cadise

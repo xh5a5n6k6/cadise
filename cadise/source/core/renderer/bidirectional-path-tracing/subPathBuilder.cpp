@@ -62,7 +62,7 @@ void SubPathBuilder::buildLightPath(
     surfaceDetail.setGeometryNormal(emitN);
     surfaceDetail.setShadingNormal(emitN);
 
-    PathVertex lightVertex(EVertexType::LIGHT_END, emittance);
+    PathVertex lightVertex(EVertexType::LightEnd, emittance);
     lightVertex.setSurfaceDetail(surfaceDetail);
     lightVertex.setPdfAForward(pdfAForward);
     lightVertex.setLight(sampleLight);
@@ -76,7 +76,7 @@ void SubPathBuilder::buildLightPath(
     // it will not used in light sub-path construction
     Spectrum localRadiance;
     _buildSubPathCompletely(
-        ETransportMode::IMPORTANCE,
+        ETransportMode::Importance,
         scene,
         Ray(emitPosition, emitDirection),
         throughput,
@@ -109,7 +109,7 @@ void SubPathBuilder::buildCameraPath(
     surfaceDetail.setGeometryNormal(primaryRay.direction());
     surfaceDetail.setShadingNormal(primaryRay.direction());
 
-    PathVertex cameraVertex(EVertexType::CAMERA_END, Spectrum(1.0_r));
+    PathVertex cameraVertex(EVertexType::CameraEnd, Spectrum(1.0_r));
     cameraVertex.setSurfaceDetail(surfaceDetail);
     cameraVertex.setPdfAForward(pdfA);
     cameraVertex.setCamera(_camera);
@@ -117,7 +117,7 @@ void SubPathBuilder::buildCameraPath(
     out_cameraPath->addVertex(cameraVertex);
 
     _buildSubPathCompletely(
-        ETransportMode::RADIANCE,
+        ETransportMode::Radiance,
         scene,
         primaryRay,
         Spectrum(1.0_r),
@@ -158,7 +158,7 @@ void SubPathBuilder::_buildSubPathCompletely(
         }
 
         PathVertex& previousVertex = (*out_subPath)[currentLength - 1];
-        PathVertex  newVertex(EVertexType::SURFACE, throughput);
+        PathVertex  newVertex(EVertexType::Surface, throughput);
 
         const Primitive* primitive = intersection.primitiveInfo().primitive();
         const Bsdf*      bsdf      = primitive->bsdf();
@@ -183,7 +183,7 @@ void SubPathBuilder::_buildSubPathCompletely(
         // add s=0 situation radiance when hitting area light
         // (while building camera sub-path)
         const AreaLight* areaLight = primitive->areaLight();
-        if (areaLight && mode == ETransportMode::RADIANCE) 
+        if (areaLight && mode == ETransportMode::Radiance) 
         {
             (*out_subPath)[currentLength - 1].setLight(areaLight);
 
@@ -215,7 +215,7 @@ void SubPathBuilder::_buildSubPathCompletely(
 
         // for non-symmetric scattering correction
         throughput.mulLocal(reflectance.mul(LdotN / pdfW));
-        if (mode == ETransportMode::IMPORTANCE)
+        if (mode == ETransportMode::Importance)
         {
             throughput.mulLocal(1.0_r);
         }

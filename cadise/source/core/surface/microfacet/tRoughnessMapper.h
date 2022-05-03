@@ -23,7 +23,7 @@ inline real TRoughnessMapper<Mode>::map(const real roughness)
     real alpha;
     
     const real safeRoughness = std::max(roughness, 0.001_r);
-    if constexpr (Mode == ERoughnessMapMode::SQUARE) 
+    if constexpr (Mode == ERoughnessMapMode::Square) 
     {
         alpha = safeRoughness * safeRoughness;
     }

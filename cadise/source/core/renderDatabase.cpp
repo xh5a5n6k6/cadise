@@ -46,43 +46,43 @@ void RenderDatabase::setUpData(const std::shared_ptr<SdData>& data)
 
     switch (data->classType()) 
     {
-        case ESdClassType::FILM:
+        case ESdClassType::Film:
             _setUpFilm(data);
             break;
 
-        case ESdClassType::CAMERA:
+        case ESdClassType::Camera:
             _setUpCamera(data);
             break;
 
-        case ESdClassType::RENDERER:
+        case ESdClassType::Renderer:
             _setUpRenderer(data);
             break;
 
-        case ESdClassType::ACCELERATOR:
+        case ESdClassType::Accelerator:
             _setUpAccelerator(data);
             break;
 
-        case ESdClassType::LIGHT_CLUSTER:
+        case ESdClassType::LightCluster:
             _setUpLightCluster(data);
             break;
 
-        case ESdClassType::TEXTURE_REAL:
+        case ESdClassType::TextureReal:
             _setUpRealTexture(data);
             break;
 
-        case ESdClassType::TEXTURE_SPECTRUM:
+        case ESdClassType::TextureSpectrum:
             _setUpSpectrumTexture(data);
             break;
 
-        case ESdClassType::MATERIAL:
+        case ESdClassType::Material:
             _setUpBsdf(data);
             break;
 
-        case ESdClassType::LIGHT:
+        case ESdClassType::Light:
             _setUpLight(data);
             break;
 
-        case ESdClassType::PRIMITIVE:
+        case ESdClassType::Primitive:
             _setUpPrimitive(data);
             break;
 

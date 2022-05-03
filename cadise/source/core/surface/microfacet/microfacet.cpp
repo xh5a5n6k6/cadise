@@ -25,7 +25,7 @@ bool Microfacet::_isShadowingMaskingValid(
 real Microfacet::_roughnessToAlpha(const real roughness) const 
 {
     // TODO: make mapping mode an user-control variable
-    return TRoughnessMapper<ERoughnessMapMode::SQUARE>().map(roughness);
+    return TRoughnessMapper<ERoughnessMapMode::Square>().map(roughness);
 }
 
 } // namespace cadise

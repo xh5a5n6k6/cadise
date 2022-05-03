@@ -6,9 +6,13 @@
 #include <memory>
 #include <vector>
 
-namespace cadise { class BvhBinaryNode; }
-namespace cadise { class BvhBoundInfo; }
-namespace cadise { class Intersector; }
+// forward declaration
+namespace cadise 
+{ 
+    class BvhBinaryNode;
+    class BvhBoundInfo;
+    class Intersector; 
+}
 
 namespace cadise 
 {
@@ -23,9 +27,10 @@ public:
         std::vector<std::shared_ptr<Intersector>>* const out_orderedIntersectors,
         std::size_t* const                               out_totalNodeSize) const;
 
-    void buildLinearNodes(std::unique_ptr<BvhBinaryNode>    root, 
-                          const std::size_t                 totalNodeSize,
-                          std::vector<BvhLinearNode>* const out_linearNodes) const;
+    void buildLinearNodes(
+        std::unique_ptr<BvhBinaryNode>    root, 
+        const std::size_t                 totalNodeSize,
+        std::vector<BvhLinearNode>* const out_linearNodes) const;
 
 private:
     std::unique_ptr<BvhBinaryNode> _buildBinaryNodesRecursively(
@@ -39,7 +44,7 @@ private:
         std::vector<BvhLinearNode>* const out_linearNodes,
         std::size_t* const                out_nodeIndex) const;
 
-    bool _canSplitWithEqual(
+    bool _canSplitWithEqualCounts(
         const std::vector<BvhBoundInfo>& boundInfos,
         const std::size_t                splitAxis,
         std::vector<BvhBoundInfo>* const out_subBoundInfosA,

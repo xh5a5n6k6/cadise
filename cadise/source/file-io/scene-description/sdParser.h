@@ -10,7 +10,7 @@ namespace cadise
     class SdData;
     class RenderDatabase;
     class Tokenizer; 
-} // end forward declaration
+}
 
 namespace cadise
 {

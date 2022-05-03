@@ -40,7 +40,7 @@ void PmViewpointConstructor::construct(
     const int32 MAX_PATH_LENGTH = 6;
 
     std::size_t   sampleViewpointCount = 0;
-    TransportInfo transportInfo(ETransportMode::RADIANCE);
+    TransportInfo transportInfo(ETransportMode::Radiance);
 
     Ray traceRay;
     _camera->spawnPrimaryRay(filmPosition, &traceRay);
@@ -77,10 +77,10 @@ void PmViewpointConstructor::construct(
 
         // build viewpoint at non-specular surface
         if (bsdf->lobes().hasAtLeastOne({
-            ELobe::DIFFUSE_REFLECTION,
-            ELobe::DIFFUSE_TRANSMISSION,
-            ELobe::GLOSSY_REFLECTION,
-            ELobe::GLOSSY_TRANSMISSION })) 
+            ELobe::DiffuseReflection,
+            ELobe::DiffuseTransmission,
+            ELobe::GlossyReflection,
+            ELobe::GlossyTransmission })) 
         {
             PmViewpoint viewpoint(
                 bsdf,
@@ -105,14 +105,14 @@ void PmViewpointConstructor::construct(
         // recursive trace for specular component
         if ((currentSampleRay.depth() < MAX_PATH_LENGTH - 1) &&
             bsdf->lobes().hasAtLeastOne({
-                ELobe::SPECULAR_REFLECTION,
-                ELobe::SPECULAR_TRANSMISSION })) 
+                ELobe::SpecularReflection,
+                ELobe::SpecularTransmission })) 
         {
             for (BsdfComponents i = 0; i < bsdf->components(); ++i) 
             {
                 if (BsdfLobes({ bsdf->lobe(i) }).hasNone({
-                    ELobe::SPECULAR_REFLECTION,
-                    ELobe::SPECULAR_TRANSMISSION }))
+                    ELobe::SpecularReflection,
+                    ELobe::SpecularTransmission }))
                 {
                     continue;
                 }

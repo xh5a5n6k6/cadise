@@ -70,7 +70,7 @@ void PhotonMapWork::work() const
         const real denominator = pickLightPdf * emitPdfA * emitPdfW;
 
         Spectrum      throughputRadiance(emittance.mul(numerator / denominator));
-        TransportInfo transportInfo(ETransportMode::IMPORTANCE);
+        TransportInfo transportInfo(ETransportMode::Importance);
         Ray           traceRay(emitPosition, emitDirection);
 
         // tracing light ray
@@ -90,10 +90,10 @@ void PhotonMapWork::work() const
 
             // only store photon at non-specular surface
             if (bsdf->lobes().hasAtLeastOne({
-                ELobe::DIFFUSE_REFLECTION,
-                ELobe::DIFFUSE_TRANSMISSION,
-                ELobe::GLOSSY_REFLECTION,
-                ELobe::GLOSSY_TRANSMISSION })) 
+                ELobe::DiffuseReflection,
+                ELobe::DiffuseTransmission,
+                ELobe::GlossyReflection,
+                ELobe::GlossyTransmission })) 
             {
                 Photon photon;
                 photon.setPosition(P);

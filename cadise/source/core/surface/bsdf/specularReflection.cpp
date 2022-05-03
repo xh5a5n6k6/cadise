@@ -15,7 +15,7 @@ SpecularReflection::SpecularReflection(
     const std::shared_ptr<TTexture<Spectrum>>& albedo,
     const std::shared_ptr<Fresnel>&            fresnel) :
     
-    Bsdf(BsdfLobes({ ELobe::SPECULAR_REFLECTION })),
+    Bsdf(BsdfLobes({ ELobe::SpecularReflection })),
     _albedo(albedo),
     _fresnel(fresnel)
 {
@@ -68,7 +68,7 @@ ELobe SpecularReflection::lobe(const BsdfComponents component) const
 {
     CS_ASSERT_EQ(component, 0);
 
-    return ELobe::SPECULAR_REFLECTION;
+    return ELobe::SpecularReflection;
 }
 
 } // namespace cadise

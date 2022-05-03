@@ -18,7 +18,7 @@ SpecularDielectric::SpecularDielectric(
     const std::shared_ptr<TTexture<Spectrum>>& albedo, 
     const std::shared_ptr<DielectricFresnel>&  fresnel) :
     
-    Bsdf(BsdfLobes({ ELobe::SPECULAR_REFLECTION, ELobe::SPECULAR_TRANSMISSION })),
+    Bsdf(BsdfLobes({ ELobe::SpecularReflection, ELobe::SpecularTransmission })),
     _albedo(albedo),
     _fresnel(fresnel)
 {
@@ -112,7 +112,7 @@ void SpecularDielectric::evaluateSample(
         _fresnel->evaluateReflectance(cosThetaI, &refractDirectionReflectance);
 
         real btdfFactor = 1.0_r;
-        if (info.mode() == ETransportMode::RADIANCE) 
+        if (info.mode() == ETransportMode::Radiance) 
         {
             if (cosThetaI < 0.0_r) 
             {
@@ -153,7 +153,7 @@ ELobe SpecularDielectric::lobe(const BsdfComponents component) const
 {
     CS_ASSERT(component == 0 || component == 1);
 
-    return component == 0 ? ELobe::SPECULAR_REFLECTION : ELobe::SPECULAR_TRANSMISSION;
+    return component == 0 ? ELobe::SpecularReflection : ELobe::SpecularTransmission;
 }
 
 } // namespace cadise

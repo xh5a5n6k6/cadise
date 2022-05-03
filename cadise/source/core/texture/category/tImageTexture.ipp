@@ -17,7 +17,7 @@ inline TImageTexture<T, ImageType, N>::TImageTexture(
 {
     switch (sampleMode) 
     {
-        case ETextureSampleMode::NEAREST:
+        case ETextureSampleMode::Nearest:
             _pixelSampler = std::make_unique<TNearestPixelSampler<ImageType, N>>(image, wrapMode);
             break;
 

@@ -2,7 +2,8 @@
 
 #include <type_traits>
 
-namespace cadise::constant {
+namespace cadise::constant
+{
 
 template<typename T>
 inline constexpr T ray_epsilon

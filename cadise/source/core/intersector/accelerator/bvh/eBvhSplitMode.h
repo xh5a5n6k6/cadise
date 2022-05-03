@@ -3,9 +3,16 @@
 namespace cadise 
 {
 
+/*! @brief Split strategy used in BVH construction.
+*/
 enum class EBvhSplitMode 
 {
-    EQUAL,
+    Undefined = 0,
+
+    /*! Split objects into two equal-sized subsets. */
+    EqualCounts,
+
+    /*! Split objects based on the Surface Area Heuristic (SAH) model. */
     SAH,
 };
 

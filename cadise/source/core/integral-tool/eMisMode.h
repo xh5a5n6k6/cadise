@@ -3,10 +3,17 @@
 namespace cadise 
 {
 
-enum class EMisMode 
+/*! @brief Weighting function used in Multiple Importance Sampling (MIS).
+*/
+enum class EMisMode
 {
-    BALANCE,
-    POWER,
+    Undefined = 0,
+
+    /*! Balance heuristic weighting function. */
+    Balance,
+
+    /*! Power heuristic weighting function. */
+    Power,
 };
 
 } // namespace cadise

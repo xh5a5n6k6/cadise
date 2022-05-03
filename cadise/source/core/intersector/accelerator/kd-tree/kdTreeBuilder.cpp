@@ -223,12 +223,12 @@ bool KdTreeBuilder::_canSplitWithSah(
             endpoints[axis][endpointBaseIndex + 0] = Endpoint(
                 intersectorIndex, 
                 bound.minVertex()[axis],
-                EEndpointType::MIN);
+                EEndpointType::Min);
 
             endpoints[axis][endpointBaseIndex + 1] = Endpoint(
                 intersectorIndex, 
                 bound.maxVertex()[axis],
-                EEndpointType::MAX);
+                EEndpointType::Max);
         }
 
         // sort all enpoints according to their positions and types
@@ -253,7 +253,7 @@ bool KdTreeBuilder::_canSplitWithSah(
         // test for each split candidate
         for (std::size_t i = 0; i < 2 * intersectorCounts; ++i) 
         {
-            if (endpoints[axis][i].type() == EEndpointType::MAX)
+            if (endpoints[axis][i].type() == EEndpointType::Max)
             {
                 --subIntersectorCountsB;
             }
@@ -289,7 +289,7 @@ bool KdTreeBuilder::_canSplitWithSah(
                 }
             }
 
-            if (endpoints[axis][i].type() == EEndpointType::MIN)
+            if (endpoints[axis][i].type() == EEndpointType::Min)
             {
                 ++subIntersectorCountsA;
             }
@@ -318,7 +318,7 @@ bool KdTreeBuilder::_canSplitWithSah(
 
     for (std::size_t i = 0; i < bestEndpointIndex; ++i) 
     {
-        if (endpoints[bestAxis][i].type() == EEndpointType::MIN)
+        if (endpoints[bestAxis][i].type() == EEndpointType::Min)
         {
             out_subIntersectorIndicesA->push_back(endpoints[bestAxis][i].intersectorIndex());
         }
@@ -326,7 +326,7 @@ bool KdTreeBuilder::_canSplitWithSah(
 
     for (std::size_t i = bestEndpointIndex; i < 2 * intersectorCounts; ++i) 
     {
-        if (endpoints[bestAxis][i].type() == EEndpointType::MAX)
+        if (endpoints[bestAxis][i].type() == EEndpointType::Max)
         {
             out_subIntersectorIndicesB->push_back(endpoints[bestAxis][i].intersectorIndex());
         }

@@ -73,7 +73,7 @@ void PmRadianceEstimationWork::work() const
         // PPM paper section 4.2
         Spectrum TauM(0.0_r);
         {
-            const TransportInfo transportInfo(ETransportMode::IMPORTANCE);
+            const TransportInfo transportInfo(ETransportMode::Importance);
 
             SurfaceIntersection si;
             si.setSurfaceDetail(surfaceDetail);

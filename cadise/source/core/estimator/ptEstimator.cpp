@@ -29,7 +29,7 @@ PtEstimator::PtEstimator(const int32 maxPathLength) :
 {
     if (_maxPathLength <= 0)
     {
-        logger.log(ELogLevel::WARN,
+        logger.log(ELogLevel::Warn,
             "Invalid value on <maxPathLength>: " + std::to_string(maxPathLength) +
             ", it should be greater than 0, set fallback value to 1");
 
@@ -44,7 +44,7 @@ void PtEstimator::estimate(
 {
     CS_ASSERT(out_radiance);
 
-    const TransportInfo transportInfo(ETransportMode::RADIANCE);
+    const TransportInfo transportInfo(ETransportMode::Radiance);
 
     SurfaceIntersection si;
     Spectrum            totalRadiance(0.0_r);
@@ -83,7 +83,7 @@ void PtEstimator::estimate(
         const Vector3R& Ns = si.surfaceDetail().shadingNormal();
 
         // early break if hitting envrionment light
-        if (bsdf->lobes().hasExactly({ ELobe::ABSORB }))
+        if (bsdf->lobes().hasExactly({ ELobe::Absorb }))
         {
             break;
         }
@@ -91,8 +91,8 @@ void PtEstimator::estimate(
         // TODO: it should be decided according to sampled bxdf
         bool canDoMis = false;
         if (!bsdf->lobes().hasAtLeastOne({
-            ELobe::SPECULAR_REFLECTION,
-            ELobe::SPECULAR_TRANSMISSION }))
+            ELobe::SpecularReflection,
+            ELobe::SpecularTransmission }))
         {
             canDoMis = true;
         }
@@ -148,7 +148,7 @@ void PtEstimator::estimate(
                         else
                         {
                             const real bsdfPdfW  = bsdf->evaluatePdfW(transportInfo, si);
-                            const real misWeight = TMis<EMisMode::POWER>().weight(totalLightPdfW, bsdfPdfW);
+                            const real misWeight = TMis<EMisMode::Power>().weight(totalLightPdfW, bsdfPdfW);
 
                             misLightRadiance = radiance.mul(factor).mul(misWeight);
                             totalRadiance.addLocal(pathThroughput.mul(misLightRadiance));
@@ -195,7 +195,7 @@ void PtEstimator::estimate(
                     const real sampleLightPdf = scene.evaluatePickLightPdf(areaLight);
                     const real lightPdfW      = areaLight->evaluateDirectPdfW(nextSi, P);
                     const real totalLightPdfW = sampleLightPdf * lightPdfW;
-                    const real misWeight      = TMis<EMisMode::POWER>().weight(bsdfPdfW, totalLightPdfW);
+                    const real misWeight      = TMis<EMisMode::Power>().weight(bsdfPdfW, totalLightPdfW);
 
                     misBsdfRadiance = radiance.mul(factor).mul(misWeight);
                     totalRadiance.addLocal(pathThroughput.mul(misBsdfRadiance));

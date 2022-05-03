@@ -29,7 +29,7 @@ void WdlEstimator::estimate(
 {
     CS_ASSERT(out_radiance);
 
-    const TransportInfo transportInfo(ETransportMode::RADIANCE);
+    const TransportInfo transportInfo(ETransportMode::Radiance);
 
     Spectrum totalRadiance(0.0_r);
     Spectrum pathThroughput(1.0_r);
@@ -50,8 +50,8 @@ void WdlEstimator::estimate(
         const Vector3R& Ns = intersection.surfaceDetail().shadingNormal();
 
         const bool isSpecular = bsdf->lobes().hasAtLeastOne({
-            ELobe::SPECULAR_REFLECTION,
-            ELobe::SPECULAR_TRANSMISSION });
+            ELobe::SpecularReflection,
+            ELobe::SpecularTransmission });
 
         // add radiance if hitting area light
         if (primitive->areaLight()) 

@@ -14,7 +14,7 @@ Logger::Logger(const std::string& senderName) :
 
 void Logger::log(const std::string& message) const
 {
-    this->log(ELogLevel::INFO, message);
+    this->log(ELogLevel::Info, message);
 }
 
 void Logger::log(const ELogLevel logLevel, const std::string& message) const 
@@ -26,16 +26,24 @@ void Logger::log(const ELogLevel logLevel, const std::string& message) const
 
     switch (logLevel)
     {
-        case ELogLevel::INFO:
-            stringStream << "[INFO]  ";
+        case ELogLevel::Trace:
+            stringStream << "[Trace] ";
             break;
 
-        case ELogLevel::WARN:
-            stringStream << "[WARN]  ";
+        case ELogLevel::Debug:
+            stringStream << "[Debug] ";
             break;
 
-        case ELogLevel::ERROR:
-            stringStream << "[ERROR] ";
+        case ELogLevel::Info:
+            stringStream << "[Info]  ";
+            break;
+
+        case ELogLevel::Warn:
+            stringStream << "[Warn]  ";
+            break;
+
+        case ELogLevel::Error:
+            stringStream << "[Error] ";
             break;
 
         default:

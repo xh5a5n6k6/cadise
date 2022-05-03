@@ -6,7 +6,7 @@ namespace cadise
 {
 
 AbsorberBsdf::AbsorberBsdf() :
-    Bsdf(BsdfLobes({ ELobe::ABSORB }))
+    Bsdf(BsdfLobes({ ELobe::Absorb }))
 {}
 
 Spectrum AbsorberBsdf::evaluate(
@@ -37,7 +37,7 @@ ELobe AbsorberBsdf::lobe(const BsdfComponents component) const
 {
     CS_ASSERT_EQ(component, 0);
 
-    return ELobe::ABSORB;
+    return ELobe::Absorb;
 }
 
 } // namespace cadise

@@ -9,7 +9,7 @@
 namespace cadise 
 { 
     class SdData; 
-} // end forward declaration
+}
 
 namespace cadise
 {

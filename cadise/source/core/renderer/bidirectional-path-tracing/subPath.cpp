@@ -68,7 +68,7 @@ void SubPath::connectCamera(
         return;
     }
 
-    CS_ASSERT_EQ(_vertices[0].type(), EVertexType::LIGHT_END);
+    CS_ASSERT_EQ(_vertices[0].type(), EVertexType::LightEnd);
 
     for (std::size_t s = 2; s <= pathLength; ++s)
     {
@@ -104,14 +104,14 @@ void SubPath::connectCamera(
         surfaceDetail.setGeometryNormal(cameraN);
         surfaceDetail.setShadingNormal(cameraN);
 
-        PathVertex cameraVertex(EVertexType::CAMERA_END, importance.div(pdfW));
+        PathVertex cameraVertex(EVertexType::CameraEnd, importance.div(pdfW));
         cameraVertex.setSurfaceDetail(surfaceDetail);
         cameraVertex.setCamera(camera);
         cameraVertex.setPdfAForward(cameraVertex.evaluateOriginPdfA(scene, lightEndpoint));
 
         const Spectrum& throughputA = cameraVertex.throughput();
         const Spectrum& throughputB = lightEndpoint.throughput();
-        const Spectrum  reflectance = lightEndpoint.evaluate(ETransportMode::IMPORTANCE, _vertices[s - 2], cameraVertex);
+        const Spectrum  reflectance = lightEndpoint.evaluate(ETransportMode::Importance, _vertices[s - 2], cameraVertex);
         const real      LdotN       = toCameraRay.direction().absDot(lightNs);
 
         Spectrum radiance = throughputA.mul(reflectance.mul(throughputB.mul(LdotN)));
@@ -145,7 +145,7 @@ void SubPath::connectLight(
         return;
     }
 
-    CS_ASSERT_EQ(_vertices[0].type(), EVertexType::CAMERA_END);
+    CS_ASSERT_EQ(_vertices[0].type(), EVertexType::CameraEnd);
 
     Spectrum totalRadiance(0.0_r);
     for (std::size_t t = 2; t <= pathLength; ++t)
@@ -191,14 +191,14 @@ void SubPath::connectLight(
         surfaceDetail.setGeometryNormal(emitN);
         surfaceDetail.setShadingNormal(emitN);
 
-        PathVertex lightVertex(EVertexType::LIGHT_END, radiance.div(pickLightPdf * pdfW));
+        PathVertex lightVertex(EVertexType::LightEnd, radiance.div(pickLightPdf * pdfW));
         lightVertex.setSurfaceDetail(surfaceDetail);
         lightVertex.setLight(sampleLight);
         lightVertex.setPdfAForward(lightVertex.evaluateOriginPdfA(scene, cameraEndpoint));
 
         const Spectrum& throughputA = lightVertex.throughput();
         const Spectrum& throughputB = cameraEndpoint.throughput();
-        const Spectrum  reflectance = cameraEndpoint.evaluate(ETransportMode::RADIANCE, _vertices[t - 2], lightVertex);
+        const Spectrum  reflectance = cameraEndpoint.evaluate(ETransportMode::Radiance, _vertices[t - 2], lightVertex);
 
         const Spectrum contributeRadiance = throughputA.mul(reflectance.mul(throughputB.mul(LdotN)));
         if (contributeRadiance.isZero())

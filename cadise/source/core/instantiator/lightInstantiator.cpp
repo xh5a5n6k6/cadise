@@ -113,8 +113,8 @@ static std::shared_ptr<Light> createEnvironment(
     HdrImage hdrImage = PictureLoader::loadRgbImage(Path(hdrFilename));
     hdrImage.flipHorizontal();
 
-    const ETextureSampleMode sampleMode = ETextureSampleMode::NEAREST;
-    const ETextureWrapMode   wrapMode   = ETextureWrapMode::REPEAT;
+    const ETextureSampleMode sampleMode = ETextureSampleMode::Nearest;
+    const ETextureWrapMode   wrapMode   = ETextureWrapMode::Repeat;
     const std::shared_ptr<TTexture<Spectrum>> radiance
         = std::make_shared<RgbImageTexture>(hdrImage, sampleMode, wrapMode);
 

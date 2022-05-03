@@ -3,9 +3,13 @@
 namespace cadise 
 {
 
+/*! @brief Map from user-control roughness (0~1) to alpha.
+*/
 enum class ERoughnessMapMode 
 {
-    SQUARE,
+    Undefined = 0,
+
+    Square,
     PBRT,
 };
 

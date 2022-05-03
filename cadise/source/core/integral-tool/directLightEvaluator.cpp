@@ -32,7 +32,7 @@
 //    const Vector3R Ns = intersection.surfaceDetail().shadingNormal();
 //    const Vector3R Ng = intersection.surfaceDetail().geometryNormal();
 //
-//    if (bsdf->lobes().hasExactly({ ELobe::ABSORB })) 
+//    if (bsdf->lobes().hasExactly({ ELobe::Absorb })) 
 //    {
 //        return directLightRadiance;
 //    }
