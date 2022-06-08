@@ -1,7 +1,27 @@
 #include "file-io/string_utils.h"
 
+#include <sstream>
+#include <unordered_set>
+
 namespace cadise::string_utils
 {
+
+static const std::unordered_set<char> regexReservedChars =
+{
+    '+',
+    '*',
+    '?',
+    '^',
+    '$',
+    '(',
+    ')',
+    '[',
+    ']',
+    '{',
+    '}',
+    '|',
+    '\\',
+};
 
 std::string trim_head(
     const std::string& source,
@@ -58,6 +78,19 @@ std::string& trim_local(
     const char   trimChar)
 {
     return trim_head_local(trim_tail_local(source, trimChar), trimChar);
+}
+
+std::string escape_regex_char(const char regexChar)
+{
+    std::stringstream stream;
+    if (regexReservedChars.contains(regexChar))
+    {
+        stream << "\\";
+    }
+
+    stream << regexChar;
+
+    return std::move(stream.str());
 }
 
 } // namespace cadise::string_utils
