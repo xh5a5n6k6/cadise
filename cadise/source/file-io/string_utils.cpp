@@ -1,6 +1,5 @@
 #include "file-io/string_utils.h"
 
-#include <sstream>
 #include <unordered_set>
 
 namespace cadise::string_utils
@@ -82,15 +81,15 @@ std::string& trim_local(
 
 std::string escape_regex_char(const char regexChar)
 {
-    std::stringstream stream;
+    std::string result = "";
     if (regexReservedChars.contains(regexChar))
     {
-        stream << "\\";
+        result += "\\";
     }
 
-    stream << regexChar;
+    result += regexChar;
 
-    return std::move(stream.str());
+    return std::move(result);
 }
 
 } // namespace cadise::string_utils
