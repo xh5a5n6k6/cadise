@@ -84,16 +84,16 @@ inline constexpr AxisType AXIS_UNKNOWN = -1;
     |   1   |   1   |   1   |   z > y > x |   z  |
     +-------+-------+-------+-------------+------+
 */
-inline constexpr constant::AxisType compareMaxTable[8] = 
+inline constexpr AxisType compareMaxTable[8] = 
 {
-    constant::AXIS_X,
-    constant::AXIS_X,
-    constant::AXIS_UNKNOWN,
-    constant::AXIS_Z,
-    constant::AXIS_Y,
-    constant::AXIS_UNKNOWN,
-    constant::AXIS_Y,
-    constant::AXIS_Z 
+    AXIS_X,
+    AXIS_X,
+    AXIS_UNKNOWN,
+    AXIS_Z,
+    AXIS_Y,
+    AXIS_UNKNOWN,
+    AXIS_Y,
+    AXIS_Z 
 };
 
 } // namespace cadise::constant

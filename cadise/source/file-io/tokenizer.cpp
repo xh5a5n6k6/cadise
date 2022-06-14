@@ -20,9 +20,10 @@ Tokenizer Tokenizer::makeFromDelimiters(
 
 Tokenizer Tokenizer::makeFromOpenClosePattern(
     const char openDelimiter,
-    const char closeDelimiter)
+    const char closeDelimiter,
+    const bool shouldIncludeEdges)
 {
-    return Tokenizer(openDelimiter, closeDelimiter);
+    return Tokenizer(openDelimiter, closeDelimiter, shouldIncludeEdges);
 }
 
 Tokenizer::Tokenizer(const std::initializer_list<char>& delimiters)
@@ -30,6 +31,7 @@ Tokenizer::Tokenizer(const std::initializer_list<char>& delimiters)
     CS_ASSERT_GT(delimiters.size(), 0);
 
     _isSeparator = true;
+    _postFunc    = nullptr;
 
     std::string regexString = "";
 
@@ -45,14 +47,25 @@ Tokenizer::Tokenizer(const std::initializer_list<char>& delimiters)
 
 Tokenizer::Tokenizer(
     const char openDelimiter,
-    const char closeDelimiter)
+    const char closeDelimiter,
+    const bool shouldIncludeEdges)
 {
     _isSeparator = false;
+    _postFunc    = nullptr;
+    if (!shouldIncludeEdges)
+    {
+        // Exclude open and close chars
+        _postFunc = 
+            [](std::string& source)
+            {
+                source = source.substr(1, source.length() - 2);
+            };
+    }
 
     std::string regexString = "";
-
+    
     regexString += string_utils::escape_regex_char(openDelimiter);
-    regexString += "(.+)?";
+    regexString += "(.*?)";
     regexString += string_utils::escape_regex_char(closeDelimiter);
 
     _regex = std::regex(std::move(regexString));
@@ -95,7 +108,13 @@ void Tokenizer::_splitThroughRegex(
     std::sregex_token_iterator iterator(source.begin(), source.end(), _regex);
     for (; iterator != std::sregex_token_iterator(); ++iterator)
     {
-        out_substrings.push_back(*iterator);
+        std::string processedString = *iterator;
+        if (_postFunc)
+        {
+            _postFunc(processedString);
+        }
+
+        out_substrings.push_back(std::move(processedString));
     }
 }
 
