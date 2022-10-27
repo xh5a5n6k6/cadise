@@ -1,22 +1,16 @@
 #pragma once
 
 #include <initializer_list>
-#include <functional>
-#include <regex>
 #include <string>
-#include <vector>
+#include <unordered_set>
 
 namespace cadise
 {
 
 class Tokenizer
 {
-private:
-    using PostFunc = std::function<void(std::string& source)>;
-
 public:
-    static Tokenizer makeFromDelimiters(
-        const std::initializer_list<char>& delimiters);
+    static Tokenizer makeFromDelimiters(const std::initializer_list<char>& delimiters);
 
     static Tokenizer makeFromOpenClosePattern(
         const char openDelimiter,
@@ -33,20 +27,23 @@ public:
         std::vector<std::string>& out_matchings) const;
 
 private:
-    explicit Tokenizer(const std::initializer_list<char>& delimiters);
+    enum class EMode
+    {
+        Undefined = 0,
+
+        Separator,
+        ClosureWithEdges,
+        ClosureWithoutEdges,
+    };
 
     Tokenizer(
-        const char openDelimiter, 
-        const char closeDelimiter,
-        const bool shouldIncludeEdges);
+        const EMode                        mode,
+        const std::initializer_list<char>& delimiters,
+        const std::pair<char, char>&       openCloseDelimiterPair);
 
-    void _splitThroughRegex(
-        const std::string         source,
-        std::vector<std::string>& out_substrings) const;
-
-    std::regex _regex;
-    PostFunc   _postFunc;
-    bool       _isSeparator;
+    EMode                    _mode;
+    std::unordered_set<char> _delimiters;
+    std::pair<char, char>    _openCloseDelimiterPair;
 };
 
 } // namespace cadise

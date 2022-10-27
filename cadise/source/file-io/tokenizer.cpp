@@ -2,7 +2,6 @@
 
 #include "fundamental/assertion.h"
 #include "fundamental/logger/logger.h"
-#include "file-io/string_utils.h"
 
 namespace cadise
 {
@@ -12,10 +11,9 @@ namespace
     const Logger logger("Tokenizer");
 }
 
-Tokenizer Tokenizer::makeFromDelimiters(
-    const std::initializer_list<char>& delimiters)
+Tokenizer Tokenizer::makeFromDelimiters(const std::initializer_list<char>& delimiters)
 {
-    return Tokenizer(delimiters);
+    return Tokenizer(EMode::Separator, delimiters, {});
 }
 
 Tokenizer Tokenizer::makeFromOpenClosePattern(
@@ -23,98 +21,121 @@ Tokenizer Tokenizer::makeFromOpenClosePattern(
     const char closeDelimiter,
     const bool shouldIncludeEdges)
 {
-    return Tokenizer(openDelimiter, closeDelimiter, shouldIncludeEdges);
-}
+    CS_ASSERT_NE(openDelimiter, closeDelimiter);
 
-Tokenizer::Tokenizer(const std::initializer_list<char>& delimiters)
-{
-    CS_ASSERT_GT(delimiters.size(), 0);
+    const EMode mode = shouldIncludeEdges
+        ? EMode::ClosureWithEdges
+        : EMode::ClosureWithoutEdges;
 
-    _isSeparator = true;
-    _postFunc    = nullptr;
-
-    std::string regexString = "";
-
-    regexString += "[^";
-    for (const auto& delimiter : delimiters)
-    {
-        regexString += delimiter;
-    }
-    regexString += "]+";
-
-    _regex = std::regex(std::move(regexString));
+    return Tokenizer(mode, {},  { openDelimiter, closeDelimiter });
 }
 
 Tokenizer::Tokenizer(
-    const char openDelimiter,
-    const char closeDelimiter,
-    const bool shouldIncludeEdges)
+    const EMode                        mode,
+    const std::initializer_list<char>& delimiters,
+    const std::pair<char, char>&       openCloseDelimiterPair) :
+
+    _mode(mode)
 {
-    _isSeparator = false;
-    _postFunc    = nullptr;
-    if (!shouldIncludeEdges)
+    switch (mode)
     {
-        // Exclude open and close chars
-        _postFunc = 
-            [](std::string& source)
+        case EMode::Separator:
+            if (std::empty(delimiters))
             {
-                source = source.substr(1, source.length() - 2);
-            };
+                logger.log(ELogLevel::Warn, "Detect zero-length delimiters!");
+            }
+
+            _delimiters = std::unordered_set<char>(delimiters);
+            break;
+
+        case EMode::ClosureWithEdges:
+        case EMode::ClosureWithoutEdges:
+            _openCloseDelimiterPair = openCloseDelimiterPair;
+            break;
     }
-
-    std::string regexString = "";
-    
-    regexString += string_utils::escape_regex_char(openDelimiter);
-    regexString += "(.*?)";
-    regexString += string_utils::escape_regex_char(closeDelimiter);
-
-    _regex = std::regex(std::move(regexString));
 }
 
 void Tokenizer::tokenize(
     const std::string&        source,
     std::vector<std::string>& out_tokens) const
 {
-    if (!_isSeparator)
+    if (_mode != EMode::Separator)
     {
         logger.log(ELogLevel::Warn, "This tokenizer is not used for separation!");
         return;
     }
 
-    _splitThroughRegex(source, out_tokens);
+    for (std::size_t i = 0; i < source.length(); ++i)
+    {
+        if (_delimiters.contains(source[i]))
+        {
+            continue;
+        }
+
+        std::size_t endIndex = i + 1;
+        while (endIndex < source.length())
+        {
+            if (_delimiters.contains(source[endIndex]))
+            {
+                break;
+            }
+
+            ++endIndex;
+        }
+        
+        std::string token = source.substr(i, endIndex - i);
+        out_tokens.push_back(std::move(token));
+
+        i = endIndex;
+    }
 }
 
 void Tokenizer::captureMatching(
     const std::string&        source,
-    std::vector<std::string>& out_tokens) const
+    std::vector<std::string>& out_matchings) const
 {
-    if (_isSeparator)
+    if (_mode != EMode::ClosureWithEdges && _mode != EMode::ClosureWithoutEdges)
     {
         logger.log(ELogLevel::Warn, "This tokenizer is not used for matching!");
         return;
     }
 
-    _splitThroughRegex(source, out_tokens);
-}
-
-void Tokenizer::_splitThroughRegex(
-    const std::string         source,
-    std::vector<std::string>& out_substrings) const
-{
-    CS_ASSERT(out_substrings.empty());
-
-    out_substrings.reserve(source.length());
-
-    std::sregex_token_iterator iterator(source.begin(), source.end(), _regex);
-    for (; iterator != std::sregex_token_iterator(); ++iterator)
+    const auto [openChar, closeChar] = _openCloseDelimiterPair;
+    for (std::size_t i = 0; i < source.length(); ++i)
     {
-        std::string processedString = *iterator;
-        if (_postFunc)
+        if (source[i] == openChar)
         {
-            _postFunc(processedString);
-        }
+            std::size_t openIndex  = i;
+            std::size_t closeIndex = openIndex + 1;
+            while (closeIndex < source.length())
+            {
+                if (source[closeIndex] == openChar)
+                {
+                    openIndex = closeIndex;
+                }
+                else if (source[closeIndex] == closeChar)
+                {
+                    std::size_t leftIndex  = openIndex;
+                    std::size_t rightIndex = closeIndex;
+                    if (_mode == EMode::ClosureWithoutEdges)
+                    {
+                        ++leftIndex;
+                        --rightIndex;
+                    }
 
-        out_substrings.push_back(std::move(processedString));
+                    std::string matching = source.substr(
+                        leftIndex,
+                        rightIndex - leftIndex + 1);
+                    out_matchings.push_back(std::move(matching));
+
+                    // Move step to next index after finding valid matching
+                    i = closeIndex;
+                    break;
+                }
+
+                ++closeIndex;
+            }
+        }
     }
 }
 
