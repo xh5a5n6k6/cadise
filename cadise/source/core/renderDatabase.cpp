@@ -234,7 +234,7 @@ void RenderDatabase::_setUpLight(const std::shared_ptr<SdData>& data)
     // HACK
     if (_backgroundSphere) 
     {
-        _environmentLightIndex = _lights.size();
+        _environmentLightIndex = _lights.size() - 1;
     }
 }
 
