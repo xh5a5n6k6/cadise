@@ -27,7 +27,7 @@ typedef char        CSchar;
 extern "C" {
 #endif
 
-/*! @brief Initilize the Cadise render engine.
+/*! @brief Initialize the Cadise render engine.
 */
 extern CS_API CSbool csInit();
 
