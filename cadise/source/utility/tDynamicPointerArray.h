@@ -1,6 +1,6 @@
 #pragma once
 
-#include "utility/movableOnly.h"
+#include "utility/iMovableOnly.h"
 
 #include <memory>
 
@@ -8,7 +8,7 @@ namespace cadise
 {
 
 template<typename T>
-class TDynamicPointerArray : private MovableOnly
+class TDynamicPointerArray : private IMovableOnly
 {
 public:
     TDynamicPointerArray(
