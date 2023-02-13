@@ -4,6 +4,7 @@
 #include "math/type/mathType.h"
 
 #include <charconv>
+#include <concepts>
 #include <span>
 #include <string>
 #include <string_view>
@@ -18,12 +19,10 @@ public:
     static bool parseBool(const std::string_view value);
     static std::string parseString(const std::string_view value);
 
-    template<typename IntType>
-        requires std::is_integral_v<IntType>
+    template<std::integral IntType>
     static IntType parseInt(const std::string_view value);
 
-    template<typename FloatType>
-        requires std::is_floating_point_v<FloatType>
+    template<std::floating_point FloatType>
     static FloatType parseFloat(const std::string_view value);
 
     template<typename ElementType>
@@ -32,8 +31,7 @@ public:
     template<typename ElementType>
     static TVector3<ElementType> parseVector3(const std::span<std::string_view> value);
 
-    template<typename FloatType>
-        requires std::is_floating_point_v<FloatType>
+    template<std::floating_point FloatType>
     static std::vector<FloatType> parseFloatArray(const std::span<std::string_view> value);
 
     template<typename ElementType>
@@ -46,15 +44,13 @@ private:
 
 // template header implementation
 
-template<typename IntType>
-    requires std::is_integral_v<IntType>
+template<std::integral IntType>
 inline IntType ValueParser::parseInt(const std::string_view value)
 {
     return _parse<IntType>(value);
 }
 
-template<typename FloatType>
-    requires std::is_floating_point_v<FloatType>
+template<std::floating_point FloatType>
 inline FloatType ValueParser::parseFloat(const std::string_view value)
 {
     return _parse<FloatType>(value);
@@ -108,8 +104,7 @@ inline TVector3<ElementType> ValueParser::parseVector3(const std::span<std::stri
     }
 }
 
-template<typename FloatType>
-    requires std::is_floating_point_v<FloatType>
+template<std::floating_point FloatType>
 inline std::vector<FloatType> ValueParser::parseFloatArray(const std::span<std::string_view> value)
 {
     std::vector<FloatType> result;
