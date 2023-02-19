@@ -1,13 +1,13 @@
 #include "file-io/scene-description/sdParser.h"
 
 #include "core/renderDatabase.h"
+#include "file-io/string_utils.h"
+#include "file-io/tokenizer.h"
 #include "file-io/scene-description/sdDataParser.h"
-#include "fundamental/time/stopwatch.h"
 #include "fundamental/logger/logger.h"
+#include "fundamental/time/stopwatch.h"
 #include "utility/parallel.h"
 
-#include <cstdio>
-#include <cstring>
 #include <fstream>
 #include <iostream>
 
@@ -19,15 +19,10 @@ namespace
     const Logger logger("SD Parser");
 }
 
-void SdParser::parse(
-    const std::string& filename,
-    RenderDatabase* ren,
-    std::vector<std::shared_ptr<SdData>>& out_sdDatas) const 
+std::vector<std::shared_ptr<SdData>> SdParser::parse(const std::string& filename)
 {
     Stopwatch stopwatch;
     stopwatch.start();
-
-    SdDataParser dataParser;
 
     const std::string fileString = _parseRaw(filename);
 
@@ -37,31 +32,23 @@ void SdParser::parse(
 
     std::size_t startPosition = 0;
     std::size_t endPosition   = 0;
-    int32 count = 0;
     std::vector<std::string> sdDataRaws;
     sdDataRaws.reserve(512);
 
-    std::vector<std::shared_ptr<SdData>> sdDatas;
-    sdDatas.reserve(512);
     while ((endPosition = fileString.find_first_of('}', startPosition)) != std::string::npos)
     {
         const std::size_t stringCount = endPosition - startPosition + 1;
-        std::string subStringView = fileString.substr(startPosition, stringCount);
 
-        //const std::shared_ptr<SdData> data = dataParser.parse(subStringView);
+        std::string subStringView = fileString.substr(startPosition, stringCount);
         sdDataRaws.push_back(std::move(subStringView));
-        //_renderDatabase->setUpData(data);
-        //out_sdDatas.push_back(data);
-        
-        //ren->setUpData(data);
 
         startPosition = endPosition + 1;
-
-        ++count;
     }
 
-    sdDatas.resize(sdDataRaws.size());
+    std::vector<std::shared_ptr<SdData>> sdDataVector;
+    sdDataVector.resize(sdDataRaws.size());
 
+    const SdDataParser dataParser;
     Parallel::execute(
         sdDataRaws.size(),
         8,
@@ -70,22 +57,17 @@ void SdParser::parse(
             for (std::size_t i = begin; i < end; ++i)
             {
                 const std::shared_ptr<SdData> data = dataParser.parse(sdDataRaws[i]);
-                sdDatas[i] = data;
+                sdDataVector[i] = data;
             }
         });
 
-    for (std::size_t i = 0; i < sdDatas.size(); ++i)
-    {
-        ren->setUpData(sdDatas[i]);
-    }
-
-    std::cout << "sd data count: " << count << std::endl;
-
     stopwatch.stop();
-    logger.log("Parsing time: " + stopwatch.elapsedTime().toString());
+    logger.log("Parsing time (to SdData): " + stopwatch.elapsedTime().toString());
+
+    return sdDataVector;
 }
 
-std::string SdParser::_parseRaw(const std::string& filename) const 
+std::string SdParser::_parseRaw(const std::string& filename)
 {
     std::ifstream fileStream(filename.c_str());
     if (!fileStream.is_open())
@@ -94,23 +76,23 @@ std::string SdParser::_parseRaw(const std::string& filename) const
         exit(-1);
     }
 
-    std::string res;
+    std::string sceneDescriptionRaw;
     std::string line;
     while (std::getline(fileStream, line))
     {
-        const std::size_t commentPos = line.find_first_of('#', 0);
-        if (commentPos != std::string::npos)
+        const std::size_t commentPosition = line.find_first_of('#', 0);
+        if (commentPosition != std::string::npos)
         {
-            auto substr = line.substr(0, commentPos);
-            res += substr;
+            const std::string substr = line.substr(0, commentPosition);
+            sceneDescriptionRaw += substr;
         }
         else
         {
-            res += line;
+            sceneDescriptionRaw += line;
         }
     }
 
-    return std::move(res);
+    return sceneDescriptionRaw;
 }
 
 } // namespace cadise

@@ -8,8 +8,6 @@
 namespace cadise 
 { 
     class SdData;
-    class RenderDatabase;
-    class Tokenizer; 
 }
 
 namespace cadise
@@ -20,13 +18,10 @@ namespace cadise
 class SdParser
 {
 public:
-    void parse(
-        const std::string& filename,
-        RenderDatabase* ren,
-        std::vector<std::shared_ptr<SdData>>& out_sdDatas) const;
+    static std::vector<std::shared_ptr<SdData>> parse(const std::string& filename);
 
 private:
-    std::string _parseRaw(const std::string& filename) const;
+    static std::string _parseRaw(const std::string& filename);
 };
 
 } // namespace cadise

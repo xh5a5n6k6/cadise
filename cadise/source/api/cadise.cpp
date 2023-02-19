@@ -36,15 +36,11 @@ CSbool csParseFile(const CSuint64 renderDatabaseId, const CSchar* filename)
     auto renderDatabase = GlobalStorage::getResource<RenderDatabase>(renderDatabaseId);
     if (renderDatabase)
     {
-        SdParser sdParser;
-
-        std::vector<std::shared_ptr<SdData>> sdDatas;
-        sdParser.parse(std::string(filename), renderDatabase.get(), sdDatas);
-        //std::cout << sdDatas.size();
-        //for (auto& data : sdDatas)
-        //{
-        //    renderDatabase->setUpData(data);
-        //}
+        const auto sdDataVector = SdParser::parse(std::string(filename));
+        for (const auto& sdData : sdDataVector)
+        {
+            renderDatabase->setUpData(sdData);
+        }
 
         return CS_TRUE;
     }
