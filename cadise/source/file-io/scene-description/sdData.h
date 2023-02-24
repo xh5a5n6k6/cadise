@@ -2,12 +2,12 @@
 
 #include "core/spectrum/spectrum.h"
 #include "file-io/scene-description/eSdClassType.h"
-#include "file-io/scene-description/tSdDataUnit.h"
-#include "math/tVector3.h"
+#include "file-io/scene-description/valueParser.h"
+#include "fundamental/assertion.h"
 #include "math/type/mapType.h"
+#include "math/type/mathType.h"
 
 #include <memory>
-#include <type_traits>
 #include <vector>
 
 // forward declaration
@@ -25,51 +25,58 @@ class SdData
 public:
     SdData();
 
-    void addBool(
-        const std::string&      name,
-        std::unique_ptr<bool[]> value,
-        const std::size_t       numValues);
-    void addReal(
-        const std::string&      name, 
-        std::unique_ptr<real[]> value,
-        const std::size_t       numValues);
-    void addInt32(
-        const std::string&       name,
-        std::unique_ptr<int32[]> value,
-        const std::size_t        numValues);
-    void addVector3R(
-        const std::string&          name,
-        std::unique_ptr<Vector3R[]> value,
-        const std::size_t           numValues);
-    void addString(
-        const std::string&             name,
-        std::unique_ptr<std::string[]> value,
-        const std::size_t              numValues);
+    void addBool(const std::string& name, const std::string& valueRaw);
+    void addString(const std::string& name, const std::string& valueRaw);
+    void addInt(const std::string& name, const std::string& valueRaw);
+    void addFloat(const std::string& name, const std::string& valueRaw);
+    void addVector2(const std::string& name, const std::vector<std::string>& valueRaw);
+    void addVector3(const std::string& name, const std::vector<std::string>& valueRaw);
+    void addFloatArray(const std::string& name, const std::vector<std::string>& valueRaw);
+    void addVector3Array(const std::string& name, const std::vector<std::string>& valueRaw);
 
-    bool     findBool(
-        const std::string& name, const bool      defaultValue = false     );
-    real     findReal (
-        const std::string& name, const real      defaultValue = 0.0_r     );
-    int32    findInt32(
-        const std::string& name, const int32     defaultValue = 0         );
-    Vector3R findVector3r(
-        const std::string& name, const Vector3R& defaultValue = Vector3R());
+    bool findBool(
+        const std::string& name, 
+        const bool         defaultValue = false);
+
     std::string findString(
-        const std::string& name, const std::string& defaultValue = "");
+        const std::string& name, 
+        const std::string& defaultValue = "");
 
-    const std::vector<real>     findRealArray(
-        const std::string& name);
-    const std::vector<Vector3R> findVector3rArray(
-        const std::string& name);
+    template<typename IntType>
+    IntType findInt(
+        const std::string& name, 
+        const IntType      defaultValue = static_cast<IntType>(0));
+
+    template<typename FloatType>
+    FloatType findFloat(
+        const std::string& name,
+        const FloatType    defaultValue = static_cast<FloatType>(0.0));
+
+    template<typename ElementType>
+    TVector2<ElementType> findVector2(
+        const std::string&           name,
+        const TVector2<ElementType>& defaultValue = TVector2<ElementType>(0));
+
+    template<typename ElementType>
+    TVector3<ElementType> findVector3(
+        const std::string&           name,
+        const TVector3<ElementType>& defaultValue = TVector3<ElementType>(0));
+
+    template<typename FloatType>
+    std::vector<FloatType> findFloatArray(const std::string& name);
+
+    template<typename ElementType>
+    std::vector<TVector3<ElementType>> findVector3Array(const std::string& name);
 
     std::shared_ptr<TTexture<real>> getRealTexture(
-        const std::string&             name, 
+        const std::string&                   name, 
         const TStringKeyMap<TTexture<real>>& realTextures,
-        const real                          defaultValue = 0.0_r);
+        const real                           defaultValue = 0.0_r);
+
     std::shared_ptr<TTexture<Spectrum>> getSpectrumTexture(
-        const std::string&                 name,
+        const std::string&                       name,
         const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures,
-        const Spectrum&                         defaultValue = Spectrum(0.0_r));
+        const Spectrum&                          defaultValue = Spectrum(0.0_r));
 
     ESdClassType classType() const;
 
@@ -77,72 +84,120 @@ public:
     void setClassType(const ESdClassType classType);
 
 private:
-    template<typename T>
-    T _findData(
-        const std::string& name, 
-        const T& defaultValue,
-        std::vector<std::shared_ptr<TSdDataUnit<T>>>& dataset);
+    template<typename RawDataType>
+    void _addRawData(
+        const std::string&                            name,
+        const RawDataType&                            rawData,
+        std::unordered_map<std::string, RawDataType>& rawDataMap);
 
-    template<typename T>
-    std::vector<T> _findDataArray(
-        const std::string& name,
-        std::vector<std::shared_ptr<TSdDataUnit<T>>>& dataset);
-
-    ESdClassType _classType;
-
-    std::vector<std::shared_ptr<TSdDataUnit<bool>>>        _bools;
-    std::vector<std::shared_ptr<TSdDataUnit<real>>>        _reals;
-    std::vector<std::shared_ptr<TSdDataUnit<int32>>>       _int32s;
-    std::vector<std::shared_ptr<TSdDataUnit<Vector3R>>>    _vector3rs;
-    std::vector<std::shared_ptr<TSdDataUnit<std::string>>> _strings;
+    ESdClassType                                              _classType;
+    std::unordered_map<std::string, std::string>              _boolRaws;
+    std::unordered_map<std::string, std::string>              _intRaws;
+    std::unordered_map<std::string, std::string>              _floatRaws;
+    std::unordered_map<std::string, std::string>              _stringRaws;
+    std::unordered_map<std::string, std::vector<std::string>> _vector2Raws;
+    std::unordered_map<std::string, std::vector<std::string>> _vector3Raws;
+    std::unordered_map<std::string, std::vector<std::string>> _floatArrayRaws;
+    std::unordered_map<std::string, std::vector<std::string>> _vector3ArrayRaws;
 };
 
 // template header implementation
 
-template<typename T>
-inline T SdData::_findData(
-    const std::string&                            name,
-    const T&                                      defaultValue,
-    std::vector<std::shared_ptr<TSdDataUnit<T>>>& dataset)
+template<typename IntType>
+inline IntType SdData::findInt(
+    const std::string& name, 
+    const IntType      defaultValue)
 {
-    for (std::size_t i = 0; i < dataset.size(); ++i) 
+    if (_intRaws.contains(name))
     {
-        if (dataset[i]->name() == name && dataset[i]->numValues() == 1)
-        {
-            auto&& value = dataset[i]->value();
-            dataset.erase(dataset.begin() + i);
-
-            return value[0];
-        }
+        return ValueParser::parseInt<IntType>(_intRaws[name]);
     }
-
-    return defaultValue;
+    else
+    {   
+        return defaultValue;
+    }
 }
 
-template<typename T>
-inline std::vector<T> SdData::_findDataArray(
-    const std::string&                            name,
-    std::vector<std::shared_ptr<TSdDataUnit<T>>>& dataset)
+template<typename FloatType>
+inline FloatType SdData::findFloat(
+    const std::string& name,
+    const FloatType    defaultValue)
 {
-    std::vector<T> dataArray;
-    for (std::size_t i = 0; i < dataset.size(); ++i)
+    if (_floatRaws.contains(name))
     {
-        if (dataset[i]->name() == name)
-        {
-            auto&& values = dataset[i]->value();
-            dataset.erase(dataset.begin() + i);
-
-            dataArray.reserve(values.size());
-            for (std::size_t i = 0; i < values.size(); ++i)
-            {
-                dataArray.emplace_back(values[i]);
-            }
-
-            break;
-        }
+        return ValueParser::parseFloat<FloatType>(_floatRaws[name]);
     }
+    else
+    {
+        return defaultValue;
+    }
+}
 
-    return std::move(dataArray);
+template<typename ElementType>
+inline TVector2<ElementType> SdData::findVector2(
+    const std::string&           name,
+    const TVector2<ElementType>& defaultValue)
+{
+    if (_vector2Raws.contains(name))
+    {
+        return ValueParser::parseVector2<ElementType>(_vector2Raws[name]);
+    }
+    else
+    {
+        return defaultValue;
+    }
+}
+
+template<typename ElementType>
+inline TVector3<ElementType> SdData::findVector3(
+    const std::string&           name,
+    const TVector3<ElementType>& defaultValue)
+{
+    if (_vector3Raws.contains(name))
+    {
+        return ValueParser::parseVector3<ElementType>(_vector3Raws[name]);
+    }
+    else
+    {
+        return defaultValue;
+    }
+}
+
+template<typename FloatType>
+inline std::vector<FloatType> SdData::findFloatArray(const std::string& name)
+{
+    if (_floatArrayRaws.contains(name))
+    {
+        return ValueParser::parseFloatArray<FloatType>(_floatArrayRaws[name]);
+    }
+    else
+    {
+        return {};
+    }
+}
+
+template<typename ElementType>
+inline std::vector<TVector3<ElementType>> SdData::findVector3Array(const std::string& name)
+{
+    if (_vector3ArrayRaws.contains(name))
+    {
+        return ValueParser::parseVector3Array<ElementType>(_vector3ArrayRaws[name]);
+    }
+    else
+    {
+        return {};
+    }
+}
+
+template<typename RawDataType>
+inline void SdData::_addRawData(
+    const std::string&                            name,
+    const RawDataType&                            rawData,
+    std::unordered_map<std::string, RawDataType>& rawDataMap)
+{
+    CS_ASSERT(!rawDataMap.contains(name));
+
+    rawDataMap[name] = rawData;
 }
 
 } // namespace cadise

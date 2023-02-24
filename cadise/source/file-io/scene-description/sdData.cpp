@@ -1,6 +1,7 @@
 #include "file-io/scene-description/sdData.h"
 
 #include "core/texture/category/tConstantTexture.h"
+#include "math/tVector3.h"
 
 namespace cadise
 {
@@ -9,99 +10,80 @@ SdData::SdData() :
     _classType(ESdClassType::Undefined) 
 {}
 
-void SdData::addBool(
-    const std::string& name, 
-    std::unique_ptr<bool[]> value, 
-    const std::size_t numValues)
+void SdData::addBool(const std::string& name, const std::string& valueRaw)
 {
-    _bools.emplace_back(
-        std::make_shared<TSdDataUnit<bool>>(name, std::move(value), numValues));
+    _addRawData(name, valueRaw, _boolRaws);
 }
 
-void SdData::addReal(
-    const std::string& name, 
-    std::unique_ptr<real[]> value, 
-    const std::size_t numValues)
+void SdData::addString(const std::string& name, const std::string& valueRaw)
 {
-    _reals.emplace_back(
-        std::make_shared<TSdDataUnit<real>>(name, std::move(value), numValues));
+    _addRawData(name, valueRaw, _stringRaws);
 }
 
-void SdData::addInt32(
-    const std::string& name,
-    std::unique_ptr<int32[]> value,
-    const std::size_t numValues)
+void SdData::addInt(const std::string& name, const std::string& valueRaw)
 {
-    _int32s.emplace_back(
-        std::make_shared<TSdDataUnit<int32>>(name, std::move(value), numValues));
+    _addRawData(name, valueRaw, _intRaws);
 }
 
-void SdData::addVector3R(
-    const std::string& name,
-    std::unique_ptr<Vector3R[]> value,
-    const std::size_t numValues)
+void SdData::addFloat(const std::string& name, const std::string& valueRaw)
 {
-    _vector3rs.emplace_back(
-        std::make_shared<TSdDataUnit<Vector3R>>(name, std::move(value), numValues));
+    _addRawData(name, valueRaw, _floatRaws);
 }
 
-void SdData::addString(
-    const std::string& name,
-    std::unique_ptr<std::string[]> value,
-    const std::size_t numValues)
+void SdData::addVector2(const std::string& name, const std::vector<std::string>& valueRaw)
 {
-    _strings.emplace_back(
-        std::make_shared<TSdDataUnit<std::string>>(name, std::move(value), numValues));
+    _addRawData(name, valueRaw, _vector2Raws);
+}
+
+void SdData::addVector3(const std::string& name, const std::vector<std::string>& valueRaw)
+{
+    _addRawData(name, valueRaw, _vector3Raws);
+}
+
+void SdData::addFloatArray(const std::string& name, const std::vector<std::string>& valueRaw)
+{
+    _addRawData(name, valueRaw, _floatArrayRaws);
+}
+
+void SdData::addVector3Array(const std::string& name, const std::vector<std::string>& valueRaw)
+{
+    _addRawData(name, valueRaw, _vector3ArrayRaws);
 }
 
 bool SdData::findBool(
-    const std::string& name, const bool defaultValue)
+    const std::string& name, 
+    const bool         defaultValue)
 {
-    return _findData(name, defaultValue, _bools);
-}
-
-real SdData::findReal(
-    const std::string& name, const real defaultValue)
-{
-    return _findData(name, defaultValue, _reals);
-}
-
-int32 SdData::findInt32(
-    const std::string& name, const int32 defaultValue)
-{
-    return _findData(name, defaultValue, _int32s);
-}
-
-Vector3R SdData::findVector3r(
-    const std::string& name, const Vector3R& defaultValue)
-{
-    return _findData(name, defaultValue, _vector3rs);
+    if (_boolRaws.contains(name))
+    {
+        return ValueParser::parseBool(_boolRaws[name]);
+    }
+    else
+    {
+        return defaultValue;
+    }
 }
 
 std::string SdData::findString(
-    const std::string& name, const std::string& defaultValue)
+    const std::string& name, 
+    const std::string& defaultValue)
 {
-    return _findData(name, defaultValue, _strings);
-}
-
-const std::vector<real> SdData::findRealArray(
-    const std::string& name)
-{
-    return _findDataArray(name, _reals);
-}
-
-const std::vector<Vector3R> SdData::findVector3rArray(
-    const std::string& name)
-{
-    return _findDataArray(name, _vector3rs);
+    if (_stringRaws.contains(name))
+    {
+        return ValueParser::parseString(_stringRaws[name]);
+    }
+    else
+    {
+        return defaultValue;
+    }
 }
 
 std::shared_ptr<TTexture<real>> SdData::getRealTexture(
-    const std::string&             name,
+    const std::string&                   name,
     const TStringKeyMap<TTexture<real>>& realTextures,
-    const real                          defaultValue)
+    const real                           defaultValue)
 {
-    std::shared_ptr<TTexture<real>> realTexture = nullptr;
+    std::shared_ptr<TTexture<real>> realTexture;
 
     const std::string textureName = this->findString(name);
     if (!textureName.empty()) 
@@ -110,7 +92,7 @@ std::shared_ptr<TTexture<real>> SdData::getRealTexture(
     }
     else 
     {
-        const real value = this->findReal(name, defaultValue);
+        const real value = this->findFloat<real>(name, defaultValue);
         realTexture = std::make_shared<TConstantTexture<real>>(value);
     }
 
@@ -118,11 +100,11 @@ std::shared_ptr<TTexture<real>> SdData::getRealTexture(
 }
 
 std::shared_ptr<TTexture<Spectrum>> SdData::getSpectrumTexture(
-    const std::string&                 name,
+    const std::string&                       name,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures,
-    const Spectrum&                         defaultValue)
+    const Spectrum&                          defaultValue)
 {
-    std::shared_ptr<TTexture<Spectrum>> spectrumTexture = nullptr;
+    std::shared_ptr<TTexture<Spectrum>> spectrumTexture;
 
     const std::string textureName = this->findString(name);
     if (!textureName.empty()) 
@@ -135,7 +117,7 @@ std::shared_ptr<TTexture<Spectrum>> SdData::getSpectrumTexture(
         Vector3R defaultLinearSrgb;
         defaultValue.transformToLinearSrgb(&defaultLinearSrgb);
 
-        const Vector3R linearSrgb = this->findVector3r(name, defaultLinearSrgb);
+        const Vector3R linearSrgb = this->findVector3<real>(name, defaultLinearSrgb);
         spectrumTexture = std::make_shared<TConstantTexture<Spectrum>>(Spectrum(linearSrgb));
     }
 
