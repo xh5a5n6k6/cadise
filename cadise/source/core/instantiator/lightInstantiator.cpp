@@ -23,8 +23,8 @@ static std::shared_ptr<Light> createPoint(
     const std::shared_ptr<SdData>&  data,
     const TStringKeyMap<Primitive>& primitives)
 {
-    const auto position  = data->findVector3r("position");
-    const auto intensity = data->findVector3r("intensity");
+    const auto position  = data->findVector3<real>("position");
+    const auto intensity = data->findVector3<real>("intensity");
 
     return std::make_shared<PointLight>(position, Spectrum(intensity));
 }
@@ -37,8 +37,8 @@ static std::vector<std::shared_ptr<AreaLight>> createArea(
 {
     std::vector<std::shared_ptr<AreaLight>> lights;
 
-    const auto color          = data->findVector3r("color");
-    const real watt           = data->findReal("watt");
+    const auto color          = data->findVector3<real>("color");
+    const real watt           = data->findFloat<real>("watt");
     const bool isBackFaceEmit = data->findBool("is-back-face-emit");
 
     const auto   primitiveName      = data->findString("primitive");
@@ -51,7 +51,7 @@ static std::vector<std::shared_ptr<AreaLight>> createArea(
 
     if (primitivePair != primitives.end())
     {
-        auto areaLight = std::make_shared<SingleAreaLight>(
+        const auto areaLight = std::make_shared<SingleAreaLight>(
             primitivePair->second.get(),
             Spectrum(color), 
             watt, 
@@ -71,7 +71,7 @@ static std::vector<std::shared_ptr<AreaLight>> createArea(
         {
             totalAreas += triangles[i]->area();
 
-            auto areaLight = std::make_shared<SingleAreaLight>(
+            const auto areaLight = std::make_shared<SingleAreaLight>(
                 triangles[i].get(),
                 Spectrum(color),
                 watt,

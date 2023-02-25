@@ -14,13 +14,18 @@ namespace cadise::instantiator
 static std::shared_ptr<Camera> createPerspectivePinhole(
     const std::shared_ptr<SdData>& data)
 {
-    const auto position      = data->findVector3r("position");
-    const auto direction     = data->findVector3r("direction");
-    const auto up            = data->findVector3r("up");
-    const real fov           = data->findReal("fov");
-    const real sensorWidthMM = data->findReal("sensor-width-mm", 36.0_r);
+    const auto position      = data->findVector3<real>("position");
+    const auto direction     = data->findVector3<real>("direction");
+    const auto up            = data->findVector3<real>("up");
+    const real fov           = data->findFloat<real>("fov");
+    const real sensorWidthMM = data->findFloat<real>("sensor-width-mm", 36.0_r);
 
-    return std::make_shared<PerspectivePinholeCamera>(position, direction, up, fov, sensorWidthMM);
+    return std::make_shared<PerspectivePinholeCamera>(
+        position,
+        direction,
+        up,
+        fov,
+        sensorWidthMM);
 }
 
 std::shared_ptr<Camera> makeCamera(

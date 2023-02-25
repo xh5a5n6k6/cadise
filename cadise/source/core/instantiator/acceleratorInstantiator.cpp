@@ -46,9 +46,9 @@ static std::shared_ptr<Accelerator> createKdTree(
     const std::shared_ptr<SdData>& data,
     const std::vector<std::shared_ptr<Intersector>>& intersectors)
 {
-    const real traversalCost    = data->findReal("traversal-cost", 1.0_r);
-    const real intersectionCost = data->findReal("intersection-cost", 80.0_r);
-    const real emptyBonus       = data->findReal("empty-bonus", 0.05_r);
+    const real traversalCost    = data->findFloat<real>("traversal-cost", 1.0_r);
+    const real intersectionCost = data->findFloat<real>("intersection-cost", 80.0_r);
+    const real emptyBonus       = data->findFloat<real>("empty-bonus", 0.05_r);
 
     return std::make_shared<KdTreeAccelerator>(
         std::move(intersectors),

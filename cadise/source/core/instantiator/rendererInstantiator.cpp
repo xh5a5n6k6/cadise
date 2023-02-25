@@ -21,7 +21,7 @@ static std::shared_ptr<Renderer> createSampling(
     const auto estimator = makeEstimator(data);
     const auto sampler   = makeSampler(data);
 
-    return std::make_shared<SamplingRenderer>(std::move(estimator), std::move(sampler));
+    return std::make_shared<SamplingRenderer>(estimator, sampler);
 }
 
 static std::shared_ptr<Renderer> createBdpt(
@@ -29,33 +29,33 @@ static std::shared_ptr<Renderer> createBdpt(
 {
     const auto sampler = makeSampler(data);
 
-    return std::make_shared<BdptRenderer>(std::move(sampler));
+    return std::make_shared<BdptRenderer>(sampler);
 }
 
 static std::shared_ptr<Renderer> createVpm(
     const std::shared_ptr<SdData>& data)
 {
-    const std::size_t numPhotons    = static_cast<std::size_t>(data->findInt32("num-photons", 250000));
-    const real        searchRadius  = data->findReal("search-radius", 0.01_r);
+    const std::size_t numPhotons    = data->findInt<std::size_t>("num-photons", 250000);
+    const real        searchRadius  = data->findFloat<real>("search-radius", 0.01_r);
 
     const auto sampler = makeSampler(data);
     const auto setting = PmSetting(numPhotons, searchRadius);
 
-    return std::make_shared<VpmRenderer>(std::move(sampler), setting);
+    return std::make_shared<VpmRenderer>(sampler, setting);
 }
 
 static std::shared_ptr<Renderer> createPpm(
     const std::shared_ptr<SdData>& data) 
 {
-    const std::size_t numPhotons    = static_cast<std::size_t>(data->findInt32("num-photons", 250000));
-    const real        searchRadius  = data->findReal("search-radius", 0.01_r);
-    const std::size_t numIterations = static_cast<std::size_t>(data->findInt32("num-iterations", 4));
-    const real        alpha         = data->findReal("alpha", 2.0_r / 3.0_r);
+    const std::size_t numPhotons    = data->findInt<std::size_t>("num-photons", 250000);
+    const real        searchRadius  = data->findFloat<real>("search-radius", 0.01_r);
+    const std::size_t numIterations = data->findInt<std::size_t>("num-iterations", 4);
+    const real        alpha         = data->findFloat<real>("alpha", 2.0_r / 3.0_r);
 
     const auto sampler = makeSampler(data);
     const auto setting = PmSetting(numPhotons, searchRadius, numIterations, alpha);
 
-    return std::make_shared<PpmRenderer>(std::move(sampler), setting);
+    return std::make_shared<PpmRenderer>(sampler, setting);
 }
 
 //static std::shared_ptr<Renderer> createPpg(

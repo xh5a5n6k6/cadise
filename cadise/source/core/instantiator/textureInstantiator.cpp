@@ -23,7 +23,7 @@ static std::shared_ptr<TTexture<real>> createRealConstant(
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
-    const real value = data->findReal("value");
+    const real value = data->findFloat<real>("value");
 
     return std::make_shared<TConstantTexture<real>>(value);
 }
@@ -33,8 +33,8 @@ static std::shared_ptr<TTexture<real>> createRealCheckerboard(
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
-    const real oddNumber   = data->findReal("odd-number");
-    const real evenNumber  = data->findReal("even-number");
+    const real oddNumber   = data->findFloat<real>("odd-number");
+    const real evenNumber  = data->findFloat<real>("even-number");
     const auto oddTexture  = data->getRealTexture("odd-texture", realTextures);
     const auto evenTexture = data->getRealTexture("even-texture", realTextures);
 
@@ -48,7 +48,7 @@ static std::shared_ptr<TTexture<Spectrum>> createSpectrumConstant(
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
     // it now only support rgb spectrum
-    const auto value = data->findVector3r("value");
+    const auto value = data->findVector3<real>("value");
 
     return std::make_shared<TConstantTexture<Spectrum>>(Spectrum(value));
 }
@@ -58,8 +58,8 @@ static std::shared_ptr<TTexture<Spectrum>> createSpectrumCheckerboard(
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
-    const real oddNumber   = data->findReal("odd-number");
-    const real evenNumber  = data->findReal("even-number");
+    const real oddNumber   = data->findFloat<real>("odd-number");
+    const real evenNumber  = data->findFloat<real>("even-number");
     const auto oddTexture  = data->getSpectrumTexture("odd-texture", spectrumTextures);
     const auto evenTexture = data->getSpectrumTexture("even-texture", spectrumTextures);
 

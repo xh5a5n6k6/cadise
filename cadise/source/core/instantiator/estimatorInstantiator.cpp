@@ -19,7 +19,7 @@ static constexpr int32 MAX_PATH_LENGTH = 10000;
 static std::shared_ptr<EnergyEstimator> createWdl(
     const std::shared_ptr<SdData>& data) 
 {
-    const int32 maxDepth = data->findInt32("max-depth", MAX_PATH_LENGTH);
+    const int32 maxDepth = data->findInt<int32>("max-depth", MAX_PATH_LENGTH);
 
     return std::make_shared<WdlEstimator>(maxDepth);
 }
@@ -27,7 +27,7 @@ static std::shared_ptr<EnergyEstimator> createWdl(
 static std::shared_ptr<EnergyEstimator> createVpt(
     const std::shared_ptr<SdData>& data) 
 {
-    const int32 maxDepth = data->findInt32("max-depth", MAX_PATH_LENGTH);
+    const int32 maxDepth = data->findInt<int32>("max-depth", MAX_PATH_LENGTH);
 
     return std::make_shared<VptEstimator>(maxDepth);
 }
@@ -35,7 +35,7 @@ static std::shared_ptr<EnergyEstimator> createVpt(
 static std::shared_ptr<EnergyEstimator> createPt(
     const std::shared_ptr<SdData>& data)
 {
-    const int32 maxDepth = data->findInt32("max-path-length", MAX_PATH_LENGTH);
+    const int32 maxDepth = data->findInt<int32>("max-path-length", MAX_PATH_LENGTH);
 
     return std::make_shared<PtEstimator>(maxDepth);
 }
@@ -43,7 +43,7 @@ static std::shared_ptr<EnergyEstimator> createPt(
 static std::shared_ptr<EnergyEstimator> createAovAo(
     const std::shared_ptr<SdData>& data)
 {
-    const std::size_t numSampleRays = static_cast<std::size_t>(data->findInt32("num-sample-rays", 4));
+    const std::size_t numSampleRays = data->findInt<std::size_t>("num-sample-rays", 4);
 
     return std::make_shared<AoEstimator>(numSampleRays);
 }

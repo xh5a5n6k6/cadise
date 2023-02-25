@@ -13,17 +13,17 @@ namespace cadise::instantiator
 static std::shared_ptr<Sampler> createRandom(
     const std::shared_ptr<SdData>& data) 
 {
-    const int32 sampleNumber = data->findInt32("sample-number", 4);
+    const std::size_t sampleNumber = data->findInt<std::size_t>("sample-number", 4);
 
-    return std::make_shared<RandomSampler>(static_cast<std::size_t>(sampleNumber));
+    return std::make_shared<RandomSampler>(sampleNumber);
 }
 
 static std::shared_ptr<Sampler> createStratified(
     const std::shared_ptr<SdData>& data)
 {
-    const int32 sampleNumber = data->findInt32("sample-number", 4);
+    const std::size_t sampleNumber = data->findInt<std::size_t>("sample-number", 4);
 
-    return std::make_shared<StratifiedSampler>(static_cast<std::size_t>(sampleNumber));
+    return std::make_shared<StratifiedSampler>(sampleNumber);
 }
 
 std::shared_ptr<Sampler> makeSampler(

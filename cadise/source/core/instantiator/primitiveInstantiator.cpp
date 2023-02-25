@@ -19,8 +19,8 @@ static std::shared_ptr<Primitive> createSphere(
     const std::shared_ptr<SdData>& data,
     const TStringKeyMap<Bsdf>&     bsdfs)
 {
-    const auto center   = data->findVector3r("center");
-    const real radius   = data->findReal("radius");
+    const auto center   = data->findVector3<real>("center");
+    const real radius   = data->findFloat<real>("radius");
     const auto bsdfName = data->findString("bsdf");
 
     const auto&& bsdf = bsdfs.find(bsdfName);
@@ -32,9 +32,9 @@ static std::shared_ptr<Primitive> createTriangle(
     const std::shared_ptr<SdData>& data,
     const TStringKeyMap<Bsdf>&     bsdfs) 
 {
-    const auto v1       = data->findVector3r("v1");
-    const auto v2       = data->findVector3r("v2");
-    const auto v3       = data->findVector3r("v3");
+    const auto v1       = data->findVector3<real>("v1");
+    const auto v2       = data->findVector3<real>("v2");
+    const auto v3       = data->findVector3<real>("v3");
     const auto bsdfName = data->findString("bsdf");
 
     const auto&& bsdf = bsdfs.find(bsdfName);
@@ -46,9 +46,9 @@ static std::shared_ptr<Primitive> createRectangle(
     const std::shared_ptr<SdData>& data,
     const TStringKeyMap<Bsdf>&     bsdfs) 
 {
-    const auto v1       = data->findVector3r("v1");
-    const auto v2       = data->findVector3r("v2");
-    const auto v3       = data->findVector3r("v3");
+    const auto v1       = data->findVector3<real>("v1");
+    const auto v2       = data->findVector3<real>("v2");
+    const auto v3       = data->findVector3<real>("v3");
     const auto bsdfName = data->findString("bsdf");
 
     const auto&& mapResult = bsdfs.find(bsdfName);
@@ -62,9 +62,9 @@ static std::shared_ptr<TriangleBuffer> createTriangleMesh(
     const std::shared_ptr<SdData>& data,
     const TStringKeyMap<Bsdf>&     bsdfs) 
 {
-    const auto positions = data->findVector3rArray("positions");
-    const auto normals   = data->findVector3rArray("normals");
-    const auto uvws      = data->findVector3rArray("uvws");
+    const auto positions = data->findVector3Array<real>("positions");
+    const auto normals   = data->findVector3Array<real>("normals");
+    const auto uvws      = data->findVector3Array<real>("uvws");
     const auto bsdfName  = data->findString("bsdf");
 
     const auto&& mapResult = bsdfs.find(bsdfName);

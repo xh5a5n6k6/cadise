@@ -15,8 +15,8 @@ namespace cadise::instantiator
 static std::shared_ptr<Filter> createBox(
     const std::shared_ptr<SdData>& data) 
 {
-    const real filterWidth  = data->findReal("filter-width", 1.0_r);
-    const real filterHeight = data->findReal("filter-height", 1.0_r);
+    const real filterWidth  = data->findFloat<real>("filter-width", 1.0_r);
+    const real filterHeight = data->findFloat<real>("filter-height", 1.0_r);
 
     return std::make_shared<BoxFilter>(filterWidth, filterHeight);
 }
@@ -24,8 +24,8 @@ static std::shared_ptr<Filter> createBox(
 static std::shared_ptr<Filter> createCone(
     const std::shared_ptr<SdData>& data) 
 {
-    const real filterWidth  = data->findReal("filter-width", 4.0_r);
-    const real filterHeight = data->findReal("filter-height", 4.0_r);
+    const real filterWidth  = data->findFloat<real>("filter-width", 4.0_r);
+    const real filterHeight = data->findFloat<real>("filter-height", 4.0_r);
 
     return std::make_shared<ConeFilter>(filterWidth, filterHeight);
 }
@@ -33,11 +33,11 @@ static std::shared_ptr<Filter> createCone(
 static std::shared_ptr<Filter> createGaussian(
     const std::shared_ptr<SdData>& data) 
 {
-    const real filterWidth  = data->findReal("filter-width", 4.0_r);
-    const real filterHeight = data->findReal("filter-height", 4.0_r);
-    const real sigmaX       = data->findReal("sigma-x", 0.5_r);
-    const real sigmaY       = data->findReal("sigma-y", 0.5_r);
-    const real amplitude    = data->findReal("amplitude", 1.0_r);
+    const real filterWidth  = data->findFloat<real>("filter-width", 4.0_r);
+    const real filterHeight = data->findFloat<real>("filter-height", 4.0_r);
+    const real sigmaX       = data->findFloat<real>("sigma-x", 0.5_r);
+    const real sigmaY       = data->findFloat<real>("sigma-y", 0.5_r);
+    const real amplitude    = data->findFloat<real>("amplitude", 1.0_r);
 
     return std::make_shared<GaussianFilter>(
         filterWidth, filterHeight, sigmaX, sigmaY, amplitude);
@@ -46,10 +46,10 @@ static std::shared_ptr<Filter> createGaussian(
 static std::shared_ptr<Filter> createMitchell(
     const std::shared_ptr<SdData>& data) 
 {
-    const real filterWidth  = data->findReal("filter-width", 4.0_r);
-    const real filterHeight = data->findReal("filter-height", 4.0_r);
-    const real b            = data->findReal("b", 1.0_r / 3.0_r);
-    const real c            = data->findReal("c", 1.0_r / 3.0_r);
+    const real filterWidth  = data->findFloat<real>("filter-width", 4.0_r);
+    const real filterHeight = data->findFloat<real>("filter-height", 4.0_r);
+    const real b            = data->findFloat<real>("b", 1.0_r / 3.0_r);
+    const real c            = data->findFloat<real>("c", 1.0_r / 3.0_r);
 
     return std::make_shared<MitchellFilter>(
         filterWidth, filterHeight, b, c);

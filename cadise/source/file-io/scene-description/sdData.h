@@ -5,7 +5,8 @@
 #include "file-io/scene-description/valueParser.h"
 #include "fundamental/assertion.h"
 #include "math/type/mapType.h"
-#include "math/type/mathType.h"
+#include "math/tVector2.h"
+#include "math/tVector3.h"
 
 #include <memory>
 #include <vector>
