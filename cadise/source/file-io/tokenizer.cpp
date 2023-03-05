@@ -21,8 +21,6 @@ Tokenizer Tokenizer::makeFromOpenClosePattern(
     const char closeDelimiter,
     const bool shouldIncludeEdges)
 {
-    CS_ASSERT_NE(openDelimiter, closeDelimiter);
-
     const EMode mode = shouldIncludeEdges
         ? EMode::ClosureWithEdges
         : EMode::ClosureWithoutEdges;
@@ -103,38 +101,36 @@ void Tokenizer::captureMatching(
     const auto [openChar, closeChar] = _openCloseDelimiterPair;
     for (std::size_t i = 0; i < source.length(); ++i)
     {
-        if (source[i] == openChar)
+        if (source[i] != openChar)
         {
-            std::size_t openIndex  = i;
-            std::size_t closeIndex = openIndex + 1;
-            while (closeIndex < source.length())
+            continue;
+        }
+
+        std::size_t openIndex  = i;
+        std::size_t closeIndex = openIndex + 1;
+        while (closeIndex < source.length())
+        {
+            if (source[closeIndex] == closeChar)
             {
-                if (source[closeIndex] == openChar)
+                std::size_t leftIndex  = openIndex;
+                std::size_t rightIndex = closeIndex;
+                if (_mode == EMode::ClosureWithoutEdges)
                 {
-                    openIndex = closeIndex;
-                }
-                else if (source[closeIndex] == closeChar)
-                {
-                    std::size_t leftIndex  = openIndex;
-                    std::size_t rightIndex = closeIndex;
-                    if (_mode == EMode::ClosureWithoutEdges)
-                    {
-                        ++leftIndex;
-                        --rightIndex;
-                    }
-
-                    std::string matching = source.substr(
-                        leftIndex,
-                        rightIndex - leftIndex + 1);
-                    out_matchings.push_back(std::move(matching));
-
-                    // Move step to next index after finding valid matching
-                    i = closeIndex;
-                    break;
+                    ++leftIndex;
+                    --rightIndex;
                 }
 
-                ++closeIndex;
+                std::string matching = source.substr(
+                    leftIndex,
+                    rightIndex - leftIndex + 1);
+                out_matchings.push_back(std::move(matching));
+
+                // Move step to next index after finding valid matching
+                i = closeIndex;
+                break;
             }
+
+            ++closeIndex;
         }
     }
 }
