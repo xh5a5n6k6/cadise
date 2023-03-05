@@ -35,19 +35,23 @@ extern CS_API CSbool csInit();
 */
 extern CS_API CSbool csExit();
 
-extern CS_API void csCreateRenderDatabase(CSuint64* const out_renderDatabaseId);
+extern CS_API void csCreateEngine(CSuint64* const out_engineId);
 
-extern CS_API void csDeleteRenderDatabase(const CSuint64 renderDatabaseId);
+extern CS_API void csDeleteEngine(const CSuint64 engineId);
 
-/*! @brief Parse scene description file (with .crsd extension) and set up to specified render database.
+/*! @brief Specify the thread count used in an engine.
+*/
+extern CS_API void csSetThreadCount(const CSuint64 engineId, const CSuint64 threadCount);
+
+/*! @brief Parse scene description file (with .crsd extension) and set up to specified engine.
 
 @return Value to indicate parsing procedure successful or not.
 */
-extern CS_API CSbool csParseFile(const CSuint64 renderDatabaseId, const CSchar* filename);
+extern CS_API CSbool csLoadSceneFromFile(const CSuint64 engineId, const CSchar* filename);
 
 /*! @brief Specify an engine to start the render process synchronously.
 */
-extern CS_API void csRender(const CSuint64 renderDatabaseId);
+extern CS_API void csRender(const CSuint64 engineId);
 
 /*! @brief Specify an engine to start the render process asynchronously.
 

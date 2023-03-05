@@ -1,7 +1,7 @@
 #include "cadise/cadise.h"
 
 #include "api/globalStorage.h"
-#include "core/renderDatabase.h"
+#include "core/engine.h"
 #include "file-io/scene-description/sdParser.h"
 #include "fundamental/assertion.h"
 
@@ -19,27 +19,36 @@ CSbool csExit()
     return CS_TRUE;
 }
 
-void csCreateRenderDatabase(CSuint64* const out_renderDatabaseId)
+void csCreateEngine(CSuint64* const out_engineId)
 {
-    CS_ASSERT(out_renderDatabaseId);
+    CS_ASSERT(out_engineId);
 
-    *out_renderDatabaseId = GlobalStorage::createResource<RenderDatabase>();
+    *out_engineId = GlobalStorage::createResource<Engine>();
 }
 
-void csDeleteRenderDatabase(const CSuint64 renderDatabaseId)
+void csDeleteEngine(const CSuint64 engineId)
 {
-    GlobalStorage::deleteResource<RenderDatabase>(renderDatabaseId);
+    GlobalStorage::deleteResource<Engine>(engineId);
 }
 
-CSbool csParseFile(const CSuint64 renderDatabaseId, const CSchar* filename)
+void csSetThreadCount(const CSuint64 engineId, const CSuint64 threadCount)
 {
-    auto renderDatabase = GlobalStorage::getResource<RenderDatabase>(renderDatabaseId);
-    if (renderDatabase)
+    auto engine = GlobalStorage::getResource<Engine>(engineId);
+    if (engine)
+    {
+        engine->setThreadCount(threadCount);
+    }
+}
+
+CSbool csLoadSceneFromFile(const CSuint64 engineId, const CSchar* filename)
+{
+    auto engine = GlobalStorage::getResource<Engine>(engineId);
+    if (engine)
     {
         const auto sdDataVector = SdParser::parse(std::string(filename));
         for (const auto& sdData : sdDataVector)
         {
-            renderDatabase->setUpData(sdData);
+            engine->consumeResource(sdData);
         }
 
         return CS_TRUE;
@@ -48,17 +57,16 @@ CSbool csParseFile(const CSuint64 renderDatabaseId, const CSchar* filename)
     return CS_FALSE;
 }
 
-void csRender(const CSuint64 renderDatabaseId)
+void csRender(const CSuint64 engineId)
 {
-    auto renderDatabase = GlobalStorage::getResource<RenderDatabase>(renderDatabaseId);
-    if (renderDatabase)
+    auto engine = GlobalStorage::getResource<Engine>(engineId);
+    if (engine)
     {
-        renderDatabase->prepareRender();
-        renderDatabase->render();
+        engine->render();
     }
 }
 
-void csRenderAsync(const CSuint64 renderDatabaseId)
+void csRenderAsync(const CSuint64 engineId)
 {
     // TODO
 }

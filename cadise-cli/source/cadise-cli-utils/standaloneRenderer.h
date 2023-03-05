@@ -17,7 +17,7 @@ public:
 
 private:
     CommandLineArguments _args;
-    CSuint64             _renderDatabaseId;
+    CSuint64             _engineId;
 };
 
 } // namespace cadise_cli
