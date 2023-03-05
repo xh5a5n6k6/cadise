@@ -29,7 +29,7 @@ std::string trim_head(
     std::string result(source);
     trim_head_local(result, trimChar);
 
-    return std::move(result);
+    return result;
 }
 
 std::string trim_tail(
@@ -39,7 +39,7 @@ std::string trim_tail(
     std::string result(source);
     trim_tail_local(result, trimChar);
 
-    return std::move(result);
+    return result;
 }
 
 std::string trim(
@@ -49,7 +49,7 @@ std::string trim(
     std::string result(source);
     trim_local(result, trimChar);
 
-    return std::move(result);
+    return result;
 }
 
 std::string& trim_head_local(
@@ -89,7 +89,7 @@ std::string escape_regex_char(const char regexChar)
 
     result += regexChar;
 
-    return std::move(result);
+    return result;
 }
 
 } // namespace cadise::string_utils

@@ -26,16 +26,16 @@ public:
     static FloatType parseFloat(const std::string_view value);
 
     template<typename ElementType>
-    static TVector2<ElementType> parseVector2(const std::span<std::string_view> value);
+    static TVector2<ElementType> parseVector2(const std::span<std::string> value);
 
     template<typename ElementType>
-    static TVector3<ElementType> parseVector3(const std::span<std::string_view> value);
+    static TVector3<ElementType> parseVector3(const std::span<std::string> value);
 
     template<std::floating_point FloatType>
-    static std::vector<FloatType> parseFloatArray(const std::span<std::string_view> value);
+    static std::vector<FloatType> parseFloatArray(const std::span<std::string> value);
 
     template<typename ElementType>
-    static std::vector<TVector3<ElementType>> parseVector3Array(const std::span<std::string_view> value);
+    static std::vector<TVector3<ElementType>> parseVector3Array(const std::span<std::string> value);
 
 private:
     template<typename ElementType>
@@ -57,7 +57,7 @@ inline FloatType ValueParser::parseFloat(const std::string_view value)
 }
 
 template<typename ElementType>
-inline TVector2<ElementType> ValueParser::parseVector2(const std::span<std::string_view> value)
+inline TVector2<ElementType> ValueParser::parseVector2(const std::span<std::string> value)
 {
     CS_ASSERT_EQ(value.size(), 2);
 
@@ -80,7 +80,7 @@ inline TVector2<ElementType> ValueParser::parseVector2(const std::span<std::stri
 }
 
 template<typename ElementType>
-inline TVector3<ElementType> ValueParser::parseVector3(const std::span<std::string_view> value)
+inline TVector3<ElementType> ValueParser::parseVector3(const std::span<std::string> value)
 {
     CS_ASSERT_EQ(value.size(), 3);
 
@@ -105,7 +105,7 @@ inline TVector3<ElementType> ValueParser::parseVector3(const std::span<std::stri
 }
 
 template<std::floating_point FloatType>
-inline std::vector<FloatType> ValueParser::parseFloatArray(const std::span<std::string_view> value)
+inline std::vector<FloatType> ValueParser::parseFloatArray(const std::span<std::string> value)
 {
     std::vector<FloatType> result;
     result.reserve(value.size());
@@ -120,7 +120,7 @@ inline std::vector<FloatType> ValueParser::parseFloatArray(const std::span<std::
 }
 
 template<typename ElementType>
-inline std::vector<TVector3<ElementType>> ValueParser::parseVector3Array(const std::span<std::string_view> value)
+inline std::vector<TVector3<ElementType>> ValueParser::parseVector3Array(const std::span<std::string> value)
 {
     CS_ASSERT_EQ(value.size() % 3, 0);
 
