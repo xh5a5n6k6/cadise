@@ -18,7 +18,7 @@
 #include "core/surface/microfacet/isotropicBlinnPhong.h"
 #include "core/surface/microfacet/isotropicGgx.h"
 #include "core/texture/tTexture.h"
-#include "file-io/scene-description/sdData.h"
+#include "file-io/scene-description/CSDResource.h"
 #include "fundamental/assertion.h"
 
 #include <iostream>
@@ -27,7 +27,7 @@ namespace cadise::instantiator
 {
 
 static std::shared_ptr<Bsdf> createLambertianDiffuse(
-    const std::shared_ptr<SdData>&           data,
+    const std::shared_ptr<CSDResource>&           data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures) 
 {
@@ -37,7 +37,7 @@ static std::shared_ptr<Bsdf> createLambertianDiffuse(
 }
 
 static std::shared_ptr<Bsdf> createSpecularReflection(
-    const std::shared_ptr<SdData>&           data,
+    const std::shared_ptr<CSDResource>&           data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
@@ -68,7 +68,7 @@ static std::shared_ptr<Bsdf> createSpecularReflection(
 }
 
 static std::shared_ptr<Bsdf> createSpecularTransmission(
-    const std::shared_ptr<SdData>&           data,
+    const std::shared_ptr<CSDResource>&           data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
@@ -82,7 +82,7 @@ static std::shared_ptr<Bsdf> createSpecularTransmission(
 }
 
 static std::shared_ptr<Bsdf> createSpecularDielectric(
-    const std::shared_ptr<SdData>&           data,
+    const std::shared_ptr<CSDResource>&           data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures) 
 {
@@ -96,7 +96,7 @@ static std::shared_ptr<Bsdf> createSpecularDielectric(
 }
 
 static std::shared_ptr<Bsdf> createPhong(
-    const std::shared_ptr<SdData>&           data,
+    const std::shared_ptr<CSDResource>&           data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures) 
 {
@@ -106,7 +106,7 @@ static std::shared_ptr<Bsdf> createPhong(
 }
 
 static std::shared_ptr<Bsdf> createPlastic(
-    const std::shared_ptr<SdData>&           data,
+    const std::shared_ptr<CSDResource>&           data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures) 
 {
@@ -121,7 +121,7 @@ static std::shared_ptr<Bsdf> createPlastic(
 }
 
 static std::shared_ptr<Bsdf> createMixed(
-    const std::shared_ptr<SdData>&           data,
+    const std::shared_ptr<CSDResource>&           data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures,
     const TStringKeyMap<Bsdf>&               bsdfs) 
@@ -145,7 +145,7 @@ static std::shared_ptr<Bsdf> createMixed(
 }
 
 static std::shared_ptr<Bsdf> createConductorMicrofacet(
-    const std::shared_ptr<SdData>&           data,
+    const std::shared_ptr<CSDResource>&           data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
@@ -193,7 +193,7 @@ static std::shared_ptr<Bsdf> createConductorMicrofacet(
 }
 
 static std::shared_ptr<Bsdf> createDielectricMicrofacet(
-    const std::shared_ptr<SdData>&           data,
+    const std::shared_ptr<CSDResource>&           data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
@@ -245,7 +245,7 @@ static std::shared_ptr<Bsdf> createDielectricMicrofacet(
 }
 
 std::shared_ptr<Bsdf> makeBsdf(
-    const std::shared_ptr<SdData>&           data,
+    const std::shared_ptr<CSDResource>&           data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures,
     const TStringKeyMap<Bsdf>&               bsdfs)

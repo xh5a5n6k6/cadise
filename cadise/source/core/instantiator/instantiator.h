@@ -20,7 +20,7 @@ namespace cadise {
     class Renderer;
     class Sampler;
     class Scene;
-    class SdData;
+    class CSDResource;
     class TriangleBuffer;
 
     template<typename T> 
@@ -33,58 +33,58 @@ namespace cadise::instantiator
 
 // implement in core/instantiator/cameraInstantiator.cpp
 std::shared_ptr<Camera> makeCamera(
-    const std::shared_ptr<SdData>& data);
+    const std::shared_ptr<CSDResource>& data);
 
 // implement in core/instantiator/rendererInstantiator.cpp
 std::shared_ptr<Renderer> makeRenderer(
-    const std::shared_ptr<SdData>& data);
+    const std::shared_ptr<CSDResource>& data);
 
 // implement in core/instantiator/estimatorInstantiator.cpp
 std::shared_ptr<EnergyEstimator> makeEstimator(
-    const std::shared_ptr<SdData>& data);
+    const std::shared_ptr<CSDResource>& data);
 
 // implement in core/instantiator/filmInstantiator.cpp
 std::shared_ptr<Film> makeFilm(
-    const std::shared_ptr<SdData>& data);
+    const std::shared_ptr<CSDResource>& data);
 
 // implement in core/instantiator/filterInstantiator.cpp
 std::shared_ptr<Filter> makeFilter(
-    const std::shared_ptr<SdData>& data);
+    const std::shared_ptr<CSDResource>& data);
 
 // implement in core/instantiator/samplerInstantiator.cpp
 std::shared_ptr<Sampler> makeSampler(
-    const std::shared_ptr<SdData>& data);
+    const std::shared_ptr<CSDResource>& data);
 
 // implement in core/instantiator/acceleratorInstantiator.cpp
 std::shared_ptr<Accelerator> makeAccelerator(
-    const std::shared_ptr<SdData>&                   data,
+    const std::shared_ptr<CSDResource>&                   data,
     const std::vector<std::shared_ptr<Intersector>>& intersectors);
 
 // implement in core/instantiator/lightClusterInstantiator.cpp
 std::shared_ptr<LightCluster> makeLightCluster(
-    const std::shared_ptr<SdData>&             data,
+    const std::shared_ptr<CSDResource>&             data,
     const std::vector<std::shared_ptr<Light>>& lights);
 
 // implement in core/instantiator/textureInstantiator.cpp
 std::shared_ptr<TTexture<real>> makeRealTexture(
-    const std::shared_ptr<SdData>&           data,
+    const std::shared_ptr<CSDResource>&           data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures);
 std::shared_ptr<TTexture<Spectrum>> makeSpectrumTexture(
-    const std::shared_ptr<SdData>&           data,
+    const std::shared_ptr<CSDResource>&           data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures);
 
 // implement in core/instantiator/bsdfInstantiator.cpp
 std::shared_ptr<Bsdf> makeBsdf(
-    const std::shared_ptr<SdData>&           data,
+    const std::shared_ptr<CSDResource>&           data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures,
     const TStringKeyMap<Bsdf>&               bsdfs);
 
 // implement in core/instantiator/lightInstantiator.cpp
 void makeLight(
-    const std::shared_ptr<SdData>&              data,
+    const std::shared_ptr<CSDResource>&              data,
     const TStringKeyMap<Primitive>&             primitives,
     TStringKeyMap<TriangleBuffer>&              out_triangleBuffers,
     std::vector<std::shared_ptr<Light>>&        out_lights,
@@ -93,7 +93,7 @@ void makeLight(
 
 // implement in core/instantiator/primitiveInstantiator.cpp
 void makePrimitive(
-    const std::shared_ptr<SdData>&              data,
+    const std::shared_ptr<CSDResource>&              data,
     const TStringKeyMap<Bsdf>&                  bsdfs,
     std::vector<std::shared_ptr<Intersector>>&  out_intersectors,
     TStringKeyMap<Primitive>&                   out_primitives,

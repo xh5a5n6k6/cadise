@@ -12,14 +12,14 @@
 #include "core/texture/eTextureWrapMode.h"
 #include "file-io/path.h"
 #include "file-io/pictureLoader.h"
-#include "file-io/scene-description/sdData.h"
+#include "file-io/scene-description/CSDResource.h"
 #include "fundamental/assertion.h"
 
 namespace cadise::instantiator 
 {
 
 static std::shared_ptr<TTexture<real>> createRealConstant(
-    const std::shared_ptr<SdData>&           data,
+    const std::shared_ptr<CSDResource>&           data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
@@ -29,7 +29,7 @@ static std::shared_ptr<TTexture<real>> createRealConstant(
 }
 
 static std::shared_ptr<TTexture<real>> createRealCheckerboard(
-    const std::shared_ptr<SdData>&           data,
+    const std::shared_ptr<CSDResource>&           data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
@@ -43,7 +43,7 @@ static std::shared_ptr<TTexture<real>> createRealCheckerboard(
 }
 
 static std::shared_ptr<TTexture<Spectrum>> createSpectrumConstant(
-    const std::shared_ptr<SdData>&           data,
+    const std::shared_ptr<CSDResource>&           data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
@@ -54,7 +54,7 @@ static std::shared_ptr<TTexture<Spectrum>> createSpectrumConstant(
 }
 
 static std::shared_ptr<TTexture<Spectrum>> createSpectrumCheckerboard(
-    const std::shared_ptr<SdData>&           data,
+    const std::shared_ptr<CSDResource>&           data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
@@ -68,7 +68,7 @@ static std::shared_ptr<TTexture<Spectrum>> createSpectrumCheckerboard(
 }
 
 static std::shared_ptr<TTexture<Spectrum>> createSpectrumImage(
-    const std::shared_ptr<SdData>&           data,
+    const std::shared_ptr<CSDResource>&           data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
@@ -107,7 +107,7 @@ static std::shared_ptr<TTexture<Spectrum>> createSpectrumImage(
 }
 
 //static std::shared_ptr<Texture<Spectrum>> createSpectrumAlphaImage(
-//    const std::shared_ptr<SdData>& data,
+//    const std::shared_ptr<CSDResource>& data,
 //    const TStringKeyMap<Texture<real>>& realTextures,
 //    const TStringKeyMap<Texture<Spectrum>>& spectrumTextures) {
 //
@@ -119,7 +119,7 @@ static std::shared_ptr<TTexture<Spectrum>> createSpectrumImage(
 //}
 
 std::shared_ptr<TTexture<real>> makeRealTexture(
-    const std::shared_ptr<SdData>&           data,
+    const std::shared_ptr<CSDResource>&           data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
@@ -156,7 +156,7 @@ std::shared_ptr<TTexture<real>> makeRealTexture(
 }
 
 std::shared_ptr<TTexture<Spectrum>> makeSpectrumTexture(
-    const std::shared_ptr<SdData>&           data,
+    const std::shared_ptr<CSDResource>&           data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {

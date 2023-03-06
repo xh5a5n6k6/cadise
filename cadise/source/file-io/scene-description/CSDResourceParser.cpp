@@ -1,6 +1,6 @@
-#include "file-io/scene-description/sdDataParser.h"
+#include "file-io/scene-description/CSDResourceParser.h"
 
-#include "file-io/scene-description/sdData.h"
+#include "file-io/scene-description/CSDResource.h"
 #include "file-io/string_utils.h"
 #include "file-io/tokenizer.h"
 #include "fundamental/logger/logger.h"
@@ -29,12 +29,12 @@ namespace cadise
 
 namespace
 {
-    const Logger logger("SdDataParser");
+    const Logger logger("CSDResourceParser");
 }
 
-SdDataParser::SdDataParser() = default;
+CSDResourceParser::CSDResourceParser() = default;
 
-std::shared_ptr<SdData> SdDataParser::parse(const std::string& dataRaw) const
+std::shared_ptr<CSDResource> CSDResourceParser::parse(const std::string& dataRaw) const
 {
     std::string sdClassType;
     std::string sdDataRaw;
@@ -46,7 +46,7 @@ std::shared_ptr<SdData> SdDataParser::parse(const std::string& dataRaw) const
         if (nameValuePair.size() != 2)
         {
             logger.log("Invalid sd data, skip parsing processing!");
-            return std::make_shared<SdData>();
+            return std::make_shared<CSDResource>();
         }
 
         // TODO: support multiple trimmed elements
@@ -57,7 +57,7 @@ std::shared_ptr<SdData> SdDataParser::parse(const std::string& dataRaw) const
         sdDataRaw   = nameValuePair[1];
     }
 
-    SdData sdData;
+    CSDResource sdData;
     sdData.setClassType(sdClassType);
 
     {
@@ -74,12 +74,12 @@ std::shared_ptr<SdData> SdDataParser::parse(const std::string& dataRaw) const
         }
     }
 
-    return std::make_shared<SdData>(std::move(sdData));
+    return std::make_shared<CSDResource>(std::move(sdData));
 }
 
-void SdDataParser::_parseDataUnit(
+void CSDResourceParser::_parseDataUnit(
     const std::string& dataUnitString,
-    SdData* const      out_sdData) const
+    CSDResource* const out_sdData) const
 {
     // TODO: redesign syntax of data unit
 

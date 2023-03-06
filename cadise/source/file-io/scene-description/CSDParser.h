@@ -7,18 +7,20 @@
 // forward declaration
 namespace cadise 
 { 
-    class SdData;
+    class CSDResource;
 }
 
 namespace cadise
 {
 
-/*! @brief Scene description file (with .crsd extension) parser.
+/*! @brief Cadise scene description file parser.
+
+It currently only supports scene file with .csda file extension.
 */
-class SdParser
+class CSDParser
 {
 public:
-    static std::vector<std::shared_ptr<SdData>> parse(const std::string& filename);
+    static std::vector<std::shared_ptr<CSDResource>> parse(const std::string& filename);
 
 private:
     static std::string _parseRaw(const std::string& filename);

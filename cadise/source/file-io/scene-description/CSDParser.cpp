@@ -1,9 +1,9 @@
-#include "file-io/scene-description/sdParser.h"
+#include "file-io/scene-description/CSDParser.h"
 
 #include "core/renderDatabase.h"
 #include "file-io/string_utils.h"
 #include "file-io/tokenizer.h"
-#include "file-io/scene-description/sdDataParser.h"
+#include "file-io/scene-description/CSDResourceParser.h"
 #include "fundamental/logger/logger.h"
 #include "fundamental/time/stopwatch.h"
 #include "utility/parallel.h"
@@ -19,7 +19,7 @@ namespace
     const Logger logger("SD Parser");
 }
 
-std::vector<std::shared_ptr<SdData>> SdParser::parse(const std::string& filename)
+std::vector<std::shared_ptr<CSDResource>> CSDParser::parse(const std::string& filename)
 {
     Stopwatch stopwatch;
     stopwatch.start();
@@ -45,10 +45,10 @@ std::vector<std::shared_ptr<SdData>> SdParser::parse(const std::string& filename
         startPosition = endPosition + 1;
     }
 
-    std::vector<std::shared_ptr<SdData>> sdDataVector;
-    sdDataVector.resize(sdDataRaws.size());
+    std::vector<std::shared_ptr<CSDResource>> csdResources;
+    csdResources.resize(sdDataRaws.size());
 
-    const SdDataParser dataParser;
+    const CSDResourceParser resourceParser;
     Parallel::execute(
         sdDataRaws.size(),
         8,
@@ -56,18 +56,18 @@ std::vector<std::shared_ptr<SdData>> SdParser::parse(const std::string& filename
         {
             for (std::size_t i = begin; i < end; ++i)
             {
-                const std::shared_ptr<SdData> data = dataParser.parse(sdDataRaws[i]);
-                sdDataVector[i] = data;
+                const std::shared_ptr<CSDResource> data = resourceParser.parse(sdDataRaws[i]);
+                csdResources[i] = data;
             }
         });
 
     stopwatch.stop();
-    logger.log("Parsing time (to SdData): " + stopwatch.elapsedTime().toString());
+    logger.log("Parsing time (to CSDResource): " + stopwatch.elapsedTime().toString());
 
-    return sdDataVector;
+    return csdResources;
 }
 
-std::string SdParser::_parseRaw(const std::string& filename)
+std::string CSDParser::_parseRaw(const std::string& filename)
 {
     std::ifstream fileStream(filename.c_str());
     if (!fileStream.is_open())

@@ -21,10 +21,10 @@ namespace cadise
 namespace cadise
 {
 
-class SdData 
+class CSDResource
 {
 public:
-    SdData();
+    CSDResource();
 
     void addBool(const std::string& name, const std::string& valueRaw);
     void addString(const std::string& name, const std::string& valueRaw);
@@ -105,7 +105,7 @@ private:
 // template header implementation
 
 template<typename IntType>
-inline IntType SdData::findInt(
+inline IntType CSDResource::findInt(
     const std::string& name, 
     const IntType      defaultValue)
 {
@@ -120,7 +120,7 @@ inline IntType SdData::findInt(
 }
 
 template<typename FloatType>
-inline FloatType SdData::findFloat(
+inline FloatType CSDResource::findFloat(
     const std::string& name,
     const FloatType    defaultValue)
 {
@@ -135,7 +135,7 @@ inline FloatType SdData::findFloat(
 }
 
 template<typename ElementType>
-inline TVector2<ElementType> SdData::findVector2(
+inline TVector2<ElementType> CSDResource::findVector2(
     const std::string&           name,
     const TVector2<ElementType>& defaultValue)
 {
@@ -150,7 +150,7 @@ inline TVector2<ElementType> SdData::findVector2(
 }
 
 template<typename ElementType>
-inline TVector3<ElementType> SdData::findVector3(
+inline TVector3<ElementType> CSDResource::findVector3(
     const std::string&           name,
     const TVector3<ElementType>& defaultValue)
 {
@@ -165,7 +165,7 @@ inline TVector3<ElementType> SdData::findVector3(
 }
 
 template<typename FloatType>
-inline std::vector<FloatType> SdData::findFloatArray(const std::string& name)
+inline std::vector<FloatType> CSDResource::findFloatArray(const std::string& name)
 {
     if (_floatArrayRaws.contains(name))
     {
@@ -178,7 +178,7 @@ inline std::vector<FloatType> SdData::findFloatArray(const std::string& name)
 }
 
 template<typename ElementType>
-inline std::vector<TVector3<ElementType>> SdData::findVector3Array(const std::string& name)
+inline std::vector<TVector3<ElementType>> CSDResource::findVector3Array(const std::string& name)
 {
     if (_vector3ArrayRaws.contains(name))
     {
@@ -191,7 +191,7 @@ inline std::vector<TVector3<ElementType>> SdData::findVector3Array(const std::st
 }
 
 template<typename RawDataType>
-inline void SdData::_addRawData(
+inline void CSDResource::_addRawData(
     const std::string&                            name,
     const RawDataType&                            rawData,
     std::unordered_map<std::string, RawDataType>& rawDataMap)

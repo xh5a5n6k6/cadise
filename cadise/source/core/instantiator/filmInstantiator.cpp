@@ -3,14 +3,14 @@
 // film type
 #include "core/film/film.h"
 
-#include "file-io/scene-description/sdData.h"
+#include "file-io/scene-description/CSDResource.h"
 #include "fundamental/assertion.h"
 
 namespace cadise::instantiator 
 {
 
 std::shared_ptr<Film> makeFilm(
-    const std::shared_ptr<SdData>& data)
+    const std::shared_ptr<CSDResource>& data)
 {
     CS_ASSERT(data);
 

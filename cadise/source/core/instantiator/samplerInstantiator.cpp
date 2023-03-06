@@ -4,14 +4,14 @@
 #include "core/sampler/category/randomSampler.h"
 #include "core/sampler/category/stratifiedSampler.h"
 
-#include "file-io/scene-description/sdData.h"
+#include "file-io/scene-description/CSDResource.h"
 #include "fundamental/assertion.h"
 
 namespace cadise::instantiator 
 {
 
 static std::shared_ptr<Sampler> createRandom(
-    const std::shared_ptr<SdData>& data) 
+    const std::shared_ptr<CSDResource>& data) 
 {
     const std::size_t sampleNumber = data->findInt<std::size_t>("sample-number", 4);
 
@@ -19,7 +19,7 @@ static std::shared_ptr<Sampler> createRandom(
 }
 
 static std::shared_ptr<Sampler> createStratified(
-    const std::shared_ptr<SdData>& data)
+    const std::shared_ptr<CSDResource>& data)
 {
     const std::size_t sampleNumber = data->findInt<std::size_t>("sample-number", 4);
 
@@ -27,7 +27,7 @@ static std::shared_ptr<Sampler> createStratified(
 }
 
 std::shared_ptr<Sampler> makeSampler(
-    const std::shared_ptr<SdData>& data) 
+    const std::shared_ptr<CSDResource>& data) 
 {
     CS_ASSERT(data);
 

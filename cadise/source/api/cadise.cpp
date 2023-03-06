@@ -2,7 +2,7 @@
 
 #include "api/globalStorage.h"
 #include "core/engine.h"
-#include "file-io/scene-description/sdParser.h"
+#include "file-io/scene-description/CSDParser.h"
 #include "fundamental/assertion.h"
 
 #include <vector>
@@ -45,10 +45,10 @@ CSbool csLoadSceneFromFile(const CSuint64 engineId, const CSchar* filename)
     auto engine = GlobalStorage::getResource<Engine>(engineId);
     if (engine)
     {
-        const auto sdDataVector = SdParser::parse(std::string(filename));
-        for (const auto& sdData : sdDataVector)
+        const auto csdResources = CSDParser::parse(std::string(filename));
+        for (const auto& resource : csdResources)
         {
-            engine->consumeResource(sdData);
+            engine->consumeResource(resource);
         }
 
         return CS_TRUE;

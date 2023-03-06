@@ -1,4 +1,4 @@
-#include "file-io/scene-description/sdData.h"
+#include "file-io/scene-description/CSDResource.h"
 
 #include "core/texture/category/tConstantTexture.h"
 #include "math/tVector3.h"
@@ -6,51 +6,51 @@
 namespace cadise
 {
 
-SdData::SdData() :
+CSDResource::CSDResource() :
     _classType(ESdClassType::Undefined) 
 {}
 
-void SdData::addBool(const std::string& name, const std::string& valueRaw)
+void CSDResource::addBool(const std::string& name, const std::string& valueRaw)
 {
     _addRawData(name, valueRaw, _boolRaws);
 }
 
-void SdData::addString(const std::string& name, const std::string& valueRaw)
+void CSDResource::addString(const std::string& name, const std::string& valueRaw)
 {
     _addRawData(name, valueRaw, _stringRaws);
 }
 
-void SdData::addInt(const std::string& name, const std::string& valueRaw)
+void CSDResource::addInt(const std::string& name, const std::string& valueRaw)
 {
     _addRawData(name, valueRaw, _intRaws);
 }
 
-void SdData::addFloat(const std::string& name, const std::string& valueRaw)
+void CSDResource::addFloat(const std::string& name, const std::string& valueRaw)
 {
     _addRawData(name, valueRaw, _floatRaws);
 }
 
-void SdData::addVector2(const std::string& name, const std::vector<std::string>& valueRaw)
+void CSDResource::addVector2(const std::string& name, const std::vector<std::string>& valueRaw)
 {
     _addRawData(name, valueRaw, _vector2Raws);
 }
 
-void SdData::addVector3(const std::string& name, const std::vector<std::string>& valueRaw)
+void CSDResource::addVector3(const std::string& name, const std::vector<std::string>& valueRaw)
 {
     _addRawData(name, valueRaw, _vector3Raws);
 }
 
-void SdData::addFloatArray(const std::string& name, const std::vector<std::string>& valueRaw)
+void CSDResource::addFloatArray(const std::string& name, const std::vector<std::string>& valueRaw)
 {
     _addRawData(name, valueRaw, _floatArrayRaws);
 }
 
-void SdData::addVector3Array(const std::string& name, const std::vector<std::string>& valueRaw)
+void CSDResource::addVector3Array(const std::string& name, const std::vector<std::string>& valueRaw)
 {
     _addRawData(name, valueRaw, _vector3ArrayRaws);
 }
 
-bool SdData::findBool(
+bool CSDResource::findBool(
     const std::string& name, 
     const bool         defaultValue)
 {
@@ -64,7 +64,7 @@ bool SdData::findBool(
     }
 }
 
-std::string SdData::findString(
+std::string CSDResource::findString(
     const std::string& name, 
     const std::string& defaultValue)
 {
@@ -78,7 +78,7 @@ std::string SdData::findString(
     }
 }
 
-std::shared_ptr<TTexture<real>> SdData::getRealTexture(
+std::shared_ptr<TTexture<real>> CSDResource::getRealTexture(
     const std::string&                   name,
     const TStringKeyMap<TTexture<real>>& realTextures,
     const real                           defaultValue)
@@ -99,7 +99,7 @@ std::shared_ptr<TTexture<real>> SdData::getRealTexture(
     return realTexture;
 }
 
-std::shared_ptr<TTexture<Spectrum>> SdData::getSpectrumTexture(
+std::shared_ptr<TTexture<Spectrum>> CSDResource::getSpectrumTexture(
     const std::string&                       name,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures,
     const Spectrum&                          defaultValue)
@@ -124,12 +124,12 @@ std::shared_ptr<TTexture<Spectrum>> SdData::getSpectrumTexture(
     return spectrumTexture;
 }
 
-ESdClassType SdData::classType() const
+ESdClassType CSDResource::classType() const
 {
     return _classType;
 }
 
-void SdData::setClassType(const std::string& classType) 
+void CSDResource::setClassType(const std::string& classType) 
 {
     if (classType == "film") 
     {
@@ -177,7 +177,7 @@ void SdData::setClassType(const std::string& classType)
     }
 }
 
-void SdData::setClassType(const ESdClassType classType)
+void CSDResource::setClassType(const ESdClassType classType)
 {
     _classType = classType;
 }

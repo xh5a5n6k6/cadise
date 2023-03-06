@@ -8,7 +8,7 @@
 #include "core/estimator/vptEstimator.h"
 #include "core/estimator/wdlEstimator.h"
 
-#include "file-io/scene-description/sdData.h"
+#include "file-io/scene-description/CSDResource.h"
 #include "fundamental/assertion.h"
 
 namespace cadise::instantiator 
@@ -17,7 +17,7 @@ namespace cadise::instantiator
 static constexpr int32 MAX_PATH_LENGTH = 10000;
 
 static std::shared_ptr<EnergyEstimator> createWdl(
-    const std::shared_ptr<SdData>& data) 
+    const std::shared_ptr<CSDResource>& data) 
 {
     const int32 maxDepth = data->findInt<int32>("max-depth", MAX_PATH_LENGTH);
 
@@ -25,7 +25,7 @@ static std::shared_ptr<EnergyEstimator> createWdl(
 }
 
 static std::shared_ptr<EnergyEstimator> createVpt(
-    const std::shared_ptr<SdData>& data) 
+    const std::shared_ptr<CSDResource>& data) 
 {
     const int32 maxDepth = data->findInt<int32>("max-depth", MAX_PATH_LENGTH);
 
@@ -33,7 +33,7 @@ static std::shared_ptr<EnergyEstimator> createVpt(
 }
 
 static std::shared_ptr<EnergyEstimator> createPt(
-    const std::shared_ptr<SdData>& data)
+    const std::shared_ptr<CSDResource>& data)
 {
     const int32 maxDepth = data->findInt<int32>("max-path-length", MAX_PATH_LENGTH);
 
@@ -41,7 +41,7 @@ static std::shared_ptr<EnergyEstimator> createPt(
 }
 
 static std::shared_ptr<EnergyEstimator> createAovAo(
-    const std::shared_ptr<SdData>& data)
+    const std::shared_ptr<CSDResource>& data)
 {
     const std::size_t numSampleRays = data->findInt<std::size_t>("num-sample-rays", 4);
 
@@ -49,19 +49,19 @@ static std::shared_ptr<EnergyEstimator> createAovAo(
 }
 
 static std::shared_ptr<EnergyEstimator> createAovUvw(
-    const std::shared_ptr<SdData>& data) 
+    const std::shared_ptr<CSDResource>& data) 
 {
     return std::make_shared<UvwEstimator>();
 }
 
 static std::shared_ptr<EnergyEstimator> createAovWsn(
-    const std::shared_ptr<SdData>& data)
+    const std::shared_ptr<CSDResource>& data)
 {
     return std::make_shared<WsnEstimator>();
 }
 
 std::shared_ptr<EnergyEstimator> makeEstimator(
-    const std::shared_ptr<SdData>& data) 
+    const std::shared_ptr<CSDResource>& data) 
 {
     CS_ASSERT(data);
 

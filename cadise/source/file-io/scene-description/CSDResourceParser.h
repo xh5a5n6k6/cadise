@@ -6,23 +6,23 @@
 // forward declaration
 namespace cadise 
 { 
-    class SdData; 
+    class CSDResource; 
 }
 
 namespace cadise
 {
 
-class SdDataParser
+class CSDResourceParser
 {
 public:
-    SdDataParser();
+    CSDResourceParser();
 
-    std::shared_ptr<SdData> parse(const std::string& data) const;
+    std::shared_ptr<CSDResource> parse(const std::string& data) const;
 
 private:
     void _parseDataUnit(
         const std::string& dataUnitString,
-        SdData* const      out_sdData) const;
+        CSDResource* const out_sdData) const;
 };
 
 } // namespace cadise

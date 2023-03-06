@@ -15,7 +15,7 @@ namespace cadise
     class Primitive;
     class Renderer;
     class Scene;
-    class SdData;
+    class CSDResource;
     class TriangleBuffer;
 
     template<typename T>
@@ -30,27 +30,27 @@ class RenderDatabase
 public:
     RenderDatabase();
 
-    void setUpData(const std::shared_ptr<SdData>& data);
+    void consumeResource(const std::shared_ptr<CSDResource>& resource);
 
     std::shared_ptr<Renderer> prepareRender();
 
 private:
-    void _setUpFilm(const std::shared_ptr<SdData>& data);
-    void _setUpCamera(const std::shared_ptr<SdData>& data);
-    void _setUpRenderer(const std::shared_ptr<SdData>& data);
-    void _setUpAccelerator(const std::shared_ptr<SdData>& data);
-    void _setUpLightCluster(const std::shared_ptr<SdData>& data);
-    void _setUpRealTexture(const std::shared_ptr<SdData>& data);
-    void _setUpSpectrumTexture(const std::shared_ptr<SdData>& data);
-    void _setUpBsdf(const std::shared_ptr<SdData>& data);
-    void _setUpLight(const std::shared_ptr<SdData>& data);
-    void _setUpPrimitive(const std::shared_ptr<SdData>& data);
+    void _setUpFilm(const std::shared_ptr<CSDResource>& resource);
+    void _setUpCamera(const std::shared_ptr<CSDResource>& resource);
+    void _setUpRenderer(const std::shared_ptr<CSDResource>& resource);
+    void _setUpAccelerator(const std::shared_ptr<CSDResource>& resource);
+    void _setUpLightCluster(const std::shared_ptr<CSDResource>& resource);
+    void _setUpRealTexture(const std::shared_ptr<CSDResource>& resource);
+    void _setUpSpectrumTexture(const std::shared_ptr<CSDResource>& resource);
+    void _setUpBsdf(const std::shared_ptr<CSDResource>& resource);
+    void _setUpLight(const std::shared_ptr<CSDResource>& resource);
+    void _setUpPrimitive(const std::shared_ptr<CSDResource>& resource);
 
-    std::shared_ptr<SdData> _filmData;
-    std::shared_ptr<SdData> _cameraData;
-    std::shared_ptr<SdData> _rendererData;
-    std::shared_ptr<SdData> _acceleratorData;
-    std::shared_ptr<SdData> _lightClusterData;
+    std::shared_ptr<CSDResource> _filmResource;
+    std::shared_ptr<CSDResource> _cameraResource;
+    std::shared_ptr<CSDResource> _rendererResource;
+    std::shared_ptr<CSDResource> _acceleratorResource;
+    std::shared_ptr<CSDResource> _lightClusterResource;
 
     std::vector<std::shared_ptr<Intersector>> _intersectors;
     std::vector<std::shared_ptr<Light>>       _lights;

@@ -9,14 +9,14 @@
 
 #include "core/intersector/accelerator/kd-tree/kdTreeAccelerator.h"
 #include "core/surface/bsdf/lambertianDiffuse.h"
-#include "file-io/scene-description/sdData.h"
+#include "file-io/scene-description/CSDResource.h"
 #include "fundamental/assertion.h"
 
 namespace cadise::instantiator 
 {
 
 static std::shared_ptr<Primitive> createSphere(
-    const std::shared_ptr<SdData>& data,
+    const std::shared_ptr<CSDResource>& data,
     const TStringKeyMap<Bsdf>&     bsdfs)
 {
     const auto center   = data->findVector3<real>("center");
@@ -29,7 +29,7 @@ static std::shared_ptr<Primitive> createSphere(
 }
 
 static std::shared_ptr<Primitive> createTriangle(
-    const std::shared_ptr<SdData>& data,
+    const std::shared_ptr<CSDResource>& data,
     const TStringKeyMap<Bsdf>&     bsdfs) 
 {
     const auto v1       = data->findVector3<real>("v1");
@@ -43,7 +43,7 @@ static std::shared_ptr<Primitive> createTriangle(
 }
 
 static std::shared_ptr<Primitive> createRectangle(
-    const std::shared_ptr<SdData>& data,
+    const std::shared_ptr<CSDResource>& data,
     const TStringKeyMap<Bsdf>&     bsdfs) 
 {
     const auto v1       = data->findVector3<real>("v1");
@@ -59,7 +59,7 @@ static std::shared_ptr<Primitive> createRectangle(
 }
 
 static std::shared_ptr<TriangleBuffer> createTriangleMesh(
-    const std::shared_ptr<SdData>& data,
+    const std::shared_ptr<CSDResource>& data,
     const TStringKeyMap<Bsdf>&     bsdfs) 
 {
     const auto positions = data->findVector3Array<real>("positions");
@@ -77,7 +77,7 @@ static std::shared_ptr<TriangleBuffer> createTriangleMesh(
 }
 
 //static std::vector<std::shared_ptr<Primitive>> createTriangleMeshKdTree(
-//    const std::shared_ptr<SdData>& data,
+//    const std::shared_ptr<CSDResource>& data,
 //    const TStringKeyMap<Bsdf>&      bsdfs)
 //{
 //    const auto positions = data->findVector3rArray("positions");
@@ -101,7 +101,7 @@ static std::shared_ptr<TriangleBuffer> createTriangleMesh(
 //}
 
 void makePrimitive(
-    const std::shared_ptr<SdData>&             data,
+    const std::shared_ptr<CSDResource>&             data,
     const TStringKeyMap<Bsdf>&                 bsdfs,
     std::vector<std::shared_ptr<Intersector>>& out_intersectors,
     TStringKeyMap<Primitive>&                  out_primitives,

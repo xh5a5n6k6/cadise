@@ -1,10 +1,9 @@
 #include "core/engine.h"
 
 #include "fundamental/logger/logger.h"
+#include "renderer/renderer.h"
 
 #include <thread>
-
-#include "renderer/renderer.h"
 
 namespace cadise 
 {
@@ -16,9 +15,9 @@ namespace
 
 Engine::Engine() = default;
 
-void Engine::consumeResource(const std::shared_ptr<SdData>& sdData)
+void Engine::consumeResource(const std::shared_ptr<CSDResource>& resource)
 {
-    _renderDatabase.setUpData(sdData);
+    _renderDatabase.consumeResource(resource);
 }
 
 void Engine::prepareRender()

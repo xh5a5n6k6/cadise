@@ -9,14 +9,14 @@
 #include "core/renderer/sampling/samplingRenderer.h"
 
 #include "core/renderer/photon-mapping/pmSetting.h"
-#include "file-io/scene-description/sdData.h"
+#include "file-io/scene-description/CSDResource.h"
 #include "fundamental/assertion.h"
 
 namespace cadise::instantiator
 {
 
 static std::shared_ptr<Renderer> createSampling(
-    const std::shared_ptr<SdData>& data) 
+    const std::shared_ptr<CSDResource>& data) 
 {
     const auto estimator = makeEstimator(data);
     const auto sampler   = makeSampler(data);
@@ -25,7 +25,7 @@ static std::shared_ptr<Renderer> createSampling(
 }
 
 static std::shared_ptr<Renderer> createBdpt(
-    const std::shared_ptr<SdData>& data) 
+    const std::shared_ptr<CSDResource>& data) 
 {
     const auto sampler = makeSampler(data);
 
@@ -33,7 +33,7 @@ static std::shared_ptr<Renderer> createBdpt(
 }
 
 static std::shared_ptr<Renderer> createVpm(
-    const std::shared_ptr<SdData>& data)
+    const std::shared_ptr<CSDResource>& data)
 {
     const std::size_t numPhotons    = data->findInt<std::size_t>("num-photons", 250000);
     const real        searchRadius  = data->findFloat<real>("search-radius", 0.01_r);
@@ -45,7 +45,7 @@ static std::shared_ptr<Renderer> createVpm(
 }
 
 static std::shared_ptr<Renderer> createPpm(
-    const std::shared_ptr<SdData>& data) 
+    const std::shared_ptr<CSDResource>& data) 
 {
     const std::size_t numPhotons    = data->findInt<std::size_t>("num-photons", 250000);
     const real        searchRadius  = data->findFloat<real>("search-radius", 0.01_r);
@@ -59,7 +59,7 @@ static std::shared_ptr<Renderer> createPpm(
 }
 
 //static std::shared_ptr<Renderer> createPpg(
-//    const std::shared_ptr<SdData>& data) {
+//    const std::shared_ptr<CSDResource>& data) {
 //
 //    const auto  sampler    = makeSampler(data);
 //    const int32 numSamples = data->findInt32("num-samples", 4);
@@ -72,7 +72,7 @@ static std::shared_ptr<Renderer> createPpm(
 //}
 
 //static std::shared_ptr<Renderer> createBdpg(
-//    const std::shared_ptr<SdData>& data) {
+//    const std::shared_ptr<CSDResource>& data) {
 //
 //    const auto  sampler               = makeSampler(data);
 //    const int32 numSamples            = data->findInt32("num-samples", 4);
@@ -85,7 +85,7 @@ static std::shared_ptr<Renderer> createPpm(
 //}
 
 std::shared_ptr<Renderer> makeRenderer(
-    const std::shared_ptr<SdData>& data) 
+    const std::shared_ptr<CSDResource>& data) 
 {
     CS_ASSERT(data);
 

@@ -3,7 +3,7 @@
 // camera type
 #include "core/camera/perspectivePinholeCamera.h"
 
-#include "file-io/scene-description/sdData.h"
+#include "file-io/scene-description/CSDResource.h"
 #include "fundamental/assertion.h"
 
 #include <iostream>
@@ -12,7 +12,7 @@ namespace cadise::instantiator
 {
 
 static std::shared_ptr<Camera> createPerspectivePinhole(
-    const std::shared_ptr<SdData>& data)
+    const std::shared_ptr<CSDResource>& data)
 {
     const auto position      = data->findVector3<real>("position");
     const auto direction     = data->findVector3<real>("direction");
@@ -29,7 +29,7 @@ static std::shared_ptr<Camera> createPerspectivePinhole(
 }
 
 std::shared_ptr<Camera> makeCamera(
-    const std::shared_ptr<SdData>& data) 
+    const std::shared_ptr<CSDResource>& data) 
 {
     CS_ASSERT(data);
 

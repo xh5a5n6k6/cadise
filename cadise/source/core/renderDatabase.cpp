@@ -12,7 +12,7 @@
 #include "core/scene.h"
 #include "core/surface/bsdf/bsdf.h"
 #include "core/texture/tTexture.h"
-#include "file-io/scene-description/sdData.h"
+#include "file-io/scene-description/CSDResource.h"
 #include "fundamental/assertion.h"
 #include "fundamental/logger/logger.h"
 #include "fundamental/time/stopwatch.h"
@@ -23,65 +23,64 @@
 namespace cadise 
 {
 
-
 namespace 
 {
     const Logger logger("Database");
 }
 
 RenderDatabase::RenderDatabase() :
-    _filmData(nullptr),
-    _cameraData(nullptr),
-    _rendererData(nullptr),
-    _acceleratorData(nullptr),
+    _filmResource(nullptr),
+    _cameraResource(nullptr),
+    _rendererResource(nullptr),
+    _acceleratorResource(nullptr),
     _backgroundSphere(nullptr),
     _environmentLightIndex(std::numeric_limits<std::size_t>::max()) 
 {}
 
-void RenderDatabase::setUpData(const std::shared_ptr<SdData>& data) 
+void RenderDatabase::consumeResource(const std::shared_ptr<CSDResource>& resource) 
 {
-    CS_ASSERT(data);
+    CS_ASSERT(resource);
 
-    switch (data->classType()) 
+    switch (resource->classType())
     {
         case ESdClassType::Film:
-            _setUpFilm(data);
+            _setUpFilm(resource);
             break;
 
         case ESdClassType::Camera:
-            _setUpCamera(data);
+            _setUpCamera(resource);
             break;
 
         case ESdClassType::Renderer:
-            _setUpRenderer(data);
+            _setUpRenderer(resource);
             break;
 
         case ESdClassType::Accelerator:
-            _setUpAccelerator(data);
+            _setUpAccelerator(resource);
             break;
 
         case ESdClassType::LightCluster:
-            _setUpLightCluster(data);
+            _setUpLightCluster(resource);
             break;
 
         case ESdClassType::TextureReal:
-            _setUpRealTexture(data);
+            _setUpRealTexture(resource);
             break;
 
         case ESdClassType::TextureSpectrum:
-            _setUpSpectrumTexture(data);
+            _setUpSpectrumTexture(resource);
             break;
 
         case ESdClassType::Material:
-            _setUpBsdf(data);
+            _setUpBsdf(resource);
             break;
 
         case ESdClassType::Light:
-            _setUpLight(data);
+            _setUpLight(resource);
             break;
 
         case ESdClassType::Primitive:
-            _setUpPrimitive(data);
+            _setUpPrimitive(resource);
             break;
 
         default:
@@ -114,15 +113,15 @@ std::shared_ptr<Renderer> RenderDatabase::prepareRender()
 
     logger.log("Finished loading scene objects (" + std::to_string(_intersectors.size()) + " primitives)");
 
-    const std::shared_ptr<Film>   film   = instantiator::makeFilm(_filmData);
-    const std::shared_ptr<Camera> camera = instantiator::makeCamera(_cameraData);
+    const std::shared_ptr<Film>   film   = instantiator::makeFilm(_filmResource);
+    const std::shared_ptr<Camera> camera = instantiator::makeCamera(_cameraResource);
 
     logger.log("Building primitive accelerator");
 
     Stopwatch stopwatch;
     stopwatch.start();
 
-    const std::shared_ptr<Accelerator> accelerator = instantiator::makeAccelerator(_acceleratorData, _intersectors);
+    const std::shared_ptr<Accelerator> accelerator = instantiator::makeAccelerator(_acceleratorResource, _intersectors);
 
     stopwatch.stop();
 
@@ -143,7 +142,7 @@ std::shared_ptr<Renderer> RenderDatabase::prepareRender()
         }
     }
 
-    const std::shared_ptr<LightCluster> lightCluster = instantiator::makeLightCluster(_lightClusterData, _lights);
+    const std::shared_ptr<LightCluster> lightCluster = instantiator::makeLightCluster(_lightClusterResource, _lights);
     const std::shared_ptr<Scene>        scene        = std::make_shared<Scene>(accelerator, lightCluster);
     if (_backgroundSphere)
     {
@@ -153,7 +152,7 @@ std::shared_ptr<Renderer> RenderDatabase::prepareRender()
     camera->setResolution(film->resolution().asType<std::size_t>());
     camera->updateTransform();
 
-    std::shared_ptr<Renderer> renderer = instantiator::makeRenderer(_rendererData);
+    std::shared_ptr<Renderer> renderer = instantiator::makeRenderer(_rendererResource);
     renderer->setScene(scene);
     renderer->setCamera(camera);
     renderer->setFilm(film);
@@ -161,63 +160,63 @@ std::shared_ptr<Renderer> RenderDatabase::prepareRender()
     return renderer;
 }
 
-void RenderDatabase::_setUpFilm(const std::shared_ptr<SdData>& data) 
+void RenderDatabase::_setUpFilm(const std::shared_ptr<CSDResource>& resource) 
 {
-    _filmData = data;
+    _filmResource = resource;
 }
 
-void RenderDatabase::_setUpCamera(const std::shared_ptr<SdData>& data) 
+void RenderDatabase::_setUpCamera(const std::shared_ptr<CSDResource>& resource)
 {
-    _cameraData = data;
+    _cameraResource = resource;
 }
 
-void RenderDatabase::_setUpRenderer(const std::shared_ptr<SdData>& data)
+void RenderDatabase::_setUpRenderer(const std::shared_ptr<CSDResource>& resource)
 {
-    _rendererData = data;
+    _rendererResource = resource;
 }
 
-void RenderDatabase::_setUpAccelerator(const std::shared_ptr<SdData>& data) 
+void RenderDatabase::_setUpAccelerator(const std::shared_ptr<CSDResource>& resource)
 {
-    _acceleratorData = data;
+    _acceleratorResource = resource;
 }
 
-void RenderDatabase::_setUpLightCluster(const std::shared_ptr<SdData>& data) 
+void RenderDatabase::_setUpLightCluster(const std::shared_ptr<CSDResource>& resource)
 {
-    _lightClusterData = data;
+    _lightClusterResource = resource;
 }
 
-void RenderDatabase::_setUpRealTexture(const std::shared_ptr<SdData>& data) 
+void RenderDatabase::_setUpRealTexture(const std::shared_ptr<CSDResource>& resource)
 {
     const std::shared_ptr<TTexture<real>> texture
-        = instantiator::makeRealTexture(data, _realTextures, _spectrumTextures);
-    const std::string textureName = data->findString("name");
+        = instantiator::makeRealTexture(resource, _realTextures, _spectrumTextures);
+    const std::string textureName = resource->findString("name");
 
     _realTextures.insert(
         std::pair<std::string, std::shared_ptr<TTexture<real>>>(textureName, texture));
 }
 
-void RenderDatabase::_setUpSpectrumTexture(const std::shared_ptr<SdData>& data) 
+void RenderDatabase::_setUpSpectrumTexture(const std::shared_ptr<CSDResource>& resource)
 {
     const std::shared_ptr<TTexture<Spectrum>> texture
-        = instantiator::makeSpectrumTexture(data, _realTextures, _spectrumTextures);
-    const std::string textureName = data->findString("name");
+        = instantiator::makeSpectrumTexture(resource, _realTextures, _spectrumTextures);
+    const std::string textureName = resource->findString("name");
 
     _spectrumTextures.insert(
         std::pair<std::string, std::shared_ptr<TTexture<Spectrum>>>(textureName, texture));
 }
 
-void RenderDatabase::_setUpBsdf(const std::shared_ptr<SdData>& data)
+void RenderDatabase::_setUpBsdf(const std::shared_ptr<CSDResource>& resource)
 {
-    const std::shared_ptr<Bsdf> bsdf = instantiator::makeBsdf(data, _realTextures, _spectrumTextures, _bsdfs);
-    const std::string bsdfName = data->findString("name");
+    const std::shared_ptr<Bsdf> bsdf = instantiator::makeBsdf(resource, _realTextures, _spectrumTextures, _bsdfs);
+    const std::string bsdfName = resource->findString("name");
 
     _bsdfs.insert(std::pair<std::string, std::shared_ptr<Bsdf>>(bsdfName, bsdf));
 }
 
-void RenderDatabase::_setUpLight(const std::shared_ptr<SdData>& data) 
+void RenderDatabase::_setUpLight(const std::shared_ptr<CSDResource>& resource)
 {
     instantiator::makeLight(
-        data, 
+        resource,
         _primitives,
         _triangleBuffers,
         _lights,
@@ -231,9 +230,9 @@ void RenderDatabase::_setUpLight(const std::shared_ptr<SdData>& data)
     }
 }
 
-void RenderDatabase::_setUpPrimitive(const std::shared_ptr<SdData>& data) 
+void RenderDatabase::_setUpPrimitive(const std::shared_ptr<CSDResource>& resource)
 {
-    instantiator::makePrimitive(data, _bsdfs, _intersectors, _primitives, _triangleBuffers);
+    instantiator::makePrimitive(resource, _bsdfs, _intersectors, _primitives, _triangleBuffers);
 }
 
 } // namespace cadise

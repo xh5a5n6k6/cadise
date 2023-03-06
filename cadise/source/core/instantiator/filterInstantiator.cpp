@@ -6,14 +6,14 @@
 #include "core/film/filter/mitchellFilter.h"
 #include "core/film/filter/coneFilter.h"
 
-#include "file-io/scene-description/sdData.h"
+#include "file-io/scene-description/CSDResource.h"
 #include "fundamental/assertion.h"
 
 namespace cadise::instantiator
 {
 
 static std::shared_ptr<Filter> createBox(
-    const std::shared_ptr<SdData>& data) 
+    const std::shared_ptr<CSDResource>& data) 
 {
     const real filterWidth  = data->findFloat<real>("filter-width", 1.0_r);
     const real filterHeight = data->findFloat<real>("filter-height", 1.0_r);
@@ -22,7 +22,7 @@ static std::shared_ptr<Filter> createBox(
 }
 
 static std::shared_ptr<Filter> createCone(
-    const std::shared_ptr<SdData>& data) 
+    const std::shared_ptr<CSDResource>& data) 
 {
     const real filterWidth  = data->findFloat<real>("filter-width", 4.0_r);
     const real filterHeight = data->findFloat<real>("filter-height", 4.0_r);
@@ -31,7 +31,7 @@ static std::shared_ptr<Filter> createCone(
 }
 
 static std::shared_ptr<Filter> createGaussian(
-    const std::shared_ptr<SdData>& data) 
+    const std::shared_ptr<CSDResource>& data) 
 {
     const real filterWidth  = data->findFloat<real>("filter-width", 4.0_r);
     const real filterHeight = data->findFloat<real>("filter-height", 4.0_r);
@@ -44,7 +44,7 @@ static std::shared_ptr<Filter> createGaussian(
 }
 
 static std::shared_ptr<Filter> createMitchell(
-    const std::shared_ptr<SdData>& data) 
+    const std::shared_ptr<CSDResource>& data) 
 {
     const real filterWidth  = data->findFloat<real>("filter-width", 4.0_r);
     const real filterHeight = data->findFloat<real>("filter-height", 4.0_r);
@@ -56,7 +56,7 @@ static std::shared_ptr<Filter> createMitchell(
 }
 
 std::shared_ptr<Filter> makeFilter(
-    const std::shared_ptr<SdData>& data)
+    const std::shared_ptr<CSDResource>& data)
 {
     CS_ASSERT(data);
 

@@ -6,21 +6,21 @@
 #include "core/intersector/accelerator/kd-tree/kdTreeAccelerator.h"
 
 #include "core/intersector/accelerator/bvh/eBvhSplitMode.h"
-#include "file-io/scene-description/sdData.h"
+#include "file-io/scene-description/CSDResource.h"
 #include "fundamental/assertion.h"
 
 namespace cadise::instantiator
 {
 
 static std::shared_ptr<Accelerator> createBruteForce(
-    const std::shared_ptr<SdData>& data,
+    const std::shared_ptr<CSDResource>& data,
     const std::vector<std::shared_ptr<Intersector>>& intersectors)
 {
     return std::make_shared<BruteForceAccelerator>(std::move(intersectors));
 }
 
 static std::shared_ptr<Accelerator> createBvh(
-    const std::shared_ptr<SdData>& data,
+    const std::shared_ptr<CSDResource>& data,
     const std::vector<std::shared_ptr<Intersector>>& intersectors)
 {
     const auto splitMode = data->findString("split-mode", "sah");
@@ -43,7 +43,7 @@ static std::shared_ptr<Accelerator> createBvh(
 }
 
 static std::shared_ptr<Accelerator> createKdTree(
-    const std::shared_ptr<SdData>& data,
+    const std::shared_ptr<CSDResource>& data,
     const std::vector<std::shared_ptr<Intersector>>& intersectors)
 {
     const real traversalCost    = data->findFloat<real>("traversal-cost", 1.0_r);
@@ -58,7 +58,7 @@ static std::shared_ptr<Accelerator> createKdTree(
 }
 
 std::shared_ptr<Accelerator> makeAccelerator(
-    const std::shared_ptr<SdData>& data,
+    const std::shared_ptr<CSDResource>& data,
     const std::vector<std::shared_ptr<Intersector>>& intersectors)
 {
     CS_ASSERT(data);

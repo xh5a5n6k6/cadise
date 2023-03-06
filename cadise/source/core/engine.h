@@ -7,9 +7,9 @@
 // forward declaration
 namespace cadise 
 {
+    class CSDResource;
     class Film;
     class Renderer;
-    class SdData;
 }
 
 namespace cadise 
@@ -26,7 +26,7 @@ private:
 public:
     Engine();
 
-    void consumeResource(const std::shared_ptr<SdData>& sdData);
+    void consumeResource(const std::shared_ptr<CSDResource>& resource);
     void prepareRender();
     void render() const;
 

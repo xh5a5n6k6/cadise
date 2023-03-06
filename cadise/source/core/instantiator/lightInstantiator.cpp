@@ -13,14 +13,14 @@
 #include "core/texture/category/tConstantTexture.h"
 #include "file-io/path.h"
 #include "file-io/pictureLoader.h"
-#include "file-io/scene-description/sdData.h"
+#include "file-io/scene-description/CSDResource.h"
 #include "fundamental/assertion.h"
 
 namespace cadise::instantiator
 {
 
 static std::shared_ptr<Light> createPoint(
-    const std::shared_ptr<SdData>&  data,
+    const std::shared_ptr<CSDResource>&  data,
     const TStringKeyMap<Primitive>& primitives)
 {
     const auto position  = data->findVector3<real>("position");
@@ -30,7 +30,7 @@ static std::shared_ptr<Light> createPoint(
 }
 
 static std::vector<std::shared_ptr<AreaLight>> createArea(
-    const std::shared_ptr<SdData>&             data,
+    const std::shared_ptr<CSDResource>&             data,
     const TStringKeyMap<Primitive>&            primitives,
     TStringKeyMap<TriangleBuffer>&             out_triangleBuffers,
     std::vector<std::shared_ptr<Intersector>>& out_intersectors)
@@ -102,7 +102,7 @@ static std::vector<std::shared_ptr<AreaLight>> createArea(
 }
 
 static std::shared_ptr<Light> createEnvironment(
-    const std::shared_ptr<SdData>&  data,
+    const std::shared_ptr<CSDResource>&  data,
     const TStringKeyMap<Primitive>& primitives,
     std::shared_ptr<Primitive>&     out_backgroundSphere) 
 {
@@ -130,7 +130,7 @@ static std::shared_ptr<Light> createEnvironment(
 }
 
 void makeLight(
-    const std::shared_ptr<SdData>&             data,
+    const std::shared_ptr<CSDResource>&             data,
     const TStringKeyMap<Primitive>&            primitives,
     TStringKeyMap<TriangleBuffer>&             out_triangleBuffers,
     std::vector<std::shared_ptr<Light>>&       out_lights,
