@@ -7,7 +7,8 @@ namespace cadise_cli
 {
 
 StandaloneRenderer::StandaloneRenderer(const CommandLineArguments& args) :
-    _args(args) 
+    _args(args),
+    _engineId()
 {
     csCreateEngine(&_engineId);
 
@@ -36,6 +37,7 @@ void StandaloneRenderer::render() const
         return;
     }
 
+    csPrepareRender(_engineId);
     csRender(_engineId);
 }
 

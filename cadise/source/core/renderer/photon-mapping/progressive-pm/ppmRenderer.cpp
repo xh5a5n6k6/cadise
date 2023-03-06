@@ -66,7 +66,7 @@ void PpmRenderer::render() const
             localViewpoints.reserve(workload * _film->tileSize().product() * _sampler->sampleNumber());
 
             PmViewpointConstructor viewpointConstructor(
-                _scene,
+                _scene.get(),
                 _camera.get(),
                 _setting.searchRadius());
 
@@ -126,7 +126,7 @@ void PpmRenderer::render() const
                 localPhotons.reserve(workload);
 
                 PhotonMapWork photonMapWork(
-                    _scene,
+                    _scene.get(),
                     &localPhotons,
                     &(numPhotonPaths[workerId]));
                 photonMapWork.setMaxNumPhotons(workload);

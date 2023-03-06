@@ -10,14 +10,13 @@ namespace cadise
 Renderer::Renderer() :
     _scene(nullptr),
     _camera(nullptr),
-    _film(nullptr) 
-{
-    _numWorkers = static_cast<std::size_t>(std::thread::hardware_concurrency());
-}
+    _film(nullptr),
+    _numWorkers(1)
+{}
 
 Renderer::~Renderer() = default;
 
-void Renderer::setScene(const Scene* const scene)
+void Renderer::setScene(const std::shared_ptr<Scene>& scene)
 {
     CS_ASSERT(scene);
 
@@ -36,6 +35,11 @@ void Renderer::setFilm(const std::shared_ptr<Film>& film)
     CS_ASSERT(film);
 
     _film = film;
+}
+
+void Renderer::setWorkerCount(const std::size_t workerCount)
+{
+    _numWorkers = workerCount;
 }
 
 } // namespace cadise

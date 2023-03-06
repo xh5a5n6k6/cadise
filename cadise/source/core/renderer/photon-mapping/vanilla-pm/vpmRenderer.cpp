@@ -18,11 +18,10 @@
 namespace cadise 
 {
 
-// local logger declaration
 namespace
 {
     const Logger logger("VPM Renderer");
-} // anonymous namespace
+}
 
 VpmRenderer::VpmRenderer(
     const std::shared_ptr<Sampler>& sampler,
@@ -63,7 +62,7 @@ void VpmRenderer::render() const
             localPhotons.reserve(workload);
 
             PhotonMapWork photonMapWork(
-                _scene, 
+                _scene.get(),
                 &localPhotons, 
                 &(numPhotonPaths[workerId]));
             photonMapWork.setMaxNumPhotons(workload);
@@ -104,7 +103,7 @@ void VpmRenderer::render() const
                 auto filmTile = _film->generateFilmTile(workIndex);
 
                 EstimatorTileWork tileWork(
-                    _scene,
+                    _scene.get(),
                     _camera.get(),
                     &estimator,
                     _sampler.get());

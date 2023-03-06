@@ -57,6 +57,15 @@ CSbool csLoadSceneFromFile(const CSuint64 engineId, const CSchar* filename)
     return CS_FALSE;
 }
 
+void csPrepareRender(const CSuint64 engineId)
+{
+    auto engine = GlobalStorage::getResource<Engine>(engineId);
+    if (engine)
+    {
+        engine->prepareRender();
+    }
+}
+
 void csRender(const CSuint64 engineId)
 {
     auto engine = GlobalStorage::getResource<Engine>(engineId);

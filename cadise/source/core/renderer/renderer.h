@@ -2,9 +2,13 @@
 
 #include <memory>
 
-namespace cadise { class Camera; }
-namespace cadise { class Film; }
-namespace cadise { class Scene; }
+// forward declaration
+namespace cadise
+{
+    class Camera;
+    class Film;
+    class Scene;
+}
 
 namespace cadise
 {
@@ -18,12 +22,13 @@ public:
 
     virtual void render() const = 0;
     
-    void setScene(const Scene* const scene);
+    void setScene(const std::shared_ptr<Scene>& scene);
     void setCamera(const std::shared_ptr<Camera>& camera);
     void setFilm(const std::shared_ptr<Film>& film);
+    void setWorkerCount(const std::size_t workerCount);
 
 protected:
-    const Scene*            _scene;
+    std::shared_ptr<Scene>  _scene;
     std::shared_ptr<Camera> _camera;
     std::shared_ptr<Film>   _film;
 

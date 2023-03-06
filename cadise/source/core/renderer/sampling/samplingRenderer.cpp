@@ -14,11 +14,11 @@
 namespace cadise 
 {
 
-// local logger declaration
+
 namespace 
 {
     const Logger logger("Sampling Renderer");
-} // anonymous namespace
+}
 
 SamplingRenderer::SamplingRenderer(
     const std::shared_ptr<EnergyEstimator>& estimator, 
@@ -53,7 +53,7 @@ void SamplingRenderer::render() const
                 auto filmTile = _film->generateFilmTile(workIndex);
 
                 EstimatorTileWork tileWork(
-                    _scene, 
+                    _scene.get(),
                     _camera.get(), 
                     _estimator.get(), 
                     _sampler.get());

@@ -32,8 +32,7 @@ public:
 
     void setUpData(const std::shared_ptr<SdData>& data);
 
-    void prepareRender();
-    void render() const;
+    std::shared_ptr<Renderer> prepareRender();
 
 private:
     void _setUpFilm(const std::shared_ptr<SdData>& data);
@@ -52,9 +51,6 @@ private:
     std::shared_ptr<SdData> _rendererData;
     std::shared_ptr<SdData> _acceleratorData;
     std::shared_ptr<SdData> _lightClusterData;
-
-    std::shared_ptr<Scene>    _scene;
-    std::shared_ptr<Renderer> _renderer;
 
     std::vector<std::shared_ptr<Intersector>> _intersectors;
     std::vector<std::shared_ptr<Light>>       _lights;

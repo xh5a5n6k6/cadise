@@ -53,7 +53,7 @@ void BdptRenderer::render() const
                 auto filmTile = _film->generateFilmTile(workIndex);
             
                 BdptTileWork tileWork(
-                    _scene,
+                    _scene.get(),
                     _camera.get(),
                     _sampler.get());
                 tileWork.setFilmTile(filmTile.get());

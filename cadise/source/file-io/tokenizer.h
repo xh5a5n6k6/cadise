@@ -9,6 +9,16 @@ namespace cadise
 
 class Tokenizer
 {
+private:
+    enum class EMode
+    {
+        Undefined = 0,
+
+        Separator,
+        ClosureWithEdges,
+        ClosureWithoutEdges,
+    };
+
 public:
     static Tokenizer makeFromDelimiters(const std::initializer_list<char>& delimiters);
 
@@ -27,15 +37,6 @@ public:
         std::vector<std::string>& out_matchings) const;
 
 private:
-    enum class EMode
-    {
-        Undefined = 0,
-
-        Separator,
-        ClosureWithEdges,
-        ClosureWithoutEdges,
-    };
-
     Tokenizer(
         const EMode                        mode,
         const std::initializer_list<char>& delimiters,

@@ -4,6 +4,8 @@
 
 #include <thread>
 
+#include "renderer/renderer.h"
+
 namespace cadise 
 {
 
@@ -12,21 +14,22 @@ namespace
     const Logger logger("Engine");
 }
 
-
-Engine::Engine()
-{
-    _numThreads = 1;
-}
+Engine::Engine() = default;
 
 void Engine::consumeResource(const std::shared_ptr<SdData>& sdData)
 {
     _renderDatabase.setUpData(sdData);
 }
 
-void Engine::render()
+void Engine::prepareRender()
 {
-    _renderDatabase.prepareRender();
-    _renderDatabase.render();
+    _renderer = _renderDatabase.prepareRender();
+    _renderer->setWorkerCount(_config.numThreads);
+}
+
+void Engine::render() const
+{
+    _renderer->render();
 }
 
 void Engine::setThreadCount(const std::size_t threadCount)
@@ -37,7 +40,7 @@ void Engine::setThreadCount(const std::size_t threadCount)
         return;
     }
 
-    _numThreads = threadCount;
+    _config.numThreads = threadCount;
 }
 
 } // namespace cadise

@@ -23,19 +23,17 @@
 namespace cadise 
 {
 
-// local logger declaration
+
 namespace 
 {
     const Logger logger("Database");
-} // anonymous namespace
+}
 
 RenderDatabase::RenderDatabase() :
     _filmData(nullptr),
     _cameraData(nullptr),
     _rendererData(nullptr),
     _acceleratorData(nullptr),
-    _scene(nullptr),
-    _renderer(nullptr),
     _backgroundSphere(nullptr),
     _environmentLightIndex(std::numeric_limits<std::size_t>::max()) 
 {}
@@ -91,7 +89,7 @@ void RenderDatabase::setUpData(const std::shared_ptr<SdData>& data)
     }
 }
 
-void RenderDatabase::prepareRender() 
+std::shared_ptr<Renderer> RenderDatabase::prepareRender() 
 {
     // make all triangle meshes to triangles
     if (!_triangleBuffers.empty())
@@ -146,26 +144,21 @@ void RenderDatabase::prepareRender()
     }
 
     const std::shared_ptr<LightCluster> lightCluster = instantiator::makeLightCluster(_lightClusterData, _lights);
-
-    _scene    = std::make_shared<Scene>(accelerator, lightCluster);
-    _renderer = std::move(instantiator::makeRenderer(_rendererData));
-    
+    const std::shared_ptr<Scene>        scene        = std::make_shared<Scene>(accelerator, lightCluster);
     if (_backgroundSphere)
     {
-        _scene->setBackgroundSphere(_backgroundSphere.get());
+        scene->setBackgroundSphere(_backgroundSphere.get());
     }
 
     camera->setResolution(film->resolution().asType<std::size_t>());
     camera->updateTransform();
 
-    _renderer->setScene(_scene.get());
-    _renderer->setCamera(camera);
-    _renderer->setFilm(film);
-}
+    std::shared_ptr<Renderer> renderer = instantiator::makeRenderer(_rendererData);
+    renderer->setScene(scene);
+    renderer->setCamera(camera);
+    renderer->setFilm(film);
 
-void RenderDatabase::render() const
-{
-    _renderer->render();
+    return renderer;
 }
 
 void RenderDatabase::_setUpFilm(const std::shared_ptr<SdData>& data) 
