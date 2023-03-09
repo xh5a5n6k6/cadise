@@ -1,9 +1,9 @@
 # Cadise command-line interface in VS Solution
 
 file(GLOB_RECURSE CADISE_CLI_HEADER_FILES 
-    "./source/*.h")
+    "./Source/*.h")
 file(GLOB_RECURSE CADISE_CLI_SOURCE_FILES
-    "./source/*.cpp")
+    "./Source/*.cpp")
 
 add_executable(${CADISE_CLI_NAME}
     ${CADISE_CLI_HEADER_FILES}
@@ -11,7 +11,7 @@ add_executable(${CADISE_CLI_NAME}
 add_dependencies(${CADISE_CLI_NAME} ${CADISE_LIB_NAME})
 
 target_include_directories(${CADISE_CLI_NAME}
-    PRIVATE "./source/")
+    PRIVATE "./Source/")
 
 target_link_libraries(${CADISE_CLI_NAME}
     PRIVATE ${CADISE_LIB_NAME})
