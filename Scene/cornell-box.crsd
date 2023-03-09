@@ -1,0 +1,154 @@
+###########################################
+#                                         #
+#    Cadise Renderer Scene Description    #
+#                                         #
+###########################################
+
+###########################################
+# Render Setting                          #
+###########################################
+film {
+    [image-width int32 "640"]
+    [image-height int32 "480"]
+    [output-filename string "cornell-box.png"]
+    [filter string "gaussian"]
+}
+camera {
+    [type string "perspective-pinhole"]
+    [position vector3r "278 273 800"]
+    [direction vector3r "0 0 -1"]
+    [up vector3r "0 1 0"]
+    [fov real "49"]
+}
+renderer {
+    [type string "sampling"]
+    [sample-number int32 "32"]
+    [sampler string "stratified"]
+    [estimator string "pt"]
+}
+accelerator {
+    [type string "bvh"]
+}
+light-cluster {
+    [type string "uniform"]
+}
+
+###########################################
+# World Setting                           #
+###########################################
+material { 
+    [type string "matte-lambertian"]
+    [name string "plane"]
+    [albedo rgb "0.7 0.7 0.7"]
+}
+material { 
+    [type string "matte-lambertian"]
+    [name string "redPlane"]
+    [albedo rgb "0.75 0.3 0.3"]
+}
+material { 
+    [type string "matte-lambertian"]
+    [name string "bluePlane"]
+    [albedo rgb "0.3 0.3 0.75"]
+}
+material {
+    [type string "conductor-microfacet"]
+    [name string "microfacet"]
+    [microfacet-type string "ggx"]
+    [fresnel-type string "schlick"]
+    [f0 rgb "1.0 1.0 1.0"]
+    [roughness real "0.0"]
+}
+material {
+    [type string "plastic"]
+    [name string "plastic"]
+    [diffuse-albedo rgb "0.7 0.56 0.0"]
+    [specular-exponent real "16"]
+    [diffuse-ratio real "0.8"]   
+}
+
+# left wall
+primitive {
+    [type string "rectangle"]
+    [name string "leftWall"]
+    [bsdf material "redPlane"]
+    [v1 vector3r "-90.0 0.0 -649.2"]
+    [v2 vector3r "-90.0 0.0 0.0"]
+    [v3 vector3r "-90.0 548.8 0.0"]   
+}
+
+# right wall
+primitive {
+    [type string "rectangle"]
+    [name string "rightWall"]
+    [bsdf material "bluePlane"]
+    [v1 vector3r "642.8 0.0 0.0"]
+    [v2 vector3r "642.8 0.0 -649.2"]
+    [v3 vector3r "642.8 548.8 -649.2"]   
+}
+
+# top wall
+primitive {
+    [type string "rectangle"]
+    [name string "topWall"]
+    [bsdf material "plane"]
+    [v1 vector3r "646.0 548.8 0.0"]
+    [v2 vector3r "-90.0 548.8 0.0"]
+    [v3 vector3r "-90.0 548.8 -649.2"]   
+}
+
+# back wall
+primitive {
+    [type string "rectangle"]
+    [name string "backWall"]
+    [bsdf material "plane"]
+    [v1 vector3r "-90.0 548.8 -649.2"]
+    [v2 vector3r "646.0 548.8 -649.2"]
+    [v3 vector3r "646.0 0.0 -649.2"]   
+}
+
+# down wall
+primitive {
+    [type string "rectangle"]
+    [name string "downWall"]
+    [bsdf material "plane"]
+    [v1 vector3r "642.8 0.0 0.0"]
+    [v2 vector3r "-90.0 0.0 0.0"]
+    [v3 vector3r "-90.0 0.0 -649.2"]   
+}
+
+# left sphere
+primitive {
+    [type string "sphere"]
+    [name string "leftSphere"]
+    [bsdf material "plastic"]
+    [center vector3r "96.0 102.0 -361.0"]
+    [radius real "102.0"]
+}
+
+# right sphere
+primitive {
+    [type string "sphere"]
+    [name string "rightSphere"]
+    [bsdf material "microfacet"]
+    [center vector3r "410.0 111.0 -216.0"]
+    [radius real "111.0"]
+}
+
+# area light
+primitive {
+    [type string "rectangle"]
+    [name string "ceilingLight"]
+    [bsdf material "plane"]
+    [v1 vector3r "373.0 538.7 -167.0"]
+    [v2 vector3r "373.0 538.7 -332.0"]
+    [v3 vector3r "183.0 538.7 -332.0"]
+}
+
+light {
+    [type string "area"]
+    [primitive primitive "ceilingLight"]
+    [color rgb "1.0 1.0 1.0"]
+    [watt real "5000000"]
+    [is-back-face-emit bool "false"]
+}
