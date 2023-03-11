@@ -3,7 +3,7 @@
 #include "Core/Gear/Sample/BSDFSample.h"
 #include "Core/Gear/Sample/DirectLightSample.h"
 #include "Core/Intersector/Primitive/Primitive.h"
-#include "Core/Light/Category/AreaLight.h"
+#include "Core/Light/AreaLight.h"
 #include "Core/Ray.h"
 #include "Core/Scene.h"
 #include "Core/Surface/BSDF/BSDF.h"

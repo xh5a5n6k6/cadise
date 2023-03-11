@@ -1,4 +1,4 @@
-#include "Core/Light/Category/AreaLight.h"
+#include "Core/Light/AreaLight.h"
 
 #include "Foundation/Assertion.h"
 #include "Math/TVector3.h"

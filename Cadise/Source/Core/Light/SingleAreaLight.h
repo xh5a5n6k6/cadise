@@ -1,8 +1,6 @@
 #pragma once
 
-#include "Core/Light/Category/AreaLight.h"
-
-#include "Math/Distribution/Distribution2D.h"
+#include "Core/Light/AreaLight.h"
 
 #include <memory>
 
@@ -15,16 +13,17 @@ namespace cadise
     class TTexture;
 }
 
-namespace cadise 
+namespace cadise
 {
 
-class EnvironmentLight : public AreaLight 
+class SingleAreaLight : public AreaLight 
 {
 public:
-    EnvironmentLight(
-        const Primitive* const                     primitive,
-        const std::shared_ptr<TTexture<Spectrum>>& environmentRadiance,
-        const Vector2S&                            resolution);
+    SingleAreaLight(
+        const Primitive* const primitive,
+        const Spectrum&        color, 
+        const real             watt, 
+        const bool             isBackFaceEmit);
 
     Spectrum emittance(const SurfaceIntersection& emitSi) const override;
 
@@ -41,21 +40,13 @@ public:
         real* const     out_pdfW) const override;
 
     real approximateFlux() const override;
-    
+
     void setEmitRadiance(const std::shared_ptr<TTexture<Spectrum>>& emitRadiance) override;
-    void setSceneBoundRadius(const real sceneBoundRadius) override;
 
 private:
-    void _updateApproxmiatedFlux();
-
     const Primitive* _primitive;
 
-    std::shared_ptr<TTexture<Spectrum>> _environmentRadiance;
-    Distribution2D                      _distribution;
-
-    real _backgroundFlux;
-    real _approximateFlux;
-    real _sceneBoundRadius;
+    std::shared_ptr<TTexture<Spectrum>> _emitRadiance;
 };
 
 } // namespace cadise

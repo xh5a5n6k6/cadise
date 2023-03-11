@@ -1,8 +1,8 @@
 #include "Core/Instantiator/Instantiator.h"
 
 // lightCluster type
-#include "Core/Light/Cluster/PowerLightCluster.h"
-#include "Core/Light/Cluster/UniformLightCluster.h"
+#include "Core/LightCluster/PowerLightCluster.h"
+#include "Core/LightCluster/UniformLightCluster.h"
 
 #include "FileIO/CSD/CSDResource.h"
 #include "Foundation/Assertion.h"

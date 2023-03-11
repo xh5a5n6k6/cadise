@@ -4,7 +4,7 @@
 #include "Core/Gear/RussianRoulette.h"
 #include "Core/Gear/Sample/BSDFSample.h"
 #include "Core/Intersector/Primitive/Primitive.h"
-#include "Core/Light/Category/AreaLight.h"
+#include "Core/Light/AreaLight.h"
 #include "Core/Ray.h"
 #include "Core/Renderer/PhotonMapping/PMViewpoint.h"
 #include "Core/Renderer/PhotonMapping/PMViewpointSampleRay.h"

@@ -1,4 +1,4 @@
-#include "Core/Light/Category/PointLight.h"
+#include "Core/Light/PointLight.h"
 
 #include "Core/Gear/Sample/DirectLightSample.h"
 #include "Core/SurfaceDetail.h"

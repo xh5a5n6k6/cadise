@@ -1,4 +1,4 @@
-#include "Core/Light/Category/EnvironmentLight.h"
+#include "Core/Light/EnvironmentLight.h"
 
 #include "Core/Gear/Sample/DirectLightSample.h"
 #include "Core/Intersector/Primitive/Primitive.h"

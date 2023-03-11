@@ -5,7 +5,7 @@
 #include "Core/Gear/Sample/BSDFSample.h"
 #include "Core/Gear/Sample/EmitLightSample.h"
 #include "Core/Intersector/Primitive/Primitive.h"
-#include "Core/Light/Category/AreaLight.h"
+#include "Core/Light/AreaLight.h"
 #include "Core/Ray.h"
 #include "Core/Renderer/BDPT/BDPTMIS.h"
 #include "Core/Renderer/BDPT/Subpath.h"

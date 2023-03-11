@@ -1,4 +1,4 @@
-#include "Core/Light/Cluster/UniformLightCluster.h"
+#include "Core/LightCluster/UniformLightCluster.h"
 
 #include "Core/Light/Light.h"
 #include "Foundation/Assertion.h"

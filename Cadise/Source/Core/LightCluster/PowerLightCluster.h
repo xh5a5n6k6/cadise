@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/Light/Cluster/LightCluster.h"
+#include "Core/LightCluster/LightCluster.h"
 
 #include "Math/Distribution/Distribution1D.h"
 

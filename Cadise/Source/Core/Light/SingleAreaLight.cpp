@@ -1,4 +1,4 @@
-#include "Core/Light/Category/SingleAreaLight.h"
+#include "Core/Light/SingleAreaLight.h"
 
 #include "Core/Gear/Sample/DirectLightSample.h"
 #include "Core/Gear/Sample/EmitLightSample.h"

@@ -3,7 +3,7 @@
 #include "Core/Intersector/Accelerator/Accelerator.h"
 #include "Core/Intersector/Primitive/Primitive.h"
 #include "Core/Light/Light.h"
-#include "Core/Light/Cluster/LightCluster.h"
+#include "Core/LightCluster/LightCluster.h"
 #include "Core/Ray.h"
 #include "Core/SurfaceIntersection.h"
 #include "Foundation/Assertion.h"
