@@ -1,13 +1,13 @@
-#include "file-io/scene-description/CSDResource.h"
+#include "FileIO/CSD/CSDResource.h"
 
-#include "core/texture/category/tConstantTexture.h"
-#include "math/tVector3.h"
+#include "Core/Texture/Category/TConstantTexture.h"
+#include "Math/TVector3.h"
 
 namespace cadise
 {
 
 CSDResource::CSDResource() :
-    _classType(ESdClassType::Undefined) 
+    _classType(ECSDClassType::Undefined) 
 {}
 
 void CSDResource::addBool(const std::string& name, const std::string& valueRaw)
@@ -124,7 +124,7 @@ std::shared_ptr<TTexture<Spectrum>> CSDResource::getSpectrumTexture(
     return spectrumTexture;
 }
 
-ESdClassType CSDResource::classType() const
+ECSDClassType CSDResource::classType() const
 {
     return _classType;
 }
@@ -133,43 +133,43 @@ void CSDResource::setClassType(const std::string& classType)
 {
     if (classType == "film") 
     {
-        this->setClassType(ESdClassType::Film);
+        this->setClassType(ECSDClassType::Film);
     }
     else if (classType == "camera")
     {
-        this->setClassType(ESdClassType::Camera);
+        this->setClassType(ECSDClassType::Camera);
     }
     else if (classType == "renderer")
     {
-        this->setClassType(ESdClassType::Renderer);
+        this->setClassType(ECSDClassType::Renderer);
     }
     else if (classType == "accelerator") 
     {
-        this->setClassType(ESdClassType::Accelerator);
+        this->setClassType(ECSDClassType::Accelerator);
     }
     else if (classType == "light-cluster") 
     {
-        this->setClassType(ESdClassType::LightCluster);
+        this->setClassType(ECSDClassType::LightCluster);
     }
     else if (classType == "texture-real") 
     {
-        this->setClassType(ESdClassType::TextureReal);
+        this->setClassType(ECSDClassType::TextureReal);
     }
     else if (classType == "texture-spectrum")
     {
-        this->setClassType(ESdClassType::TextureSpectrum);
+        this->setClassType(ECSDClassType::TextureSpectrum);
     }
     else if (classType == "material") 
     {
-        this->setClassType(ESdClassType::Material);
+        this->setClassType(ECSDClassType::Material);
     }
     else if (classType == "light") 
     {
-        this->setClassType(ESdClassType::Light);
+        this->setClassType(ECSDClassType::Light);
     }
     else if (classType == "primitive") 
     {
-        this->setClassType(ESdClassType::Primitive);
+        this->setClassType(ECSDClassType::Primitive);
     }
     else 
     {
@@ -177,7 +177,7 @@ void CSDResource::setClassType(const std::string& classType)
     }
 }
 
-void CSDResource::setClassType(const ESdClassType classType)
+void CSDResource::setClassType(const ECSDClassType classType)
 {
     _classType = classType;
 }

@@ -1,23 +1,23 @@
-#include "core/estimator/vpmEstimator.h"
+#include "Core/Estimator/VPMEstimator.h"
 
-#include "core/integral-tool/russianRoulette.h"
-#include "core/integral-tool/sample/bsdfSample.h"
-#include "core/intersector/primitive/primitive.h"
-#include "core/light/category/areaLight.h"
-#include "core/ray.h"
-#include "core/scene.h"
-#include "core/surface/bsdf/bsdf.h"
-#include "core/surface/transportInfo.h"
-#include "core/surfaceIntersection.h"
-#include "fundamental/assertion.h"
-#include "math/constant.h"
+#include "Core/Gear/RussianRoulette.h"
+#include "Core/Gear/Sample/BSDFSample.h"
+#include "Core/Intersector/Primitive/Primitive.h"
+#include "Core/Light/Category/AreaLight.h"
+#include "Core/Ray.h"
+#include "Core/Scene.h"
+#include "Core/Surface/BSDF/BSDF.h"
+#include "Core/Surface/TransportInfo.h"
+#include "Core/SurfaceIntersection.h"
+#include "Foundation/Assertion.h"
+#include "Math/Constant.h"
 
 #include <vector>
 
 namespace cadise 
 {
 
-VpmEstimator::VpmEstimator(
+VPMEstimator::VPMEstimator(
     const PhotonMap* const photonMap,
     const std::size_t      numPhotonPaths,
     const real             searchRadius) :
@@ -32,7 +32,7 @@ VpmEstimator::VpmEstimator(
     _kernelFactor = 1.0_r / (constant::pi<real> * _searchRadius * _searchRadius * numPhotonPaths);
 }
 
-void VpmEstimator::estimate(
+void VPMEstimator::estimate(
     const Scene&    scene,
     const Ray&      ray,
     Spectrum* const out_radiance) const 
@@ -53,7 +53,7 @@ void VpmEstimator::estimate(
         }
 
         const Primitive* primitive = intersection.primitiveInfo().primitive();
-        const Bsdf*      bsdf      = primitive->bsdf();
+        const BSDF*      bsdf      = primitive->bsdf();
 
         const Vector3R& P  = intersection.surfaceDetail().position();
         const Vector3R& Ns = intersection.surfaceDetail().shadingNormal();
@@ -113,7 +113,7 @@ void VpmEstimator::estimate(
         {
             // TODO: sample two directions if encountering
             //       dielectric bsdf
-            BsdfSample bsdfSample;
+            BSDFSample bsdfSample;
             bsdf->evaluateSample(TransportInfo(), intersection, &bsdfSample);
             if (!bsdfSample.isValid()) 
             {

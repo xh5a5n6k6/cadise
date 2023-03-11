@@ -1,4 +1,4 @@
-#include "core/intersector/differentialGeometry.h"
+#include "Core/Intersector/DifferentialGeometry.h"
 
 namespace cadise
 {

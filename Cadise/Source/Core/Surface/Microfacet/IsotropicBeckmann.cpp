@@ -1,10 +1,10 @@
-#include "core/surface/microfacet/isotropicBeckmann.h"
+#include "Core/Surface/Microfacet/IsotropicBeckmann.h"
 
-#include "core/integral-tool/tSurfaceSampler.h"
-#include "fundamental/assertion.h"
-#include "math/constant.h"
-#include "math/math.h"
-#include "math/tVector3.h"
+#include "Core/Gear/TSurfaceSampler.h"
+#include "Foundation/Assertion.h"
+#include "Math/Constant.h"
+#include "Math/Math.h"
+#include "Math/TVector3.h"
 
 #include <cmath>
 

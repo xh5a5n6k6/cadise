@@ -1,6 +1,6 @@
-#include "core/surface/fresnel/vanillaDielectricFresnel.h"
+#include "Core/Surface/Fresnel/VanillaDielectricFresnel.h"
 
-#include "fundamental/assertion.h"
+#include "Foundation/Assertion.h"
 
 #include <algorithm>
 #include <utility>

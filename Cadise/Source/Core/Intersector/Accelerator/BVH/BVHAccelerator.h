@@ -1,8 +1,8 @@
 #pragma once
 
-#include "core/intersector/accelerator/accelerator.h"
+#include "Core/Intersector/Accelerator/Accelerator.h"
 
-#include "core/intersector/accelerator/bvh/bvhLinearNode.h"
+#include "Core/Intersector/Accelerator/BVH/BVHLinearNode.h"
 
 #include <memory>
 #include <vector>
@@ -10,7 +10,7 @@
 // forward declration
 namespace cadise 
 { 
-    enum class EBvhSplitMode; 
+    enum class EBVHSplitMode; 
 }
 
 namespace cadise 
@@ -21,7 +21,7 @@ class BvhAccelerator : public Accelerator
 public:
     BvhAccelerator(
         const std::vector<std::shared_ptr<Intersector>>& intersectors,
-        const EBvhSplitMode                              splitMode);
+        const EBVHSplitMode                              splitMode);
 
     void evaluateBound(AABB3R* const out_bound) const override;
 
@@ -30,7 +30,7 @@ public:
 
 private:
     std::vector<std::shared_ptr<Intersector>> _intersectors;
-    std::vector<BvhLinearNode>                _nodes;
+    std::vector<BVHLinearNode>                _nodes;
 
     static const std::size_t MAX_STACK_SIZE = 64;
 };

@@ -1,4 +1,4 @@
-#include "core/film/filter/mitchellFilter.h"
+#include "Core/Film/Filter/MitchellFilter.h"
 
 #include <cmath>
 

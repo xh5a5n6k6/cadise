@@ -1,7 +1,7 @@
-#include "core/ray.h"
+#include "Core/Ray.h"
 
-#include "fundamental/assertion.h"
-#include "math/constant.h"
+#include "Foundation/Assertion.h"
+#include "Math/Constant.h"
 
 #include <limits>
 

@@ -1,10 +1,10 @@
-#include "core/intersector/accelerator/bvh/bvhBuilder.h"
+#include "Core/Intersector/Accelerator/BVH/BVHBuilder.h"
 
-#include "core/intersector/accelerator/bvh/bvhBinaryNode.h"
-#include "core/intersector/accelerator/bvh/bvhBoundInfo.h"
-#include "core/intersector/accelerator/bvh/bvhSahBucket.h"
-#include "core/intersector/intersector.h"
-#include "fundamental/assertion.h"
+#include "Core/Intersector/Accelerator/BVH/BVHBinaryNode.h"
+#include "Core/Intersector/Accelerator/BVH/BVHBoundInfo.h"
+#include "Core/Intersector/Accelerator/BVH/SAHBucket.h"
+#include "Core/Intersector/Intersector.h"
+#include "Foundation/Assertion.h"
 
 #include <algorithm>
 #include <limits>
@@ -12,11 +12,11 @@
 namespace cadise 
 {
 
-BvhBuilder::BvhBuilder(const EBvhSplitMode splitMode) :
+BVHBuilder::BVHBuilder(const EBVHSplitMode splitMode) :
     _splitMode(splitMode)
 {}
 
-std::unique_ptr<BvhBinaryNode> BvhBuilder::buildBinaryNodes(
+std::unique_ptr<BVHBinaryNode> BVHBuilder::buildBinaryNodes(
     const std::vector<std::shared_ptr<Intersector>>& intersectors, 
     std::vector<std::shared_ptr<Intersector>>* const out_orderedIntersectors,
     std::size_t* const                               out_totalNodeSize) const 
@@ -26,16 +26,16 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::buildBinaryNodes(
 
     const std::size_t intersectorCounts = intersectors.size();
 
-    std::vector<BvhBoundInfo> boundInfos;
+    std::vector<BVHBoundInfo> boundInfos;
     boundInfos.reserve(intersectorCounts);
     AABB3R bound;
     for (std::size_t i = 0; i < intersectorCounts; ++i)
     {
         intersectors[i]->evaluateBound(&bound);
-        boundInfos.push_back(BvhBoundInfo(bound, i));
+        boundInfos.push_back(BVHBoundInfo(bound, i));
     }
 
-    std::unique_ptr<BvhBinaryNode> root = nullptr;
+    std::unique_ptr<BVHBinaryNode> root = nullptr;
     root = _buildBinaryNodesRecursively(
         boundInfos,
         intersectors, 
@@ -45,14 +45,14 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::buildBinaryNodes(
     return std::move(root);
 }
 
-void BvhBuilder::buildLinearNodes(
-    std::unique_ptr<BvhBinaryNode>    root, 
+void BVHBuilder::buildLinearNodes(
+    std::unique_ptr<BVHBinaryNode>    root, 
     const std::size_t                 totalNodeSize,
-    std::vector<BvhLinearNode>* const out_linearNodes) const 
+    std::vector<BVHLinearNode>* const out_linearNodes) const 
 {
     CS_ASSERT(out_linearNodes);
     
-    std::vector<BvhLinearNode> nodes;
+    std::vector<BVHLinearNode> nodes;
     nodes.reserve(totalNodeSize);
 
     _buildLinearNodesRecursively(std::move(root), &nodes, nullptr);
@@ -60,8 +60,8 @@ void BvhBuilder::buildLinearNodes(
     out_linearNodes->swap(nodes);
 }
 
-std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
-    const std::vector<BvhBoundInfo>&                 boundInfos,
+std::unique_ptr<BVHBinaryNode> BVHBuilder::_buildBinaryNodesRecursively(
+    const std::vector<BVHBoundInfo>&                 boundInfos,
     const std::vector<std::shared_ptr<Intersector>>& intersectors, 
     std::vector<std::shared_ptr<Intersector>>* const out_orderedIntersectors,
     std::size_t* const                               out_totalNodeSize) const 
@@ -69,7 +69,7 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
     CS_ASSERT(out_orderedIntersectors);
     CS_ASSERT(out_totalNodeSize);
 
-    std::unique_ptr<BvhBinaryNode> node = std::make_unique<BvhBinaryNode>();
+    std::unique_ptr<BVHBinaryNode> node = std::make_unique<BVHBinaryNode>();
 
     const std::size_t intersectorBeginIndex = out_orderedIntersectors->size();
     const std::size_t intersectorCounts     = boundInfos.size();
@@ -118,13 +118,13 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
         // attempt to split
         else 
         {
-            std::vector<BvhBoundInfo> subBoundInfosA;
-            std::vector<BvhBoundInfo> subBoundInfosB;
+            std::vector<BVHBoundInfo> subBoundInfosA;
+            std::vector<BVHBoundInfo> subBoundInfosB;
 
             bool canSplit = false;
             switch (_splitMode)
             {
-                case EBvhSplitMode::EqualCounts:
+                case EBVHSplitMode::EqualCounts:
                     canSplit = _canSplitWithEqualCounts(
                         boundInfos,
                         splitAxis,
@@ -132,7 +132,7 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
                         &subBoundInfosB);
                     break;
 
-                case EBvhSplitMode::SAH:
+                case EBVHSplitMode::SAH:
                     canSplit = _canSplitWithSah(
                         boundInfos,
                         splitAxis,
@@ -161,14 +161,14 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
             // make internal node
             else 
             {
-                std::unique_ptr<BvhBinaryNode> firstChild = nullptr;
+                std::unique_ptr<BVHBinaryNode> firstChild = nullptr;
                 firstChild = _buildBinaryNodesRecursively(
                     subBoundInfosA,
                     intersectors,
                     out_orderedIntersectors,
                     out_totalNodeSize);
 
-                std::unique_ptr<BvhBinaryNode> secondChild = nullptr;
+                std::unique_ptr<BVHBinaryNode> secondChild = nullptr;
                 secondChild = _buildBinaryNodesRecursively(
                     subBoundInfosB,
                     intersectors,
@@ -189,14 +189,14 @@ std::unique_ptr<BvhBinaryNode> BvhBuilder::_buildBinaryNodesRecursively(
     return std::move(node);
 }
 
-void BvhBuilder::_buildLinearNodesRecursively(
-    std::unique_ptr<BvhBinaryNode>    binaryNode, 
-    std::vector<BvhLinearNode>* const out_linearNodes,
+void BVHBuilder::_buildLinearNodesRecursively(
+    std::unique_ptr<BVHBinaryNode>    binaryNode, 
+    std::vector<BVHLinearNode>* const out_linearNodes,
     std::size_t* const                out_secondChildNodeIndex) const 
 {
     CS_ASSERT(out_linearNodes);
     
-    BvhLinearNode linearNode;
+    BVHLinearNode linearNode;
     const std::size_t nodeIndex = out_linearNodes->size();
     if (out_secondChildNodeIndex) 
     {
@@ -237,11 +237,11 @@ void BvhBuilder::_buildLinearNodesRecursively(
     }
 }
 
-bool BvhBuilder::_canSplitWithEqualCounts(
-    const std::vector<BvhBoundInfo>& boundInfos,
+bool BVHBuilder::_canSplitWithEqualCounts(
+    const std::vector<BVHBoundInfo>& boundInfos,
     const std::size_t                splitAxis,
-    std::vector<BvhBoundInfo>* const out_subBoundInfosA,
-    std::vector<BvhBoundInfo>* const out_subBoundInfosB) const
+    std::vector<BVHBoundInfo>* const out_subBoundInfosA,
+    std::vector<BVHBoundInfo>* const out_subBoundInfosB) const
 {
     CS_ASSERT(out_subBoundInfosA);
     CS_ASSERT(out_subBoundInfosB);
@@ -256,12 +256,12 @@ bool BvhBuilder::_canSplitWithEqualCounts(
     out_subBoundInfosA->reserve(size);
     out_subBoundInfosB->reserve(size);
 
-    std::vector<BvhBoundInfo> sortedBoundInfos(boundInfos);
+    std::vector<BVHBoundInfo> sortedBoundInfos(boundInfos);
     std::nth_element(
         sortedBoundInfos.begin(),
         sortedBoundInfos.begin() + size,
         sortedBoundInfos.end(),
-        [splitAxis](const BvhBoundInfo& bA, const BvhBoundInfo& bB)
+        [splitAxis](const BVHBoundInfo& bA, const BVHBoundInfo& bB)
         {
             return bA.centroid()[splitAxis] < bB.centroid()[splitAxis];
         });
@@ -279,13 +279,13 @@ bool BvhBuilder::_canSplitWithEqualCounts(
     return true;
 }
 
-bool BvhBuilder::_canSplitWithSah(
-    const std::vector<BvhBoundInfo>& boundInfos,
+bool BVHBuilder::_canSplitWithSah(
+    const std::vector<BVHBoundInfo>& boundInfos,
     const std::size_t                splitAxis,
     const AABB3R&                    intersectorBound,
     const AABB3R&                    centroidBound,
-    std::vector<BvhBoundInfo>* const out_subBoundInfosA,
-    std::vector<BvhBoundInfo>* const out_subBoundInfosB) const 
+    std::vector<BVHBoundInfo>* const out_subBoundInfosA,
+    std::vector<BVHBoundInfo>* const out_subBoundInfosB) const 
 {
     CS_ASSERT(out_subBoundInfosA);
     CS_ASSERT(out_subBoundInfosB);
@@ -311,7 +311,7 @@ bool BvhBuilder::_canSplitWithSah(
     }
 
     constexpr std::size_t NUM_BUCKETS = 12;
-    BvhSahBucket buckets[NUM_BUCKETS];
+    SAHBucket buckets[NUM_BUCKETS];
     for (std::size_t i = 0; i < intersectorCounts; ++i)
     {
         const AABB3R&   bound    = boundInfos[i].bound();
@@ -334,21 +334,21 @@ bool BvhBuilder::_canSplitWithSah(
 
     for (std::size_t split = 0; split < NUM_BUCKETS - 1; ++split) 
     {
-        std::size_t subIntersectorCountsA = 0;
-        std::size_t subIntersectorCountsB = 0;
+        std::size_t subIntersectorCountA = 0;
+        std::size_t subIntersectorCountB = 0;
         AABB3R      subBoundA;
         AABB3R      subBoundB;
 
         for (std::size_t i = 0; i <= split; ++i) 
         {
             subBoundA.unionWithLocal(buckets[i].bound());
-            subIntersectorCountsA += buckets[i].intersectorCounts();
+            subIntersectorCountA += buckets[i].intersectorCount();
         }
 
         for (std::size_t i = split + 1; i < NUM_BUCKETS; ++i) 
         {
             subBoundB.unionWithLocal(buckets[i].bound());
-            subIntersectorCountsB += buckets[i].intersectorCounts();
+            subIntersectorCountB += buckets[i].intersectorCount();
         }
 
         const real probabilitySplitBoundA = subBoundA.surfaceArea() * rcpSurfaceArea;
@@ -356,7 +356,7 @@ bool BvhBuilder::_canSplitWithSah(
 
         const real splitCost 
             = traversalCost + intersectionCost * 
-              (probabilitySplitBoundA * subIntersectorCountsA + probabilitySplitBoundB * subIntersectorCountsB);
+              (probabilitySplitBoundA * subIntersectorCountA + probabilitySplitBoundB * subIntersectorCountB);
 
         if (splitCost < bestCost) 
         {
@@ -371,11 +371,11 @@ bool BvhBuilder::_canSplitWithSah(
         return false;
     }
 
-    std::vector<BvhBoundInfo> sortedBoundInfos(boundInfos);
+    std::vector<BVHBoundInfo> sortedBoundInfos(boundInfos);
     const auto middlePointer = std::partition(
         sortedBoundInfos.begin(),
         sortedBoundInfos.end(),
-        [=](const BvhBoundInfo& b)
+        [=](const BVHBoundInfo& b)
         {
             const Vector3R& centroid = b.centroid();
             const real      offset   = (centroid[splitAxis] - splitMinVertex[splitAxis]) * rcpSplitExtent;

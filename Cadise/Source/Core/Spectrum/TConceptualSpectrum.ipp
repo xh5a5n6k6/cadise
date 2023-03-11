@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/spectrum/tConceptualSpectrum.h"
+#include "Core/Spectrum/TConceptualSpectrum.h"
 
 namespace cadise
 {

@@ -1,11 +1,11 @@
 #pragma once
 
-#include "core/estimator/energyEstimator.h"
+#include "Core/Estimator/EnergyEstimator.h"
 
 namespace cadise 
 {
 
-class AovEstimator : public EnergyEstimator 
+class AOVEstimator : public EnergyEstimator 
 {
 public:
     void estimate(

@@ -1,10 +1,10 @@
-#include "core/instantiator/instantiator.h"
+#include "Core/Instantiator/Instantiator.h"
 
 // camera type
-#include "core/camera/perspectivePinholeCamera.h"
+#include "Core/Camera/PerspectivePinholeCamera.h"
 
-#include "file-io/scene-description/CSDResource.h"
-#include "fundamental/assertion.h"
+#include "FileIO/CSD/CSDResource.h"
+#include "Foundation/Assertion.h"
 
 #include <iostream>
 

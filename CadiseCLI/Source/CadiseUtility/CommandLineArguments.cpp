@@ -1,8 +1,9 @@
-#include "cadise-cli-utils/commandLineArguments.h"
+#include "CadiseUtility/CommandLineArguments.h"
 
 #include <iostream>
 
-namespace cadise_cli {
+namespace cadise::cli
+{
 
 CommandLineArguments::CommandLineArguments(int argc, char* argv[]) :
     _isHelpMessageRequested(false),
@@ -44,4 +45,4 @@ Options:
 
 }
 
-} // namespace cadise_cli
+} // namespace cadise::cli

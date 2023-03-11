@@ -1,4 +1,4 @@
-#include "core/integral-tool/sample/cameraSample.h"
+#include "Core/Gear/Sample/CameraSample.h"
 
 namespace cadise 
 {

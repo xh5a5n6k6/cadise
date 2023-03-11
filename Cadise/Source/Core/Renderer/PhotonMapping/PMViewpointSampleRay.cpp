@@ -1,11 +1,11 @@
-#include "core/renderer/photon-mapping/pmViewpointSampleRay.h"
+#include "Core/Renderer/PhotonMapping/PMViewpointSampleRay.h"
 
 namespace cadise 
 {
 
-PmViewpointSampleRay::PmViewpointSampleRay() = default;
+PMViewpointSampleRay::PMViewpointSampleRay() = default;
 
-PmViewpointSampleRay::PmViewpointSampleRay(
+PMViewpointSampleRay::PMViewpointSampleRay(
     const Ray&      sampleRay,
     const Spectrum& pathThroughput,
     const int32     depth) :
@@ -15,17 +15,17 @@ PmViewpointSampleRay::PmViewpointSampleRay(
     _depth(depth)
 {}
 
-const Ray& PmViewpointSampleRay::sampleRay() const 
+const Ray& PMViewpointSampleRay::sampleRay() const
 {
     return _sampleRay;
 }
 
-const Spectrum& PmViewpointSampleRay::pathThroughput() const 
+const Spectrum& PMViewpointSampleRay::pathThroughput() const
 {
     return _pathThroughput;
 }
 
-const int32 PmViewpointSampleRay::depth() const 
+int32 PMViewpointSampleRay::depth() const
 {
     return _depth;
 }

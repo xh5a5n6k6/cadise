@@ -1,17 +1,17 @@
-#include "core/surface/microfacet/anisotropicGgx.h"
+#include "Core/Surface/Microfacet/AnisotropicTrowbridgeReitz.h"
 
-#include "core/integral-tool/tSurfaceSampler.h"
-#include "fundamental/assertion.h"
-#include "math/constant.h"
-#include "math/math.h"
-#include "math/tVector3.h"
+#include "Core/Gear/TSurfaceSampler.h"
+#include "Foundation/Assertion.h"
+#include "Math/Constant.h"
+#include "Math/Math.h"
+#include "Math/TVector3.h"
 
 #include <cmath>
 
 namespace cadise
 {
 
-AnisotropicGgx::AnisotropicGgx(
+AnisotropicTrowbridgeReitz::AnisotropicTrowbridgeReitz(
     const std::shared_ptr<TTexture<real>>& roughnessU,
     const std::shared_ptr<TTexture<real>>& roughnessV) :
 
@@ -23,7 +23,7 @@ AnisotropicGgx::AnisotropicGgx(
     CS_ASSERT(roughnessV);
 }
 
-real AnisotropicGgx::distributionD(
+real AnisotropicTrowbridgeReitz::distributionD(
     const SurfaceIntersection& si,
     const Vector3R&            N,
     const Vector3R&            H) const 
@@ -56,7 +56,7 @@ real AnisotropicGgx::distributionD(
     return 1.0_r / denominator;
 }
 
-real AnisotropicGgx::shadowingMaskingG(
+real AnisotropicTrowbridgeReitz::shadowingMaskingG(
     const SurfaceIntersection& si,
     const Vector3R&            V,
     const Vector3R&            L,
@@ -83,7 +83,7 @@ real AnisotropicGgx::shadowingMaskingG(
     return 1.0_r / (1.0_r + lambdaV + lambdaL);
 }
 
-void AnisotropicGgx::sampleHalfVectorH(
+void AnisotropicTrowbridgeReitz::sampleHalfVectorH(
     const SurfaceIntersection& si,
     const std::array<real, 2>& sample,
     Vector3R* const            out_H) const 
@@ -140,7 +140,7 @@ void AnisotropicGgx::sampleHalfVectorH(
     out_H->set(worldH.normalize());
 }
 
-real AnisotropicGgx::_lambda(
+real AnisotropicTrowbridgeReitz::_lambda(
     const SurfaceIntersection& si,
     const real                 alphaX,
     const real                 alphaY,

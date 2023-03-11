@@ -1,17 +1,17 @@
-#include "core/renderer/render-work/photonMapWork.h"
+#include "Core/Renderer/RenderWork/PhotonMapWork.h"
 
-#include "core/integral-tool/russianRoulette.h"
-#include "core/integral-tool/sample/bsdfSample.h"
-#include "core/integral-tool/sample/emitLightSample.h"
-#include "core/intersector/primitive/primitive.h"
-#include "core/light/light.h"
-#include "core/ray.h"
-#include "core/renderer/photon-mapping/photon.h"
-#include "core/scene.h"
-#include "core/surface/bsdf/bsdf.h"
-#include "core/surface/transportInfo.h"
-#include "core/surfaceIntersection.h"
-#include "fundamental/assertion.h"
+#include "Core/Gear/RussianRoulette.h"
+#include "Core/Gear/Sample/BSDFSample.h"
+#include "Core/Gear/Sample/EmitLightSample.h"
+#include "Core/Intersector/Primitive/Primitive.h"
+#include "Core/Light/Light.h"
+#include "Core/Ray.h"
+#include "Core/Renderer/PhotonMapping/Photon.h"
+#include "Core/Scene.h"
+#include "Core/Surface/BSDF/BSDF.h"
+#include "Core/Surface/TransportInfo.h"
+#include "Core/SurfaceIntersection.h"
+#include "Foundation/Assertion.h"
 
 #include <limits>
 
@@ -83,7 +83,7 @@ void PhotonMapWork::work() const
             }
 
             const Primitive* primitive = intersection.primitiveInfo().primitive();
-            const Bsdf*      bsdf      = primitive->bsdf();
+            const BSDF*      bsdf      = primitive->bsdf();
 
             const Vector3R& P  = intersection.surfaceDetail().position();
             const Vector3R& Ns = intersection.surfaceDetail().shadingNormal();
@@ -110,7 +110,7 @@ void PhotonMapWork::work() const
             }
 
             // keep tracing with bsdf sampling
-            BsdfSample bsdfSample;
+            BSDFSample bsdfSample;
             bsdf->evaluateSample(transportInfo, intersection, &bsdfSample);
             if (!bsdfSample.isValid())
             {

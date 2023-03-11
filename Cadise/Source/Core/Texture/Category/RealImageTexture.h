@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/texture/category/tImageTexture.h"
+#include "Core/Texture/Category/TImageTexture.h"
 
 namespace cadise
 {

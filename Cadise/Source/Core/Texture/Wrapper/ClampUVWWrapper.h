@@ -1,11 +1,11 @@
 #pragma once
 
-#include "core/texture/wrapper/uvwWrapper.h"
+#include "Core/Texture/Wrapper/UVWWrapper.h"
 
 namespace cadise 
 {
 
-class ClampUvwWrapper : public UvwWrapper 
+class ClampUVWWrapper : public UVWWrapper 
 {
 public:
     void wrap(

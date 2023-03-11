@@ -1,7 +1,7 @@
 #pragma once
 
-#include "core/intersector/accelerator/kd-tree/tKdTreeNode.h"
-#include "math/tAabb3.h"
+#include "Core/Intersector/Accelerator/KDTree/TKDTreeNode.h"
+#include "Math/TAABB3.h"
 
 #include <tuple>
 #include <vector>
@@ -10,13 +10,13 @@ namespace cadise
 {
 
 template<typename Index, typename Object, typename ObjectCenterCalculator>
-class TPointKdTree
+class TPointKDTree
 {
 private:
-    using Node = TKdTreeNode<Index>;
+    using Node = TKDTreeNode<Index>;
 
 public:
-    explicit TPointKdTree(const ObjectCenterCalculator& centerCalculator);
+    explicit TPointKDTree(const ObjectCenterCalculator& centerCalculator);
 
     void buildNodes(const std::vector<Object>& objects);
 
@@ -53,4 +53,4 @@ private:
 
 } // namespace cadise
 
-#include "core/integral-tool/tPointKdTree.ipp"
+#include "Core/Gear/TPointKDTree.ipp"

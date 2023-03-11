@@ -1,16 +1,20 @@
 #pragma once
 
-#include "core/intersector/intersector.h"
+#include "Core/Intersector/Intersector.h"
 
-#include "core/spectrum/spectrum.h"
+#include "Core/Spectrum/Spectrum.h"
 
 #include <memory>
 
-namespace cadise { class AreaLight; }
-namespace cadise { class Bsdf; }
-namespace cadise { class PositionSample; }
-namespace cadise { class SurfaceDetail; }
-namespace cadise { class TextureMapper; }
+// forward declaration
+namespace cadise
+{
+    class AreaLight;
+    class BSDF;
+    class PositionSample;
+    class SurfaceDetail;
+    class TextureMapper;
+}
 
 namespace cadise 
 {
@@ -19,7 +23,7 @@ class Primitive : public Intersector
 {
 public:
     Primitive();
-    explicit Primitive(const std::shared_ptr<Bsdf>& bsdf);
+    explicit Primitive(const std::shared_ptr<BSDF>& bsdf);
 	
     void evaluateBound(AABB3R* const out_bound) const override = 0;
 
@@ -38,12 +42,12 @@ public:
         const Vector3R& uvw, 
         Vector3R* const out_position) const;
 
-    const Bsdf* bsdf() const;
+    const BSDF* bsdf() const;
     const AreaLight* areaLight() const;
     void setAreaLight(const AreaLight* const areaLight);
 
 protected:
-    std::shared_ptr<Bsdf>          _bsdf;
+    std::shared_ptr<BSDF>          _bsdf;
     std::shared_ptr<TextureMapper> _textureMapper;
     
     const AreaLight* _areaLight;

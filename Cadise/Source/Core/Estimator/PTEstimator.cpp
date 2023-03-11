@@ -1,19 +1,19 @@
-#include "core/estimator/ptEstimator.h"
+#include "Core/Estimator/PTEstimator.h"
 
-#include "core/integral-tool/russianRoulette.h"
-#include "core/integral-tool/sample/bsdfSample.h"
-#include "core/integral-tool/sample/directLightSample.h"
-#include "core/integral-tool/tMis.h"
-#include "core/intersector/primitive/primitive.h"
-#include "core/light/category/areaLight.h"
-#include "core/ray.h"
-#include "core/scene.h"
-#include "core/surface/bsdf/bsdf.h"
-#include "core/surface/transportInfo.h"
-#include "core/surfaceIntersection.h"
-#include "fundamental/assertion.h"
-#include "fundamental/logger/logger.h"
-#include "math/constant.h"
+#include "Core/Gear/RussianRoulette.h"
+#include "Core/Gear/Sample/BSDFSample.h"
+#include "Core/Gear/Sample/DirectLightSample.h"
+#include "Core/Gear/TMIS.h"
+#include "Core/Intersector/Primitive/Primitive.h"
+#include "Core/Light/Category/AreaLight.h"
+#include "Core/Ray.h"
+#include "Core/Scene.h"
+#include "Core/Surface/BSDF/BSDF.h"
+#include "Core/Surface/TransportInfo.h"
+#include "Core/SurfaceIntersection.h"
+#include "Foundation/Assertion.h"
+#include "Foundation/Logging/Logger.h"
+#include "Math/Constant.h"
 
 namespace cadise 
 {
@@ -23,7 +23,7 @@ namespace
     const Logger logger("PT Estimator");
 }
 
-PtEstimator::PtEstimator(const int32 maxPathLength) :
+PTEstimator::PTEstimator(const int32 maxPathLength) :
     RadianceEstimator(),
     _maxPathLength(maxPathLength) 
 {
@@ -37,19 +37,20 @@ PtEstimator::PtEstimator(const int32 maxPathLength) :
     }
 }
 
-void PtEstimator::estimate(
+void PTEstimator::estimate(
     const Scene&    scene, 
     const Ray&      ray,
     Spectrum* const out_radiance) const 
 {
     CS_ASSERT(out_radiance);
 
-    const TransportInfo transportInfo(ETransportMode::Radiance);
+    const TransportInfo         transportInfo(ETransportMode::Radiance);
+    const TMIS<EMISMode::Power> mis;
 
-    SurfaceIntersection si;
-    Spectrum            totalRadiance(0.0_r);
-    Spectrum            pathThroughput(1.0_r);
-    Ray                 traceRay(ray);
+    SurfaceIntersection   si;
+    Spectrum              totalRadiance(0.0_r);
+    Spectrum              pathThroughput(1.0_r);
+    Ray                   traceRay(ray);
 
     if (!scene.isIntersecting(traceRay, si))
     {
@@ -77,7 +78,7 @@ void PtEstimator::estimate(
     for (int32 bounceTimes = 1; bounceTimes < _maxPathLength; ++bounceTimes)
     {
         const Primitive* primitive = si.primitiveInfo().primitive();
-        const Bsdf*      bsdf      = primitive->bsdf();
+        const BSDF*      bsdf      = primitive->bsdf();
 
         const Vector3R& P  = si.surfaceDetail().position();
         const Vector3R& Ns = si.surfaceDetail().shadingNormal();
@@ -148,7 +149,7 @@ void PtEstimator::estimate(
                         else
                         {
                             const real bsdfPdfW  = bsdf->evaluatePdfW(transportInfo, si);
-                            const real misWeight = TMis<EMisMode::Power>().weight(totalLightPdfW, bsdfPdfW);
+                            const real misWeight = mis.weight(totalLightPdfW, bsdfPdfW);
 
                             misLightRadiance = radiance.mul(factor).mul(misWeight);
                             totalRadiance.addLocal(pathThroughput.mul(misLightRadiance));
@@ -160,7 +161,7 @@ void PtEstimator::estimate(
 
         // sampling from bsdf
         {
-            BsdfSample bsdfSample;
+            BSDFSample bsdfSample;
             bsdf->evaluateSample(transportInfo, si, &bsdfSample);
             if (!bsdfSample.isValid())
             {
@@ -195,7 +196,7 @@ void PtEstimator::estimate(
                     const real sampleLightPdf = scene.evaluatePickLightPdf(areaLight);
                     const real lightPdfW      = areaLight->evaluateDirectPdfW(nextSi, P);
                     const real totalLightPdfW = sampleLightPdf * lightPdfW;
-                    const real misWeight      = TMis<EMisMode::Power>().weight(bsdfPdfW, totalLightPdfW);
+                    const real misWeight      = mis.weight(bsdfPdfW, totalLightPdfW);
 
                     misBsdfRadiance = radiance.mul(factor).mul(misWeight);
                     totalRadiance.addLocal(pathThroughput.mul(misBsdfRadiance));

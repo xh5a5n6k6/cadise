@@ -1,23 +1,23 @@
-#include "core/renderer/photon-mapping/pmViewpointConstructor.h"
+#include "Core/Renderer/PhotonMapping/PMViewpointConstructor.h"
 
-#include "core/camera/camera.h"
-#include "core/integral-tool/russianRoulette.h"
-#include "core/integral-tool/sample/bsdfSample.h"
-#include "core/intersector/primitive/primitive.h"
-#include "core/light/category/areaLight.h"
-#include "core/ray.h"
-#include "core/renderer/photon-mapping/pmViewpoint.h"
-#include "core/renderer/photon-mapping/pmViewpointSampleRay.h"
-#include "core/scene.h"
-#include "core/surface/bsdf/bsdf.h"
-#include "core/surface/transportInfo.h"
-#include "core/surfaceIntersection.h"
-#include "fundamental/assertion.h"
+#include "Core/Camera/Camera.h"
+#include "Core/Gear/RussianRoulette.h"
+#include "Core/Gear/Sample/BSDFSample.h"
+#include "Core/Intersector/Primitive/Primitive.h"
+#include "Core/Light/Category/AreaLight.h"
+#include "Core/Ray.h"
+#include "Core/Renderer/PhotonMapping/PMViewpoint.h"
+#include "Core/Renderer/PhotonMapping/PMViewpointSampleRay.h"
+#include "Core/Scene.h"
+#include "Core/Surface/BSDF/BSDF.h"
+#include "Core/Surface/TransportInfo.h"
+#include "Core/SurfaceIntersection.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise 
 {
 
-PmViewpointConstructor::PmViewpointConstructor(
+PMViewpointConstructor::PMViewpointConstructor(
     const Scene* const  scene,
     const Camera* const camera,
     const real          initialRadius) :
@@ -31,9 +31,9 @@ PmViewpointConstructor::PmViewpointConstructor(
     CS_ASSERT_GT(initialRadius, 0.0_r);
 }
 
-void PmViewpointConstructor::construct(
+void PMViewpointConstructor::construct(
     const Vector2D&                 filmPosition,
-    std::vector<PmViewpoint>* const out_viewpoints) const
+    std::vector<PMViewpoint>* const out_viewpoints) const
 {
     CS_ASSERT(out_viewpoints);
 
@@ -45,8 +45,8 @@ void PmViewpointConstructor::construct(
     Ray traceRay;
     _camera->spawnPrimaryRay(filmPosition, &traceRay);
 
-    PmViewpointSampleRay rayBufferStack[64];
-    PmViewpointSampleRay currentSampleRay = { traceRay, Spectrum(1.0_r), 0 };
+    PMViewpointSampleRay rayBufferStack[64];
+    PMViewpointSampleRay currentSampleRay = { traceRay, Spectrum(1.0_r), 0 };
     uint8                currentStackSize = 0;
 
     while (true) 
@@ -70,7 +70,7 @@ void PmViewpointConstructor::construct(
         }
 
         const Primitive* primitive = si.primitiveInfo().primitive();
-        const Bsdf*      bsdf      = primitive->bsdf();
+        const BSDF*      bsdf      = primitive->bsdf();
 
         const Vector3R& P  = si.surfaceDetail().position();
         const Vector3R& Ns = si.surfaceDetail().shadingNormal();
@@ -82,7 +82,7 @@ void PmViewpointConstructor::construct(
             ELobe::GlossyReflection,
             ELobe::GlossyTransmission })) 
         {
-            PmViewpoint viewpoint(
+            PMViewpoint viewpoint(
                 bsdf,
                 si.surfaceDetail(),
                 si.wi(),
@@ -108,9 +108,9 @@ void PmViewpointConstructor::construct(
                 ELobe::SpecularReflection,
                 ELobe::SpecularTransmission })) 
         {
-            for (BsdfComponents i = 0; i < bsdf->components(); ++i) 
+            for (BSDFComponents i = 0; i < bsdf->components(); ++i) 
             {
-                if (BsdfLobes({ bsdf->lobe(i) }).hasNone({
+                if (BSDFLobes({ bsdf->lobe(i) }).hasNone({
                     ELobe::SpecularReflection,
                     ELobe::SpecularTransmission }))
                 {
@@ -119,7 +119,7 @@ void PmViewpointConstructor::construct(
 
                 transportInfo.setComponents(i);
 
-                BsdfSample bsdfSample;
+                BSDFSample bsdfSample;
                 bsdf->evaluateSample(transportInfo, si, &bsdfSample);
                 if (!bsdfSample.isValid()) 
                 {
@@ -170,7 +170,7 @@ void PmViewpointConstructor::construct(
     {
         // add zero contribution viewpoint
 
-        PmViewpoint viewpoint(
+        PMViewpoint viewpoint(
             nullptr,
             SurfaceDetail(),
             Vector3R(),

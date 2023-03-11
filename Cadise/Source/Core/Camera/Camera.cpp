@@ -1,4 +1,4 @@
-#include "core/camera/camera.h"
+#include "Core/Camera/Camera.h"
 
 namespace cadise 
 {

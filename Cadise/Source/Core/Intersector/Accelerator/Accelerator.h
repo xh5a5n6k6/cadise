@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/intersector/intersector.h"
+#include "Core/Intersector/Intersector.h"
 
 namespace cadise
 {

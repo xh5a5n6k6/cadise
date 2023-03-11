@@ -1,8 +1,12 @@
 #pragma once
 
-#include "core/renderer/renderWork.h"
+#include "Core/Renderer/RenderWork.h"
 
-namespace cadise { class FilmTile; }
+// forward declaration
+namespace cadise
+{
+    class FilmTile;
+}
 
 namespace cadise
 {

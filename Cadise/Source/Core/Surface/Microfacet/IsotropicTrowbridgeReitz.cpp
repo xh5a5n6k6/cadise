@@ -1,24 +1,24 @@
-#include "core/surface/microfacet/isotropicGgx.h"
+#include "Core/Surface/Microfacet/IsotropicTrowbridgeReitz.h"
 
-#include "core/integral-tool/tSurfaceSampler.h"
-#include "fundamental/assertion.h"
-#include "math/constant.h"
-#include "math/math.h"
-#include "math/tVector3.h"
+#include "Core/Gear/TSurfaceSampler.h"
+#include "Foundation/Assertion.h"
+#include "Math/Constant.h"
+#include "Math/Math.h"
+#include "Math/TVector3.h"
 
 #include <cmath>
 
 namespace cadise 
 {
 
-IsotropicGgx::IsotropicGgx(const std::shared_ptr<TTexture<real>>& roughness) :
+IsotropicTrowbridgeReitz::IsotropicTrowbridgeReitz(const std::shared_ptr<TTexture<real>>& roughness) :
     Microfacet(),
     _roughness(roughness)
 {
     CS_ASSERT(roughness);
 }
 
-real IsotropicGgx::distributionD(
+real IsotropicTrowbridgeReitz::distributionD(
     const SurfaceIntersection& si,
     const Vector3R&            N,
     const Vector3R&            H) const 
@@ -45,7 +45,7 @@ real IsotropicGgx::distributionD(
     return numerator / denominator;
 }
 
-real IsotropicGgx::shadowingMaskingG(
+real IsotropicTrowbridgeReitz::shadowingMaskingG(
     const SurfaceIntersection& si,
     const Vector3R&            V,
     const Vector3R&            L,
@@ -81,7 +81,7 @@ real IsotropicGgx::shadowingMaskingG(
     return G1V * G1L;
 }
 
-void IsotropicGgx::sampleHalfVectorH(
+void IsotropicTrowbridgeReitz::sampleHalfVectorH(
     const SurfaceIntersection& si,
     const std::array<real, 2>& sample,
     Vector3R* const            out_H) const 

@@ -1,9 +1,9 @@
-#include "core/intersector/accelerator/kd-tree/kdTreeBuilder.h"
+#include "Core/Intersector/Accelerator/KDTree/KDTreeBuilder.h"
 
-#include "core/intersector/accelerator/kd-tree/endpoint.h"
-#include "core/intersector/intersector.h"
-#include "fundamental/assertion.h"
-#include "math/tAabb3.h"
+#include "Core/Intersector/Accelerator/KDTree/Endpoint.h"
+#include "Core/Intersector/Intersector.h"
+#include "Foundation/Assertion.h"
+#include "Math/TAABB3.h"
 
 #include <algorithm>
 #include <cmath>
@@ -12,7 +12,7 @@
 namespace cadise
 {
 
-KdTreeBuilder::KdTreeBuilder(
+KDTreeBuilder::KDTreeBuilder(
     const real traversalCost,
     const real intersectionCost,
     const real emptyBonus) :
@@ -23,11 +23,11 @@ KdTreeBuilder::KdTreeBuilder(
     _maxDepth(0)
 {}
 
-void KdTreeBuilder::buildNodes(
+void KDTreeBuilder::buildNodes(
     const std::vector<std::shared_ptr<Intersector>>& intersectors,
     const std::vector<AABB3R>&                       intersectorBounds,
     const AABB3R&                                    entireBound,
-    std::vector<KdTreeNode>* const                   out_nodes,
+    std::vector<KDTreeNode>* const                   out_nodes,
     std::vector<std::size_t>* const                  out_intersectorIndices) 
 {
     CS_ASSERT(out_nodes);
@@ -57,19 +57,19 @@ void KdTreeBuilder::buildNodes(
         out_intersectorIndices);
 }
 
-void KdTreeBuilder::_buildNodesRecursively(
+void KDTreeBuilder::_buildNodesRecursively(
     const std::vector<std::size_t>& intersectorIndices,
     const std::vector<AABB3R>&      intersectorBounds,
     const AABB3R&                   entireBound,
     const std::size_t               currentDepth,
     const std::size_t               badRefines,
-    std::vector<KdTreeNode>* const  out_nodes,
+    std::vector<KDTreeNode>* const  out_nodes,
     std::vector<std::size_t>* const out_intersectorIndices) const
 {
     CS_ASSERT(out_nodes);
     CS_ASSERT(out_intersectorIndices);
 
-    KdTreeNode node;
+    KDTreeNode node;
     const std::size_t nodeIndex                    = out_nodes->size();
     const std::size_t intersectorIndicesBeginIndex = out_intersectorIndices->size();
 
@@ -169,7 +169,7 @@ void KdTreeBuilder::_buildNodesRecursively(
     }
 }
 
-bool KdTreeBuilder::_canSplitWithSah(
+bool KDTreeBuilder::_canSplitWithSah(
     const std::vector<std::size_t>&      intersectorIndices,
     const std::vector<AABB3R>&           intersectorBounds,
     const AABB3R&                        entireBound,

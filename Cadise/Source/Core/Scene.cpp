@@ -1,12 +1,12 @@
-#include "core/scene.h"
+#include "Core/Scene.h"
 
-#include "core/intersector/accelerator/accelerator.h"
-#include "core/intersector/primitive/primitive.h"
-#include "core/light/light.h"
-#include "core/light/cluster/lightCluster.h"
-#include "core/ray.h"
-#include "core/surfaceIntersection.h"
-#include "fundamental/assertion.h"
+#include "Core/Intersector/Accelerator/Accelerator.h"
+#include "Core/Intersector/Primitive/Primitive.h"
+#include "Core/Light/Light.h"
+#include "Core/Light/Cluster/LightCluster.h"
+#include "Core/Ray.h"
+#include "Core/SurfaceIntersection.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise 
 {

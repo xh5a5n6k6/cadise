@@ -1,10 +1,14 @@
 #pragma once
 
-#include "math/type/mathType.h"
+#include "Math/Type/MathType.h"
 
 #include <array>
 
-namespace cadise { class SurfaceIntersection; }
+// forward declaration
+namespace cadise
+{
+    class SurfaceIntersection;
+}
 
 namespace cadise 
 {

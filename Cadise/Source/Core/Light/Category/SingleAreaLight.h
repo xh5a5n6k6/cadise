@@ -1,11 +1,17 @@
 #pragma once
 
-#include "core/light/category/areaLight.h"
+#include "Core/Light/Category/AreaLight.h"
 
 #include <memory>
 
-namespace cadise { class Primitive; }
-namespace cadise { template<typename T> class TTexture; }
+// forward declaration
+namespace cadise
+{
+    class Primitive;
+
+    template<typename T>
+    class TTexture;
+}
 
 namespace cadise
 {

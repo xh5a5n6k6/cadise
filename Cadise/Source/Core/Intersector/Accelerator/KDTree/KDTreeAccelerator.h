@@ -1,9 +1,9 @@
 #pragma once
 
-#include "core/intersector/accelerator/accelerator.h"
+#include "Core/Intersector/Accelerator/Accelerator.h"
 
-#include "core/intersector/accelerator/kd-tree/tKdTreeNode.h"
-#include "math/tAabb3.h"
+#include "Core/Intersector/Accelerator/KDTree/TKDTreeNode.h"
+#include "Math/TAABB3.h"
 
 #include <memory>
 #include <vector>
@@ -11,13 +11,13 @@
 namespace cadise 
 {
 
-class KdTreeAccelerator : public Accelerator 
+class KDTreeAccelerator : public Accelerator 
 {
 private:
-    using KdTreeNode = TKdTreeNode<std::size_t>;
+    using KDTreeNode = TKDTreeNode<std::size_t>;
 
 public:
-    KdTreeAccelerator(
+    KDTreeAccelerator(
         const std::vector<std::shared_ptr<Intersector>>& intersectors,
         const real                                       traversalCost,
         const real                                       intersectionCost,
@@ -30,7 +30,7 @@ public:
 
 private:
     std::vector<std::shared_ptr<Intersector>> _intersectors;
-    std::vector<KdTreeNode>                   _nodes;
+    std::vector<KDTreeNode>                   _nodes;
 
     // it stores intersector indices all nodes point to,
     // its size may be more than total intersectors because 

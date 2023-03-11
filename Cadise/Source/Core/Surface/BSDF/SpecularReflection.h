@@ -1,16 +1,22 @@
 #pragma once
 
-#include "core/surface/bsdf/bsdf.h"
+#include "Core/Surface/BSDF/BSDF.h"
 
 #include <memory>
 
-namespace cadise { class Fresnel; }
-namespace cadise { template<typename T> class TTexture; }
+// forward declaration
+namespace cadise
+{
+    class Fresnel;
+
+    template<typename T>
+    class TTexture;
+}
 
 namespace cadise
 {
 
-class SpecularReflection : public Bsdf
+class SpecularReflection : public BSDF
 {
 public:
     SpecularReflection(
@@ -24,13 +30,13 @@ public:
     void evaluateSample(
         const TransportInfo&       info,
         const SurfaceIntersection& si,
-        BsdfSample* const          out_sample) const override;
+        BSDFSample* const          out_sample) const override;
 
     real evaluatePdfW(
         const TransportInfo&       info,
         const SurfaceIntersection& si) const override;
 
-    ELobe lobe(const BsdfComponents component) const override;
+    ELobe lobe(const BSDFComponents component) const override;
 
 private:
     std::shared_ptr<TTexture<Spectrum>> _albedo;

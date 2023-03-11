@@ -1,10 +1,15 @@
 #pragma once
 
-#include "core/surface/microfacet/microfacet.h"
+#include "Core/Surface/Microfacet/Microfacet.h"
 
 #include <memory>
 
-namespace cadise { template<typename T> class TTexture; }
+// forward declaration
+namespace cadise
+{
+    template<typename T>
+    class TTexture;
+}
 
 namespace cadise 
 {
@@ -14,10 +19,10 @@ namespace cadise
     "Microfacet Models for Refraction through Rough Surfaces"
     Walter et al., EGSR 2007
 */
-class IsotropicGgx : public Microfacet 
+class IsotropicTrowbridgeReitz : public Microfacet
 {
 public:
-    IsotropicGgx(const std::shared_ptr<TTexture<real>>& roughness);
+    IsotropicTrowbridgeReitz(const std::shared_ptr<TTexture<real>>& roughness);
 
     real distributionD(
         const SurfaceIntersection& si,

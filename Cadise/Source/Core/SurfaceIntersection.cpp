@@ -1,4 +1,4 @@
-#include "core/surfaceIntersection.h"
+#include "Core/SurfaceIntersection.h"
 
 namespace cadise
 {

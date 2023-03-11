@@ -1,16 +1,20 @@
 #pragma once
 
-#include "core/renderer/renderer.h"
+#include "Core/Renderer/Renderer.h"
 
-namespace cadise { class Sampler; }
+// forward declaration
+namespace cadise
+{
+    class Sampler;
+}
 
 namespace cadise 
 {
 
-class BdptRenderer : public Renderer 
+class BDPTRenderer : public Renderer 
 {
 public:
-    explicit BdptRenderer(const std::shared_ptr<Sampler>& sampler);
+    explicit BDPTRenderer(const std::shared_ptr<Sampler>& sampler);
 
     void render() const override;
 

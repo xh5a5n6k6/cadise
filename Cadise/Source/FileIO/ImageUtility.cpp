@@ -1,15 +1,15 @@
-#include "utility/imageUtils.h"
+#include "FileIO/ImageUtility.h"
 
-#include "core/imaging/tImage.h"
-#include "fundamental/assertion.h"
-#include "math/math.h"
+#include "Core/Image/TImage.h"
+#include "Foundation/Assertion.h"
+#include "Math/Math.h"
 
 namespace cadise
 {
 
-void ImageUtils::ldrToHdr(
-    const LdrImage& ldrImage, 
-    HdrImage* const out_hdrImage) 
+void ImageUtility::ldrToHdr(
+    const LDRImage& ldrImage, 
+    HDRImage* const out_hdrImage) 
 {
     CS_ASSERT(out_hdrImage);
 
@@ -23,9 +23,9 @@ void ImageUtils::ldrToHdr(
     }
 }
 
-void ImageUtils::hdrToLdr(
-    const HdrImage& hdrImage, 
-    LdrImage* const out_ldrImage)
+void ImageUtility::hdrToLdr(
+    const HDRImage& hdrImage, 
+    LDRImage* const out_ldrImage)
 {
     CS_ASSERT(out_ldrImage);
 
@@ -40,9 +40,9 @@ void ImageUtils::hdrToLdr(
     }
 }
 
-void ImageUtils::ldrAlphaToHdrAlpha(
-    const LdrAlphaImage& ldrAlphaImage, 
-    HdrAlphaImage* const out_hdrAlphaImage)
+void ImageUtility::ldrAlphaToHdrAlpha(
+    const LDRAlphaImage& ldrAlphaImage, 
+    HDRAlphaImage* const out_hdrAlphaImage)
 {
     CS_ASSERT(out_hdrAlphaImage);
 

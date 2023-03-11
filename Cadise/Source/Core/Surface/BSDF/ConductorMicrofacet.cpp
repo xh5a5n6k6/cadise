@@ -1,12 +1,12 @@
-#include "core/surface/bsdf/conductorMicrofacet.h"
+#include "Core/Surface/BSDF/ConductorMicrofacet.h"
 
-#include "core/integral-tool/sample/bsdfSample.h"
-#include "core/surface/fresnel/conductorFresnel.h"
-#include "core/surface/microfacet/microfacet.h"
-#include "core/surface/microfacet/microfacetHelper.h"
-#include "core/surfaceIntersection.h"
-#include "fundamental/assertion.h"
-#include "math/random.h"
+#include "Core/Gear/Sample/BSDFSample.h"
+#include "Core/Surface/Fresnel/ConductorFresnel.h"
+#include "Core/Surface/Microfacet/Microfacet.h"
+#include "Core/Surface/Microfacet/MicrofacetHelper.h"
+#include "Core/SurfaceIntersection.h"
+#include "Foundation/Assertion.h"
+#include "Math/Random.h"
 
 #include <cmath>
 
@@ -17,7 +17,7 @@ ConductorMicrofacet::ConductorMicrofacet(
     const std::shared_ptr<Microfacet>&       microfacet,
     const std::shared_ptr<ConductorFresnel>& fresnel) :
     
-    Bsdf(BsdfLobes({ ELobe::GlossyReflection })),
+    BSDF(BSDFLobes({ ELobe::GlossyReflection })),
     _microfacet(microfacet),
     _fresnel(fresnel) 
 {
@@ -62,7 +62,7 @@ Spectrum ConductorMicrofacet::evaluate(
 void ConductorMicrofacet::evaluateSample(
     const TransportInfo&       info, 
     const SurfaceIntersection& si,
-    BsdfSample* const          out_sample) const
+    BSDFSample* const          out_sample) const
 {
     CS_ASSERT(out_sample);
 
@@ -139,7 +139,7 @@ real ConductorMicrofacet::evaluatePdfW(
     return pdfL;
 }
 
-ELobe ConductorMicrofacet::lobe(const BsdfComponents component) const 
+ELobe ConductorMicrofacet::lobe(const BSDFComponents component) const 
 {
     CS_ASSERT_EQ(component, 0);
 

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "math/tVector3.h"
+#include "Math/TVector3.h"
 
-#include "fundamental/assertion.h"
-#include "math/tArithmeticArray.h"
-#include "math/math.h"
+#include "Foundation/Assertion.h"
+#include "Math/TArithmeticArray.h"
+#include "Math/Math.h"
 
 #include <type_traits>
 #include <utility>

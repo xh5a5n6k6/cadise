@@ -1,13 +1,13 @@
-#include "core/renderer/render-work/estimatorTileWork.h"
+#include "Core/Renderer/RenderWork/EstimatorTileWork.h"
 
-#include "core/camera/camera.h"
-#include "core/estimator/energyEstimator.h"
-#include "core/film/filmTile.h"
-#include "core/ray.h"
-#include "core/sampler/sampler.h"
-#include "core/sampler/sampleRecord2D.h"
-#include "core/scene.h"
-#include "fundamental/assertion.h"
+#include "Core/Camera/Camera.h"
+#include "Core/Estimator/EnergyEstimator.h"
+#include "Core/Film/FilmTile.h"
+#include "Core/Ray.h"
+#include "Core/Sampler/Sampler.h"
+#include "Core/Sampler/SampleRecord2D.h"
+#include "Core/Scene.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise 
 {

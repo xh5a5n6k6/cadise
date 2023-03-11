@@ -1,7 +1,7 @@
-#include "core/light/category/areaLight.h"
+#include "Core/Light/Category/AreaLight.h"
 
-#include "fundamental/assertion.h"
-#include "math/tVector3.h"
+#include "Foundation/Assertion.h"
+#include "Math/TVector3.h"
 
 namespace cadise 
 {

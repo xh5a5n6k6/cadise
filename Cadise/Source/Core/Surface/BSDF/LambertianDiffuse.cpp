@@ -1,14 +1,14 @@
-#include "core/surface/bsdf/lambertianDiffuse.h"
+#include "Core/Surface/BSDF/LambertianDiffuse.h"
 
-#include "core/integral-tool/sample/bsdfSample.h"
-#include "core/integral-tool/tSurfaceSampler.h"
-#include "core/surfaceIntersection.h"
-#include "core/texture/category/tConstantTexture.h"
-#include "fundamental/assertion.h"
-#include "math/constant.h"
-#include "math/math.h"
-#include "math/random.h"
-#include "math/warp/hemisphere.h"
+#include "Core/Gear/Sample/BSDFSample.h"
+#include "Core/Gear/TSurfaceSampler.h"
+#include "Core/SurfaceIntersection.h"
+#include "Core/Texture/Category/TConstantTexture.h"
+#include "Foundation/Assertion.h"
+#include "Math/Constant.h"
+#include "Math/Math.h"
+#include "Math/Random.h"
+#include "Math/Warp/Hemisphere.h"
 
 namespace cadise
 {
@@ -19,7 +19,7 @@ LambertianDiffuse::LambertianDiffuse() :
 {}
 
 LambertianDiffuse::LambertianDiffuse(const std::shared_ptr<TTexture<Spectrum>>& albedo) :
-    Bsdf(BsdfLobes({ ELobe::DiffuseReflection })),
+    BSDF(BSDFLobes({ ELobe::DiffuseReflection })),
     _albedo(albedo) 
 {
     CS_ASSERT(albedo);
@@ -47,7 +47,7 @@ Spectrum LambertianDiffuse::evaluate(
 void LambertianDiffuse::evaluateSample(
     const TransportInfo&       info,
     const SurfaceIntersection& si,
-    BsdfSample* const          out_sample) const
+    BSDFSample* const          out_sample) const
 {
     CS_ASSERT(out_sample);
 
@@ -92,7 +92,7 @@ real LambertianDiffuse::evaluatePdfW(
     return L.absDot(Ns) * constant::rcp_pi<real>;
 }
 
-ELobe LambertianDiffuse::lobe(const BsdfComponents component) const 
+ELobe LambertianDiffuse::lobe(const BSDFComponents component) const 
 {
     CS_ASSERT_EQ(component, 0);
 

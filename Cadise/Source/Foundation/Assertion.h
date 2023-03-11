@@ -1,6 +1,6 @@
 #pragma once
 
-#include "fundamental/config.h"
+#include "Foundation/Config.h"
 
 /*
     this is simple custom assert macro

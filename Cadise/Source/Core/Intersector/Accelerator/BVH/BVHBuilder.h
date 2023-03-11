@@ -1,7 +1,7 @@
 #pragma once
 
-#include "core/intersector/accelerator/bvh/bvhLinearNode.h"
-#include "core/intersector/accelerator/bvh/eBvhSplitMode.h"
+#include "Core/Intersector/Accelerator/BVH/BVHLinearNode.h"
+#include "Core/Intersector/Accelerator/BVH/EBVHSplitMode.h"
 
 #include <memory>
 #include <vector>
@@ -9,56 +9,56 @@
 // forward declaration
 namespace cadise 
 { 
-    class BvhBinaryNode;
-    class BvhBoundInfo;
+    class BVHBinaryNode;
+    class BVHBoundInfo;
     class Intersector; 
 }
 
 namespace cadise 
 {
 
-class BvhBuilder 
+class BVHBuilder 
 {
 public:
-    explicit BvhBuilder(const EBvhSplitMode splitMode);
+    explicit BVHBuilder(const EBVHSplitMode splitMode);
 
-    std::unique_ptr<BvhBinaryNode> buildBinaryNodes(
+    std::unique_ptr<BVHBinaryNode> buildBinaryNodes(
         const std::vector<std::shared_ptr<Intersector>>& intersectors, 
         std::vector<std::shared_ptr<Intersector>>* const out_orderedIntersectors,
         std::size_t* const                               out_totalNodeSize) const;
 
     void buildLinearNodes(
-        std::unique_ptr<BvhBinaryNode>    root, 
+        std::unique_ptr<BVHBinaryNode>    root, 
         const std::size_t                 totalNodeSize,
-        std::vector<BvhLinearNode>* const out_linearNodes) const;
+        std::vector<BVHLinearNode>* const out_linearNodes) const;
 
 private:
-    std::unique_ptr<BvhBinaryNode> _buildBinaryNodesRecursively(
-        const std::vector<BvhBoundInfo>&                 boundInfos,
+    std::unique_ptr<BVHBinaryNode> _buildBinaryNodesRecursively(
+        const std::vector<BVHBoundInfo>&                 boundInfos,
         const std::vector<std::shared_ptr<Intersector>>& intersectors,
         std::vector<std::shared_ptr<Intersector>>* const out_orderedIntersectors,
         std::size_t* const                               out_totalNodeSize) const;
 
     void _buildLinearNodesRecursively(
-        std::unique_ptr<BvhBinaryNode>    binaryNode, 
-        std::vector<BvhLinearNode>* const out_linearNodes,
+        std::unique_ptr<BVHBinaryNode>    binaryNode, 
+        std::vector<BVHLinearNode>* const out_linearNodes,
         std::size_t* const                out_nodeIndex) const;
 
     bool _canSplitWithEqualCounts(
-        const std::vector<BvhBoundInfo>& boundInfos,
+        const std::vector<BVHBoundInfo>& boundInfos,
         const std::size_t                splitAxis,
-        std::vector<BvhBoundInfo>* const out_subBoundInfosA,
-        std::vector<BvhBoundInfo>* const out_subBoundInfosB) const;
+        std::vector<BVHBoundInfo>* const out_subBoundInfosA,
+        std::vector<BVHBoundInfo>* const out_subBoundInfosB) const;
 
     bool _canSplitWithSah(
-        const std::vector<BvhBoundInfo>& boundInfos,
+        const std::vector<BVHBoundInfo>& boundInfos,
         const std::size_t                splitAxis,
         const AABB3R&                    intersectorBound,
         const AABB3R&                    centroidBound,
-        std::vector<BvhBoundInfo>* const out_subBoundInfosA,
-        std::vector<BvhBoundInfo>* const out_subBoundInfosB) const;
+        std::vector<BVHBoundInfo>* const out_subBoundInfosA,
+        std::vector<BVHBoundInfo>* const out_subBoundInfosB) const;
 
-    EBvhSplitMode _splitMode;
+    EBVHSplitMode _splitMode;
 
     static const std::size_t MAX_INTERSECTOR_SIZE = 1;
 };

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/tVector3.h"
+#include "Math/TVector3.h"
 
 namespace cadise
 {
@@ -59,4 +59,4 @@ private:
 
 } // namespace cadise
 
-#include "math/tLocalCoordinateSystem3.ipp"
+#include "Math/TLocalCoordinateSystem3.ipp"

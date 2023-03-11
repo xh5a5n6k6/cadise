@@ -1,10 +1,14 @@
 #pragma once
 
-#include "core/intersector/primitive/primitive.h"
+#include "Core/Intersector/Primitive/Primitive.h"
 
-#include "math/tVector3.h"
+#include "Math/TVector3.h"
 
-namespace cadise { class Transform; }
+// forward declaration
+namespace cadise
+{
+    class Transform;
+}
 
 namespace cadise 
 {
@@ -13,7 +17,7 @@ class Sphere : public Primitive
 {
 public:
     Sphere(
-        const std::shared_ptr<Bsdf>& bsdf, 
+        const std::shared_ptr<BSDF>& bsdf, 
         const Vector3R&              center, 
         const real                   radius);
 

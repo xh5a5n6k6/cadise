@@ -1,20 +1,20 @@
-#include "core/instantiator/instantiator.h"
+#include "Core/Instantiator/Instantiator.h"
 
 // light type
-#include "core/light/category/environmentLight.h"
-#include "core/light/category/pointLight.h"
-#include "core/light/category/singleAreaLight.h"
+#include "Core/Light/Category/EnvironmentLight.h"
+#include "Core/Light/Category/PointLight.h"
+#include "Core/Light/Category/SingleAreaLight.h"
 
-#include "core/imaging/tImage.h"
-#include "core/intersector/primitive/infiniteSphere.h"
-#include "core/intersector/primitive/primitive.h"
-#include "core/intersector/primitive/triangleBuffer.h"
-#include "core/texture/category/rgbImageTexture.h"
-#include "core/texture/category/tConstantTexture.h"
-#include "file-io/path.h"
-#include "file-io/pictureLoader.h"
-#include "file-io/scene-description/CSDResource.h"
-#include "fundamental/assertion.h"
+#include "Core/Image/TImage.h"
+#include "Core/Intersector/Primitive/InfiniteSphere.h"
+#include "Core/Intersector/Primitive/Primitive.h"
+#include "Core/Intersector/Primitive/TriangleBuffer.h"
+#include "Core/Texture/Category/RGBImageTexture.h"
+#include "Core/Texture/Category/TConstantTexture.h"
+#include "FileIO/CSD/CSDResource.h"
+#include "FileIO/Path.h"
+#include "FileIO/PictureLoader.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise::instantiator
 {
@@ -110,13 +110,13 @@ static std::shared_ptr<Light> createEnvironment(
 
     CS_ASSERT_NE(hdrFilename, "");
 
-    HdrImage hdrImage = PictureLoader::loadRgbImage(Path(hdrFilename));
+    HDRImage hdrImage = PictureLoader::loadRgbImage(Path(hdrFilename));
     hdrImage.flipHorizontal();
 
     const ETextureSampleMode sampleMode = ETextureSampleMode::Nearest;
     const ETextureWrapMode   wrapMode   = ETextureWrapMode::Repeat;
     const std::shared_ptr<TTexture<Spectrum>> radiance
-        = std::make_shared<RgbImageTexture>(hdrImage, sampleMode, wrapMode);
+        = std::make_shared<RGBImageTexture>(hdrImage, sampleMode, wrapMode);
 
     out_backgroundSphere = std::make_shared<InfiniteSphere>();
     std::shared_ptr<EnvironmentLight> environmentLight

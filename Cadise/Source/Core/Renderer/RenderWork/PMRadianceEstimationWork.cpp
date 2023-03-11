@@ -1,21 +1,21 @@
-#include "core/renderer/render-work/pmRadianceEstimationWork.h"
+#include "Core/Renderer/RenderWork/PMRadianceEstimationWork.h"
 
-#include "core/film/film.h"
-#include "core/renderer/photon-mapping/pmViewpoint.h"
-#include "core/surface/bsdf/bsdf.h"
-#include "core/surface/transportInfo.h"
-#include "core/surfaceIntersection.h"
-#include "fundamental/assertion.h"
-#include "math/constant.h"
+#include "Core/Film/Film.h"
+#include "Core/Renderer/PhotonMapping/PMViewpoint.h"
+#include "Core/Surface/BSDF/BSDF.h"
+#include "Core/Surface/TransportInfo.h"
+#include "Core/SurfaceIntersection.h"
+#include "Foundation/Assertion.h"
+#include "Math/Constant.h"
 
 #include <cmath>
 
 namespace cadise 
 {
 
-PmRadianceEstimationWork::PmRadianceEstimationWork(
+PMRadianceEstimationWork::PMRadianceEstimationWork(
     const PhotonMap* const    photonMap,
-    std::vector<PmViewpoint>* viewpoints,
+    std::vector<PMViewpoint>* viewpoints,
     Film*                     film,
     const std::size_t         numPhotonPaths,
     const real                alpha) :
@@ -33,15 +33,15 @@ PmRadianceEstimationWork::PmRadianceEstimationWork(
     CS_ASSERT(film);
 }
 
-void PmRadianceEstimationWork::work() const
+void PMRadianceEstimationWork::work() const
 {
     // for each viewpoint, do progressive radiance estimation
     // PPM paper chapter 4
     for (std::size_t i = _workBeginIndex; i < _workEndIndex; ++i) 
     {
-        PmViewpoint& viewpoint = (*_viewpoints)[i];
+        PMViewpoint& viewpoint = (*_viewpoints)[i];
 
-        const Bsdf*          bsdf                 = viewpoint.bsdf();
+        const BSDF*          bsdf                 = viewpoint.bsdf();
         const SurfaceDetail& surfaceDetail        = viewpoint.surfaceDetail();
         const Vector3R&      fromDirection        = viewpoint.fromDirection();
         const Vector2D&      filmPosition         = viewpoint.filmPosition();
@@ -111,7 +111,7 @@ void PmRadianceEstimationWork::work() const
     }
 }
 
-void PmRadianceEstimationWork::setWorkBeginEnd(
+void PMRadianceEstimationWork::setWorkBeginEnd(
     const std::size_t beginIndex,
     const std::size_t endIndex) 
 {

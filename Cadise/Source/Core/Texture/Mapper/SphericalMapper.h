@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/texture/mapper/textureMapper.h"
+#include "Core/Texture/Mapper/TextureMapper.h"
 
 namespace cadise
 {

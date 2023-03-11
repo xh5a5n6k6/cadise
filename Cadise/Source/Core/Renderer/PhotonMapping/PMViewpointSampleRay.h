@@ -1,23 +1,23 @@
 #pragma once
 
-#include "core/ray.h"
-#include "core/spectrum/spectrum.h"
+#include "Core/Ray.h"
+#include "Core/Spectrum/Spectrum.h"
 
 namespace cadise
 {
 
-class PmViewpointSampleRay
+class PMViewpointSampleRay
 {
 public:
-    PmViewpointSampleRay();
-    PmViewpointSampleRay(
+    PMViewpointSampleRay();
+    PMViewpointSampleRay(
         const Ray&      sampleRay,
         const Spectrum& pathThroughput,
         const int32     depth);
 
     const Ray& sampleRay() const;
     const Spectrum& pathThroughput() const;
-    const int32 depth() const;
+    int32 depth() const;
 
 private:
     Ray      _sampleRay;

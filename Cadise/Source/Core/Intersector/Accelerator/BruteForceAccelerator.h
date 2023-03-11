@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/intersector/accelerator/accelerator.h"
+#include "Core/Intersector/Accelerator/Accelerator.h"
 
 #include <memory>
 #include <vector>

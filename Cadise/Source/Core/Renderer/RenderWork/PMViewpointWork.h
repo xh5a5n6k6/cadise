@@ -1,34 +1,38 @@
 #pragma once
 
-#include "core/renderer/renderWork.h"
+#include "Core/Renderer/RenderWork.h"
 
-#include "math/tAabb2.h"
+#include "Math/TAABB2.h"
 
 #include <vector>
 
-namespace cadise { class PmViewpoint; }
-namespace cadise { class PmViewpointConstructor; }
-namespace cadise { class Sampler; }
+// forward declaration
+namespace cadise
+{
+    class PMViewpoint;
+    class PMViewpointConstructor;
+    class Sampler;
+}
 
 namespace cadise
 {
 
-class PmViewpointWork : public RenderWork
+class PMViewpointWork : public RenderWork
 {
 public:
-    PmViewpointWork(
+    PMViewpointWork(
         const AABB2I&                       sampleBound,
         const Sampler* const                sampler,
-        const PmViewpointConstructor* const viewpointBuilder,
-        std::vector<PmViewpoint>* const     viewpoints);
+        const PMViewpointConstructor* const viewpointBuilder,
+        std::vector<PMViewpoint>* const     viewpoints);
 
     void work() const override;
 
 private:
     const Sampler*                _sampler;
-    const PmViewpointConstructor* _viewpointConstructor;
+    const PMViewpointConstructor* _viewpointConstructor;
 
-    std::vector<PmViewpoint>* _viewpoints;
+    std::vector<PMViewpoint>* _viewpoints;
 
     AABB2I _sampleBound;
 };

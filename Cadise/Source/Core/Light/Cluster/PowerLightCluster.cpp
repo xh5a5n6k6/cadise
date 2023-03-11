@@ -1,8 +1,8 @@
-#include "core/light/cluster/powerLightCluster.h"
+#include "Core/Light/Cluster/PowerLightCluster.h"
 
-#include "core/light/light.h"
-#include "fundamental/assertion.h"
-#include "math/random.h"
+#include "Core/Light/Light.h"
+#include "Foundation/Assertion.h"
+#include "Math/Random.h"
 
 namespace cadise
 {

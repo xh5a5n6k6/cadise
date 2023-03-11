@@ -1,4 +1,4 @@
-#include "core/sampler/sampleRecord.h"
+#include "Core/Sampler/SampleRecord.h"
 
 namespace cadise 
 {

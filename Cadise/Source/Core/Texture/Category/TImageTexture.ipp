@@ -1,8 +1,8 @@
 #pragma once
 
-#include "core/texture/category/tImageTexture.h"
+#include "Core/Texture/Category/TImageTexture.h"
 
-#include "core/texture/sampler/tNearestPixelSampler.h"
+#include "Core/Texture/Sampler/TNearestPixelSampler.h"
 
 namespace cadise 
 {

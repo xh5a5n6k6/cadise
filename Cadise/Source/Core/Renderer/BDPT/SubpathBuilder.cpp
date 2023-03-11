@@ -1,39 +1,38 @@
-#include "core/renderer/bidirectional-path-tracing/subPathBuilder.h"
+#include "Core/Renderer/BDPT/SubpathBuilder.h"
 
-#include "core/camera/camera.h"
-#include "core/integral-tool/russianRoulette.h"
-#include "core/integral-tool/sample/bsdfSample.h"
-#include "core/integral-tool/sample/directLightSample.h"
-#include "core/integral-tool/sample/emitLightSample.h"
-#include "core/intersector/primitive/primitive.h"
-#include "core/light/category/areaLight.h"
-#include "core/ray.h"
-#include "core/renderer/bidirectional-path-tracing/bdptMis.h"
-#include "core/renderer/bidirectional-path-tracing/subPath.h"
-#include "core/scene.h"
-#include "core/surface/bsdf/bsdf.h"
-#include "core/surface/transportInfo.h"
-#include "core/surfaceIntersection.h"
-#include "fundamental/assertion.h"
+#include "Core/Camera/Camera.h"
+#include "Core/Gear/RussianRoulette.h"
+#include "Core/Gear/Sample/BSDFSample.h"
+#include "Core/Gear/Sample/EmitLightSample.h"
+#include "Core/Intersector/Primitive/Primitive.h"
+#include "Core/Light/Category/AreaLight.h"
+#include "Core/Ray.h"
+#include "Core/Renderer/BDPT/BDPTMIS.h"
+#include "Core/Renderer/BDPT/Subpath.h"
+#include "Core/Scene.h"
+#include "Core/Surface/BSDF/BSDF.h"
+#include "Core/Surface/TransportInfo.h"
+#include "Core/SurfaceIntersection.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise 
 {
 
-SubPathBuilder::SubPathBuilder(const std::size_t maxPathLength) :
+SubpathBuilder::SubpathBuilder(const std::size_t maxPathLength) :
     _maxPathLength(maxPathLength),
     _camera(nullptr) 
 {}
 
-void SubPathBuilder::setCamera(const Camera* const camera)
+void SubpathBuilder::setCamera(const Camera* const camera)
 {
     CS_ASSERT(camera);
 
     _camera = camera;
 }
 
-void SubPathBuilder::buildLightPath(
+void SubpathBuilder::buildLightPath(
     const Scene&   scene,
-    SubPath* const out_lightPath) const
+    Subpath* const out_lightPath) const
 {
     CS_ASSERT(out_lightPath);
 
@@ -75,7 +74,7 @@ void SubPathBuilder::buildLightPath(
 
     // it will not used in light sub-path construction
     Spectrum localRadiance;
-    _buildSubPathCompletely(
+    _buildSubpathCompletely(
         ETransportMode::Importance,
         scene,
         Ray(emitPosition, emitDirection),
@@ -85,10 +84,10 @@ void SubPathBuilder::buildLightPath(
         &localRadiance);
 }
 
-void SubPathBuilder::buildCameraPath(
+void SubpathBuilder::buildCameraPath(
     const Scene&    scene,
     const Vector2D& filmPosition,
-    SubPath* const  out_cameraPath,
+    Subpath* const  out_cameraPath,
     Spectrum* const out_zeroBounceRadiance) const
 {
     CS_ASSERT(out_cameraPath);
@@ -116,7 +115,7 @@ void SubPathBuilder::buildCameraPath(
 
     out_cameraPath->addVertex(cameraVertex);
 
-    _buildSubPathCompletely(
+    _buildSubpathCompletely(
         ETransportMode::Radiance,
         scene,
         primaryRay,
@@ -126,19 +125,19 @@ void SubPathBuilder::buildCameraPath(
         out_zeroBounceRadiance);
 }
 
-void SubPathBuilder::_buildSubPathCompletely(
+void SubpathBuilder::_buildSubpathCompletely(
     const ETransportMode mode,
     const Scene&         scene,
     const Ray&           firstRay,
     const Spectrum&      secondVertexThroughput,
     const real           secondVertexForwardPdfW,
-    SubPath* const       out_subPath,
+    Subpath* const       out_subpath,
     Spectrum* const      out_zeroBounceRadiance) const 
 {
-    CS_ASSERT(out_subPath);
+    CS_ASSERT(out_subpath);
     CS_ASSERT(out_zeroBounceRadiance);
 
-    std::size_t currentLength = out_subPath->length();
+    std::size_t currentLength = out_subpath->length();
     if (currentLength == _maxPathLength) 
     {
         return;
@@ -157,11 +156,11 @@ void SubPathBuilder::_buildSubPathCompletely(
             break;
         }
 
-        PathVertex& previousVertex = (*out_subPath)[currentLength - 1];
+        PathVertex& previousVertex = (*out_subpath)[currentLength - 1];
         PathVertex  newVertex(EVertexType::Surface, throughput);
 
         const Primitive* primitive = intersection.primitiveInfo().primitive();
-        const Bsdf*      bsdf      = primitive->bsdf();
+        const BSDF*      bsdf      = primitive->bsdf();
 
         const Vector3R& newP       = intersection.surfaceDetail().position();
         const Vector3R& newNs      = intersection.surfaceDetail().shadingNormal();
@@ -177,7 +176,7 @@ void SubPathBuilder::_buildSubPathCompletely(
         newVertex.setPdfAForward(pdfWForward * newToPreviousDotN / distance2);
         newVertex.setBsdf(bsdf);
 
-        out_subPath->addVertex(newVertex);
+        out_subpath->addVertex(newVertex);
         ++currentLength;
 
         // add s=0 situation radiance when hitting area light
@@ -185,10 +184,10 @@ void SubPathBuilder::_buildSubPathCompletely(
         const AreaLight* areaLight = primitive->areaLight();
         if (areaLight && mode == ETransportMode::Radiance) 
         {
-            (*out_subPath)[currentLength - 1].setLight(areaLight);
+            (*out_subpath)[currentLength - 1].setLight(areaLight);
 
             const Spectrum emittance = areaLight->emittance(intersection);
-            const real     misWeight = BdptMis::weight(scene, SubPath::emptyPath(), *out_subPath, 0, currentLength);
+            const real     misWeight = BDPTMIS::weight(scene, Subpath::emptyPath(), *out_subpath, 0, currentLength);
 
             out_zeroBounceRadiance->addLocal(throughput.mul(emittance.mul(misWeight)));
         }
@@ -199,7 +198,7 @@ void SubPathBuilder::_buildSubPathCompletely(
         }
 
         // estimate next direction with bsdf sampling
-        BsdfSample bsdfSample;
+        BSDFSample bsdfSample;
         bsdf->evaluateSample(TransportInfo(mode), intersection, &bsdfSample);
         if (!bsdfSample.isValid()) 
         {

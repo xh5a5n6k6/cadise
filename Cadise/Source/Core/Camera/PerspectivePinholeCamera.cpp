@@ -1,13 +1,12 @@
-#include "core/camera/perspectivePinholeCamera.h"
+#include "Core/Camera/PerspectivePinholeCamera.h"
 
-#include "core/integral-tool/sample/cameraSample.h"
-#include "core/ray.h"
-#include "fundamental/assertion.h"
-#include "math/constant.h"
-#include "math/transform.h"
+#include "Core/Gear/Sample/CameraSample.h"
+#include "Core/Ray.h"
+#include "Foundation/Assertion.h"
+#include "Math/Constant.h"
+#include "Math/Transform.h"
 
 #include <cmath>
-#include <limits>
 
 namespace cadise
 {

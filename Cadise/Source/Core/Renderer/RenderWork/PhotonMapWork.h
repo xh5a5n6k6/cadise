@@ -1,11 +1,15 @@
 #pragma once
 
-#include "core/renderer/renderWork.h"
+#include "Core/Renderer/RenderWork.h"
 
 #include <vector>
 
-namespace cadise { class Photon; }
-namespace cadise { class Scene; }
+// forward declaration
+namespace cadise
+{
+    class Photon;
+    class Scene;
+}
 
 namespace cadise
 {

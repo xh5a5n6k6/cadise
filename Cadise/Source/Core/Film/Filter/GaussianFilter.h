@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/film/filter/filter.h"
+#include "Core/Film/Filter/Filter.h"
 
 namespace cadise 
 {

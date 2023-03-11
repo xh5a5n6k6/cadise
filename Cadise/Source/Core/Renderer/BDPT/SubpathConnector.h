@@ -1,23 +1,27 @@
 #pragma once
 
-#include "core/spectrum/spectrum.h"
+#include "Core/Spectrum/Spectrum.h"
 
-namespace cadise { class PathVertex; }
-namespace cadise { class Scene; }
-namespace cadise { class SubPath; }
+// forward declaration
+namespace cadise
+{
+    class PathVertex;
+    class Scene;
+    class Subpath;
+}
 
 namespace cadise
 {
 
-class SubPathConnector 
+class SubpathConnector
 {
 public:
-    SubPathConnector();
+    SubpathConnector();
 
     void connect(
         const Scene&      scene,
-        const SubPath&    lightPath,
-        const SubPath&    cameraPath,
+        const Subpath&    lightPath,
+        const Subpath&    cameraPath,
         const std::size_t s,
         const std::size_t t,
         Spectrum* const   out_radiance) const;

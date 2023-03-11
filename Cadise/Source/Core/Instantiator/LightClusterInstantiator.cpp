@@ -1,11 +1,11 @@
-#include "instantiator.h"
+#include "Core/Instantiator/Instantiator.h"
 
 // lightCluster type
-#include "core/light/cluster/powerLightCluster.h"
-#include "core/light/cluster/uniformLightCluster.h"
+#include "Core/Light/Cluster/PowerLightCluster.h"
+#include "Core/Light/Cluster/UniformLightCluster.h"
 
-#include "file-io/scene-description/CSDResource.h"
-#include "fundamental/assertion.h"
+#include "FileIO/CSD/CSDResource.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise::instantiator 
 {

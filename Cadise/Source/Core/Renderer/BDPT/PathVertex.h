@@ -1,14 +1,19 @@
 #pragma once
 
-#include "core/renderer/bidirectional-path-tracing/eVertexType.h"
-#include "core/spectrum/spectrum.h"
-#include "core/surfaceDetail.h"
+#include "Core/Renderer/BDPT/EVertexType.h"
+#include "Core/Spectrum/Spectrum.h"
+#include "Core/SurfaceDetail.h"
 
-namespace cadise { class Bsdf; }
-namespace cadise { class Camera; }
-namespace cadise { class Light; }
-namespace cadise { class Scene; }
-namespace cadise { enum class ETransportMode; }
+// forward declaration
+namespace cadise
+{
+    class BSDF;
+    class Camera;
+    class Light;
+    class Scene;
+
+    enum class ETransportMode;
+}
 
 namespace cadise 
 {
@@ -46,14 +51,14 @@ public:
     real pdfAReverse() const;
     const Camera* camera() const;
     const Light* light() const;
-    const Bsdf* bsdf() const;
+    const BSDF* bsdf() const;
 
     void setSurfaceDetail(const SurfaceDetail& surfaceDetail);
     void setPdfAForward(const real pdfAForward);
     void setPdfAReverse(const real pdfAReverse);
     void setCamera(const Camera* const camera);
     void setLight(const Light* const light);
-    void setBsdf(const Bsdf* const bsdf);
+    void setBsdf(const BSDF* const bsdf);
 
 private:
     EVertexType   _type;
@@ -65,7 +70,7 @@ private:
 
     const Camera* _camera;
     const Light*  _light;
-    const Bsdf*   _bsdf;
+    const BSDF*   _bsdf;
 };
 
 } // namespace cadise

@@ -1,6 +1,6 @@
 //#pragma once
 //
-//#include "core/spectrum/spectrum.h"
+//#include "Core/spectrum/spectrum.h"
 //
 //namespace cadise { class Bsdf; }
 //namespace cadise { class Light; }

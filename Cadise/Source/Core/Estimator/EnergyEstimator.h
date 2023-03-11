@@ -1,11 +1,15 @@
 #pragma once
 
-#include "core/spectrum/spectrum.h"
+#include "Core/Spectrum/Spectrum.h"
 
 #include <string>
 
-namespace cadise { class Ray; }
-namespace cadise { class Scene; }
+// forward declaration
+namespace cadise
+{
+    class Ray; 
+    class Scene;
+}
 
 namespace cadise 
 {

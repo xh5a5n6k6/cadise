@@ -1,4 +1,4 @@
-#include "core/light/cluster/lightCluster.h"
+#include "Core/Light/Cluster/LightCluster.h"
 
 namespace cadise
 {

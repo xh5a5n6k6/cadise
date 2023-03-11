@@ -5,7 +5,7 @@ namespace cadise
 
 /*! @brief Scene description class type.
 */
-enum class ESdClassType 
+enum class ECSDClassType 
 {
     Undefined = 0,
 

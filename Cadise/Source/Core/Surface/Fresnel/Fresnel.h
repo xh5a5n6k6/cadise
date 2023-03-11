@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/spectrum/spectrum.h"
+#include "Core/Spectrum/Spectrum.h"
 
 namespace cadise 
 {

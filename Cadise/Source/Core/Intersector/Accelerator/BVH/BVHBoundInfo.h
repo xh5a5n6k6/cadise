@@ -1,15 +1,15 @@
 #pragma once
 
-#include "math/tAabb3.h"
+#include "Math/TAABB3.h"
 
 namespace cadise 
 {
 
-class BvhBoundInfo 
+class BVHBoundInfo 
 {
 public:
-    BvhBoundInfo();
-    BvhBoundInfo(const AABB3R& bound, const std::size_t index);
+    BVHBoundInfo();
+    BVHBoundInfo(const AABB3R& bound, const std::size_t index);
 
     const AABB3R& bound() const;
     const Vector3R& centroid() const;

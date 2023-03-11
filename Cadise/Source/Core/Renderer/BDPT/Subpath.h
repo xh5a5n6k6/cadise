@@ -1,28 +1,32 @@
 #pragma once
 
-#include "core/renderer/bidirectional-path-tracing/pathVertex.h"
+#include "Core/Renderer/BDPT/PathVertex.h"
 
 #include <vector>
 
-namespace cadise { class Camera; }
-namespace cadise { class ConnectEvent; }
-namespace cadise { class Scene; }
+// forward declaration
+namespace cadise
+{
+    class Camera;
+    class ConnectEvent;
+    class Scene;
+}
 
 namespace cadise 
 {
 
-class SubPath 
+class Subpath 
 {
 public:
     // used for s=0 situation
     // (it doesn't support t=0 situation currently)
-    static SubPath emptyPath();
+    static Subpath emptyPath();
 
     // used for s=1 or t=1 situation
-    static SubPath oneVertexPath(const PathVertex& vertex);
+    static Subpath oneVertexPath(const PathVertex& vertex);
 
 public:
-    explicit SubPath(const std::size_t maxPathLength);
+    explicit Subpath(const std::size_t maxPathLength);
 
     PathVertex& operator[] (const std::size_t index);
     const PathVertex& operator[] (const std::size_t index) const;

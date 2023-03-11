@@ -1,20 +1,20 @@
 #pragma once
 
-#include "core/estimator/radianceEstimator.h"
+#include "Core/Estimator/RadianceEstimator.h"
 
 namespace cadise 
 {
 
 /*
-    WdlEstimator: Whitted-Style Direct Light Estimator
+    WDLEstimator: Whitted-Style Direct Light Estimator
 
     This estimator considers direct lighting and reflection/refraction effects.
     (reflection/refraction effects are calculated only at specular surface)
 */
-class WdlEstimator : public RadianceEstimator 
+class WDLEstimator : public RadianceEstimator 
 {
 public:
-    explicit WdlEstimator(const int32 maxDepth);
+    explicit WDLEstimator(const int32 maxDepth);
 
     void estimate(
         const Scene&    scene, 
@@ -29,7 +29,7 @@ private:
 
 // header implementation
 
-inline std::string WdlEstimator::toString() const 
+inline std::string WDLEstimator::toString() const 
 {
     return "WDL Estimator";
 }

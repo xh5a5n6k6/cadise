@@ -1,26 +1,30 @@
 #pragma once
 
-#include "core/renderer/renderer.h"
+#include "Core/Renderer/Renderer.h"
 
-#include "core/renderer/photon-mapping/pmSetting.h"
+#include "Core/Renderer/PhotonMapping/PMSetting.h"
 
-namespace cadise { class Sampler; }
+// forward declaration
+namespace cadise
+{
+    class Sampler;
+}
 
 namespace cadise
 {
 
-class PpmRenderer : public Renderer
+class PPMRenderer : public Renderer
 {
 public:
-    PpmRenderer(
+    PPMRenderer(
         const std::shared_ptr<Sampler>& sampler,
-        const PmSetting&                setting);
+        const PMSetting&                setting);
 
     void render() const override;
 
 private:
     std::shared_ptr<Sampler> _sampler;
-    PmSetting                _setting;
+    PMSetting                _setting;
 };
 
 } // namespace cadise

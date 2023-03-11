@@ -1,27 +1,31 @@
 #pragma once
 
-#include "math/type/mathType.h"
+#include "Math/Type/MathType.h"
 
 #include <vector>
 
-namespace cadise { class Camera; }
-namespace cadise { class PmViewpoint; }
-namespace cadise { class Scene; }
+// forward declaration
+namespace cadise
+{
+    class Camera;
+    class PMViewpoint;
+    class Scene;
+}
 
 namespace cadise
 {
 
-class PmViewpointConstructor 
+class PMViewpointConstructor 
 {
 public:
-    PmViewpointConstructor(
+    PMViewpointConstructor(
         const Scene* const  scene,
         const Camera* const camera,
         const real          initialRadius);
 
     void construct(
         const Vector2D&                 filmPosition,
-        std::vector<PmViewpoint>* const out_viewpoints) const;
+        std::vector<PMViewpoint>* const out_viewpoints) const;
 
 private:
     const Scene*  _scene;

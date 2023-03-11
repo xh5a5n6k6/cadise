@@ -1,13 +1,13 @@
-#include "core/film/film.h"
+#include "Core/Film/Film.h"
 
-#include "core/film/filmTile.h"
-#include "core/film/filter/filter.h"
-#include "core/imaging/tImage.h"
-#include "core/integral-tool/connectEvent.h"
-#include "file-io/pictureSaver.h"
-#include "fundamental/assertion.h"
-#include "math/math.h"
-#include "math/type/imageType.h"
+#include "Core/Film/FilmTile.h"
+#include "Core/Film/Filter/Filter.h"
+#include "Core/Gear/ConnectEvent.h"
+#include "Core/Image/TImage.h"
+#include "FileIO/PictureSaver.h"
+#include "Foundation/Assertion.h"
+#include "Math/Math.h"
+#include "Math/Type/ImageType.h"
 
 #include <cmath>
 
@@ -36,7 +36,7 @@ Film::Film(
 
     for (std::size_t i = 0; i < numPixels; ++i) 
     {
-        _sensorPixels[i] = RgbRadianceSensor();
+        _sensorPixels[i] = RGBRadianceSensor();
         _splatPixels[i]  = Vector3R(0.0_r);
     }
 }
@@ -54,7 +54,7 @@ void Film::mergeWithFilm(std::unique_ptr<Film> other)
         for (int32 ix = 0; ix < _resolution.x(); ++ix) 
         {
             const std::size_t        sensorIndex = other->_pixelIndexOffset(ix, iy);
-            const RgbRadianceSensor& sensor      = other->_sensorPixels[sensorIndex];
+            const RGBRadianceSensor& sensor      = other->_sensorPixels[sensorIndex];
 
             _sensorPixels[sensorIndex].addValue(sensor.r(), sensor.g(), sensor.b());
             _sensorPixels[sensorIndex].addWeight(sensor.weight());
@@ -70,7 +70,7 @@ void Film::replaceWithFilm(std::unique_ptr<Film> other)
         for (int32 ix = 0; ix < _resolution.x(); ++ix)
         {
             const std::size_t        sensorIndex = other->_pixelIndexOffset(ix, iy);
-            const RgbRadianceSensor& sensor      = other->_sensorPixels[sensorIndex];
+            const RGBRadianceSensor& sensor      = other->_sensorPixels[sensorIndex];
 
             _sensorPixels[sensorIndex] = sensor;
         }
@@ -100,7 +100,7 @@ void Film::mergeWithFilmTile(std::unique_ptr<FilmTile> filmTile)
     {
         for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix) 
         {
-            const RgbRadianceSensor& sensor 
+            const RGBRadianceSensor& sensor 
                 = filmTile->getSensor(ix - x0y0.x(), iy - x0y0.y());
 
             const std::size_t pixelIndexOffset = _pixelIndexOffset(ix, iy);
@@ -180,7 +180,7 @@ void Film::save(
     const bool        usePostProcessing) 
 {
     // TODO: refactor here
-    HdrImage hdrImage(_resolution);
+    HDRImage hdrImage(_resolution);
     const real rcpSpp = 1.0_r / static_cast<real>(samplesPerPixel);
 
     for (int32 iy = 0; iy < _resolution.y(); ++iy)
@@ -189,7 +189,7 @@ void Film::save(
         {
             const std::size_t pixelOffset = _pixelIndexOffset(ix, iy);
 
-            const RgbRadianceSensor& sensorPixel = _sensorPixels[pixelOffset];
+            const RGBRadianceSensor& sensorPixel = _sensorPixels[pixelOffset];
             const Vector3R&          splatPixel  = _splatPixels[pixelOffset];
 
             const real rcpWeight 

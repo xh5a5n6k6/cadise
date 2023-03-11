@@ -1,8 +1,8 @@
 #pragma once
 
-#include "utility/tDynamicPointerArray.h"
+#include "Utility/TDynamicPointerArray.h"
 
-#include "fundamental/assertion.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise
 {

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "core/surface/bsdfComponents.h"
-#include "core/surface/eTransportMode.h"
+#include "Core/Surface/BSDFComponents.h"
+#include "Core/Surface/ETransportMode.h"
 
 namespace cadise
 {
@@ -13,16 +13,16 @@ public:
     explicit TransportInfo(const ETransportMode mode);
     TransportInfo(
         const ETransportMode mode,
-        const BsdfComponents components);
+        const BSDFComponents components);
 
-    void setComponents(const BsdfComponents components);
+    void setComponents(const BSDFComponents components);
 
     ETransportMode mode() const;
-    BsdfComponents components() const;
+    BSDFComponents components() const;
 
 private:
     ETransportMode _mode;
-    BsdfComponents _components;
+    BSDFComponents _components;
 };
 
 } // namespace cadise

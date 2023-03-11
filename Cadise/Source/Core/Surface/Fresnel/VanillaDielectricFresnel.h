@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/surface/fresnel/dielectricFresnel.h"
+#include "Core/Surface/Fresnel/DielectricFresnel.h"
 
 namespace cadise 
 {

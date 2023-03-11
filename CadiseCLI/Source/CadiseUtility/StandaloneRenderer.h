@@ -1,10 +1,10 @@
 #pragma once
 
-#include "commandLineArguments.h"
+#include "CadiseUtility/CommandLineArguments.h"
 
 #include <cadise/cadise.h>
 
-namespace cadise_cli 
+namespace cadise::cli
 {
 
 class StandaloneRenderer 
@@ -20,4 +20,4 @@ private:
     CSuint64             _engineId;
 };
 
-} // namespace cadise_cli
+} // namespace cadise::cli

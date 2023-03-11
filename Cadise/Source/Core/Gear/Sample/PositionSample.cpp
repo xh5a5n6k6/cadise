@@ -1,4 +1,4 @@
-#include "core/integral-tool/sample/positionSample.h"
+#include "Core/Gear/Sample/PositionSample.h"
 
 namespace cadise
 {

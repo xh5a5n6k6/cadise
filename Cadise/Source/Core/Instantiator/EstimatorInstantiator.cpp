@@ -1,15 +1,15 @@
-#include "core/instantiator/instantiator.h"
+#include "Core/Instantiator/Instantiator.h"
 
 // estimator type
-#include "core/estimator/aov/aoEstimator.h"
-#include "core/estimator/aov/uvwEstimator.h"
-#include "core/estimator/aov/wsnEstimator.h"
-#include "core/estimator/ptEstimator.h"
-#include "core/estimator/vptEstimator.h"
-#include "core/estimator/wdlEstimator.h"
+#include "Core/Estimator/AOV/AOEstimator.h"
+#include "Core/Estimator/AOV/UVWEstimator.h"
+#include "Core/Estimator/AOV/WSNEstimator.h"
+#include "Core/Estimator/PTEstimator.h"
+#include "Core/Estimator/VPTEstimator.h"
+#include "Core/Estimator/WDLEstimator.h"
 
-#include "file-io/scene-description/CSDResource.h"
-#include "fundamental/assertion.h"
+#include "FileIO/CSD/CSDResource.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise::instantiator 
 {
@@ -21,7 +21,7 @@ static std::shared_ptr<EnergyEstimator> createWdl(
 {
     const int32 maxDepth = data->findInt<int32>("max-depth", MAX_PATH_LENGTH);
 
-    return std::make_shared<WdlEstimator>(maxDepth);
+    return std::make_shared<WDLEstimator>(maxDepth);
 }
 
 static std::shared_ptr<EnergyEstimator> createVpt(
@@ -29,7 +29,7 @@ static std::shared_ptr<EnergyEstimator> createVpt(
 {
     const int32 maxDepth = data->findInt<int32>("max-depth", MAX_PATH_LENGTH);
 
-    return std::make_shared<VptEstimator>(maxDepth);
+    return std::make_shared<VPTEstimator>(maxDepth);
 }
 
 static std::shared_ptr<EnergyEstimator> createPt(
@@ -37,7 +37,7 @@ static std::shared_ptr<EnergyEstimator> createPt(
 {
     const int32 maxDepth = data->findInt<int32>("max-path-length", MAX_PATH_LENGTH);
 
-    return std::make_shared<PtEstimator>(maxDepth);
+    return std::make_shared<PTEstimator>(maxDepth);
 }
 
 static std::shared_ptr<EnergyEstimator> createAovAo(
@@ -45,19 +45,19 @@ static std::shared_ptr<EnergyEstimator> createAovAo(
 {
     const std::size_t numSampleRays = data->findInt<std::size_t>("num-sample-rays", 4);
 
-    return std::make_shared<AoEstimator>(numSampleRays);
+    return std::make_shared<AOEstimator>(numSampleRays);
 }
 
 static std::shared_ptr<EnergyEstimator> createAovUvw(
     const std::shared_ptr<CSDResource>& data) 
 {
-    return std::make_shared<UvwEstimator>();
+    return std::make_shared<UVWEstimator>();
 }
 
 static std::shared_ptr<EnergyEstimator> createAovWsn(
     const std::shared_ptr<CSDResource>& data)
 {
-    return std::make_shared<WsnEstimator>();
+    return std::make_shared<WSNEstimator>();
 }
 
 std::shared_ptr<EnergyEstimator> makeEstimator(

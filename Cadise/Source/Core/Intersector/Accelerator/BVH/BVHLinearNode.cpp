@@ -1,15 +1,15 @@
-#include "core/intersector/accelerator/bvh/bvhLinearNode.h"
+#include "Core/Intersector/Accelerator/BVH/BVHLinearNode.h"
 
 namespace cadise 
 {
 
-BvhLinearNode::BvhLinearNode() :
+BVHLinearNode::BVHLinearNode() :
     _bound() 
 {}
 
-BvhLinearNode::~BvhLinearNode() = default;
+BVHLinearNode::~BVHLinearNode() = default;
 
-void BvhLinearNode::initializeInternalNode(
+void BVHLinearNode::initializeInternalNode(
     const AABB3R&     bound, 
     const std::size_t secondChildIndex, 
     const std::size_t splitAxis)
@@ -20,7 +20,7 @@ void BvhLinearNode::initializeInternalNode(
     _isLeaf           = false;
 }
 
-void BvhLinearNode::initializeLeafNode(
+void BVHLinearNode::initializeLeafNode(
     const AABB3R&     bound, 
     const std::size_t intersectorIndex, 
     const std::size_t intersectorCounts) 
@@ -31,32 +31,32 @@ void BvhLinearNode::initializeLeafNode(
     _isLeaf            = true;
 }
 
-std::size_t BvhLinearNode::intersectorIndex() const
+std::size_t BVHLinearNode::intersectorIndex() const
 {
     return _intersectorIndex;
 }
 
-std::size_t BvhLinearNode::intersectorCounts() const 
+std::size_t BVHLinearNode::intersectorCounts() const 
 {
     return _intersectorCounts;
 }
 
-std::size_t BvhLinearNode::secondChildIndex() const 
+std::size_t BVHLinearNode::secondChildIndex() const 
 {
     return _secondChildIndex;
 }
 
-std::size_t BvhLinearNode::splitAxis() const 
+std::size_t BVHLinearNode::splitAxis() const 
 {
     return _splitAxis;
 }
 
-const AABB3R& BvhLinearNode::bound() const 
+const AABB3R& BVHLinearNode::bound() const 
 {
     return _bound;
 }
 
-bool BvhLinearNode::isLeaf() const 
+bool BVHLinearNode::isLeaf() const 
 {
     return _isLeaf;
 }

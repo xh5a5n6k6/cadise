@@ -1,10 +1,9 @@
 #pragma once
 
-#include "core/texture/sampler/tPixelSampler.h"
+#include "Core/Texture/Sampler/TPixelSampler.h"
 
-#include "core/texture/wrapper/clampUvwWrapper.h"
-#include "core/texture/wrapper/repeatUvwWrapper.h"
-#include "fundamental/assertion.h"
+#include "Core/Texture/Wrapper/ClampUVWWrapper.h"
+#include "Core/Texture/Wrapper/RepeatUVWWrapper.h"
 
 namespace cadise 
 {
@@ -20,15 +19,15 @@ inline TPixelSampler<T, N>::TPixelSampler(
     switch (mode) 
     {
         case ETextureWrapMode::Clamp:
-            _uvwWrapper = std::make_unique<ClampUvwWrapper>();
+            _uvwWrapper = std::make_unique<ClampUVWWrapper>();
             break;
 
         case ETextureWrapMode::Repeat:
-            _uvwWrapper = std::make_unique<RepeatUvwWrapper>();
+            _uvwWrapper = std::make_unique<RepeatUVWWrapper>();
             break;
 
         default:
-            _uvwWrapper = std::make_unique<RepeatUvwWrapper>();
+            _uvwWrapper = std::make_unique<RepeatUVWWrapper>();
             break;
     }
 }

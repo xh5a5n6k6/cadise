@@ -1,47 +1,47 @@
-#include "file-io/pictureLoader.h"
+#include "FileIO/PictureLoader.h"
 
-#include "core/imaging/tImage.h"
-#include "file-io/path.h"
-#include "fundamental/assertion.h"
-#include "math/math.h"
-#include "math/tVector3.h"
-#include "third-party/tp-stb-load.h"
-#include "utility/imageUtils.h"
+#include "Core/Image/TImage.h"
+#include "FileIO/Path.h"
+#include "Foundation/Assertion.h"
+#include "Math/Math.h"
+#include "Math/TVector3.h"
+#include "ThirdParty/TP_stb-load.h"
+#include "FileIO/ImageUtility.h"
 
 #include <iostream>
 
 namespace cadise 
 {
 
-HdrImage PictureLoader::loadRgbImage(const Path& path)
+HDRImage PictureLoader::loadRgbImage(const Path& path)
 {
-    HdrImage hdrImage;
+    HDRImage hdrImage;
     if (path.isExtendedWith(".jpg") || path.isExtendedWith(".JPG") ||
         path.isExtendedWith(".png") || path.isExtendedWith(".PNG") ||
         path.isExtendedWith(".tga") || path.isExtendedWith(".TGA")) 
     {
-        LdrImage ldrImage;
-        loadLdrImage(path, &ldrImage);
-        ImageUtils::ldrToHdr(ldrImage, &hdrImage);
+        LDRImage ldrImage;
+        _loadLdrImage(path, &ldrImage);
+        ImageUtility::ldrToHdr(ldrImage, &hdrImage);
     }
     else if (path.isExtendedWith(".hdr") || path.isExtendedWith(".HDR")) 
     {
-        loadHdrImage(path, &hdrImage);
+        _loadHdrImage(path, &hdrImage);
     }
 
     return hdrImage;
 }
 
-HdrAlphaImage PictureLoader::loadRgbaImage(const Path& path)
+HDRAlphaImage PictureLoader::loadRgbaImage(const Path& path)
 {
-    HdrAlphaImage hdrAlphaImage;
+    HDRAlphaImage hdrAlphaImage;
 
     // TODO: implement here
 
     return hdrAlphaImage;
 }
 
-void PictureLoader::loadLdrImage(const Path& path, LdrImage* const out_ldrImage)
+void PictureLoader::_loadLdrImage(const Path& path, LDRImage* const out_ldrImage)
 {
     CS_ASSERT(out_ldrImage);
 
@@ -137,7 +137,7 @@ void PictureLoader::loadLdrImage(const Path& path, LdrImage* const out_ldrImage)
     stbi_image_free(imageData);
 }
 
-void PictureLoader::loadHdrImage(const Path& path, HdrImage* const out_hdrImage)
+void PictureLoader::_loadHdrImage(const Path& path, HDRImage* const out_hdrImage)
 {
     CS_ASSERT(out_hdrImage);
 
@@ -201,13 +201,13 @@ void PictureLoader::loadHdrImage(const Path& path, HdrImage* const out_hdrImage)
     stbi_image_free(imageData);
 }
 
-void PictureLoader::loadLdrAlphaImage(const Path& path, LdrAlphaImage* const out_ldrAlphaImage)
+void PictureLoader::_loadLdrAlphaImage(const Path& path, LDRAlphaImage* const out_ldrAlphaImage)
 {
     CS_ASSERT(out_ldrAlphaImage);
     // TODO: implement here
 }
 
-void PictureLoader::loadHdrAlphaImage(const Path& path, HdrAlphaImage* const out_hdrAlphaImage)
+void PictureLoader::_loadHdrAlphaImage(const Path& path, HDRAlphaImage* const out_hdrAlphaImage)
 {
     CS_ASSERT(out_hdrAlphaImage);
     // TODO: implement here

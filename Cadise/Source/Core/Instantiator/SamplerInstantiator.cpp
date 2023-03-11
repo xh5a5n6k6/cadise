@@ -1,11 +1,11 @@
-#include "core/instantiator/instantiator.h"
+#include "Core/Instantiator/Instantiator.h"
 
 // sampler type
-#include "core/sampler/category/randomSampler.h"
-#include "core/sampler/category/stratifiedSampler.h"
+#include "Core/Sampler/Category/RandomSampler.h"
+#include "Core/Sampler/Category/StratifiedSampler.h"
 
-#include "file-io/scene-description/CSDResource.h"
-#include "fundamental/assertion.h"
+#include "FileIO/CSD/CSDResource.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise::instantiator 
 {

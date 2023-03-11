@@ -1,14 +1,14 @@
-#include "core/surface/bsdf/dielectricMicrofacet.h"
+#include "Core/Surface/BSDF/DielectricMicrofacet.h"
 
-#include "core/integral-tool/sample/bsdfSample.h"
-#include "core/surface/fresnel/dielectricFresnel.h"
-#include "core/surface/microfacet/microfacet.h"
-#include "core/surface/microfacet/microfacetHelper.h"
-#include "core/surface/transportInfo.h"
-#include "core/surfaceIntersection.h"
-#include "fundamental/assertion.h"
-#include "math/math.h"
-#include "math/random.h"
+#include "Core/Gear/Sample/BSDFSample.h"
+#include "Core/Surface/Fresnel/DielectricFresnel.h"
+#include "Core/Surface/Microfacet/Microfacet.h"
+#include "Core/Surface/Microfacet/MicrofacetHelper.h"
+#include "Core/Surface/TransportInfo.h"
+#include "Core/SurfaceIntersection.h"
+#include "Foundation/Assertion.h"
+#include "Math/math.h"
+#include "Math/Random.h"
 
 #include <utility>
 
@@ -19,7 +19,7 @@ DielectricMicrofacet::DielectricMicrofacet(
     const std::shared_ptr<Microfacet>&        microfacet,
     const std::shared_ptr<DielectricFresnel>& fresnel) :
 
-    Bsdf(BsdfLobes({ ELobe::GlossyReflection, ELobe::GlossyTransmission })),
+    BSDF(BSDFLobes({ ELobe::GlossyReflection, ELobe::GlossyTransmission })),
     _microfacet(microfacet),
     _fresnel(fresnel) 
 {
@@ -115,7 +115,7 @@ Spectrum DielectricMicrofacet::evaluate(
 void DielectricMicrofacet::evaluateSample(
     const TransportInfo&       info,
     const SurfaceIntersection& si,
-    BsdfSample* const          out_sample) const 
+    BSDFSample* const          out_sample) const 
 {
     CS_ASSERT(out_sample);
 
@@ -349,7 +349,7 @@ real DielectricMicrofacet::evaluatePdfW(
     return pdfL;
 }
 
-ELobe DielectricMicrofacet::lobe(const BsdfComponents component) const 
+ELobe DielectricMicrofacet::lobe(const BSDFComponents component) const 
 {
     CS_ASSERT(component == 0 || component == 1);
 

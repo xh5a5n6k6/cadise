@@ -1,8 +1,12 @@
 #pragma once
 
-#include "math/type/imageType.h"
+#include "Math/Type/ImageType.h"
 
-namespace cadise { class Path; }
+// forward declaration
+namespace cadise
+{
+    class Path;
+}
 
 namespace cadise 
 {
@@ -10,20 +14,20 @@ namespace cadise
 class PictureLoader 
 {
 public:
-    static HdrImage      loadRgbImage(const Path& path);
-    static HdrAlphaImage loadRgbaImage(const Path& path);
+    static HDRImage      loadRgbImage(const Path& path);
+    static HDRAlphaImage loadRgbaImage(const Path& path);
 
 private:
-    static void loadLdrImage(const Path& path, LdrImage* const out_ldrImage);
-    static void loadHdrImage(const Path& path, HdrImage* const out_hdrImage);
+    static void _loadLdrImage(const Path& path, LDRImage* const out_ldrImage);
+    static void _loadHdrImage(const Path& path, HDRImage* const out_hdrImage);
 
-    static void loadLdrAlphaImage(
+    static void _loadLdrAlphaImage(
         const Path&          path, 
-        LdrAlphaImage* const out_ldrAlphaImage);
+        LDRAlphaImage* const out_ldrAlphaImage);
 
-    static void loadHdrAlphaImage(
+    static void _loadHdrAlphaImage(
         const Path&          path, 
-        HdrAlphaImage* const out_hdrAlphaImage);
+        HDRAlphaImage* const out_hdrAlphaImage);
 };
 
 } // namespace cadise

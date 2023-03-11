@@ -1,11 +1,11 @@
 #pragma once
 
-#include "core/integral-tool/tPointKdTree.h"
-#include "core/renderer/photon-mapping/photonCenterCalculator.h"
+#include "Core/Gear/TPointKDTree.h"
+#include "Core/Renderer/PhotonMapping/PhotonCenterCalculator.h"
 
 namespace cadise 
 {
 
-using PhotonMap = TPointKdTree<std::size_t, Photon, PhotonCenterCalculator>;
+using PhotonMap = TPointKDTree<std::size_t, Photon, PhotonCenterCalculator>;
 
 } // namespace cadise

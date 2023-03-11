@@ -1,24 +1,28 @@
 #pragma once
 
-#include "core/surface/bsdfComponents.h"
-#include "core/surface/bsdfLobes.h"
-#include "core/spectrum/spectrum.h"
+#include "Core/Surface/BSDFComponents.h"
+#include "Core/Surface/BSDFLobes.h"
+#include "Core/Spectrum/Spectrum.h"
 
-namespace cadise { class BsdfSample; }
-namespace cadise { class SurfaceIntersection; }
-namespace cadise { class TransportInfo; }
+// forward declaration
+namespace cadise
+{
+    class BSDFSample;
+    class SurfaceIntersection;
+    class TransportInfo;
+}
 
 namespace cadise 
 {
 
-class Bsdf 
+class BSDF 
 {
 public:
-    Bsdf();
-    explicit Bsdf(const BsdfLobes& lobes);
-    Bsdf(const BsdfLobes& lobes, const BsdfComponents components);
+    BSDF();
+    explicit BSDF(const BSDFLobes& lobes);
+    BSDF(const BSDFLobes& lobes, const BSDFComponents components);
 
-    virtual ~Bsdf();
+    virtual ~BSDF();
 
     virtual Spectrum evaluate(
         const TransportInfo&       info,
@@ -27,20 +31,20 @@ public:
     virtual void evaluateSample(
         const TransportInfo&       info,
         const SurfaceIntersection& si,
-        BsdfSample* const          out_sample) const = 0;
+        BSDFSample* const          out_sample) const = 0;
 
     virtual real evaluatePdfW(
         const TransportInfo&       info,
         const SurfaceIntersection& si) const = 0;
 
-    virtual ELobe lobe(const BsdfComponents component) const = 0;
+    virtual ELobe lobe(const BSDFComponents component) const = 0;
 
-    const BsdfLobes& lobes() const;
-    BsdfComponents components() const;
+    const BSDFLobes& lobes() const;
+    BSDFComponents components() const;
 
 protected:
-    BsdfLobes      _lobes;
-    BsdfComponents _components;
+    BSDFLobes      _lobes;
+    BSDFComponents _components;
 };
 
 } // namespace cadise

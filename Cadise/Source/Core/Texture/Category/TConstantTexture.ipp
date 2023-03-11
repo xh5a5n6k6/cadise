@@ -1,8 +1,8 @@
 #pragma once
 
-#include "core/texture/category/tConstantTexture.h"
+#include "Core/Texture/Category/TConstantTexture.h"
 
-#include "fundamental/assertion.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise
 {

@@ -1,8 +1,8 @@
-#include "fundamental/assertion.h"
+#include "Foundation/Assertion.h"
 
 #ifdef CS_DEBUG
     #ifdef CS_ASSERT_STACK_TRACE
-        #include "fundamental/stackTracer.h"
+        #include "Foundation/StackTracer.h"
     #endif
 
     #ifdef CS_ASSERT_ABORT
@@ -16,7 +16,7 @@
     {
 
     #ifdef CS_ASSERT_STACK_TRACE
-        StackTracer stackTracer;
+        const StackTracer stackTracer;
         stackTracer.trace();
     #endif
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "fundamental/time/timePeriod.h"
+#include "Foundation/Time/TimePeriod.h"
 
 #include <chrono>
 

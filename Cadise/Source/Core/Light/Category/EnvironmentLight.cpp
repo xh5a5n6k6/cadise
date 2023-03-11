@@ -1,13 +1,13 @@
-#include "core/light/category/environmentLight.h"
+#include "Core/Light/Category/EnvironmentLight.h"
 
-#include "core/integral-tool/sample/directLightSample.h"
-#include "core/intersector/primitive/primitive.h"
-#include "core/surfaceIntersection.h"
-#include "core/texture/tTexture.h"
-#include "fundamental/assertion.h"
-#include "math/constant.h"
-#include "math/random.h"
-#include "math/tVector2.h"
+#include "Core/Gear/Sample/DirectLightSample.h"
+#include "Core/Intersector/Primitive/Primitive.h"
+#include "Core/SurfaceIntersection.h"
+#include "Core/Texture/TTexture.h"
+#include "Foundation/Assertion.h"
+#include "Math/Constant.h"
+#include "Math/Random.h"
+#include "Math/TVector2.h"
 
 #include <cmath>
 #include <vector>

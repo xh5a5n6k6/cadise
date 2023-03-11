@@ -1,32 +1,32 @@
-#include "core/surface/bsdf/bsdf.h"
+#include "Core/Surface/BSDF/BSDF.h"
 
 #include <bitset>
 
 namespace cadise
 {
 
-Bsdf::Bsdf() = default;
+BSDF::BSDF() = default;
 
-Bsdf::Bsdf(const BsdfLobes& lobes) :
+BSDF::BSDF(const BSDFLobes& lobes) :
     _lobes(lobes)
 {
-    _components = static_cast<BsdfComponents>(
+    _components = static_cast<BSDFComponents>(
         std::bitset<32>(lobes.rawLobes()).count());
 }
 
-Bsdf::Bsdf(const BsdfLobes& lobes, const BsdfComponents components) :
+BSDF::BSDF(const BSDFLobes& lobes, const BSDFComponents components) :
     _lobes(lobes),
     _components(components)
 {}
 
-Bsdf::~Bsdf() = default;
+BSDF::~BSDF() = default;
 
-const BsdfLobes& Bsdf::lobes() const
+const BSDFLobes& BSDF::lobes() const
 {
     return _lobes;
 }
 
-BsdfComponents Bsdf::components() const
+BSDFComponents BSDF::components() const
 {
     return _components;
 }

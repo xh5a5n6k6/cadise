@@ -1,25 +1,25 @@
-#include "core/renderer/bidirectional-path-tracing/subPathConnector.h"
+#include "Core/Renderer/BDPT/SubpathConnector.h"
 
-#include "core/ray.h"
-#include "core/renderer/bidirectional-path-tracing/bdptMis.h"
-#include "core/renderer/bidirectional-path-tracing/pathVertex.h"
-#include "core/renderer/bidirectional-path-tracing/subPath.h"
-#include "core/scene.h"
-#include "core/surface/eTransportMode.h"
-#include "fundamental/assertion.h"
-#include "math/constant.h"
+#include "Core/Ray.h"
+#include "Core/Renderer/BDPT/BDPTMIS.h"
+#include "Core/Renderer/BDPT/PathVertex.h"
+#include "Core/Renderer/BDPT/Subpath.h"
+#include "Core/Scene.h"
+#include "Core/Surface/ETransportMode.h"
+#include "Foundation/Assertion.h"
+#include "Math/Constant.h"
 
 #include <cmath>
 
 namespace cadise 
 {
 
-SubPathConnector::SubPathConnector() = default;
+SubpathConnector::SubpathConnector() = default;
 
-void SubPathConnector::connect(
+void SubpathConnector::connect(
     const Scene&      scene,
-    const SubPath&    lightPath,
-    const SubPath&    cameraPath,
+    const Subpath&    lightPath,
+    const Subpath&    cameraPath,
     const std::size_t s,
     const std::size_t t,
     Spectrum* const   out_radiance) const 
@@ -60,12 +60,12 @@ void SubPathConnector::connect(
         return;
     }
 
-    const real misWeight = BdptMis::weight(scene, lightPath, cameraPath, s, t);
+    const real misWeight = BDPTMIS::weight(scene, lightPath, cameraPath, s, t);
 
     out_radiance->set(radiance.mul(connectGTerm * misWeight));
 }
 
-bool SubPathConnector::_canConnect(
+bool SubpathConnector::_canConnect(
     const Scene&      scene,
     const PathVertex& lightEndpoint,
     const PathVertex& cameraEndpoint,

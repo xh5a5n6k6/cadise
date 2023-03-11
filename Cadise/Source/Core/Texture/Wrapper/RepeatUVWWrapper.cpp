@@ -1,13 +1,13 @@
-#include "core/texture/wrapper/repeatUvwWrapper.h"
+#include "Core/Texture/Wrapper/RepeatUVWWrapper.h"
 
-#include "fundamental/assertion.h"
-#include "math/math.h"
-#include "math/tVector3.h"
+#include "Foundation/Assertion.h"
+#include "Math/Math.h"
+#include "Math/TVector3.h"
 
 namespace cadise 
 {
 
-void RepeatUvwWrapper::wrap(
+void RepeatUVWWrapper::wrap(
     const Vector3R& uvw, 
     Vector3R* const out_wrapUvw) const 
 {

@@ -1,8 +1,8 @@
-#include "core/sampler/category/randomSampler.h"
+#include "Core/Sampler/Category/RandomSampler.h"
 
-#include "core/sampler/sampleRecord1D.h"
-#include "core/sampler/sampleRecord2D.h"
-#include "math/random.h"
+#include "Core/Sampler/SampleRecord1D.h"
+#include "Core/Sampler/SampleRecord2D.h"
+#include "Math/Random.h"
 
 namespace cadise
 {

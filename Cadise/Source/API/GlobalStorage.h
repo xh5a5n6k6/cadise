@@ -1,10 +1,11 @@
 #pragma once
 
-#include "math/type/fundamentalType.h"
-#include "utility/tDenseBuffer.h"
+#include "Math/Type/PrimitiveType.h"
+#include "Utility/TDenseBuffer.h"
 
 #include <memory>
 #include <mutex>
+
 
 namespace cadise
 {

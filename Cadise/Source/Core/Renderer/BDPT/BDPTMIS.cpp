@@ -1,18 +1,18 @@
-#include "core/renderer/bidirectional-path-tracing/bdptMis.h"
+#include "Core/Renderer/BDPT/BDPTMIS.h"
 
-#include "core/renderer/bidirectional-path-tracing/subPath.h"
-#include "core/scene.h"
-#include "core/surface/eTransportMode.h"
-#include "fundamental/assertion.h"
-#include "math/math.h"
+#include "Core/Renderer/BDPT/subpath.h"
+#include "Core/Scene.h"
+#include "Core/Surface/ETransportMode.h"
+#include "Foundation/Assertion.h"
+#include "Math/Math.h"
 
 namespace cadise
 {
 
-real BdptMis::weight(
+real BDPTMIS::weight(
     const Scene&      scene,
-    const SubPath&    lightPath,
-    const SubPath&    cameraPath,
+    const Subpath&    lightPath,
+    const Subpath&    cameraPath,
     const std::size_t s,
     const std::size_t t)
 {
@@ -30,8 +30,8 @@ real BdptMis::weight(
 
     // build another two sub-paths
     // which won't effect origin ones.
-    SubPath modifiedLightPath(lightPath);
-    SubPath modifiedCameraPath(cameraPath);
+    Subpath modifiedLightPath(lightPath);
+    Subpath modifiedCameraPath(cameraPath);
 
     PathVertex* lightEndpoint       = (s > 0) ? &modifiedLightPath[s - 1] : nullptr;
     PathVertex* lightEndpointMinus  = (s > 1) ? &modifiedLightPath[s - 2] : nullptr;

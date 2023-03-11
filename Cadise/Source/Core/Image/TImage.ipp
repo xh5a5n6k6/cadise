@@ -1,10 +1,10 @@
 #pragma once
 
-#include "core/imaging/tImage.h"
+#include "Core/Image/TImage.h"
 
-#include "fundamental/assertion.h"
-#include "math/tArithmeticArray.h"
-#include "math/tVector2.h"
+#include "Foundation/Assertion.h"
+#include "Math/TArithmeticArray.h"
+#include "Math/TVector2.h"
 
 #include <utility>
 

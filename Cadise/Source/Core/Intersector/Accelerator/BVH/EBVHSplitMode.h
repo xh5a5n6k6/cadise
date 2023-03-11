@@ -5,7 +5,7 @@ namespace cadise
 
 /*! @brief Split strategy used in BVH construction.
 */
-enum class EBvhSplitMode 
+enum class EBVHSplitMode 
 {
     Undefined = 0,
 

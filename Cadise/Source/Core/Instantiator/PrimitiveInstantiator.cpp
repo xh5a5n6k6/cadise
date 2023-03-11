@@ -1,23 +1,23 @@
-#include "core/instantiator/instantiator.h"
+#include "Core/Instantiator/Instantiator.h"
 
 // primitive type
-#include "core/intersector/primitive/rectangle.h"
-#include "core/intersector/primitive/sphere.h"
-#include "core/intersector/primitive/triangle.h"
-#include "core/intersector/primitive/triangleBuffer.h"
-#include "core/intersector/primitive/triangleMesh.h"
+#include "Core/Intersector/Primitive/Rectangle.h"
+#include "Core/Intersector/Primitive/Sphere.h"
+#include "Core/Intersector/Primitive/Triangle.h"
+#include "Core/Intersector/Primitive/TriangleBuffer.h"
+#include "Core/Intersector/Primitive/TriangleMesh.h"
 
-#include "core/intersector/accelerator/kd-tree/kdTreeAccelerator.h"
-#include "core/surface/bsdf/lambertianDiffuse.h"
-#include "file-io/scene-description/CSDResource.h"
-#include "fundamental/assertion.h"
+#include "Core/Intersector/Accelerator/KDTree/KDTreeAccelerator.h"
+#include "Core/Surface/BSDF/LambertianDiffuse.h"
+#include "FileIO/CSD/CSDResource.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise::instantiator 
 {
 
 static std::shared_ptr<Primitive> createSphere(
     const std::shared_ptr<CSDResource>& data,
-    const TStringKeyMap<Bsdf>&     bsdfs)
+    const TStringKeyMap<BSDF>&     bsdfs)
 {
     const auto center   = data->findVector3<real>("center");
     const real radius   = data->findFloat<real>("radius");
@@ -30,7 +30,7 @@ static std::shared_ptr<Primitive> createSphere(
 
 static std::shared_ptr<Primitive> createTriangle(
     const std::shared_ptr<CSDResource>& data,
-    const TStringKeyMap<Bsdf>&     bsdfs) 
+    const TStringKeyMap<BSDF>&     bsdfs) 
 {
     const auto v1       = data->findVector3<real>("v1");
     const auto v2       = data->findVector3<real>("v2");
@@ -44,7 +44,7 @@ static std::shared_ptr<Primitive> createTriangle(
 
 static std::shared_ptr<Primitive> createRectangle(
     const std::shared_ptr<CSDResource>& data,
-    const TStringKeyMap<Bsdf>&     bsdfs) 
+    const TStringKeyMap<BSDF>&     bsdfs) 
 {
     const auto v1       = data->findVector3<real>("v1");
     const auto v2       = data->findVector3<real>("v2");
@@ -60,7 +60,7 @@ static std::shared_ptr<Primitive> createRectangle(
 
 static std::shared_ptr<TriangleBuffer> createTriangleMesh(
     const std::shared_ptr<CSDResource>& data,
-    const TStringKeyMap<Bsdf>&     bsdfs) 
+    const TStringKeyMap<BSDF>&     bsdfs) 
 {
     const auto positions = data->findVector3Array<real>("positions");
     const auto normals   = data->findVector3Array<real>("normals");
@@ -78,7 +78,7 @@ static std::shared_ptr<TriangleBuffer> createTriangleMesh(
 
 //static std::vector<std::shared_ptr<Primitive>> createTriangleMeshKdTree(
 //    const std::shared_ptr<CSDResource>& data,
-//    const TStringKeyMap<Bsdf>&      bsdfs)
+//    const TStringKeyMap<BSDF>&      bsdfs)
 //{
 //    const auto positions = data->findVector3rArray("positions");
 //    const auto normals = data->findVector3rArray("normals");
@@ -102,7 +102,7 @@ static std::shared_ptr<TriangleBuffer> createTriangleMesh(
 
 void makePrimitive(
     const std::shared_ptr<CSDResource>&             data,
-    const TStringKeyMap<Bsdf>&                 bsdfs,
+    const TStringKeyMap<BSDF>&                 bsdfs,
     std::vector<std::shared_ptr<Intersector>>& out_intersectors,
     TStringKeyMap<Primitive>&                  out_primitives,
     TStringKeyMap<TriangleBuffer>&             out_triangleBuffers) 

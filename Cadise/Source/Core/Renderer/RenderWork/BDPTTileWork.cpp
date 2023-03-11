@@ -1,20 +1,19 @@
-#include "core/renderer/render-work/bdptTileWork.h"
+#include "Core/Renderer/RenderWork/BDPTTileWork.h"
 
-#include "core/camera/camera.h"
-#include "core/film/filmTile.h"
-#include "core/ray.h"
-#include "core/renderer/bidirectional-path-tracing/subPath.h"
-#include "core/renderer/bidirectional-path-tracing/subPathBuilder.h"
-#include "core/renderer/bidirectional-path-tracing/subPathConnector.h"
-#include "core/sampler/sampler.h"
-#include "core/sampler/sampleRecord2D.h"
-#include "core/scene.h"
-#include "fundamental/assertion.h"
+#include "Core/Camera/Camera.h"
+#include "Core/Film/FilmTile.h"
+#include "Core/Renderer/BDPT/subpath.h"
+#include "Core/Renderer/BDPT/subpathBuilder.h"
+#include "Core/Renderer/BDPT/subpathConnector.h"
+#include "Core/Sampler/Sampler.h"
+#include "Core/Sampler/SampleRecord2D.h"
+#include "Core/Scene.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise 
 {
 
-BdptTileWork::BdptTileWork(
+BDPTTileWork::BDPTTileWork(
     const Scene* const   scene,
     const Camera* const  camera,
     const Sampler* const sampler) :
@@ -30,15 +29,15 @@ BdptTileWork::BdptTileWork(
     CS_ASSERT(sampler);
 }
 
-void BdptTileWork::work() const 
+void BDPTTileWork::work() const
 {
     CS_ASSERT(_filmTile);
     CS_ASSERT(_connectEvents);
 
-    SubPathBuilder subPathBuilder(MAX_PATH_LENGTH);
-    subPathBuilder.setCamera(_camera);
+    SubpathBuilder subpathBuilder(MAX_PATH_LENGTH);
+    subpathBuilder.setCamera(_camera);
 
-    SubPathConnector subPathConnector;
+    SubpathConnector subpathConnector;
 
     const Vector2I& x0y0 = _filmTile->tileBound().minVertex();
     const Vector2I& x1y1 = _filmTile->tileBound().maxVertex();
@@ -58,14 +57,14 @@ void BdptTileWork::work() const
                 Spectrum accumulatedRadiance(0.0_r);
 
                 // step1: build light sub-path
-                SubPath lightPath(MAX_PATH_LENGTH);
-                subPathBuilder.buildLightPath(*_scene, &lightPath);
+                Subpath lightPath(MAX_PATH_LENGTH);
+                subpathBuilder.buildLightPath(*_scene, &lightPath);
 
                 // step2: build camera sub-path
                 // it also calculates s=0 situation radiance
-                SubPath  cameraPath(MAX_PATH_LENGTH);
+                Subpath  cameraPath(MAX_PATH_LENGTH);
                 Spectrum zeroBounceRadiance(0.0_r);
-                subPathBuilder.buildCameraPath(
+                subpathBuilder.buildCameraPath(
                     *_scene, filmJitterPosition.asType<float64>(), &cameraPath, &zeroBounceRadiance);
 
                 accumulatedRadiance.addLocal(zeroBounceRadiance);
@@ -91,7 +90,7 @@ void BdptTileWork::work() const
                     for (std::size_t t = 2; t <= cameraPathLength; ++t) 
                     {
                         Spectrum connectRadiance(0.0_r);
-                        subPathConnector.connect(*_scene, lightPath, cameraPath, s, t, &connectRadiance);
+                        subpathConnector.connect(*_scene, lightPath, cameraPath, s, t, &connectRadiance);
 
                         accumulatedRadiance.addLocal(connectRadiance);
                     }
@@ -107,7 +106,7 @@ void BdptTileWork::work() const
     }
 }
 
-void BdptTileWork::setConnectEvents(std::vector<ConnectEvent>* const connectEvents) 
+void BDPTTileWork::setConnectEvents(std::vector<ConnectEvent>* const connectEvents)
 {
     CS_ASSERT(connectEvents);
 

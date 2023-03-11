@@ -1,24 +1,24 @@
 #pragma once
 
-#include "fundamental/assertion.h"
+#include "Foundation/Assertion.h"
 
 #include <atomic>
 
-namespace cadise::utility 
+namespace cadise
 {
 
-enum class EOps 
+enum class EOperation
 {
-    ADD,
-    SUB,
-    MUL,
-    DIV,
+    Add,
+    Sub,
+    Mul,
+    Div,
 };
 
 /*
     It provides atomic operation between atomic variable and non-atomic value
 */
-template<EOps OPERATOR, typename T>
+template<EOperation Operator, typename T>
 inline void atomic_operate(
     const T               value,
     std::atomic<T>* const out_variable) 
@@ -28,19 +28,19 @@ inline void atomic_operate(
     T currentValue = out_variable->load();
     T targetValue;
 
-    if constexpr (OPERATOR == EOps::ADD) 
+    if constexpr (Operator == EOperation::Add)
     {
         targetValue = currentValue + value;
     }
-    else if constexpr (OPERATOR == EOps::SUB) 
+    else if constexpr (Operator == EOperation::Sub)
     {
         targetValue = currentValue - value;
     }
-    else if constexpr (OPERATOR == EOps::MUL) 
+    else if constexpr (Operator == EOperation::Mul)
     {
         targetValue = currentValue * value;
     }
-    else if constexpr (OPERATOR == EOps::DIV) 
+    else if constexpr (Operator == EOperation::Div)
     {
         targetValue = currentValue / value;
     }
@@ -56,4 +56,4 @@ inline void atomic_operate(
     while (!out_variable->compare_exchange_weak(currentValue, targetValue));
 }
 
-} // namespace cadise::utility
+} // namespace cadise

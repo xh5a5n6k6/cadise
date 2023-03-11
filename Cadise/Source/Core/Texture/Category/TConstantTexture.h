@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/texture/tTexture.h"
+#include "Core/Texture/TTexture.h"
 
 namespace cadise
 {
@@ -19,4 +19,4 @@ private:
 
 } // namespace cadise
 
-#include "core/texture/category/tConstantTexture.ipp"
+#include "Core/Texture/Category/TConstantTexture.ipp"

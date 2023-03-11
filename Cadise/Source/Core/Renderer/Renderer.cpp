@@ -1,8 +1,6 @@
-#include "core/renderer/renderer.h"
+#include "Core/Renderer/Renderer.h"
 
-#include "fundamental/assertion.h"
-
-#include <thread>
+#include "Foundation/Assertion.h"
 
 namespace cadise 
 {

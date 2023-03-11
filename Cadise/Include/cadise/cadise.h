@@ -55,7 +55,7 @@ extern CS_API void csSetThreadCount(const CSuint64 engineId, const CSuint64 thre
 extern CS_API CSbool csLoadSceneFromFile(const CSuint64 engineId, const CSchar* filename);
 
 
-extern CS_API void csPrepareRender(const CSuint64 engineId);
+extern CS_API void csPreRender(const CSuint64 engineId);
 
 
 /*! @brief Specify an engine to start the render process synchronously.

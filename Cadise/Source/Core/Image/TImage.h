@@ -1,10 +1,15 @@
 #pragma once
 
-#include "math/type/mathType.h"
+#include "Math/Type/MathType.h"
 
 #include <vector>
 
-namespace cadise { template<typename T, std::size_t N> class TArithmeticArray; }
+// forward declaration
+namespace cadise
+{
+    template<typename T, std::size_t N>
+    class TArithmeticArray;
+}
 
 namespace cadise
 {
@@ -64,4 +69,4 @@ private:
 
 } // namespace cadise
 
-#include "core/imaging/tImage.ipp"
+#include "Core/Image/TImage.ipp"

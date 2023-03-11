@@ -1,8 +1,8 @@
-#include "core/texture/wrapper/uvwWrapper.h"
+#include "Core/Texture/Wrapper/UVWWrapper.h"
 
 namespace cadise
 {
 
-UvwWrapper::~UvwWrapper() = default;
+UVWWrapper::~UVWWrapper() = default;
 
 } // namespace cadise

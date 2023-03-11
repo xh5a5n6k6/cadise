@@ -1,4 +1,4 @@
-#include "core/estimator/radianceEstimator.h"
+#include "Core/Estimator/RadianceEstimator.h"
 
 namespace cadise
 {

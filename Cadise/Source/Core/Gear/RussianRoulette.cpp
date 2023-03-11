@@ -1,8 +1,8 @@
-#include "core/integral-tool/russianRoulette.h"
+#include "Core/Gear/RussianRoulette.h"
 
-#include "fundamental/assertion.h"
-#include "math/math.h"
-#include "math/random.h"
+#include "Foundation/Assertion.h"
+#include "Math/Math.h"
+#include "Math/Random.h"
 
 namespace cadise 
 {

@@ -1,16 +1,16 @@
-#include "core/instantiator/instantiator.h"
+#include "Core/Instantiator/Instantiator.h"
 
 // renderer type
-//#include "core/renderer/bdpg-renderer/bdpgRenderer.h"
-//#include "core/renderer/bdpg-renderer/ppgRenderer.h"
-#include "core/renderer/bidirectional-path-tracing/bdptRenderer.h"
-#include "core/renderer/photon-mapping/progressive-pm/ppmRenderer.h"
-#include "core/renderer/photon-mapping/vanilla-pm/vpmRenderer.h"
-#include "core/renderer/sampling/samplingRenderer.h"
+//#include "Core/renderer/bdpg-renderer/bdpgRenderer.h"
+//#include "Core/renderer/bdpg-renderer/ppgRenderer.h"
+#include "Core/renderer/BDPT/BDPTRenderer.h"
+#include "Core/Renderer/PhotonMapping/PPM/PPMRenderer.h"
+#include "Core/Renderer/PhotonMapping/VPM/VPMRenderer.h"
+#include "Core/Renderer/Sampling/SamplingRenderer.h"
 
-#include "core/renderer/photon-mapping/pmSetting.h"
-#include "file-io/scene-description/CSDResource.h"
-#include "fundamental/assertion.h"
+#include "Core/Renderer/PhotonMapping/PMSetting.h"
+#include "FileIO/CSD/CSDResource.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise::instantiator
 {
@@ -29,7 +29,7 @@ static std::shared_ptr<Renderer> createBdpt(
 {
     const auto sampler = makeSampler(data);
 
-    return std::make_shared<BdptRenderer>(sampler);
+    return std::make_shared<BDPTRenderer>(sampler);
 }
 
 static std::shared_ptr<Renderer> createVpm(
@@ -39,9 +39,9 @@ static std::shared_ptr<Renderer> createVpm(
     const real        searchRadius  = data->findFloat<real>("search-radius", 0.01_r);
 
     const auto sampler = makeSampler(data);
-    const auto setting = PmSetting(numPhotons, searchRadius);
+    const auto setting = PMSetting(numPhotons, searchRadius);
 
-    return std::make_shared<VpmRenderer>(sampler, setting);
+    return std::make_shared<VPMRenderer>(sampler, setting);
 }
 
 static std::shared_ptr<Renderer> createPpm(
@@ -53,9 +53,9 @@ static std::shared_ptr<Renderer> createPpm(
     const real        alpha         = data->findFloat<real>("alpha", 2.0_r / 3.0_r);
 
     const auto sampler = makeSampler(data);
-    const auto setting = PmSetting(numPhotons, searchRadius, numIterations, alpha);
+    const auto setting = PMSetting(numPhotons, searchRadius, numIterations, alpha);
 
-    return std::make_shared<PpmRenderer>(sampler, setting);
+    return std::make_shared<PPMRenderer>(sampler, setting);
 }
 
 //static std::shared_ptr<Renderer> createPpg(

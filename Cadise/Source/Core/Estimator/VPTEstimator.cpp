@@ -1,28 +1,27 @@
-#include "core/estimator/vptEstimator.h"
+#include "Core/Estimator/VPTEstimator.h"
 
-#include "core/integral-tool/russianRoulette.h"
-#include "core/integral-tool/sample/bsdfSample.h"
-#include "core/intersector/primitive/primitive.h"
-#include "core/light/category/areaLight.h"
-#include "core/ray.h"
-#include "core/scene.h"
-#include "core/surface/bsdf/bsdf.h"
-#include "core/surface/transportInfo.h"
-#include "core/surfaceIntersection.h"
-#include "fundamental/assertion.h"
-#include "math/constant.h"
+#include "Core/Gear/RussianRoulette.h"
+#include "Core/Gear/Sample/bsdfSample.h"
+#include "Core/Intersector/Primitive/Primitive.h"
+#include "Core/Light/Category/AreaLight.h"
+#include "Core/Ray.h"
+#include "Core/Scene.h"
+#include "Core/Surface/BSDF/BSDF.h"
+#include "Core/Surface/TransportInfo.h"
+#include "Core/SurfaceIntersection.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise
 {
 
-VptEstimator::VptEstimator(const int32 maxDepth) :
+VPTEstimator::VPTEstimator(const int32 maxDepth) :
     RadianceEstimator(),
     _maxDepth(maxDepth)
 {
     CS_ASSERT_GE(maxDepth, 0);
 }
 
-void VptEstimator::estimate(
+void VPTEstimator::estimate(
     const Scene&    scene, 
     const Ray&      ray,
     Spectrum* const out_radiance) const
@@ -44,7 +43,7 @@ void VptEstimator::estimate(
         }
 
         const Primitive* primitive = intersection.primitiveInfo().primitive();
-        const Bsdf*      bsdf      = primitive->bsdf();
+        const BSDF*      bsdf      = primitive->bsdf();
 
         const Vector3R& P  = intersection.surfaceDetail().position();
         const Vector3R& Ns = intersection.surfaceDetail().shadingNormal();
@@ -56,7 +55,7 @@ void VptEstimator::estimate(
             totalRadiance.addLocal(pathThroughput.mul(emittance));
         }
 
-        BsdfSample bsdfSample;
+        BSDFSample bsdfSample;
         bsdf->evaluateSample(transportInfo, intersection, &bsdfSample);
         if (!bsdfSample.isValid())
         {

@@ -1,6 +1,6 @@
-#include "utility/parallel.h"
+#include "Utility/Parallel.h"
 
-#include "fundamental/assertion.h"
+#include "Foundation/Assertion.h"
 
 #include <algorithm>
 #include <thread>

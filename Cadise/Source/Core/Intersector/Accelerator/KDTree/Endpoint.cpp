@@ -1,4 +1,4 @@
-#include "core/intersector/accelerator/kd-tree/endpoint.h"
+#include "Core/Intersector/Accelerator/KDTree/Endpoint.h"
 
 namespace cadise 
 {

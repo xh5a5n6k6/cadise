@@ -1,23 +1,23 @@
 #pragma once
 
-#include "core/surface/eLobe.h"
+#include "Core/Surface/ELobe.h"
 
 #include <initializer_list>
 
 namespace cadise 
 {
 
-class BsdfLobes 
+class BSDFLobes 
 {
 private:
     using Lobes = std::initializer_list<ELobe>;
 
 public:
-    BsdfLobes();
-    BsdfLobes(const BsdfLobes& other);
-    explicit BsdfLobes(const Lobes& lobes);
+    BSDFLobes();
+    BSDFLobes(const BSDFLobes& other);
+    explicit BSDFLobes(const Lobes& lobes);
 
-    BsdfLobes operator | (const BsdfLobes& rhs) const;
+    BSDFLobes operator | (const BSDFLobes& rhs) const;
 
     bool isEmpty() const;
     bool hasNone(const Lobes& lobes) const;

@@ -1,22 +1,22 @@
 #pragma once
 
-#include "core/estimator/radianceEstimator.h"
+#include "Core/Estimator/RadianceEstimator.h"
 
 namespace cadise 
 {
 
 /*
-     VptEstimator: Vanilla Path Tracing Estimator
+     VPTEstimator: Vanilla Path Tracing Estimator
      
      This estimator implements vanilla path tracing.
      It means a path has contribution only when it hits an emitter. 
      It may be the most fundamental global illumination technique yet 
      still unbiased, so it is a good reference for ground truth rendering.
 */
-class VptEstimator : public RadianceEstimator 
+class VPTEstimator : public RadianceEstimator 
 {
 public:
-    explicit VptEstimator(const int32 maxDepth);
+    explicit VPTEstimator(const int32 maxDepth);
 
     void estimate(
         const Scene&    scene, 
@@ -31,7 +31,7 @@ private:
 
 // header implementation
 
-inline std::string VptEstimator::toString() const 
+inline std::string VPTEstimator::toString() const 
 {
     return "VPT Estimator";
 }

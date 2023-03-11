@@ -1,14 +1,19 @@
 #pragma once
 
-#include "core/texture/tTexture.h"
+#include "Core/Texture/TTexture.h"
 
-#include "core/texture/eTextureSampleMode.h"
-#include "core/texture/eTextureWrapMode.h"
-#include "math/type/imageType.h"
+#include "Core/Texture/ETextureSampleMode.h"
+#include "Core/Texture/ETextureWrapMode.h"
+#include "Math/Type/ImageType.h"
 
 #include <memory>
 
-namespace cadise { template<typename T, std::size_t N> class TPixelSampler; }
+// forward declaration
+namespace cadise
+{
+    template<typename T, std::size_t N>
+    class TPixelSampler;
+}
 
 namespace cadise 
 {
@@ -30,4 +35,4 @@ protected:
 
 } // namespace cadise
 
-#include "core/texture/category/tImageTexture.ipp"
+#include "Core/Texture/Category/TImageTexture.ipp"

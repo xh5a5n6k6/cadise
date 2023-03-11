@@ -1,12 +1,12 @@
 #pragma once
 
-#include "math/tArithmeticArray.h"
-#include "math/type/mathType.h"
+#include "Math/TArithmeticArray.h"
 
 namespace cadise 
 {
 
 // TODO: refactor as CRTP (curiously recurring template pattern)
+//       because which spectrum is used can be determined in compile time.
 template<typename T, std::size_t N>
 class TConceptualSpectrum
 {
@@ -84,4 +84,4 @@ inline TConceptualSpectrum<T, N> operator * (const T scalar, const TConceptualSp
 
 } // namespace cadise
 
-#include "core/spectrum/tConceptualSpectrum.ipp"
+#include "Core/Spectrum/TConceptualSpectrum.ipp"

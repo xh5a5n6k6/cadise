@@ -1,8 +1,8 @@
 #pragma once
 
-#include "core/intersector/differentialGeometry.h"
-#include "math/tLocalCoordinateSystem3.h"
-#include "math/tVector3.h"
+#include "Core/Intersector/DifferentialGeometry.h"
+#include "Math/TLocalCoordinateSystem3.h"
+#include "Math/TVector3.h"
 
 namespace cadise 
 {

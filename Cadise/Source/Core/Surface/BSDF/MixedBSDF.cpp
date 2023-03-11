@@ -1,30 +1,30 @@
-#include "core/surface/bsdf/mixedBsdf.h"
+#include "Core/Surface/BSDF/MixedBSDF.h"
 
-#include "core/integral-tool/sample/bsdfSample.h"
-#include "core/integral-tool/tSurfaceSampler.h"
-#include "core/surfaceIntersection.h"
-#include "core/surface/transportInfo.h"
-#include "core/texture/category/tConstantTexture.h"
-#include "fundamental/assertion.h"
-#include "math/random.h"
+#include "Core/Gear/Sample/BSDFSample.h"
+#include "Core/Gear/TSurfaceSampler.h"
+#include "Core/SurfaceIntersection.h"
+#include "Core/Surface/TransportInfo.h"
+#include "Core/Texture/Category/TConstantTexture.h"
+#include "Foundation/Assertion.h"
+#include "Math/Random.h"
 
 namespace cadise
 {
 
-MixedBsdf::MixedBsdf(
-    const std::shared_ptr<Bsdf>& bsdfA, 
-    const std::shared_ptr<Bsdf>& bsdfB,
+MixedBSDF::MixedBSDF(
+    const std::shared_ptr<BSDF>& bsdfA, 
+    const std::shared_ptr<BSDF>& bsdfB,
     const real                   ratio) :
     
-    MixedBsdf(bsdfA, bsdfB, std::make_shared<TConstantTexture<Spectrum>>(Spectrum(ratio))) 
+    MixedBSDF(bsdfA, bsdfB, std::make_shared<TConstantTexture<Spectrum>>(Spectrum(ratio))) 
 {}
 
-MixedBsdf::MixedBsdf(
-    const std::shared_ptr<Bsdf>&               bsdfA, 
-    const std::shared_ptr<Bsdf>&               bsdfB,
+MixedBSDF::MixedBSDF(
+    const std::shared_ptr<BSDF>&               bsdfA, 
+    const std::shared_ptr<BSDF>&               bsdfB,
     const std::shared_ptr<TTexture<Spectrum>>& ratio) :
     
-    Bsdf(bsdfA->lobes() | bsdfB->lobes(), bsdfA->components() + bsdfB->components()),
+    BSDF(bsdfA->lobes() | bsdfB->lobes(), bsdfA->components() + bsdfB->components()),
     _bsdfA(bsdfA),
     _bsdfB(bsdfB),
     _ratio(ratio) 
@@ -34,7 +34,7 @@ MixedBsdf::MixedBsdf(
     CS_ASSERT(ratio);
 }
 
-Spectrum MixedBsdf::evaluate(
+Spectrum MixedBSDF::evaluate(
     const TransportInfo&       info,
     const SurfaceIntersection& si) const 
 {
@@ -67,10 +67,10 @@ Spectrum MixedBsdf::evaluate(
     return scatterValue;
 }
 
-void MixedBsdf::evaluateSample(
+void MixedBSDF::evaluateSample(
     const TransportInfo&       info, 
     const SurfaceIntersection& si,
-    BsdfSample* const          out_sample) const 
+    BSDFSample* const          out_sample) const 
 {
     CS_ASSERT(out_sample);
 
@@ -91,7 +91,7 @@ void MixedBsdf::evaluateSample(
         // sample out direction with bsdfA
         if (sample < sampleRatio.average())
         {
-            BsdfSample localSample;
+            BSDFSample localSample;
             _bsdfA->evaluateSample(info, localSi, &localSample);
             if (!localSample.isValid()) 
             {
@@ -113,7 +113,7 @@ void MixedBsdf::evaluateSample(
         // sample out direction with bsdfB
         else 
         {
-            BsdfSample localSample;
+            BSDFSample localSample;
             _bsdfB->evaluateSample(info, localSi, &localSample);
             if (!localSample.isValid()) 
             {
@@ -137,7 +137,7 @@ void MixedBsdf::evaluateSample(
         CS_ASSERT_LT(info.components(), _bsdfA->components() + _bsdfB->components());
 
         Spectrum   localRatio(0.0_r);
-        BsdfSample localSample;
+        BSDFSample localSample;
         if (info.components() < _bsdfA->components()) 
         {
             _bsdfA->evaluateSample(info, si, &localSample);
@@ -167,7 +167,7 @@ void MixedBsdf::evaluateSample(
     out_sample->setPdfW(scatterPdfW);
 }
 
-real MixedBsdf::evaluatePdfW(
+real MixedBSDF::evaluatePdfW(
     const TransportInfo&       info, 
     const SurfaceIntersection& si) const
 {
@@ -202,7 +202,7 @@ real MixedBsdf::evaluatePdfW(
     return pdfW;
 }
 
-ELobe MixedBsdf::lobe(const BsdfComponents component) const
+ELobe MixedBSDF::lobe(const BSDFComponents component) const
 {
     CS_ASSERT_LT(component, _bsdfA->components() + _bsdfB->components());
 

@@ -1,25 +1,25 @@
-#include "core/instantiator/instantiator.h"
+#include "Core/Instantiator/Instantiator.h"
 
 // texture type
-#include "core/texture/category/tConstantTexture.h"
-#include "core/texture/category/tCheckerboardTexture.h"
-#include "core/texture/category/realImageTexture.h"
-#include "core/texture/category/rgbaImageTexture.h"
-#include "core/texture/category/rgbImageTexture.h"
+#include "Core/Texture/Category/RealImageTexture.h"
+#include "Core/Texture/Category/RGBAImageTexture.h"
+#include "Core/Texture/Category/RGBImageTexture.h"
+#include "Core/Texture/Category/TConstantTexture.h"
+#include "Core/Texture/Category/TCheckerboardTexture.h"
 
-#include "core/imaging/tImage.h"
-#include "core/texture/eTextureSampleMode.h"
-#include "core/texture/eTextureWrapMode.h"
-#include "file-io/path.h"
-#include "file-io/pictureLoader.h"
-#include "file-io/scene-description/CSDResource.h"
-#include "fundamental/assertion.h"
+#include "Core/Image/TImage.h"
+#include "Core/Texture/ETextureSampleMode.h"
+#include "Core/Texture/ETextureWrapMode.h"
+#include "FileIO/CSD/CSDResource.h"
+#include "FileIO/Path.h"
+#include "FileIO/PictureLoader.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise::instantiator 
 {
 
 static std::shared_ptr<TTexture<real>> createRealConstant(
-    const std::shared_ptr<CSDResource>&           data,
+    const std::shared_ptr<CSDResource>&      data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
@@ -29,7 +29,7 @@ static std::shared_ptr<TTexture<real>> createRealConstant(
 }
 
 static std::shared_ptr<TTexture<real>> createRealCheckerboard(
-    const std::shared_ptr<CSDResource>&           data,
+    const std::shared_ptr<CSDResource>&      data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
@@ -43,7 +43,7 @@ static std::shared_ptr<TTexture<real>> createRealCheckerboard(
 }
 
 static std::shared_ptr<TTexture<Spectrum>> createSpectrumConstant(
-    const std::shared_ptr<CSDResource>&           data,
+    const std::shared_ptr<CSDResource>&      data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
@@ -54,7 +54,7 @@ static std::shared_ptr<TTexture<Spectrum>> createSpectrumConstant(
 }
 
 static std::shared_ptr<TTexture<Spectrum>> createSpectrumCheckerboard(
-    const std::shared_ptr<CSDResource>&           data,
+    const std::shared_ptr<CSDResource>&      data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
@@ -68,7 +68,7 @@ static std::shared_ptr<TTexture<Spectrum>> createSpectrumCheckerboard(
 }
 
 static std::shared_ptr<TTexture<Spectrum>> createSpectrumImage(
-    const std::shared_ptr<CSDResource>&           data,
+    const std::shared_ptr<CSDResource>&      data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
@@ -76,7 +76,7 @@ static std::shared_ptr<TTexture<Spectrum>> createSpectrumImage(
     const auto sMode    = data->findString("sample-mode");
     const auto wMode    = data->findString("wrap-mode");
 
-    HdrImage hdrImage = PictureLoader::loadRgbImage(Path(filename));
+    HDRImage hdrImage = PictureLoader::loadRgbImage(Path(filename));
 
     ETextureSampleMode sampleMode;
     if (sMode == "nearest")
@@ -103,7 +103,7 @@ static std::shared_ptr<TTexture<Spectrum>> createSpectrumImage(
         wrapMode = ETextureWrapMode::Repeat;
     }
 
-    return std::make_shared<RgbImageTexture>(hdrImage, sampleMode, wrapMode);
+    return std::make_shared<RGBImageTexture>(hdrImage, sampleMode, wrapMode);
 }
 
 //static std::shared_ptr<Texture<Spectrum>> createSpectrumAlphaImage(
@@ -115,11 +115,11 @@ static std::shared_ptr<TTexture<Spectrum>> createSpectrumImage(
 //
 //    const HdrAlphaImage hdrAlphaImage = PictureLoader::loadRgbaImage(Path(filename));
 //
-//    return std::make_shared<RgbaImageTexture>(hdrAlphaImage);
+//    return std::make_shared<RGBAImageTexture>(hdrAlphaImage);
 //}
 
 std::shared_ptr<TTexture<real>> makeRealTexture(
-    const std::shared_ptr<CSDResource>&           data,
+    const std::shared_ptr<CSDResource>&      data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {
@@ -156,7 +156,7 @@ std::shared_ptr<TTexture<real>> makeRealTexture(
 }
 
 std::shared_ptr<TTexture<Spectrum>> makeSpectrumTexture(
-    const std::shared_ptr<CSDResource>&           data,
+    const std::shared_ptr<CSDResource>&      data,
     const TStringKeyMap<TTexture<real>>&     realTextures,
     const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures)
 {

@@ -1,13 +1,13 @@
-#include "core/renderer/bidirectional-path-tracing/pathVertex.h"
+#include "Core/Renderer/BDPT/PathVertex.h"
 
-#include "core/camera/camera.h"
-#include "core/light/light.h"
-#include "core/ray.h"
-#include "core/scene.h"
-#include "core/surface/bsdf/bsdf.h"
-#include "core/surface/transportInfo.h"
-#include "core/surfaceIntersection.h"
-#include "fundamental/assertion.h"
+#include "Core/Camera/Camera.h"
+#include "Core/Light/Light.h"
+#include "Core/Ray.h"
+#include "Core/Scene.h"
+#include "Core/Surface/BSDF/BSDF.h"
+#include "Core/Surface/TransportInfo.h"
+#include "Core/SurfaceIntersection.h"
+#include "Foundation/Assertion.h"
 
 #include <cmath>
 
@@ -255,7 +255,7 @@ const Light* PathVertex::light() const
     return _light;
 }
 
-const Bsdf* PathVertex::bsdf() const 
+const BSDF* PathVertex::bsdf() const 
 {
     return _bsdf;
 }
@@ -289,7 +289,7 @@ void PathVertex::setLight(const Light* const light)
     _light = light;
 }
 
-void PathVertex::setBsdf(const Bsdf* const bsdf) 
+void PathVertex::setBsdf(const BSDF* const bsdf) 
 {
     CS_ASSERT(bsdf);
 

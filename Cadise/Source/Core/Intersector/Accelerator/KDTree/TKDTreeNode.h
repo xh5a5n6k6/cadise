@@ -1,15 +1,15 @@
 #pragma once
 
-#include "math/type/fundamentalType.h"
+#include "Math/Type/PrimitiveType.h"
 
 namespace cadise 
 {
 
 template<typename Index = std::size_t>
-class TKdTreeNode
+class TKDTreeNode
 {
 public:
-    TKdTreeNode();
+    TKDTreeNode();
 
     void initializInternalNode(
         const std::size_t secondChildIndex,
@@ -36,6 +36,7 @@ private:
     {
         // for leaf node
         Index _objectIndex;
+
         // for internal node
         real  _splitPosition;
     };
@@ -59,8 +60,10 @@ private:
         
         // for both nodes
         Index _splitAxis;
+
         // for leaf node
         Index _numObjects;
+
         // for internal node
         Index _secondChildIndex;
     };
@@ -68,4 +71,4 @@ private:
 
 } // namespace cadise
 
-#include "core/intersector/accelerator/kd-tree/tKdTreeNode.ipp"
+#include "Core/Intersector/Accelerator/KDTree/TKDTreeNode.ipp"

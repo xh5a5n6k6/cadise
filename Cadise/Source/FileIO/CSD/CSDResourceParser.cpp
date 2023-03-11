@@ -1,13 +1,11 @@
-#include "file-io/scene-description/CSDResourceParser.h"
+#include "FileIO/CSD/CSDResourceParser.h"
 
-#include "file-io/scene-description/CSDResource.h"
-#include "file-io/string_utils.h"
-#include "file-io/tokenizer.h"
-#include "fundamental/logger/logger.h"
+#include "FileIO/CSD/CSDResource.h"
+#include "FileIO/StringUtility.h"
+#include "FileIO/Tokenizer.h"
+#include "Foundation/Logging/Logger.h"
 
-#include <cctype>
 #include <string>
-#include <unordered_map>
 
 namespace cadise::internal
 {
@@ -50,8 +48,8 @@ std::shared_ptr<CSDResource> CSDResourceParser::parse(const std::string& dataRaw
         }
 
         // TODO: support multiple trimmed elements
-        string_utils::trim_local(nameValuePair[0], ' ');
-        string_utils::trim_local(nameValuePair[0], '\n');
+        StringUtility::trimLocal(nameValuePair[0], ' ');
+        StringUtility::trimLocal(nameValuePair[0], '\n');
 
         sdClassType = nameValuePair[0];
         sdDataRaw   = nameValuePair[1];

@@ -1,9 +1,9 @@
-#include "core/texture/mapper/sphericalMapper.h"
+#include "Core/Texture/Mapper/SphericalMapper.h"
 
-#include "fundamental/assertion.h"
-#include "math/constant.h"
-#include "math/math.h"
-#include "math/tVector3.h"
+#include "Foundation/Assertion.h"
+#include "Math/Constant.h"
+#include "Math/Math.h"
+#include "Math/TVector3.h"
 
 namespace cadise 
 {

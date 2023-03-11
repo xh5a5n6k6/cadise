@@ -1,4 +1,4 @@
-#include "core/texture/category/realImageTexture.h"
+#include "Core/Texture/Category/RealImageTexture.h"
 
 namespace cadise
 {

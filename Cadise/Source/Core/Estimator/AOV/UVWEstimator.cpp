@@ -1,15 +1,15 @@
-#include "core/estimator/aov/uvwEstimator.h"
+#include "Core/Estimator/AOV/UVWEstimator.h"
 
-#include "core/ray.h"
-#include "core/scene.h"
-#include "core/surfaceIntersection.h"
-#include "fundamental/assertion.h"
-#include "math/math.h"
+#include "Core/Ray.h"
+#include "Core/Scene.h"
+#include "Core/SurfaceIntersection.h"
+#include "Foundation/Assertion.h"
+#include "Math/Math.h"
 
 namespace cadise
 {
 
-void UvwEstimator::estimate(
+void UVWEstimator::estimate(
     const Scene&    scene,
     const Ray&      ray,
     Spectrum* const out_radiance) const 

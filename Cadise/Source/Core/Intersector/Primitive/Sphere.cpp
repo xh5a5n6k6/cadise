@@ -1,15 +1,15 @@
-#include "core/intersector/primitive/sphere.h"
+#include "Core/Intersector/Primitive/Sphere.h"
 
-#include "core/integral-tool/sample/positionSample.h"
-#include "core/intersector/primitiveInfo.h"
-#include "core/ray.h"
-#include "core/surfaceDetail.h"
-#include "core/texture/mapper/sphericalMapper.h"
-#include "fundamental/assertion.h"
-#include "math/constant.h"
-#include "math/random.h"
-#include "math/tAabb3.h"
-#include "math/transform.h"
+#include "Core/Gear/Sample/PositionSample.h"
+#include "Core/Intersector/PrimitiveInfo.h"
+#include "Core/Ray.h"
+#include "Core/SurfaceDetail.h"
+#include "Core/Texture/Mapper/SphericalMapper.h"
+#include "Foundation/Assertion.h"
+#include "Math/Constant.h"
+#include "Math/Random.h"
+#include "Math/TAABB3.h"
+#include "Math/Transform.h"
 
 #include <cmath>
 
@@ -17,7 +17,7 @@ namespace cadise
 {
 
 Sphere::Sphere(
-    const std::shared_ptr<Bsdf>& bsdf, 
+    const std::shared_ptr<BSDF>& bsdf, 
     const Vector3R&              center, 
     const real                   radius) :
     

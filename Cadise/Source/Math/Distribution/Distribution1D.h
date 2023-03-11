@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/type/fundamentalType.h"
+#include "Math/Type/PrimitiveType.h"
 
 #include <vector>
 
@@ -29,7 +29,7 @@ public:
         const real  seed,
         real* const out_pdf) const;
 
-    // evaulate pdf from the sample generated from the distribution
+    // evaluate pdf from the sample generated from the distribution
     real pdfContinuous(const real sample) const;
     real pdfContinuous(const std::size_t sampleIndex) const;
 

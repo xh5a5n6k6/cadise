@@ -1,29 +1,29 @@
-#include "file-io/pictureSaver.h"
+#include "FileIO/PictureSaver.h"
 
-#include "core/imaging/tImage.h"
-#include "file-io/path.h"
-#include "third-party/tp-stb-write.h"
-#include "utility/imageUtils.h"
+#include "Core/Image/TImage.h"
+#include "FileIO/Path.h"
+#include "FileIO/ImageUtility.h"
+#include "ThirdParty/TP_stb-write.h"
 
 #include <cstdio>
 
 namespace cadise
 {
 
-void PictureSaver::save(const Path& path, const HdrImage& hdrImage) 
+void PictureSaver::save(const Path& path, const HDRImage& hdrImage) 
 {
     if (path.isExtendedWith(".png") || path.isExtendedWith(".PNG") ||
         path.isExtendedWith(".jpg") || path.isExtendedWith(".JPG") ||
         path.isExtendedWith(".ppm") || path.isExtendedWith(".PPM"))
     {
-        LdrImage ldrImage;
-        ImageUtils::hdrToLdr(hdrImage, &ldrImage);
+        LDRImage ldrImage;
+        ImageUtility::hdrToLdr(hdrImage, &ldrImage);
 
-        saveLdrImage(path, ldrImage);
+        _saveLdrImage(path, ldrImage);
     }
     else if (path.isExtendedWith(".hdr") || path.isExtendedWith(".HDR")) 
     {
-        saveHdrImage(path, hdrImage);
+        _saveHdrImage(path, hdrImage);
     }
     else 
     {
@@ -31,11 +31,11 @@ void PictureSaver::save(const Path& path, const HdrImage& hdrImage)
     }
 }
 
-void PictureSaver::saveLdrImage(const Path& path, const LdrImage& ldrImage)
+void PictureSaver::_saveLdrImage(const Path& path, const LDRImage& ldrImage)
 {
     if (path.isExtendedWith(".png") || path.isExtendedWith(".PNG")) 
     {
-        if (!savePNG(path, ldrImage)) 
+        if (!_savePNG(path, ldrImage)) 
         {
 
         }
@@ -43,50 +43,52 @@ void PictureSaver::saveLdrImage(const Path& path, const LdrImage& ldrImage)
     else if (path.isExtendedWith(".jpg") || path.isExtendedWith(".JPG") ||
              path.isExtendedWith(".jpeg") || path.isExtendedWith(".JPEG")) 
     {
-        if (!saveJPG(path, ldrImage))
+        if (!_saveJPG(path, ldrImage))
         {
 
         }
     }
     else if (path.isExtendedWith(".ppm") || path.isExtendedWith(".PPM"))
     {
-        if (!savePPM(path, ldrImage)) 
+        if (!_savePPM(path, ldrImage)) 
         {
 
         }
     }
 }
 
-void PictureSaver::saveHdrImage(const Path& path, const HdrImage& hdrImage)
+void PictureSaver::_saveHdrImage(const Path& path, const HDRImage& hdrImage)
 {
     // TODO: hdr saver
 }
 
-bool PictureSaver::savePNG(const Path& path, const LdrImage& ldrImage) 
+bool PictureSaver::_savePNG(const Path& path, const LDRImage& ldrImage) 
 {
-    const int32 result = stbi_write_png(path.path().c_str(), 
-                                        ldrImage.width(), 
-                                        ldrImage.height(),
-                                        3,
-                                        ldrImage.rawData(),
-                                        0);
+    const int32 result = stbi_write_png(
+        path.path().c_str(), 
+        ldrImage.width(), 
+        ldrImage.height(),
+        3,
+        ldrImage.rawData(),
+        0);
 
     return result != 0;
 }
 
-bool PictureSaver::saveJPG(const Path& path, const LdrImage& ldrImage)
+bool PictureSaver::_saveJPG(const Path& path, const LDRImage& ldrImage)
 {
-    const int32 result = stbi_write_jpg(path.path().c_str(), 
-                                        ldrImage.width(), 
-                                        ldrImage.height(), 
-                                        3, 
-                                        ldrImage.rawData(), 
-                                        92);
+    const int32 result = stbi_write_jpg(
+        path.path().c_str(), 
+        ldrImage.width(), 
+        ldrImage.height(), 
+        3, 
+        ldrImage.rawData(), 
+        92);
 
     return result != 0;
 }
 
-bool PictureSaver::savePPM(const Path& path, const LdrImage& ldrImage) 
+bool PictureSaver::_savePPM(const Path& path, const LDRImage& ldrImage) 
 {
     FILE *output;
     output = fopen(path.path().c_str(), "wb");

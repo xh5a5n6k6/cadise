@@ -1,11 +1,11 @@
 #pragma once
 
-#include "math/tVector2.h"
+#include "math/TVector2.h"
 
 namespace cadise
 {
 
-// AABB is for axis-aligned bounding box
+// AABB is short for axis-aligned bounding box
 template<typename T>
 class TAABB2
 {
@@ -38,4 +38,4 @@ private:
 
 } // namespace cadise
 
-#include "math/tAabb2.ipp"
+#include "Math/TAABB2.ipp"

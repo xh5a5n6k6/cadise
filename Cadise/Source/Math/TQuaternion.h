@@ -1,12 +1,12 @@
 #pragma once
 
-#include "math/tMatrix4.h"
+#include "Math/TMatrix4.h"
 
 namespace cadise 
 {
 
 template<typename T>
-class Quaternion 
+class TQuaternion 
 {
 public:
 
@@ -20,3 +20,5 @@ private:
 };
 
 } // namespace cadise
+
+#include "Math/TQuaternion.ipp"

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "core/spectrum/spectrum.h"
-#include "file-io/scene-description/eSdClassType.h"
-#include "file-io/scene-description/valueParser.h"
-#include "fundamental/assertion.h"
-#include "math/type/mapType.h"
-#include "math/tVector2.h"
-#include "math/tVector3.h"
+#include "Core/Spectrum/Spectrum.h"
+#include "FileIO/CSD/ECSDClassType.h"
+#include "FileIO/CSD/ValueParser.h"
+#include "Foundation/Assertion.h"
+#include "Math/Type/MapType.h"
+#include "Math/TVector2.h"
+#include "Math/TVector3.h"
 
 #include <memory>
 #include <vector>
@@ -79,10 +79,10 @@ public:
         const TStringKeyMap<TTexture<Spectrum>>& spectrumTextures,
         const Spectrum&                          defaultValue = Spectrum(0.0_r));
 
-    ESdClassType classType() const;
+    ECSDClassType classType() const;
 
     void setClassType(const std::string& classType);
-    void setClassType(const ESdClassType classType);
+    void setClassType(const ECSDClassType classType);
 
 private:
     template<typename RawDataType>
@@ -91,7 +91,7 @@ private:
         const RawDataType&                            rawData,
         std::unordered_map<std::string, RawDataType>& rawDataMap);
 
-    ESdClassType                                              _classType;
+    ECSDClassType                                             _classType;
     std::unordered_map<std::string, std::string>              _boolRaws;
     std::unordered_map<std::string, std::string>              _intRaws;
     std::unordered_map<std::string, std::string>              _floatRaws;

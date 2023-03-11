@@ -1,9 +1,9 @@
 #pragma once
 
-#include "math/tMatrix4.h"
+#include "Math/TMatrix4.h"
 
-#include "fundamental/assertion.h"
-#include "math/tVector3.h"
+#include "Foundation/Assertion.h"
+#include "Math/TVector3.h"
 
 #include <utility>
 

@@ -1,17 +1,20 @@
 #pragma once
 
-#include "math/type/mathType.h"
+#include "Math/Type/MathType.h"
 
 #include <memory>
-#include <vector>
 
-namespace cadise { class Accelerator; }
-namespace cadise { class Intersector; }
-namespace cadise { class Light; }
-namespace cadise { class LightCluster; }
-namespace cadise { class Primitive; }
-namespace cadise { class Ray; }
-namespace cadise { class SurfaceIntersection; }
+// forward declaration
+namespace cadise
+{
+    class Accelerator;
+    class Intersector;
+    class Light;
+    class LightCluster;
+    class Primitive;
+    class Ray;
+    class SurfaceIntersection;
+}
 
 namespace cadise
 {

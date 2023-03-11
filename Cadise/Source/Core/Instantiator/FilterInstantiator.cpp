@@ -1,13 +1,13 @@
-#include "core/instantiator/instantiator.h"
+#include "Core/Instantiator/Instantiator.h"
 
 // filter type
-#include "core/film/filter/boxFilter.h"
-#include "core/film/filter/gaussianFilter.h"
-#include "core/film/filter/mitchellFilter.h"
-#include "core/film/filter/coneFilter.h"
+#include "Core/Film/Filter/BoxFilter.h"
+#include "Core/Film/Filter/GaussianFilter.h"
+#include "Core/Film/Filter/MitchellFilter.h"
+#include "Core/Film/Filter/ConeFilter.h"
 
-#include "file-io/scene-description/CSDResource.h"
-#include "fundamental/assertion.h"
+#include "FileIO/CSD/CSDResource.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise::instantiator
 {

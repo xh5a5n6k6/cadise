@@ -1,12 +1,12 @@
-#include "core/texture/wrapper/clampUvwWrapper.h"
+#include "Core/Texture/Wrapper/ClampUVWWrapper.h"
 
-#include "fundamental/assertion.h"
-#include "math/tVector3.h"
+#include "Foundation/Assertion.h"
+#include "Math/TVector3.h"
 
 namespace cadise
 {
 
-void ClampUvwWrapper::wrap(
+void ClampUVWWrapper::wrap(
     const Vector3R& uvw, 
     Vector3R* const out_wrapUvw) const 
 {

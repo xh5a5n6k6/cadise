@@ -1,9 +1,13 @@
 #pragma once
 
-#include "math/type/mathType.h"
+#include "Math/Type/MathType.h"
 
-namespace cadise { class PrimitiveInfo; }
-namespace cadise { class Ray; }
+// forward declaration
+namespace cadise
+{
+    class PrimitiveInfo;
+    class Ray;
+}
 
 namespace cadise 
 {

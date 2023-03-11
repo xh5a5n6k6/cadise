@@ -1,8 +1,8 @@
 #pragma once
 
-#include "math/tVector2.h"
+#include "Math/TVector2.h"
 
-#include "fundamental/assertion.h"
+#include "Foundation/Assertion.h"
 
 #include <cmath>
 #include <type_traits>

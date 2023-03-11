@@ -1,13 +1,13 @@
-#include "core/instantiator/instantiator.h"
+#include "Core/Instantiator/Instantiator.h"
 
 // accelerator type
-#include "core/intersector/accelerator/bruteForceAccelerator.h"
-#include "core/intersector/accelerator/bvh/bvhAccelerator.h"
-#include "core/intersector/accelerator/kd-tree/kdTreeAccelerator.h"
+#include "Core/Intersector/Accelerator/BruteForceAccelerator.h"
+#include "Core/Intersector/Accelerator/BVH/BVHAccelerator.h"
+#include "Core/Intersector/Accelerator/KDTree/KDTreeAccelerator.h"
 
-#include "core/intersector/accelerator/bvh/eBvhSplitMode.h"
-#include "file-io/scene-description/CSDResource.h"
-#include "fundamental/assertion.h"
+#include "Core/Intersector/Accelerator/BVH/EBVHSplitMode.h"
+#include "FileIO/CSD/CSDResource.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise::instantiator
 {
@@ -25,18 +25,18 @@ static std::shared_ptr<Accelerator> createBvh(
 {
     const auto splitMode = data->findString("split-mode", "sah");
 
-    EBvhSplitMode mode;
+    EBVHSplitMode mode;
     if (splitMode == "equal")
     {
-        mode = EBvhSplitMode::EqualCounts;
+        mode = EBVHSplitMode::EqualCounts;
     }
     else if (splitMode == "sah")
     {
-        mode = EBvhSplitMode::SAH;
+        mode = EBVHSplitMode::SAH;
     }
     else
     {
-        mode = EBvhSplitMode::SAH;
+        mode = EBVHSplitMode::SAH;
     }
 
     return std::make_shared<BvhAccelerator>(std::move(intersectors), mode);
@@ -50,7 +50,7 @@ static std::shared_ptr<Accelerator> createKdTree(
     const real intersectionCost = data->findFloat<real>("intersection-cost", 80.0_r);
     const real emptyBonus       = data->findFloat<real>("empty-bonus", 0.05_r);
 
-    return std::make_shared<KdTreeAccelerator>(
+    return std::make_shared<KDTreeAccelerator>(
         std::move(intersectors),
         traversalCost,
         intersectionCost,

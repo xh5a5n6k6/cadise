@@ -1,13 +1,13 @@
-#include "core/texture/category/rgbImageTexture.h"
+#include "Core/Texture/Category/RGBImageTexture.h"
 
-#include "core/texture/sampler/tPixelSampler.h"
-#include "fundamental/assertion.h"
-#include "math/tArithmeticArray.h"
+#include "Core/Texture/Sampler/TPixelSampler.h"
+#include "Foundation/Assertion.h"
+#include "Math/TArithmeticArray.h"
 
 namespace cadise 
 {
 
-void RgbImageTexture::evaluate(const Vector3R& uvw, Spectrum* const out_value) const 
+void RGBImageTexture::evaluate(const Vector3R& uvw, Spectrum* const out_value) const 
 {
     CS_ASSERT(out_value);
 

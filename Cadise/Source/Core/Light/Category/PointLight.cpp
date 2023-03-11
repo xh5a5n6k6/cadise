@@ -1,9 +1,9 @@
-#include "core/light/category/pointLight.h"
+#include "Core/Light/Category/PointLight.h"
 
-#include "core/integral-tool/sample/directLightSample.h"
-#include "core/surfaceDetail.h"
-#include "fundamental/assertion.h"
-#include "math/constant.h"
+#include "Core/Gear/Sample/DirectLightSample.h"
+#include "Core/SurfaceDetail.h"
+#include "Foundation/Assertion.h"
+#include "Math/Constant.h"
 
 #include <cmath>
 

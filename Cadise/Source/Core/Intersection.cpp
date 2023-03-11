@@ -1,4 +1,4 @@
-#include "core/intersection.h"
+#include "Core/Intersection.h"
 
 namespace cadise
 {

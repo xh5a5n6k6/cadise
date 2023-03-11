@@ -1,28 +1,28 @@
-#include "core/estimator/wdlEstimator.h"
+#include "Core/Estimator/WDLEstimator.h"
 
-#include "core/integral-tool/sample/bsdfSample.h"
-#include "core/integral-tool/sample/directLightSample.h"
-#include "core/intersector/primitive/primitive.h"
-#include "core/light/category/areaLight.h"
-#include "core/ray.h"
-#include "core/scene.h"
-#include "core/surface/bsdf/bsdf.h"
-#include "core/surface/transportInfo.h"
-#include "core/surfaceIntersection.h"
-#include "fundamental/assertion.h"
-#include "math/constant.h"
+#include "Core/Gear/Sample/BSDFSample.h"
+#include "Core/Gear/Sample/DirectLightSample.h"
+#include "Core/Intersector/Primitive/Primitive.h"
+#include "Core/Light/Category/AreaLight.h"
+#include "Core/Ray.h"
+#include "Core/Scene.h"
+#include "Core/Surface/BSDF/BSDF.h"
+#include "Core/Surface/TransportInfo.h"
+#include "Core/SurfaceIntersection.h"
+#include "Foundation/Assertion.h"
+#include "Math/Constant.h"
 
 namespace cadise 
 {
 
-WdlEstimator::WdlEstimator(const int32 maxDepth) :
+WDLEstimator::WDLEstimator(const int32 maxDepth) :
     RadianceEstimator(),
     _maxDepth(maxDepth) 
 {
     CS_ASSERT_GE(maxDepth, 0);
 }
 
-void WdlEstimator::estimate(
+void WDLEstimator::estimate(
     const Scene&    scene, 
     const Ray&      ray,
     Spectrum* const out_radiance) const 
@@ -44,7 +44,7 @@ void WdlEstimator::estimate(
         }
 
         const Primitive* primitive = intersection.primitiveInfo().primitive();
-        const Bsdf*      bsdf      = primitive->bsdf();
+        const BSDF*      bsdf      = primitive->bsdf();
 
         const Vector3R& P  = intersection.surfaceDetail().position();
         const Vector3R& Ns = intersection.surfaceDetail().shadingNormal();
@@ -105,30 +105,27 @@ void WdlEstimator::estimate(
 
         // only trace next ray at specular surface
         // according to bsdf sampling
-        else 
+        BSDFSample bsdfSample;
+        bsdf->evaluateSample(transportInfo, intersection, &bsdfSample);
+        if (!bsdfSample.isValid()) 
         {
-            BsdfSample bsdfSample;
-            bsdf->evaluateSample(transportInfo, intersection, &bsdfSample);
-            if (!bsdfSample.isValid()) 
-            {
-                break;
-            }
-
-            const Spectrum& reflectance = bsdfSample.scatterValue();
-            const Vector3R& L           = bsdfSample.scatterDirection();
-            const real      pdfW        = bsdfSample.pdfW();
-            const real      LdotN       = L.absDot(Ns);
-                
-            pathThroughput.mulLocal(reflectance.mul(LdotN / pdfW));
-            if (pathThroughput.isZero()) 
-            {
-                break;
-            }
-                
-            traceRay.reset();
-            traceRay.setOrigin(P);
-            traceRay.setDirection(L);
+            break;
         }
+
+        const Spectrum& reflectance = bsdfSample.scatterValue();
+        const Vector3R& L           = bsdfSample.scatterDirection();
+        const real      pdfW        = bsdfSample.pdfW();
+        const real      LdotN       = L.absDot(Ns);
+            
+        pathThroughput.mulLocal(reflectance.mul(LdotN / pdfW));
+        if (pathThroughput.isZero()) 
+        {
+            break;
+        }
+            
+        traceRay.reset();
+        traceRay.setOrigin(P);
+        traceRay.setDirection(L);
     }
 
     out_radiance->set(totalRadiance);

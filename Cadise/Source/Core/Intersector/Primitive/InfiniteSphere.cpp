@@ -1,13 +1,13 @@
-#include "core/intersector/primitive/infiniteSphere.h"
+#include "Core/Intersector/Primitive/InfiniteSphere.h"
 
-#include "core/intersector/primitiveInfo.h"
-#include "core/ray.h"
-#include "core/surface/bsdf/absorberBsdf.h"
-#include "core/surfaceDetail.h"
-#include "core/texture/mapper/sphericalMapper.h"
-#include "fundamental/assertion.h"
-#include "math/tAabb3.h"
-#include "math/constant.h"
+#include "Core/Intersector/PrimitiveInfo.h"
+#include "Core/Ray.h"
+#include "Core/Surface/BSDF/AbsorberBSDF.h"
+#include "Core/SurfaceDetail.h"
+#include "Core/Texture/Mapper/SphericalMapper.h"
+#include "Foundation/Assertion.h"
+#include "Math/TAABB3.h"
+#include "Math/Constant.h"
 
 #include <cmath>
 #include <limits>
@@ -21,7 +21,7 @@ InfiniteSphere::InfiniteSphere() :
 {}
 
 InfiniteSphere::InfiniteSphere(const real radius) :
-    Primitive(std::make_shared<AbsorberBsdf>()),
+    Primitive(std::make_shared<AbsorberBSDF>()),
     _radius(radius) 
 {}
 

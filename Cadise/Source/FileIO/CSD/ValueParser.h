@@ -1,7 +1,7 @@
 #pragma once
 
-#include "fundamental/assertion.h"
-#include "math/type/mathType.h"
+#include "Foundation/Assertion.h"
+#include "Math/Type/MathType.h"
 
 #include <charconv>
 #include <concepts>

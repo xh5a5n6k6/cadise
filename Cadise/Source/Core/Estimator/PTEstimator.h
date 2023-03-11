@@ -1,12 +1,12 @@
 #pragma once
 
-#include "core/estimator/radianceEstimator.h"
+#include "Core/Estimator/RadianceEstimator.h"
 
 namespace cadise
 {
 
 /*
-     PtEstimator: Path Tracing Estimator
+     PTEstimator: Path Tracing Estimator
 
      This estimator implements vanilla path tracing plus next event estimation.
 
@@ -15,10 +15,10 @@ namespace cadise
      Reference Note:
      http://www.cs.uu.nl/docs/vakken/magr/portfolio/INFOMAGR/lecture8.pdf
 */
-class PtEstimator : public RadianceEstimator
+class PTEstimator : public RadianceEstimator
 {
 public:
-    explicit PtEstimator(const int32 maxPathLength);
+    explicit PTEstimator(const int32 maxPathLength);
 
     void estimate(
         const Scene&    scene, 
@@ -33,7 +33,7 @@ private:
 
 // header implementation
 
-inline std::string PtEstimator::toString() const 
+inline std::string PTEstimator::toString() const 
 {
     return "PT Estimator";
 }

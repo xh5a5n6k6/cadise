@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/type/mathType.h"
+#include "Math/Type/MathType.h"
 
 namespace cadise 
 {
@@ -8,10 +8,10 @@ namespace cadise
 /*
     It stores radiance as rgb value rather than origin spectrum.
 */
-class RgbRadianceSensor
+class RGBRadianceSensor
 {
 public:
-    RgbRadianceSensor();
+    RGBRadianceSensor();
 
     void addValue(const Vector3R& value);
     void addValue(const real r, const real g, const real b);

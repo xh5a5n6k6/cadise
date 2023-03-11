@@ -1,9 +1,9 @@
-#include "fundamental/stackTracer.h"
+#include "Foundation/StackTracer.h"
 
-#include "fundamental/os.h"
+#include "Foundation/OS.h"
 
 #if defined(CADISE_OS_WINDOWS)
-    #include "third-party/tp-StackWalker.h"
+    #include "ThirdParty/TP_StackWalker.h"
 #elif defined(CADISE_OS_LINUX)
     #include <execinfo.h>
     #include <iostream>

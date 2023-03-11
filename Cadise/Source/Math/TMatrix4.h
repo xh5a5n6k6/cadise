@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/type/mathType.h"
+#include "Math/Type/MathType.h"
 
 #include <array>
 
@@ -61,4 +61,4 @@ private:
 
 } // namespace cadise
 
-#include "math/tMatrix4.ipp"
+#include "Math/TMatrix4.ipp"

@@ -1,12 +1,12 @@
-#include "core/intersector/accelerator/kd-tree/kdTreeNodeInfo.h"
+#include "Core/Intersector/Accelerator/KDTree/KDTreeNodeInfo.h"
 
 namespace cadise {
 
-KdTreeNodeInfo::KdTreeNodeInfo() :
-    KdTreeNodeInfo(0, 0.0_r, 0.0_r) 
+KDTreeNodeInfo::KDTreeNodeInfo() :
+    KDTreeNodeInfo(0, 0.0_r, 0.0_r)
 {}
 
-KdTreeNodeInfo::KdTreeNodeInfo(
+KDTreeNodeInfo::KDTreeNodeInfo(
     const std::size_t nodeIndex,
     const real        minT,
     const real        maxT) :
@@ -16,32 +16,32 @@ KdTreeNodeInfo::KdTreeNodeInfo(
     _maxT(maxT) 
 {}
 
-std::size_t KdTreeNodeInfo::nodeIndex() const 
+std::size_t KDTreeNodeInfo::nodeIndex() const
 {
     return _nodeIndex;
 }
 
-real KdTreeNodeInfo::minT() const
+real KDTreeNodeInfo::minT() const
 {
     return _minT;
 }
 
-real KdTreeNodeInfo::maxT() const 
+real KDTreeNodeInfo::maxT() const
 {
     return _maxT;
 }
 
-void KdTreeNodeInfo::setNodeIndex(const std::size_t nodeIndex)
+void KDTreeNodeInfo::setNodeIndex(const std::size_t nodeIndex)
 {
     _nodeIndex = nodeIndex;
 }
 
-void KdTreeNodeInfo::setMinT(const real minT)
+void KDTreeNodeInfo::setMinT(const real minT)
 {
     _minT = minT;
 }
 
-void KdTreeNodeInfo::setMaxT(const real maxT)
+void KDTreeNodeInfo::setMaxT(const real maxT)
 {
     _maxT = maxT;
 }

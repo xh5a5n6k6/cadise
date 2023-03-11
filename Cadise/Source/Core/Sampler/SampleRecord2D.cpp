@@ -1,8 +1,8 @@
-#include "core/sampler/sampleRecord2D.h"
+#include "Core/Sampler/SampleRecord2D.h"
 
-#include "fundamental/assertion.h"
-#include "math/random.h"
-#include "math/tVector2.h"
+#include "Foundation/Assertion.h"
+#include "Math/Random.h"
+#include "Math/TVector2.h"
 
 #include <utility>
 

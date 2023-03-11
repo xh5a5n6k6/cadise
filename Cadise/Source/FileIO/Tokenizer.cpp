@@ -1,7 +1,7 @@
-#include "file-io/tokenizer.h"
+#include "FileIO/Tokenizer.h"
 
-#include "fundamental/assertion.h"
-#include "fundamental/logger/logger.h"
+#include "Foundation/Assertion.h"
+#include "Foundation/Logging/Logger.h"
 
 namespace cadise
 {

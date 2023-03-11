@@ -1,13 +1,13 @@
-#include "core/intersector/primitive/triangleBuffer.h"
+#include "Core/Intersector/Primitive/TriangleBuffer.h"
 
-#include "core/intersector/primitive/triangle.h"
-#include "fundamental/assertion.h"
+#include "Core/Intersector/Primitive/Triangle.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise
 {
 
 TriangleBuffer::TriangleBuffer(
-    const std::shared_ptr<Bsdf>& bsdf, 
+    const std::shared_ptr<BSDF>& bsdf, 
     const std::vector<Vector3R>& positions,
     const std::vector<Vector3R>& normals, 
     const std::vector<Vector3R>& uvws) :

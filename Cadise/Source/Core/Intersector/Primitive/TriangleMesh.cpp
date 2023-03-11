@@ -1,8 +1,8 @@
-//#include "core/intersector/primitive/triangleMesh.h"
+//#include "Core/intersector/primitive/triangleMesh.h"
 //
-//#include "core/integral-tool/sample/positionSample.h"
-//#include "core/intersector/accelerator/kd-tree/kdTreeAccelerator.h"
-//#include "core/intersector/primitive/triangle.h"
+//#include "Core/integral-tool/sample/positionSample.h"
+//#include "Core/intersector/accelerator/kd-tree/kdTreeAccelerator.h"
+//#include "Core/intersector/primitive/triangle.h"
 //#include "fundamental/assertion.h"
 //#include "math/random.h"
 //
@@ -11,7 +11,7 @@
 //
 //TriangleMesh::TriangleMesh(
 //    const std::vector<const Triangle*>& triangles,
-//    std::unique_ptr<KdTreeAccelerator>  triangleKdTree) :
+//    std::unique_ptr<KDTreeAccelerator>  triangleKdTree) :
 //
 //    Primitive(),
 //    _triangles(triangles),

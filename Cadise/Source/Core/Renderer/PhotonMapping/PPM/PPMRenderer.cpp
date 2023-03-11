@@ -1,18 +1,18 @@
-#include "core/renderer/photon-mapping/progressive-pm/ppmRenderer.h"
+#include "Core/Renderer/PhotonMapping/PPM/PPMRenderer.h"
 
-#include "core/film/film.h"
-#include "core/film/filmTile.h"
-#include "core/renderer/photon-mapping/photonMap.h"
-#include "core/renderer/photon-mapping/pmViewpoint.h"
-#include "core/renderer/photon-mapping/pmViewpointConstructor.h"
-#include "core/renderer/render-work/photonMapWork.h"
-#include "core/renderer/render-work/pmRadianceEstimationWork.h"
-#include "core/renderer/render-work/pmViewpointWork.h"
-#include "core/sampler/sampler.h"
-#include "fundamental/assertion.h"
-#include "fundamental/logger/logger.h"
-#include "fundamental/time/stopwatch.h"
-#include "utility/parallel.h"
+#include "Core/Film/Film.h"
+#include "Core/Film/FilmTile.h"
+#include "Core/Renderer/PhotonMapping/PhotonMap.h"
+#include "Core/Renderer/PhotonMapping/PMViewpoint.h"
+#include "Core/Renderer/PhotonMapping/PMViewpointConstructor.h"
+#include "Core/Renderer/RenderWork/PhotonMapWork.h"
+#include "Core/Renderer/RenderWork/PMRadianceEstimationWork.h"
+#include "Core/Renderer/RenderWork/PMViewpointWork.h"
+#include "Core/Sampler/Sampler.h"
+#include "Foundation/Assertion.h"
+#include "Foundation/Logging/Logger.h"
+#include "Foundation/Time/Stopwatch.h"
+#include "Utility/Parallel.h"
 
 #include <mutex>
 #include <numeric>
@@ -26,9 +26,9 @@ namespace
     const Logger logger("PPM Renderer");
 } // anonymous namespace
 
-PpmRenderer::PpmRenderer(
+PPMRenderer::PPMRenderer(
     const std::shared_ptr<Sampler>& sampler,
-    const PmSetting&                setting) :
+    const PMSetting&                setting) :
 
     Renderer(),
     _sampler(sampler),
@@ -37,7 +37,7 @@ PpmRenderer::PpmRenderer(
     CS_ASSERT(sampler);
 }
 
-void PpmRenderer::render() const 
+void PPMRenderer::render() const 
 {
     CS_ASSERT(_scene);
 
@@ -47,7 +47,7 @@ void PpmRenderer::render() const
     std::mutex ppmMutex;
 
     // build viewpoints cache
-    std::vector<PmViewpoint> viewpoints;
+    std::vector<PMViewpoint> viewpoints;
     viewpoints.reserve(_film->resolution().product() * _sampler->sampleNumber());
 
     logger.log("Begin building viewpoints");
@@ -62,10 +62,10 @@ void PpmRenderer::render() const
         {
             const std::size_t workload = workEnd - workBegin;
 
-            std::vector<PmViewpoint> localViewpoints;
+            std::vector<PMViewpoint> localViewpoints;
             localViewpoints.reserve(workload * _film->tileSize().product() * _sampler->sampleNumber());
 
-            PmViewpointConstructor viewpointConstructor(
+            PMViewpointConstructor viewpointConstructor(
                 _scene.get(),
                 _camera.get(),
                 _setting.searchRadius());
@@ -74,7 +74,7 @@ void PpmRenderer::render() const
             {
                 const AABB2I tileBound = _film->getTileBound(workIndex);
 
-                PmViewpointWork viewpointWork(
+                PMViewpointWork viewpointWork(
                     tileBound,
                     _sampler.get(),
                     &viewpointConstructor,
@@ -158,7 +158,7 @@ void PpmRenderer::render() const
             {
                 auto localFilm = _film->generateEmptyFilm();
 
-                PmRadianceEstimationWork radianceEstimationWork(
+                PMRadianceEstimationWork radianceEstimationWork(
                     &photonMap,
                     &viewpoints,
                     localFilm.get(),

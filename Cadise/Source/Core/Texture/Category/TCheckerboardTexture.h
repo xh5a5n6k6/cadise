@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/texture/tTexture.h"
+#include "Core/Texture/TTexture.h"
 
 #include <memory>
 
@@ -29,4 +29,4 @@ private:
 
 } // namespace cadise
 
-#include "core/texture/category/tCheckerboardTexture.ipp"
+#include "Core/Texture/Category/TCheckerboardTexture.ipp"

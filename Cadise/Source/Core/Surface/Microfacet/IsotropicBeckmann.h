@@ -1,10 +1,15 @@
 #pragma once
 
-#include "core/surface/microfacet/microfacet.h"
+#include "Core/Surface/Microfacet/Microfacet.h"
 
 #include <memory>
 
-namespace cadise { template<typename T> class TTexture; }
+// forward declaration
+namespace cadise
+{
+    template<typename T>
+    class TTexture;
+}
 
 namespace cadise 
 {

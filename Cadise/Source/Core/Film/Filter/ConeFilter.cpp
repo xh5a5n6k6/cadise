@@ -1,4 +1,4 @@
-#include "core/film/filter/coneFilter.h"
+#include "Core/Film/Filter/ConeFilter.h"
 
 #include <algorithm>
 #include <cmath>

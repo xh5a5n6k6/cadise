@@ -1,7 +1,7 @@
-#include "math/distribution/distribution1D.h"
+#include "Math/Distribution/Distribution1D.h"
 
-#include "fundamental/assertion.h"
-#include "math/math.h"
+#include "Foundation/Assertion.h"
+#include "Math/Math.h"
 
 namespace cadise 
 {

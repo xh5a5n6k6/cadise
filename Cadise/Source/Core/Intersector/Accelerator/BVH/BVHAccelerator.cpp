@@ -1,16 +1,16 @@
-#include "core/intersector/accelerator/bvh/bvhAccelerator.h"
+#include "Core/Intersector/Accelerator/BVH/BVHAccelerator.h"
 
-#include "core/intersector/accelerator/bvh/bvhBinaryNode.h"
-#include "core/intersector/accelerator/bvh/bvhBuilder.h"
-#include "core/ray.h"
-#include "fundamental/assertion.h"
+#include "Core/Intersector/Accelerator/BVH/BVHBinaryNode.h"
+#include "Core/Intersector/Accelerator/BVH/BVHBuilder.h"
+#include "Core/Ray.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise 
 {
 
 BvhAccelerator::BvhAccelerator(
     const std::vector<std::shared_ptr<Intersector>>& intersectors,
-    const EBvhSplitMode                              splitMode) :
+    const EBVHSplitMode                              splitMode) :
     
     Accelerator(),
     _intersectors(),
@@ -18,11 +18,11 @@ BvhAccelerator::BvhAccelerator(
 {
     _intersectors.reserve(intersectors.size());
 
-    const BvhBuilder builder(splitMode);
+    const BVHBuilder builder(splitMode);
 
     // build binary node tree recursively
     std::size_t totalNodeSize = 0;
-    std::unique_ptr<BvhBinaryNode> root = builder.buildBinaryNodes(std::move(intersectors), 
+    std::unique_ptr<BVHBinaryNode> root = builder.buildBinaryNodes(std::move(intersectors), 
                                                                    &_intersectors, 
                                                                    &totalNodeSize);
 
@@ -57,7 +57,7 @@ bool BvhAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) cons
 
     while (true)
     {
-        const BvhLinearNode& currentNode = _nodes[currentNodeIndex];
+        const BVHLinearNode& currentNode = _nodes[currentNodeIndex];
 
         if (currentNode.bound().isIntersectingAABB(origin, inverseDirection, ray.minT(), ray.maxT())) 
         {
@@ -129,7 +129,7 @@ bool BvhAccelerator::isOccluded(const Ray& ray) const
 
     while (true) 
     {
-        const BvhLinearNode& currentNode = _nodes[currentNodeIndex];
+        const BVHLinearNode& currentNode = _nodes[currentNodeIndex];
 
         if (currentNode.bound().isIntersectingAABB(origin, inverseDirection, ray.minT(), ray.maxT())) 
         {

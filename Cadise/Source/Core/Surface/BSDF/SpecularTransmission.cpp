@@ -1,11 +1,11 @@
-#include "core/surface/bsdf/specularTransmission.h"
+#include "Core/Surface/BSDF/SpecularTransmission.h"
 
-#include "core/integral-tool/sample/bsdfSample.h"
-#include "core/integral-tool/tSurfaceSampler.h"
-#include "core/surface/fresnel/dielectricFresnel.h"
-#include "core/surface/transportInfo.h"
-#include "core/surfaceIntersection.h"
-#include "fundamental/assertion.h"
+#include "Core/Gear/Sample/BSDFSample.h"
+#include "Core/Gear/TSurfaceSampler.h"
+#include "Core/Surface/Fresnel/DielectricFresnel.h"
+#include "Core/Surface/TransportInfo.h"
+#include "Core/SurfaceIntersection.h"
+#include "Foundation/Assertion.h"
 
 #include <cmath>
 #include <utility>
@@ -17,7 +17,7 @@ SpecularTransmission::SpecularTransmission(
     const std::shared_ptr<TTexture<Spectrum>>& albedo,
     const std::shared_ptr<DielectricFresnel>&  fresnel) :
     
-    Bsdf(BsdfLobes({ ELobe::SpecularTransmission })),
+    BSDF(BSDFLobes({ ELobe::SpecularTransmission })),
     _albedo(albedo),
     _fresnel(fresnel)
 {
@@ -35,7 +35,7 @@ Spectrum SpecularTransmission::evaluate(
 void SpecularTransmission::evaluateSample(
     const TransportInfo&       info, 
     const SurfaceIntersection& si,
-    BsdfSample* const          out_sample) const
+    BSDFSample* const          out_sample) const
 {
     CS_ASSERT(out_sample);
 
@@ -85,7 +85,7 @@ real SpecularTransmission::evaluatePdfW(
     return 0.0_r;
 }
 
-ELobe SpecularTransmission::lobe(const BsdfComponents component) const 
+ELobe SpecularTransmission::lobe(const BSDFComponents component) const 
 {
     CS_ASSERT_EQ(component, 0);
 

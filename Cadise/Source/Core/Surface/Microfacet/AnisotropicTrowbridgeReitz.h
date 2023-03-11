@@ -1,10 +1,15 @@
 #pragma once
 
-#include "core/surface/microfacet/microfacet.h"
+#include "Core/Surface/Microfacet/Microfacet.h"
 
 #include <memory>
 
-namespace cadise { template<typename T> class TTexture; }
+// forward declaration
+namespace cadise
+{
+    template<typename T>
+    class TTexture;
+}
 
 namespace cadise 
 {
@@ -17,10 +22,10 @@ namespace cadise
     "Understanding the Masking-Shadowing Function in Microfacet-Based BRDFs"
     Eric Heitz, JCGT 2014
 */
-class AnisotropicGgx : public Microfacet 
+class AnisotropicTrowbridgeReitz : public Microfacet
 {
 public:
-    AnisotropicGgx(
+    AnisotropicTrowbridgeReitz(
         const std::shared_ptr<TTexture<real>>& roughnessU,
         const std::shared_ptr<TTexture<real>>& roughnessV);
 

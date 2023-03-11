@@ -1,16 +1,16 @@
 #pragma once
 
-#include "core/estimator/radianceEstimator.h"
+#include "Core/Estimator/RadianceEstimator.h"
 
-#include "core/renderer/photon-mapping/photonMap.h"
+#include "Core/Renderer/PhotonMapping/PhotonMap.h"
 
 namespace cadise 
 {
 
-class VpmEstimator : public RadianceEstimator 
+class VPMEstimator : public RadianceEstimator 
 {
 public:
-    VpmEstimator(
+    VPMEstimator(
         const PhotonMap* const photonMap,
         const std::size_t      numPhotonPaths,
         const real             searchRadius);
@@ -33,7 +33,7 @@ private:
 
 // header implementation
 
-inline std::string VpmEstimator::toString() const 
+inline std::string VPMEstimator::toString() const 
 {
     return "VPM Estimator";
 }

@@ -1,11 +1,15 @@
 #pragma once
 
-#include "core/renderer/render-work/tileWork.h"
+#include "Core/Renderer/RenderWork/TileWork.h"
 
-namespace cadise { class Camera; }
-namespace cadise { class EnergyEstimator; }
-namespace cadise { class Sampler; }
-namespace cadise { class Scene; }
+// forward declaration
+namespace cadise
+{
+    class Camera;
+    class EnergyEstimator;
+    class Sampler;
+    class Scene;
+}
 
 namespace cadise 
 {

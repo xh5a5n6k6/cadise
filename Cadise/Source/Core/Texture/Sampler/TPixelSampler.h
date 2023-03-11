@@ -1,12 +1,17 @@
 #pragma once
 
-#include "core/imaging/tImage.h"
-#include "math/type/mathType.h"
+#include "Core/Image/TImage.h"
+#include "Math/Type/MathType.h"
 
 #include <memory>
 
-namespace cadise { class UvwWrapper; }
-namespace cadise { enum class ETextureWrapMode; }
+// forward declaration
+namespace cadise
+{
+    class UVWWrapper;
+
+    enum class ETextureWrapMode;
+}
 
 namespace cadise 
 {
@@ -27,9 +32,9 @@ public:
 
 protected:
     TImage<T, N>                _image;
-    std::unique_ptr<UvwWrapper> _uvwWrapper;
+    std::unique_ptr<UVWWrapper> _uvwWrapper;
 };
 
 } // namespace cadise
 
-#include "core/texture/sampler/tPixelSampler.ipp"
+#include "Core/Texture/Sampler/TPixelSampler.ipp"

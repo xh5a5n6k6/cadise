@@ -3,8 +3,8 @@
 namespace cadise 
 {
 
-using BsdfComponents = int;
+using BSDFComponents = int;
 
-inline constexpr BsdfComponents BSDF_ALL_COMPONENTS = -1;
+inline constexpr BSDFComponents BSDF_ALL_COMPONENTS = -1;
 
 } // namespace cadise

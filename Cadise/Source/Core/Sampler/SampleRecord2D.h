@@ -1,8 +1,8 @@
 #pragma once
 
-#include "core/sampler/sampleRecord.h"
+#include "Core/Sampler/SampleRecord.h"
 
-#include "math/type/mathType.h"
+#include "Math/Type/MathType.h"
 
 namespace cadise
 {

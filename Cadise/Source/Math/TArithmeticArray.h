@@ -92,4 +92,4 @@ inline TArithmeticArray<T, N> operator * (const T scalar, const TArithmeticArray
 
 } // namespace cadise
 
-#include "math/tArithmeticArray.ipp"
+#include "Math/TArithmeticArray.ipp"

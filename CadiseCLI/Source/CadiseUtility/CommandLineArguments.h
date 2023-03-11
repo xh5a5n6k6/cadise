@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-namespace cadise_cli 
+namespace cadise::cli
 {
 
 class CommandLineArguments 
@@ -22,4 +22,4 @@ private:
     std::vector<std::string> _filenames;
 };
 
-} // namespace cadise_cli
+} // namespace cadise::cli

@@ -1,24 +1,28 @@
 #pragma once
 
-#include "core/renderer/renderWork.h"
+#include "Core/Renderer/RenderWork.h"
 
-#include "core/renderer/photon-mapping/photonMap.h"
+#include "Core/Renderer/PhotonMapping/PhotonMap.h"
 
 #include <vector>
 
-namespace cadise { class Film; }
-namespace cadise { class PmViewpoint; }
-namespace cadise { class Scene; }
+// forward declaration
+namespace cadise
+{
+    class Film;
+    class PMViewpoint;
+    class Scene;
+}
 
 namespace cadise
 {
 
-class PmRadianceEstimationWork : public RenderWork
+class PMRadianceEstimationWork : public RenderWork
 {
 public:
-    PmRadianceEstimationWork(
+    PMRadianceEstimationWork(
         const PhotonMap* const    photonMap,
-        std::vector<PmViewpoint>* viewpoints,
+        std::vector<PMViewpoint>* viewpoints,
         Film*                     film,
         const std::size_t         numPhotonPaths,
         const real                alpha);
@@ -32,7 +36,7 @@ public:
 private:
     const PhotonMap* _photonMap;
 
-    std::vector<PmViewpoint>* _viewpoints;
+    std::vector<PMViewpoint>* _viewpoints;
     Film*                     _film;
 
     std::size_t _numPhotonPaths;

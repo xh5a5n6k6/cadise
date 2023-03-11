@@ -1,8 +1,8 @@
 #pragma once
 
-#include "utility/tDenseBuffer.h"
+#include "Utility/TDenseBuffer.h"
 
-#include "fundamental/assertion.h"
+#include "Foundation/Assertion.h"
 
 #include <utility>
 

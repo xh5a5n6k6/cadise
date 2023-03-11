@@ -1,14 +1,14 @@
 #pragma once
 
-#include "core/surface/bsdf/bsdf.h"
+#include "Core/surface/bsdf/BSDF.h"
 
 namespace cadise 
 {
 
-class AbsorberBsdf : public Bsdf 
+class AbsorberBSDF : public BSDF 
 {
 public:
-    AbsorberBsdf();
+    AbsorberBSDF();
 
     Spectrum evaluate(
         const TransportInfo&       info,
@@ -17,13 +17,13 @@ public:
     void evaluateSample(
         const TransportInfo&       info,
         const SurfaceIntersection& si,
-        BsdfSample* const          out_sample) const override;
+        BSDFSample* const          out_sample) const override;
 
     real evaluatePdfW(
         const TransportInfo&       info,
         const SurfaceIntersection& si) const override;
 
-    ELobe lobe(const BsdfComponents component) const override;
+    ELobe lobe(const BSDFComponents component) const override;
 };
 
 } // namespace cadise

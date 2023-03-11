@@ -1,18 +1,18 @@
 #pragma once
 
-#include "math/type/fundamentalType.h"
+#include "Math/Type/PrimitiveType.h"
 
 namespace cadise
 {
 
-class PmSetting
+class PMSetting
 {
 public:
-    PmSetting(
+    PMSetting(
         const std::size_t numPhotons,
         const real        searchRadius);
 
-    PmSetting(
+    PMSetting(
         const std::size_t numPhotons,
         const real        searchRadius,
         const std::size_t numIterations,

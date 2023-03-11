@@ -2,8 +2,12 @@
 
 #include <memory>
 
-namespace cadise { class SampleRecord1D; }
-namespace cadise { class SampleRecord2D; }
+// forward declaration
+namespace cadise
+{
+    class SampleRecord1D;
+    class SampleRecord2D;
+}
 
 namespace cadise
 {

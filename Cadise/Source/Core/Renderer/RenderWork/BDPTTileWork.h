@@ -1,22 +1,26 @@
 #pragma once
 
-#include "core/renderer/render-work/tileWork.h"
+#include "Core/Renderer/RenderWork/TileWork.h"
 
-#include "core/integral-tool/connectEvent.h"
+#include "Core/Gear/ConnectEvent.h"
 
 #include <vector>
 
-namespace cadise { class Camera; }
-namespace cadise { class Sampler; }
-namespace cadise { class Scene; }
+// forward declaration
+namespace cadise
+{
+    class Camera;
+    class Sampler;
+    class Scene;
+}
 
 namespace cadise 
 {
 
-class BdptTileWork : public TileWork 
+class BDPTTileWork : public TileWork 
 {
 public:
-    BdptTileWork(
+    BDPTTileWork(
         const Scene* const   scene,
         const Camera* const  camera,
         const Sampler* const sampler);

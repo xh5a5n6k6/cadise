@@ -1,6 +1,6 @@
-#include "core/surface/fresnel/schlickConductorFresnel.h"
+#include "Core/Surface/Fresnel/SchlickConductorFresnel.h"
 
-#include "fundamental/assertion.h"
+#include "Foundation/Assertion.h"
 
 #include <cmath>
 

@@ -1,22 +1,21 @@
-#include "core/intersector/primitive/triangle.h"
+#include "Core/Intersector/Primitive/Triangle.h"
 
-#include "core/integral-tool/sample/positionSample.h"
-#include "core/intersector/primitiveInfo.h"
-#include "core/ray.h"
-#include "core/surfaceDetail.h"
-#include "core/texture/mapper/textureMapper.h"
-#include "fundamental/assertion.h"
-#include "math/constant.h"
-#include "math/random.h"
-#include "math/tAabb3.h"
-#include "math/tVector2.h"
-#include "math/warp/sampleWarp.h"
+#include "Core/Gear/Sample/PositionSample.h"
+#include "Core/Intersector/PrimitiveInfo.h"
+#include "Core/Ray.h"
+#include "Core/SurfaceDetail.h"
+#include "Core/Texture/Mapper/TextureMapper.h"
+#include "Foundation/Assertion.h"
+#include "Math/Random.h"
+#include "Math/TAabb3.h"
+#include "Math/TVector2.h"
+#include "Math/Warp/SampleWarp.h"
 
 namespace cadise
 {
 
 Triangle::Triangle(
-    const std::shared_ptr<Bsdf>& bsdf, 
+    const std::shared_ptr<BSDF>& bsdf, 
     const Vector3R&              vA, 
     const Vector3R&              vB, 
     const Vector3R&              vC) :

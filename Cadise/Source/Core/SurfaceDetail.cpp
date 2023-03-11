@@ -1,4 +1,4 @@
-#include "core/surfaceDetail.h"
+#include "Core/SurfaceDetail.h"
 
 namespace cadise
 {

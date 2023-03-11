@@ -1,8 +1,8 @@
-#include "math/warp/hemisphere.h"
+#include "Math/Warp/Hemisphere.h"
 
-#include "fundamental/assertion.h"
-#include "math/constant.h"
-#include "math/tVector3.h"
+#include "Foundation/Assertion.h"
+#include "Math/Constant.h"
+#include "Math/TVector3.h"
 
 #include <cmath>
 

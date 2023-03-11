@@ -1,6 +1,6 @@
-#include "core/renderer/render-work/tileWork.h"
+#include "Core/Renderer/RenderWork/TileWork.h"
 
-#include "fundamental/assertion.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise 
 {

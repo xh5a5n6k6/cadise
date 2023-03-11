@@ -1,16 +1,16 @@
-#include "core/renderer/photon-mapping/vanilla-pm/vpmRenderer.h"
+#include "Core/Renderer/PhotonMapping/VPM/VPMRenderer.h"
 
-#include "core/estimator/vpmEstimator.h"
-#include "core/film/film.h"
-#include "core/film/filmTile.h"
-#include "core/renderer/photon-mapping/photonMap.h"
-#include "core/renderer/render-work/estimatorTileWork.h"
-#include "core/renderer/render-work/photonMapWork.h"
-#include "core/sampler/sampler.h"
-#include "fundamental/assertion.h"
-#include "fundamental/logger/logger.h"
-#include "fundamental/time/stopwatch.h"
-#include "utility/parallel.h"
+#include "Core/Estimator/VPMEstimator.h"
+#include "Core/Film/Film.h"
+#include "Core/Film/FilmTile.h"
+#include "Core/Renderer/PhotonMapping/PhotonMap.h"
+#include "Core/Renderer/RenderWork/EstimatorTileWork.h"
+#include "Core/Renderer/RenderWork/PhotonMapWork.h"
+#include "Core/Sampler/Sampler.h"
+#include "Foundation/Assertion.h"
+#include "Foundation/Logging/Logger.h"
+#include "Foundation/Time/Stopwatch.h"
+#include "Utility/Parallel.h"
 
 #include <mutex>
 #include <numeric>
@@ -23,9 +23,9 @@ namespace
     const Logger logger("VPM Renderer");
 }
 
-VpmRenderer::VpmRenderer(
+VPMRenderer::VPMRenderer(
     const std::shared_ptr<Sampler>& sampler,
-    const PmSetting&                setting) :
+    const PMSetting&                setting) :
 
     Renderer(),
     _sampler(sampler),
@@ -34,7 +34,7 @@ VpmRenderer::VpmRenderer(
     CS_ASSERT(sampler);
 }
 
-void VpmRenderer::render() const 
+void VPMRenderer::render() const 
 {
     CS_ASSERT(_scene);
 
@@ -96,7 +96,7 @@ void VpmRenderer::render() const
             const std::size_t workBegin,
             const std::size_t workEnd)
         {
-            const VpmEstimator estimator(&photonMap, totalPhotonPaths, _setting.searchRadius());
+            const VPMEstimator estimator(&photonMap, totalPhotonPaths, _setting.searchRadius());
 
             for (std::size_t workIndex = workBegin; workIndex < workEnd; ++workIndex) 
             {

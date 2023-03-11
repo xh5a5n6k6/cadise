@@ -1,14 +1,14 @@
-#include "core/intersector/accelerator/kd-tree/kdTreeAccelerator.h"
+#include "Core/Intersector/Accelerator/KDTree/KDTreeAccelerator.h"
 
-#include "core/intersector/accelerator/kd-tree/kdTreeBuilder.h"
-#include "core/intersector/accelerator/kd-tree/kdTreeNodeInfo.h"
-#include "core/ray.h"
-#include "fundamental/assertion.h"
+#include "Core/Intersector/Accelerator/KDTree/KDTreeBuilder.h"
+#include "Core/Intersector/Accelerator/KDTree/KDTreeNodeInfo.h"
+#include "Core/Ray.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise 
 {
 
-KdTreeAccelerator::KdTreeAccelerator(
+KDTreeAccelerator::KDTreeAccelerator(
     const std::vector<std::shared_ptr<Intersector>>& intersectors,
     const real                                       traversalCost,
     const real                                       intersectionCost,
@@ -31,7 +31,7 @@ KdTreeAccelerator::KdTreeAccelerator(
         _bound.unionWithLocal(bound);
     }
 
-    KdTreeBuilder builder(traversalCost, intersectionCost, emptyBonus);
+    KDTreeBuilder builder(traversalCost, intersectionCost, emptyBonus);
     builder.buildNodes(
         _intersectors, 
         intersectorBounds, 
@@ -40,14 +40,14 @@ KdTreeAccelerator::KdTreeAccelerator(
         &_intersectorIndices);
 }
 
-void KdTreeAccelerator::evaluateBound(AABB3R* const out_bound) const 
+void KDTreeAccelerator::evaluateBound(AABB3R* const out_bound) const
 {
     CS_ASSERT(out_bound);
 
     out_bound->set(_bound);
 }
 
-bool KdTreeAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const
+bool KDTreeAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const
 {
     bool result = false;
 
@@ -67,14 +67,14 @@ bool KdTreeAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) c
         return result;
     }
 
-    KdTreeNodeInfo currentNodeInfo(0, boundMinT, boundMaxT);
+    KDTreeNodeInfo currentNodeInfo(0, boundMinT, boundMaxT);
     std::size_t    currentStackSize = 0;
-    KdTreeNodeInfo nodeInfoStack[MAX_STACK_SIZE];
+    KDTreeNodeInfo nodeInfoStack[MAX_STACK_SIZE];
 
     while (true) 
     {
         const std::size_t currentNodeIndex = currentNodeInfo.nodeIndex();
-        const KdTreeNode& currentNode      = _nodes[currentNodeIndex];
+        const KDTreeNode& currentNode      = _nodes[currentNodeIndex];
 
         // early exits when there is a closer intersection
         // than current node
@@ -164,7 +164,7 @@ bool KdTreeAccelerator::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) c
     return result;
 }
 
-bool KdTreeAccelerator::isOccluded(const Ray& ray) const
+bool KDTreeAccelerator::isOccluded(const Ray& ray) const
 {
     const Vector3R& origin       = ray.origin();
     const Vector3R& direction    = ray.direction();
@@ -182,14 +182,14 @@ bool KdTreeAccelerator::isOccluded(const Ray& ray) const
         return false;
     }
 
-    KdTreeNodeInfo currentNodeInfo(0, boundMinT, boundMaxT);
+    KDTreeNodeInfo currentNodeInfo(0, boundMinT, boundMaxT);
     std::size_t    currentStackSize = 0;
-    KdTreeNodeInfo nodeInfoStack[MAX_STACK_SIZE];
+    KDTreeNodeInfo nodeInfoStack[MAX_STACK_SIZE];
 
     while (true)
     {
         const std::size_t currentNodeIndex = currentNodeInfo.nodeIndex();
-        const KdTreeNode& currentNode      = _nodes[currentNodeIndex];
+        const KDTreeNode& currentNode      = _nodes[currentNodeIndex];
 
         // early exits when there is a closer intersection
         // than current node

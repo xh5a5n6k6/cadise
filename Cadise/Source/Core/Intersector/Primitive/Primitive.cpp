@@ -1,13 +1,13 @@
-#include "core/intersector/primitive/primitive.h"
+#include "Core/Intersector/Primitive/Primitive.h"
 
-#include "fundamental/assertion.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise 
 {
 
 Primitive::Primitive() = default;
 
-Primitive::Primitive(const std::shared_ptr<Bsdf>& bsdf) :
+Primitive::Primitive(const std::shared_ptr<BSDF>& bsdf) :
     _bsdf(bsdf),
     _textureMapper(nullptr),
     _areaLight(nullptr) 
@@ -41,7 +41,7 @@ void Primitive::uvwToPosition(
     return;
 }
 
-const Bsdf* Primitive::bsdf() const 
+const BSDF* Primitive::bsdf() const 
 {
     return _bsdf.get();
 }

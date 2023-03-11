@@ -1,8 +1,8 @@
-#include "math/math.h"
+#include "Math/Math.h"
 
-#include "fundamental/assertion.h"
-#include "math/tVector2.h"
-#include "math/tVector3.h"
+#include "Foundation/Assertion.h"
+#include "Math/TVector2.h"
+#include "Math/TVector3.h"
 
 #include <cmath>
 

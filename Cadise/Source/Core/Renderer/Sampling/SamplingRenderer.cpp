@@ -1,19 +1,17 @@
-#include "core/renderer/sampling/samplingRenderer.h"
+#include "Core/Renderer/Sampling/SamplingRenderer.h"
 
-#include "core/film/film.h"
-#include "core/film/filmTile.h"
-#include "core/estimator/energyEstimator.h"
-#include "core/renderer/render-work/estimatorTileWork.h"
-#include "core/sampler/sampler.h"
-#include "core/scene.h"
-#include "fundamental/assertion.h"
-#include "fundamental/logger/logger.h"
-#include "fundamental/time/stopwatch.h"
-#include "utility/parallel.h"
+#include "Core/Film/Film.h"
+#include "Core/Film/FilmTile.h"
+#include "Core/Estimator/EnergyEstimator.h"
+#include "Core/Renderer/RenderWork/EstimatorTileWork.h"
+#include "Core/Sampler/Sampler.h"
+#include "Foundation/Assertion.h"
+#include "Foundation/Logging/Logger.h"
+#include "Foundation/Time/Stopwatch.h"
+#include "Utility/Parallel.h"
 
 namespace cadise 
 {
-
 
 namespace 
 {

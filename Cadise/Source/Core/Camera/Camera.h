@@ -1,12 +1,16 @@
 #pragma once
 
-#include "math/tVector2.h"
-#include "math/tVector3.h"
+#include "Math/TVector2.h"
+#include "Math/TVector3.h"
 
-namespace cadise { class CameraSample; }
-namespace cadise { class Ray; }
+// forward declaration
+namespace cadise
+{
+    class CameraSample;
+    class Ray;
+}
 
-namespace cadise 
+namespace cadise
 {
 
 class Camera 

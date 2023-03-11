@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/type/fundamentalType.h"
+#include "Math/Type/PrimitiveType.h"
 
 namespace cadise 
 {
@@ -8,9 +8,9 @@ namespace cadise
 template<typename T, std::size_t N>
 class TImage;
 
-using LdrImage      = TImage<uint8, 3>;
-using LdrAlphaImage = TImage<uint8, 4>;
-using HdrImage      = TImage<real, 3>;
-using HdrAlphaImage = TImage<real, 4>;
+using LDRImage      = TImage<uint8, 3>;
+using LDRAlphaImage = TImage<uint8, 4>;
+using HDRImage      = TImage<real, 3>;
+using HDRAlphaImage = TImage<real, 4>;
 
 } // namespace cadise

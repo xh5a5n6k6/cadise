@@ -1,4 +1,4 @@
-#include "core/light/light.h"
+#include "Core/Light/Light.h"
 
 namespace cadise 
 {

@@ -1,4 +1,4 @@
-#include "core/film/filter/boxFilter.h"
+#include "Core/Film/Filter/BoxFilter.h"
 
 namespace cadise
 {

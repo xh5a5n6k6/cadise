@@ -1,18 +1,18 @@
-#include "core/renderer/photon-mapping/pmSetting.h"
+#include "Core/Renderer/PhotonMapping/PMSetting.h"
 
-#include "fundamental/assertion.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise
 {
 
-PmSetting::PmSetting(
+PMSetting::PMSetting(
     const std::size_t numPhotons,
     const real        searchRadius) :
 
-    PmSetting(numPhotons, searchRadius, 0, 0.0001_r)
+    PMSetting(numPhotons, searchRadius, 0, 0.0001_r)
 {}
 
-PmSetting::PmSetting(
+PMSetting::PMSetting(
     const std::size_t numPhotons,
     const real        searchRadius,
     const std::size_t numIterations,
@@ -28,22 +28,22 @@ PmSetting::PmSetting(
     CS_ASSERT_RANGE_INCLUSIVE(alpha, 0.0_r, 1.0_r);
 }
 
-std::size_t PmSetting::numPhotons() const
+std::size_t PMSetting::numPhotons() const
 {
     return _numPhotons;
 }
 
-real PmSetting::searchRadius() const
+real PMSetting::searchRadius() const
 {
     return _searchRadius;
 }
 
-std::size_t PmSetting::numIterations() const
+std::size_t PMSetting::numIterations() const
 {
     return _numIterations;
 }
 
-real PmSetting::alpha() const 
+real PMSetting::alpha() const
 {
     return _alpha;
 }

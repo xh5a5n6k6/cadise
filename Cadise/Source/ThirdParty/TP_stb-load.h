@@ -1,6 +1,6 @@
 #pragma once
 
-#include "fundamental/compiler.h"
+#include "Foundation/Compiler.h"
 
 ///////////////////////////////////////////////////////////
 
@@ -14,4 +14,4 @@
 // create the implementation
 #define STB_IMAGE_IMPLEMENTATION
 
-#include "third-party/stb/stb_image.h"
+#include "ThirdParty/stb/stb_image.h"

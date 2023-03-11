@@ -1,4 +1,4 @@
-#include "core/film/filter/gaussianFilter.h"
+#include "Core/Film/Filter/GaussianFilter.h"
 
 #include <algorithm>
 #include <cmath>

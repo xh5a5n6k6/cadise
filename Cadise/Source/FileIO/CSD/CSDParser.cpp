@@ -1,11 +1,10 @@
-#include "file-io/scene-description/CSDParser.h"
+#include "FileIO/CSD/CSDParser.h"
 
-#include "core/renderDatabase.h"
-#include "file-io/string_utils.h"
-#include "file-io/tokenizer.h"
-#include "file-io/scene-description/CSDResourceParser.h"
-#include "fundamental/logger/logger.h"
-#include "fundamental/time/stopwatch.h"
+#include "Core/RenderDatabase.h"
+#include "FileIO/CSD/CSDResourceParser.h"
+#include "FileIO/Tokenizer.h"
+#include "Foundation/Logging/Logger.h"
+#include "Foundation/Time/Stopwatch.h"
 #include "utility/parallel.h"
 
 #include <fstream>
@@ -16,7 +15,7 @@ namespace cadise
 
 namespace
 {
-    const Logger logger("SD Parser");
+    const Logger logger("CSD Parser");
 }
 
 std::vector<std::shared_ptr<CSDResource>> CSDParser::parse(const std::string& filename)

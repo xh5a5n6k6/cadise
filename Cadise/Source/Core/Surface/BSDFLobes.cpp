@@ -1,48 +1,48 @@
-#include "core/surface/bsdfLobes.h"
+#include "Core/Surface/BSDFLobes.h"
 
 namespace cadise 
 {
 
-BsdfLobes::BsdfLobes() = default;
+BSDFLobes::BSDFLobes() = default;
 
-BsdfLobes::BsdfLobes(const BsdfLobes& other) :
+BSDFLobes::BSDFLobes(const BSDFLobes& other) :
     _lobes(other._lobes) 
 {}
 
-BsdfLobes::BsdfLobes(const Lobes& lobes) 
+BSDFLobes::BSDFLobes(const Lobes& lobes) 
 {
     _lobes = _getAllLobes(lobes);
 }
 
-BsdfLobes BsdfLobes::operator | (const BsdfLobes& rhs) const 
+BSDFLobes BSDFLobes::operator | (const BSDFLobes& rhs) const 
 {
-    BsdfLobes result;
+    BSDFLobes result;
     result._lobes = _lobes | rhs._lobes;
 
     return result;
 }
 
-bool BsdfLobes::isEmpty() const
+bool BSDFLobes::isEmpty() const
 {
     return _lobes == static_cast<uint32>(0);
 }
 
-bool BsdfLobes::hasNone(const Lobes& lobes) const 
+bool BSDFLobes::hasNone(const Lobes& lobes) const 
 {
     return (_lobes & _getAllLobes(lobes)) == static_cast<uint32>(0);
 }
 
-bool BsdfLobes::hasExactly(const Lobes& lobes) const
+bool BSDFLobes::hasExactly(const Lobes& lobes) const
 {
     return _lobes == _getAllLobes(lobes);
 }
 
-bool BsdfLobes::hasAtLeastOne(const Lobes& lobes) const 
+bool BSDFLobes::hasAtLeastOne(const Lobes& lobes) const 
 {
     return (_lobes & _getAllLobes(lobes)) != static_cast<uint32>(0);
 }
 
-bool BsdfLobes::hasOnlyAtLeastOne(const Lobes& lobes) const
+bool BSDFLobes::hasOnlyAtLeastOne(const Lobes& lobes) const
 {
     const uint32 allLobes = _getAllLobes(lobes);
 
@@ -50,12 +50,12 @@ bool BsdfLobes::hasOnlyAtLeastOne(const Lobes& lobes) const
            (_lobes & (~allLobes)) == static_cast<uint32>(0);
 }
 
-uint32 BsdfLobes::rawLobes() const 
+uint32 BSDFLobes::rawLobes() const 
 {
     return _lobes;
 }
 
-uint32 BsdfLobes::_getAllLobes(const Lobes& lobes) const
+uint32 BSDFLobes::_getAllLobes(const Lobes& lobes) const
 {
     uint32 allLobes = 0;
 

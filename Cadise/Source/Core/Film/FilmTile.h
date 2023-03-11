@@ -1,12 +1,16 @@
 #pragma once
 
-#include "core/film/rgbRadianceSensor.h"
-#include "core/spectrum/spectrum.h"
-#include "math/tAabb2.h"
+#include "Core/Film/RGBRadianceSensor.h"
+#include "Core/Spectrum/Spectrum.h"
+#include "Math/TAabb2.h"
 
 #include <vector>
 
-namespace cadise { class Filter; }
+// forward declaration
+namespace cadise
+{
+    class Filter;
+}
 
 namespace cadise 
 {
@@ -20,7 +24,7 @@ public:
     void addSample(const Vector2R& filmPosition, const Vector3R& value);
 
     const AABB2I& tileBound() const;
-    const RgbRadianceSensor& getSensor(const int32 x, const int32 y) const;
+    const RGBRadianceSensor& getSensor(const int32 x, const int32 y) const;
 
     void setSensorSize(const std::size_t sensorSize);
 
@@ -31,7 +35,7 @@ private:
 
     Vector2I                       _resolution;
     AABB2I                         _tileBound;
-    std::vector<RgbRadianceSensor> _sensors;
+    std::vector<RGBRadianceSensor> _sensors;
 };
 
 } // namespace cadise

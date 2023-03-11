@@ -1,15 +1,15 @@
 #pragma once
 
-#include "math/tAabb3.h"
+#include "Math/TAABB3.h"
 
 namespace cadise 
 {
 
-class BvhLinearNode 
+class BVHLinearNode 
 {
 public:
-    BvhLinearNode();
-    ~BvhLinearNode();
+    BVHLinearNode();
+    ~BVHLinearNode();
 
     void initializeInternalNode(
         const AABB3R&     bound, 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "utility/iMovableOnly.h"
+#include "Utility/IMovableOnly.h"
 
 #include <memory>
 
@@ -28,4 +28,4 @@ private:
 
 } // namespace cadise
 
-#include "utility/tDynamicPointerArray.ipp"
+#include "Utility/TDynamicPointerArray.ipp"

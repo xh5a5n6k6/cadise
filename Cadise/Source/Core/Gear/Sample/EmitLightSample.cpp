@@ -1,4 +1,4 @@
-#include "core/integral-tool/sample/emitLightSample.h"
+#include "Core/Gear/Sample/EmitLightSample.h"
 
 namespace cadise
 {

@@ -1,9 +1,9 @@
 #include "cadise/cadise.h"
 
-#include "api/globalStorage.h"
-#include "core/engine.h"
-#include "file-io/scene-description/CSDParser.h"
-#include "fundamental/assertion.h"
+#include "API/GlobalStorage.h"
+#include "Core/Engine.h"
+#include "FileIO/CSD/CSDParser.h"
+#include "Foundation/Assertion.h"
 
 #include <vector>
 
@@ -57,12 +57,12 @@ CSbool csLoadSceneFromFile(const CSuint64 engineId, const CSchar* filename)
     return CS_FALSE;
 }
 
-void csPrepareRender(const CSuint64 engineId)
+void csPreRender(const CSuint64 engineId)
 {
     auto engine = GlobalStorage::getResource<Engine>(engineId);
     if (engine)
     {
-        engine->prepareRender();
+        engine->preRender();
     }
 }
 

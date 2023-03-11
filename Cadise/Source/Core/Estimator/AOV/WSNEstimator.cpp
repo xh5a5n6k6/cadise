@@ -1,14 +1,14 @@
-#include "core/estimator/aov/wsnEstimator.h"
+#include "Core/Estimator/AOV/WSNEstimator.h"
 
-#include "core/ray.h"
-#include "core/scene.h"
-#include "core/surfaceIntersection.h"
-#include "fundamental/assertion.h"
+#include "Core/Ray.h"
+#include "Core/Scene.h"
+#include "Core/SurfaceIntersection.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise 
 {
 
-void WsnEstimator::estimate(
+void WSNEstimator::estimate(
     const Scene&    scene,
     const Ray&      ray,
     Spectrum* const out_radiance) const 

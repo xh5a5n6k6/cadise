@@ -1,20 +1,20 @@
-#include "core/renderer/render-work/pmViewpointWork.h"
+#include "Core/Renderer/RenderWork/PMViewpointWork.h"
 
-#include "core/camera/camera.h"
-#include "core/ray.h"
-#include "core/renderer/photon-mapping/pmViewpointConstructor.h"
-#include "core/sampler/sampler.h"
-#include "core/sampler/sampleRecord2D.h"
-#include "fundamental/assertion.h"
+#include "Core/Camera/Camera.h"
+#include "Core/Ray.h"
+#include "Core/Renderer/PhotonMapping/PMViewpointConstructor.h"
+#include "Core/Sampler/Sampler.h"
+#include "Core/Sampler/SampleRecord2D.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise 
 {
 
-PmViewpointWork::PmViewpointWork(
+PMViewpointWork::PMViewpointWork(
     const AABB2I&                       sampleBound,
     const Sampler* const                sampler,
-    const PmViewpointConstructor* const viewpointConstructor,
-    std::vector<PmViewpoint>* const     viewpoints) :
+    const PMViewpointConstructor* const viewpointConstructor,
+    std::vector<PMViewpoint>* const     viewpoints) :
 
     _sampleBound(sampleBound),
     _sampler(sampler),
@@ -26,7 +26,7 @@ PmViewpointWork::PmViewpointWork(
     CS_ASSERT(viewpoints);
 }
 
-void PmViewpointWork::work() const
+void PMViewpointWork::work() const
 {
     const Vector2I& x0y0 = _sampleBound.minVertex();
     const Vector2I& x1y1 = _sampleBound.maxVertex();

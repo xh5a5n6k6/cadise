@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/renderDatabase.h"
+#include "Core/RenderDatabase.h"
 
 #include <memory>
 
@@ -27,7 +27,7 @@ public:
     Engine();
 
     void consumeResource(const std::shared_ptr<CSDResource>& resource);
-    void prepareRender();
+    void preRender();
     void render() const;
 
     void setThreadCount(const std::size_t threadCount);

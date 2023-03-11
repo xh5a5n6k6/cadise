@@ -1,7 +1,7 @@
 #pragma once
 
-#include "math/constant.h"
-#include "math/type/mathType.h"
+#include "Math/Constant.h"
+#include "Math/Type/MathType.h"
 
 #include <algorithm>
 #include <cmath>

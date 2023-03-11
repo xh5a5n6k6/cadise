@@ -1,8 +1,8 @@
 #pragma once
 
-#include "core/intersector/accelerator/kd-tree/tKdTreeNode.h"
+#include "Core/Intersector/Accelerator/KDTree/TKDTreeNode.h"
 
-#include "fundamental/assertion.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise 
 {
@@ -11,13 +11,13 @@ template<typename T>
 inline constexpr T MASK = T(3);
 
 template<typename Index>
-inline TKdTreeNode<Index>::TKdTreeNode() :
+inline TKDTreeNode<Index>::TKDTreeNode() :
     _objectIndex(0),
     _secondChildIndex(0) 
 {}
 
 template<typename Index>
-inline void TKdTreeNode<Index>::initializInternalNode(
+inline void TKDTreeNode<Index>::initializInternalNode(
     const std::size_t secondChildIndex,
     const std::size_t splitAxis,
     const real        splitPosition)
@@ -28,7 +28,7 @@ inline void TKdTreeNode<Index>::initializInternalNode(
 }
 
 template<typename Index>
-inline void TKdTreeNode<Index>::initializeLeafNode(
+inline void TKDTreeNode<Index>::initializeLeafNode(
     const std::size_t objectIndex,
     const std::size_t numObjects)
 {
@@ -38,37 +38,37 @@ inline void TKdTreeNode<Index>::initializeLeafNode(
 }
 
 template<typename Index>
-inline std::size_t TKdTreeNode<Index>::objectIndex() const
+inline std::size_t TKDTreeNode<Index>::objectIndex() const
 {
     return static_cast<std::size_t>(_objectIndex);
 }
 
 template<typename Index>
-inline std::size_t TKdTreeNode<Index>::numObjects() const
+inline std::size_t TKDTreeNode<Index>::numObjects() const
 {
     return static_cast<std::size_t>(_numObjects >> 2);
 }
 
 template<typename Index>
-inline real TKdTreeNode<Index>::splitPosition() const
+inline real TKDTreeNode<Index>::splitPosition() const
 {
     return _splitPosition;
 }
 
 template<typename Index>
-inline std::size_t TKdTreeNode<Index>::splitAxis() const
+inline std::size_t TKDTreeNode<Index>::splitAxis() const
 {
     return static_cast<std::size_t>(_splitAxis & MASK<Index>);
 }
 
 template<typename Index>
-inline std::size_t TKdTreeNode<Index>::secondChildIndex() const
+inline std::size_t TKDTreeNode<Index>::secondChildIndex() const
 {
     return static_cast<std::size_t>(_secondChildIndex >> 2);
 }
 
 template<typename Index>
-inline bool TKdTreeNode<Index>::isLeaf() const
+inline bool TKDTreeNode<Index>::isLeaf() const
 {
     return (_splitAxis & MASK<Index>) == MASK<Index>;
 }

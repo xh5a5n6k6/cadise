@@ -1,49 +1,49 @@
-#include "core/integral-tool/sample/bsdfSample.h"
+#include "Core/Gear/Sample/BSDFSample.h"
 
-#include "fundamental/assertion.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise
 {
 
-BsdfSample::BsdfSample() :
+BSDFSample::BSDFSample() :
     _scatterValue(0.0_r),
     _scatterDirection(0.0_r),
     _pdfW(0.0_r)
 {}
 
-const Spectrum& BsdfSample::scatterValue() const 
+const Spectrum& BSDFSample::scatterValue() const
 {
     return _scatterValue;
 }
 
-const Vector3R& BsdfSample::scatterDirection() const 
+const Vector3R& BSDFSample::scatterDirection() const
 {
     return _scatterDirection;
 }
 
-real BsdfSample::pdfW() const 
+real BSDFSample::pdfW() const
 {
     return _pdfW;
 }
 
-void BsdfSample::setScatterValue(const Spectrum& scatterValue)
+void BSDFSample::setScatterValue(const Spectrum& scatterValue)
 {
     _scatterValue = scatterValue;
 }
 
-void BsdfSample::setScatterDirection(const Vector3R& scatterDirection)
+void BSDFSample::setScatterDirection(const Vector3R& scatterDirection)
 {
     CS_ASSERT(!scatterDirection.isZero());
 
     _scatterDirection = scatterDirection;
 }
 
-void BsdfSample::setPdfW(const real pdfW)
+void BSDFSample::setPdfW(const real pdfW)
 {
     _pdfW = pdfW;
 }
 
-bool BsdfSample::isValid() const
+bool BSDFSample::isValid() const
 {
     return !_scatterValue.isZero() && _pdfW > 0.0_r;
 }

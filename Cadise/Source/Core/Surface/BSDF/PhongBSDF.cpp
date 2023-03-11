@@ -1,10 +1,10 @@
-#include "core/surface/bsdf/phongBsdf.h"
+#include "Core/Surface/BSDF/PhongBSDF.h"
 
-#include "core/integral-tool/sample/bsdfSample.h"
-#include "core/surfaceIntersection.h"
-#include "math/constant.h"
-#include "math/random.h"
-#include "math/warp/hemisphere.h"
+#include "Core/Gear/Sample/BSDFSample.h"
+#include "Core/SurfaceIntersection.h"
+#include "Math/Constant.h"
+#include "Math/Random.h"
+#include "Math/Warp/Hemisphere.h"
 
 #include <algorithm>
 #include <cmath>
@@ -12,15 +12,15 @@
 namespace cadise 
 {
 
-PhongBsdf::PhongBsdf(const real exponent) :
-    Bsdf(BsdfLobes({ ELobe::GlossyReflection })),
+PhongBSDF::PhongBSDF(const real exponent) :
+    BSDF(BSDFLobes({ ELobe::GlossyReflection })),
     _exponent(exponent) 
 {
     _pdfFactor  = (exponent + 1.0_r) * constant::rcp_two_pi<real>;
     _brdfFactor = (exponent + 2.0_r) * constant::rcp_two_pi<real>;
 }
 
-Spectrum PhongBsdf::evaluate(
+Spectrum PhongBSDF::evaluate(
     const TransportInfo&       info,
     const SurfaceIntersection& si) const 
 {
@@ -41,10 +41,10 @@ Spectrum PhongBsdf::evaluate(
     return Spectrum(specularValue);
 }
 
-void PhongBsdf::evaluateSample(
+void PhongBSDF::evaluateSample(
     const TransportInfo&       info,
     const SurfaceIntersection& si,
-    BsdfSample* const          out_sample) const
+    BSDFSample* const          out_sample) const
 {
     CS_ASSERT(out_sample);
 
@@ -79,7 +79,7 @@ void PhongBsdf::evaluateSample(
     out_sample->setPdfW(pdfL);
 }
 
-real PhongBsdf::evaluatePdfW(
+real PhongBSDF::evaluatePdfW(
     const TransportInfo&       info,
     const SurfaceIntersection& si) const 
 {
@@ -100,7 +100,7 @@ real PhongBsdf::evaluatePdfW(
     return pdfL;
 }
 
-ELobe PhongBsdf::lobe(const BsdfComponents component) const 
+ELobe PhongBSDF::lobe(const BSDFComponents component) const 
 {
     CS_ASSERT_EQ(component, 0);
 

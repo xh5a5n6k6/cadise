@@ -1,13 +1,13 @@
 #pragma once
 
-#include "core/texture/category/tImageTexture.h"
+#include "Core/Texture/Category/TImageTexture.h"
 
-#include "core/spectrum/spectrum.h"
+#include "Core/Spectrum/Spectrum.h"
 
 namespace cadise
 {
 
-class RgbaImageTexture : public TImageTexture<Spectrum, real, 4> 
+class RGBAImageTexture : public TImageTexture<Spectrum, real, 4> 
 {
 public:
     using Parent = TImageTexture<Spectrum, real, 4>;

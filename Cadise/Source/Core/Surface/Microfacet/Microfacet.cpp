@@ -1,7 +1,7 @@
-#include "core/surface/microfacet/microfacet.h"
+#include "Core/Surface/Microfacet/Microfacet.h"
 
-#include "core/surface/microfacet/tRoughnessMapper.h"
-#include "math/tVector3.h"
+#include "Core/Surface/Microfacet/TRoughnessMapper.h"
+#include "Math/TVector3.h"
 
 namespace cadise 
 {

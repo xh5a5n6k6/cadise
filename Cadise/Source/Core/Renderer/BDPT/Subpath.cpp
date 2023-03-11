@@ -1,50 +1,50 @@
-#include "core/renderer/bidirectional-path-tracing/subPath.h"
+#include "Core/Renderer/BDPT/Subpath.h"
 
-#include "core/camera/camera.h"
-#include "core/integral-tool/connectEvent.h"
-#include "core/integral-tool/sample/cameraSample.h"
-#include "core/integral-tool/sample/directLightSample.h"
-#include "core/light/light.h"
-#include "core/ray.h"
-#include "core/renderer/bidirectional-path-tracing/bdptMis.h"
-#include "core/scene.h"
-#include "core/surface/eTransportMode.h"
-#include "fundamental/assertion.h"
-#include "math/constant.h"
+#include "Core/Camera/Camera.h"
+#include "Core/Gear/ConnectEvent.h"
+#include "Core/Gear/Sample/CameraSample.h"
+#include "Core/Gear/Sample/DirectLightSample.h"
+#include "Core/Light/Light.h"
+#include "Core/Ray.h"
+#include "Core/Renderer/BDPT/BDPTMIS.h"
+#include "Core/Scene.h"
+#include "Core/Surface/ETransportMode.h"
+#include "Foundation/Assertion.h"
+#include "Math/Constant.h"
 
 namespace cadise
 {
 
-SubPath SubPath::emptyPath() 
+Subpath Subpath::emptyPath()
 {
-    return SubPath(0);
+    return Subpath(0);
 }
 
-SubPath SubPath::oneVertexPath(const PathVertex& vertex) 
+Subpath Subpath::oneVertexPath(const PathVertex& vertex)
 {
-    SubPath path(1);
+    Subpath path(1);
     path.addVertex(vertex);
 
     return path;
 }
 
-SubPath::SubPath(const std::size_t maxPathLength) :
+Subpath::Subpath(const std::size_t maxPathLength) :
     _vertices()
 {
     _vertices.reserve(maxPathLength);
 }
 
-PathVertex& SubPath::operator[] (const std::size_t index) 
+PathVertex& Subpath::operator[] (const std::size_t index)
 {
     return _vertices[index];
 }
 
-const PathVertex& SubPath::operator[] (const std::size_t index) const 
+const PathVertex& Subpath::operator[] (const std::size_t index) const
 {
     return _vertices[index];
 }
 
-void SubPath::addVertex(const PathVertex& vertex) 
+void Subpath::addVertex(const PathVertex& vertex)
 {
     // we take _vertices as a fixed size array,
     // so it needs to check the number of elements
@@ -54,7 +54,7 @@ void SubPath::addVertex(const PathVertex& vertex)
     _vertices.push_back(vertex);
 }
 
-void SubPath::connectCamera(
+void Subpath::connectCamera(
     const Scene&                     scene,
     const Camera* const              camera,
     std::vector<ConnectEvent>* const out_events) const 
@@ -126,14 +126,14 @@ void SubPath::connectCamera(
             continue;
         }
 
-        const real misWeight = BdptMis::weight(
-            scene, *this, SubPath::oneVertexPath(cameraVertex), s, 1);
+        const real misWeight = BDPTMIS::weight(
+            scene, *this, Subpath::oneVertexPath(cameraVertex), s, 1);
 
         out_events->push_back(ConnectEvent(filmPosition, radiance.mul(misWeight)));
     }
 }
 
-void SubPath::connectLight(
+void Subpath::connectLight(
     const Scene&    scene,
     Spectrum* const out_radiance) const
 {
@@ -215,8 +215,8 @@ void SubPath::connectLight(
             continue;
         }
 
-        const real misWeight = BdptMis::weight(
-            scene, SubPath::oneVertexPath(lightVertex), *this, 1, t);
+        const real misWeight = BDPTMIS::weight(
+            scene, Subpath::oneVertexPath(lightVertex), *this, 1, t);
 
         totalRadiance.addLocal(contributeRadiance.mul(misWeight));
     }
@@ -224,7 +224,7 @@ void SubPath::connectLight(
     out_radiance->set(totalRadiance);
 }
 
-std::size_t SubPath::length() const 
+std::size_t Subpath::length() const
 {
     return _vertices.size();
 }

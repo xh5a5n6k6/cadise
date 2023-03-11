@@ -1,17 +1,18 @@
 #pragma once
 
-#include "math/type/fundamentalType.h"
+#include "Math/Type/PrimitiveType.h"
 
 namespace cadise 
 {
 
-class KdTreeNodeInfo 
+class KDTreeNodeInfo 
 {
 public:
-    KdTreeNodeInfo();
-    KdTreeNodeInfo(const std::size_t nodeIndex,
-                   const real        minT,
-                   const real        maxT);
+    KDTreeNodeInfo();
+    KDTreeNodeInfo(
+        const std::size_t nodeIndex,
+        const real        minT,
+        const real        maxT);
 
     std::size_t nodeIndex() const;
     real minT() const;

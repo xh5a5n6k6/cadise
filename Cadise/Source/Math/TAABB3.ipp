@@ -1,12 +1,11 @@
 #pragma once
 
-#include "math/tAabb3.h"
+#include "Math/TAABB3.h"
 
-#include "fundamental/assertion.h"
+#include "Foundation/Assertion.h"
 
 #include <algorithm>
 #include <limits>
-#include <type_traits>
 
 namespace cadise 
 {

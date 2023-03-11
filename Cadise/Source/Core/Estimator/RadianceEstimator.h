@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/estimator/energyEstimator.h"
+#include "Core/Estimator/EnergyEstimator.h"
 
 namespace cadise
 {

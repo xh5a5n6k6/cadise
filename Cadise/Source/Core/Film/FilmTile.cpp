@@ -1,8 +1,8 @@
-#include "core/film/filmTile.h"
+#include "Core/Film/FilmTile.h"
 
-#include "core/film/filter/filter.h"
-#include "fundamental/assertion.h"
-#include "math/tVector3.h"
+#include "Core/Film/Filter/Filter.h"
+#include "Foundation/Assertion.h"
+#include "Math/TVector3.h"
 
 namespace cadise 
 {
@@ -77,7 +77,7 @@ const AABB2I& FilmTile::tileBound() const
     return _tileBound;
 }
 
-const RgbRadianceSensor& FilmTile::getSensor(const int32 x, const int32 y) const
+const RGBRadianceSensor& FilmTile::getSensor(const int32 x, const int32 y) const
 {
     const std::size_t sensorIndexOffset = _sensorIndexOffset(x, y);
 

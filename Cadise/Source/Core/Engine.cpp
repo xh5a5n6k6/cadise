@@ -1,7 +1,7 @@
-#include "core/engine.h"
+#include "Core/Engine.h"
 
-#include "fundamental/logger/logger.h"
-#include "renderer/renderer.h"
+#include "Foundation/Logging/Logger.h"
+#include "Renderer/Renderer.h"
 
 #include <thread>
 
@@ -20,7 +20,7 @@ void Engine::consumeResource(const std::shared_ptr<CSDResource>& resource)
     _renderDatabase.consumeResource(resource);
 }
 
-void Engine::prepareRender()
+void Engine::preRender()
 {
     _renderer = _renderDatabase.prepareRender();
     _renderer->setWorkerCount(_config.numThreads);

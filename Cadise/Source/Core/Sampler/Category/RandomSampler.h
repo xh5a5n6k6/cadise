@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/sampler/sampler.h"
+#include "Core/Sampler/Sampler.h"
 
 namespace cadise
 {

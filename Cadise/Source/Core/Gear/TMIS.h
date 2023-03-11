@@ -1,31 +1,31 @@
 #pragma once
 
-#include "core/integral-tool/eMisMode.h"
-#include "fundamental/assertion.h"
-#include "math/type/fundamentalType.h"
+#include "Core/Gear/EMisMode.h"
+#include "Foundation/Assertion.h"
+#include "Math/Type/PrimitiveType.h"
 
 namespace cadise 
 {
 
-template<EMisMode Mode>
-class TMis
+template<EMISMode Mode>
+class TMIS
 {
 public:
     real weight(
         const real  pdfA, 
         const real  pdfB,
         const int32 nA = 1, 
-        const int32 nB = 1);
+        const int32 nB = 1) const;
 };
 
 // template header implementation
 
-template<EMisMode Mode>
-inline real TMis<Mode>::weight(
+template<EMISMode Mode>
+inline real TMIS<Mode>::weight(
     const real  pdfA,
     const real  pdfB,
     const int32 nA,
-    const int32 nB)
+    const int32 nB) const
 {
     CS_ASSERT_GE(pdfA, 0.0_r);
     CS_ASSERT_GE(pdfB, 0.0_r);
@@ -33,12 +33,12 @@ inline real TMis<Mode>::weight(
     const real mulA = nA * pdfA;
     const real mulB = nB * pdfB;
 
-    if constexpr (Mode == EMisMode::Balance)
+    if constexpr (Mode == EMISMode::Balance)
     {
         return mulA / (mulA + mulB);
     }
     // using power as 2
-    else if constexpr (Mode == EMisMode::Power)
+    else if constexpr (Mode == EMISMode::Power)
     {
         const real mulA2 = mulA * mulA;
         const real mulB2 = mulB * mulB;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/surface/microfacet/eRoughnessMapMode.h"
+#include "Core/Surface/Microfacet/ERoughnessMapMode.h"
 
 #include <algorithm>
 #include <cmath>
@@ -12,13 +12,13 @@ template<ERoughnessMapMode Mode>
 class TRoughnessMapper 
 {
 public:
-    real map(const real roughness);
+    real map(const real roughness) const;
 };
 
 // template header implementation
 
 template<ERoughnessMapMode Mode>
-inline real TRoughnessMapper<Mode>::map(const real roughness) 
+inline real TRoughnessMapper<Mode>::map(const real roughness) const
 {
     real alpha;
     

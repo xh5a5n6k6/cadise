@@ -1,8 +1,12 @@
 #pragma once
 
-#include "math/type/imageType.h"
+#include "Math/Type/ImageType.h"
 
-namespace cadise { class Path; }
+// forward declaration
+namespace cadise
+{
+    class Path;
+}
 
 namespace cadise 
 {
@@ -10,15 +14,15 @@ namespace cadise
 class PictureSaver 
 {
 public:
-    static void save(const Path& path, const HdrImage& hdrImage);
+    static void save(const Path& path, const HDRImage& hdrImage);
 
 private:
-    static void saveLdrImage(const Path& path, const LdrImage& ldrImage);
-    static void saveHdrImage(const Path& path, const HdrImage& hdrImage);
+    static void _saveLdrImage(const Path& path, const LDRImage& ldrImage);
+    static void _saveHdrImage(const Path& path, const HDRImage& hdrImage);
 
-    static bool savePNG(const Path& path, const LdrImage& ldrImage);
-    static bool saveJPG(const Path& path, const LdrImage& ldrImage);
-    static bool savePPM(const Path& path, const LdrImage& ldrImage);
+    static bool _savePNG(const Path& path, const LDRImage& ldrImage);
+    static bool _saveJPG(const Path& path, const LDRImage& ldrImage);
+    static bool _savePPM(const Path& path, const LDRImage& ldrImage);
 };
 
 } // namespace cadise

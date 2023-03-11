@@ -1,7 +1,7 @@
-#include "core/intersector/accelerator/bruteForceAccelerator.h"
+#include "Core/Intersector/Accelerator/BruteForceAccelerator.h"
 
-#include "fundamental/assertion.h"
-#include "math/tAabb3.h"
+#include "Foundation/Assertion.h"
+#include "Math/TAABB3.h"
 
 namespace cadise 
 {

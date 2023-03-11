@@ -1,6 +1,10 @@
 #pragma once
 
-namespace cadise { class Primitive; }
+// forward declaration
+namespace cadise
+{
+    class Primitive;
+}
 
 namespace cadise
 {

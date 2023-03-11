@@ -1,7 +1,7 @@
 #pragma once
 
-#include "core/surfaceIntersection.h"
-#include "core/texture/tTexture.h"
+#include "Core/SurfaceIntersection.h"
+#include "Core/Texture/TTexture.h"
 
 namespace cadise 
 {

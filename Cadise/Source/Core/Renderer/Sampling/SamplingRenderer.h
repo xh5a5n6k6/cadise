@@ -1,9 +1,13 @@
 #pragma once
 
-#include "core/renderer/renderer.h"
+#include "Core/Renderer/Renderer.h"
 
-namespace cadise { class EnergyEstimator; }
-namespace cadise { class Sampler; }
+// forward declaration
+namespace cadise
+{
+    class EnergyEstimator;
+    class Sampler;
+}
 
 namespace cadise
 {

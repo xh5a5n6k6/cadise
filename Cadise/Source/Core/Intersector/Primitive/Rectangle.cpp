@@ -1,13 +1,13 @@
-#include "core/intersector/primitive/rectangle.h"
+#include "Core/Intersector/Primitive/Rectangle.h"
 
-#include "core/integral-tool/sample/positionSample.h"
-#include "core/intersector/primitiveInfo.h"
-#include "core/ray.h"
-#include "core/surfaceDetail.h"
-#include "core/texture/mapper/textureMapper.h"
-#include "fundamental/assertion.h"
-#include "math/random.h"
-#include "math/tAabb3.h"
+#include "Core/Gear/Sample/PositionSample.h"
+#include "Core/Intersector/PrimitiveInfo.h"
+#include "Core/Ray.h"
+#include "Core/SurfaceDetail.h"
+#include "Core/Texture/Mapper/TextureMapper.h"
+#include "Foundation/Assertion.h"
+#include "Math/Random.h"
+#include "Math/TAabb3.h"
 
 #include <limits>
 
@@ -15,7 +15,7 @@ namespace cadise
 {
 
 Rectangle::Rectangle(
-    const std::shared_ptr<Bsdf>& bsdf, 
+    const std::shared_ptr<BSDF>& bsdf, 
     const Vector3R&              vA, 
     const Vector3R&              vB, 
     const Vector3R&              vC) :

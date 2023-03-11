@@ -1,8 +1,8 @@
 #pragma once
 
-#include "core/integral-tool/tPointKdTree.h"
+#include "Core/Gear/TPointKDTree.h"
 
-#include "fundamental/assertion.h"
+#include "Foundation/Assertion.h"
 
 #include <algorithm>
 
@@ -10,8 +10,8 @@ namespace cadise
 {
 
 template<typename Index, typename Object, typename ObjectCenterCalculator>
-inline TPointKdTree<Index, Object, ObjectCenterCalculator>::
-    TPointKdTree(const ObjectCenterCalculator& centerCalculator) :
+inline TPointKDTree<Index, Object, ObjectCenterCalculator>::TPointKDTree(
+    const ObjectCenterCalculator& centerCalculator) :
     
     _objects(),
     _nodes(),
@@ -21,7 +21,7 @@ inline TPointKdTree<Index, Object, ObjectCenterCalculator>::
 {}
 
 template<typename Index, typename Object, typename ObjectCenterCalculator>
-inline void TPointKdTree<Index, Object, ObjectCenterCalculator>::
+inline void TPointKDTree<Index, Object, ObjectCenterCalculator>::
     buildNodes(const std::vector<Object>& objects)
 {
     // clear buffer first
@@ -55,7 +55,7 @@ inline void TPointKdTree<Index, Object, ObjectCenterCalculator>::
 }
 
 template<typename Index, typename Object, typename ObjectCenterCalculator>
-inline void TPointKdTree<Index, Object, ObjectCenterCalculator>::
+inline void TPointKDTree<Index, Object, ObjectCenterCalculator>::
     findWithRange(
         const Vector3R&            position,
         const real                 searchRadius,
@@ -144,7 +144,7 @@ inline void TPointKdTree<Index, Object, ObjectCenterCalculator>::
 }
 
 template<typename Index, typename Object, typename ObjectCenterCalculator>
-inline void TPointKdTree<Index, Object, ObjectCenterCalculator>::
+inline void TPointKDTree<Index, Object, ObjectCenterCalculator>::
     _buildNodesRecursively(
         const std::vector<Vector3R>& objectCenters,
         const std::vector<Index>&    objectIndices,
@@ -236,7 +236,7 @@ inline void TPointKdTree<Index, Object, ObjectCenterCalculator>::
 }
 
 template<typename Index, typename Object, typename ObjectCenterCalculator>
-inline bool TPointKdTree<Index, Object, ObjectCenterCalculator>::
+inline bool TPointKDTree<Index, Object, ObjectCenterCalculator>::
     _canSplitWithEqual(
         const std::vector<Vector3R>&         objectCenters,
         const std::vector<Index>&            objectIndices,

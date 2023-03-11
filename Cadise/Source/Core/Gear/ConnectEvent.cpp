@@ -1,4 +1,4 @@
-#include "core/integral-tool/connectEvent.h"
+#include "Core/Gear/ConnectEvent.h"
 
 namespace cadise 
 {

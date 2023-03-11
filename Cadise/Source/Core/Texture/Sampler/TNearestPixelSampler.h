@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/texture/sampler/tPixelSampler.h"
+#include "Core/Texture/Sampler/TPixelSampler.h"
 
 namespace cadise
 {
@@ -30,4 +30,4 @@ public:
 
 } // namespace cadise
 
-#include "core/texture/sampler/tNearestPixelSampler.ipp"
+#include "Core/Texture/Sampler/TNearestPixelSampler.ipp"

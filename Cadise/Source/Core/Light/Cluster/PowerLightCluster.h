@@ -1,8 +1,8 @@
 #pragma once
 
-#include "core/light/cluster/lightCluster.h"
+#include "Core/Light/Cluster/LightCluster.h"
 
-#include "math/distribution/distribution1D.h"
+#include "Math/Distribution/Distribution1D.h"
 
 #include <memory>
 #include <unordered_map>

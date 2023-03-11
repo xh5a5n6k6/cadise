@@ -1,7 +1,7 @@
-#include "math/warp/sampleWarp.h"
+#include "Math/Warp/SampleWarp.h"
 
-#include "fundamental/assertion.h"
-#include "math/tVector2.h"
+#include "Foundation/Assertion.h"
+#include "Math/TVector2.h"
 
 #include <cmath>
 

@@ -1,22 +1,21 @@
-#include "core/renderDatabase.h"
+#include "Core/RenderDatabase.h"
 
-#include "core/camera/camera.h"
-#include "core/film/film.h"
-#include "core/instantiator/instantiator.h"
-#include "core/intersector/accelerator/accelerator.h"
-#include "core/intersector/primitive/primitive.h"
-#include "core/intersector/primitive/triangle.h"
-#include "core/intersector/primitive/triangleBuffer.h"
-#include "core/light/light.h"
-#include "core/renderer/renderer.h"
-#include "core/scene.h"
-#include "core/surface/bsdf/bsdf.h"
-#include "core/texture/tTexture.h"
-#include "file-io/scene-description/CSDResource.h"
-#include "fundamental/assertion.h"
-#include "fundamental/logger/logger.h"
-#include "fundamental/time/stopwatch.h"
-#include "math/tAabb3.h"
+#include "Core/Camera/Camera.h"
+#include "Core/Film/Film.h"
+#include "Core/Instantiator/Instantiator.h"
+#include "Core/Intersector/Accelerator/Accelerator.h"
+#include "Core/Intersector/Primitive/Primitive.h"
+#include "Core/Intersector/Primitive/TriangleBuffer.h"
+#include "Core/Light/Light.h"
+#include "Core/Renderer/Renderer.h"
+#include "Core/Scene.h"
+#include "Core/Surface/BSDF/BSDF.h"
+#include "Core/Texture/TTexture.h"
+#include "FileIO/CSD/CSDResource.h"
+#include "Foundation/Assertion.h"
+#include "Foundation/Logging/Logger.h"
+#include "Foundation/Time/Stopwatch.h"
+#include "Math/TAABB3.h"
 
 #include <limits>
 
@@ -43,43 +42,43 @@ void RenderDatabase::consumeResource(const std::shared_ptr<CSDResource>& resourc
 
     switch (resource->classType())
     {
-        case ESdClassType::Film:
+        case ECSDClassType::Film:
             _setUpFilm(resource);
             break;
 
-        case ESdClassType::Camera:
+        case ECSDClassType::Camera:
             _setUpCamera(resource);
             break;
 
-        case ESdClassType::Renderer:
+        case ECSDClassType::Renderer:
             _setUpRenderer(resource);
             break;
 
-        case ESdClassType::Accelerator:
+        case ECSDClassType::Accelerator:
             _setUpAccelerator(resource);
             break;
 
-        case ESdClassType::LightCluster:
+        case ECSDClassType::LightCluster:
             _setUpLightCluster(resource);
             break;
 
-        case ESdClassType::TextureReal:
+        case ECSDClassType::TextureReal:
             _setUpRealTexture(resource);
             break;
 
-        case ESdClassType::TextureSpectrum:
+        case ECSDClassType::TextureSpectrum:
             _setUpSpectrumTexture(resource);
             break;
 
-        case ESdClassType::Material:
+        case ECSDClassType::Material:
             _setUpBsdf(resource);
             break;
 
-        case ESdClassType::Light:
+        case ECSDClassType::Light:
             _setUpLight(resource);
             break;
 
-        case ESdClassType::Primitive:
+        case ECSDClassType::Primitive:
             _setUpPrimitive(resource);
             break;
 
@@ -207,10 +206,10 @@ void RenderDatabase::_setUpSpectrumTexture(const std::shared_ptr<CSDResource>& r
 
 void RenderDatabase::_setUpBsdf(const std::shared_ptr<CSDResource>& resource)
 {
-    const std::shared_ptr<Bsdf> bsdf = instantiator::makeBsdf(resource, _realTextures, _spectrumTextures, _bsdfs);
+    const std::shared_ptr<BSDF> bsdf = instantiator::makeBsdf(resource, _realTextures, _spectrumTextures, _bsdfs);
     const std::string bsdfName = resource->findString("name");
 
-    _bsdfs.insert(std::pair<std::string, std::shared_ptr<Bsdf>>(bsdfName, bsdf));
+    _bsdfs.insert(std::pair<std::string, std::shared_ptr<BSDF>>(bsdfName, bsdf));
 }
 
 void RenderDatabase::_setUpLight(const std::shared_ptr<CSDResource>& resource)

@@ -1,15 +1,15 @@
 #pragma once
 
-#include "core/spectrum/spectrum.h"
-#include "math/tVector3.h"
+#include "Core/Spectrum/Spectrum.h"
+#include "Math/TVector3.h"
 
 namespace cadise 
 {
 
-class BsdfSample 
+class BSDFSample 
 {
 public:
-    BsdfSample();
+    BSDFSample();
 
     const Spectrum& scatterValue() const;
     const Vector3R& scatterDirection() const;

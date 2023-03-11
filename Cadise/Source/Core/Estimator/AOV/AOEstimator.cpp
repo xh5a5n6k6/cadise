@@ -1,26 +1,25 @@
-#include "core/estimator/aov/aoEstimator.h"
+#include "Core/Estimator/AOV/AOEstimator.h"
 
-#include "core/ray.h"
-#include "core/scene.h"
-#include "core/surfaceIntersection.h"
-#include "fundamental/assertion.h"
-#include "math/math.h"
-#include "math/random.h"
-#include "math/warp/hemisphere.h"
+#include "Core/Ray.h"
+#include "Core/Scene.h"
+#include "Core/SurfaceIntersection.h"
+#include "Foundation/Assertion.h"
+#include "Math/Random.h"
+#include "Math/Warp/Hemisphere.h"
 
 namespace cadise 
 {
 
-AoEstimator::AoEstimator() :
-    AoEstimator(4) 
+AOEstimator::AOEstimator() :
+    AOEstimator(4)
 {}
 
-AoEstimator::AoEstimator(const std::size_t numSampleRays) :
-    AovEstimator(),
+AOEstimator::AOEstimator(const std::size_t numSampleRays) :
+    AOVEstimator(),
     _numSampleRays(numSampleRays)
 {}
 
-void AoEstimator::estimate(
+void AOEstimator::estimate(
     const Scene&    scene,
     const Ray&      ray,
     Spectrum* const out_radiance) const

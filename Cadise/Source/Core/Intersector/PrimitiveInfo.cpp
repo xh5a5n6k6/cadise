@@ -1,6 +1,6 @@
-#include "core/intersector/primitiveInfo.h"
+#include "Core/Intersector/PrimitiveInfo.h"
 
-#include "fundamental/assertion.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise
 {

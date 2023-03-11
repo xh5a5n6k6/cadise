@@ -1,16 +1,16 @@
 #pragma once
 
-#include "fundamental/os.h"
+#include "Foundation/OS.h"
 
 #if defined(CADISE_OS_WINDOWS)
-    #include "third-party/StackWalker/StackWalker.h"
+    #include "ThirdParty/StackWalker/StackWalker.h"
 
     #include <iostream>
 
     namespace cadise
     {
 
-    // self-defined class for custom output-mechnism
+    // self-defined class for custom output-mechanism
     class WindowsStackWalker : public StackWalker
     {
     public:

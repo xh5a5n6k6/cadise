@@ -1,41 +1,46 @@
 #pragma once
 
-#include "core/spectrum/spectrum.h"
+#include "Core/Spectrum/Spectrum.h"
 
-namespace cadise { class Camera; }
-namespace cadise { class Ray; }
-namespace cadise { class Scene; }
-namespace cadise { class SubPath; }
-namespace cadise { enum class ETransportMode; }
+// forward declaration
+namespace cadise
+{
+    class Camera;
+    class Ray;
+    class Scene;
+    class Subpath;
+
+    enum class ETransportMode;
+}
 
 namespace cadise
 {
 
-class SubPathBuilder
+class SubpathBuilder
 {
 public:
-    explicit SubPathBuilder(const std::size_t maxPathLength);
+    explicit SubpathBuilder(const std::size_t maxPathLength);
 
     void setCamera(const Camera* const camera);
 
     void buildLightPath(
         const Scene&   scene,
-        SubPath* const out_lightPath) const;
+        Subpath* const out_lightPath) const;
 
     void buildCameraPath(
         const Scene&    scene,
         const Vector2D& filmPosition,
-        SubPath* const  out_cameraPath,
+        Subpath* const  out_cameraPath,
         Spectrum* const out_zeroBounceRadiance) const;
 
 private:
-    void _buildSubPathCompletely(
+    void _buildSubpathCompletely(
         const ETransportMode mode,
         const Scene&         scene,
         const Ray&           firstRay,
         const Spectrum&      secondVertexThroughput,
         const real           secondVertexForwardPdfW,
-        SubPath* const       out_subPath,
+        Subpath* const       out_subpath,
         Spectrum* const      out_zeroBoundRadiance) const;
 
     std::size_t   _maxPathLength;

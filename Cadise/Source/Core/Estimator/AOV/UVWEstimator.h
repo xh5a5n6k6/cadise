@@ -1,17 +1,17 @@
 #pragma once
 
-#include "core/estimator/aov/aovEstimator.h"
+#include "Core/Estimator/AOV/AOVEstimator.h"
 
 namespace cadise 
 {
 
 /*
-    UvwEstimator: UVs Estimator
+    UVWEstimator: UVs Estimator
 */
-class UvwEstimator : public AovEstimator 
+class UVWEstimator : public AOVEstimator 
 {
 public:
-    using AovEstimator::AovEstimator;
+    using AOVEstimator::AOVEstimator;
 
     void estimate(
         const Scene&    scene,
@@ -23,7 +23,7 @@ public:
 
 // header implementation
 
-inline std::string UvwEstimator::toString() const 
+inline std::string UVWEstimator::toString() const 
 {
     return "AOV-UVW Estimator";
 }

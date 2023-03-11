@@ -1,16 +1,20 @@
 #pragma once
 
-#include "core/surface/bsdf/bsdf.h"
+#include "Core/Surface/BSDF/BSDF.h"
 
 #include <memory>
 
-namespace cadise { class ConductorFresnel; }
-namespace cadise { class Microfacet; }
+// forward declaration
+namespace cadise
+{
+    class ConductorFresnel;
+    class Microfacet; 
+}
 
 namespace cadise 
 {
 
-class ConductorMicrofacet : public Bsdf 
+class ConductorMicrofacet : public BSDF 
 {
 public:
     ConductorMicrofacet(
@@ -24,13 +28,13 @@ public:
     void evaluateSample(
         const TransportInfo&       info,
         const SurfaceIntersection& si,
-        BsdfSample* const          out_sample) const override;
+        BSDFSample* const          out_sample) const override;
 
     real evaluatePdfW(
         const TransportInfo&       info,
         const SurfaceIntersection& si) const override;
 
-    ELobe lobe(const BsdfComponents component) const override;
+    ELobe lobe(const BSDFComponents component) const override;
 
 private:
     std::shared_ptr<Microfacet>       _microfacet;

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "math/distribution/distribution1D.h"
-#include "math/type/mathType.h"
+#include "Math/Distribution/Distribution1D.h"
+#include "Math/Type/MathType.h"
 
 #include <array>
 

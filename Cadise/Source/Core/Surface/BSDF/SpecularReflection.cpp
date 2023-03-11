@@ -1,10 +1,10 @@
-#include "core/surface/bsdf/specularReflection.h"
+#include "Core/Surface/BSDF/SpecularReflection.h"
 
-#include "core/integral-tool/sample/bsdfSample.h"
-#include "core/integral-tool/tSurfaceSampler.h"
-#include "core/surface/fresnel/fresnel.h"
-#include "core/surfaceIntersection.h"
-#include "fundamental/assertion.h"
+#include "Core/Gear/Sample/BSDFSample.h"
+#include "Core/Gear/TSurfaceSampler.h"
+#include "Core/Surface/Fresnel/Fresnel.h"
+#include "Core/SurfaceIntersection.h"
+#include "Foundation/Assertion.h"
 
 #include <cmath>
 
@@ -15,7 +15,7 @@ SpecularReflection::SpecularReflection(
     const std::shared_ptr<TTexture<Spectrum>>& albedo,
     const std::shared_ptr<Fresnel>&            fresnel) :
     
-    Bsdf(BsdfLobes({ ELobe::SpecularReflection })),
+    BSDF(BSDFLobes({ ELobe::SpecularReflection })),
     _albedo(albedo),
     _fresnel(fresnel)
 {
@@ -33,7 +33,7 @@ Spectrum SpecularReflection::evaluate(
 void SpecularReflection::evaluateSample(
     const TransportInfo&       info, 
     const SurfaceIntersection& si,
-    BsdfSample* const          out_sample) const
+    BSDFSample* const          out_sample) const
 {
     CS_ASSERT(out_sample);
 
@@ -64,7 +64,7 @@ real SpecularReflection::evaluatePdfW(
     return 0.0_r;
 }
 
-ELobe SpecularReflection::lobe(const BsdfComponents component) const 
+ELobe SpecularReflection::lobe(const BSDFComponents component) const 
 {
     CS_ASSERT_EQ(component, 0);
 

@@ -1,20 +1,20 @@
 #pragma once
 
-#include "core/spectrum/tConceptualSpectrum.h"
+#include "Core/Spectrum/TConceptualSpectrum.h"
 
-#include "math/type/mathType.h"
+#include "Math/Type/MathType.h"
 
 namespace cadise 
 {
 
-class RgbSpectrum : public TConceptualSpectrum<real, 3>
+class RGBSpectrum : public TConceptualSpectrum<real, 3>
 {
 public:
-    RgbSpectrum();
-    explicit RgbSpectrum(const real value);
-    explicit RgbSpectrum(const Vector3R& value);
-    RgbSpectrum(const TConceptualSpectrum<real, 3>& other);
-    RgbSpectrum(const RgbSpectrum& other);
+    RGBSpectrum();
+    explicit RGBSpectrum(const real value);
+    explicit RGBSpectrum(const Vector3R& value);
+    RGBSpectrum(const TConceptualSpectrum<real, 3>& other);
+    RGBSpectrum(const RGBSpectrum& other);
 
     using Parent = TConceptualSpectrum<real, 3>;
     using Parent::Parent;

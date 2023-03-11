@@ -1,6 +1,6 @@
-#include "file-io/scene-description/valueParser.h"
+#include "FileIO/CSD/ValueParser.h"
 
-#include "fundamental/logger/logger.h"
+#include "Foundation/Logging/Logger.h"
 
 namespace cadise 
 {

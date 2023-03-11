@@ -1,39 +1,39 @@
-#include "core/surface/bsdf/absorberBsdf.h"
+#include "Core/Surface/BSDF/AbsorberBSDF.h"
 
-#include "fundamental/assertion.h"
+#include "Foundation/Assertion.h"
 
 namespace cadise 
 {
 
-AbsorberBsdf::AbsorberBsdf() :
-    Bsdf(BsdfLobes({ ELobe::Absorb }))
+AbsorberBSDF::AbsorberBSDF() :
+    BSDF(BSDFLobes({ ELobe::Absorb }))
 {}
 
-Spectrum AbsorberBsdf::evaluate(
+Spectrum AbsorberBSDF::evaluate(
     const TransportInfo&       transportInfo,
     const SurfaceIntersection& surfaceIntersection) const
 {
     return Spectrum(0.0_r);
 }
 
-void AbsorberBsdf::evaluateSample(
+void AbsorberBSDF::evaluateSample(
     const TransportInfo&       info,
     const SurfaceIntersection& si,
-    BsdfSample* const          out_sample) const
+    BSDFSample* const          out_sample) const
 {
     CS_ASSERT(out_sample);
 
     return;
 }
 
-real AbsorberBsdf::evaluatePdfW(
+real AbsorberBSDF::evaluatePdfW(
     const TransportInfo&       info, 
     const SurfaceIntersection& si) const
 {
     return 0.0_r;
 }
 
-ELobe AbsorberBsdf::lobe(const BsdfComponents component) const 
+ELobe AbsorberBSDF::lobe(const BSDFComponents component) const 
 {
     CS_ASSERT_EQ(component, 0);
 

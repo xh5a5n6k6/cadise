@@ -1,8 +1,8 @@
 #pragma once
 
-#include "math/tArithmeticArray.h"
+#include "Math/TArithmeticArray.h"
 
-#include "fundamental/assertion.h"
+#include "Foundation/Assertion.h"
 
 #include <cmath>
 #include <utility>

@@ -1,8 +1,8 @@
-#include "core/surface/microfacet/microfacetHelper.h"
+#include "Core/Surface/Microfacet/MicrofacetHelper.h"
 
-#include "fundamental/assertion.h"
-#include "math/math.h"
-#include "math/tVector3.h"
+#include "Foundation/Assertion.h"
+#include "Math/Math.h"
+#include "Math/TVector3.h"
 
 #include <utility>
 

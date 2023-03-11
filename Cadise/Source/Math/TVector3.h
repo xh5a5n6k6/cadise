@@ -1,7 +1,7 @@
 #pragma once
 
-#include "math/constant.h"
-#include "math/type/mathType.h"
+#include "Math/Constant.h"
+#include "Math/Type/MathType.h"
 
 namespace cadise 
 {
@@ -126,4 +126,4 @@ inline TVector3<T> operator * (const T scalar, const TVector3<T>& lhs)
 
 } // namespace cadise
 
-#include "math/tVector3.ipp"
+#include "Math/TVector3.ipp"

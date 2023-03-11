@@ -1,15 +1,14 @@
-#include "core/renderer/bidirectional-path-tracing/bdptRenderer.h"
+#include "Core/Renderer/BDPT/BDPTRenderer.h"
 
-#include "core/film/film.h"
-#include "core/film/filmTile.h"
-#include "core/integral-tool/connectEvent.h"
-#include "core/renderer/render-work/bdptTileWork.h"
-#include "core/sampler/sampler.h"
-#include "core/scene.h"
-#include "fundamental/assertion.h"
-#include "fundamental/logger/logger.h"
-#include "fundamental/time/stopwatch.h"
-#include "utility/parallel.h"
+#include "Core/Film/Film.h"
+#include "Core/Film/FilmTile.h"
+#include "Core/Gear/ConnectEvent.h"
+#include "Core/Renderer/RenderWork/BDPTTileWork.h"
+#include "Core/Sampler/Sampler.h"
+#include "Foundation/Assertion.h"
+#include "Foundation/Logging/Logger.h"
+#include "Foundation/Time/Stopwatch.h"
+#include "Utility/Parallel.h"
 
 #include <vector>
 
@@ -22,14 +21,14 @@ namespace
     const Logger logger("BDPT Renderer");
 } // anonymous namespace
 
-BdptRenderer::BdptRenderer(const std::shared_ptr<Sampler>& sampler) :
+BDPTRenderer::BDPTRenderer(const std::shared_ptr<Sampler>& sampler) :
     Renderer(),
     _sampler(sampler)
 {
     CS_ASSERT(sampler);
 }
 
-void BdptRenderer::render() const 
+void BDPTRenderer::render() const
 {
     CS_ASSERT(_scene);
 
@@ -52,7 +51,7 @@ void BdptRenderer::render() const
 
                 auto filmTile = _film->generateFilmTile(workIndex);
             
-                BdptTileWork tileWork(
+                BDPTTileWork tileWork(
                     _scene.get(),
                     _camera.get(),
                     _sampler.get());

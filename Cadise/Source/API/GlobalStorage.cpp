@@ -1,4 +1,4 @@
-#include "api/globalStorage.h"
+#include "API/GlobalStorage.h"
 
 namespace cadise
 {

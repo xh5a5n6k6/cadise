@@ -1,9 +1,9 @@
-#include "cadise-cli-utils/standaloneRenderer.h"
+#include "CadiseUtility/StandaloneRenderer.h"
 
 #include <iostream>
 #include <thread>
 
-namespace cadise_cli 
+namespace cadise::cli 
 {
 
 StandaloneRenderer::StandaloneRenderer(const CommandLineArguments& args) :
@@ -37,8 +37,10 @@ void StandaloneRenderer::render() const
         return;
     }
 
-    csPrepareRender(_engineId);
+    csPreRender(_engineId);
+
+    // TODO: add async query method to update render stats interactively
     csRender(_engineId);
 }
 
-} // namespace cadise_cli
+} // namespace cadise::cli

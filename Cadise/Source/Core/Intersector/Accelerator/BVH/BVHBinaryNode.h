@@ -1,22 +1,22 @@
 #pragma once
 
-#include "math/tAabb3.h"
+#include "Math/TAABB3.h"
 
 #include <memory>
 
 namespace cadise 
 {
 
-class BvhBinaryNode 
+class BVHBinaryNode 
 {
 public:
-    BvhBinaryNode();
-    ~BvhBinaryNode();
+    BVHBinaryNode();
+    ~BVHBinaryNode();
 
     void initializeInternalNode(
         const AABB3R&                  bound,
-        std::unique_ptr<BvhBinaryNode> firstChild, 
-        std::unique_ptr<BvhBinaryNode> secondChild, 
+        std::unique_ptr<BVHBinaryNode> firstChild, 
+        std::unique_ptr<BVHBinaryNode> secondChild, 
         const std::size_t              splitAxis);
 
     void initializeLeafNode(
@@ -29,8 +29,8 @@ public:
     std::size_t intersectorCounts() const;
 
     // for internal node
-    std::unique_ptr<BvhBinaryNode> firstChild();
-    std::unique_ptr<BvhBinaryNode> secondChild();
+    std::unique_ptr<BVHBinaryNode> firstChild();
+    std::unique_ptr<BVHBinaryNode> secondChild();
     std::size_t splitAxis() const;
 
     const AABB3R& bound() const;
@@ -42,7 +42,7 @@ private:
         // for leaf node
         std::size_t _intersectorIndex;
         // for internal node
-        std::unique_ptr<BvhBinaryNode> _children[2];
+        std::unique_ptr<BVHBinaryNode> _children[2];
     };
 
     union 

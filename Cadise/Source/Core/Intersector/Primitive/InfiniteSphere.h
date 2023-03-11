@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/intersector/primitive/primitive.h"
+#include "Core/Intersector/Primitive/Primitive.h"
 
 namespace cadise 
 {

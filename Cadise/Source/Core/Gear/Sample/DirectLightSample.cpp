@@ -1,4 +1,4 @@
-#include "core/integral-tool/sample/directLightSample.h"
+#include "Core/Gear/Sample/DirectLightSample.h"
 
 namespace cadise 
 {

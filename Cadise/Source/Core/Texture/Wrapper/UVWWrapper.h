@@ -1,14 +1,14 @@
 #pragma once
 
-#include "math/type/mathType.h"
+#include "Math/Type/MathType.h"
 
 namespace cadise 
 {
 
-class UvwWrapper 
+class UVWWrapper
 {
 public:
-    virtual ~UvwWrapper();
+    virtual ~UVWWrapper();
 
     virtual void wrap(
         const Vector3R& uvw, 

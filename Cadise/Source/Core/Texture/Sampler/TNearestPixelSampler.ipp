@@ -1,12 +1,10 @@
 #pragma once
 
-#include "core/texture/sampler/tNearestPixelSampler.h"
+#include "Core/Texture/Sampler/TNearestPixelSampler.h"
 
-#include "core/imaging/tImage.h"
-#include "core/texture/wrapper/uvwWrapper.h"
-#include "fundamental/assertion.h"
-#include "math/math.h"
-#include "math/tVector3.h"
+#include "Foundation/Assertion.h"
+#include "Math/Math.h"
+#include "Math/TVector3.h"
 
 namespace cadise 
 {

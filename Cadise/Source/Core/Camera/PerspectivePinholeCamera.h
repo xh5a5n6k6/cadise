@@ -1,11 +1,15 @@
 #pragma once
 
-#include "core/camera/camera.h"
+#include "Core/Camera/Camera.h"
 
 #include <memory>
 #include <utility>
 
-namespace cadise { class Transform; }
+// forward declaration
+namespace cadise
+{
+    class Transform;
+}
 
 namespace cadise 
 {

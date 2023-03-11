@@ -1,9 +1,9 @@
 #pragma once
 
-#include "math/tLocalCoordinateSystem3.h"
+#include "Math/TLocalCoordinateSystem3.h"
 
-#include "fundamental/assertion.h"
-#include "math/math.h"
+#include "Foundation/Assertion.h"
+#include "Math/Math.h"
 
 #include <cmath>
 #include <limits>

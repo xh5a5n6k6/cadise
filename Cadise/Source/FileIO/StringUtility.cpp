@@ -1,8 +1,8 @@
-#include "file-io/string_utils.h"
+#include "FileIO/StringUtility.h"
 
 #include <unordered_set>
 
-namespace cadise::string_utils
+namespace cadise
 {
 
 static const std::unordered_set<char> regexReservedChars =
@@ -22,37 +22,37 @@ static const std::unordered_set<char> regexReservedChars =
     '\\',
 };
 
-std::string trim_head(
+std::string StringUtility::trimHead(
     const std::string& source,
     const char         trimChar)
 {
     std::string result(source);
-    trim_head_local(result, trimChar);
+    trimHeadLocal(result, trimChar);
 
     return result;
 }
 
-std::string trim_tail(
+std::string StringUtility::trimTail(
     const std::string& source,
     const char         trimChar)
 {
     std::string result(source);
-    trim_tail_local(result, trimChar);
+    trimTailLocal(result, trimChar);
 
     return result;
 }
 
-std::string trim(
+std::string StringUtility::trim(
     const std::string& source,
     const char         trimChar)
 {
     std::string result(source);
-    trim_local(result, trimChar);
+    trimLocal(result, trimChar);
 
     return result;
 }
 
-std::string& trim_head_local(
+std::string& StringUtility::trimHeadLocal(
     std::string& source,
     const char   trimChar)
 {
@@ -62,7 +62,7 @@ std::string& trim_head_local(
     return source;
 }
 
-std::string& trim_tail_local(
+std::string& StringUtility::trimTailLocal(
     std::string& source,
     const char   trimChar)
 {
@@ -72,14 +72,14 @@ std::string& trim_tail_local(
     return source;
 }
 
-std::string& trim_local(
+std::string& StringUtility::trimLocal(
     std::string& source,
     const char   trimChar)
 {
-    return trim_head_local(trim_tail_local(source, trimChar), trimChar);
+    return trimHeadLocal(trimTailLocal(source, trimChar), trimChar);
 }
 
-std::string escape_regex_char(const char regexChar)
+std::string StringUtility::escapeRegexChar(const char regexChar)
 {
     std::string result = "";
     if (regexReservedChars.contains(regexChar))
@@ -92,4 +92,4 @@ std::string escape_regex_char(const char regexChar)
     return result;
 }
 
-} // namespace cadise::string_utils
+} // namespace cadise

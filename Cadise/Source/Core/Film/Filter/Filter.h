@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/tVector2.h"
+#include "Math/TVector2.h"
 
 namespace cadise 
 {

@@ -1,18 +1,22 @@
 #pragma once
 
-#include "core/film/rgbRadianceSensor.h"
-#include "core/spectrum/spectrum.h"
-#include "file-io/path.h"
-#include "math/tVector2.h"
-#include "math/tVector3.h"
+#include "Core/Film/RGBRadianceSensor.h"
+#include "Core/Spectrum/Spectrum.h"
+#include "FileIO/Path.h"
+#include "Math/TVector2.h"
+#include "Math/TVector3.h"
 
 #include <memory>
 #include <mutex>
 #include <vector>
 
-namespace cadise { class ConnectEvent; }
-namespace cadise { class FilmTile; }
-namespace cadise { class Filter; }
+// forward declaration
+namespace cadise
+{
+    class ConnectEvent;
+    class FilmTile; 
+    class Filter;
+}
 
 namespace cadise 
 {
@@ -56,7 +60,7 @@ private:
     Vector2I                _tileSize;
     std::shared_ptr<Filter> _filter;
 
-    std::vector<RgbRadianceSensor> _sensorPixels;
+    std::vector<RGBRadianceSensor> _sensorPixels;
     std::vector<Vector3R>          _splatPixels;
 
     std::mutex _filmMutex;

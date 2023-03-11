@@ -1,7 +1,7 @@
 #pragma once
 
-#include "core/spectrum/spectrum.h"
-#include "math/type/mapType.h"
+#include "Core/Spectrum/Spectrum.h"
+#include "Math/Type/MapType.h"
 
 #include <memory>
 #include <vector>
@@ -9,13 +9,13 @@
 // forward declaration
 namespace cadise 
 { 
-    class Bsdf;
+    class BSDF;
+    class CSDResource;
     class Intersector;
     class Light;
     class Primitive;
     class Renderer;
     class Scene;
-    class CSDResource;
     class TriangleBuffer;
 
     template<typename T>
@@ -59,7 +59,7 @@ private:
     std::shared_ptr<Primitive> _backgroundSphere;
     std::size_t                _environmentLightIndex;
 
-    TStringKeyMap<Bsdf>               _bsdfs;
+    TStringKeyMap<BSDF>               _bsdfs;
     TStringKeyMap<Primitive>          _primitives; // for area light
     TStringKeyMap<TriangleBuffer>     _triangleBuffers; // HACK for non-decomposed triangles
     TStringKeyMap<TTexture<real>>     _realTextures;

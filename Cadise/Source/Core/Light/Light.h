@@ -1,12 +1,16 @@
 #pragma once
 
-#include "core/spectrum/spectrum.h"
+#include "Core/Spectrum/Spectrum.h"
 
-namespace cadise { class DirectLightSample; }
-namespace cadise { class EmitLightSample; }
-namespace cadise { class Ray; }
-namespace cadise { class SurfaceInfo; }
-namespace cadise { class SurfaceIntersection; }
+// forward declaration
+namespace cadise
+{
+    class DirectLightSample;
+    class EmitLightSample;
+    class Ray;
+    class SurfaceInfo;
+    class SurfaceIntersection;
+}
 
 namespace cadise 
 {

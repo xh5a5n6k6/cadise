@@ -1,9 +1,9 @@
 #pragma once
 
-#include "core/intersection.h"
+#include "Core/Intersection.h"
 
-#include "core/intersector/primitiveInfo.h"
-#include "core/surfaceDetail.h"
+#include "Core/Intersector/PrimitiveInfo.h"
+#include "Core/SurfaceDetail.h"
 
 namespace cadise
 {

@@ -1,12 +1,17 @@
 #pragma once
 
-#include "core/light/light.h"
+#include "Core/Light/Light.h"
 
-#include "core/spectrum/spectrum.h"
+#include "Core/Spectrum/Spectrum.h"
 
 #include <memory>
 
-namespace cadise { template<typename T> class TTexture; }
+// forward declaration
+namespace cadise
+{
+    template<typename T>
+    class TTexture;
+}
 
 namespace cadise 
 {

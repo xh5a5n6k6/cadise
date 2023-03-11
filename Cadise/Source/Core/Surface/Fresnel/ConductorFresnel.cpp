@@ -1,4 +1,4 @@
-#include "core/surface/fresnel/conductorFresnel.h"
+#include "Core/Surface/Fresnel/ConductorFresnel.h"
 
 namespace cadise 
 {

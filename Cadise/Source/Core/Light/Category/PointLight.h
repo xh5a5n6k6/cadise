@@ -1,8 +1,8 @@
 #pragma once
 
-#include "core/light/light.h"
+#include "Core/Light/Light.h"
 
-#include "math/tVector3.h"
+#include "Math/TVector3.h"
 
 namespace cadise
 {

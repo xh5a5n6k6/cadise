@@ -1,8 +1,8 @@
-#include "cadise-cli-utils/standaloneRenderer.h"
+#include "CadiseUtility/StandaloneRenderer.h"
 
 #include <iostream>
 
-using namespace cadise_cli;
+using namespace cadise::cli;
 
 int main(int argc, char* argv[]) 
 {

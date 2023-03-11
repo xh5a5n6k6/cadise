@@ -9,10 +9,12 @@ class Parallel
 {
 private:
     using Work = 
-        std::function<void(
-            const std::size_t workerId,
-            const std::size_t workBeginIndex,
-            const std::size_t workEndIndex)
+        std::function
+        <
+            void(
+                const std::size_t workerId,
+                const std::size_t workBeginIndex,
+                const std::size_t workEndIndex)
         >;
 
 public:

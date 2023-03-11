@@ -1,15 +1,15 @@
-//#include "core/integral-tool/directLightEvaluator.h"
+//#include "Core/integral-tool/directLightEvaluator.h"
 //
-//#include "core/integral-tool/sample/bsdfSample.h"
-//#include "core/integral-tool/sample/directLightSample.h"
-//#include "core/integral-tool/tMis.h"
-//#include "core/intersector/primitive/primitive.h"
-//#include "core/light/category/areaLight.h"
-//#include "core/ray.h"
-//#include "core/scene.h"
-//#include "core/surface/bsdf/bsdf.h"
-//#include "core/surface/transportInfo.h"
-//#include "core/surfaceIntersection.h"
+//#include "Core/integral-tool/sample/bsdfSample.h"
+//#include "Core/integral-tool/sample/directLightSample.h"
+//#include "Core/integral-tool/tMis.h"
+//#include "Core/intersector/primitive/primitive.h"
+//#include "Core/light/category/areaLight.h"
+//#include "Core/ray.h"
+//#include "Core/scene.h"
+//#include "Core/surface/bsdf/bsdf.h"
+//#include "Core/surface/transportInfo.h"
+//#include "Core/surfaceIntersection.h"
 //#include "fundamental/assertion.h"
 //#include "math/constant.h"
 //
@@ -73,7 +73,7 @@
 //                else
 //                {
 //                    const real bsdfPdfW  = bsdf->evaluatePdfW(TransportInfo(), intersection);
-//                    const real misWeight = TMis<EMisMode::POWER>().weight(lightPdfW, bsdfPdfW);
+//                    const real misWeight = TMIS<EMISMode::POWER>().weight(lightPdfW, bsdfPdfW);
 //
 //                    directLightRadiance.addLocal(radiance.mul(directLightFactor).mul(misWeight));
 //                }
@@ -85,7 +85,7 @@
 //    {
 //        if (!light->isDeltaLight())
 //        {
-//            BsdfSample bsdfSample;
+//            BSDFSample bsdfSample;
 //            bsdf->evaluateSample(TransportInfo(), intersection, &bsdfSample);
 //            if (bsdfSample.isValid())
 //            {
@@ -103,7 +103,7 @@
 //                    {
 //                        const real bsdfPdfW  = bsdfSample.pdfW();
 //                        const real lightPdfW = areaLight->evaluateDirectPdfW(localIntersection, P);
-//                        const real misWeight = TMis<EMisMode::POWER>().weight(bsdfPdfW, lightPdfW);
+//                        const real misWeight = TMIS<EMISMode::POWER>().weight(bsdfPdfW, lightPdfW);
 //
 //                        const Spectrum directLightFactor = reflectance.mul(L.absDot(Ns) / bsdfPdfW);
 //                        const Spectrum radiance          = areaLight->emittance(localIntersection);
