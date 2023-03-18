@@ -16,6 +16,7 @@ public:
 public:
     TVector3();
     explicit TVector3(const T value);
+    explicit TVector3(const std::array<T, 3>& value);
     explicit TVector3(const TArithmeticArray<T, 3>& value);
     TVector3(const T x, const T y, const T z);
 

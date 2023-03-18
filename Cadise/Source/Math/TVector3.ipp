@@ -41,6 +41,11 @@ inline TVector3<T>::TVector3(const T value) :
 {}
 
 template<typename T>
+inline TVector3<T>::TVector3(const std::array<T, 3>& value) :
+    TVector3(value[0], value[1], value[2])
+{}
+
+template<typename T>
 inline TVector3<T>::TVector3(const TArithmeticArray<T, 3>& value) :
     TVector3(value[0], value[1], value[2]) 
 {}

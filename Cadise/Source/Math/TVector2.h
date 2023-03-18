@@ -16,6 +16,8 @@ public:
 public:
     TVector2();
     explicit TVector2(const T value);
+    explicit TVector2(const std::array<T, 2>& value);
+    explicit TVector2(const TArithmeticArray<T, 2>& value);
     TVector2(const T x, const T y);
 
     TVector2(const TVector2& other);

@@ -3,6 +3,7 @@
 #include "Math/TVector2.h"
 
 #include "Foundation/Assertion.h"
+#include "Math/TArithmeticArray.h"
 
 #include <cmath>
 #include <type_traits>
@@ -35,6 +36,16 @@ inline TVector2<T>::TVector2() :
 template<typename T>
 inline TVector2<T>::TVector2(const T value) :
     TVector2(value, value)
+{}
+
+template<typename T>
+inline TVector2<T>::TVector2(const std::array<T, 2>& value) :
+    TVector2(value[0], value[1])
+{}
+
+template<typename T>
+inline TVector2<T>::TVector2(const TArithmeticArray<T, 2>& value) :
+    TVector2(value[0], value[1])
 {}
 
 template<typename T>
