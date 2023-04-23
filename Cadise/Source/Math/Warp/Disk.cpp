@@ -10,14 +10,14 @@ namespace cadise::internal
 {
 
 // Return (radius, theta)
-std::pair<real, real> mapToRadiusTheta(Vector2R sample)
+std::pair<real, real> mapToRadiusTheta(const Vector2R& sample)
 {
     if (std::abs(sample[0]) > std::abs(sample[1]))
     {
         return
         {
             sample[0],
-            constant::rcp_four_pi<real> * (sample[1] / sample[0])
+            constant::pi_over_four<real> * (sample[1] / sample[0])
         };
     }
     else
@@ -25,7 +25,7 @@ std::pair<real, real> mapToRadiusTheta(Vector2R sample)
         return
         {
             sample[1],
-            constant::rcp_two_pi<real> - constant::rcp_four_pi<real> *(sample[0] / sample[1])
+            constant::pi_over_two<real> - constant::pi_over_four<real> * (sample[0] / sample[1])
         };
     }
 }
@@ -46,9 +46,7 @@ void Disk::uniformSampling(
     const real cosTheta      = std::cos(sampledTheta);
     const real sinTheta      = std::sqrt(1.0_r - cosTheta * cosTheta);
 
-    out_surfacePoint->set(
-        sampledRadius * cosTheta,
-        sampledRadius * sinTheta);
+    out_surfacePoint->set(sampledRadius * cosTheta, sampledRadius * sinTheta);
 }
 
 void Disk::concentricSampling(
@@ -66,13 +64,10 @@ void Disk::concentricSampling(
     }
 
     const auto [sampledRadius, sampledTheta] = internal::mapToRadiusTheta(mappedSample);
-
     const real cosTheta = std::cos(sampledTheta);
     const real sinTheta = std::sqrt(1.0_r - cosTheta * cosTheta);
 
-    out_surfacePoint->set(
-        sampledRadius * cosTheta,
-        sampledRadius * sinTheta);
+    out_surfacePoint->set(sampledRadius * cosTheta, sampledRadius * sinTheta);
 }
 
 } // namespace cadise

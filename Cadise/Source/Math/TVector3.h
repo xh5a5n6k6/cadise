@@ -3,6 +3,8 @@
 #include "Math/Constant.h"
 #include "Math/Type/MathType.h"
 
+#include <array>
+
 namespace cadise 
 {
 

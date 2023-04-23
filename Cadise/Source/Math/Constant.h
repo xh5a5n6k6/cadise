@@ -12,36 +12,44 @@ inline constexpr T ray_epsilon
 // 1 degree = pi/180 radian
 template<typename T>
 inline constexpr T radian_per_degree
-    = static_cast<T>(0.0174532925199432);
+    = static_cast<T>(0.01745329251994329576);
 
 // 1 radian = 180/pi degree
 template<typename T>
 inline constexpr T degree_per_radian
-    = static_cast<T>(57.295779513082320);
+    = static_cast<T>(57.2957795130823208767);
 
 template<typename T>
 inline constexpr T pi
-    = static_cast<T>(3.1415926535897932);
+    = static_cast<T>(3.14159265358979323846);
 
 template<typename T>
 inline constexpr T two_pi
-    = static_cast<T>(6.2831853071795864);
+    = static_cast<T>(6.28318530717958647692);
 
 template<typename T>
 inline constexpr T four_pi
-    = static_cast<T>(12.566370614359172);
+    = static_cast<T>(12.5663706143591729538);
 
 template<typename T>
 inline constexpr T rcp_pi
-    = static_cast<T>(0.3183098861837906);
+    = static_cast<T>(0.31830988618379067153);
 
 template<typename T>
 inline constexpr T rcp_two_pi
-    = static_cast<T>(0.1591549430918953);
+    = static_cast<T>(0.15915494309189533576);
 
 template<typename T>
 inline constexpr T rcp_four_pi
-    = static_cast<T>(0.0795774715459476);
+    = static_cast<T>(0.07957747154594766788);
+
+template<typename T>
+inline constexpr T pi_over_two
+    = static_cast<T>(1.57079632679489661923);
+
+template<typename T>
+inline constexpr T pi_over_four
+    = static_cast<T>(0.78539816339744830961);
 
 
 
