@@ -14,10 +14,10 @@ namespace cadise
 namespace cadise 
 {
 
-class PerspectivePinholeCamera : public Camera 
+class PinholePerspectiveCamera : public Camera
 {
 public:
-    PerspectivePinholeCamera(
+    PinholePerspectiveCamera(
         const Vector3R& position, 
         const Vector3R& direction, 
         const Vector3R& up, 

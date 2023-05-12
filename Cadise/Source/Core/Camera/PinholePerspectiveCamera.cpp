@@ -1,4 +1,4 @@
-#include "Core/Camera/PerspectivePinholeCamera.h"
+#include "Core/Camera/PinholePerspectiveCamera.h"
 
 #include "Core/Gear/Sample/CameraSample.h"
 #include "Core/Ray.h"
@@ -11,7 +11,7 @@
 namespace cadise
 {
 
-PerspectivePinholeCamera::PerspectivePinholeCamera(
+PinholePerspectiveCamera::PinholePerspectiveCamera(
     const Vector3R& position,
     const Vector3R& direction, 
     const Vector3R& up, 
@@ -29,7 +29,7 @@ PerspectivePinholeCamera::PerspectivePinholeCamera(
     this->updateTransform();
 }
 
-void PerspectivePinholeCamera::updateTransform()
+void PinholePerspectiveCamera::updateTransform()
 {
     const auto [sensorWidth, sensorHeight] = _getSensorSizeXy();
     const auto realResolution              = _resolution.asType<real>();
@@ -50,7 +50,7 @@ void PerspectivePinholeCamera::updateTransform()
     _filmToCamera = std::make_shared<Transform>(filmToCameraMatrix);
 }
 
-void PerspectivePinholeCamera::spawnPrimaryRay(
+void PinholePerspectiveCamera::spawnPrimaryRay(
     const Vector2D& filmPosition,
     Ray* const      out_primaryRay) const
 {
@@ -73,7 +73,7 @@ void PerspectivePinholeCamera::spawnPrimaryRay(
     out_primaryRay->setDirection(direction);
 }
 
-void PerspectivePinholeCamera::evaluateCameraSample(
+void PinholePerspectiveCamera::evaluateCameraSample(
     CameraSample* const out_sample, 
     Ray* const          out_toCameraRay) const
 {
@@ -149,7 +149,7 @@ void PerspectivePinholeCamera::evaluateCameraSample(
     out_toCameraRay->setMaxT(distance - constant::ray_epsilon<real>);
 }
 
-void PerspectivePinholeCamera::evaluateCameraPdf(
+void PinholePerspectiveCamera::evaluateCameraPdf(
     const Ray&  cameraRay,
     real* const out_pdfA,
     real* const out_pdfW) const 
@@ -190,7 +190,7 @@ void PerspectivePinholeCamera::evaluateCameraPdf(
     *out_pdfW = cameraToImagePointDistance2 / (sensorArea * cosTheta);
 }
 
-std::pair<float64, float64> PerspectivePinholeCamera::_getSensorSizeXy() const 
+std::pair<float64, float64> PinholePerspectiveCamera::_getSensorSizeXy() const
 {
     const float64 aspectRatio = _getAspectRatio();
 
@@ -201,7 +201,8 @@ std::pair<float64, float64> PerspectivePinholeCamera::_getSensorSizeXy() const
     };
 }
 
-float64 PerspectivePinholeCamera::_getSensorArea() const {
+float64 PinholePerspectiveCamera::_getSensorArea() const
+{
     const auto [sensorWidth, sensorHeight] = _getSensorSizeXy();
 
     return sensorWidth * sensorHeight;
