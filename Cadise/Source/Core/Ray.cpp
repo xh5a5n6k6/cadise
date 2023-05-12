@@ -16,16 +16,12 @@ Ray::Ray(const Vector3R& origin, const Vector3R& direction) :
     Ray(origin, direction, constant::ray_epsilon<real>, std::numeric_limits<real>::max()) 
 {}
 
-Ray::Ray(const Vector3R& origin, const Vector3R& direction, const real minT, const real maxT) : 
+Ray::Ray(const Vector3R& origin, const Vector3R& direction, const real minT, const real maxT) :
     _origin(origin), 
-    _direction(direction), 
+    _direction(direction.normalize()), 
     _minT(minT),
     _maxT(maxT) 
-{
-    CS_ASSERT(!direction.isZero());
-
-    _direction = direction.normalize();
-}
+{}
 
 Vector3R Ray::at(const real t) const 
 {

@@ -47,7 +47,8 @@
         - UV wrap mode: clamp, repeat
 
 - ### Camera
-    - Perspective Pinhole
+    - Pinhole Perspective
+    - Thin Lens Perspective
 
 - ### Sampling
     - Random
