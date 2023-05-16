@@ -2,10 +2,10 @@
 
 #include "Core/Intersector/Primitive/Primitive.h"
 
-namespace cadise 
+namespace cadise
 {
 
-class InfiniteSphere : public Primitive 
+class InfiniteSphere : public Primitive
 {
 public:
     InfiniteSphere();
@@ -17,11 +17,11 @@ public:
     bool isOccluded(const Ray& ray) const override;
 
     void evaluateSurfaceDetail(
-        const PrimitiveInfo& primitiveInfo, 
+        const PrimitiveInfo& primitiveInfo,
         SurfaceDetail* const out_surface) const override;
 
     void uvwToPosition(
-        const Vector3R& uvw, 
+        const Vector3R& uvw,
         Vector3R* const out_position) const override;
 
 private:

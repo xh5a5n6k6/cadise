@@ -1,11 +1,11 @@
 #pragma once
 
-namespace cadise 
+namespace cadise
 {
 
 /*! @brief Method to remap texture coordinates to the range from 0 to 1.
 */
-enum class ETextureWrapMode 
+enum class ETextureWrapMode
 {
     Undefined = 0,
 

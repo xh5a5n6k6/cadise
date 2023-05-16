@@ -32,12 +32,12 @@ std::pair<real, real> mapToRadiusTheta(const Vector2R& sample)
 
 } // namespace cadise::internal
 
-namespace cadise 
+namespace cadise
 {
 
 void Disk::uniformSampling(
     const std::array<real, 2>& sample,
-    Vector2R* const            out_surfacePoint) 
+    Vector2R* const            out_surfacePoint)
 {
     CS_ASSERT(out_surfacePoint);
 
@@ -51,7 +51,7 @@ void Disk::uniformSampling(
 
 void Disk::concentricSampling(
     const std::array<real, 2>& sample,
-    Vector2R* const            out_surfacePoint) 
+    Vector2R* const            out_surfacePoint)
 {
     CS_ASSERT(out_surfacePoint);
 

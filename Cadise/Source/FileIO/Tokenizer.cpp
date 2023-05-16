@@ -6,7 +6,7 @@
 namespace cadise
 {
 
-namespace 
+namespace
 {
     const Logger logger("Tokenizer");
 }
@@ -25,7 +25,7 @@ Tokenizer Tokenizer::makeFromOpenClosePattern(
         ? EMode::ClosureWithEdges
         : EMode::ClosureWithoutEdges;
 
-    return Tokenizer(mode, {},  { openDelimiter, closeDelimiter });
+    return Tokenizer(mode, {}, { openDelimiter, closeDelimiter });
 }
 
 Tokenizer::Tokenizer(
@@ -80,7 +80,7 @@ void Tokenizer::tokenize(
 
             ++endIndex;
         }
-        
+
         std::string token = source.substr(i, endIndex - i);
         out_tokens.push_back(std::move(token));
 

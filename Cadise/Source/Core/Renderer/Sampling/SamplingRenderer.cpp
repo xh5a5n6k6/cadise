@@ -10,27 +10,27 @@
 #include "Foundation/Time/Stopwatch.h"
 #include "Utility/Parallel.h"
 
-namespace cadise 
+namespace cadise
 {
 
-namespace 
+namespace
 {
     const Logger logger("Sampling Renderer");
 }
 
 SamplingRenderer::SamplingRenderer(
-    const std::shared_ptr<EnergyEstimator>& estimator, 
+    const std::shared_ptr<EnergyEstimator>& estimator,
     const std::shared_ptr<Sampler>&         sampler) :
-    
+
     Renderer(),
     _estimator(estimator),
-    _sampler(sampler) 
+    _sampler(sampler)
 {
     CS_ASSERT(estimator);
     CS_ASSERT(sampler);
 }
 
-void SamplingRenderer::render() const 
+void SamplingRenderer::render() const
 {
     CS_ASSERT(_scene);
 
@@ -40,20 +40,21 @@ void SamplingRenderer::render() const
     stopwatch.start();
 
     Parallel::execute(
-        _film->numTilesXy().product(), 
+        _film->numTilesXy().product(),
         _numWorkers,
-        [this](const std::size_t workerId,
-               const std::size_t workBegin,
-               const std::size_t workEnd)
+        [this](
+            const std::size_t workerId,
+            const std::size_t workBegin,
+            const std::size_t workEnd)
         {
-            for (std::size_t workIndex = workBegin; workIndex < workEnd; ++workIndex) 
+            for (std::size_t workIndex = workBegin; workIndex < workEnd; ++workIndex)
             {
                 auto filmTile = _film->generateFilmTile(workIndex);
 
                 EstimatorTileWork tileWork(
                     _scene.get(),
-                    _camera.get(), 
-                    _estimator.get(), 
+                    _camera.get(),
+                    _estimator.get(),
                     _sampler.get());
                 tileWork.setFilmTile(filmTile.get());
 

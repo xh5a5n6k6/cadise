@@ -7,7 +7,7 @@
 #include "Math/Random.h"
 #include "Math/Warp/Hemisphere.h"
 
-namespace cadise 
+namespace cadise
 {
 
 AOEstimator::AOEstimator() :
@@ -34,7 +34,7 @@ void AOEstimator::estimate(
     // HACK: manually unset environment light 
     localScene.unsetBackgroundSphere();
 
-    if (!localScene.isIntersecting(traceRay, si)) 
+    if (!localScene.isIntersecting(traceRay, si))
     {
         out_radiance->set(1.0_r);
 

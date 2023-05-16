@@ -10,7 +10,7 @@ namespace cadise
 
 void SampleWarp::uniformTriangleUv(
     const std::array<real, 2>& sample,
-    Vector2R* const            out_uv) 
+    Vector2R* const            out_uv)
 {
     CS_ASSERT(out_uv);
 

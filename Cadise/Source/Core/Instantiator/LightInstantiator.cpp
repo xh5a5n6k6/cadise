@@ -20,7 +20,7 @@ namespace cadise::instantiator
 {
 
 static std::shared_ptr<Light> createPoint(
-    const std::shared_ptr<CSDResource>&  data,
+    const std::shared_ptr<CSDResource>& data,
     const TStringKeyMap<Primitive>& primitives)
 {
     const auto position  = data->findVector3<real>("position");
@@ -30,7 +30,7 @@ static std::shared_ptr<Light> createPoint(
 }
 
 static std::vector<std::shared_ptr<AreaLight>> createArea(
-    const std::shared_ptr<CSDResource>&             data,
+    const std::shared_ptr<CSDResource>&        data,
     const TStringKeyMap<Primitive>&            primitives,
     TStringKeyMap<TriangleBuffer>&             out_triangleBuffers,
     std::vector<std::shared_ptr<Intersector>>& out_intersectors)
@@ -53,8 +53,8 @@ static std::vector<std::shared_ptr<AreaLight>> createArea(
     {
         const auto areaLight = std::make_shared<SingleAreaLight>(
             primitivePair->second.get(),
-            Spectrum(color), 
-            watt, 
+            Spectrum(color),
+            watt,
             isBackFaceEmit);
 
         primitivePair->second->setAreaLight(areaLight.get());
@@ -87,7 +87,7 @@ static std::vector<std::shared_ptr<AreaLight>> createArea(
         const Spectrum unitWattColor  = colorSpectrum.div(colorSpectrum.sum());
         const Spectrum totalWattColor = unitWattColor.mul(watt);
 
-        auto emitRadiance = std::make_shared<TConstantTexture<Spectrum>>(
+        const auto emitRadiance = std::make_shared<TConstantTexture<Spectrum>>(
             totalWattColor.div(totalAreas * constant::pi<real>));
 
         for (std::size_t i = 0; i < lights.size(); ++i)
@@ -102,9 +102,9 @@ static std::vector<std::shared_ptr<AreaLight>> createArea(
 }
 
 static std::shared_ptr<Light> createEnvironment(
-    const std::shared_ptr<CSDResource>&  data,
-    const TStringKeyMap<Primitive>& primitives,
-    std::shared_ptr<Primitive>&     out_backgroundSphere) 
+    const std::shared_ptr<CSDResource>& data,
+    const TStringKeyMap<Primitive>&     primitives,
+    std::shared_ptr<Primitive>&         out_backgroundSphere)
 {
     const auto hdrFilename = data->findString("hdr-filename");
 
@@ -118,11 +118,11 @@ static std::shared_ptr<Light> createEnvironment(
     const std::shared_ptr<TTexture<Spectrum>> radiance
         = std::make_shared<RGBImageTexture>(hdrImage, sampleMode, wrapMode);
 
-    out_backgroundSphere = std::make_shared<InfiniteSphere>();
-    std::shared_ptr<EnvironmentLight> environmentLight
-        = std::make_shared<EnvironmentLight>(out_backgroundSphere.get(), 
-                                             radiance, 
-                                             hdrImage.resolution().asType<std::size_t>());
+    out_backgroundSphere  = std::make_shared<InfiniteSphere>();
+    auto environmentLight = std::make_shared<EnvironmentLight>(
+        out_backgroundSphere.get(),
+        radiance,
+        hdrImage.resolution().asType<std::size_t>());
 
     out_backgroundSphere->setAreaLight(environmentLight.get());
 
@@ -130,7 +130,7 @@ static std::shared_ptr<Light> createEnvironment(
 }
 
 void makeLight(
-    const std::shared_ptr<CSDResource>&             data,
+    const std::shared_ptr<CSDResource>&        data,
     const TStringKeyMap<Primitive>&            primitives,
     TStringKeyMap<TriangleBuffer>&             out_triangleBuffers,
     std::vector<std::shared_ptr<Light>>&       out_lights,
@@ -141,7 +141,7 @@ void makeLight(
 
     std::shared_ptr<Light> light = nullptr;
     const auto type = data->findString("type");
-    if (type == "point") 
+    if (type == "point")
     {
         light = createPoint(data, primitives);
         out_lights.push_back(light);
@@ -154,12 +154,12 @@ void makeLight(
             out_lights.push_back(lights[i]);
         }
     }
-    else if (type == "environment") 
+    else if (type == "environment")
     {
         light = createEnvironment(data, primitives, out_backgroundSphere);
         out_lights.push_back(light);
     }
-    else 
+    else
     {
         // unsupported light type
     }

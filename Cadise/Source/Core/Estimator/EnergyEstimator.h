@@ -7,14 +7,14 @@
 // forward declaration
 namespace cadise
 {
-    class Ray; 
+    class Ray;
     class Scene;
 }
 
-namespace cadise 
+namespace cadise
 {
 
-class EnergyEstimator 
+class EnergyEstimator
 {
 public:
     virtual ~EnergyEstimator();

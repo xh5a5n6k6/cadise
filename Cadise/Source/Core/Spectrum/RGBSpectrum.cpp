@@ -8,11 +8,11 @@ namespace cadise
 {
 
 RGBSpectrum::RGBSpectrum() :
-    TConceptualSpectrum<real, 3>() 
+    TConceptualSpectrum<real, 3>()
 {}
 
 RGBSpectrum::RGBSpectrum(const real value) :
-    TConceptualSpectrum<real, 3>(value) 
+    TConceptualSpectrum<real, 3>(value)
 {}
 
 RGBSpectrum::RGBSpectrum(const Vector3R& value)
@@ -23,7 +23,7 @@ RGBSpectrum::RGBSpectrum(const Vector3R& value)
 }
 
 RGBSpectrum::RGBSpectrum(const TConceptualSpectrum<real, 3>& other) :
-    TConceptualSpectrum<real, 3>(other) 
+    TConceptualSpectrum<real, 3>(other)
 {}
 
 RGBSpectrum::RGBSpectrum(const RGBSpectrum& other) = default;
@@ -52,11 +52,12 @@ void RGBSpectrum::transformToLinearSrgb(Vector3R* const out_linearSrgb) const
     out_linearSrgb->set(_values[0], _values[1], _values[2]);
 }
 
-real RGBSpectrum::luminance() const 
+real RGBSpectrum::luminance() const
 {
-    return 0.0126_r * _values[0] +
-           0.7152_r * _values[1] +
-           0.0722_r * _values[2];
+    return
+        0.0126_r * _values[0] +
+        0.7152_r * _values[1] +
+        0.0722_r * _values[2];
 }
 
 } // namespace cadise

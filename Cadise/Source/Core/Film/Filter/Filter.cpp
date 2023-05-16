@@ -1,6 +1,6 @@
 #include "Core/Film/Filter/Filter.h"
 
-namespace cadise 
+namespace cadise
 {
 
 Filter::Filter(const real filterWidth, const real filterHeight) :

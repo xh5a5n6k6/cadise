@@ -1,11 +1,11 @@
 #pragma once
 
-namespace cadise 
+namespace cadise
 {
 
 /*! @brief Scene description class type.
 */
-enum class ECSDClassType 
+enum class ECSDClassType
 {
     Undefined = 0,
 

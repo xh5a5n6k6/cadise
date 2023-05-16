@@ -21,7 +21,7 @@ public:
     virtual ~Renderer();
 
     virtual void render() const = 0;
-    
+
     void setScene(const std::shared_ptr<Scene>& scene);
     void setCamera(const std::shared_ptr<Camera>& camera);
     void setFilm(const std::shared_ptr<Film>& film);

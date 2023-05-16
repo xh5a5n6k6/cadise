@@ -13,11 +13,11 @@ namespace cadise
     enum class ETextureWrapMode;
 }
 
-namespace cadise 
+namespace cadise
 {
 
 template<typename T, std::size_t N>
-class TPixelSampler 
+class TPixelSampler
 {
 public:
     TPixelSampler(

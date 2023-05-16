@@ -17,11 +17,11 @@
 #include <mutex>
 #include <numeric>
 
-namespace cadise 
+namespace cadise
 {
 
 // local logger declaration
-namespace 
+namespace
 {
     const Logger logger("PPM Renderer");
 } // anonymous namespace
@@ -37,7 +37,7 @@ PPMRenderer::PPMRenderer(
     CS_ASSERT(sampler);
 }
 
-void PPMRenderer::render() const 
+void PPMRenderer::render() const
 {
     CS_ASSERT(_scene);
 
@@ -58,7 +58,7 @@ void PPMRenderer::render() const
         [this, &viewpoints, &ppmMutex](
             const std::size_t workerId,
             const std::size_t workBegin,
-            const std::size_t workEnd) 
+            const std::size_t workEnd)
         {
             const std::size_t workload = workEnd - workBegin;
 
@@ -70,7 +70,7 @@ void PPMRenderer::render() const
                 _camera.get(),
                 _setting.searchRadius());
 
-            for (std::size_t workIndex = workBegin; workIndex < workEnd; ++workIndex) 
+            for (std::size_t workIndex = workBegin; workIndex < workEnd; ++workIndex)
             {
                 const AABB2I tileBound = _film->getTileBound(workIndex);
 
@@ -101,10 +101,10 @@ void PPMRenderer::render() const
     // each iteration has two steps:
     // building photon map and radiance estimation
     std::size_t totalPhotonPaths = 0;
-    for(std::size_t i = 0; i < _setting.numIterations(); ++i) 
+    for (std::size_t i = 0; i < _setting.numIterations(); ++i)
     {
-        logger.log("Iteration progress: " + 
-                   std::to_string(i + 1) + "/" + std::to_string(_setting.numIterations()));
+        logger.log("Iteration progress: " +
+            std::to_string(i + 1) + "/" + std::to_string(_setting.numIterations()));
 
         // step1: photon map construction
         std::vector<std::size_t> numPhotonPaths(_numWorkers);
@@ -154,7 +154,7 @@ void PPMRenderer::render() const
             [this, &viewpoints, &photonMap, &iterationFilm, &ppmMutex, totalPhotonPaths](
                 const std::size_t workerId,
                 const std::size_t workBegin,
-                const std::size_t workEnd) 
+                const std::size_t workEnd)
             {
                 auto localFilm = _film->generateEmptyFilm();
 

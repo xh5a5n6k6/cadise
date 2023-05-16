@@ -2,7 +2,7 @@
 
 #include "Foundation/Assertion.h"
 
-namespace cadise 
+namespace cadise
 {
 
 TileWork::TileWork() :
@@ -13,7 +13,7 @@ TileWork::TileWork() :
 void TileWork::setFilmTile(FilmTile* const filmTile)
 {
     CS_ASSERT(filmTile);
-    
+
     _filmTile = filmTile;
 }
 

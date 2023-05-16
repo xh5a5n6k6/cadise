@@ -7,28 +7,28 @@
 #include <vector>
 
 // forward declaration
-namespace cadise 
-{ 
+namespace cadise
+{
     class BVHBinaryNode;
     class BVHBoundInfo;
-    class Intersector; 
+    class Intersector;
 }
 
-namespace cadise 
+namespace cadise
 {
 
-class BVHBuilder 
+class BVHBuilder
 {
 public:
     explicit BVHBuilder(const EBVHSplitMode splitMode);
 
     std::unique_ptr<BVHBinaryNode> buildBinaryNodes(
-        const std::vector<std::shared_ptr<Intersector>>& intersectors, 
+        const std::vector<std::shared_ptr<Intersector>>& intersectors,
         std::vector<std::shared_ptr<Intersector>>* const out_orderedIntersectors,
         std::size_t* const                               out_totalNodeSize) const;
 
     void buildLinearNodes(
-        std::unique_ptr<BVHBinaryNode>    root, 
+        std::unique_ptr<BVHBinaryNode>    root,
         const std::size_t                 totalNodeSize,
         std::vector<BVHLinearNode>* const out_linearNodes) const;
 
@@ -40,7 +40,7 @@ private:
         std::size_t* const                               out_totalNodeSize) const;
 
     void _buildLinearNodesRecursively(
-        std::unique_ptr<BVHBinaryNode>    binaryNode, 
+        std::unique_ptr<BVHBinaryNode>    binaryNode,
         std::vector<BVHLinearNode>* const out_linearNodes,
         std::size_t* const                out_nodeIndex) const;
 

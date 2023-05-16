@@ -4,14 +4,14 @@
 
 #include <array>
 
-namespace cadise 
+namespace cadise
 {
 
-class Hemisphere 
+class Hemisphere
 {
 public:
     static void uniformSampling(
-        const std::array<real, 2>& sample, 
+        const std::array<real, 2>& sample,
         Vector3R* const            out_direction,
         real* const                out_pdfW);
 
@@ -22,7 +22,7 @@ public:
 
     static void cosineExpWeightedSampling(
         const std::array<real, 2>& sample,
-        const real                 exponent,                                          
+        const real                 exponent,
         Vector3R* const            out_direction,
         real* const                out_pdfW);
 };

@@ -4,7 +4,7 @@
 
 #include "Foundation/Assertion.h"
 
-namespace cadise 
+namespace cadise
 {
 
 template<typename T>
@@ -13,7 +13,7 @@ inline constexpr T MASK = T(3);
 template<typename Index>
 inline TKDTreeNode<Index>::TKDTreeNode() :
     _objectIndex(0),
-    _secondChildIndex(0) 
+    _secondChildIndex(0)
 {}
 
 template<typename Index>

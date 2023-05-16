@@ -5,13 +5,13 @@
 #include "Math/Math.h"
 #include "Math/TVector3.h"
 
-namespace cadise 
+namespace cadise
 {
 
 SphericalMapper::SphericalMapper() = default;
 
 void SphericalMapper::mappingToUvw(
-    const Vector3R& direction, 
+    const Vector3R& direction,
     Vector3R* const out_uvw) const
 {
     CS_ASSERT(out_uvw);

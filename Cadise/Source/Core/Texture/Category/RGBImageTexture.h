@@ -4,7 +4,7 @@
 
 #include "Core/Spectrum/Spectrum.h"
 
-namespace cadise 
+namespace cadise
 {
 
 class RGBImageTexture : public TImageTexture<Spectrum, real, 3>

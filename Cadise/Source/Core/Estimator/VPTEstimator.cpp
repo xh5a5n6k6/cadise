@@ -22,14 +22,14 @@ VPTEstimator::VPTEstimator(const int32 maxDepth) :
 }
 
 void VPTEstimator::estimate(
-    const Scene&    scene, 
+    const Scene&    scene,
     const Ray&      ray,
     Spectrum* const out_radiance) const
 {
     CS_ASSERT(out_radiance);
 
     const TransportInfo transportInfo(ETransportMode::Radiance);
-    
+
     Spectrum totalRadiance(0.0_r);
     Spectrum pathThroughput(1.0_r);
     Ray      traceRay(ray);
@@ -48,7 +48,7 @@ void VPTEstimator::estimate(
         const Vector3R& P  = intersection.surfaceDetail().position();
         const Vector3R& Ns = intersection.surfaceDetail().shadingNormal();
 
-        if (primitive->areaLight()) 
+        if (primitive->areaLight())
         {
             const Spectrum emittance = primitive->areaLight()->emittance(intersection);
 
@@ -70,7 +70,7 @@ void VPTEstimator::estimate(
         pathThroughput.mulLocal(reflectance.mul(LdotN / pdfW));
 
         // use russian roulette to decide if the ray needs to be kept tracking
-        if (bounceTimes > 2) 
+        if (bounceTimes > 2)
         {
             Spectrum newPathThroughput;
             if (!RussianRoulette::isSurvivedOnNextRound(pathThroughput, &newPathThroughput))
@@ -90,7 +90,7 @@ void VPTEstimator::estimate(
         traceRay.setOrigin(P);
         traceRay.setDirection(L);
     }
-    
+
     out_radiance->set(totalRadiance);
 }
 

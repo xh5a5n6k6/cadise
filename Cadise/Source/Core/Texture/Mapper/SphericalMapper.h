@@ -11,7 +11,7 @@ public:
     SphericalMapper();
 
     void mappingToUvw(
-        const Vector3R& direction, 
+        const Vector3R& direction,
         Vector3R* const out_uvw) const override;
 };
 

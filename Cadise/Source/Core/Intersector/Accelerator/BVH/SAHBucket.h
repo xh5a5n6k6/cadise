@@ -2,7 +2,7 @@
 
 #include "Math/TAABB3.h"
 
-namespace cadise 
+namespace cadise
 {
 
 class SAHBucket

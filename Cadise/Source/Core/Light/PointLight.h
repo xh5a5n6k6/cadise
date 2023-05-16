@@ -7,7 +7,7 @@
 namespace cadise
 {
 
-class PointLight : public Light 
+class PointLight : public Light
 {
 public:
     PointLight(const Vector3R& position, const Spectrum& intensity);

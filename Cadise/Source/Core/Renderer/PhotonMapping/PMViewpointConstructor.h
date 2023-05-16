@@ -15,7 +15,7 @@ namespace cadise
 namespace cadise
 {
 
-class PMViewpointConstructor 
+class PMViewpointConstructor
 {
 public:
     PMViewpointConstructor(

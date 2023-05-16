@@ -7,7 +7,7 @@
 
 #include <cmath>
 
-namespace cadise 
+namespace cadise
 {
 
 StratifiedSampler::StratifiedSampler(const std::size_t sampleNumber) :
@@ -22,7 +22,7 @@ std::unique_ptr<Sampler> StratifiedSampler::clone(const std::size_t sampleNumber
     return std::make_unique<StratifiedSampler>(sampleNumber);
 }
 
-std::unique_ptr<SampleRecord1D> StratifiedSampler::requestSample1D() const 
+std::unique_ptr<SampleRecord1D> StratifiedSampler::requestSample1D() const
 {
     std::unique_ptr<SampleRecord1D> sample1D = std::make_unique<SampleRecord1D>(_sampleNumber);
 
@@ -39,7 +39,7 @@ std::unique_ptr<SampleRecord1D> StratifiedSampler::requestSample1D() const
     return std::move(sample1D);
 }
 
-std::unique_ptr<SampleRecord2D> StratifiedSampler::requestSample2D() const 
+std::unique_ptr<SampleRecord2D> StratifiedSampler::requestSample2D() const
 {
     std::unique_ptr<SampleRecord2D> sample2D = std::make_unique<SampleRecord2D>(_sampleNumber);
 
@@ -47,8 +47,8 @@ std::unique_ptr<SampleRecord2D> StratifiedSampler::requestSample2D() const
     const std::size_t strataNumber = _baseNumber * _baseNumber;
     const real dx = 1.0_r / static_cast<real>(_baseNumber);
     const real dy = 1.0_r / static_cast<real>(_baseNumber);
-    
-    for (std::size_t iy = 0; iy < _baseNumber; ++iy) 
+
+    for (std::size_t iy = 0; iy < _baseNumber; ++iy)
     {
         for (std::size_t ix = 0; ix < _baseNumber; ++ix)
         {
@@ -64,9 +64,9 @@ std::unique_ptr<SampleRecord2D> StratifiedSampler::requestSample2D() const
     }
 
     std::size_t remainSample = _sampleNumber - strataNumber;
-    if (remainSample > 0) 
+    if (remainSample > 0)
     {
-        for (std::size_t i = 0; i < remainSample; ++i) 
+        for (std::size_t i = 0; i < remainSample; ++i)
         {
             const std::size_t indexOffset = 2 * index;
 

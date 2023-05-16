@@ -4,16 +4,16 @@
 
 #include "Math/TVector3.h"
 
-namespace cadise 
+namespace cadise
 {
 
-class Triangle : public Primitive 
+class Triangle : public Primitive
 {
 public:
     Triangle(
-        const std::shared_ptr<BSDF>& bsdf, 
-        const Vector3R&              vA, 
-        const Vector3R&              vB, 
+        const std::shared_ptr<BSDF>& bsdf,
+        const Vector3R&              vA,
+        const Vector3R&              vB,
         const Vector3R&              vC);
 
     void evaluateBound(AABB3R* const out_bound) const override;
@@ -22,7 +22,7 @@ public:
     bool isOccluded(const Ray& ray) const override;
 
     void evaluateSurfaceDetail(
-        const PrimitiveInfo& primitiveInfo, 
+        const PrimitiveInfo& primitiveInfo,
         SurfaceDetail* const out_surface) const override;
 
     void evaluatePositionSample(PositionSample* const out_sample) const override;
@@ -45,7 +45,7 @@ private:
         which is transcribed from "Real-Time Collision Detection"
     */
     void _positionToBarycentric(
-        const Vector3R& position, 
+        const Vector3R& position,
         Vector3R* const out_barycentric) const;
 
     Vector3R _vA;

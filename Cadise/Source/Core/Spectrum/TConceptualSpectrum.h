@@ -2,7 +2,7 @@
 
 #include "Math/TArithmeticArray.h"
 
-namespace cadise 
+namespace cadise
 {
 
 // TODO: refactor as CRTP (curiously recurring template pattern)
@@ -26,7 +26,7 @@ public:
     TConceptualSpectrum operator - (const TConceptualSpectrum& rhs) const;
     TConceptualSpectrum operator * (const TConceptualSpectrum& rhs) const;
     TConceptualSpectrum operator / (const TConceptualSpectrum& rhs) const;
-    
+
     TConceptualSpectrum  add(const TConceptualSpectrum& rhs) const;
     TConceptualSpectrum  add(const T rhs) const;
     TConceptualSpectrum& addLocal(const TConceptualSpectrum& rhs);
@@ -37,7 +37,7 @@ public:
     TConceptualSpectrum& subLocal(const TConceptualSpectrum& rhs);
     TConceptualSpectrum& subLocal(const T rhs);
 
-    TConceptualSpectrum  mul (const TConceptualSpectrum& rhs) const;
+    TConceptualSpectrum  mul(const TConceptualSpectrum& rhs) const;
     TConceptualSpectrum  mul(const T rhs) const;
     TConceptualSpectrum& mulLocal(const TConceptualSpectrum& rhs);
     TConceptualSpectrum& mulLocal(const T rhs);
@@ -63,7 +63,7 @@ public:
     void set(const TConceptualSpectrum& other);
     void set(const TArithmeticArray<T, N>& value);
     void set(const T value);
-    
+
 protected:
     TArithmeticArray<T, N> _values;
 };

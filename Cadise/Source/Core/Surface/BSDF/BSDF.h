@@ -12,10 +12,10 @@ namespace cadise
     class TransportInfo;
 }
 
-namespace cadise 
+namespace cadise
 {
 
-class BSDF 
+class BSDF
 {
 public:
     BSDF();

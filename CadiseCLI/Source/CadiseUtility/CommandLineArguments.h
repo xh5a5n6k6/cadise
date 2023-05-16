@@ -6,7 +6,7 @@
 namespace cadise::cli
 {
 
-class CommandLineArguments 
+class CommandLineArguments
 {
 public:
     CommandLineArguments(int argc, char* argv[]);

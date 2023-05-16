@@ -2,7 +2,7 @@
 
 #include "Core/Estimator/AOV/AOVEstimator.h"
 
-namespace cadise 
+namespace cadise
 {
 
 /*
@@ -12,7 +12,7 @@ namespace cadise
     evaluating global illumination. It is preferred to use 
     this estimator at outdoor scene.
 */
-class AOEstimator : public AOVEstimator 
+class AOEstimator : public AOVEstimator
 {
 public:
     AOEstimator();
@@ -31,7 +31,7 @@ private:
 
 // header implementation
 
-inline std::string AOEstimator::toString() const 
+inline std::string AOEstimator::toString() const
 {
     return "AOV-AO Estimator";
 }

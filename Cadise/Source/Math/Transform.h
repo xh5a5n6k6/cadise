@@ -5,7 +5,7 @@
 namespace cadise
 {
 
-class Transform 
+class Transform
 {
 public:
     explicit Transform(const Matrix4R& matrix);

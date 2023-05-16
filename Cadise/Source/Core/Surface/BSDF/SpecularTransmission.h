@@ -13,14 +13,14 @@ namespace cadise
     class TTexture;
 }
 
-namespace cadise 
+namespace cadise
 {
 
-class SpecularTransmission : public BSDF 
+class SpecularTransmission : public BSDF
 {
 public:
     SpecularTransmission(
-        const std::shared_ptr<TTexture<Spectrum>>& albedo, 
+        const std::shared_ptr<TTexture<Spectrum>>& albedo,
         const std::shared_ptr<DielectricFresnel>&  fresnel);
 
     Spectrum evaluate(

@@ -15,7 +15,7 @@
 #include "Foundation/Logging/Logger.h"
 #include "Math/Constant.h"
 
-namespace cadise 
+namespace cadise
 {
 
 namespace
@@ -25,7 +25,7 @@ namespace
 
 PTEstimator::PTEstimator(const int32 maxPathLength) :
     RadianceEstimator(),
-    _maxPathLength(maxPathLength) 
+    _maxPathLength(maxPathLength)
 {
     if (_maxPathLength <= 0)
     {
@@ -38,9 +38,9 @@ PTEstimator::PTEstimator(const int32 maxPathLength) :
 }
 
 void PTEstimator::estimate(
-    const Scene&    scene, 
+    const Scene&    scene,
     const Ray&      ray,
-    Spectrum* const out_radiance) const 
+    Spectrum* const out_radiance) const
 {
     CS_ASSERT(out_radiance);
 
@@ -230,7 +230,7 @@ void PTEstimator::estimate(
             break;
         }
     }
-    
+
     out_radiance->set(totalRadiance);
 }
 

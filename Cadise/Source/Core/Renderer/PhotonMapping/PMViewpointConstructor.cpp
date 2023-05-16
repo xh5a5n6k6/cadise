@@ -1,7 +1,6 @@
 #include "Core/Renderer/PhotonMapping/PMViewpointConstructor.h"
 
 #include "Core/Camera/Camera.h"
-#include "Core/Gear/RussianRoulette.h"
 #include "Core/Gear/Sample/BSDFSample.h"
 #include "Core/Intersector/Primitive/Primitive.h"
 #include "Core/Light/AreaLight.h"
@@ -14,7 +13,7 @@
 #include "Core/SurfaceIntersection.h"
 #include "Foundation/Assertion.h"
 
-namespace cadise 
+namespace cadise
 {
 
 PMViewpointConstructor::PMViewpointConstructor(
@@ -24,7 +23,7 @@ PMViewpointConstructor::PMViewpointConstructor(
 
     _scene(scene),
     _camera(camera),
-    _initialRadius(initialRadius) 
+    _initialRadius(initialRadius)
 {
     CS_ASSERT(scene);
     CS_ASSERT(camera);
@@ -49,14 +48,14 @@ void PMViewpointConstructor::construct(
     PMViewpointSampleRay currentSampleRay = { traceRay, Spectrum(1.0_r), 0 };
     uint8                currentStackSize = 0;
 
-    while (true) 
+    while (true)
     {
         traceRay = currentSampleRay.sampleRay();
 
         SurfaceIntersection si;
-        if (!_scene->isIntersecting(traceRay, si)) 
+        if (!_scene->isIntersecting(traceRay, si))
         {
-            if (currentStackSize == 0) 
+            if (currentStackSize == 0)
             {
                 break;
             }
@@ -80,7 +79,7 @@ void PMViewpointConstructor::construct(
             ELobe::DiffuseReflection,
             ELobe::DiffuseTransmission,
             ELobe::GlossyReflection,
-            ELobe::GlossyTransmission })) 
+            ELobe::GlossyTransmission }))
         {
             PMViewpoint viewpoint(
                 bsdf,
@@ -90,7 +89,7 @@ void PMViewpointConstructor::construct(
                 currentSampleRay.pathThroughput(),
                 _initialRadius);
 
-            if (primitive->areaLight()) 
+            if (primitive->areaLight())
             {
                 const Spectrum emittedRadiance = primitive->areaLight()->emittance(si);
 
@@ -106,9 +105,9 @@ void PMViewpointConstructor::construct(
         if ((currentSampleRay.depth() < MAX_PATH_LENGTH - 1) &&
             bsdf->lobes().hasAtLeastOne({
                 ELobe::SpecularReflection,
-                ELobe::SpecularTransmission })) 
+                ELobe::SpecularTransmission }))
         {
-            for (BSDFComponents i = 0; i < bsdf->components(); ++i) 
+            for (BSDFComponents i = 0; i < bsdf->components(); ++i)
             {
                 if (BSDFLobes({ bsdf->lobe(i) }).hasNone({
                     ELobe::SpecularReflection,
@@ -121,7 +120,7 @@ void PMViewpointConstructor::construct(
 
                 BSDFSample bsdfSample;
                 bsdf->evaluateSample(transportInfo, si, &bsdfSample);
-                if (!bsdfSample.isValid()) 
+                if (!bsdfSample.isValid())
                 {
                     continue;
                 }
@@ -131,8 +130,9 @@ void PMViewpointConstructor::construct(
                 const real      pdfW        = bsdfSample.pdfW();
                 const real      LdotN       = L.absDot(Ns);
 
-                const Spectrum newPathThroughput 
-                    = currentSampleRay.pathThroughput().mul(reflectance).mul(LdotN / pdfW);
+                const Spectrum newPathThroughput = currentSampleRay.pathThroughput()
+                    .mul(reflectance)
+                    .mul(LdotN / pdfW);
 
                 rayBufferStack[currentStackSize] = { Ray(P, L), newPathThroughput, currentSampleRay.depth() + 1 };
                 ++currentStackSize;
@@ -140,11 +140,11 @@ void PMViewpointConstructor::construct(
         }
 
         // check if there is any untraced sample
-        if (currentStackSize == 0) 
+        if (currentStackSize == 0)
         {
             break;
         }
-        else 
+        else
         {
             --currentStackSize;
             currentSampleRay = rayBufferStack[currentStackSize];
@@ -153,20 +153,20 @@ void PMViewpointConstructor::construct(
         }
     } // end while loop
 
-    if (sampleViewpointCount > 0) 
+    if (sampleViewpointCount > 0)
     {
         const std::size_t numViewpoints            = out_viewpoints->size();
         const real        realSampleViewpointCount = static_cast<real>(sampleViewpointCount);
 
-        for (std::size_t i = numViewpoints - sampleViewpointCount; i < numViewpoints; ++i) 
+        for (std::size_t i = numViewpoints - sampleViewpointCount; i < numViewpoints; ++i)
         {
-            const Spectrum& unnormalizeThroughput = (*out_viewpoints)[i].throughputImportance();
+            const Spectrum& unnormalizedThroughput = (*out_viewpoints)[i].throughputImportance();
 
             (*out_viewpoints)[i].setThroughputImportance(
-                unnormalizeThroughput.mul(realSampleViewpointCount));
+                unnormalizedThroughput.mul(realSampleViewpointCount));
         }
     }
-    else 
+    else
     {
         // add zero contribution viewpoint
 
@@ -176,8 +176,7 @@ void PMViewpointConstructor::construct(
             Vector3R(),
             filmPosition,
             Spectrum(),
-            0.0_r
-        );
+            0.0_r);
 
         out_viewpoints->push_back(std::move(viewpoint));
     }

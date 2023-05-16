@@ -23,7 +23,7 @@ public:
 
 // header implementation
 
-inline std::string WSNEstimator::toString() const 
+inline std::string WSNEstimator::toString() const
 {
     return "AOV-WSN Estimator";
 }

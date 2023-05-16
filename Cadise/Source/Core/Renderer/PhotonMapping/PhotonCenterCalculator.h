@@ -2,15 +2,15 @@
 
 #include "Core/Renderer/PhotonMapping/Photon.h"
 
-namespace cadise 
+namespace cadise
 {
 
-class PhotonCenterCalculator 
+class PhotonCenterCalculator
 {
 public:
     PhotonCenterCalculator() = default;
 
-    Vector3R operator () (const Photon& photon) const 
+    Vector3R operator () (const Photon& photon) const
     {
         return photon.position();
     }

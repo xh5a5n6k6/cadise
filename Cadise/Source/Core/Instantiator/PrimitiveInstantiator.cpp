@@ -12,12 +12,12 @@
 #include "FileIO/CSD/CSDResource.h"
 #include "Foundation/Assertion.h"
 
-namespace cadise::instantiator 
+namespace cadise::instantiator
 {
 
 static std::shared_ptr<Primitive> createSphere(
     const std::shared_ptr<CSDResource>& data,
-    const TStringKeyMap<BSDF>&     bsdfs)
+    const TStringKeyMap<BSDF>&          bsdfs)
 {
     const auto center   = data->findVector3<real>("center");
     const real radius   = data->findFloat<real>("radius");
@@ -30,7 +30,7 @@ static std::shared_ptr<Primitive> createSphere(
 
 static std::shared_ptr<Primitive> createTriangle(
     const std::shared_ptr<CSDResource>& data,
-    const TStringKeyMap<BSDF>&     bsdfs) 
+    const TStringKeyMap<BSDF>&          bsdfs)
 {
     const auto v1       = data->findVector3<real>("v1");
     const auto v2       = data->findVector3<real>("v2");
@@ -44,7 +44,7 @@ static std::shared_ptr<Primitive> createTriangle(
 
 static std::shared_ptr<Primitive> createRectangle(
     const std::shared_ptr<CSDResource>& data,
-    const TStringKeyMap<BSDF>&     bsdfs) 
+    const TStringKeyMap<BSDF>&          bsdfs)
 {
     const auto v1       = data->findVector3<real>("v1");
     const auto v2       = data->findVector3<real>("v2");
@@ -52,15 +52,16 @@ static std::shared_ptr<Primitive> createRectangle(
     const auto bsdfName = data->findString("bsdf");
 
     const auto&& mapResult = bsdfs.find(bsdfName);
-    const auto   bsdf      = (mapResult != bsdfs.end()) ? 
-        mapResult->second : std::make_shared<LambertianDiffuse>();
+    const auto   bsdf = mapResult != bsdfs.end()
+        ? mapResult->second
+        : std::make_shared<LambertianDiffuse>();
 
     return std::make_shared<Rectangle>(bsdf, v1, v2, v3);
 }
 
 static std::shared_ptr<TriangleBuffer> createTriangleMesh(
     const std::shared_ptr<CSDResource>& data,
-    const TStringKeyMap<BSDF>&     bsdfs) 
+    const TStringKeyMap<BSDF>&          bsdfs)
 {
     const auto positions = data->findVector3Array<real>("positions");
     const auto normals   = data->findVector3Array<real>("normals");
@@ -68,10 +69,9 @@ static std::shared_ptr<TriangleBuffer> createTriangleMesh(
     const auto bsdfName  = data->findString("bsdf");
 
     const auto&& mapResult = bsdfs.find(bsdfName);
-    const auto   bsdf      = (mapResult != bsdfs.end()) ?
-        mapResult->second : std::make_shared<LambertianDiffuse>();
-
-    const std::size_t numTriangles = positions.size() / 3;
+    const auto   bsdf = mapResult != bsdfs.end()
+        ? mapResult->second
+        : std::make_shared<LambertianDiffuse>();
 
     return std::make_shared<TriangleBuffer>(bsdf, positions, normals, uvws);
 }
@@ -101,40 +101,40 @@ static std::shared_ptr<TriangleBuffer> createTriangleMesh(
 //}
 
 void makePrimitive(
-    const std::shared_ptr<CSDResource>&             data,
+    const std::shared_ptr<CSDResource>&        data,
     const TStringKeyMap<BSDF>&                 bsdfs,
     std::vector<std::shared_ptr<Intersector>>& out_intersectors,
     TStringKeyMap<Primitive>&                  out_primitives,
-    TStringKeyMap<TriangleBuffer>&             out_triangleBuffers) 
+    TStringKeyMap<TriangleBuffer>&             out_triangleBuffers)
 {
     CS_ASSERT(data);
 
     const auto type          = data->findString("type");
     const auto primitiveName = data->findString("name");
-    if (type == "sphere") 
+    if (type == "sphere")
     {
         const auto sphere = createSphere(data, bsdfs);
         out_intersectors.push_back(sphere);
         out_primitives.insert(std::pair<std::string, std::shared_ptr<Primitive>>(primitiveName, sphere));
     }
-    else if (type == "triangle") 
+    else if (type == "triangle")
     {
         const auto triangle = createTriangle(data, bsdfs);
         out_intersectors.push_back(triangle);
         out_primitives.insert(std::pair<std::string, std::shared_ptr<Primitive>>(primitiveName, triangle));
     }
-    else if (type == "rectangle") 
+    else if (type == "rectangle")
     {
         const auto rectangle = createRectangle(data, bsdfs);
         out_intersectors.push_back(rectangle);
         out_primitives.insert(std::pair<std::string, std::shared_ptr<Primitive>>(primitiveName, rectangle));
     }
-    else if (type == "triangle-mesh") 
+    else if (type == "triangle-mesh")
     {
         const auto triangleBuffer = createTriangleMesh(data, bsdfs);
         out_triangleBuffers.insert(std::pair<std::string, std::shared_ptr<TriangleBuffer>>(primitiveName, triangleBuffer));
     }
-    else 
+    else
     {
         // unsupported primitive type
     }

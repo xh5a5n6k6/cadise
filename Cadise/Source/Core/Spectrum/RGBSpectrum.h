@@ -4,7 +4,7 @@
 
 #include "Math/Type/MathType.h"
 
-namespace cadise 
+namespace cadise
 {
 
 class RGBSpectrum : public TConceptualSpectrum<real, 3>

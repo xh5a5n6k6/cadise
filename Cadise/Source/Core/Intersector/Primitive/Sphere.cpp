@@ -13,17 +13,17 @@
 
 #include <cmath>
 
-namespace cadise 
+namespace cadise
 {
 
 Sphere::Sphere(
-    const std::shared_ptr<BSDF>& bsdf, 
-    const Vector3R&              center, 
+    const std::shared_ptr<BSDF>& bsdf,
+    const Vector3R&              center,
     const real                   radius) :
-    
-    Primitive(bsdf), 
+
+    Primitive(bsdf),
     _center(center),
-    _radius(radius) 
+    _radius(radius)
 {
     CS_ASSERT(bsdf);
 
@@ -31,7 +31,7 @@ Sphere::Sphere(
     _tmptextureMapper = std::make_shared<SphericalMapper>();
 }
 
-void Sphere::evaluateBound(AABB3R* const out_bound) const 
+void Sphere::evaluateBound(AABB3R* const out_bound) const
 {
     CS_ASSERT(out_bound);
 
@@ -71,7 +71,7 @@ bool Sphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const
     const real t1 = q;
 
     real t;
-    if (!_isSolutionValid(t0, t1, ray.minT(), ray.maxT(), &t)) 
+    if (!_isSolutionValid(t0, t1, ray.minT(), ray.maxT(), &t))
     {
         return false;
     }
@@ -82,7 +82,7 @@ bool Sphere::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const
     return true;
 }
 
-bool Sphere::isOccluded(const Ray& ray) const 
+bool Sphere::isOccluded(const Ray& ray) const
 {
     const Vector3R& O = ray.origin();
     const Vector3R  G = _center;
@@ -115,8 +115,8 @@ bool Sphere::isOccluded(const Ray& ray) const
 }
 
 void Sphere::evaluateSurfaceDetail(
-    const PrimitiveInfo& primitiveInfo, 
-    SurfaceDetail* const out_surface) const 
+    const PrimitiveInfo& primitiveInfo,
+    SurfaceDetail* const out_surface) const
 {
     CS_ASSERT(out_surface);
 
@@ -133,7 +133,7 @@ void Sphere::evaluateSurfaceDetail(
         _textureMapper->mappingToUvw(out_surface->shadingNormal(), &uvw);
         out_surface->setUvw(uvw);
     }
-    else 
+    else
     {
         _tmptextureMapper->mappingToUvw(out_surface->shadingNormal(), &uvw);
         out_surface->setUvw(uvw);
@@ -141,7 +141,7 @@ void Sphere::evaluateSurfaceDetail(
 
     /*
         calculate differential geometry properties.
-        
+
         implementation follows PBRT-v3's solution
         Reference: PBRT-v3 e-book (Sphere)
     */
@@ -190,10 +190,10 @@ void Sphere::evaluateSurfaceDetail(
         const real EGsubF2     = E * G - F * F;
         const real inverseEGF2 = (EGsubF2 != 0.0_r) ? 1.0_r / EGsubF2 : 1.0_r;
 
-        dNdU = dPdU.mul((f * F - e * G) * inverseEGF2).add(
-               dPdV.mul((e * F - f * E) * inverseEGF2));
-        dNdV = dPdU.mul((g * F - f * G) * inverseEGF2).add(
-               dPdV.mul((f * F - g * E) * inverseEGF2));
+        dNdU = dPdU.mul((f * F - e * G) * inverseEGF2)
+            .add(dPdV.mul((e * F - f * E) * inverseEGF2));
+        dNdV = dPdU.mul((g * F - f * G) * inverseEGF2)
+            .add(dPdV.mul((f * F - g * E) * inverseEGF2));
     }
 
     out_surface->setDifferentialGeometry({ dPdU, dPdV, dNdU, dNdV });
@@ -231,7 +231,7 @@ bool Sphere::_isSolutionValid(
     }
 
     real localT = t0;
-    if (localT < minT) 
+    if (localT < minT)
     {
         localT = t1;
 

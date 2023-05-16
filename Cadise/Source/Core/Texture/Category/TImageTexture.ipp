@@ -4,7 +4,7 @@
 
 #include "Core/Texture/Sampler/TNearestPixelSampler.h"
 
-namespace cadise 
+namespace cadise
 {
 
 template<typename T, typename ImageType, std::size_t N>
@@ -13,9 +13,9 @@ inline TImageTexture<T, ImageType, N>::TImageTexture(
     const ETextureSampleMode    sampleMode,
     const ETextureWrapMode      wrapMode) :
 
-    _pixelSampler(nullptr) 
+    _pixelSampler(nullptr)
 {
-    switch (sampleMode) 
+    switch (sampleMode)
     {
         case ETextureSampleMode::Nearest:
             _pixelSampler = std::make_unique<TNearestPixelSampler<ImageType, N>>(image, wrapMode);

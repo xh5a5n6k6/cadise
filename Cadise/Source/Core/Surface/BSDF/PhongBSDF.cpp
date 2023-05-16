@@ -9,12 +9,12 @@
 #include <algorithm>
 #include <cmath>
 
-namespace cadise 
+namespace cadise
 {
 
 PhongBSDF::PhongBSDF(const real exponent) :
     BSDF(BSDFLobes({ ELobe::GlossyReflection })),
-    _exponent(exponent) 
+    _exponent(exponent)
 {
     _pdfFactor  = (exponent + 1.0_r) * constant::rcp_two_pi<real>;
     _brdfFactor = (exponent + 2.0_r) * constant::rcp_two_pi<real>;
@@ -22,14 +22,14 @@ PhongBSDF::PhongBSDF(const real exponent) :
 
 Spectrum PhongBSDF::evaluate(
     const TransportInfo&       info,
-    const SurfaceIntersection& si) const 
+    const SurfaceIntersection& si) const
 {
     const Vector3R& Ns = si.surfaceDetail().shadingNormal();
     const Vector3R& V  = si.wi();
     const Vector3R& L  = si.wo();
     const Vector3R  R  = L.reflect(Ns);
 
-    if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) 
+    if (V.dot(Ns) * L.dot(Ns) <= 0.0_r)
     {
         return Spectrum(0.0_r);
     }
@@ -60,7 +60,7 @@ void PhongBSDF::evaluateSample(
     L = si.surfaceDetail().shadingLcs().localToWorld(L);
     L.normalizeLocal();
 
-    if (V.dot(Ns) * L.dot(Ns) <= 0.0_r) 
+    if (V.dot(Ns) * L.dot(Ns) <= 0.0_r)
     {
         return;
     }
@@ -81,7 +81,7 @@ void PhongBSDF::evaluateSample(
 
 real PhongBSDF::evaluatePdfW(
     const TransportInfo&       info,
-    const SurfaceIntersection& si) const 
+    const SurfaceIntersection& si) const
 {
     const Vector3R& Ns = si.surfaceDetail().shadingNormal();
     const Vector3R& V  = si.wi();
@@ -100,7 +100,7 @@ real PhongBSDF::evaluatePdfW(
     return pdfL;
 }
 
-ELobe PhongBSDF::lobe(const BSDFComponents component) const 
+ELobe PhongBSDF::lobe(const BSDFComponents component) const
 {
     CS_ASSERT_EQ(component, 0);
 

@@ -14,13 +14,13 @@
     class WindowsStackWalker : public StackWalker
     {
     public:
-        WindowsStackWalker() : 
+        WindowsStackWalker() :
             StackWalker()
         {}
     protected:
         void OnOutput(LPCSTR szText) override
         {
-            std::cerr << szText; 
+            std::cerr << szText;
             StackWalker::OnOutput(szText);
         }
     };

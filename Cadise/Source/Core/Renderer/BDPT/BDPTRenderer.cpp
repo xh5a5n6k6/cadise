@@ -1,7 +1,6 @@
 #include "Core/Renderer/BDPT/BDPTRenderer.h"
 
 #include "Core/Film/Film.h"
-#include "Core/Film/FilmTile.h"
 #include "Core/Gear/ConnectEvent.h"
 #include "Core/Renderer/RenderWork/BDPTTileWork.h"
 #include "Core/Sampler/Sampler.h"
@@ -15,11 +14,10 @@
 namespace cadise
 {
 
-// local logger declaration
 namespace
 {
     const Logger logger("BDPT Renderer");
-} // anonymous namespace
+}
 
 BDPTRenderer::BDPTRenderer(const std::shared_ptr<Sampler>& sampler) :
     Renderer(),
@@ -38,11 +36,12 @@ void BDPTRenderer::render() const
     Parallel::execute(
         _film->numTilesXy().product(),
         _numWorkers,
-        [this](const std::size_t workerId,
-               const std::size_t workBegin,
-               const std::size_t workEnd) 
+        [this](
+            const std::size_t workerId,
+            const std::size_t workBegin,
+            const std::size_t workEnd)
         {
-            for (std::size_t workIndex = workBegin; workIndex < workEnd; ++workIndex) 
+            for (std::size_t workIndex = workBegin; workIndex < workEnd; ++workIndex)
             {
                 // pre-allocate a fixed number of events,
                 // maybe allocate a sample-sensitive number of events instead?
@@ -50,7 +49,7 @@ void BDPTRenderer::render() const
                 connectEvents.reserve(_film->resolution().product());
 
                 auto filmTile = _film->generateFilmTile(workIndex);
-            
+
                 BDPTTileWork tileWork(
                     _scene.get(),
                     _camera.get(),
@@ -62,7 +61,7 @@ void BDPTRenderer::render() const
 
                 _film->mergeWithFilmTile(std::move(filmTile));
 
-                for (std::size_t i = 0; i < connectEvents.size(); ++i) 
+                for (std::size_t i = 0; i < connectEvents.size(); ++i)
                 {
                     _film->addSplatRadiance(connectEvents[i]);
                 }

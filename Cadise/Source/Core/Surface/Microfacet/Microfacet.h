@@ -10,10 +10,10 @@ namespace cadise
     class SurfaceIntersection;
 }
 
-namespace cadise 
+namespace cadise
 {
 
-class Microfacet 
+class Microfacet
 {
 public:
     virtual ~Microfacet();
@@ -26,8 +26,8 @@ public:
     virtual real shadowingMaskingG(
         const SurfaceIntersection& si,
         const Vector3R&            V,
-        const Vector3R&            L, 
-        const Vector3R&            N, 
+        const Vector3R&            L,
+        const Vector3R&            N,
         const Vector3R&            H) const = 0;
 
     virtual void sampleHalfVectorH(

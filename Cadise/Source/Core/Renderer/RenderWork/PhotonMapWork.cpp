@@ -15,7 +15,7 @@
 
 #include <limits>
 
-namespace cadise 
+namespace cadise
 {
 
 PhotonMapWork::PhotonMapWork(
@@ -28,22 +28,23 @@ PhotonMapWork::PhotonMapWork(
     _photons(photons),
     _numPhotonPaths(numPhotonPaths),
     _maxNumPhotons(std::numeric_limits<std::size_t>::max()),
-    _maxNumPhotonPaths(std::numeric_limits<std::size_t>::max()) 
+    _maxNumPhotonPaths(std::numeric_limits<std::size_t>::max())
 {
     CS_ASSERT(scene);
     CS_ASSERT(photons);
     CS_ASSERT(numPhotonPaths);
 }
 
-void PhotonMapWork::work() const 
+void PhotonMapWork::work() const
 {
+    // TODO: maybe stricter check?
     CS_ASSERT(
-        !(_maxNumPhotons     == std::numeric_limits<std::size_t>::max() &&
-          _maxNumPhotonPaths == std::numeric_limits<std::size_t>::max()));
+        _maxNumPhotons != std::numeric_limits<std::size_t>::max() ||
+        _maxNumPhotonPaths != std::numeric_limits<std::size_t>::max());
 
     std::size_t numPhotonPaths = 0;
     std::size_t numPhotons     = 0;
-    while (numPhotons < _maxNumPhotons && numPhotonPaths < _maxNumPhotonPaths) 
+    while (numPhotons < _maxNumPhotons && numPhotonPaths < _maxNumPhotonPaths)
     {
         ++numPhotonPaths;
 
@@ -54,7 +55,7 @@ void PhotonMapWork::work() const
 
         EmitLightSample emitLightSample;
         sampleLight->evaluateEmitSample(&emitLightSample);
-        if (!emitLightSample.isValid()) 
+        if (!emitLightSample.isValid())
         {
             continue;
         }
@@ -74,7 +75,7 @@ void PhotonMapWork::work() const
         Ray           traceRay(emitPosition, emitDirection);
 
         // tracing light ray
-        for(int32 bounceTimes = 0;; ++bounceTimes) 
+        for (int32 bounceTimes = 0;; ++bounceTimes)
         {
             SurfaceIntersection intersection;
             if (!_scene->isIntersecting(traceRay, intersection))
@@ -93,7 +94,7 @@ void PhotonMapWork::work() const
                 ELobe::DiffuseReflection,
                 ELobe::DiffuseTransmission,
                 ELobe::GlossyReflection,
-                ELobe::GlossyTransmission })) 
+                ELobe::GlossyTransmission }))
             {
                 Photon photon;
                 photon.setPosition(P);
@@ -103,7 +104,7 @@ void PhotonMapWork::work() const
                 _photons->push_back(std::move(photon));
 
                 ++numPhotons;
-                if (numPhotons == _maxNumPhotons) 
+                if (numPhotons == _maxNumPhotons)
                 {
                     break;
                 }
@@ -129,7 +130,7 @@ void PhotonMapWork::work() const
 
             // use russian roulette to decide if the ray needs to be kept tracking
             Spectrum newThroughputRadiance;
-            if (!RussianRoulette::isSurvivedOnNextRound(throughputRadiance, &newThroughputRadiance)) 
+            if (!RussianRoulette::isSurvivedOnNextRound(throughputRadiance, &newThroughputRadiance))
             {
                 break;
             }
@@ -152,7 +153,7 @@ void PhotonMapWork::work() const
     *_numPhotonPaths = numPhotonPaths;
 }
 
-void PhotonMapWork::setMaxNumPhotons(const std::size_t maxNumPhotons) 
+void PhotonMapWork::setMaxNumPhotons(const std::size_t maxNumPhotons)
 {
     _maxNumPhotons = maxNumPhotons;
 }

@@ -7,7 +7,7 @@ namespace cadise
 {
 
 CSDResource::CSDResource() :
-    _classType(ECSDClassType::Undefined) 
+    _classType(ECSDClassType::Undefined)
 {}
 
 void CSDResource::addBool(const std::string& name, const std::string& valueRaw)
@@ -51,7 +51,7 @@ void CSDResource::addVector3Array(const std::string& name, const std::vector<std
 }
 
 bool CSDResource::findBool(
-    const std::string& name, 
+    const std::string& name,
     const bool         defaultValue)
 {
     if (_boolRaws.contains(name))
@@ -65,7 +65,7 @@ bool CSDResource::findBool(
 }
 
 std::string CSDResource::findString(
-    const std::string& name, 
+    const std::string& name,
     const std::string& defaultValue)
 {
     if (_stringRaws.contains(name))
@@ -86,11 +86,11 @@ std::shared_ptr<TTexture<real>> CSDResource::getRealTexture(
     std::shared_ptr<TTexture<real>> realTexture;
 
     const std::string textureName = this->findString(name);
-    if (!textureName.empty()) 
+    if (!textureName.empty())
     {
         realTexture = realTextures.at(textureName);
     }
-    else 
+    else
     {
         const real value = this->findFloat<real>(name, defaultValue);
         realTexture = std::make_shared<TConstantTexture<real>>(value);
@@ -107,11 +107,11 @@ std::shared_ptr<TTexture<Spectrum>> CSDResource::getSpectrumTexture(
     std::shared_ptr<TTexture<Spectrum>> spectrumTexture;
 
     const std::string textureName = this->findString(name);
-    if (!textureName.empty()) 
+    if (!textureName.empty())
     {
         spectrumTexture = spectrumTextures.at(textureName);
     }
-    else 
+    else
     {
         // it now only support rgb spectrum
         Vector3R defaultLinearSrgb;
@@ -129,9 +129,9 @@ ECSDClassType CSDResource::classType() const
     return _classType;
 }
 
-void CSDResource::setClassType(const std::string& classType) 
+void CSDResource::setClassType(const std::string& classType)
 {
-    if (classType == "film") 
+    if (classType == "film")
     {
         this->setClassType(ECSDClassType::Film);
     }
@@ -143,15 +143,15 @@ void CSDResource::setClassType(const std::string& classType)
     {
         this->setClassType(ECSDClassType::Renderer);
     }
-    else if (classType == "accelerator") 
+    else if (classType == "accelerator")
     {
         this->setClassType(ECSDClassType::Accelerator);
     }
-    else if (classType == "light-cluster") 
+    else if (classType == "light-cluster")
     {
         this->setClassType(ECSDClassType::LightCluster);
     }
-    else if (classType == "texture-real") 
+    else if (classType == "texture-real")
     {
         this->setClassType(ECSDClassType::TextureReal);
     }
@@ -159,19 +159,19 @@ void CSDResource::setClassType(const std::string& classType)
     {
         this->setClassType(ECSDClassType::TextureSpectrum);
     }
-    else if (classType == "material") 
+    else if (classType == "material")
     {
         this->setClassType(ECSDClassType::Material);
     }
-    else if (classType == "light") 
+    else if (classType == "light")
     {
         this->setClassType(ECSDClassType::Light);
     }
-    else if (classType == "primitive") 
+    else if (classType == "primitive")
     {
         this->setClassType(ECSDClassType::Primitive);
     }
-    else 
+    else
     {
         // unsupported type
     }

@@ -3,7 +3,7 @@
 namespace cadise
 {
 
-void RealImageTexture::evaluate(const Vector3R& uvw, real* const out_value) const 
+void RealImageTexture::evaluate(const Vector3R& uvw, real* const out_value) const
 {
     // TODO: implement here
 }

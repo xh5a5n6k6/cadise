@@ -6,35 +6,37 @@
 
 #include <limits>
 
-namespace cadise 
+namespace cadise
 {
 
 template<typename T>
 inline TAABB2<T>::TAABB2() :
-    TAABB2(TVector2<T>(std::numeric_limits<T>::max()), 
-           TVector2<T>(std::numeric_limits<T>::min()))
+    TAABB2(
+        TVector2<T>(std::numeric_limits<T>::max()),
+        TVector2<T>(std::numeric_limits<T>::min()))
 {}
 
 template<typename T>
 inline TAABB2<T>::TAABB2(const TVector2<T>& vertex) :
-    TAABB2(vertex, vertex) 
+    TAABB2(vertex, vertex)
 {}
 
 template<typename T>
 inline TAABB2<T>::TAABB2(const TVector2<T>& minVertex, const TVector2<T>& maxVertex) :
     _minVertex(minVertex),
-    _maxVertex(maxVertex) 
+    _maxVertex(maxVertex)
 {}
 
 template<typename T>
 inline bool TAABB2<T>::isEmpty() const
 {
-    return _minVertex.isEqualTo(TVector2<T>(std::numeric_limits<T>::max())) ||
-           _maxVertex.isEqualTo(TVector2<T>(std::numeric_limits<T>::min()));
+    return
+        _minVertex.isEqualTo(TVector2<T>(std::numeric_limits<T>::max())) ||
+        _maxVertex.isEqualTo(TVector2<T>(std::numeric_limits<T>::min()));
 }
 
 template<typename T>
-inline T TAABB2<T>::area() const 
+inline T TAABB2<T>::area() const
 {
     return this->extent().product();
 }
@@ -46,7 +48,7 @@ inline TVector2<T> TAABB2<T>::extent() const
 }
 
 template<typename T>
-inline constant::AxisType TAABB2<T>::maxAxis() const 
+inline constant::AxisType TAABB2<T>::maxAxis() const
 {
     return this->extent().maxDimension();
 }
@@ -58,7 +60,7 @@ inline const TVector2<T>& TAABB2<T>::minVertex() const
 }
 
 template<typename T>
-inline const TVector2<T>& TAABB2<T>::maxVertex() const 
+inline const TVector2<T>& TAABB2<T>::maxVertex() const
 {
     return _maxVertex;
 }

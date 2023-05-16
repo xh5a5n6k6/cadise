@@ -1,11 +1,11 @@
 #pragma once
 
-namespace cadise 
+namespace cadise
 {
 
 /*! @brief Split strategy used in BVH construction.
 */
-enum class EBVHSplitMode 
+enum class EBVHSplitMode
 {
     Undefined = 0,
 

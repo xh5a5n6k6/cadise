@@ -13,14 +13,14 @@ namespace cadise::instantiator
 {
 
 static std::shared_ptr<Accelerator> createBruteForce(
-    const std::shared_ptr<CSDResource>& data,
+    const std::shared_ptr<CSDResource>&              data,
     const std::vector<std::shared_ptr<Intersector>>& intersectors)
 {
     return std::make_shared<BruteForceAccelerator>(std::move(intersectors));
 }
 
 static std::shared_ptr<Accelerator> createBvh(
-    const std::shared_ptr<CSDResource>& data,
+    const std::shared_ptr<CSDResource>&              data,
     const std::vector<std::shared_ptr<Intersector>>& intersectors)
 {
     const auto splitMode = data->findString("split-mode", "sah");
@@ -64,17 +64,17 @@ std::shared_ptr<Accelerator> makeAccelerator(
     CS_ASSERT(data);
 
     std::shared_ptr<Accelerator> accelerator = nullptr;
-    
+
     const auto type = data->findString("type");
-    if (type == "bruteForce") 
+    if (type == "bruteForce")
     {
         accelerator = createBruteForce(data, intersectors);
     }
-    else if (type == "bvh") 
+    else if (type == "bvh")
     {
         accelerator = createBvh(data, intersectors);
     }
-    else if (type == "kd-tree") 
+    else if (type == "kd-tree")
     {
         accelerator = createKdTree(data, intersectors);
     }

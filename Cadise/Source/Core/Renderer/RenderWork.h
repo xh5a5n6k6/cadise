@@ -3,7 +3,7 @@
 namespace cadise
 {
 
-class RenderWork 
+class RenderWork
 {
 public:
     virtual ~RenderWork();

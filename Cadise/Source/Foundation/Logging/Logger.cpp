@@ -17,7 +17,7 @@ void Logger::log(const std::string& message) const
     this->log(ELogLevel::Info, message);
 }
 
-void Logger::log(const ELogLevel logLevel, const std::string& message) const 
+void Logger::log(const ELogLevel logLevel, const std::string& message) const
 {
     const Timestamp timestamp;
 

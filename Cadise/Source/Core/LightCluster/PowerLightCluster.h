@@ -8,7 +8,7 @@
 #include <unordered_map>
 #include <vector>
 
-namespace cadise 
+namespace cadise
 {
 
 class PowerLightCluster : public LightCluster

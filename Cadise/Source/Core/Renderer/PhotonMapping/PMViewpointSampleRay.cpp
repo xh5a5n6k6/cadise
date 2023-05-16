@@ -1,6 +1,6 @@
 #include "Core/Renderer/PhotonMapping/PMViewpointSampleRay.h"
 
-namespace cadise 
+namespace cadise
 {
 
 PMViewpointSampleRay::PMViewpointSampleRay() = default;

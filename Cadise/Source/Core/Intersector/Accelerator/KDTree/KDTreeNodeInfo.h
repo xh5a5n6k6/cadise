@@ -2,10 +2,10 @@
 
 #include "Math/Type/PrimitiveType.h"
 
-namespace cadise 
+namespace cadise
 {
 
-class KDTreeNodeInfo 
+class KDTreeNodeInfo
 {
 public:
     KDTreeNodeInfo();

@@ -8,13 +8,13 @@
 namespace cadise
 {
     class ConductorFresnel;
-    class Microfacet; 
+    class Microfacet;
 }
 
-namespace cadise 
+namespace cadise
 {
 
-class ConductorMicrofacet : public BSDF 
+class ConductorMicrofacet : public BSDF
 {
 public:
     ConductorMicrofacet(

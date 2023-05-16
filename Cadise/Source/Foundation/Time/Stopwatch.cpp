@@ -1,11 +1,11 @@
 #include "Foundation/Time/Stopwatch.h"
 
-namespace cadise 
+namespace cadise
 {
 
 Stopwatch::Stopwatch() = default;
 
-void Stopwatch::start() 
+void Stopwatch::start()
 {
     _startTime = Clock::now();
 }
@@ -18,7 +18,7 @@ void Stopwatch::stop()
     _elapsedTime.addMilliseconds(static_cast<uint64>(duration.count()));
 }
 
-void Stopwatch::reset() 
+void Stopwatch::reset()
 {
     _elapsedTime.reset();
 }

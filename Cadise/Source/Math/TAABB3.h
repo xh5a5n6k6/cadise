@@ -18,9 +18,9 @@ public:
     bool isInside(const TVector3<T>& position) const;
 
     bool isIntersectingAABB(
-        const TVector3<T>& rayOrigin, 
-        const TVector3<T>& rayRcpDirection, 
-        const T            rayMinT, 
+        const TVector3<T>& rayOrigin,
+        const TVector3<T>& rayRcpDirection,
+        const T            rayMinT,
         const T            rayMaxT) const;
 
     bool isIntersectingAABB(

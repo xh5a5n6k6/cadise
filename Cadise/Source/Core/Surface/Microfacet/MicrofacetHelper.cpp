@@ -6,26 +6,26 @@
 
 #include <utility>
 
-namespace cadise 
+namespace cadise
 {
 
 bool MicrofacetHelper::canMakeReflectionH(
     const Vector3R& V,
     const Vector3R& L,
     const Vector3R& N,
-    Vector3R* const out_H) 
+    Vector3R* const out_H)
 {
     CS_ASSERT(out_H);
 
     const Vector3R HVector = V.add(L);
-    if (HVector.isZero()) 
+    if (HVector.isZero())
     {
         return false;
     }
 
     // make sure H and N lie in the same hemisphere
     const Vector3R H = HVector.normalize();
-    switch (math::sign(N.dot(H))) 
+    switch (math::sign(N.dot(H)))
     {
         case constant::SIGN_POSITIVE:
             out_H->set(H);
@@ -50,7 +50,7 @@ bool MicrofacetHelper::canMakeRefractionH(
     const Vector3R& N,
     const real      iorOuter,
     const real      iorInner,
-    Vector3R* const out_H) 
+    Vector3R* const out_H)
 {
     CS_ASSERT(out_H);
 
@@ -69,7 +69,7 @@ bool MicrofacetHelper::canMakeRefractionH(
 
     // make sure H and N lie in the same hemisphere
     const Vector3R H = HVector.normalize();
-    switch (math::sign(N.dot(H))) 
+    switch (math::sign(N.dot(H)))
     {
         case constant::SIGN_POSITIVE:
             out_H->set(H);

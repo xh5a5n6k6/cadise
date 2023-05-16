@@ -9,9 +9,9 @@ namespace cadise
 {
 
 VanillaDielectricFresnel::VanillaDielectricFresnel(
-    const real iorOuter, 
+    const real iorOuter,
     const real iorInner) :
-    
+
     DielectricFresnel(iorOuter, iorInner)
 {}
 
@@ -25,7 +25,7 @@ void VanillaDielectricFresnel::evaluateReflectance(
     real etaT = this->iorInner();
 
     real cosI = cosThetaI;
-    if (cosI < 0.0_r) 
+    if (cosI < 0.0_r)
     {
         std::swap(etaI, etaT);
         cosI *= -1.0_r;

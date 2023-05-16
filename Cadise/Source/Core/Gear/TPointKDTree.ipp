@@ -6,13 +6,13 @@
 
 #include <algorithm>
 
-namespace cadise 
+namespace cadise
 {
 
 template<typename Index, typename Object, typename ObjectCenterCalculator>
 inline TPointKDTree<Index, Object, ObjectCenterCalculator>::TPointKDTree(
     const ObjectCenterCalculator& centerCalculator) :
-    
+
     _objects(),
     _nodes(),
     _objectIndices(),
@@ -63,7 +63,7 @@ inline void TPointKDTree<Index, Object, ObjectCenterCalculator>::
 {
     CS_ASSERT(out_objects);
 
-    if (!_bound.isInside(position)) 
+    if (!_bound.isInside(position))
     {
         return;
     }
@@ -94,11 +94,11 @@ inline void TPointKDTree<Index, Object, ObjectCenterCalculator>::
                 }
             }
 
-            if (currentStackSize == 0) 
+            if (currentStackSize == 0)
             {
                 break;
             }
-            else 
+            else
             {
                 --currentStackSize;
                 currentNodeIndex = nodeStack[currentStackSize];
@@ -110,7 +110,7 @@ inline void TPointKDTree<Index, Object, ObjectCenterCalculator>::
         else
         {
             const std::size_t splitAxis = currentNode.splitAxis();
-            const real splitDifferenceT 
+            const real splitDifferenceT
                 = position[splitAxis] - currentNode.splitPosition();
 
             std::size_t nearChildIndex;
@@ -132,7 +132,7 @@ inline void TPointKDTree<Index, Object, ObjectCenterCalculator>::
             }
 
             // check if it needs to put farChildIndex in the stack
-            if (splitDifferenceT * splitDifferenceT <= searchRadius2) 
+            if (splitDifferenceT * splitDifferenceT <= searchRadius2)
             {
                 nodeStack[currentStackSize] = farChildIndex;
                 ++currentStackSize;
@@ -149,7 +149,7 @@ inline void TPointKDTree<Index, Object, ObjectCenterCalculator>::
         const std::vector<Vector3R>& objectCenters,
         const std::vector<Index>&    objectIndices,
         const AABB3R&                entireBound,
-        const std::size_t            currentDepth) 
+        const std::size_t            currentDepth)
 {
     Node node;
     const std::size_t nodeIndex               = _nodes.size();
@@ -180,12 +180,13 @@ inline void TPointKDTree<Index, Object, ObjectCenterCalculator>::
         std::tuple<std::size_t, real> splitInfo;
 
         // make leaf node if there isn't good split choice
-        if (!_canSplitWithEqual(objectCenters,
-                                objectIndices,
-                                entireBound,
-                                &splitInfo,
-                                &subObjectIndicesA,
-                                &subObjectIndicesB)) 
+        if (!_canSplitWithEqual(
+            objectCenters,
+            objectIndices,
+            entireBound,
+            &splitInfo,
+            &subObjectIndicesA,
+            &subObjectIndicesB))
         {
             for (std::size_t i = 0; i < numObjects; ++i)
             {
@@ -197,7 +198,7 @@ inline void TPointKDTree<Index, Object, ObjectCenterCalculator>::
         }
 
         // make internal node
-        else 
+        else
         {
             std::size_t splitAxis;
             real        splitPosition;

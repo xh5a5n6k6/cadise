@@ -11,7 +11,7 @@
 
 #include <cmath>
 
-namespace cadise 
+namespace cadise
 {
 
 SubpathConnector::SubpathConnector() = default;
@@ -22,13 +22,13 @@ void SubpathConnector::connect(
     const Subpath&    cameraPath,
     const std::size_t s,
     const std::size_t t,
-    Spectrum* const   out_radiance) const 
+    Spectrum* const   out_radiance) const
 {
     CS_ASSERT(out_radiance);
     CS_ASSERT_GE(s, 2);
     CS_ASSERT_GE(t, 2);
 
-    if (s + t - 1 > 16) 
+    if (s + t - 1 > 16)
     {
         return;
     }
@@ -37,7 +37,7 @@ void SubpathConnector::connect(
     const PathVertex& cameraPathEndpoint = cameraPath[t - 1];
 
     if (!lightPathEndpoint.isConnectible() ||
-        !cameraPathEndpoint.isConnectible()) 
+        !cameraPathEndpoint.isConnectible())
     {
         return;
     }
@@ -48,14 +48,14 @@ void SubpathConnector::connect(
     const Spectrum  reflectanceB = cameraPathEndpoint.evaluate(ETransportMode::Radiance, cameraPath[t - 2], lightPathEndpoint);
 
     Spectrum radiance = throughputA.mul(reflectanceA).mul(throughputB).mul(reflectanceB);
-    if (radiance.isZero()) 
+    if (radiance.isZero())
     {
         return;
     }
 
     // it includes visibility test
     real connectGTerm;
-    if (!_canConnect(scene, lightPathEndpoint, cameraPathEndpoint, &connectGTerm)) 
+    if (!_canConnect(scene, lightPathEndpoint, cameraPathEndpoint, &connectGTerm))
     {
         return;
     }
@@ -69,7 +69,7 @@ bool SubpathConnector::_canConnect(
     const Scene&      scene,
     const PathVertex& lightEndpoint,
     const PathVertex& cameraEndpoint,
-    real* const       out_connectG) const 
+    real* const       out_connectG) const
 {
     CS_ASSERT(out_connectG);
 
@@ -93,7 +93,7 @@ bool SubpathConnector::_canConnect(
     {
         return false;
     }
-    
+
     const real cameraToLightDotN = cameraToLightDirection.absDot(cameraNs);
     const real lightToCameraDotN = cameraToLightDirection.negate().absDot(lightNs);
 

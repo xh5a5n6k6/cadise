@@ -1,6 +1,6 @@
 #include "Core/Gear/ConnectEvent.h"
 
-namespace cadise 
+namespace cadise
 {
 
 ConnectEvent::ConnectEvent() :
@@ -12,15 +12,15 @@ ConnectEvent::ConnectEvent(
     const Spectrum& splatRadiance) :
 
     _filmPosition(filmPosition),
-    _splatRadiance(splatRadiance) 
+    _splatRadiance(splatRadiance)
 {}
 
-const Vector2D& ConnectEvent::filmPosition() const 
+const Vector2D& ConnectEvent::filmPosition() const
 {
     return _filmPosition;
 }
 
-const Spectrum& ConnectEvent::splatRadiance() const 
+const Spectrum& ConnectEvent::splatRadiance() const
 {
     return _splatRadiance;
 }
@@ -30,7 +30,7 @@ void ConnectEvent::setFilmPosition(const Vector2D& filmPosition)
     _filmPosition = filmPosition;
 }
 
-void ConnectEvent::setSplatRadiance(const Spectrum& splatRadiance) 
+void ConnectEvent::setSplatRadiance(const Spectrum& splatRadiance)
 {
     _splatRadiance = splatRadiance;
 }

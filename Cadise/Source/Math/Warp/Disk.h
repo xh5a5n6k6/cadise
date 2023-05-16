@@ -4,7 +4,7 @@
 
 #include <array>
 
-namespace cadise 
+namespace cadise
 {
 
 // Reference: PBRT-v3
@@ -12,7 +12,7 @@ class Disk
 {
 public:
     static void uniformSampling(
-        const std::array<real, 2>& sample, 
+        const std::array<real, 2>& sample,
         Vector2R* const            out_surfacePoint);
 
     static void concentricSampling(

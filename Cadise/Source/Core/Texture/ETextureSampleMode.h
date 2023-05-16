@@ -1,11 +1,11 @@
 #pragma once
 
-namespace cadise 
+namespace cadise
 {
 
 /*! @brief Resampling method used in image interpolation.
 */
-enum class ETextureSampleMode 
+enum class ETextureSampleMode
 {
     Undefined = 0,
 

@@ -10,7 +10,7 @@ namespace cadise
     class Sampler;
 }
 
-namespace cadise 
+namespace cadise
 {
 
 class VPMRenderer : public Renderer

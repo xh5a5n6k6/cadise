@@ -17,12 +17,12 @@ namespace cadise
 /*
     TImage represents value array.
 
-    T: value type. 
-        [real]  for hdr image, 
+    T: value type.
+        [real]  for hdr image,
         [uint8] for ldr image.
-    N: number of values per pixel. 
+    N: number of values per pixel.
         [1] for attribute map image (ex. roughness map)
-        [3] for normal image (rgb), 
+        [3] for normal image (rgb),
         [4] for alpha image (rgba).
 */
 template<typename T, std::size_t N>
@@ -43,13 +43,13 @@ public:
     void setDataValue(const std::size_t index, const T value);
 
     void setPixelValue(
-        const int32                   x, 
-        const int32                   y, 
+        const int32                   x,
+        const int32                   y,
         const TArithmeticArray<T, N>& pixelValue);
-    
+
     void getImagePixel(
-        const int32                   x, 
-        const int32                   y, 
+        const int32                   x,
+        const int32                   y,
         TArithmeticArray<T, N>* const out_pixel) const;
 
     int32 width() const;

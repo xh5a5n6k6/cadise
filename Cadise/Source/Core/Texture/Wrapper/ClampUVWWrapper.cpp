@@ -7,8 +7,8 @@ namespace cadise
 {
 
 void ClampUVWWrapper::wrap(
-    const Vector3R& uvw, 
-    Vector3R* const out_wrapUvw) const 
+    const Vector3R& uvw,
+    Vector3R* const out_wrapUvw) const
 {
     CS_ASSERT(out_wrapUvw);
 

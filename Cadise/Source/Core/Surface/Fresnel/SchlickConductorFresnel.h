@@ -9,8 +9,8 @@ class SchlickConductorFresnel : public ConductorFresnel
 {
 public:
     SchlickConductorFresnel(
-        const real      iorOuter, 
-        const Spectrum& eta, 
+        const real      iorOuter,
+        const Spectrum& eta,
         const Spectrum& k);
     explicit SchlickConductorFresnel(const Spectrum& f0);
 

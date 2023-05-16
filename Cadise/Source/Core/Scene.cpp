@@ -8,7 +8,7 @@
 #include "Core/SurfaceIntersection.h"
 #include "Foundation/Assertion.h"
 
-namespace cadise 
+namespace cadise
 {
 
 Scene::Scene(
@@ -17,7 +17,7 @@ Scene::Scene(
 
     _topAccelerator(topAccelerator),
     _lightCluster(lightCluster),
-    _backgroundSphere(nullptr) 
+    _backgroundSphere(nullptr)
 {
     CS_ASSERT(topAccelerator);
     CS_ASSERT(lightCluster);
@@ -34,7 +34,7 @@ bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) c
 {
     // TODO: Refactor here
     PrimitiveInfo primitiveInfo;
-    if(_topAccelerator->isIntersecting(ray, primitiveInfo)) 
+    if (_topAccelerator->isIntersecting(ray, primitiveInfo))
     {
         surfaceIntersection.setWi(ray.direction().negate());
         surfaceIntersection.setPrimitiveInfo(primitiveInfo);
@@ -51,8 +51,8 @@ bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) c
 
         return true;
     }
-    else if (_backgroundSphere && 
-             _backgroundSphere->isIntersecting(ray, primitiveInfo))
+    else if (_backgroundSphere &&
+        _backgroundSphere->isIntersecting(ray, primitiveInfo))
     {
         surfaceIntersection.setWi(ray.direction().negate());
         surfaceIntersection.setPrimitiveInfo(primitiveInfo);
@@ -69,11 +69,11 @@ bool Scene::isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) c
 
         return true;
     }
-    
+
     return false;
 }
 
-bool Scene::isOccluded(const Ray& ray) const 
+bool Scene::isOccluded(const Ray& ray) const
 {
     // TODO: Refactor here
     if (_topAccelerator->isOccluded(ray))
@@ -88,7 +88,7 @@ bool Scene::isOccluded(const Ray& ray) const
     return false;
 }
 
-const Light* Scene::sampleOneLight(real* const out_pdf) const 
+const Light* Scene::sampleOneLight(real* const out_pdf) const
 {
     CS_ASSERT(out_pdf);
 
@@ -109,7 +109,7 @@ void Scene::setBackgroundSphere(const Primitive* const backgroundSphere)
     _backgroundSphere = backgroundSphere;
 }
 
-void Scene::unsetBackgroundSphere() 
+void Scene::unsetBackgroundSphere()
 {
     _backgroundSphere = nullptr;
 }

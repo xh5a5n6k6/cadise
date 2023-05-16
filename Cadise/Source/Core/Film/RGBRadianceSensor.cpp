@@ -9,7 +9,7 @@ RGBRadianceSensor::RGBRadianceSensor() :
     _r(0.0_r),
     _g(0.0_r),
     _b(0.0_r),
-    _weight(0.0_r) 
+    _weight(0.0_r)
 {}
 
 void RGBRadianceSensor::addValue(const Vector3R& value)
@@ -34,12 +34,12 @@ real RGBRadianceSensor::r() const
     return _r;
 }
 
-real RGBRadianceSensor::g() const 
+real RGBRadianceSensor::g() const
 {
     return _g;
 }
 
-real RGBRadianceSensor::b() const 
+real RGBRadianceSensor::b() const
 {
     return _b;
 }

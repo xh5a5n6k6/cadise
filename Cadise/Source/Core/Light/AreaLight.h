@@ -13,10 +13,10 @@ namespace cadise
     class TTexture;
 }
 
-namespace cadise 
+namespace cadise
 {
 
-class AreaLight : public Light 
+class AreaLight : public Light
 {
 public:
     AreaLight();

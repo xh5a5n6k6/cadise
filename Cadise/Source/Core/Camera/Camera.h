@@ -13,7 +13,7 @@ namespace cadise
 namespace cadise
 {
 
-class Camera 
+class Camera
 {
 public:
     explicit Camera(const Vector3R& position);
@@ -22,12 +22,13 @@ public:
 
     virtual void updateTransform() = 0;
 
+    // filmPosition: x and y are both in range of [0, resolution).
     virtual void spawnPrimaryRay(
         const Vector2D& filmPosition,
         Ray* const      out_primaryRay) const = 0;
 
     virtual void evaluateCameraSample(
-        CameraSample* const out_sample, 
+        CameraSample* const out_sample,
         Ray* const          out_toCameraRay) const = 0;
 
     virtual void evaluateCameraPdf(

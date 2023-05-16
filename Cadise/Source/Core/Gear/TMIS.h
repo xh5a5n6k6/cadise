@@ -4,7 +4,7 @@
 #include "Foundation/Assertion.h"
 #include "Math/Type/PrimitiveType.h"
 
-namespace cadise 
+namespace cadise
 {
 
 template<EMISMode Mode>
@@ -12,9 +12,9 @@ class TMIS
 {
 public:
     real weight(
-        const real  pdfA, 
+        const real  pdfA,
         const real  pdfB,
-        const int32 nA = 1, 
+        const int32 nA = 1,
         const int32 nB = 1) const;
 };
 
@@ -45,7 +45,7 @@ inline real TMIS<Mode>::weight(
 
         return mulA2 / (mulA2 + mulB2);
     }
-    else 
+    else
     {
         return 0.0_r;
     }

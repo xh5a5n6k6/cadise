@@ -7,11 +7,11 @@ namespace cadise
 {
 
 TriangleBuffer::TriangleBuffer(
-    const std::shared_ptr<BSDF>& bsdf, 
+    const std::shared_ptr<BSDF>& bsdf,
     const std::vector<Vector3R>& positions,
-    const std::vector<Vector3R>& normals, 
+    const std::vector<Vector3R>& normals,
     const std::vector<Vector3R>& uvws) :
-    
+
     _bsdf(bsdf),
     _positions(positions),
     _normals(normals),

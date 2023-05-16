@@ -1,6 +1,6 @@
 #include "Core/Surface/TransportInfo.h"
 
-namespace cadise 
+namespace cadise
 {
 
 TransportInfo::TransportInfo() :
@@ -19,7 +19,7 @@ TransportInfo::TransportInfo(
     _components(components)
 {}
 
-void TransportInfo::setComponents(const BSDFComponents components) 
+void TransportInfo::setComponents(const BSDFComponents components)
 {
     _components = components;
 }
@@ -29,7 +29,7 @@ ETransportMode TransportInfo::mode() const
     return _mode;
 }
 
-BSDFComponents TransportInfo::components() const 
+BSDFComponents TransportInfo::components() const
 {
     return _components;
 }

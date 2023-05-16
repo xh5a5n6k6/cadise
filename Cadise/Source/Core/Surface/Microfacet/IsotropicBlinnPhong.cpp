@@ -8,7 +8,7 @@
 
 #include <cmath>
 
-namespace cadise 
+namespace cadise
 {
 
 IsotropicBlinnPhong::IsotropicBlinnPhong(const std::shared_ptr<TTexture<real>>& roughness) :
@@ -21,14 +21,14 @@ IsotropicBlinnPhong::IsotropicBlinnPhong(const std::shared_ptr<TTexture<real>>& 
 real IsotropicBlinnPhong::distributionD(
     const SurfaceIntersection& si,
     const Vector3R&            N,
-    const Vector3R&            H) const 
+    const Vector3R&            H) const
 {
     const real NdotH = N.dot(H);
-    if (NdotH <= 0.0_r) 
+    if (NdotH <= 0.0_r)
     {
         return 0.0_r;
     }
-    
+
     real sampleRoughness;
     TSurfaceSampler<real>().sample(si, _roughness.get(), &sampleRoughness);
 
@@ -46,7 +46,7 @@ real IsotropicBlinnPhong::shadowingMaskingG(
     const Vector3R&            N,
     const Vector3R&            H) const
 {
-    if (!_isShadowingMaskingValid(V, L, N, H)) 
+    if (!_isShadowingMaskingValid(V, L, N, H))
     {
         return 0.0_r;
     }
@@ -65,7 +65,7 @@ real IsotropicBlinnPhong::shadowingMaskingG(
     const real VdotN2 = VdotN * VdotN;
     const real tanV2  = (1.0_r - VdotN2) / VdotN2;
     const real aV     = std::sqrt((0.5_r * alphaP + 1.0_r) / tanV2);
-    if (aV < 1.6_r) 
+    if (aV < 1.6_r)
     {
         const real numerator   = 3.535_r * aV + 2.181_r * aV * aV;
         const real denominator = 1.0_r + 2.276_r * aV + 2.577_r * aV * aV;
@@ -99,7 +99,7 @@ real IsotropicBlinnPhong::shadowingMaskingG(
 void IsotropicBlinnPhong::sampleHalfVectorH(
     const SurfaceIntersection& si,
     const std::array<real, 2>& sample,
-    Vector3R* const            out_H) const 
+    Vector3R* const            out_H) const
 {
     CS_ASSERT(out_H);
 

@@ -64,7 +64,7 @@ inline std::shared_ptr<T> GlobalStorage::getResource(const uint64 resourceId)
         auto& resources = GlobalStorage::_resources<T>();
         resource = resources.get(resourceId);
     }
-    
+
     return resource;
 }
 

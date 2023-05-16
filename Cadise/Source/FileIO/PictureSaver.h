@@ -8,10 +8,10 @@ namespace cadise
     class Path;
 }
 
-namespace cadise 
+namespace cadise
 {
 
-class PictureSaver 
+class PictureSaver
 {
 public:
     static void save(const Path& path, const HDRImage& hdrImage);

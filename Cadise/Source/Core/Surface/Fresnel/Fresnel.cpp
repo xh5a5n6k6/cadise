@@ -1,6 +1,6 @@
 #include "Core/Surface/Fresnel/Fresnel.h"
 
-namespace cadise 
+namespace cadise
 {
 
 Fresnel::~Fresnel() = default;

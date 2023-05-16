@@ -1,6 +1,6 @@
 #include "Core/Sampler/SampleRecord.h"
 
-namespace cadise 
+namespace cadise
 {
 
 SampleRecord::SampleRecord(const std::size_t sampleNumber) :
@@ -11,12 +11,12 @@ SampleRecord::SampleRecord(const std::size_t sampleNumber) :
 
 SampleRecord::~SampleRecord() = default;
 
-void SampleRecord::setData(const std::size_t offset, const real value) 
+void SampleRecord::setData(const std::size_t offset, const real value)
 {
     _data[offset] = value;
 }
 
-void SampleRecord::allocate(std::size_t dimension) 
+void SampleRecord::allocate(std::size_t dimension)
 {
     _data = new real[dimension * _sampleNumber];
 }

@@ -2,10 +2,10 @@
 
 #include "Math/TVector2.h"
 
-namespace cadise 
+namespace cadise
 {
 
-class Filter 
+class Filter
 {
 public:
     Filter(const real filterWidth, const real filterHeight);

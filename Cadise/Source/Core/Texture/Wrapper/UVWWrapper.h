@@ -2,7 +2,7 @@
 
 #include "Math/Type/MathType.h"
 
-namespace cadise 
+namespace cadise
 {
 
 class UVWWrapper
@@ -11,7 +11,7 @@ public:
     virtual ~UVWWrapper();
 
     virtual void wrap(
-        const Vector3R& uvw, 
+        const Vector3R& uvw,
         Vector3R* const out_wrapUvw) const = 0;
 };
 

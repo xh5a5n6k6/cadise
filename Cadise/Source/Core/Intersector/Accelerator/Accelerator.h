@@ -5,7 +5,7 @@
 namespace cadise
 {
 
-class Accelerator : public Intersector 
+class Accelerator : public Intersector
 {
 public:
     void evaluateBound(AABB3R* const out_bound) const override = 0;

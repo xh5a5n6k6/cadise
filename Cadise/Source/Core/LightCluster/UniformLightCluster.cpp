@@ -4,7 +4,7 @@
 #include "Foundation/Assertion.h"
 #include "Math/Random.h"
 
-namespace cadise 
+namespace cadise
 {
 
 UniformLightCluster::UniformLightCluster(const std::vector<std::shared_ptr<Light>>& lights) :
@@ -14,10 +14,10 @@ UniformLightCluster::UniformLightCluster(const std::vector<std::shared_ptr<Light
     CS_ASSERT(!_lights.empty());
 }
 
-const Light* UniformLightCluster::sampleOneLight(real* const out_pdf) const 
+const Light* UniformLightCluster::sampleOneLight(real* const out_pdf) const
 {
     CS_ASSERT(out_pdf);
-    
+
     const std::size_t numLights   = _lights.size();
     const std::size_t sampleIndex = Random::nextIndex(0, numLights);
 

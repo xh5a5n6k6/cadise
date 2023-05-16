@@ -9,23 +9,25 @@
 #include <type_traits>
 #include <utility>
 
-namespace cadise 
+namespace cadise
 {
 
 template<typename T>
 inline TVector2<T> TVector2<T>::min(const TVector2<T>& vectorA, const TVector2<T>& vectorB)
 {
-    return TVector2<T>(
-        std::min(vectorA._x, vectorB._x),
-        std::min(vectorA._y, vectorB._y));
+    return
+        TVector2<T>(
+            std::min(vectorA._x, vectorB._x),
+            std::min(vectorA._y, vectorB._y));
 }
 
 template<typename T>
-inline TVector2<T> TVector2<T>::max(const TVector2<T>& vectorA, const TVector2<T>& vectorB) 
+inline TVector2<T> TVector2<T>::max(const TVector2<T>& vectorA, const TVector2<T>& vectorB)
 {
-    return TVector2<T>(
-        std::max(vectorA._x, vectorB._x),
-        std::max(vectorA._y, vectorB._y));
+    return
+        TVector2<T>(
+            std::max(vectorA._x, vectorB._x),
+            std::max(vectorA._y, vectorB._y));
 }
 
 template<typename T>
@@ -51,7 +53,7 @@ inline TVector2<T>::TVector2(const TArithmeticArray<T, 2>& value) :
 template<typename T>
 inline TVector2<T>::TVector2(const T x, const T y) :
     _x(x),
-    _y(y) 
+    _y(y)
 {}
 
 template<typename T>
@@ -62,7 +64,7 @@ template<typename U>
 inline TVector2<T>::TVector2(const TVector2<U>& other) :
     TVector2(
         static_cast<T>(other.x()),
-        static_cast<T>(other.y())) 
+        static_cast<T>(other.y()))
 {}
 
 template<typename T>
@@ -72,19 +74,19 @@ inline TVector2<T> TVector2<T>::operator + (const T rhs) const
 }
 
 template<typename T>
-inline TVector2<T> TVector2<T>::operator - (const T rhs) const 
+inline TVector2<T> TVector2<T>::operator - (const T rhs) const
 {
     return this->sub(rhs);
 }
 
 template<typename T>
-inline TVector2<T> TVector2<T>::operator * (const T rhs) const 
+inline TVector2<T> TVector2<T>::operator * (const T rhs) const
 {
     return this->mul(rhs);
 }
 
 template<typename T>
-inline TVector2<T> TVector2<T>::operator / (const T rhs) const 
+inline TVector2<T> TVector2<T>::operator / (const T rhs) const
 {
     return this->div(rhs);
 }
@@ -96,29 +98,29 @@ inline TVector2<T> TVector2<T>::operator + (const TVector2<T>& rhs) const
 }
 
 template<typename T>
-inline TVector2<T> TVector2<T>::operator - (const TVector2<T>& rhs) const 
+inline TVector2<T> TVector2<T>::operator - (const TVector2<T>& rhs) const
 {
     return this->sub(rhs);
 }
 
 template<typename T>
-inline TVector2<T> TVector2<T>::operator * (const TVector2<T>& rhs) const 
+inline TVector2<T> TVector2<T>::operator * (const TVector2<T>& rhs) const
 {
     return this->mul(rhs);
 }
 
 template<typename T>
-inline TVector2<T> TVector2<T>::operator / (const TVector2<T>& rhs) const 
+inline TVector2<T> TVector2<T>::operator / (const TVector2<T>& rhs) const
 {
     return this->div(rhs);
 }
 
 template<typename T>
-inline T& TVector2<T>::operator [] (const constant::AxisType index) 
+inline T& TVector2<T>::operator [] (const constant::AxisType index)
 {
     CS_ASSERT_LT(index, 2);
 
-    switch (index) 
+    switch (index)
     {
         case constant::AXIS_X:
             return _x;
@@ -133,11 +135,11 @@ inline T& TVector2<T>::operator [] (const constant::AxisType index)
 }
 
 template<typename T>
-inline const T& TVector2<T>::operator [] (const constant::AxisType index) const 
+inline const T& TVector2<T>::operator [] (const constant::AxisType index) const
 {
     CS_ASSERT_LT(index, 2);
 
-    switch (index) 
+    switch (index)
     {
         case constant::AXIS_X:
             return _x;
@@ -153,25 +155,25 @@ inline const T& TVector2<T>::operator [] (const constant::AxisType index) const
 
 template<typename T>
 template<typename U>
-inline TVector2<U> TVector2<T>::asType() const 
+inline TVector2<U> TVector2<T>::asType() const
 {
     return TVector2<U>(*this);
 }
 
 template<typename T>
-inline TVector2<T> TVector2<T>::add(const TVector2<T>& rhs) const 
+inline TVector2<T> TVector2<T>::add(const TVector2<T>& rhs) const
 {
     return this->add(rhs._x, rhs._y);
 }
 
 template<typename T>
-inline TVector2<T> TVector2<T>::add(const T rhs) const 
+inline TVector2<T> TVector2<T>::add(const T rhs) const
 {
     return this->add(rhs, rhs);
 }
 
 template<typename T>
-inline TVector2<T> TVector2<T>::add(const T x, const T y) const 
+inline TVector2<T> TVector2<T>::add(const T x, const T y) const
 {
     return TVector2<T>(_x + x, _y + y);
 }
@@ -195,7 +197,7 @@ inline TVector2<T>& TVector2<T>::addLocal(const T rhs)
 }
 
 template<typename T>
-inline TVector2<T> TVector2<T>::sub(const TVector2<T>& rhs) const 
+inline TVector2<T> TVector2<T>::sub(const TVector2<T>& rhs) const
 {
     return this->sub(rhs._x, rhs._y);
 }
@@ -213,7 +215,7 @@ inline TVector2<T> TVector2<T>::sub(const T x, const T y) const
 }
 
 template<typename T>
-inline TVector2<T>& TVector2<T>::subLocal(const TVector2<T>& rhs) 
+inline TVector2<T>& TVector2<T>::subLocal(const TVector2<T>& rhs)
 {
     _x -= rhs._x;
     _y -= rhs._y;
@@ -222,7 +224,7 @@ inline TVector2<T>& TVector2<T>::subLocal(const TVector2<T>& rhs)
 }
 
 template<typename T>
-inline TVector2<T>& TVector2<T>::subLocal(const T rhs) 
+inline TVector2<T>& TVector2<T>::subLocal(const T rhs)
 {
     _x -= rhs;
     _y -= rhs;
@@ -231,7 +233,7 @@ inline TVector2<T>& TVector2<T>::subLocal(const T rhs)
 }
 
 template<typename T>
-inline TVector2<T> TVector2<T>::mul(const TVector2<T>& rhs) const 
+inline TVector2<T> TVector2<T>::mul(const TVector2<T>& rhs) const
 {
     return this->mul(rhs._x, rhs._y);
 }
@@ -243,7 +245,7 @@ inline TVector2<T> TVector2<T>::mul(const T rhs) const
 }
 
 template<typename T>
-inline TVector2<T> TVector2<T>::mul(const T x, const T y) const 
+inline TVector2<T> TVector2<T>::mul(const T x, const T y) const
 {
     return TVector2<T>(_x * x, _y * y);
 }
@@ -258,7 +260,7 @@ inline TVector2<T>& TVector2<T>::mulLocal(const TVector2<T>& rhs)
 }
 
 template<typename T>
-inline TVector2<T>& TVector2<T>::mulLocal(const T rhs) 
+inline TVector2<T>& TVector2<T>::mulLocal(const T rhs)
 {
     _x *= rhs;
     _y *= rhs;
@@ -267,13 +269,13 @@ inline TVector2<T>& TVector2<T>::mulLocal(const T rhs)
 }
 
 template<typename T>
-inline TVector2<T> TVector2<T>::div(const TVector2<T>& rhs) const 
+inline TVector2<T> TVector2<T>::div(const TVector2<T>& rhs) const
 {
     return this->div(rhs._x, rhs._y);
 }
 
 template<typename T>
-inline TVector2<T> TVector2<T>::div(const T rhs) const 
+inline TVector2<T> TVector2<T>::div(const T rhs) const
 {
     const T rcpRhs = static_cast<T>(1) / rhs;
 
@@ -281,7 +283,7 @@ inline TVector2<T> TVector2<T>::div(const T rhs) const
 }
 
 template<typename T>
-inline TVector2<T> TVector2<T>::div(const T x, const T y) const 
+inline TVector2<T> TVector2<T>::div(const T x, const T y) const
 {
     return TVector2<T>(_x / x, _y / y);
 }
@@ -296,7 +298,7 @@ inline TVector2<T>& TVector2<T>::divLocal(const TVector2<T>& rhs)
 }
 
 template<typename T>
-inline TVector2<T>& TVector2<T>::divLocal(const T rhs) 
+inline TVector2<T>& TVector2<T>::divLocal(const T rhs)
 {
     const T rcpRhs = static_cast<T>(1) / rhs;
 
@@ -309,24 +311,22 @@ inline TVector2<T>& TVector2<T>::divLocal(const T rhs)
 template<typename T>
 inline bool TVector2<T>::isZero() const
 {
-    return _x == static_cast<T>(0) &&
-           _y == static_cast<T>(0);
+    return _x == static_cast<T>(0) && _y == static_cast<T>(0);
 }
 
 template<typename T>
-inline bool TVector2<T>::hasNaN() const 
+inline bool TVector2<T>::hasNaN() const
 {
     return std::isnan(_x) || std::isnan(_y);
 }
 
 template<typename T>
-inline bool TVector2<T>::hasNegative() const 
+inline bool TVector2<T>::hasNegative() const
 {
     static_assert(std::is_signed_v<T>,
         "TVector2<T>'s hasNegative function only works with signed type\n");
 
-    return _x < static_cast<T>(0) ||
-           _y < static_cast<T>(0);
+    return _x < static_cast<T>(0) || _y < static_cast<T>(0);
 }
 
 template<typename T>
@@ -336,13 +336,13 @@ inline bool TVector2<T>::hasInfinite() const
 }
 
 template<typename T>
-inline T TVector2<T>::sum() const 
+inline T TVector2<T>::sum() const
 {
     return _x + _y;
 }
 
 template<typename T>
-inline T TVector2<T>::average() const 
+inline T TVector2<T>::average() const
 {
     return this->sum() / static_cast<T>(2);
 }
@@ -354,31 +354,31 @@ inline T TVector2<T>::length() const
 }
 
 template<typename T>
-inline T TVector2<T>::lengthSquared() const 
+inline T TVector2<T>::lengthSquared() const
 {
     return _x * _x + _y * _y;
 }
 
 template<typename T>
-inline T TVector2<T>::product() const 
+inline T TVector2<T>::product() const
 {
     return _x * _y;
 }
 
 template<typename T>
-inline T TVector2<T>::maxComponent() const 
+inline T TVector2<T>::maxComponent() const
 {
     return std::max(_x, _y);
 }
 
 template<typename T>
-inline constant::AxisType TVector2<T>::maxDimension() const 
+inline constant::AxisType TVector2<T>::maxDimension() const
 {
     return (_x > _y) ? constant::AXIS_X : constant::AXIS_Y;
 }
 
 template<typename T>
-inline void TVector2<T>::swap(TVector2<T>& rhs) 
+inline void TVector2<T>::swap(TVector2<T>& rhs)
 {
     std::swap(_x, rhs._x);
     std::swap(_y, rhs._y);
@@ -391,13 +391,13 @@ inline bool TVector2<T>::isEqualTo(const TVector2<T>& rhs) const
 }
 
 template<typename T>
-inline T TVector2<T>::x() const 
+inline T TVector2<T>::x() const
 {
     return _x;
 }
 
 template<typename T>
-inline T TVector2<T>::y() const 
+inline T TVector2<T>::y() const
 {
     return _y;
 }
@@ -415,7 +415,7 @@ inline void TVector2<T>::set(const T value)
 }
 
 template<typename T>
-inline void TVector2<T>::set(const T x, const T y) 
+inline void TVector2<T>::set(const T x, const T y)
 {
     _x = x;
     _y = y;

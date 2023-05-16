@@ -12,7 +12,7 @@ namespace cadise
 namespace cadise
 {
 
-class Sampler 
+class Sampler
 {
 public:
     explicit Sampler(const std::size_t sampleNumber);

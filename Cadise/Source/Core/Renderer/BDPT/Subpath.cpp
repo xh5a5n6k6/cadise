@@ -57,7 +57,7 @@ void Subpath::addVertex(const PathVertex& vertex)
 void Subpath::connectCamera(
     const Scene&                     scene,
     const Camera* const              camera,
-    std::vector<ConnectEvent>* const out_events) const 
+    std::vector<ConnectEvent>* const out_events) const
 {
     CS_ASSERT(camera);
     CS_ASSERT(out_events);
@@ -115,19 +115,23 @@ void Subpath::connectCamera(
         const real      LdotN       = toCameraRay.direction().absDot(lightNs);
 
         Spectrum radiance = throughputA.mul(reflectance.mul(throughputB.mul(LdotN)));
-        if (radiance.isZero()) 
+        if (radiance.isZero())
         {
             continue;
         }
 
         // visibility test
-        if (scene.isOccluded(toCameraRay)) 
+        if (scene.isOccluded(toCameraRay))
         {
             continue;
         }
 
         const real misWeight = BDPTMIS::weight(
-            scene, *this, Subpath::oneVertexPath(cameraVertex), s, 1);
+            scene,
+            *this,
+            Subpath::oneVertexPath(cameraVertex),
+            s,
+            1);
 
         out_events->push_back(ConnectEvent(filmPosition, radiance.mul(misWeight)));
     }
@@ -140,7 +144,7 @@ void Subpath::connectLight(
     CS_ASSERT(out_radiance);
 
     const std::size_t pathLength = this->length();
-    if (pathLength < 2) 
+    if (pathLength < 2)
     {
         return;
     }
@@ -151,7 +155,7 @@ void Subpath::connectLight(
     for (std::size_t t = 2; t <= pathLength; ++t)
     {
         const PathVertex& cameraEndpoint = _vertices[t - 1];
-        if (!cameraEndpoint.isConnectible()) 
+        if (!cameraEndpoint.isConnectible())
         {
             continue;
         }
@@ -168,7 +172,7 @@ void Subpath::connectLight(
         directLightSample.setTargetPosition(cameraP);
 
         sampleLight->evaluateDirectSample(&directLightSample);
-        if (!directLightSample.isValid()) 
+        if (!directLightSample.isValid())
         {
             continue;
         }
@@ -216,7 +220,11 @@ void Subpath::connectLight(
         }
 
         const real misWeight = BDPTMIS::weight(
-            scene, Subpath::oneVertexPath(lightVertex), *this, 1, t);
+            scene,
+            Subpath::oneVertexPath(lightVertex),
+            *this,
+            1,
+            t);
 
         totalRadiance.addLocal(contributeRadiance.mul(misWeight));
     }

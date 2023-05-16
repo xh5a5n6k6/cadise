@@ -16,7 +16,7 @@ namespace cadise
 namespace cadise
 {
 
-class SpecularDielectric : public BSDF 
+class SpecularDielectric : public BSDF
 {
 public:
     SpecularDielectric(

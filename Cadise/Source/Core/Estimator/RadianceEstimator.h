@@ -9,8 +9,8 @@ class RadianceEstimator : public EnergyEstimator
 {
 public:
     void estimate(
-        const Scene&    scene, 
-        const Ray&      ray, 
+        const Scene&    scene,
+        const Ray&      ray,
         Spectrum* const out_radiance) const override = 0;
 
     bool useDirectly() const override;

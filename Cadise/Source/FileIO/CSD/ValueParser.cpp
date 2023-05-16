@@ -2,7 +2,7 @@
 
 #include "Foundation/Logging/Logger.h"
 
-namespace cadise 
+namespace cadise
 {
 
 namespace

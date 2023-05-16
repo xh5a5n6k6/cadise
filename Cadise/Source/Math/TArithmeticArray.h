@@ -30,7 +30,7 @@ public:
 
     T& operator [] (const std::size_t index);
     const T& operator [] (const std::size_t index) const;
-    
+
     template<typename U>
     TArithmeticArray<U, N> asType() const;
 

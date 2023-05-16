@@ -10,16 +10,16 @@
 
 #include <cmath>
 
-namespace cadise 
+namespace cadise
 {
 
 ConductorMicrofacet::ConductorMicrofacet(
     const std::shared_ptr<Microfacet>&       microfacet,
     const std::shared_ptr<ConductorFresnel>& fresnel) :
-    
+
     BSDF(BSDFLobes({ ELobe::GlossyReflection })),
     _microfacet(microfacet),
-    _fresnel(fresnel) 
+    _fresnel(fresnel)
 {
     CS_ASSERT(microfacet);
     CS_ASSERT(fresnel);
@@ -35,13 +35,13 @@ Spectrum ConductorMicrofacet::evaluate(
 
     const real VdotN = V.dot(Ns);
     const real LdotN = L.dot(Ns);
-    if (VdotN * LdotN <= 0.0_r) 
+    if (VdotN * LdotN <= 0.0_r)
     {
         return Spectrum(0.0_r);
     }
 
     Vector3R H;
-    if (!MicrofacetHelper::canMakeReflectionH(V, L, Ns, &H)) 
+    if (!MicrofacetHelper::canMakeReflectionH(V, L, Ns, &H))
     {
         return Spectrum(0.0_r);
     }
@@ -60,7 +60,7 @@ Spectrum ConductorMicrofacet::evaluate(
 }
 
 void ConductorMicrofacet::evaluateSample(
-    const TransportInfo&       info, 
+    const TransportInfo&       info,
     const SurfaceIntersection& si,
     BSDFSample* const          out_sample) const
 {
@@ -94,7 +94,7 @@ void ConductorMicrofacet::evaluateSample(
 
     const real pdfH = std::abs(D * NdotH);
     const real pdfL = std::abs(pdfH / (4.0_r * LdotH));
-    if (!std::isfinite(pdfL)) 
+    if (!std::isfinite(pdfL))
     {
         return;
     }
@@ -105,7 +105,7 @@ void ConductorMicrofacet::evaluateSample(
 }
 
 real ConductorMicrofacet::evaluatePdfW(
-    const TransportInfo&       info, 
+    const TransportInfo&       info,
     const SurfaceIntersection& si) const
 {
     const Vector3R& Ns = si.surfaceDetail().shadingNormal();
@@ -114,7 +114,7 @@ real ConductorMicrofacet::evaluatePdfW(
 
     const real VdotN = V.dot(Ns);
     const real LdotN = L.dot(Ns);
-    if (VdotN * LdotN <= 0.0_r) 
+    if (VdotN * LdotN <= 0.0_r)
     {
         return 0.0_r;
     }
@@ -139,7 +139,7 @@ real ConductorMicrofacet::evaluatePdfW(
     return pdfL;
 }
 
-ELobe ConductorMicrofacet::lobe(const BSDFComponents component) const 
+ELobe ConductorMicrofacet::lobe(const BSDFComponents component) const
 {
     CS_ASSERT_EQ(component, 0);
 

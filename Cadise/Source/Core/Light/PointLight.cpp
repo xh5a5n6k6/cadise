@@ -7,26 +7,26 @@
 
 #include <cmath>
 
-namespace cadise 
+namespace cadise
 {
 
 PointLight::PointLight(const Vector3R& position, const Spectrum& intensity) :
-    _position(position), 
-    _intensity(intensity) 
+    _position(position),
+    _intensity(intensity)
 {}
 
-Spectrum PointLight::emittance(const SurfaceIntersection& emitSi) const 
+Spectrum PointLight::emittance(const SurfaceIntersection& emitSi) const
 {
     return Spectrum(0.0_r);
 }
 
-void PointLight::evaluateDirectSample(DirectLightSample* const out_sample) const 
+void PointLight::evaluateDirectSample(DirectLightSample* const out_sample) const
 {
     CS_ASSERT(out_sample);
 
     const Vector3R emitPosition = _position;
     const Vector3R emitVector   = out_sample->targetPosition().sub(emitPosition);
-    
+
     CS_ASSERT(!emitVector.isZero());
 
     const real distance2 = emitVector.lengthSquared();
@@ -39,12 +39,12 @@ void PointLight::evaluateDirectSample(DirectLightSample* const out_sample) const
 
 real PointLight::evaluateDirectPdfW(
     const SurfaceIntersection& emitSi,
-    const Vector3R&            targetPosition) const 
+    const Vector3R&            targetPosition) const
 {
     return 0.0_r;
 }
 
-void PointLight::evaluateEmitSample(EmitLightSample* const out_sample) const 
+void PointLight::evaluateEmitSample(EmitLightSample* const out_sample) const
 {
     CS_ASSERT(out_sample);
 
@@ -55,7 +55,7 @@ void PointLight::evaluateEmitPdf(
     const Ray&      emitRay,
     const Vector3R& emitN,
     real* const     out_pdfA,
-    real* const     out_pdfW) const 
+    real* const     out_pdfW) const
 {
     CS_ASSERT(out_pdfA);
     CS_ASSERT(out_pdfW);
@@ -65,7 +65,7 @@ void PointLight::evaluateEmitPdf(
 
 }
 
-real PointLight::approximateFlux() const 
+real PointLight::approximateFlux() const
 {
     return constant::four_pi<real> * _intensity.luminance();
 }

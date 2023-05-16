@@ -18,17 +18,17 @@ inline TImage<T, N>::TImage() :
 
 template<typename T, std::size_t N>
 inline TImage<T, N>::TImage(const Vector2I& resolution) :
-    TImage(resolution.x(), resolution.y()) 
+    TImage(resolution.x(), resolution.y())
 {}
 
 template<typename T, std::size_t N>
 inline TImage<T, N>::TImage(const int32 width, const int32 height) :
     _width(width),
     _height(height),
-    _data() 
+    _data()
 {
     const std::size_t dataSize = static_cast<std::size_t>(width * height * N);
-    
+
     this->setDataSize(dataSize);
 }
 
@@ -80,9 +80,9 @@ inline void TImage<T, N>::setDataSize(const std::size_t dataSize)
 
 template<typename T, std::size_t N>
 inline void TImage<T, N>::setPixelValue(
-    const int32                   x, 
-    const int32                   y, 
-    const TArithmeticArray<T, N>& pixelValue) 
+    const int32                   x,
+    const int32                   y,
+    const TArithmeticArray<T, N>& pixelValue)
 {
     const std::size_t dataIndexOffset = _pixelDataOffset(x, y);
 
@@ -100,8 +100,8 @@ inline void TImage<T, N>::setDataValue(const std::size_t index, const T value)
 
 template<typename T, std::size_t N>
 inline void TImage<T, N>::getImagePixel(
-    const int32                   x, 
-    const int32                   y, 
+    const int32                   x,
+    const int32                   y,
     TArithmeticArray<T, N>* const out_pixel) const
 {
     CS_ASSERT(out_pixel);

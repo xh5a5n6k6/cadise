@@ -2,11 +2,11 @@
 
 #include "Math/TMatrix4.h"
 
-namespace cadise 
+namespace cadise
 {
 
 template<typename T>
-class TQuaternion 
+class TQuaternion
 {
 public:
 

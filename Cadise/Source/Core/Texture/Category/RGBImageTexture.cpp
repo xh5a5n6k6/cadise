@@ -4,10 +4,10 @@
 #include "Foundation/Assertion.h"
 #include "Math/TArithmeticArray.h"
 
-namespace cadise 
+namespace cadise
 {
 
-void RGBImageTexture::evaluate(const Vector3R& uvw, Spectrum* const out_value) const 
+void RGBImageTexture::evaluate(const Vector3R& uvw, Spectrum* const out_value) const
 {
     CS_ASSERT(out_value);
 

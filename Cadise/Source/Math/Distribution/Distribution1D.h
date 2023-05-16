@@ -4,10 +4,10 @@
 
 #include <vector>
 
-namespace cadise 
+namespace cadise
 {
 
-class Distribution1D 
+class Distribution1D
 {
 public:
     Distribution1D();
@@ -18,12 +18,12 @@ public:
     real sampleContinuous(
         const real  seed,
         real* const out_pdf) const;
-    
+
     real sampleContinuous(
-        const real         seed, 
+        const real         seed,
         real* const        out_pdf,
         std::size_t* const out_index) const;
-    
+
     std::size_t sampleDiscrete(const real seed) const;
     std::size_t sampleDiscrete(
         const real  seed,

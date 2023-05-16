@@ -2,7 +2,7 @@
 
 #include "Foundation/Assertion.h"
 
-namespace cadise 
+namespace cadise
 {
 
 Renderer::Renderer() :
@@ -21,7 +21,7 @@ void Renderer::setScene(const std::shared_ptr<Scene>& scene)
     _scene = scene;
 }
 
-void Renderer::setCamera(const std::shared_ptr<Camera>& camera) 
+void Renderer::setCamera(const std::shared_ptr<Camera>& camera)
 {
     CS_ASSERT(camera);
 

@@ -4,19 +4,19 @@
 #include "Foundation/Assertion.h"
 #include "Math/TVector3.h"
 
-namespace cadise 
+namespace cadise
 {
 
 FilmTile::FilmTile(const AABB2I& tileBound, const Filter* const filter) :
     _resolution(tileBound.extent()),
     _tileBound(tileBound),
     _filter(filter),
-    _sensors() 
+    _sensors()
 {
     CS_ASSERT(filter);
 
     const std::size_t sensorSize = static_cast<std::size_t>(_resolution.x() * _resolution.y());
-    
+
     this->setSensorSize(sensorSize);
 }
 
@@ -26,18 +26,18 @@ void FilmTile::addSample(const Vector2R& filmPosition, const Spectrum& value)
     //CS_ASSERT(sampleSpectrum.hasNaN());
     //CS_ASSERT(sampleSpectrum.hasInfinite());
 
-    if (value.hasNaN() || value.hasInfinite()) 
+    if (value.hasNaN() || value.hasInfinite())
     {
         return;
     }
 
     Vector3R linearSrgb;
     value.transformToLinearSrgb(&linearSrgb);
-    
+
     this->addSample(filmPosition, linearSrgb);
 }
 
-void FilmTile::addSample(const Vector2R& filmPosition, const Vector3R& value) 
+void FilmTile::addSample(const Vector2R& filmPosition, const Vector3R& value)
 {
     // calculate filter bound for given film position
     Vector2R filmMinPosition = filmPosition.sub(_filter->filterHalfSize());
@@ -54,11 +54,11 @@ void FilmTile::addSample(const Vector2R& filmPosition, const Vector3R& value)
         static_cast<int32>(std::floor(filmMaxPosition.y() - 0.5_r) + 1));
 
     // for each effective pixel, accumulate its weight
-    for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy) 
+    for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy)
     {
-        for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix) 
+        for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix)
         {
-            const std::size_t sensorIndexOffset 
+            const std::size_t sensorIndexOffset
                 = _sensorIndexOffset(ix - _tileBound.minVertex().x(), iy - _tileBound.minVertex().y());
 
             const real x = ix - (filmPosition.x() - 0.5_r);
@@ -72,7 +72,7 @@ void FilmTile::addSample(const Vector2R& filmPosition, const Vector3R& value)
     }
 }
 
-const AABB2I& FilmTile::tileBound() const 
+const AABB2I& FilmTile::tileBound() const
 {
     return _tileBound;
 }

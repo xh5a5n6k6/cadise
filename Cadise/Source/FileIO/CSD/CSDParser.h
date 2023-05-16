@@ -5,8 +5,8 @@
 #include <vector>
 
 // forward declaration
-namespace cadise 
-{ 
+namespace cadise
+{
     class CSDResource;
 }
 

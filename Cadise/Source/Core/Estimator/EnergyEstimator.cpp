@@ -1,6 +1,6 @@
 #include "Core/Estimator/EnergyEstimator.h"
 
-namespace cadise 
+namespace cadise
 {
 
 EnergyEstimator::~EnergyEstimator() = default;

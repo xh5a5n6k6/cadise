@@ -1,11 +1,11 @@
 #pragma once
 
-namespace cadise 
+namespace cadise
 {
 
 /*! @brief An label to distinguish how important a log message is.
 */
-enum class ELogLevel 
+enum class ELogLevel
 {
     Undefined = 0,
 

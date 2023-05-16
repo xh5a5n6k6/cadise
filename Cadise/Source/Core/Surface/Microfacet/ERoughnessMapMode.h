@@ -1,11 +1,11 @@
 #pragma once
 
-namespace cadise 
+namespace cadise
 {
 
 /*! @brief Map from user-control roughness (0~1) to alpha.
 */
-enum class ERoughnessMapMode 
+enum class ERoughnessMapMode
 {
     Undefined = 0,
 

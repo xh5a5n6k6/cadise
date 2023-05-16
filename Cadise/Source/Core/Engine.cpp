@@ -5,7 +5,7 @@
 
 #include <thread>
 
-namespace cadise 
+namespace cadise
 {
 
 namespace

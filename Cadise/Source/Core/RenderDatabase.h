@@ -7,7 +7,7 @@
 #include <vector>
 
 // forward declaration
-namespace cadise 
+namespace cadise
 { 
     class BSDF;
     class CSDResource;
@@ -22,7 +22,7 @@ namespace cadise
     class TTexture;
 }
 
-namespace cadise 
+namespace cadise
 {
 
 class RenderDatabase

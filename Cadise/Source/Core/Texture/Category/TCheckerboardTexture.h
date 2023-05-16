@@ -4,7 +4,7 @@
 
 #include <memory>
 
-namespace cadise 
+namespace cadise
 {
 
 template<typename T>
@@ -12,8 +12,8 @@ class TCheckerboardTexture : public TTexture<T>
 {
 public:
     TCheckerboardTexture(
-        const real                          oddTextureNumber, 
-        const real                          evenTextureNumber, 
+        const real                          oddTextureNumber,
+        const real                          evenTextureNumber,
         const std::shared_ptr<TTexture<T>>& oddTexture,
         const std::shared_ptr<TTexture<T>>& evenTexture);
 

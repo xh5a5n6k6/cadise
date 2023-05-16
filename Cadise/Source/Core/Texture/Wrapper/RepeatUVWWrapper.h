@@ -2,14 +2,14 @@
 
 #include "Core/Texture/Wrapper/UVWWrapper.h"
 
-namespace cadise 
+namespace cadise
 {
 
 class RepeatUVWWrapper : public UVWWrapper
 {
 public:
     void wrap(
-        const Vector3R& uvw, 
+        const Vector3R& uvw,
         Vector3R* const out_wrapUvw) const override;
 };
 

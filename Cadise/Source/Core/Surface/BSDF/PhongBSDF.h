@@ -2,7 +2,7 @@
 
 #include "Core/Surface/BSDF/BSDF.h"
 
-namespace cadise 
+namespace cadise
 {
 
 /*
@@ -23,7 +23,7 @@ namespace cadise
     http://www.thetenthplanet.de/archives/255
     by christian
 */
-class PhongBSDF : public BSDF 
+class PhongBSDF : public BSDF
 {
 public:
     explicit PhongBSDF(const real exponent);

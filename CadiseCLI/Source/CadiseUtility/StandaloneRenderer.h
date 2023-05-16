@@ -7,7 +7,7 @@
 namespace cadise::cli
 {
 
-class StandaloneRenderer 
+class StandaloneRenderer
 {
 public:
     explicit StandaloneRenderer(const CommandLineArguments& args);

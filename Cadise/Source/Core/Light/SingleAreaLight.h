@@ -16,20 +16,20 @@ namespace cadise
 namespace cadise
 {
 
-class SingleAreaLight : public AreaLight 
+class SingleAreaLight : public AreaLight
 {
 public:
     SingleAreaLight(
         const Primitive* const primitive,
-        const Spectrum&        color, 
-        const real             watt, 
+        const Spectrum&        color,
+        const real             watt,
         const bool             isBackFaceEmit);
 
     Spectrum emittance(const SurfaceIntersection& emitSi) const override;
 
     void evaluateDirectSample(DirectLightSample* const out_sample) const override;
     real evaluateDirectPdfW(
-        const SurfaceIntersection& emitSi, 
+        const SurfaceIntersection& emitSi,
         const Vector3R&            targetPosition) const override;
 
     void evaluateEmitSample(EmitLightSample* const out_sample) const override;

@@ -1,11 +1,11 @@
 #pragma once
 
-namespace cadise 
+namespace cadise
 {
 
 /*! @brief Denote which physical quantity current ray is traced.
 */
-enum class ETransportMode 
+enum class ETransportMode
 {
     Undefined = 0,
 

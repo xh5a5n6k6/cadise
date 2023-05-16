@@ -2,13 +2,13 @@
 
 #include "Core/Estimator/AOV/AOVEstimator.h"
 
-namespace cadise 
+namespace cadise
 {
 
 /*
     UVWEstimator: UVs Estimator
 */
-class UVWEstimator : public AOVEstimator 
+class UVWEstimator : public AOVEstimator
 {
 public:
     using AOVEstimator::AOVEstimator;
@@ -23,7 +23,7 @@ public:
 
 // header implementation
 
-inline std::string UVWEstimator::toString() const 
+inline std::string UVWEstimator::toString() const
 {
     return "AOV-UVW Estimator";
 }

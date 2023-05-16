@@ -11,13 +11,13 @@
 #include "FileIO/CSD/CSDResource.h"
 #include "Foundation/Assertion.h"
 
-namespace cadise::instantiator 
+namespace cadise::instantiator
 {
 
 static constexpr int32 MAX_PATH_LENGTH = 10000;
 
 static std::shared_ptr<EnergyEstimator> createWdl(
-    const std::shared_ptr<CSDResource>& data) 
+    const std::shared_ptr<CSDResource>& data)
 {
     const int32 maxDepth = data->findInt<int32>("max-depth", MAX_PATH_LENGTH);
 
@@ -25,7 +25,7 @@ static std::shared_ptr<EnergyEstimator> createWdl(
 }
 
 static std::shared_ptr<EnergyEstimator> createVpt(
-    const std::shared_ptr<CSDResource>& data) 
+    const std::shared_ptr<CSDResource>& data)
 {
     const int32 maxDepth = data->findInt<int32>("max-depth", MAX_PATH_LENGTH);
 
@@ -49,7 +49,7 @@ static std::shared_ptr<EnergyEstimator> createAovAo(
 }
 
 static std::shared_ptr<EnergyEstimator> createAovUvw(
-    const std::shared_ptr<CSDResource>& data) 
+    const std::shared_ptr<CSDResource>& data)
 {
     return std::make_shared<UVWEstimator>();
 }
@@ -61,18 +61,18 @@ static std::shared_ptr<EnergyEstimator> createAovWsn(
 }
 
 std::shared_ptr<EnergyEstimator> makeEstimator(
-    const std::shared_ptr<CSDResource>& data) 
+    const std::shared_ptr<CSDResource>& data)
 {
     CS_ASSERT(data);
 
     std::shared_ptr<EnergyEstimator> estimator = nullptr;
 
     const auto type = data->findString("estimator");
-    if (type == "wdl") 
+    if (type == "wdl")
     {
         estimator = createWdl(data);
     }
-    else if (type == "vpt") 
+    else if (type == "vpt")
     {
         estimator = createVpt(data);
     }
@@ -80,7 +80,7 @@ std::shared_ptr<EnergyEstimator> makeEstimator(
     {
         estimator = createPt(data);
     }
-    else if (type == "aov-ao") 
+    else if (type == "aov-ao")
     {
         estimator = createAovAo(data);
     }
@@ -88,7 +88,7 @@ std::shared_ptr<EnergyEstimator> makeEstimator(
     {
         estimator = createAovUvw(data);
     }
-    else if (type == "aov-wsn") 
+    else if (type == "aov-wsn")
     {
         estimator = createAovWsn(data);
     }

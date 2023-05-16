@@ -7,14 +7,14 @@ namespace cadise
 {
 
 GaussianFilter::GaussianFilter(
-    const real filterWidth, 
+    const real filterWidth,
     const real filterHeight,
-    const real sigmaX, 
-    const real sigmaY, 
+    const real sigmaX,
+    const real sigmaY,
     const real amplitude) :
 
     Filter(filterWidth, filterHeight),
-    _amplitude(amplitude) 
+    _amplitude(amplitude)
 {
     const Vector2R halfSize = filterHalfSize();
 
@@ -22,11 +22,11 @@ GaussianFilter::GaussianFilter(
     _expY = -1.0_r / (2.0_r * sigmaY * sigmaY);
 
     _edgeValue = _amplitude * std::exp(
-        _expX * halfSize.x() * halfSize.x() + 
+        _expX * halfSize.x() * halfSize.x() +
         _expY * halfSize.y() * halfSize.y());
 }
 
-real GaussianFilter::evaluate(const real locationX, const real locationY) const 
+real GaussianFilter::evaluate(const real locationX, const real locationY) const
 {
     const real value = _amplitude * std::exp(
         _expX * locationX * locationX +

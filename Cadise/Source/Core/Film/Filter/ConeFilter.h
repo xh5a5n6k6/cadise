@@ -2,10 +2,10 @@
 
 #include "Core/Film/Filter/Filter.h"
 
-namespace cadise 
+namespace cadise
 {
 
-class ConeFilter : public Filter 
+class ConeFilter : public Filter
 {
 public:
     ConeFilter(const real filterWidth, const real filterHeight);

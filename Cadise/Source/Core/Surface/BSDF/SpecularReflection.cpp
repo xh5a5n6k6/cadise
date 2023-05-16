@@ -8,13 +8,13 @@
 
 #include <cmath>
 
-namespace cadise 
+namespace cadise
 {
 
 SpecularReflection::SpecularReflection(
     const std::shared_ptr<TTexture<Spectrum>>& albedo,
     const std::shared_ptr<Fresnel>&            fresnel) :
-    
+
     BSDF(BSDFLobes({ ELobe::SpecularReflection })),
     _albedo(albedo),
     _fresnel(fresnel)
@@ -24,14 +24,14 @@ SpecularReflection::SpecularReflection(
 }
 
 Spectrum SpecularReflection::evaluate(
-    const TransportInfo&       info, 
+    const TransportInfo&       info,
     const SurfaceIntersection& si) const
 {
     return Spectrum(0.0_r);
 }
 
 void SpecularReflection::evaluateSample(
-    const TransportInfo&       info, 
+    const TransportInfo&       info,
     const SurfaceIntersection& si,
     BSDFSample* const          out_sample) const
 {
@@ -41,7 +41,7 @@ void SpecularReflection::evaluateSample(
     const Vector3R& V       = si.wi();
     const real      VdotN   = V.dot(Ns);
     const real      NFactor = (VdotN > 0.0_r) ? 1.0_r : -1.0_r;
-    
+
     const Vector3R L     = V.reflect(Ns.mul(NFactor));
     const real     LdotN = L.dot(Ns);
     const real     pdfW  = 1.0_r;
@@ -58,13 +58,13 @@ void SpecularReflection::evaluateSample(
 }
 
 real SpecularReflection::evaluatePdfW(
-    const TransportInfo&       info, 
-    const SurfaceIntersection& si) const 
+    const TransportInfo&       info,
+    const SurfaceIntersection& si) const
 {
     return 0.0_r;
 }
 
-ELobe SpecularReflection::lobe(const BSDFComponents component) const 
+ELobe SpecularReflection::lobe(const BSDFComponents component) const
 {
     CS_ASSERT_EQ(component, 0);
 

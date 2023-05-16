@@ -6,7 +6,7 @@
 #include "FileIO/CSD/CSDResource.h"
 #include "Foundation/Assertion.h"
 
-namespace cadise::instantiator 
+namespace cadise::instantiator
 {
 
 std::shared_ptr<Film> makeFilm(
@@ -24,11 +24,12 @@ std::shared_ptr<Film> makeFilm(
 
     const auto filter = makeFilter(data);
 
-    return std::make_shared<Film>(
-        Vector2I(width, height), 
-        Vector2I(tileSizeX, tileSizeY),
-        Path(output), 
-        filter);
+    return
+        std::make_shared<Film>(
+            Vector2I(width, height),
+            Vector2I(tileSizeX, tileSizeY),
+            Path(output),
+            filter);
 }
 
 } // namespace cadise::instantiator

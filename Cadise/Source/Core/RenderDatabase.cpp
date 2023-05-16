@@ -19,10 +19,10 @@
 
 #include <limits>
 
-namespace cadise 
+namespace cadise
 {
 
-namespace 
+namespace
 {
     const Logger logger("Database");
 }
@@ -33,10 +33,10 @@ RenderDatabase::RenderDatabase() :
     _rendererResource(nullptr),
     _acceleratorResource(nullptr),
     _backgroundSphere(nullptr),
-    _environmentLightIndex(std::numeric_limits<std::size_t>::max()) 
+    _environmentLightIndex(std::numeric_limits<std::size_t>::max())
 {}
 
-void RenderDatabase::consumeResource(const std::shared_ptr<CSDResource>& resource) 
+void RenderDatabase::consumeResource(const std::shared_ptr<CSDResource>& resource)
 {
     CS_ASSERT(resource);
 
@@ -87,7 +87,7 @@ void RenderDatabase::consumeResource(const std::shared_ptr<CSDResource>& resourc
     }
 }
 
-std::shared_ptr<Renderer> RenderDatabase::prepareRender() 
+std::shared_ptr<Renderer> RenderDatabase::prepareRender()
 {
     // make all triangle meshes to triangles
     if (!_triangleBuffers.empty())
@@ -128,12 +128,12 @@ std::shared_ptr<Renderer> RenderDatabase::prepareRender()
 
     // HACK
     // it means there is an environment light
-    if (_environmentLightIndex != std::numeric_limits<std::size_t>::max()) 
+    if (_environmentLightIndex != std::numeric_limits<std::size_t>::max())
     {
         AABB3R sceneBound;
         accelerator->evaluateBound(&sceneBound);
 
-        if (!sceneBound.isEmpty()) 
+        if (!sceneBound.isEmpty())
         {
             const real sceneBoundRadius = sceneBound.extent().length() * 0.5_r;
 
@@ -159,7 +159,7 @@ std::shared_ptr<Renderer> RenderDatabase::prepareRender()
     return renderer;
 }
 
-void RenderDatabase::_setUpFilm(const std::shared_ptr<CSDResource>& resource) 
+void RenderDatabase::_setUpFilm(const std::shared_ptr<CSDResource>& resource)
 {
     _filmResource = resource;
 }
@@ -221,9 +221,9 @@ void RenderDatabase::_setUpLight(const std::shared_ptr<CSDResource>& resource)
         _lights,
         _intersectors,
         _backgroundSphere);
-    
+
     // HACK
-    if (_backgroundSphere) 
+    if (_backgroundSphere)
     {
         _environmentLightIndex = _lights.size() - 1;
     }

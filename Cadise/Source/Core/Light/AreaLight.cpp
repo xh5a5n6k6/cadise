@@ -3,7 +3,7 @@
 #include "Foundation/Assertion.h"
 #include "Math/TVector3.h"
 
-namespace cadise 
+namespace cadise
 {
 
 AreaLight::AreaLight() :
@@ -15,7 +15,7 @@ AreaLight::AreaLight(const bool isBackFaceEmit) :
     _isBackFaceEmit(isBackFaceEmit)
 {}
 
-bool AreaLight::isDeltaLight() const 
+bool AreaLight::isDeltaLight() const
 {
     return false;
 }
@@ -25,7 +25,7 @@ void AreaLight::setIsBackFaceEmit(const bool isBackFaceEmit)
     _isBackFaceEmit = isBackFaceEmit;
 }
 
-bool AreaLight::_canEmit(const Vector3R& direction, const Vector3R& N) const 
+bool AreaLight::_canEmit(const Vector3R& direction, const Vector3R& N) const
 {
     CS_ASSERT_GT(N.length(), 0.0_r);
 

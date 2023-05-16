@@ -2,7 +2,7 @@
 
 #include "Foundation/Assertion.h"
 
-namespace cadise 
+namespace cadise
 {
 
 AbsorberBSDF::AbsorberBSDF() :
@@ -27,13 +27,13 @@ void AbsorberBSDF::evaluateSample(
 }
 
 real AbsorberBSDF::evaluatePdfW(
-    const TransportInfo&       info, 
+    const TransportInfo&       info,
     const SurfaceIntersection& si) const
 {
     return 0.0_r;
 }
 
-ELobe AbsorberBSDF::lobe(const BSDFComponents component) const 
+ELobe AbsorberBSDF::lobe(const BSDFComponents component) const
 {
     CS_ASSERT_EQ(component, 0);
 

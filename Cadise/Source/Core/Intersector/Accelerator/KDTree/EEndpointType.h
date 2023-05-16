@@ -1,11 +1,11 @@
 #pragma once
 
-namespace cadise 
+namespace cadise
 {
 
 /*! @brief Vertex type used in K-d tree space partition process.
 */
-enum class EEndpointType 
+enum class EEndpointType
 {
     Undefined = 0,
 

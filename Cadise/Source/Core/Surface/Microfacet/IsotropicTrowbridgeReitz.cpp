@@ -8,7 +8,7 @@
 
 #include <cmath>
 
-namespace cadise 
+namespace cadise
 {
 
 IsotropicTrowbridgeReitz::IsotropicTrowbridgeReitz(const std::shared_ptr<TTexture<real>>& roughness) :
@@ -21,7 +21,7 @@ IsotropicTrowbridgeReitz::IsotropicTrowbridgeReitz(const std::shared_ptr<TTextur
 real IsotropicTrowbridgeReitz::distributionD(
     const SurfaceIntersection& si,
     const Vector3R&            N,
-    const Vector3R&            H) const 
+    const Vector3R&            H) const
 {
     const real NdotH = N.dot(H);
     if (NdotH <= 0.0_r)
@@ -50,9 +50,9 @@ real IsotropicTrowbridgeReitz::shadowingMaskingG(
     const Vector3R&            V,
     const Vector3R&            L,
     const Vector3R&            N,
-    const Vector3R&            H) const 
+    const Vector3R&            H) const
 {
-    if (!_isShadowingMaskingValid(V, L, N, H)) 
+    if (!_isShadowingMaskingValid(V, L, N, H))
     {
         return 0.0_r;
     }
@@ -84,7 +84,7 @@ real IsotropicTrowbridgeReitz::shadowingMaskingG(
 void IsotropicTrowbridgeReitz::sampleHalfVectorH(
     const SurfaceIntersection& si,
     const std::array<real, 2>& sample,
-    Vector3R* const            out_H) const 
+    Vector3R* const            out_H) const
 {
     CS_ASSERT(out_H);
 

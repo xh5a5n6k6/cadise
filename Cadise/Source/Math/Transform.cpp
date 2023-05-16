@@ -3,7 +3,7 @@
 #include "Foundation/Assertion.h"
 #include "Math/TVector3.h"
 
-namespace cadise 
+namespace cadise
 {
 
 Transform::Transform(const Matrix4R& matrix) :
@@ -34,7 +34,7 @@ const Matrix4R& Transform::matrix() const
     return _matrix;
 }
 
-const Matrix4R& Transform::inverseMatrix() const 
+const Matrix4R& Transform::inverseMatrix() const
 {
     return _inverseMatrix;
 }

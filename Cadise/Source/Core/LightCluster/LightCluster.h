@@ -8,10 +8,10 @@ namespace cadise
     class Light;
 }
 
-namespace cadise 
+namespace cadise
 {
 
-class LightCluster 
+class LightCluster
 {
 public:
     virtual ~LightCluster();

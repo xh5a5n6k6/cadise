@@ -102,7 +102,7 @@ void CSDResourceParser::_parseDataUnit(
             valueRaw = tokens[0];
         }
     }
-    
+
     std::string type;
     std::string name;
     {

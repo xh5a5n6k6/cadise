@@ -10,7 +10,7 @@
 
 #include <iostream>
 
-namespace cadise 
+namespace cadise
 {
 
 HDRImage PictureLoader::loadRgbImage(const Path& path)
@@ -18,13 +18,13 @@ HDRImage PictureLoader::loadRgbImage(const Path& path)
     HDRImage hdrImage;
     if (path.isExtendedWith(".jpg") || path.isExtendedWith(".JPG") ||
         path.isExtendedWith(".png") || path.isExtendedWith(".PNG") ||
-        path.isExtendedWith(".tga") || path.isExtendedWith(".TGA")) 
+        path.isExtendedWith(".tga") || path.isExtendedWith(".TGA"))
     {
         LDRImage ldrImage;
         _loadLdrImage(path, &ldrImage);
         ImageUtility::ldrToHdr(ldrImage, &hdrImage);
     }
-    else if (path.isExtendedWith(".hdr") || path.isExtendedWith(".HDR")) 
+    else if (path.isExtendedWith(".hdr") || path.isExtendedWith(".HDR"))
     {
         _loadHdrImage(path, &hdrImage);
     }
@@ -53,14 +53,15 @@ void PictureLoader::_loadLdrImage(const Path& path, LDRImage* const out_ldrImage
     // starting from left-down corner, so we need to do
     // this operation to fit the situation.
     stbi_set_flip_vertically_on_load(true);
-    
-    stbi_uc* imageData = stbi_load(path.path().c_str(),
-                                   &width, 
-                                   &height, 
-                                   &componentNumber, 
-                                   0);
 
-    if (imageData == NULL) 
+    stbi_uc* imageData = stbi_load(
+        path.path().c_str(),
+        &width,
+        &height,
+        &componentNumber,
+        0);
+
+    if (imageData == NULL)
     {
         return;
     }
@@ -79,10 +80,10 @@ void PictureLoader::_loadLdrImage(const Path& path, LDRImage* const out_ldrImage
 
                 // TODO: transform input sRGB to linear-sRGB
                 //       ldr -> hdr -> inverseGamma -> ldr
-                real value = static_cast<real>(imageData[indexOffset]) / 255.0_r;
+                real value       = static_cast<real>(imageData[indexOffset]) / 255.0_r;
                 real linearValue = math::inverse_gamma_correction(value);
                 linearValue = linearValue * 255.0_r + 0.5_r;
-                
+
                 const uint8 ldrLinearValue = static_cast<uint8>(math::clamp(linearValue, 0.0_r, 255.0_r));
 
                 out_ldrImage->setDataValue(dataIndexOffset + 0, ldrLinearValue);
@@ -92,11 +93,11 @@ void PictureLoader::_loadLdrImage(const Path& path, LDRImage* const out_ldrImage
         }
     }
     // rgb image
-    else if (componentNumber == 3) 
+    else if (componentNumber == 3)
     {
         for (int32 iy = 0; iy < height; ++iy)
         {
-            for (int32 ix = 0; ix < width; ++ix) 
+            for (int32 ix = 0; ix < width; ++ix)
             {
                 const std::size_t indexOffset = static_cast<std::size_t>((ix + iy * width) * 3);
 
@@ -106,9 +107,10 @@ void PictureLoader::_loadLdrImage(const Path& path, LDRImage* const out_ldrImage
                 real g = static_cast<real>(imageData[indexOffset + 1]) / 255.0_r;
                 real b = static_cast<real>(imageData[indexOffset + 2]) / 255.0_r;
 
-                Vector3R linearRgb(math::inverse_gamma_correction(r),
-                                   math::inverse_gamma_correction(g),
-                                   math::inverse_gamma_correction(b));
+                Vector3R linearRgb(
+                    math::inverse_gamma_correction(r),
+                    math::inverse_gamma_correction(g),
+                    math::inverse_gamma_correction(b));
 
                 linearRgb.mulLocal(255.0_r).addLocal(0.5_r);
 
@@ -123,11 +125,11 @@ void PictureLoader::_loadLdrImage(const Path& path, LDRImage* const out_ldrImage
         }
     }
     // image with alpha channel
-    else if (componentNumber == 2 || componentNumber == 4) 
+    else if (componentNumber == 2 || componentNumber == 4)
     {
         std::cerr << "[" << path.path() << "]"
-                  << "has alpha channel, please modify CRSD file instead."
-                  << std::endl;
+            << "has alpha channel, please modify CRSD file instead."
+            << std::endl;
     }
     else
     {
@@ -150,11 +152,12 @@ void PictureLoader::_loadHdrImage(const Path& path, HDRImage* const out_hdrImage
     // this operation to fit the situation.
     stbi_set_flip_vertically_on_load(true);
 
-    float* imageData = stbi_loadf(path.path().c_str(),
-                                  &width,
-                                  &height,
-                                  &componentNumber,
-                                  0);
+    float* imageData = stbi_loadf(
+        path.path().c_str(),
+        &width,
+        &height,
+        &componentNumber,
+        0);
 
     if (imageData == NULL)
     {
@@ -166,9 +169,9 @@ void PictureLoader::_loadHdrImage(const Path& path, HDRImage* const out_hdrImage
     // gray image, we still store 3 components each pixel with same value
     if (componentNumber == 1)
     {
-        for (int32 iy = 0; iy < height; ++iy) 
+        for (int32 iy = 0; iy < height; ++iy)
         {
-            for (int32 ix = 0; ix < width; ++ix) 
+            for (int32 ix = 0; ix < width; ++ix)
             {
                 const std::size_t indexOffset = static_cast<std::size_t>(ix + iy * width);
                 const real        pixelValue  = imageData[indexOffset];
@@ -178,22 +181,26 @@ void PictureLoader::_loadHdrImage(const Path& path, HDRImage* const out_hdrImage
         }
     }
     // rgb image
-    else if (componentNumber == 3) 
+    else if (componentNumber == 3)
     {
         for (int32 iy = 0; iy < height; ++iy)
         {
-            for (int32 ix = 0; ix < width; ++ix) 
+            for (int32 ix = 0; ix < width; ++ix)
             {
                 const std::size_t indexOffset = static_cast<std::size_t>((ix + iy * width) * 3);
 
-                out_hdrImage->setPixelValue(ix, iy, { 
-                    static_cast<real>(imageData[indexOffset + 0]),
-                    static_cast<real>(imageData[indexOffset + 1]),
-                    static_cast<real>(imageData[indexOffset + 2]) });
+                out_hdrImage->setPixelValue(
+                    ix,
+                    iy,
+                    {
+                        static_cast<real>(imageData[indexOffset + 0]),
+                        static_cast<real>(imageData[indexOffset + 1]),
+                        static_cast<real>(imageData[indexOffset + 2])
+                    });
             }
         }
     }
-    else 
+    else
     {
 
     }

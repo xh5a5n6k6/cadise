@@ -1,6 +1,6 @@
 #pragma once
 
-namespace cadise 
+namespace cadise
 {
 
 using BSDFComponents = int;

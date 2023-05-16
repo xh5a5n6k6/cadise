@@ -4,7 +4,7 @@
 #include <string>
 #include <unordered_map>
 
-namespace cadise 
+namespace cadise
 {
 
 template<typename T>

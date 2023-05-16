@@ -12,19 +12,19 @@ namespace cadise
     class Primitive;
 }
 
-namespace cadise 
+namespace cadise
 {
 
 /*
-    
+
 */
 class TriangleBuffer
 {
 public:
     TriangleBuffer(
-        const std::shared_ptr<BSDF>& bsdf, 
+        const std::shared_ptr<BSDF>& bsdf,
         const std::vector<Vector3R>& positions,
-        const std::vector<Vector3R>& normals, 
+        const std::vector<Vector3R>& normals,
         const std::vector<Vector3R>& uvws);
 
     void transformToTriangles(

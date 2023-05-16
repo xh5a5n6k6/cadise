@@ -7,13 +7,13 @@
 #include <algorithm>
 #include <limits>
 
-namespace cadise 
+namespace cadise
 {
 
 template<typename T>
 inline TAABB3<T>::TAABB3() :
     TAABB3(
-        TVector3<T>(std::numeric_limits<T>::max()), 
+        TVector3<T>(std::numeric_limits<T>::max()),
         TVector3<T>(std::numeric_limits<T>::min()))
 {}
 
@@ -25,37 +25,39 @@ inline TAABB3<T>::TAABB3(const TVector3<T>& vertex) :
 template<typename T>
 inline TAABB3<T>::TAABB3(const TVector3<T>& minVertex, const TVector3<T>& maxVertex) :
     _minVertex(minVertex),
-    _maxVertex(maxVertex) 
+    _maxVertex(maxVertex)
 {}
 
 template<typename T>
-inline bool TAABB3<T>::isEmpty() const 
+inline bool TAABB3<T>::isEmpty() const
 {
-    return _minVertex.isEqualTo(TVector3<T>(std::numeric_limits<T>::max())) ||
-           _maxVertex.isEqualTo(TVector3<T>(std::numeric_limits<T>::min()));
+    return
+        _minVertex.isEqualTo(TVector3<T>(std::numeric_limits<T>::max())) ||
+        _maxVertex.isEqualTo(TVector3<T>(std::numeric_limits<T>::min()));
 }
 
 template<typename T>
 inline bool TAABB3<T>::isInside(const TVector3<T>& position) const
 {
-    return _minVertex.isEqualTo(TVector3<T>::min(_minVertex, position)) &&
-           _maxVertex.isEqualTo(TVector3<T>::max(_maxVertex, position));
+    return
+        _minVertex.isEqualTo(TVector3<T>::min(_minVertex, position)) &&
+        _maxVertex.isEqualTo(TVector3<T>::max(_maxVertex, position));
 }
 
 template<typename T>
 inline bool TAABB3<T>::isIntersectingAABB(
-    const TVector3<T>& rayOrigin, 
-    const TVector3<T>& rayRcpDirection, 
-    const T            rayMinT, 
+    const TVector3<T>& rayOrigin,
+    const TVector3<T>& rayRcpDirection,
+    const T            rayMinT,
     const T            rayMaxT) const
 {
     T localMinT;
     T localMaxT;
 
     return this->isIntersectingAABB(
-        rayOrigin, 
-        rayRcpDirection, 
-        rayMinT, 
+        rayOrigin,
+        rayRcpDirection,
+        rayMinT,
         rayMaxT,
         &localMinT,
         &localMaxT);
@@ -92,7 +94,7 @@ inline bool TAABB3<T>::isIntersectingAABB(
     }
 
     // calculate y-slab interval
-    if (rayRcpDirection.y() > static_cast<T>(0)) 
+    if (rayRcpDirection.y() > static_cast<T>(0))
     {
         minT = std::max(minT, nearT.y());
         maxT = std::min(maxT, farT.y());
@@ -109,7 +111,7 @@ inline bool TAABB3<T>::isIntersectingAABB(
         minT = std::max(minT, nearT.z());
         maxT = std::min(maxT, farT.z());
     }
-    else 
+    else
     {
         minT = std::max(minT, farT.z());
         maxT = std::min(maxT, nearT.z());
@@ -128,7 +130,7 @@ inline bool TAABB3<T>::isIntersectingAABB(
 }
 
 template<typename T>
-inline void TAABB3<T>::reset() 
+inline void TAABB3<T>::reset()
 {
     this->setMinVertex(TVector3<T>(std::numeric_limits<T>::max()));
     this->setMaxVertex(TVector3<T>(std::numeric_limits<T>::min()));
@@ -145,13 +147,14 @@ inline T TAABB3<T>::halfSurfaceArea() const
 {
     const TVector3<T> extent = this->extent();
 
-    return extent.x() * extent.y() +
-           extent.x() * extent.z() +
-           extent.y() * extent.z();
+    return
+        extent.x() * extent.y() +
+        extent.x() * extent.z() +
+        extent.y() * extent.z();
 }
 
 template<typename T>
-inline TVector3<T> TAABB3<T>::extent() const 
+inline TVector3<T> TAABB3<T>::extent() const
 {
     return _maxVertex.sub(_minVertex);
 }
@@ -159,24 +162,24 @@ inline TVector3<T> TAABB3<T>::extent() const
 template<typename T>
 inline TVector3<T> TAABB3<T>::centroid() const
 {
-    if constexpr (std::is_integral_v<T>) 
+    if constexpr (std::is_integral_v<T>)
     {
         return _minVertex.add(_maxVertex).div(static_cast<T>(2));
     }
-    else 
-    { 
-        return _minVertex.add(_maxVertex).mul(static_cast<T>(0.5_r)); 
+    else
+    {
+        return _minVertex.add(_maxVertex).mul(static_cast<T>(0.5_r));
     }
 }
 
 template<typename T>
-inline constant::AxisType TAABB3<T>::maxAxis() const 
+inline constant::AxisType TAABB3<T>::maxAxis() const
 {
     return this->extent().maxDimension();
 }
 
 template<typename T>
-inline TAABB3<T> TAABB3<T>::unionWith(const TAABB3<T>& rhs) const 
+inline TAABB3<T> TAABB3<T>::unionWith(const TAABB3<T>& rhs) const
 {
     return TAABB3<T>(
         TVector3<T>::min(_minVertex, rhs._minVertex),
@@ -184,7 +187,7 @@ inline TAABB3<T> TAABB3<T>::unionWith(const TAABB3<T>& rhs) const
 }
 
 template<typename T>
-inline TAABB3<T>& TAABB3<T>::unionWithLocal(const TAABB3<T>& rhs) 
+inline TAABB3<T>& TAABB3<T>::unionWithLocal(const TAABB3<T>& rhs)
 {
     _minVertex = TVector3<T>::min(_minVertex, rhs._minVertex);
     _maxVertex = TVector3<T>::max(_maxVertex, rhs._maxVertex);
@@ -205,7 +208,7 @@ inline TAABB3<T>& TAABB3<T>::unionWithLocal(const TVector3<T>& rhs)
 {
     _minVertex = TVector3<T>::min(_minVertex, rhs);
     _maxVertex = TVector3<T>::max(_maxVertex, rhs);
-    
+
     return *this;
 }
 

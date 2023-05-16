@@ -15,10 +15,10 @@ namespace cadise
     class TTexture;
 }
 
-namespace cadise 
+namespace cadise
 {
 
-class EnvironmentLight : public AreaLight 
+class EnvironmentLight : public AreaLight
 {
 public:
     EnvironmentLight(
@@ -30,7 +30,7 @@ public:
 
     void evaluateDirectSample(DirectLightSample* const out_sample) const override;
     real evaluateDirectPdfW(
-        const SurfaceIntersection& emitSi, 
+        const SurfaceIntersection& emitSi,
         const Vector3R&            targetPosition) const override;
 
     void evaluateEmitSample(EmitLightSample* const out_sample) const override;
@@ -41,12 +41,12 @@ public:
         real* const     out_pdfW) const override;
 
     real approximateFlux() const override;
-    
+
     void setEmitRadiance(const std::shared_ptr<TTexture<Spectrum>>& emitRadiance) override;
     void setSceneBoundRadius(const real sceneBoundRadius) override;
 
 private:
-    void _updateApproxmiatedFlux();
+    void _updateApproximatedFlux();
 
     const Primitive* _primitive;
 

@@ -14,7 +14,7 @@ namespace cadise
 namespace cadise
 {
 
-class LambertianDiffuse : public BSDF 
+class LambertianDiffuse : public BSDF
 {
 public:
     // Hack

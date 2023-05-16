@@ -1,10 +1,10 @@
 #include "Core/Intersector/Accelerator/BVH/BVHBoundInfo.h"
 
-namespace cadise 
+namespace cadise
 {
 
 BVHBoundInfo::BVHBoundInfo() :
-    BVHBoundInfo(AABB3R(), 0) 
+    BVHBoundInfo(AABB3R(), 0)
 {}
 
 BVHBoundInfo::BVHBoundInfo(const AABB3R& bound, const std::size_t index) :
@@ -19,12 +19,12 @@ const AABB3R& BVHBoundInfo::bound() const
     return _bound;
 }
 
-const Vector3R& BVHBoundInfo::centroid() const 
+const Vector3R& BVHBoundInfo::centroid() const
 {
     return _centroid;
 }
 
-std::size_t BVHBoundInfo::index() const 
+std::size_t BVHBoundInfo::index() const
 {
     return _index;
 }

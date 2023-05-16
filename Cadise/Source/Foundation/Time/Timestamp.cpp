@@ -4,17 +4,17 @@
 #include <iomanip>
 #include <sstream>
 
-namespace cadise 
+namespace cadise
 {
 
-Timestamp::Timestamp() 
+Timestamp::Timestamp()
 {
     const auto timePoint = std::chrono::system_clock::now();
 
     _currentTime = std::chrono::system_clock::to_time_t(timePoint);
 }
 
-std::string Timestamp::toString() const 
+std::string Timestamp::toString() const
 {
     std::lock_guard<std::mutex> lock(_getMutex());
 

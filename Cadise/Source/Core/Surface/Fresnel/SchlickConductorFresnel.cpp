@@ -4,15 +4,15 @@
 
 #include <cmath>
 
-namespace cadise 
+namespace cadise
 {
 
 SchlickConductorFresnel::SchlickConductorFresnel(
     const real      iorOuter,
     const Spectrum& eta,
     const Spectrum& k) :
-    
-    ConductorFresnel(iorOuter, eta, k) 
+
+    ConductorFresnel(iorOuter, eta, k)
 {
     const Spectrum k2          = k.squared();
     const Spectrum numerator   = eta.sub(iorOuter).squared().add(k2);
@@ -28,7 +28,7 @@ SchlickConductorFresnel::SchlickConductorFresnel(const Spectrum& f0) :
 
 void SchlickConductorFresnel::evaluateReflectance(
     const real      cosThetaI,
-    Spectrum* const out_reflectance) const 
+    Spectrum* const out_reflectance) const
 {
     CS_ASSERT(out_reflectance);
 

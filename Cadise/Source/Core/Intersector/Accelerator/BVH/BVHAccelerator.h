@@ -8,15 +8,15 @@
 #include <vector>
 
 // forward declration
-namespace cadise 
-{ 
-    enum class EBVHSplitMode; 
+namespace cadise
+{
+    enum class EBVHSplitMode;
 }
 
-namespace cadise 
+namespace cadise
 {
 
-class BvhAccelerator : public Accelerator 
+class BvhAccelerator : public Accelerator
 {
 public:
     BvhAccelerator(

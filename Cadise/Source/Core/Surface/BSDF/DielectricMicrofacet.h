@@ -11,10 +11,10 @@ namespace cadise
     class Microfacet;
 }
 
-namespace cadise 
+namespace cadise
 {
 
-class DielectricMicrofacet : public BSDF 
+class DielectricMicrofacet : public BSDF
 {
 public:
     DielectricMicrofacet(

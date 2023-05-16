@@ -2,15 +2,15 @@
 
 #include "Core/Surface/Fresnel/Fresnel.h"
 
-namespace cadise 
+namespace cadise
 {
 
-class ConductorFresnel : public Fresnel 
+class ConductorFresnel : public Fresnel
 {
 public:
     ConductorFresnel(
-        const real      iorOuter, 
-        const Spectrum& eta, 
+        const real      iorOuter,
+        const Spectrum& eta,
         const Spectrum& k);
 
     void evaluateReflectance(

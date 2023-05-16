@@ -2,7 +2,7 @@
 
 #include "Math/Type/PrimitiveType.h"
 
-namespace cadise 
+namespace cadise
 {
 
 template<typename Index = std::size_t>
@@ -47,7 +47,7 @@ private:
             use last two bits to recognize if it is leaf node,
             remaining bits store object count in leaf node
             or second child index in internal node.
-        
+
             Last two bits represent as follows:
             00: for x-axis
             01: for y-axis
@@ -57,7 +57,7 @@ private:
             Reference:
             PBRT-v3 src/accelerators/kdtreeaccel.cpp
         */
-        
+
         // for both nodes
         Index _splitAxis;
 

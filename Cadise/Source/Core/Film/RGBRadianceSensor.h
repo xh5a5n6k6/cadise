@@ -2,7 +2,7 @@
 
 #include "Math/Type/MathType.h"
 
-namespace cadise 
+namespace cadise
 {
 
 /*

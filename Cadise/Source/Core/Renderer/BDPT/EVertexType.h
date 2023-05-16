@@ -1,11 +1,11 @@
 #pragma once
 
-namespace cadise 
+namespace cadise
 {
 
 /*! @brief Vertex type used in Bidirectional Path Tracing.
 */
-enum class EVertexType 
+enum class EVertexType
 {
     Undefined = 0,
 

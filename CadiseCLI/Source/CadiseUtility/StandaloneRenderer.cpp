@@ -3,7 +3,7 @@
 #include <iostream>
 #include <thread>
 
-namespace cadise::cli 
+namespace cadise::cli
 {
 
 StandaloneRenderer::StandaloneRenderer(const CommandLineArguments& args) :
@@ -27,7 +27,7 @@ void StandaloneRenderer::render() const
     if (filenames.size() > 1)
     {
         std::cout << "Cadise now only renders one frame per time.\n"
-                  << "It'll skip the process after first rendering process is done.";
+            << "It'll skip the process after first rendering process is done.";
     }
 
     if (!csLoadSceneFromFile(_engineId, filenames[0].c_str()))

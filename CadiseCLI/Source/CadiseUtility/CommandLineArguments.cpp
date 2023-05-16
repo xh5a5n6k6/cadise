@@ -7,33 +7,33 @@ namespace cadise::cli
 
 CommandLineArguments::CommandLineArguments(int argc, char* argv[]) :
     _isHelpMessageRequested(false),
-    _filenames() 
+    _filenames()
 {
-    for (int i = 1; i < argc; ++i) 
+    for (int i = 1; i < argc; ++i)
     {
         const std::string argumentString = std::string(argv[i]);
-        if (argumentString == "-h" || argumentString == "--help") 
+        if (argumentString == "-h" || argumentString == "--help")
         {
             _isHelpMessageRequested = true;
         }
-        else 
+        else
         {
             _filenames.push_back(argumentString);
         }
     }
 }
 
-bool CommandLineArguments::isHelpMessageRequested() const 
+bool CommandLineArguments::isHelpMessageRequested() const
 {
     return _isHelpMessageRequested;
 }
 
-const std::vector<std::string>& CommandLineArguments::filenames() const 
+const std::vector<std::string>& CommandLineArguments::filenames() const
 {
     return _filenames;
 }
 
-void CommandLineArguments::printHelpMessage() const 
+void CommandLineArguments::printHelpMessage() const
 {
     std::cout << R"(Cadise Renderer, copyright (c)2019-2021 Chia-Yu Chou
 

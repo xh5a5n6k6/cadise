@@ -10,7 +10,7 @@
 #include <fstream>
 #include <iostream>
 
-namespace cadise 
+namespace cadise
 {
 
 namespace

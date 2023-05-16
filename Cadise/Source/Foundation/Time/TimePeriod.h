@@ -4,10 +4,10 @@
 
 #include <string>
 
-namespace cadise 
+namespace cadise
 {
 
-class TimePeriod 
+class TimePeriod
 {
 public:
     TimePeriod();

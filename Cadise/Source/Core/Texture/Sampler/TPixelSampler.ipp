@@ -5,7 +5,7 @@
 #include "Core/Texture/Wrapper/ClampUVWWrapper.h"
 #include "Core/Texture/Wrapper/RepeatUVWWrapper.h"
 
-namespace cadise 
+namespace cadise
 {
 
 template<typename T, std::size_t N>
@@ -14,9 +14,9 @@ inline TPixelSampler<T, N>::TPixelSampler(
     const ETextureWrapMode mode) :
 
     _image(image),
-    _uvwWrapper(nullptr) 
+    _uvwWrapper(nullptr)
 {
-    switch (mode) 
+    switch (mode)
     {
         case ETextureWrapMode::Clamp:
             _uvwWrapper = std::make_unique<ClampUVWWrapper>();

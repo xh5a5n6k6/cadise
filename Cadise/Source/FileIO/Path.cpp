@@ -1,17 +1,17 @@
 #include "FileIO/Path.h"
 
-namespace cadise 
+namespace cadise
 {
 
 Path::Path(const std::string& path) :
-    _path(path) 
+    _path(path)
 {}
 
 Path::Path(const std::string_view& path) :
     Path(std::string(path))
 {}
 
-bool Path::isExtendedWith(const std::string& extension) const 
+bool Path::isExtendedWith(const std::string& extension) const
 {
     if (extension.length() > _path.length())
     {

@@ -13,12 +13,12 @@ class TMatrix4
 public:
     static TMatrix4 makeIdentity();
     static TMatrix4 makeScale(const TVector3<T>& scaleVector);
-    static TMatrix4 makeScale(const T sx, const T sy, const T sz);  
+    static TMatrix4 makeScale(const T sx, const T sy, const T sz);
     static TMatrix4 makeTranslate(const TVector3<T>& translateVector);
     static TMatrix4 makeTranslate(const T tx, const T ty, const T tz);
     static TMatrix4 makeLookAt(
-        const TVector3<T>& position, 
-        const TVector3<T>& direction, 
+        const TVector3<T>& position,
+        const TVector3<T>& direction,
         const TVector3<T>& up);
 
 public:
@@ -39,11 +39,11 @@ public:
     TMatrix4 inverse() const;
 
     void transformPoint(
-        const TVector3<T>& point, 
+        const TVector3<T>& point,
         TVector3<T>* const out_point) const;
-    
+
     void transformVector(
-        const TVector3<T>& vector, 
+        const TVector3<T>& vector,
         TVector3<T>* const out_vector) const;
 
     T n(const std::size_t row, const std::size_t col) const;

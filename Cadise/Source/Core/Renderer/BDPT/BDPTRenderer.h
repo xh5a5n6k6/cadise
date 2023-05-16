@@ -8,10 +8,10 @@ namespace cadise
     class Sampler;
 }
 
-namespace cadise 
+namespace cadise
 {
 
-class BDPTRenderer : public Renderer 
+class BDPTRenderer : public Renderer
 {
 public:
     explicit BDPTRenderer(const std::shared_ptr<Sampler>& sampler);

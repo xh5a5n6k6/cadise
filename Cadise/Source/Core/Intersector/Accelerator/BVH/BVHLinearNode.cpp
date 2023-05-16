@@ -1,17 +1,17 @@
 #include "Core/Intersector/Accelerator/BVH/BVHLinearNode.h"
 
-namespace cadise 
+namespace cadise
 {
 
 BVHLinearNode::BVHLinearNode() :
-    _bound() 
+    _bound()
 {}
 
 BVHLinearNode::~BVHLinearNode() = default;
 
 void BVHLinearNode::initializeInternalNode(
-    const AABB3R&     bound, 
-    const std::size_t secondChildIndex, 
+    const AABB3R&     bound,
+    const std::size_t secondChildIndex,
     const std::size_t splitAxis)
 {
     _bound            = bound;
@@ -21,9 +21,9 @@ void BVHLinearNode::initializeInternalNode(
 }
 
 void BVHLinearNode::initializeLeafNode(
-    const AABB3R&     bound, 
-    const std::size_t intersectorIndex, 
-    const std::size_t intersectorCounts) 
+    const AABB3R&     bound,
+    const std::size_t intersectorIndex,
+    const std::size_t intersectorCounts)
 {
     _bound             = bound;
     _intersectorIndex  = intersectorIndex;
@@ -36,27 +36,27 @@ std::size_t BVHLinearNode::intersectorIndex() const
     return _intersectorIndex;
 }
 
-std::size_t BVHLinearNode::intersectorCounts() const 
+std::size_t BVHLinearNode::intersectorCounts() const
 {
     return _intersectorCounts;
 }
 
-std::size_t BVHLinearNode::secondChildIndex() const 
+std::size_t BVHLinearNode::secondChildIndex() const
 {
     return _secondChildIndex;
 }
 
-std::size_t BVHLinearNode::splitAxis() const 
+std::size_t BVHLinearNode::splitAxis() const
 {
     return _splitAxis;
 }
 
-const AABB3R& BVHLinearNode::bound() const 
+const AABB3R& BVHLinearNode::bound() const
 {
     return _bound;
 }
 
-bool BVHLinearNode::isLeaf() const 
+bool BVHLinearNode::isLeaf() const
 {
     return _isLeaf;
 }

@@ -2,7 +2,7 @@
 
 #include "Math/Type/PrimitiveType.h"
 
-namespace cadise 
+namespace cadise
 {
 
 template<typename T, std::size_t N>

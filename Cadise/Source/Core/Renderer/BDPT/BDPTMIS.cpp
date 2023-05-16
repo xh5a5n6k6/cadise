@@ -20,7 +20,7 @@ real BDPTMIS::weight(
     // so just return 1 this time
     //
     // TODO: remove this when supporting (t=0, s=2) situation
-    if (s + t == 2) 
+    if (s + t == 2)
     {
         return 1.0_r;
     }
@@ -46,73 +46,87 @@ real BDPTMIS::weight(
         if (s == 0)
         {
             pdfAReverse = cameraEndpoint->evaluateOriginPdfA(
-                scene, *cameraEndpointMinus);
+                scene,
+                *cameraEndpointMinus);
         }
-        else if (s == 1) 
+        else if (s == 1)
         {
             pdfAReverse = lightEndpoint->evaluateDirectPdfA(
-                scene, *cameraEndpoint);
+                scene,
+                *cameraEndpoint);
         }
-        else 
+        else
         {
             pdfAReverse = lightEndpoint->evaluateConnectPdfA(
-                ETransportMode::Importance, *lightEndpointMinus, *cameraEndpoint);
+                ETransportMode::Importance,
+                *lightEndpointMinus,
+                *cameraEndpoint);
         }
 
         cameraEndpoint->setPdfAReverse(pdfAReverse);
     }
 
     // P_t-2
-    if (cameraEndpointMinus) 
+    if (cameraEndpointMinus)
     {
-        if (s == 0) 
+        if (s == 0)
         {
             pdfAReverse = cameraEndpoint->evaluateDirectPdfA(
-                scene, *cameraEndpointMinus);
+                scene,
+                *cameraEndpointMinus);
         }
-        else 
+        else
         {
             pdfAReverse = cameraEndpoint->evaluateConnectPdfA(
-                ETransportMode::Importance, *lightEndpoint, *cameraEndpointMinus);
+                ETransportMode::Importance,
+                *lightEndpoint,
+                *cameraEndpointMinus);
         }
 
         cameraEndpointMinus->setPdfAReverse(pdfAReverse);
     }
 
     // P_s-1
-    if (lightEndpoint) 
+    if (lightEndpoint)
     {
-        if (t == 0) 
+        if (t == 0)
         {
             pdfAReverse = lightEndpoint->evaluateOriginPdfA(
-                scene, *lightEndpointMinus);
+                scene,
+                *lightEndpointMinus);
         }
-        else if (t == 1) 
+        else if (t == 1)
         {
             pdfAReverse = cameraEndpoint->evaluateDirectPdfA(
-                scene, *lightEndpoint);
+                scene,
+                *lightEndpoint);
         }
         else
         {
             pdfAReverse = cameraEndpoint->evaluateConnectPdfA(
-                ETransportMode::Radiance, *cameraEndpointMinus, *lightEndpoint);
+                ETransportMode::Radiance,
+                *cameraEndpointMinus,
+                *lightEndpoint);
         }
 
         lightEndpoint->setPdfAReverse(pdfAReverse);
     }
 
     // P_s-2
-    if (lightEndpointMinus) 
+    if (lightEndpointMinus)
     {
         if (t == 0)
         {
             pdfAReverse = lightEndpoint->evaluateDirectPdfA(
-                scene, *lightEndpointMinus);
+                scene,
+                *lightEndpointMinus);
         }
-        else 
+        else
         {
             pdfAReverse = lightEndpoint->evaluateConnectPdfA(
-                ETransportMode::Radiance, *cameraEndpoint, *lightEndpointMinus);
+                ETransportMode::Radiance,
+                *cameraEndpoint,
+                *lightEndpointMinus);
         }
 
         lightEndpointMinus->setPdfAReverse(pdfAReverse);
@@ -124,14 +138,14 @@ real BDPTMIS::weight(
 
     // TODO: modify here when supporting t=0 situation
     real cameraPathMisWeight = 0.0_r;
-    for (std::size_t i = t; i > 1; --i) 
+    for (std::size_t i = t; i > 1; --i)
     {
-        ri *= math::map_to_non_zero<real>(modifiedCameraPath[i - 1].pdfAReverse()) / 
-              math::map_to_non_zero<real>(modifiedCameraPath[i - 1].pdfAForward());
-        
-        if (modifiedCameraPath[i - 1].isConnectible() && 
+        ri *= math::map_to_non_zero<real>(modifiedCameraPath[i - 1].pdfAReverse()) /
+            math::map_to_non_zero<real>(modifiedCameraPath[i - 1].pdfAForward());
+
+        if (modifiedCameraPath[i - 1].isConnectible() &&
             modifiedCameraPath[i - 2].isConnectible())
-        { 
+        {
             cameraPathMisWeight += ri;
         }
     }
@@ -141,9 +155,9 @@ real BDPTMIS::weight(
     for (std::size_t i = s; i >= 1; --i)
     {
         ri *= math::map_to_non_zero<real>(modifiedLightPath[i - 1].pdfAReverse()) /
-              math::map_to_non_zero<real>(modifiedLightPath[i - 1].pdfAForward());
+            math::map_to_non_zero<real>(modifiedLightPath[i - 1].pdfAForward());
 
-        const bool canConnect = (i > 1) ?
+        const bool canConnect = i > 1 ?
             modifiedLightPath[i - 1].isConnectible() && modifiedLightPath[i - 2].isConnectible() :
             modifiedLightPath[i - 1].isConnectible();
 

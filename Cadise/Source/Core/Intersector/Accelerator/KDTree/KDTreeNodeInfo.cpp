@@ -13,7 +13,7 @@ KDTreeNodeInfo::KDTreeNodeInfo(
 
     _nodeIndex(nodeIndex),
     _minT(minT),
-    _maxT(maxT) 
+    _maxT(maxT)
 {}
 
 std::size_t KDTreeNodeInfo::nodeIndex() const

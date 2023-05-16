@@ -21,7 +21,7 @@ enum class EOperation
 template<EOperation Operator, typename T>
 inline void atomic_operate(
     const T               value,
-    std::atomic<T>* const out_variable) 
+    std::atomic<T>* const out_variable)
 {
     CS_ASSERT(out_variable);
 
@@ -44,7 +44,7 @@ inline void atomic_operate(
     {
         targetValue = currentValue / value;
     }
-    else 
+    else
     {
         // unreachable place
     }

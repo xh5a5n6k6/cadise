@@ -15,12 +15,12 @@
 #include "Core/SurfaceIntersection.h"
 #include "Foundation/Assertion.h"
 
-namespace cadise 
+namespace cadise
 {
 
 SubpathBuilder::SubpathBuilder(const std::size_t maxPathLength) :
     _maxPathLength(maxPathLength),
-    _camera(nullptr) 
+    _camera(nullptr)
 {}
 
 void SubpathBuilder::setCamera(const Camera* const camera)
@@ -132,13 +132,13 @@ void SubpathBuilder::_buildSubpathCompletely(
     const Spectrum&      secondVertexThroughput,
     const real           secondVertexForwardPdfW,
     Subpath* const       out_subpath,
-    Spectrum* const      out_zeroBounceRadiance) const 
+    Spectrum* const      out_zeroBounceRadiance) const
 {
     CS_ASSERT(out_subpath);
     CS_ASSERT(out_zeroBounceRadiance);
 
     std::size_t currentLength = out_subpath->length();
-    if (currentLength == _maxPathLength) 
+    if (currentLength == _maxPathLength)
     {
         return;
     }
@@ -182,7 +182,7 @@ void SubpathBuilder::_buildSubpathCompletely(
         // add s=0 situation radiance when hitting area light
         // (while building camera sub-path)
         const AreaLight* areaLight = primitive->areaLight();
-        if (areaLight && mode == ETransportMode::Radiance) 
+        if (areaLight && mode == ETransportMode::Radiance)
         {
             (*out_subpath)[currentLength - 1].setLight(areaLight);
 
@@ -192,7 +192,7 @@ void SubpathBuilder::_buildSubpathCompletely(
             out_zeroBounceRadiance->addLocal(throughput.mul(emittance.mul(misWeight)));
         }
 
-        if (currentLength == _maxPathLength) 
+        if (currentLength == _maxPathLength)
         {
             break;
         }
@@ -200,7 +200,7 @@ void SubpathBuilder::_buildSubpathCompletely(
         // estimate next direction with bsdf sampling
         BSDFSample bsdfSample;
         bsdf->evaluateSample(TransportInfo(mode), intersection, &bsdfSample);
-        if (!bsdfSample.isValid()) 
+        if (!bsdfSample.isValid())
         {
             break;
         }
@@ -238,10 +238,10 @@ void SubpathBuilder::_buildSubpathCompletely(
         previousVertex.setPdfAReverse(pdfAReverse);
 
         // use russian roulette to decide if the ray needs to be kept tracking
-        if (bounceTimes > 10) 
+        if (bounceTimes > 10)
         {
             Spectrum newThroughput;
-            if (!RussianRoulette::isSurvivedOnNextRound(throughput, &newThroughput)) 
+            if (!RussianRoulette::isSurvivedOnNextRound(throughput, &newThroughput))
             {
                 break;
             }
@@ -249,7 +249,7 @@ void SubpathBuilder::_buildSubpathCompletely(
             throughput = newThroughput;
         }
 
-        if (throughput.isZero()) 
+        if (throughput.isZero())
         {
             break;
         }

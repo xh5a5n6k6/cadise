@@ -1,13 +1,12 @@
 #include "Core/Renderer/RenderWork/PMViewpointWork.h"
 
 #include "Core/Camera/Camera.h"
-#include "Core/Ray.h"
 #include "Core/Renderer/PhotonMapping/PMViewpointConstructor.h"
 #include "Core/Sampler/Sampler.h"
 #include "Core/Sampler/SampleRecord2D.h"
 #include "Foundation/Assertion.h"
 
-namespace cadise 
+namespace cadise
 {
 
 PMViewpointWork::PMViewpointWork(
@@ -31,7 +30,7 @@ void PMViewpointWork::work() const
     const Vector2I& x0y0 = _sampleBound.minVertex();
     const Vector2I& x1y1 = _sampleBound.maxVertex();
 
-    for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy) 
+    for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy)
     {
         for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix)
         {
@@ -44,7 +43,7 @@ void PMViewpointWork::work() const
                     = Vector2I(ix, iy).asType<real>().add(sample2D->nextSample());
 
                 _viewpointConstructor->construct(
-                    filmJitterPosition.asType<float64>(), 
+                    filmJitterPosition.asType<float64>(),
                     _viewpoints);
             }
 

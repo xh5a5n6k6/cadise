@@ -55,7 +55,7 @@ inline constexpr T pi_over_four
 
 using SignType = int;
 
-static_assert(std::is_signed_v<SignType>, 
+static_assert(std::is_signed_v<SignType>,
     "Sign type needs to be signed.\n");
 
 inline constexpr SignType SIGN_POSITIVE =  1;
@@ -92,7 +92,7 @@ inline constexpr AxisType AXIS_UNKNOWN = -1;
     |   1   |   1   |   1   |   z > y > x |   z  |
     +-------+-------+-------+-------------+------+
 */
-inline constexpr AxisType compareMaxTable[8] = 
+inline constexpr AxisType compareMaxTable[8] =
 {
     AXIS_X,
     AXIS_X,
@@ -101,7 +101,7 @@ inline constexpr AxisType compareMaxTable[8] =
     AXIS_Y,
     AXIS_UNKNOWN,
     AXIS_Y,
-    AXIS_Z 
+    AXIS_Z,
 };
 
 } // namespace cadise::constant

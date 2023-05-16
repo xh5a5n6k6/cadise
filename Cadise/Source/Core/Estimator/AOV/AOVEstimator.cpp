@@ -3,7 +3,7 @@
 namespace cadise
 {
 
-bool AOVEstimator::useDirectly() const 
+bool AOVEstimator::useDirectly() const
 {
     return true;
 }

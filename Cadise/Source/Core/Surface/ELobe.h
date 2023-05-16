@@ -2,12 +2,12 @@
 
 #include "Math/Type/PrimitiveType.h"
 
-namespace cadise 
+namespace cadise
 {
 
 /*! @brief BSDF (BRDF + BTDF) lobe type.
 */
-enum class ELobe : uint32 
+enum class ELobe : uint32
 {
     Undefined = 0,
 

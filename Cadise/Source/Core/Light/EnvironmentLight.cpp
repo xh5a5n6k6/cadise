@@ -12,14 +12,14 @@
 #include <cmath>
 #include <vector>
 
-namespace cadise 
+namespace cadise
 {
 
 EnvironmentLight::EnvironmentLight(
     const Primitive* const                     primitive,
     const std::shared_ptr<TTexture<Spectrum>>& environmentRadiance,
     const Vector2S&                            resolution) :
-    
+
     AreaLight(false),
     _primitive(primitive),
     _environmentRadiance(environmentRadiance),
@@ -32,16 +32,16 @@ EnvironmentLight::EnvironmentLight(
     CS_ASSERT(environmentRadiance);
 
     std::vector<real> weightedSampleRadiances(resolution.x() * resolution.y());
-    for (std::size_t iy = 0; iy < resolution.y(); ++iy) 
+    for (std::size_t iy = 0; iy < resolution.y(); ++iy)
     {
         const std::size_t rowIndex = iy * resolution.x();
         const real        sampleV  = (static_cast<real>(iy) + 0.5_r) / static_cast<real>(resolution.y());
-        
+
         // image's y coordinate is from bottom to top, but
         // spherical theta is from top to bottom.
         const real sinTheta = std::sin((1.0_r - sampleV) * constant::pi<real>);
 
-        for (std::size_t ix = 0; ix < resolution.x(); ++ix) 
+        for (std::size_t ix = 0; ix < resolution.x(); ++ix)
         {
             const real sampleU = (static_cast<real>(ix) + 0.5_r) / static_cast<real>(resolution.x());
 
@@ -56,11 +56,11 @@ EnvironmentLight::EnvironmentLight(
 
     _distribution = Distribution2D(weightedSampleRadiances.data(), resolution);
 
-    // set dafulat scene radius
+    // set default scene radius
     this->setSceneBoundRadius(5000.0_r);
 }
 
-Spectrum EnvironmentLight::emittance(const SurfaceIntersection& emitSi) const 
+Spectrum EnvironmentLight::emittance(const SurfaceIntersection& emitSi) const
 {
     const Vector3R& uvw = emitSi.surfaceDetail().uvw();
     Spectrum sampleRadiance;
@@ -69,7 +69,7 @@ Spectrum EnvironmentLight::emittance(const SurfaceIntersection& emitSi) const
     return sampleRadiance;
 }
 
-void EnvironmentLight::evaluateDirectSample(DirectLightSample* const out_sample) const 
+void EnvironmentLight::evaluateDirectSample(DirectLightSample* const out_sample) const
 {
     CS_ASSERT(out_sample);
 
@@ -95,8 +95,8 @@ void EnvironmentLight::evaluateDirectSample(DirectLightSample* const out_sample)
 }
 
 real EnvironmentLight::evaluateDirectPdfW(
-    const SurfaceIntersection& emitSi, 
-    const Vector3R&            targetPosition) const 
+    const SurfaceIntersection& emitSi,
+    const Vector3R&            targetPosition) const
 {
     const Vector3R& uvw      = emitSi.surfaceDetail().uvw();
     const real      sinTheta = std::sin((1.0_r - uvw.y()) * constant::pi<real>);
@@ -121,7 +121,7 @@ void EnvironmentLight::evaluateEmitPdf(
     const Ray&      emitRay,
     const Vector3R& emitN,
     real* const     out_pdfA,
-    real* const     out_pdfW) const 
+    real* const     out_pdfW) const
 {
     CS_ASSERT(out_pdfA);
     CS_ASSERT(out_pdfW);
@@ -129,7 +129,7 @@ void EnvironmentLight::evaluateEmitPdf(
     // TODO: implement here
 }
 
-real EnvironmentLight::approximateFlux() const 
+real EnvironmentLight::approximateFlux() const
 {
     return _approximateFlux;
 }
@@ -141,18 +141,18 @@ void EnvironmentLight::setEmitRadiance(const std::shared_ptr<TTexture<Spectrum>>
     _environmentRadiance = emitRadiance;
 }
 
-void EnvironmentLight::setSceneBoundRadius(const real sceneBoundRadius) 
+void EnvironmentLight::setSceneBoundRadius(const real sceneBoundRadius)
 {
     CS_ASSERT_GE(sceneBoundRadius, 0.0_r);
 
     _sceneBoundRadius = sceneBoundRadius;
 
-    _updateApproxmiatedFlux();
+    _updateApproximatedFlux();
 }
 
-void EnvironmentLight::_updateApproxmiatedFlux() 
+void EnvironmentLight::_updateApproximatedFlux()
 {
-    _approximateFlux = 
+    _approximateFlux =
         _backgroundFlux * constant::four_pi<real> * _sceneBoundRadius * _sceneBoundRadius;
 }
 

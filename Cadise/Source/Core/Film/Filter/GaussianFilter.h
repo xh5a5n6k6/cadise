@@ -2,17 +2,17 @@
 
 #include "Core/Film/Filter/Filter.h"
 
-namespace cadise 
+namespace cadise
 {
 
-class GaussianFilter : public Filter 
+class GaussianFilter : public Filter
 {
 public:
     GaussianFilter(
-        const real filterWidth, 
+        const real filterWidth,
         const real filterHeight,
-        const real sigmaX, 
-        const real sigmaY, 
+        const real sigmaX,
+        const real sigmaY,
         const real amplitude);
 
     real evaluate(const real locationX, const real locationY) const override;

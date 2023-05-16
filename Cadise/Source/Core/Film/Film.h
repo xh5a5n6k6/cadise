@@ -14,14 +14,14 @@
 namespace cadise
 {
     class ConnectEvent;
-    class FilmTile; 
+    class FilmTile;
     class Filter;
 }
 
-namespace cadise 
+namespace cadise
 {
 
-class Film 
+class Film
 {
 public:
     Film(

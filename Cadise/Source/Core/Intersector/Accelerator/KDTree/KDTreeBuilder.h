@@ -13,17 +13,17 @@ namespace cadise
     class Intersector;
 }
 
-namespace cadise 
+namespace cadise
 {
 
-class KDTreeBuilder 
+class KDTreeBuilder
 {
 private:
     using KDTreeNode = TKDTreeNode<std::size_t>;
 
 public:
     KDTreeBuilder(
-        const real traversalCost, 
+        const real traversalCost,
         const real intersectionCost,
         const real emptyBonus);
 
@@ -36,7 +36,7 @@ public:
 
 private:
     void _buildNodesRecursively(
-        const std::vector<std::size_t>& intersectorIndices, 
+        const std::vector<std::size_t>& intersectorIndices,
         const std::vector<AABB3R>&      intersectorBounds,
         const AABB3R&                   entireBound,
         const std::size_t               currentDepth,

@@ -12,10 +12,10 @@ namespace cadise
     class Scene;
 }
 
-namespace cadise 
+namespace cadise
 {
 
-class Subpath 
+class Subpath
 {
 public:
     // used for s=0 situation
@@ -34,7 +34,7 @@ public:
     void addVertex(const PathVertex& vertex);
 
     void connectCamera(
-        const Scene&                     scene, 
+        const Scene&                     scene,
         const Camera* const              camera,
         std::vector<ConnectEvent>* const out_events) const;
 

@@ -4,7 +4,7 @@
 #include "Math/TLocalCoordinateSystem3.h"
 #include "Math/TVector3.h"
 
-namespace cadise 
+namespace cadise
 {
 
 class SurfaceDetail
@@ -24,7 +24,7 @@ public:
     void setGeometryNormal(const Vector3R& geometryNormal);
     void setShadingNormal(const Vector3R& shadingNormal);
 
-    void setPosition(const Vector3R& point);
+    void setPosition(const Vector3R& position);
     void setUvw(const Vector3R& uvw);
     void setDifferentialGeometry(const DifferentialGeometry& differentialGeometry);
 

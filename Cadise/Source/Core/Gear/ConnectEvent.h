@@ -3,15 +3,15 @@
 #include "Core/Spectrum/Spectrum.h"
 #include "Math/TVector2.h"
 
-namespace cadise 
+namespace cadise
 {
 
-class ConnectEvent 
+class ConnectEvent
 {
 public:
     ConnectEvent();
     ConnectEvent(
-        const Vector2D& filmPosition, 
+        const Vector2D& filmPosition,
         const Spectrum& splatRadiance);
 
     const Vector2D& filmPosition() const;

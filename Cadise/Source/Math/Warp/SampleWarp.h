@@ -4,7 +4,7 @@
 
 #include <array>
 
-namespace cadise 
+namespace cadise
 {
 
 class SampleWarp

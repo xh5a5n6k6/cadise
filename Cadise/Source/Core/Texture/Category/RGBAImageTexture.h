@@ -7,7 +7,7 @@
 namespace cadise
 {
 
-class RGBAImageTexture : public TImageTexture<Spectrum, real, 4> 
+class RGBAImageTexture : public TImageTexture<Spectrum, real, 4>
 {
 public:
     using Parent = TImageTexture<Spectrum, real, 4>;

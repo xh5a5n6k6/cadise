@@ -10,13 +10,13 @@
 #include <cmath>
 #include <utility>
 
-namespace cadise 
+namespace cadise
 {
 
 SpecularTransmission::SpecularTransmission(
     const std::shared_ptr<TTexture<Spectrum>>& albedo,
     const std::shared_ptr<DielectricFresnel>&  fresnel) :
-    
+
     BSDF(BSDFLobes({ ELobe::SpecularTransmission })),
     _albedo(albedo),
     _fresnel(fresnel)
@@ -26,14 +26,14 @@ SpecularTransmission::SpecularTransmission(
 }
 
 Spectrum SpecularTransmission::evaluate(
-    const TransportInfo&       info, 
-    const SurfaceIntersection& si) const 
+    const TransportInfo&       info,
+    const SurfaceIntersection& si) const
 {
     return Spectrum(0.0_r);
 }
 
 void SpecularTransmission::evaluateSample(
-    const TransportInfo&       info, 
+    const TransportInfo&       info,
     const SurfaceIntersection& si,
     BSDFSample* const          out_sample) const
 {
@@ -58,14 +58,14 @@ void SpecularTransmission::evaluateSample(
     real btdfFactor = 1.0_r;
     if (info.mode() == ETransportMode::Radiance)
     {
-        if (cosThetaI < 0.0_r) 
+        if (cosThetaI < 0.0_r)
         {
             std::swap(etaI, etaT);
         }
 
         btdfFactor = (etaT * etaT) / (etaI * etaI);
     }
-    
+
     const real     pdfW          = 1.0_r;
     const real     LdotN         = std::abs(cosThetaI);
     const Spectrum transmittance = reflectance.complement();
@@ -79,13 +79,13 @@ void SpecularTransmission::evaluateSample(
 }
 
 real SpecularTransmission::evaluatePdfW(
-    const TransportInfo&       info, 
+    const TransportInfo&       info,
     const SurfaceIntersection& si) const
 {
     return 0.0_r;
 }
 
-ELobe SpecularTransmission::lobe(const BSDFComponents component) const 
+ELobe SpecularTransmission::lobe(const BSDFComponents component) const
 {
     CS_ASSERT_EQ(component, 0);
 

@@ -4,7 +4,7 @@
 
 #include <string>
 
-namespace cadise 
+namespace cadise
 {
 
 class Logger

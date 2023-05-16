@@ -11,7 +11,7 @@ namespace cadise
     class TTexture;
 }
 
-namespace cadise 
+namespace cadise
 {
 
 /*
@@ -19,7 +19,7 @@ namespace cadise
     "Microfacet Models for Refraction through Rough Surfaces"
     Walter et al., EGSR 2007
 */
-class IsotropicBeckmann : public Microfacet 
+class IsotropicBeckmann : public Microfacet
 {
 public:
     IsotropicBeckmann(const std::shared_ptr<TTexture<real>>& roughness);

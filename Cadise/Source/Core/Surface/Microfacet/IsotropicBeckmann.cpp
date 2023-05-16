@@ -8,12 +8,12 @@
 
 #include <cmath>
 
-namespace cadise 
+namespace cadise
 {
 
 IsotropicBeckmann::IsotropicBeckmann(const std::shared_ptr<TTexture<real>>& roughness) :
     Microfacet(),
-    _roughness(roughness) 
+    _roughness(roughness)
 {
     CS_ASSERT(roughness);
 }
@@ -21,7 +21,7 @@ IsotropicBeckmann::IsotropicBeckmann(const std::shared_ptr<TTexture<real>>& roug
 real IsotropicBeckmann::distributionD(
     const SurfaceIntersection& si,
     const Vector3R&            N,
-    const Vector3R&            H) const 
+    const Vector3R&            H) const
 {
     const real NdotH = N.dot(H);
     if (NdotH <= 0.0_r)
@@ -49,9 +49,9 @@ real IsotropicBeckmann::shadowingMaskingG(
     const Vector3R&            V,
     const Vector3R&            L,
     const Vector3R&            N,
-    const Vector3R&            H) const 
+    const Vector3R&            H) const
 {
-    if (!_isShadowingMaskingValid(V, L, N, H)) 
+    if (!_isShadowingMaskingValid(V, L, N, H))
     {
         return 0.0_r;
     }
@@ -84,14 +84,14 @@ real IsotropicBeckmann::shadowingMaskingG(
     const real LdotN2 = LdotN * LdotN;
     const real tanL   = std::sqrt((1.0_r - LdotN2) / LdotN2);
     const real aL     = 1.0_r / (alpha * tanL);
-    if (aL < 1.6_r) 
+    if (aL < 1.6_r)
     {
         const real numerator   = 3.535_r * aL + 2.181_r * aL * aL;
         const real denominator = 1.0_r + 2.276_r * aL + 2.577_r * aL * aL;
 
         G1L = numerator / denominator;
     }
-    else 
+    else
     {
         G1L = 1.0_r;
     }
@@ -102,10 +102,10 @@ real IsotropicBeckmann::shadowingMaskingG(
 void IsotropicBeckmann::sampleHalfVectorH(
     const SurfaceIntersection& si,
     const std::array<real, 2>& sample,
-    Vector3R* const            out_H) const 
+    Vector3R* const            out_H) const
 {
     CS_ASSERT(out_H);
-    
+
     // to avoid random sample with 1 value
     const std::array<real, 2> safeSample = {
         math::clamp(sample[0], 0.0_r, 0.9999_r),
@@ -116,7 +116,7 @@ void IsotropicBeckmann::sampleHalfVectorH(
 
     const real alpha  = _roughnessToAlpha(sampleRoughness);
     const real alpha2 = alpha * alpha;
-    
+
     const real phi       = constant::two_pi<real> * safeSample[0];
     const real tan2Theta = -alpha2 * std::log(1.0_r - safeSample[1]);
     const real cosTheta  = math::clamp(1.0_r / std::sqrt(1.0_r + tan2Theta), -1.0_r, 1.0_r);

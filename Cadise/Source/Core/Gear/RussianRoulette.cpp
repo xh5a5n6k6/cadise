@@ -4,7 +4,7 @@
 #include "Math/Math.h"
 #include "Math/Random.h"
 
-namespace cadise 
+namespace cadise
 {
 
 bool RussianRoulette::isSurvivedOnNextRound(
@@ -17,14 +17,14 @@ bool RussianRoulette::isSurvivedOnNextRound(
     const real sample = Random::nextReal();
 
     // it survives on next round
-    if (sample > q) 
+    if (sample > q)
     {
         const real weightScale = 1.0_r / (1.0_r - q);
         out_newWeight->set(weight.mul(weightScale));
 
         return true;
     }
-    else 
+    else
     {
         return false;
     }

@@ -15,7 +15,7 @@
 #include <mutex>
 #include <numeric>
 
-namespace cadise 
+namespace cadise
 {
 
 namespace
@@ -29,12 +29,12 @@ VPMRenderer::VPMRenderer(
 
     Renderer(),
     _sampler(sampler),
-    _setting(setting) 
+    _setting(setting)
 {
     CS_ASSERT(sampler);
 }
 
-void VPMRenderer::render() const 
+void VPMRenderer::render() const
 {
     CS_ASSERT(_scene);
 
@@ -57,13 +57,13 @@ void VPMRenderer::render() const
             const std::size_t workEnd)
         {
             const std::size_t workload = workEnd - workBegin;
-        
+
             std::vector<Photon> localPhotons;
             localPhotons.reserve(workload);
 
             PhotonMapWork photonMapWork(
                 _scene.get(),
-                &localPhotons, 
+                &localPhotons,
                 &(numPhotonPaths[workerId]));
             photonMapWork.setMaxNumPhotons(workload);
 
@@ -76,7 +76,7 @@ void VPMRenderer::render() const
             }
         });
 
-    const std::size_t totalPhotonPaths 
+    const std::size_t totalPhotonPaths
         = std::accumulate(numPhotonPaths.begin(), numPhotonPaths.end(), static_cast<std::size_t>(0));
 
     PhotonMap photonMap = PhotonMap(PhotonCenterCalculator());
@@ -84,8 +84,8 @@ void VPMRenderer::render() const
 
     logger.log("Finish building photon map");
     logger.log("Total photons cost: " +
-               std::to_string((sizeof(Photon) * _setting.numPhotons()) / 1024.0_r / 1024.0_r) +
-               " MB");
+        std::to_string((sizeof(Photon) * _setting.numPhotons()) / 1024.0_r / 1024.0_r) +
+        " MB");
 
     // step2: radiance estimation
     Parallel::execute(
@@ -98,7 +98,7 @@ void VPMRenderer::render() const
         {
             const VPMEstimator estimator(&photonMap, totalPhotonPaths, _setting.searchRadius());
 
-            for (std::size_t workIndex = workBegin; workIndex < workEnd; ++workIndex) 
+            for (std::size_t workIndex = workBegin; workIndex < workEnd; ++workIndex)
             {
                 auto filmTile = _film->generateFilmTile(workIndex);
 

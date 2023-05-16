@@ -15,10 +15,10 @@ namespace cadise
     enum class ETransportMode;
 }
 
-namespace cadise 
+namespace cadise
 {
 
-class PathVertex 
+class PathVertex
 {
 public:
     explicit PathVertex(const EVertexType type);
@@ -30,7 +30,7 @@ public:
 
     Spectrum evaluate(
         const ETransportMode mode,
-        const PathVertex&    previous, 
+        const PathVertex&    previous,
         const PathVertex&    next) const;
 
     real evaluateOriginPdfA(
@@ -64,7 +64,7 @@ private:
     EVertexType   _type;
     Spectrum      _throughput;
     SurfaceDetail _surfaceDetail;
-    
+
     real _pdfAForward;
     real _pdfAReverse;
 

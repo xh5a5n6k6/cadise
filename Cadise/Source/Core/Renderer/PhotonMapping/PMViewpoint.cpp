@@ -2,7 +2,7 @@
 
 #include "Foundation/Assertion.h"
 
-namespace cadise 
+namespace cadise
 {
 
 PMViewpoint::PMViewpoint() :
@@ -14,8 +14,10 @@ PMViewpoint::PMViewpoint() :
     _emittedRadiance(),
     _numPhotons(),
     _radius(),
-    _tau() 
-{}
+    _tau()
+{
+    // TODO: assert bsdf not null
+}
 
 PMViewpoint::PMViewpoint(
     const BSDF* const    bsdf,

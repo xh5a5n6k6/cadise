@@ -2,10 +2,10 @@
 
 #include "Core/Estimator/EnergyEstimator.h"
 
-namespace cadise 
+namespace cadise
 {
 
-class AOVEstimator : public EnergyEstimator 
+class AOVEstimator : public EnergyEstimator
 {
 public:
     void estimate(

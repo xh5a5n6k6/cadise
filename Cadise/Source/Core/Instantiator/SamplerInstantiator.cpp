@@ -7,11 +7,11 @@
 #include "FileIO/CSD/CSDResource.h"
 #include "Foundation/Assertion.h"
 
-namespace cadise::instantiator 
+namespace cadise::instantiator
 {
 
 static std::shared_ptr<Sampler> createRandom(
-    const std::shared_ptr<CSDResource>& data) 
+    const std::shared_ptr<CSDResource>& data)
 {
     const std::size_t sampleNumber = data->findInt<std::size_t>("sample-number", 4);
 
@@ -27,14 +27,14 @@ static std::shared_ptr<Sampler> createStratified(
 }
 
 std::shared_ptr<Sampler> makeSampler(
-    const std::shared_ptr<CSDResource>& data) 
+    const std::shared_ptr<CSDResource>& data)
 {
     CS_ASSERT(data);
 
     std::shared_ptr<Sampler> sampler = nullptr;
-    
+
     const auto type = data->findString("sampler");
-    if (type == "random") 
+    if (type == "random")
     {
         sampler = createRandom(data);
     }

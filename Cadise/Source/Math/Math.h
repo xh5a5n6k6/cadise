@@ -9,7 +9,7 @@
 /*
     some math utilities here
 */
-namespace cadise::math 
+namespace cadise::math
 {
 
 /*
@@ -43,8 +43,8 @@ real fractional(const real value);
     given up-axis, build local coordinate system
 */
 void build_coordinate_system(
-    const Vector3R& yAxis, 
-    Vector3R* const out_zAxis, 
+    const Vector3R& yAxis,
+    Vector3R* const out_zAxis,
     Vector3R* const out_xAxis);
 
 /*
@@ -85,14 +85,14 @@ real inverse_gamma_correction(const real value);
     https://stackoverflow.com/questions/1903954/is-there-a-standard-sign-function-signum-sgn-in-c-c
 */
 template<typename T>
-inline constant::SignType sign(const T& value) 
+inline constant::SignType sign(const T& value)
 {
     return static_cast<constant::SignType>(
         (static_cast<T>(0) < value) - (value < static_cast<T>(0)));
 }
 
 template<typename T>
-inline T squared(const T& value) 
+inline T squared(const T& value)
 {
     return value * value;
 }
@@ -101,7 +101,7 @@ inline T squared(const T& value)
     if value is NaN, return lowerBound, otherwise return normal clamp result
 */
 template<typename T>
-inline T clamp(const T& value, const T& lowerBound, const T& upperBound) 
+inline T clamp(const T& value, const T& lowerBound, const T& upperBound)
 {
     return std::isnan(value) ? lowerBound : std::clamp(value, lowerBound, upperBound);
 }
@@ -110,7 +110,7 @@ inline T clamp(const T& value, const T& lowerBound, const T& upperBound)
     zero maps to one and the others remain the same
 */
 template<typename T>
-inline T map_to_non_zero(const T& value) 
+inline T map_to_non_zero(const T& value)
 {
     return (value == static_cast<T>(0)) ? static_cast<T>(1) : value;
 }

@@ -5,11 +5,11 @@
 
 #include <array>
 
-namespace cadise 
+namespace cadise
 {
 
 template<typename T>
-class TVector3 
+class TVector3
 {
 public:
     static TVector3 min(const TVector3& vectorA, const TVector3& vectorB);
@@ -37,7 +37,7 @@ public:
 
     T& operator [] (const constant::AxisType index);
     const T& operator [] (const constant::AxisType index) const;
-    
+
     template<typename U>
     TVector3<U> asType() const;
 
@@ -84,7 +84,7 @@ public:
     TVector3& reciprocalLocal();
     TVector3  clamp(const T min, const T max) const;
     TVector3& clampLocal(const T min, const T max);
-    
+
     void swap(TVector3& rhs);
     bool isEqualTo(const TVector3& rhs) const;
     T dot(const TVector3& rhs) const;
@@ -116,13 +116,13 @@ private:
 // template header implementation
 
 template<typename T>
-inline TVector3<T> operator + (const T scalar, const TVector3<T>& lhs) 
+inline TVector3<T> operator + (const T scalar, const TVector3<T>& lhs)
 {
     return lhs.add(scalar);
 }
 
 template<typename T>
-inline TVector3<T> operator * (const T scalar, const TVector3<T>& lhs) 
+inline TVector3<T> operator * (const T scalar, const TVector3<T>& lhs)
 {
     return lhs.mul(scalar);
 }

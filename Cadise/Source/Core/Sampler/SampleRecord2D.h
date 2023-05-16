@@ -7,7 +7,7 @@
 namespace cadise
 {
 
-class SampleRecord2D : public SampleRecord 
+class SampleRecord2D : public SampleRecord
 {
 public:
     explicit SampleRecord2D(const std::size_t sampleNumber);

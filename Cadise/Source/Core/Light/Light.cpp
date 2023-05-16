@@ -1,6 +1,6 @@
 #include "Core/Light/Light.h"
 
-namespace cadise 
+namespace cadise
 {
 
 Light::~Light() = default;

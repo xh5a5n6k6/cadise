@@ -16,7 +16,7 @@
     #include <iostream>
     #include <string>
 
-    namespace cadise 
+    namespace cadise
     {
         void assertionFailed();
     } // namespace cadise

@@ -15,13 +15,13 @@ namespace cadise
 
 ThinLensPerspectiveCamera::ThinLensPerspectiveCamera(
     const Vector3R& position,
-    const Vector3R& direction, 
-    const Vector3R& up, 
+    const Vector3R& direction,
+    const Vector3R& up,
     const float64   fov,
     const float64   sensorWidthMM,
     const float64   focalDistanceMM,
     const float64   lensRadiusMM) :
-    
+
     Camera(position),
     _cameraToWorld(nullptr),
     _filmToCamera(nullptr),
@@ -66,7 +66,7 @@ void ThinLensPerspectiveCamera::spawnPrimaryRay(
 
     Vector3R sampleCameraPosition;
     _filmToCamera->transformPoint(
-        Vector3D(filmPosition.x(), filmPosition.y(), 0.0).asType<real>(), 
+        Vector3D(filmPosition.x(), filmPosition.y(), 0.0).asType<real>(),
         &sampleCameraPosition);
 
     const real focalDistanceT = _focalDistanceM / (-sampleCameraPosition.z());
@@ -97,7 +97,7 @@ void ThinLensPerspectiveCamera::spawnPrimaryRay(
 }
 
 void ThinLensPerspectiveCamera::evaluateCameraSample(
-    CameraSample* const out_sample, 
+    CameraSample* const out_sample,
     Ray* const          out_toCameraRay) const
 {
     CS_ASSERT_MSG(false, "Unsupported type");
@@ -179,7 +179,7 @@ void ThinLensPerspectiveCamera::evaluateCameraSample(
 void ThinLensPerspectiveCamera::evaluateCameraPdf(
     const Ray&  cameraRay,
     real* const out_pdfA,
-    real* const out_pdfW) const 
+    real* const out_pdfW) const
 {
     CS_ASSERT_MSG(false, "Unsupported type");
     // TODO: Fix
@@ -225,7 +225,7 @@ std::pair<float64, float64> ThinLensPerspectiveCamera::_getSensorSizeXy() const
 {
     const float64 aspectRatio = _getAspectRatio();
 
-    return 
+    return
     {
         _sensorWidthM,              // sensorWidth
         _sensorWidthM / aspectRatio // sensorHeight

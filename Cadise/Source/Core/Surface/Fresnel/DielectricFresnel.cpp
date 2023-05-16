@@ -1,11 +1,11 @@
 #include "Core/Surface/Fresnel/DielectricFresnel.h"
 
-namespace cadise 
+namespace cadise
 {
 
 DielectricFresnel::DielectricFresnel(const real iorOuter, const real iorInner) :
     _iorOuter(iorOuter),
-    _iorInner(iorInner) 
+    _iorInner(iorInner)
 {}
 
 real DielectricFresnel::iorOuter() const

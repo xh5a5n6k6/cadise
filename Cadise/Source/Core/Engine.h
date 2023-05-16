@@ -5,14 +5,14 @@
 #include <memory>
 
 // forward declaration
-namespace cadise 
+namespace cadise
 {
     class CSDResource;
     class Film;
     class Renderer;
 }
 
-namespace cadise 
+namespace cadise
 {
 
 class Engine

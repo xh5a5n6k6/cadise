@@ -14,7 +14,7 @@
 
 #include <vector>
 
-namespace cadise 
+namespace cadise
 {
 
 VPMEstimator::VPMEstimator(
@@ -23,7 +23,7 @@ VPMEstimator::VPMEstimator(
     const real             searchRadius) :
 
     _photonMap(photonMap),
-    _searchRadius(searchRadius) 
+    _searchRadius(searchRadius)
 {
     CS_ASSERT(photonMap);
     CS_ASSERT_GT(numPhotonPaths, 0);
@@ -35,7 +35,7 @@ VPMEstimator::VPMEstimator(
 void VPMEstimator::estimate(
     const Scene&    scene,
     const Ray&      ray,
-    Spectrum* const out_radiance) const 
+    Spectrum* const out_radiance) const
 {
     CS_ASSERT(out_radiance);
 
@@ -44,10 +44,10 @@ void VPMEstimator::estimate(
     Spectrum pathThroughput(1.0_r);
     Ray      traceRay(ray);
 
-    for (int32 bounceTimes = 0;; ++bounceTimes) 
+    for (int32 bounceTimes = 0;; ++bounceTimes)
     {
         SurfaceIntersection intersection;
-        if (!scene.isIntersecting(traceRay, intersection)) 
+        if (!scene.isIntersecting(traceRay, intersection))
         {
             break;
         }
@@ -63,7 +63,7 @@ void VPMEstimator::estimate(
             ELobe::SpecularTransmission });
 
         // add radiance if hitting area light
-        if (primitive->areaLight()) 
+        if (primitive->areaLight())
         {
             const Spectrum emittance = primitive->areaLight()->emittance(intersection);
 
@@ -79,7 +79,7 @@ void VPMEstimator::estimate(
             std::vector<Photon> nearPhotons;
             _photonMap->findWithRange(P, _searchRadius, &nearPhotons);
 
-            for (const auto& photon : nearPhotons) 
+            for (const auto& photon : nearPhotons)
             {
                 const Vector3R& fromDirection      = photon.fromDirection();
                 const Spectrum& throughputRadiance = photon.throughputRadiance();
@@ -109,13 +109,13 @@ void VPMEstimator::estimate(
 
         // only trace next ray at specular surface
         // according to bsdf sampling
-        else 
+        else
         {
             // TODO: sample two directions if encountering
             //       dielectric bsdf
             BSDFSample bsdfSample;
             bsdf->evaluateSample(TransportInfo(), intersection, &bsdfSample);
-            if (!bsdfSample.isValid()) 
+            if (!bsdfSample.isValid())
             {
                 break;
             }
@@ -126,7 +126,7 @@ void VPMEstimator::estimate(
             const real      LdotN       = L.absDot(Ns);
 
             pathThroughput.mulLocal(reflectance.mul(LdotN / pdfW));
-            if (pathThroughput.isZero()) 
+            if (pathThroughput.isZero())
             {
                 break;
             }

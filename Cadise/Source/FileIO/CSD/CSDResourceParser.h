@@ -4,9 +4,9 @@
 #include <string>
 
 // forward declaration
-namespace cadise 
-{ 
-    class CSDResource; 
+namespace cadise
+{
+    class CSDResource;
 }
 
 namespace cadise

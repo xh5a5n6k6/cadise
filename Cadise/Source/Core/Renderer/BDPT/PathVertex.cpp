@@ -11,7 +11,7 @@
 
 #include <cmath>
 
-namespace cadise 
+namespace cadise
 {
 
 PathVertex::PathVertex(const EVertexType type) :
@@ -32,9 +32,9 @@ PathVertex::PathVertex(
     _bsdf(nullptr)
 {}
 
-bool PathVertex::isConnectible() const 
+bool PathVertex::isConnectible() const
 {
-    switch (_type) 
+    switch (_type)
     {
         case EVertexType::CameraEnd:
             CS_ASSERT(_camera);
@@ -66,8 +66,8 @@ bool PathVertex::isConnectible() const
 
 Spectrum PathVertex::evaluate(
     const ETransportMode mode,
-    const PathVertex&    previous, 
-    const PathVertex&    next) const 
+    const PathVertex&    previous,
+    const PathVertex&    next) const
 {
     CS_ASSERT(_bsdf);
 
@@ -98,7 +98,7 @@ Spectrum PathVertex::evaluate(
 
 real PathVertex::evaluateOriginPdfA(
     const Scene&      scene,
-    const PathVertex& next) const 
+    const PathVertex& next) const
 {
     const Vector3R& nowP      = _surfaceDetail.position();
     const Vector3R& nextP     = next.surfaceDetail().position();
@@ -110,7 +110,7 @@ real PathVertex::evaluateOriginPdfA(
 
     CS_ASSERT(!(_camera && _light));
 
-    if (_camera) 
+    if (_camera)
     {
         real pdfA;
         real pdfW;
@@ -118,16 +118,16 @@ real PathVertex::evaluateOriginPdfA(
 
         return pdfA;
     }
-    else if (_light) 
+    else if (_light)
     {
         const real pickLightPdf = scene.evaluatePickLightPdf(_light);
 
         real pdfA;
         real pdfW;
         _light->evaluateEmitPdf(
-            Ray(nowP, nowToNext), 
+            Ray(nowP, nowToNext),
             _surfaceDetail.shadingNormal(),
-            &pdfA, 
+            &pdfA,
             &pdfW);
 
         return pickLightPdf * pdfA;
@@ -152,11 +152,11 @@ real PathVertex::evaluateDirectPdfA(
 
     const Vector3R& nextNs    = next.surfaceDetail().shadingNormal();
     const Vector3R  nowToNext = nextP.sub(nowP);
-    
+
     const real distance2     = nowToNext.lengthSquared();
     const real nextToNowDotN = nowToNext.div(std::sqrt(distance2)).negate().absDot(nextNs);
 
-    if (_camera) 
+    if (_camera)
     {
         real pdfA;
         real pdfW;
@@ -164,12 +164,12 @@ real PathVertex::evaluateDirectPdfA(
 
         return pdfW * nextToNowDotN / distance2;
     }
-    else if (_light) 
+    else if (_light)
     {
         real pdfA;
         real pdfW;
         _light->evaluateEmitPdf(
-            Ray(nowP, nowToNext), 
+            Ray(nowP, nowToNext),
             _surfaceDetail.shadingNormal(),
             &pdfA,
             &pdfW);
@@ -189,7 +189,7 @@ real PathVertex::evaluateConnectPdfA(
     const Vector3R& nowP      = _surfaceDetail.position();
     const Vector3R& previousP = previous.surfaceDetail().position();
     const Vector3R& nextP     = next.surfaceDetail().position();
-    if (nowP.isEqualTo(nextP) || nowP.isEqualTo(previousP)) 
+    if (nowP.isEqualTo(nextP) || nowP.isEqualTo(previousP))
     {
         return 0.0_r;
     }
@@ -212,7 +212,7 @@ real PathVertex::evaluateConnectPdfA(
     const real pdfW = _bsdf->evaluatePdfW(TransportInfo(mode), intersection);
 
     real pdfA = pdfW / distance2;
-    if (next.camera() == nullptr) 
+    if (next.camera() == nullptr)
     {
         pdfA *= nextToNowDotN;
     }
@@ -235,17 +235,17 @@ const SurfaceDetail& PathVertex::surfaceDetail() const
     return _surfaceDetail;
 }
 
-real PathVertex::pdfAForward() const 
+real PathVertex::pdfAForward() const
 {
     return _pdfAForward;
 }
 
-real PathVertex::pdfAReverse() const 
+real PathVertex::pdfAReverse() const
 {
     return _pdfAReverse;
 }
 
-const Camera* PathVertex::camera() const 
+const Camera* PathVertex::camera() const
 {
     return _camera;
 }
@@ -255,12 +255,12 @@ const Light* PathVertex::light() const
     return _light;
 }
 
-const BSDF* PathVertex::bsdf() const 
+const BSDF* PathVertex::bsdf() const
 {
     return _bsdf;
 }
 
-void PathVertex::setSurfaceDetail(const SurfaceDetail& surfaceDetail) 
+void PathVertex::setSurfaceDetail(const SurfaceDetail& surfaceDetail)
 {
     _surfaceDetail = surfaceDetail;
 }
@@ -270,7 +270,7 @@ void PathVertex::setPdfAForward(const real pdfAForward)
     _pdfAForward = pdfAForward;
 }
 
-void PathVertex::setPdfAReverse(const real pdfAReverse) 
+void PathVertex::setPdfAReverse(const real pdfAReverse)
 {
     _pdfAReverse = pdfAReverse;
 }
@@ -289,7 +289,7 @@ void PathVertex::setLight(const Light* const light)
     _light = light;
 }
 
-void PathVertex::setBsdf(const BSDF* const bsdf) 
+void PathVertex::setBsdf(const BSDF* const bsdf)
 {
     CS_ASSERT(bsdf);
 

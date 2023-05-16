@@ -1,6 +1,6 @@
 #pragma once
 
-namespace cadise 
+namespace cadise
 {
 
 /*! @brief Weighting function used in Multiple Importance Sampling (MIS).

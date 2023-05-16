@@ -1,6 +1,6 @@
 #include "Core/Intersector/Accelerator/BVH/SAHBucket.h"
 
-namespace cadise 
+namespace cadise
 {
 
 SAHBucket::SAHBucket() :
@@ -9,7 +9,7 @@ SAHBucket::SAHBucket() :
 
 SAHBucket::SAHBucket(const AABB3R& bound, const std::size_t intersectorCount) :
     _bound(bound),
-    _intersectorCount(intersectorCount) 
+    _intersectorCount(intersectorCount)
 {}
 
 void SAHBucket::addOneBoundAndCount(const AABB3R& bound)

@@ -12,10 +12,10 @@
 #include <vector>
 
 // forward declaration
-namespace cadise 
-{ 
-    template<typename T> 
-    class TTexture; 
+namespace cadise
+{
+    template<typename T>
+    class TTexture;
 }
 
 namespace cadise
@@ -36,16 +36,16 @@ public:
     void addVector3Array(const std::string& name, const std::vector<std::string>& valueRaw);
 
     bool findBool(
-        const std::string& name, 
+        const std::string& name,
         const bool         defaultValue = false);
 
     std::string findString(
-        const std::string& name, 
+        const std::string& name,
         const std::string& defaultValue = "");
 
     template<typename IntType>
     IntType findInt(
-        const std::string& name, 
+        const std::string& name,
         const IntType      defaultValue = static_cast<IntType>(0));
 
     template<typename FloatType>
@@ -70,7 +70,7 @@ public:
     std::vector<TVector3<ElementType>> findVector3Array(const std::string& name);
 
     std::shared_ptr<TTexture<real>> getRealTexture(
-        const std::string&                   name, 
+        const std::string&                   name,
         const TStringKeyMap<TTexture<real>>& realTextures,
         const real                           defaultValue = 0.0_r);
 
@@ -106,7 +106,7 @@ private:
 
 template<typename IntType>
 inline IntType CSDResource::findInt(
-    const std::string& name, 
+    const std::string& name,
     const IntType      defaultValue)
 {
     if (_intRaws.contains(name))
@@ -114,7 +114,7 @@ inline IntType CSDResource::findInt(
         return ValueParser::parseInt<IntType>(_intRaws[name]);
     }
     else
-    {   
+    {
         return defaultValue;
     }
 }

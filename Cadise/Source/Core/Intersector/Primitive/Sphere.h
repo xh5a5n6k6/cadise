@@ -10,15 +10,15 @@ namespace cadise
     class Transform;
 }
 
-namespace cadise 
+namespace cadise
 {
 
-class Sphere : public Primitive 
+class Sphere : public Primitive
 {
 public:
     Sphere(
-        const std::shared_ptr<BSDF>& bsdf, 
-        const Vector3R&              center, 
+        const std::shared_ptr<BSDF>& bsdf,
+        const Vector3R&              center,
         const real                   radius);
 
     void evaluateBound(AABB3R* const out_bound) const override;
@@ -27,7 +27,7 @@ public:
     bool isOccluded(const Ray& ray) const override;
 
     void evaluateSurfaceDetail(
-        const PrimitiveInfo& primitiveInfo, 
+        const PrimitiveInfo& primitiveInfo,
         SurfaceDetail* const out_surface) const override;
 
     void evaluatePositionSample(PositionSample* const out_sample) const override;

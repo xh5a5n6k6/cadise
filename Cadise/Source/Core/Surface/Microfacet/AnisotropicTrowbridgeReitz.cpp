@@ -26,10 +26,10 @@ AnisotropicTrowbridgeReitz::AnisotropicTrowbridgeReitz(
 real AnisotropicTrowbridgeReitz::distributionD(
     const SurfaceIntersection& si,
     const Vector3R&            N,
-    const Vector3R&            H) const 
+    const Vector3R&            H) const
 {
     const real cosTheta = math::clamp(N.dot(H), -1.0_r, 1.0_r);
-    if (cosTheta <= 0.0_r) 
+    if (cosTheta <= 0.0_r)
     {
         return 0.0_r;
     }
@@ -52,7 +52,7 @@ real AnisotropicTrowbridgeReitz::distributionD(
 
     const real squareFactor = cos2Theta * (1.0_r + tan2Theta * (cos2Phi / alphaX2 + sin2Phi / alphaY2));
     const real denominator  = constant::pi<real> * alphaX * alphaY * (squareFactor * squareFactor);
-    
+
     return 1.0_r / denominator;
 }
 
@@ -61,7 +61,7 @@ real AnisotropicTrowbridgeReitz::shadowingMaskingG(
     const Vector3R&            V,
     const Vector3R&            L,
     const Vector3R&            N,
-    const Vector3R&            H) const 
+    const Vector3R&            H) const
 {
     if (!_isShadowingMaskingValid(V, L, N, H))
     {
@@ -86,7 +86,7 @@ real AnisotropicTrowbridgeReitz::shadowingMaskingG(
 void AnisotropicTrowbridgeReitz::sampleHalfVectorH(
     const SurfaceIntersection& si,
     const std::array<real, 2>& sample,
-    Vector3R* const            out_H) const 
+    Vector3R* const            out_H) const
 {
     CS_ASSERT(out_H);
 

@@ -12,7 +12,7 @@ namespace cadise
 void Parallel::execute(
     const std::size_t numWorks,
     const std::size_t numWorkers,
-    const Work&       work) 
+    const Work&       work)
 {
     const std::size_t averageWorkload = (numWorks + numWorkers - 1) / numWorkers;
 

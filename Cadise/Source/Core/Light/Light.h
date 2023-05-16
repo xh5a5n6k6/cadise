@@ -12,10 +12,10 @@ namespace cadise
     class SurfaceIntersection;
 }
 
-namespace cadise 
+namespace cadise
 {
 
-class Light 
+class Light
 {
 public:
     virtual ~Light();

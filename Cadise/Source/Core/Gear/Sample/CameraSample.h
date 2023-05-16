@@ -4,10 +4,10 @@
 #include "Math/TVector2.h"
 #include "Math/TVector3.h"
 
-namespace cadise 
+namespace cadise
 {
 
-class CameraSample 
+class CameraSample
 {
 public:
     CameraSample();

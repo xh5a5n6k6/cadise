@@ -10,7 +10,7 @@
 
 #include <cmath>
 
-namespace cadise 
+namespace cadise
 {
 
 PMRadianceEstimationWork::PMRadianceEstimationWork(
@@ -26,7 +26,7 @@ PMRadianceEstimationWork::PMRadianceEstimationWork(
     _numPhotonPaths(numPhotonPaths),
     _alpha(alpha),
     _workBeginIndex(),
-    _workEndIndex() 
+    _workEndIndex()
 {
     CS_ASSERT(photonMap);
     CS_ASSERT(viewpoints);
@@ -37,7 +37,7 @@ void PMRadianceEstimationWork::work() const
 {
     // for each viewpoint, do progressive radiance estimation
     // PPM paper chapter 4
-    for (std::size_t i = _workBeginIndex; i < _workEndIndex; ++i) 
+    for (std::size_t i = _workBeginIndex; i < _workEndIndex; ++i)
     {
         PMViewpoint& viewpoint = (*_viewpoints)[i];
 
@@ -49,7 +49,7 @@ void PMRadianceEstimationWork::work() const
         const Spectrum&      emittedRadiance      = viewpoint.emittedRadiance();
 
         // HACK: add zero radiance for non-hit viewpoint
-        if (!bsdf) 
+        if (!bsdf)
         {
             _film->addSampleRadiance(filmPosition, Spectrum(0.0_r));
 
@@ -84,7 +84,7 @@ void PMRadianceEstimationWork::work() const
                 si.setWi(photon.fromDirection());
 
                 const Spectrum f = bsdf->evaluate(transportInfo, si);
-                if (!f.isZero()) 
+                if (!f.isZero())
                 {
                     TauM.addLocal(f.mul(photon.throughputRadiance()));
                 }
@@ -99,8 +99,9 @@ void PMRadianceEstimationWork::work() const
         const real kernelFactor
             = 1.0_r / (constant::pi<real> * newR * newR * static_cast<real>(_numPhotonPaths));
 
-        const Spectrum radiance 
-            = newTauN.mul(kernelFactor).add(emittedRadiance).mul(throughputImportance);
+        const Spectrum radiance = newTauN.mul(kernelFactor)
+            .add(emittedRadiance)
+            .mul(throughputImportance);
 
         _film->addSampleRadiance(filmPosition, radiance);
 
@@ -113,7 +114,7 @@ void PMRadianceEstimationWork::work() const
 
 void PMRadianceEstimationWork::setWorkBeginEnd(
     const std::size_t beginIndex,
-    const std::size_t endIndex) 
+    const std::size_t endIndex)
 {
     _workBeginIndex = beginIndex;
     _workEndIndex   = endIndex;

@@ -1,6 +1,6 @@
 #include "Core/Renderer/RenderWork.h"
 
-namespace cadise 
+namespace cadise
 {
 
 RenderWork::~RenderWork() = default;

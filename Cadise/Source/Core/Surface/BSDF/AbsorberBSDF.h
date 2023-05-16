@@ -2,10 +2,10 @@
 
 #include "Core/surface/bsdf/BSDF.h"
 
-namespace cadise 
+namespace cadise
 {
 
-class AbsorberBSDF : public BSDF 
+class AbsorberBSDF : public BSDF
 {
 public:
     AbsorberBSDF();

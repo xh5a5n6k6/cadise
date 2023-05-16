@@ -11,10 +11,10 @@ namespace cadise
     class Scene;
 }
 
-namespace cadise 
+namespace cadise
 {
 
-class EstimatorTileWork : public TileWork 
+class EstimatorTileWork : public TileWork
 {
 public:
     EstimatorTileWork(

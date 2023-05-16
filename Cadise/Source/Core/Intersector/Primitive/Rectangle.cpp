@@ -15,11 +15,11 @@ namespace cadise
 {
 
 Rectangle::Rectangle(
-    const std::shared_ptr<BSDF>& bsdf, 
-    const Vector3R&              vA, 
-    const Vector3R&              vB, 
+    const std::shared_ptr<BSDF>& bsdf,
+    const Vector3R&              vA,
+    const Vector3R&              vB,
     const Vector3R&              vC) :
-    
+
     Primitive(bsdf),
     _vA(vA),
     _vB(vB),
@@ -31,7 +31,7 @@ Rectangle::Rectangle(
     _eB = _vC.sub(_vB);
 
     _vD = _vB.add(_eA).add(_eB);
-    
+
     _uvwA = Vector3R(1.0_r, 0.0_r, 0.0_r);
     _uvwB = Vector3R(0.0_r, 0.0_r, 0.0_r);
     _uvwC = Vector3R(0.0_r, 1.0_r, 0.0_r);
@@ -48,11 +48,11 @@ void Rectangle::evaluateBound(AABB3R* const out_bound) const
     out_bound->set(bound);
 }
 
-bool Rectangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const 
+bool Rectangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const
 {
     Vector3R eA = _eA;
     Vector3R eB = _eB;
-    if (ray.direction().dot(eA.cross(eB)) > 0.0_r) 
+    if (ray.direction().dot(eA.cross(eB)) > 0.0_r)
     {
         eA.swap(eB);
     }
@@ -68,7 +68,7 @@ bool Rectangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const
     const real     projectionA   = vectorOnPlane.dot(_eA.normalize());
     const real     projectionB   = vectorOnPlane.dot(_eB.normalize());
     if (projectionA < 0.0_r || projectionA > _eA.length() ||
-        projectionB < 0.0_r || projectionB > _eB.length()) 
+        projectionB < 0.0_r || projectionB > _eB.length())
     {
         return false;
     }
@@ -79,11 +79,11 @@ bool Rectangle::isIntersecting(Ray& ray, PrimitiveInfo& primitiveInfo) const
     return true;
 }
 
-bool Rectangle::isOccluded(const Ray& ray) const 
+bool Rectangle::isOccluded(const Ray& ray) const
 {
     Vector3R eA = _eA;
     Vector3R eB = _eB;
-    if (ray.direction().dot(eA.cross(eB)) > 0.0_r) 
+    if (ray.direction().dot(eA.cross(eB)) > 0.0_r)
     {
         eA.swap(eB);
     }
@@ -99,7 +99,7 @@ bool Rectangle::isOccluded(const Ray& ray) const
     const real     projectionA   = vectorOnPlane.dot(_eA.normalize());
     const real     projectionB   = vectorOnPlane.dot(_eB.normalize());
     if (projectionA < 0.0_r || projectionA > _eA.length() ||
-        projectionB < 0.0_r || projectionB > _eB.length()) 
+        projectionB < 0.0_r || projectionB > _eB.length())
     {
         return false;
     }
@@ -108,7 +108,7 @@ bool Rectangle::isOccluded(const Ray& ray) const
 }
 
 void Rectangle::evaluateSurfaceDetail(
-    const PrimitiveInfo& primitiveInfo, 
+    const PrimitiveInfo& primitiveInfo,
     SurfaceDetail* const out_surface) const
 {
     CS_ASSERT(out_surface);
@@ -120,13 +120,13 @@ void Rectangle::evaluateSurfaceDetail(
     out_surface->setShadingNormal(N);
 
     Vector3R uvw;
-    if (_textureMapper) 
+    if (_textureMapper)
     {
         _textureMapper->mappingToUvw(out_surface->shadingNormal(), &uvw);
 
         out_surface->setUvw(uvw);
     }
-    else 
+    else
     {
         const Vector3R& P             = out_surface->position();
         const Vector3R  vectorOnPlane = P.sub(_vB);
@@ -135,7 +135,7 @@ void Rectangle::evaluateSurfaceDetail(
 
         const Vector3R xUvwLerpA = _uvwB.lerp(_uvwC, projectionB);
         const Vector3R xUvwLerpB = _uvwA.lerp(_uvwD, projectionB);
-        
+
         uvw = xUvwLerpA.lerp(xUvwLerpB, projectionA);
 
         out_surface->setUvw(uvw);
@@ -187,7 +187,7 @@ real Rectangle::evaluatePositionPdfA(const Vector3R& position) const
     return 1.0_r / this->area();
 }
 
-real Rectangle::area() const 
+real Rectangle::area() const
 {
     return _eA.length() * _eB.length();
 }
@@ -197,17 +197,17 @@ void Rectangle::setUvwA(const Vector3R& uvwA)
     _uvwA = uvwA;
 }
 
-void Rectangle::setUvwB(const Vector3R& uvwB) 
+void Rectangle::setUvwB(const Vector3R& uvwB)
 {
     _uvwB = uvwB;
 }
 
-void Rectangle::setUvwC(const Vector3R& uvwC) 
+void Rectangle::setUvwC(const Vector3R& uvwC)
 {
     _uvwC = uvwC;
 }
 
-void Rectangle::setUvwD(const Vector3R& uvwD) 
+void Rectangle::setUvwD(const Vector3R& uvwD)
 {
     _uvwD = uvwD;
 }

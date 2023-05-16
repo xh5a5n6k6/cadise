@@ -11,7 +11,7 @@ namespace cadise
 namespace cadise
 {
 
-class TileWork : public RenderWork 
+class TileWork : public RenderWork
 {
 public:
     TileWork();

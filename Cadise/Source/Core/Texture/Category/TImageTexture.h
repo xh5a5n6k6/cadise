@@ -15,7 +15,7 @@ namespace cadise
     class TPixelSampler;
 }
 
-namespace cadise 
+namespace cadise
 {
 
 template<typename T, typename ImageType, std::size_t N>
@@ -23,7 +23,7 @@ class TImageTexture : public TTexture<T>
 {
 public:
     TImageTexture(
-        const TImage<ImageType, N>& image, 
+        const TImage<ImageType, N>& image,
         const ETextureSampleMode    sampleMode,
         const ETextureWrapMode      wrapMode);
 

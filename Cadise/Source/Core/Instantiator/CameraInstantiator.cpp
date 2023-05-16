@@ -9,7 +9,7 @@
 
 #include <iostream>
 
-namespace cadise::instantiator 
+namespace cadise::instantiator
 {
 
 static std::shared_ptr<Camera> createPinholePerspective(
@@ -21,12 +21,13 @@ static std::shared_ptr<Camera> createPinholePerspective(
     const real fov           = data->findFloat<real>("fov");
     const real sensorWidthMM = data->findFloat<real>("sensor-width-mm", 36.0_r);
 
-    return std::make_shared<PinholePerspectiveCamera>(
-        position,
-        direction,
-        up,
-        fov,
-        sensorWidthMM);
+    return
+        std::make_shared<PinholePerspectiveCamera>(
+            position,
+            direction,
+            up,
+            fov,
+            sensorWidthMM);
 }
 
 static std::shared_ptr<Camera> createThinLensPerspective(
@@ -40,25 +41,26 @@ static std::shared_ptr<Camera> createThinLensPerspective(
     const real focalDistanceMM = data->findFloat<real>("focal-distance-mm", 43000.0_r);
     const real lensRadiusMM    = data->findFloat<real>("lens-radius-mm", 175.0_r);
 
-    return std::make_shared<ThinLensPerspectiveCamera>(
-        position,
-        direction,
-        up,
-        fov,
-        sensorWidthMM,
-        focalDistanceMM,
-        lensRadiusMM);
+    return
+        std::make_shared<ThinLensPerspectiveCamera>(
+            position,
+            direction,
+            up,
+            fov,
+            sensorWidthMM,
+            focalDistanceMM,
+            lensRadiusMM);
 }
 
 std::shared_ptr<Camera> makeCamera(
-    const std::shared_ptr<CSDResource>& data) 
+    const std::shared_ptr<CSDResource>& data)
 {
     CS_ASSERT(data);
 
     std::shared_ptr<Camera> camera = nullptr;
 
     const auto type = data->findString("type");
-    if (type == "pinhole-perspective") 
+    if (type == "pinhole-perspective")
     {
         camera = createPinholePerspective(data);
     }
@@ -66,11 +68,11 @@ std::shared_ptr<Camera> makeCamera(
     {
         camera = createThinLensPerspective(data);
     }
-    else 
+    else
     {
         // unsupported camera type
         std::cerr << "Unsupported camera type: <" << type
-                  << ">" << std::endl;
+            << ">" << std::endl;
     }
 
     return camera;

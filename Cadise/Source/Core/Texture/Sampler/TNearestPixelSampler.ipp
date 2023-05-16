@@ -6,7 +6,7 @@
 #include "Math/Math.h"
 #include "Math/TVector3.h"
 
-namespace cadise 
+namespace cadise
 {
 
 template<typename T, std::size_t N>
@@ -18,7 +18,7 @@ inline void TNearestPixelSampler<T, N>::sample(
 
     Vector3R wrapUvw;
     _uvwWrapper->wrap(uvw, &wrapUvw);
-    
+
     int32 sampleW = static_cast<int32>(wrapUvw.x() * _image.width());
     int32 sampleH = static_cast<int32>(wrapUvw.y() * _image.height());
 

@@ -13,11 +13,11 @@ namespace cadise
 
 PinholePerspectiveCamera::PinholePerspectiveCamera(
     const Vector3R& position,
-    const Vector3R& direction, 
-    const Vector3R& up, 
+    const Vector3R& direction,
+    const Vector3R& up,
     const float64   fov,
     const float64   sensorWidthMM) :
-    
+
     Camera(position),
     _cameraToWorld(nullptr),
     _filmToCamera(nullptr),
@@ -58,7 +58,7 @@ void PinholePerspectiveCamera::spawnPrimaryRay(
 
     Vector3R sampleCameraPosition;
     _filmToCamera->transformPoint(
-        Vector3D(filmPosition.x(), filmPosition.y(), 0.0).asType<real>(), 
+        Vector3D(filmPosition.x(), filmPosition.y(), 0.0).asType<real>(),
         &sampleCameraPosition);
 
     // calculate parameter in camera space
@@ -74,7 +74,7 @@ void PinholePerspectiveCamera::spawnPrimaryRay(
 }
 
 void PinholePerspectiveCamera::evaluateCameraSample(
-    CameraSample* const out_sample, 
+    CameraSample* const out_sample,
     Ray* const          out_toCameraRay) const
 {
     CS_ASSERT(out_sample);
@@ -103,23 +103,23 @@ void PinholePerspectiveCamera::evaluateCameraSample(
     CS_ASSERT(!targetCameraPosition.isZero());
 
     // transform to focus (film) plane in camera space
-    const real     cameraToImagePointDistance  = _sensorOffset / cosTheta;
+    const real     cameraToImagePointDistance = _sensorOffset / cosTheta;
     const real     cameraToImagePointDistance2 = cameraToImagePointDistance * cameraToImagePointDistance;
-    const Vector3R targetFocusPosition         = targetCameraPosition.mul(cameraToImagePointDistance / distance);
+    const Vector3R targetFocusPosition = targetCameraPosition.mul(cameraToImagePointDistance / distance);
 
     // transform from camera space to film (raster) space
     Vector3R filmPosition;
     _filmToCamera->inverseMatrix().transformPoint(targetFocusPosition, &filmPosition);
 
     // check film boundary (0 ~ resolution)
-    if (filmPosition.x() <  0.0_r || 
-        filmPosition.y() <  0.0_r ||
-        filmPosition.x() >= static_cast<real>(_resolution.x()) || 
+    if (filmPosition.x() < 0.0_r ||
+        filmPosition.y() < 0.0_r ||
+        filmPosition.x() >= static_cast<real>(_resolution.x()) ||
         filmPosition.y() >= static_cast<real>(_resolution.y()))
     {
         // temporary hack for BDPG radiance estimator
         // TODO: remove this situation
-        if (out_toCameraRay->origin().isEqualTo(targetPosition)) 
+        if (out_toCameraRay->origin().isEqualTo(targetPosition))
         {
             fprintf(stdout, "filmPosition error\n");
             fprintf(stdout, "cos: %f, x: %lf, y: %f\n", cosTheta, double(filmPosition.x()), filmPosition.y());
@@ -152,7 +152,7 @@ void PinholePerspectiveCamera::evaluateCameraSample(
 void PinholePerspectiveCamera::evaluateCameraPdf(
     const Ray&  cameraRay,
     real* const out_pdfA,
-    real* const out_pdfW) const 
+    real* const out_pdfW) const
 {
     CS_ASSERT(out_pdfA);
     CS_ASSERT(out_pdfW);
@@ -161,7 +161,7 @@ void PinholePerspectiveCamera::evaluateCameraPdf(
     _cameraToWorld->transformVector(Vector3R(0.0_r, 0.0_r, -1.0_r), &cameraRayN);
 
     const real cosTheta = cameraRay.direction().dot(cameraRayN);
-    if (cosTheta <= 0.0_r) 
+    if (cosTheta <= 0.0_r)
     {
         return;
     }
@@ -178,10 +178,10 @@ void PinholePerspectiveCamera::evaluateCameraPdf(
     _filmToCamera->inverseMatrix().transformPoint(rayCameraFocusPosition, &filmPosition);
 
     // check film boundary (0 ~ resolution)
-    if (filmPosition.x() <  0.0_r ||
-        filmPosition.y() <  0.0_r ||
+    if (filmPosition.x() < 0.0_r ||
+        filmPosition.y() < 0.0_r ||
         filmPosition.x() >= static_cast<real>(_resolution.x()) ||
-        filmPosition.y() >= static_cast<real>(_resolution.y())) 
+        filmPosition.y() >= static_cast<real>(_resolution.y()))
     {
         return;
     }
@@ -194,7 +194,7 @@ std::pair<float64, float64> PinholePerspectiveCamera::_getSensorSizeXy() const
 {
     const float64 aspectRatio = _getAspectRatio();
 
-    return 
+    return
     {
         _sensorWidthMM,              // sensorWidth
         _sensorWidthMM / aspectRatio // sensorHeight

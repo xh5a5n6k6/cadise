@@ -16,7 +16,7 @@ namespace cadise::instantiator
 {
 
 static std::shared_ptr<Renderer> createSampling(
-    const std::shared_ptr<CSDResource>& data) 
+    const std::shared_ptr<CSDResource>& data)
 {
     const auto estimator = makeEstimator(data);
     const auto sampler   = makeSampler(data);
@@ -25,7 +25,7 @@ static std::shared_ptr<Renderer> createSampling(
 }
 
 static std::shared_ptr<Renderer> createBdpt(
-    const std::shared_ptr<CSDResource>& data) 
+    const std::shared_ptr<CSDResource>& data)
 {
     const auto sampler = makeSampler(data);
 
@@ -35,8 +35,8 @@ static std::shared_ptr<Renderer> createBdpt(
 static std::shared_ptr<Renderer> createVpm(
     const std::shared_ptr<CSDResource>& data)
 {
-    const std::size_t numPhotons    = data->findInt<std::size_t>("num-photons", 250000);
-    const real        searchRadius  = data->findFloat<real>("search-radius", 0.01_r);
+    const std::size_t numPhotons   = data->findInt<std::size_t>("num-photons", 250000);
+    const real        searchRadius = data->findFloat<real>("search-radius", 0.01_r);
 
     const auto sampler = makeSampler(data);
     const auto setting = PMSetting(numPhotons, searchRadius);
@@ -45,7 +45,7 @@ static std::shared_ptr<Renderer> createVpm(
 }
 
 static std::shared_ptr<Renderer> createPpm(
-    const std::shared_ptr<CSDResource>& data) 
+    const std::shared_ptr<CSDResource>& data)
 {
     const std::size_t numPhotons    = data->findInt<std::size_t>("num-photons", 250000);
     const real        searchRadius  = data->findFloat<real>("search-radius", 0.01_r);
@@ -85,14 +85,14 @@ static std::shared_ptr<Renderer> createPpm(
 //}
 
 std::shared_ptr<Renderer> makeRenderer(
-    const std::shared_ptr<CSDResource>& data) 
+    const std::shared_ptr<CSDResource>& data)
 {
     CS_ASSERT(data);
 
     std::shared_ptr<Renderer> renderer = nullptr;
-    
+
     const auto type = data->findString("type");
-    if (type == "sampling") 
+    if (type == "sampling")
     {
         renderer = createSampling(data);
     }
@@ -100,7 +100,7 @@ std::shared_ptr<Renderer> makeRenderer(
     {
         renderer = createBdpt(data);
     }
-    else if (type == "vpm") 
+    else if (type == "vpm")
     {
         renderer = createVpm(data);
     }
@@ -114,7 +114,7 @@ std::shared_ptr<Renderer> makeRenderer(
     //else if (type == "bdpg") {
     //    renderer = createBdpg(data);
     //}
-    else 
+    else
     {
         // unsupported renderer type
         std::cerr << "Unsupported renderer type: <" << type << ">" << std::endl;

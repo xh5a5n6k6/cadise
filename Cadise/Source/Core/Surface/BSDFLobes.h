@@ -4,10 +4,10 @@
 
 #include <initializer_list>
 
-namespace cadise 
+namespace cadise
 {
 
-class BSDFLobes 
+class BSDFLobes
 {
 private:
     using Lobes = std::initializer_list<ELobe>;

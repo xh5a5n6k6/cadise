@@ -11,10 +11,10 @@ class TNearestPixelSampler : public TPixelSampler<T, N>
 public:
     using Parent = TPixelSampler<T, N>;
     using Parent::Parent;
-    
+
     /*
-        When it needs to use template parent's attribute, it needs to tell 
-        the compiler explicitly that the names are in fact dependent on 
+        When it needs to use template parent's attribute, it needs to tell
+        the compiler explicitly that the names are in fact dependent on
         the instantiation of the parent.
 
         Reference Note:

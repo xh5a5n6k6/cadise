@@ -10,14 +10,14 @@ namespace cadise
 PowerLightCluster::PowerLightCluster(const std::vector<std::shared_ptr<Light>>& lights) :
     _lights(std::move(lights)),
     _lightIndexMap(),
-    _distribution() 
+    _distribution()
 {
     CS_ASSERT(!_lights.empty());
 
     const std::size_t numLights = _lights.size();
 
     std::vector<real> fluxVector(numLights);
-    for (std::size_t i = 0; i < numLights; ++i) 
+    for (std::size_t i = 0; i < numLights; ++i)
     {
         fluxVector[i] = _lights[i]->approximateFlux();
 
@@ -38,7 +38,7 @@ const Light* PowerLightCluster::sampleOneLight(real* const out_pdf) const
     return _lights[sampleIndex].get();
 }
 
-real PowerLightCluster::evaluatePickLightPdf(const Light* const light) const 
+real PowerLightCluster::evaluatePickLightPdf(const Light* const light) const
 {
     const auto&& iterator = _lightIndexMap.find(light);
 

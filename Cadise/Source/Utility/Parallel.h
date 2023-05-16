@@ -2,14 +2,13 @@
 
 #include <functional>
 
-namespace cadise 
+namespace cadise
 {
 
 class Parallel
 {
 private:
-    using Work = 
-        std::function
+    using Work = std::function
         <
             void(
                 const std::size_t workerId,

@@ -12,7 +12,7 @@ inline TConceptualSpectrum<T, N>::TConceptualSpectrum() :
 
 template<typename T, std::size_t N>
 inline TConceptualSpectrum<T, N>::TConceptualSpectrum(const T value) :
-    _values(value) 
+    _values(value)
 {}
 
 template<typename T, std::size_t N>
@@ -27,25 +27,25 @@ template<typename T, std::size_t N>
 inline TConceptualSpectrum<T, N>::~TConceptualSpectrum() = default;
 
 template<typename T, std::size_t N>
-inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::operator + (const T rhs) const 
+inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::operator + (const T rhs) const
 {
     return this->add(rhs);
 }
 
 template<typename T, std::size_t N>
-inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::operator - (const T rhs) const 
+inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::operator - (const T rhs) const
 {
     return this->sub(rhs);
 }
 
 template<typename T, std::size_t N>
-inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::operator * (const T rhs) const 
+inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::operator * (const T rhs) const
 {
     return this->mul(rhs);
 }
 
 template<typename T, std::size_t N>
-inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::operator / (const T rhs) const 
+inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::operator / (const T rhs) const
 {
     return this->div(rhs);
 }
@@ -57,31 +57,31 @@ inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::operator + (const TC
 }
 
 template<typename T, std::size_t N>
-inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::operator - (const TConceptualSpectrum<T, N>& rhs) const 
+inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::operator - (const TConceptualSpectrum<T, N>& rhs) const
 {
     return this->sub(rhs);
 }
 
 template<typename T, std::size_t N>
-inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::operator * (const TConceptualSpectrum<T, N>& rhs) const 
+inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::operator * (const TConceptualSpectrum<T, N>& rhs) const
 {
     return this->mul(rhs);
 }
 
 template<typename T, std::size_t N>
-inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::operator / (const TConceptualSpectrum<T, N>& rhs) const 
+inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::operator / (const TConceptualSpectrum<T, N>& rhs) const
 {
     return this->div(rhs);
 }
 
 template<typename T, std::size_t N>
-inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::add(const TConceptualSpectrum& rhs) const 
+inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::add(const TConceptualSpectrum& rhs) const
 {
     return TConceptualSpectrum<T, N>(_values.add(rhs._values));
 }
 
 template<typename T, std::size_t N>
-inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::add(const T rhs) const 
+inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::add(const T rhs) const
 {
     return TConceptualSpectrum<T, N>(_values.add(rhs));
 }
@@ -103,19 +103,19 @@ inline TConceptualSpectrum<T, N>& TConceptualSpectrum<T, N>::addLocal(const T rh
 }
 
 template<typename T, std::size_t N>
-inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::sub(const TConceptualSpectrum& rhs) const 
+inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::sub(const TConceptualSpectrum& rhs) const
 {
     return TConceptualSpectrum<T, N>(_values.sub(rhs._values));
 }
 
 template<typename T, std::size_t N>
-inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::sub(const T rhs) const 
+inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::sub(const T rhs) const
 {
     return TConceptualSpectrum<T, N>(_values.sub(rhs));
 }
 
 template<typename T, std::size_t N>
-inline TConceptualSpectrum<T, N>& TConceptualSpectrum<T, N>::subLocal(const TConceptualSpectrum<T, N>& rhs) 
+inline TConceptualSpectrum<T, N>& TConceptualSpectrum<T, N>::subLocal(const TConceptualSpectrum<T, N>& rhs)
 {
     _values.subLocal(rhs._values);
 
@@ -131,13 +131,13 @@ inline TConceptualSpectrum<T, N>& TConceptualSpectrum<T, N>::subLocal(const T rh
 }
 
 template<typename T, std::size_t N>
-inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::mul(const TConceptualSpectrum& rhs) const 
+inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::mul(const TConceptualSpectrum& rhs) const
 {
     return TConceptualSpectrum<T, N>(_values.mul(rhs._values));
 }
 
 template<typename T, std::size_t N>
-inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::mul(const T rhs) const 
+inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::mul(const T rhs) const
 {
     return TConceptualSpectrum<T, N>(_values.mul(rhs));
 }
@@ -151,7 +151,7 @@ inline TConceptualSpectrum<T, N>& TConceptualSpectrum<T, N>::mulLocal(const TCon
 }
 
 template<typename T, std::size_t N>
-inline TConceptualSpectrum<T, N>& TConceptualSpectrum<T, N>::mulLocal(const T rhs) 
+inline TConceptualSpectrum<T, N>& TConceptualSpectrum<T, N>::mulLocal(const T rhs)
 {
     _values.mulLocal(rhs);
 
@@ -159,7 +159,7 @@ inline TConceptualSpectrum<T, N>& TConceptualSpectrum<T, N>::mulLocal(const T rh
 }
 
 template<typename T, std::size_t N>
-inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::div(const TConceptualSpectrum& rhs) const 
+inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::div(const TConceptualSpectrum& rhs) const
 {
     return TConceptualSpectrum<T, N>(_values.div(rhs._values));
 }
@@ -187,13 +187,13 @@ inline TConceptualSpectrum<T, N>& TConceptualSpectrum<T, N>::divLocal(const T rh
 }
 
 template<typename T, std::size_t N>
-inline bool TConceptualSpectrum<T, N>::isZero() const 
+inline bool TConceptualSpectrum<T, N>::isZero() const
 {
     return _values.isZero();
 }
 
 template<typename T, std::size_t N>
-inline bool TConceptualSpectrum<T, N>::hasNegative() const 
+inline bool TConceptualSpectrum<T, N>::hasNegative() const
 {
     return _values.hasNegative();
 }
@@ -205,7 +205,7 @@ inline bool TConceptualSpectrum<T, N>::hasNaN() const
 }
 
 template<typename T, std::size_t N>
-inline bool TConceptualSpectrum<T, N>::hasInfinite() const 
+inline bool TConceptualSpectrum<T, N>::hasInfinite() const
 {
     return _values.hasInfinite();
 }
@@ -217,7 +217,7 @@ inline T TConceptualSpectrum<T, N>::sum() const
 }
 
 template<typename T, std::size_t N>
-inline T TConceptualSpectrum<T, N>::average() const 
+inline T TConceptualSpectrum<T, N>::average() const
 {
     return _values.average();
 }
@@ -229,16 +229,16 @@ inline T TConceptualSpectrum<T, N>::maxComponent() const
 }
 
 template<typename T, std::size_t N>
-inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::squared() const 
+inline TConceptualSpectrum<T, N> TConceptualSpectrum<T, N>::squared() const
 {
     return TConceptualSpectrum<T, N>(_values.squared());
 }
 
 template<typename T, std::size_t N>
-inline TConceptualSpectrum<T, N>& TConceptualSpectrum<T, N>::squaredLocal() 
+inline TConceptualSpectrum<T, N>& TConceptualSpectrum<T, N>::squaredLocal()
 {
     _values.squaredLocal();
-    
+
     return *this;
 }
 
@@ -263,13 +263,13 @@ inline void TConceptualSpectrum<T, N>::set(const TConceptualSpectrum& other)
 }
 
 template<typename T, std::size_t N>
-inline void TConceptualSpectrum<T, N>::set(const TArithmeticArray<T, N>& value) 
+inline void TConceptualSpectrum<T, N>::set(const TArithmeticArray<T, N>& value)
 {
     _values = value;
 }
 
 template<typename T, std::size_t N>
-inline void TConceptualSpectrum<T, N>::set(const T value) 
+inline void TConceptualSpectrum<T, N>::set(const T value)
 {
     _values.set(value);
 }

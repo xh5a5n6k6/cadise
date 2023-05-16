@@ -6,13 +6,13 @@
 
 #include <cmath>
 
-namespace cadise 
+namespace cadise
 {
 
 void Hemisphere::uniformSampling(
     const std::array<real, 2>& sample,
     Vector3R* const            out_direction,
-    real* const                out_pdfW) 
+    real* const                out_pdfW)
 {
     CS_ASSERT(out_direction);
     CS_ASSERT(out_pdfW);
@@ -32,7 +32,7 @@ void Hemisphere::uniformSampling(
 void Hemisphere::cosineWeightedSampling(
     const std::array<real, 2>& sample,
     Vector3R* const            out_direction,
-    real* const                out_pdfW) 
+    real* const                out_pdfW)
 {
     CS_ASSERT(out_direction);
     CS_ASSERT(out_pdfW);
@@ -54,7 +54,7 @@ void Hemisphere::cosineExpWeightedSampling(
     const std::array<real, 2>& sample,
     const real                 exponent,
     Vector3R* const            out_direction,
-    real* const                out_pdfW) 
+    real* const                out_pdfW)
 {
     CS_ASSERT(out_direction);
     CS_ASSERT(out_pdfW);

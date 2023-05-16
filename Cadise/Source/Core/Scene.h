@@ -19,7 +19,7 @@ namespace cadise
 namespace cadise
 {
 
-class Scene 
+class Scene
 {
 public:
     Scene(
@@ -30,7 +30,7 @@ public:
 
     bool isIntersecting(Ray& ray, SurfaceIntersection& surfaceIntersection) const;
     bool isOccluded(const Ray& ray) const;
-    
+
     const Light* sampleOneLight(real* const out_pdf) const;
     real evaluatePickLightPdf(const Light* const light) const;
 

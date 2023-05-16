@@ -9,7 +9,7 @@ PrimitiveInfo::PrimitiveInfo() :
     _primitive(nullptr)
 {}
 
-const Primitive* PrimitiveInfo::primitive() const 
+const Primitive* PrimitiveInfo::primitive() const
 {
     return _primitive;
 }

@@ -8,7 +8,7 @@ SurfaceDetail::SurfaceDetail() :
     _uvw(0.0_r),
     _differentialGeometry(),
     _geometryLcs(),
-    _shadingLcs() 
+    _shadingLcs()
 {}
 
 void SurfaceDetail::computeCoordinateSystem()
@@ -27,7 +27,7 @@ void SurfaceDetail::computeCoordinateSystem()
                 unitY,
                 unitZ);
         }
-        else 
+        else
         {
             _geometryLcs.initializeViaUnitY(unitY);
         }
@@ -47,14 +47,14 @@ void SurfaceDetail::computeCoordinateSystem()
                 unitY,
                 unitZ);
         }
-        else 
+        else
         {
             _shadingLcs.initializeViaUnitY(unitY);
         }
     }
 }
 
-const Vector3R& SurfaceDetail::position() const 
+const Vector3R& SurfaceDetail::position() const
 {
     return _position;
 }
@@ -64,7 +64,7 @@ const Vector3R& SurfaceDetail::geometryNormal() const
     return _geometryLcs.yAxis();
 }
 
-const Vector3R& SurfaceDetail::shadingNormal() const 
+const Vector3R& SurfaceDetail::shadingNormal() const
 {
     return _shadingLcs.yAxis();
 }
@@ -79,17 +79,17 @@ const LCS3R& SurfaceDetail::geometryLcs() const
     return _geometryLcs;
 }
 
-const LCS3R& SurfaceDetail::shadingLcs() const 
+const LCS3R& SurfaceDetail::shadingLcs() const
 {
     return _shadingLcs;
 }
 
-void SurfaceDetail::setPosition(const Vector3R& position) 
+void SurfaceDetail::setPosition(const Vector3R& position)
 {
     _position = position;
 }
 
-void SurfaceDetail::setGeometryNormal(const Vector3R& geometryNormal) 
+void SurfaceDetail::setGeometryNormal(const Vector3R& geometryNormal)
 {
     _geometryLcs.setYAxis(geometryNormal);
 }

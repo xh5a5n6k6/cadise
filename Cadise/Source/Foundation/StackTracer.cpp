@@ -9,12 +9,12 @@
     #include <iostream>
 #endif
 
-namespace cadise 
+namespace cadise
 {
 
 StackTracer::StackTracer() = default;
 
-void StackTracer::trace() const 
+void StackTracer::trace() const
 {
 
 #if defined(CADISE_OS_WINDOWS)
@@ -26,7 +26,7 @@ void StackTracer::trace() const
     int32  traceDepth    = backtrace(traceBuffer, MAX_STACK_TRACE_DEPTH);
     char** traceMessages = backtrace_symbols(traceBuffer, traceDepth);
 
-    for (int32 i = 0; i < traceDepth; ++i) 
+    for (int32 i = 0; i < traceDepth; ++i)
     {
         std::cerr << traceMessages[i] << std::endl;
     }

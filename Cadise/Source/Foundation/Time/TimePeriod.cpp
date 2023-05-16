@@ -6,28 +6,28 @@ namespace cadise
 {
 
 TimePeriod::TimePeriod() :
-    _sumMilliseconds(0) 
+    _sumMilliseconds(0)
 {}
 
-void TimePeriod::addMilliseconds(const uint64 milliseconds) 
+void TimePeriod::addMilliseconds(const uint64 milliseconds)
 {
     _sumMilliseconds += milliseconds;
 }
 
-void TimePeriod::reset() 
+void TimePeriod::reset()
 {
     _sumMilliseconds = 0;
 }
 
-std::string TimePeriod::toString() const 
+std::string TimePeriod::toString() const
 {
     std::stringstream stringStream;
 
-    if (_sumMilliseconds < 1000) 
+    if (_sumMilliseconds < 1000)
     {
         stringStream << _sumMilliseconds << "ms";
     }
-    else 
+    else
     {
         uint64 restMs;
         uint64 seconds;

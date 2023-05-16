@@ -21,7 +21,7 @@ public:
     explicit PTEstimator(const int32 maxPathLength);
 
     void estimate(
-        const Scene&    scene, 
+        const Scene&    scene,
         const Ray&      ray,
         Spectrum* const out_radiance) const override;
 
@@ -33,7 +33,7 @@ private:
 
 // header implementation
 
-inline std::string PTEstimator::toString() const 
+inline std::string PTEstimator::toString() const
 {
     return "PT Estimator";
 }

@@ -10,7 +10,7 @@
 #include "Core/Scene.h"
 #include "Foundation/Assertion.h"
 
-namespace cadise 
+namespace cadise
 {
 
 BDPTTileWork::BDPTTileWork(
@@ -44,14 +44,14 @@ void BDPTTileWork::work() const
 
     for (int32 iy = x0y0.y(); iy < x1y1.y(); ++iy)
     {
-        for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix) 
+        for (int32 ix = x0y0.x(); ix < x1y1.x(); ++ix)
         {
             auto sampleSampler = _sampler->clone(_sampler->sampleNumber());
             auto sample2D      = sampleSampler->requestSample2D();
 
             for (std::size_t in = 0; in < sampleSampler->sampleNumber(); ++in)
             {
-                const Vector2R filmJitterPosition 
+                const Vector2R filmJitterPosition
                     = Vector2I(ix, iy).asType<real>().add(sample2D->nextSample());
 
                 Spectrum accumulatedRadiance(0.0_r);
@@ -85,9 +85,9 @@ void BDPTTileWork::work() const
                 const std::size_t cameraPathLength = cameraPath.length();
 
                 // step5: connect all sub-paths (s>1 & t>1)
-                for (std::size_t s = 2; s <= lightPathLength; ++s) 
+                for (std::size_t s = 2; s <= lightPathLength; ++s)
                 {
-                    for (std::size_t t = 2; t <= cameraPathLength; ++t) 
+                    for (std::size_t t = 2; t <= cameraPathLength; ++t)
                     {
                         Spectrum connectRadiance(0.0_r);
                         subpathConnector.connect(*_scene, lightPath, cameraPath, s, t, &connectRadiance);

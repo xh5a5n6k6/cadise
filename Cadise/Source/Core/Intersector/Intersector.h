@@ -9,14 +9,14 @@ namespace cadise
     class Ray;
 }
 
-namespace cadise 
+namespace cadise
 {
 
 /*
-    Intersector represents an object that is intersectable, 
+    Intersector represents an object that is intersectable,
     and it includes primitive, accelerator and transformedIntersector.
 */
-class Intersector 
+class Intersector
 {
 public:
     virtual ~Intersector();

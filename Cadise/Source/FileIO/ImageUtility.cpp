@@ -8,15 +8,15 @@ namespace cadise
 {
 
 void ImageUtility::ldrToHdr(
-    const LDRImage& ldrImage, 
-    HDRImage* const out_hdrImage) 
+    const LDRImage& ldrImage,
+    HDRImage* const out_hdrImage)
 {
     CS_ASSERT(out_hdrImage);
 
     out_hdrImage->setImageSize(ldrImage.width(), ldrImage.height());
 
     const uint8* data = ldrImage.rawData();
-    for (std::size_t i = 0; i < ldrImage.dataSize(); ++i) 
+    for (std::size_t i = 0; i < ldrImage.dataSize(); ++i)
     {
         const real value = static_cast<real>(data[i]) / 255.0_r;
         out_hdrImage->setDataValue(i, value);
@@ -24,7 +24,7 @@ void ImageUtility::ldrToHdr(
 }
 
 void ImageUtility::hdrToLdr(
-    const HDRImage& hdrImage, 
+    const HDRImage& hdrImage,
     LDRImage* const out_ldrImage)
 {
     CS_ASSERT(out_ldrImage);
@@ -41,7 +41,7 @@ void ImageUtility::hdrToLdr(
 }
 
 void ImageUtility::ldrAlphaToHdrAlpha(
-    const LDRAlphaImage& ldrAlphaImage, 
+    const LDRAlphaImage& ldrAlphaImage,
     HDRAlphaImage* const out_hdrAlphaImage)
 {
     CS_ASSERT(out_hdrAlphaImage);

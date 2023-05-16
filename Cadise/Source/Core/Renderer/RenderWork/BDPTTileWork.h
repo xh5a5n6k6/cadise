@@ -14,10 +14,10 @@ namespace cadise
     class Scene;
 }
 
-namespace cadise 
+namespace cadise
 {
 
-class BDPTTileWork : public TileWork 
+class BDPTTileWork : public TileWork
 {
 public:
     BDPTTileWork(

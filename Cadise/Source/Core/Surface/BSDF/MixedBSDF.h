@@ -18,11 +18,11 @@ class MixedBSDF : public BSDF
 {
 public:
     MixedBSDF(
-        const std::shared_ptr<BSDF>& bsdfA, 
+        const std::shared_ptr<BSDF>& bsdfA,
         const std::shared_ptr<BSDF>& bsdfB,
         const real                   ratio);
     MixedBSDF(
-        const std::shared_ptr<BSDF>&               bsdfA, 
+        const std::shared_ptr<BSDF>&               bsdfA,
         const std::shared_ptr<BSDF>&               bsdfB,
         const std::shared_ptr<TTexture<Spectrum>>& ratio);
 

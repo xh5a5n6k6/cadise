@@ -4,12 +4,12 @@
 #include "Math/Math.h"
 #include "Math/TVector3.h"
 
-namespace cadise 
+namespace cadise
 {
 
 void RepeatUVWWrapper::wrap(
-    const Vector3R& uvw, 
-    Vector3R* const out_wrapUvw) const 
+    const Vector3R& uvw,
+    Vector3R* const out_wrapUvw) const
 {
     CS_ASSERT(out_wrapUvw);
 

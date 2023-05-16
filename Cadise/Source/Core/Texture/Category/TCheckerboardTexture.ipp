@@ -7,18 +7,18 @@
 
 #include <cmath>
 
-namespace cadise 
+namespace cadise
 {
 
 template<typename T>
 inline TCheckerboardTexture<T>::TCheckerboardTexture(
-    const real                          oddTextureNumber, 
+    const real                          oddTextureNumber,
     const real                          evenTextureNumber,
-    const std::shared_ptr<TTexture<T>>& oddTexture, 
+    const std::shared_ptr<TTexture<T>>& oddTexture,
     const std::shared_ptr<TTexture<T>>& evenTexture) :
-    
-    _oddTexture(oddTexture), 
-    _evenTexture(evenTexture) 
+
+    _oddTexture(oddTexture),
+    _evenTexture(evenTexture)
 {
     CS_ASSERT(oddTexture);
     CS_ASSERT(evenTexture);
@@ -34,12 +34,12 @@ inline void TCheckerboardTexture<T>::evaluate(const Vector3R& uvw, T* const out_
 
     const int32 uCast = static_cast<int32>(std::floor(uvw.x() / _oddTextureSize));
     const int32 vCast = static_cast<int32>(std::floor(uvw.y() / _evenTextureSize));
-    
-    if ((uCast + vCast) % 2 == 0) 
+
+    if ((uCast + vCast) % 2 == 0)
     {
         _evenTexture->evaluate(uvw, out_value);
     }
-    else 
+    else
     {
         _oddTexture->evaluate(uvw, out_value);
     }

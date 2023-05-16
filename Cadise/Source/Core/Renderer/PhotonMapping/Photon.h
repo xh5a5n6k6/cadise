@@ -3,10 +3,10 @@
 #include "Core/Spectrum/Spectrum.h"
 #include "Math/TVector3.h"
 
-namespace cadise 
+namespace cadise
 {
 
-class Photon 
+class Photon
 {
 public:
     Photon();

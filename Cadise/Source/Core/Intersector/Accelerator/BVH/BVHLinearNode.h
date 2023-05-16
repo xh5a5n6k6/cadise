@@ -2,25 +2,25 @@
 
 #include "Math/TAABB3.h"
 
-namespace cadise 
+namespace cadise
 {
 
-class BVHLinearNode 
+class BVHLinearNode
 {
 public:
     BVHLinearNode();
     ~BVHLinearNode();
 
     void initializeInternalNode(
-        const AABB3R&     bound, 
-        const std::size_t secondChildIndex, 
+        const AABB3R&     bound,
+        const std::size_t secondChildIndex,
         const std::size_t splitAxis);
 
     void initializeLeafNode(
-        const AABB3R&     bound, 
-        const std::size_t intersectorIndex, 
+        const AABB3R&     bound,
+        const std::size_t intersectorIndex,
         const std::size_t intersectorCounts);
-    
+
     // for leaf node
     std::size_t intersectorIndex() const;
     std::size_t intersectorCounts() const;
@@ -33,7 +33,7 @@ public:
     bool isLeaf() const;
 
 private:
-    union 
+    union
     {
         // for leaf node
         std::size_t _intersectorIndex;
@@ -41,7 +41,7 @@ private:
         std::size_t _secondChildIndex;
     };
 
-    union 
+    union
     {
         // for leaf node
         std::size_t _intersectorCounts;

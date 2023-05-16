@@ -5,7 +5,7 @@
 namespace cadise
 {
 
-class RussianRoulette 
+class RussianRoulette
 {
 public:
     static bool isSurvivedOnNextRound(
