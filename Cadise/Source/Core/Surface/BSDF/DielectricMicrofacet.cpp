@@ -3,7 +3,7 @@
 #include "Core/Gear/Sample/BSDFSample.h"
 #include "Core/Surface/Fresnel/DielectricFresnel.h"
 #include "Core/Surface/Microfacet/Microfacet.h"
-#include "Core/Surface/Microfacet/MicrofacetHelper.h"
+#include "Core/Surface/Microfacet/MicrofacetUtility.h"
 #include "Core/Surface/TransportInfo.h"
 #include "Core/SurfaceIntersection.h"
 #include "Foundation/Assertion.h"
@@ -60,14 +60,14 @@ Spectrum DielectricMicrofacet::evaluate(
     Vector3R H;
     if (isReflection)
     {
-        if (!MicrofacetHelper::canMakeReflectionH(V, L, Ns, &H))
+        if (!MicrofacetUtility::canMakeReflectionH(V, L, Ns, &H))
         {
             return Spectrum(0.0_r);
         }
     }
     else
     {
-        if (!MicrofacetHelper::canMakeRefractionH(
+        if (!MicrofacetUtility::canMakeRefractionH(
             V, L, Ns, _fresnel->iorOuter(), _fresnel->iorInner(), &H))
         {
             return Spectrum(0.0_r);
@@ -285,14 +285,14 @@ real DielectricMicrofacet::evaluatePdfW(
     Vector3R H;
     if (isReflection)
     {
-        if (!MicrofacetHelper::canMakeReflectionH(V, L, Ns, &H))
+        if (!MicrofacetUtility::canMakeReflectionH(V, L, Ns, &H))
         {
             return 0.0_r;
         }
     }
     else
     {
-        if (!MicrofacetHelper::canMakeRefractionH(
+        if (!MicrofacetUtility::canMakeRefractionH(
             V, L, Ns, _fresnel->iorOuter(), _fresnel->iorInner(), &H))
         {
             return 0.0_r;

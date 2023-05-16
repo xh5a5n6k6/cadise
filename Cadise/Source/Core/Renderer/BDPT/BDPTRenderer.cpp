@@ -1,6 +1,7 @@
 #include "Core/Renderer/BDPT/BDPTRenderer.h"
 
 #include "Core/Film/Film.h"
+#include "Core/Film/FilmTile.h"
 #include "Core/Gear/ConnectEvent.h"
 #include "Core/Renderer/RenderWork/BDPTTileWork.h"
 #include "Core/Sampler/Sampler.h"

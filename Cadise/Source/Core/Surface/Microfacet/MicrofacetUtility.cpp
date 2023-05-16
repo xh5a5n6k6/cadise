@@ -1,4 +1,4 @@
-#include "Core/Surface/Microfacet/MicrofacetHelper.h"
+#include "Core/Surface/Microfacet/MicrofacetUtility.h"
 
 #include "Foundation/Assertion.h"
 #include "Math/Math.h"
@@ -9,7 +9,7 @@
 namespace cadise
 {
 
-bool MicrofacetHelper::canMakeReflectionH(
+bool MicrofacetUtility::canMakeReflectionH(
     const Vector3R& V,
     const Vector3R& L,
     const Vector3R& N,
@@ -44,7 +44,7 @@ bool MicrofacetHelper::canMakeReflectionH(
     return false;
 }
 
-bool MicrofacetHelper::canMakeRefractionH(
+bool MicrofacetUtility::canMakeRefractionH(
     const Vector3R& V,
     const Vector3R& L,
     const Vector3R& N,

@@ -5,7 +5,7 @@
 namespace cadise
 {
 
-class MicrofacetHelper
+class MicrofacetUtility
 {
 public:
     static bool canMakeReflectionH(

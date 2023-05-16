@@ -47,13 +47,13 @@ protected:
 
         Equation (7)
     */
-    bool _isShadowingMaskingValid(
+    static bool _isShadowingMaskingValid(
         const Vector3R& V,
         const Vector3R& L,
         const Vector3R& N,
-        const Vector3R& H) const;
+        const Vector3R& H);
 
-    real _roughnessToAlpha(const real roughness) const;
+    static real _roughnessToAlpha(const real roughness);
 };
 
 } // namespace cadise

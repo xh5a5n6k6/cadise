@@ -3,7 +3,7 @@
 #include "Core/Gear/Sample/BSDFSample.h"
 #include "Core/Surface/Fresnel/ConductorFresnel.h"
 #include "Core/Surface/Microfacet/Microfacet.h"
-#include "Core/Surface/Microfacet/MicrofacetHelper.h"
+#include "Core/Surface/Microfacet/MicrofacetUtility.h"
 #include "Core/SurfaceIntersection.h"
 #include "Foundation/Assertion.h"
 #include "Math/Random.h"
@@ -41,7 +41,7 @@ Spectrum ConductorMicrofacet::evaluate(
     }
 
     Vector3R H;
-    if (!MicrofacetHelper::canMakeReflectionH(V, L, Ns, &H))
+    if (!MicrofacetUtility::canMakeReflectionH(V, L, Ns, &H))
     {
         return Spectrum(0.0_r);
     }
@@ -120,7 +120,7 @@ real ConductorMicrofacet::evaluatePdfW(
     }
 
     Vector3R H;
-    if (!MicrofacetHelper::canMakeReflectionH(V, L, Ns, &H))
+    if (!MicrofacetUtility::canMakeReflectionH(V, L, Ns, &H))
     {
         return 0.0_r;
     }
