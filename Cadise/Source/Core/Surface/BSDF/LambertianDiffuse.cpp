@@ -55,9 +55,8 @@ void LambertianDiffuse::evaluateSample(
     const Vector3R& V  = si.wi();
 
     const std::array<real, 2> sample = { Random::nextReal(), Random::nextReal() };
-    Vector3R L;
     real pdfW;
-    Hemisphere::cosineWeightedSampling(sample, &L, &pdfW);
+    Vector3R L = Hemisphere::cosineWeightedSampling(sample, &pdfW);
 
     // transform L to world coordinate
     L = si.surfaceDetail().shadingLcs().localToWorld(L);

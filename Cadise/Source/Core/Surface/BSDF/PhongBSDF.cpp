@@ -52,9 +52,8 @@ void PhongBSDF::evaluateSample(
     const Vector3R& V  = si.wi();
 
     const std::array<real, 2> sample = { Random::nextReal(), Random::nextReal() };
-    Vector3R L;
     real pdfW;
-    Hemisphere::cosineExpWeightedSampling(sample, _exponent, &L, &pdfW);
+    Vector3R L = Hemisphere::cosineExpWeightedSampling(sample, _exponent, &pdfW);
 
     // transform L to world coordinate
     L = si.surfaceDetail().shadingLcs().localToWorld(L);

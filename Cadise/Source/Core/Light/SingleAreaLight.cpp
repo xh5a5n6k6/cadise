@@ -134,9 +134,8 @@ void SingleAreaLight::evaluateEmitSample(EmitLightSample* const out_sample) cons
     lcs.initializeViaUnitY(Ns);
 
     const std::array<real, 2> sample = { Random::nextReal(), Random::nextReal() };
-    Vector3R emitDirection;
     real pdfW;
-    Hemisphere::cosineWeightedSampling(sample, &emitDirection, &pdfW);
+    Vector3R emitDirection = Hemisphere::cosineWeightedSampling(sample, &pdfW);
 
     // transform emitDirection to world coordinate
     emitDirection = lcs.localToWorld(emitDirection);

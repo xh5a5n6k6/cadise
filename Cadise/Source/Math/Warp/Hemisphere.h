@@ -10,20 +10,25 @@ namespace cadise
 class Hemisphere
 {
 public:
-    static void uniformSampling(
+    static Vector3R uniformSampling(const std::array<real, 2>& sample);
+
+    static Vector3R uniformSampling(
         const std::array<real, 2>& sample,
-        Vector3R* const            out_direction,
         real* const                out_pdfW);
 
-    static void cosineWeightedSampling(
+    static Vector3R cosineWeightedSampling(const std::array<real, 2>& sample);
+
+    static Vector3R cosineWeightedSampling(
         const std::array<real, 2>& sample,
-        Vector3R* const            out_direction,
         real* const                out_pdfW);
 
-    static void cosineExpWeightedSampling(
+    static Vector3R cosineExpWeightedSampling(
+        const std::array<real, 2>& sample,
+        const real                 exponent);
+
+    static Vector3R cosineExpWeightedSampling(
         const std::array<real, 2>& sample,
         const real                 exponent,
-        Vector3R* const            out_direction,
         real* const                out_pdfW);
 };
 

@@ -48,9 +48,7 @@ void AOEstimator::estimate(
     for (std::size_t i = 0; i < _numSampleRays; ++i)
     {
         const std::array<real, 2> sample = { Random::nextReal(), Random::nextReal() };
-        Vector3R L;
-        real pdfW;
-        Hemisphere::cosineWeightedSampling(sample, &L, &pdfW);
+        Vector3R L = Hemisphere::cosineWeightedSampling(sample);
 
         // transform L to world coordinate
         L = si.surfaceDetail().geometryLcs().localToWorld(L);
