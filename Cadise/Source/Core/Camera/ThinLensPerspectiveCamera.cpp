@@ -81,9 +81,8 @@ void ThinLensPerspectiveCamera::spawnPrimaryRay(
     CS_ASSERT(!focusPointWS.isZero());
 
     // Check lens radius
-    Vector2R lensPoint;
     const std::array<real, 2> sample = { Random::nextReal(), Random::nextReal() };
-    Disk::concentricSampling(sample, &lensPoint);
+    Vector2R lensPoint = Disk::concentricSampling(sample);
 
     lensPoint.mulLocal(_lensRadiusM);
 

@@ -11,13 +11,9 @@ namespace cadise
 class Disk
 {
 public:
-    static void uniformSampling(
-        const std::array<real, 2>& sample,
-        Vector2R* const            out_surfacePoint);
+    static Vector2R uniformSampling(const std::array<real, 2>& sample);
 
-    static void concentricSampling(
-        const std::array<real, 2>& sample,
-        Vector2R* const            out_surfacePoint);
+    static Vector2R concentricSampling(const std::array<real, 2>& sample);
 };
 
 } // namespace cadise
