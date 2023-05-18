@@ -72,4 +72,7 @@ using LCS3D = TLocalCoordinateSystem3<float64>;
 template<typename T, std::size_t N>
 class TArithmeticArray;
 
+template<typename T>
+class TTransform;
+
 } // namespace cadise
