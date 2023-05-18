@@ -63,25 +63,6 @@ inline TMatrix4<T> TMatrix4<T>::makeTranslate(const T tx, const T ty, const T tz
             T(0), T(0), T(0), T(1));
 }
 
-// Return cameraToWorld matrix
-template<typename T>
-inline TMatrix4<T> TMatrix4<T>::makeLookAt(
-    const TVector3<T>& position,
-    const TVector3<T>& direction,
-    const TVector3<T>& up)
-{
-    const TVector3<T> newZ = direction.negate().normalize();
-    const TVector3<T> newX = up.cross(newZ).normalize();
-    const TVector3<T> newY = newZ.cross(newX);
-
-    return
-        TMatrix4<T>(
-            newX.x(), newY.x(), newZ.x(), position.x(),
-            newX.y(), newY.y(), newZ.y(), position.y(),
-            newX.z(), newY.z(), newZ.z(), position.z(),
-            T(0),     T(0),     T(0),     T(1));
-}
-
 template<typename T>
 inline TMatrix4<T>::TMatrix4()
 {

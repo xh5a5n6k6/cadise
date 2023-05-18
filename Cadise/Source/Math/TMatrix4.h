@@ -16,10 +16,6 @@ public:
     static TMatrix4 makeScale(const T sx, const T sy, const T sz);
     static TMatrix4 makeTranslate(const TVector3<T>& translateVector);
     static TMatrix4 makeTranslate(const T tx, const T ty, const T tz);
-    static TMatrix4 makeLookAt(
-        const TVector3<T>& position,
-        const TVector3<T>& direction,
-        const TVector3<T>& up);
 
 public:
     TMatrix4();
