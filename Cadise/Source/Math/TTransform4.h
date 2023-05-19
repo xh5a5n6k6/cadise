@@ -7,11 +7,12 @@ namespace cadise
 {
 
 template<typename T>
-class TTransform
+class TTransform4
 {
 public:
-    explicit TTransform(const TMatrix4<T>& matrix);
-    TTransform(const TMatrix4<T>& matrix, const TMatrix4<T>& inverseMatrix);
+    TTransform4();
+    explicit TTransform4(const TMatrix4<T>& matrix);
+    TTransform4(const TMatrix4<T>& matrix, const TMatrix4<T>& inverseMatrix);
 
     void transformPoint(
         const TVector3<T>& point,
@@ -31,4 +32,4 @@ private:
 
 } // namespace cadise
 
-#include "Math/TTransform.ipp"
+#include "Math/TTransform4.ipp"

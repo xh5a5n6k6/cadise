@@ -73,6 +73,11 @@ template<typename T, std::size_t N>
 class TArithmeticArray;
 
 template<typename T>
-class TTransform;
+class TTransform4;
+
+using Transform4I = TTransform4<int32>;
+using Transform4R = TTransform4<real>;
+using Transform4S = TTransform4<std::size_t>;
+using Transform4D = TTransform4<float64>;
 
 } // namespace cadise

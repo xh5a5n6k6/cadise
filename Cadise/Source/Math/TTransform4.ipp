@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Math/TTransform.h"
+#include "Math/TTransform4.h"
 
 #include "Foundation/Assertion.h"
 #include "Math/TVector3.h"
@@ -9,18 +9,23 @@ namespace cadise
 {
 
 template<typename T>
-inline TTransform<T>::TTransform(const TMatrix4<T>& matrix) :
-    TTransform(matrix, matrix.inverse())
+inline TTransform4<T>::TTransform4() :
+    TTransform4(TMatrix4<T>::makeIdentity(), TMatrix4<T>::makeIdentity())
 {}
 
 template<typename T>
-inline TTransform<T>::TTransform(const TMatrix4<T>& matrix, const TMatrix4<T>& inverseMatrix) :
+inline TTransform4<T>::TTransform4(const TMatrix4<T>& matrix) :
+    TTransform4(matrix, matrix.inverse())
+{}
+
+template<typename T>
+inline TTransform4<T>::TTransform4(const TMatrix4<T>& matrix, const TMatrix4<T>& inverseMatrix) :
     _matrix(matrix),
     _inverseMatrix(inverseMatrix)
 {}
 
 template<typename T>
-inline void TTransform<T>::transformPoint(
+inline void TTransform4<T>::transformPoint(
     const TVector3<T>& point,
     TVector3<T>* const out_point) const
 {
@@ -30,7 +35,7 @@ inline void TTransform<T>::transformPoint(
 }
 
 template<typename T>
-inline void TTransform<T>::transformVector(
+inline void TTransform4<T>::transformVector(
     const TVector3<T>& vector,
     TVector3<T>* const out_vector) const
 {
@@ -40,13 +45,13 @@ inline void TTransform<T>::transformVector(
 }
 
 template<typename T>
-inline const TMatrix4<T>& TTransform<T>::getMatrix() const
+inline const TMatrix4<T>& TTransform4<T>::getMatrix() const
 {
     return _matrix;
 }
 
 template<typename T>
-inline const TMatrix4<T>& TTransform<T>::getInverseMatrix() const
+inline const TMatrix4<T>& TTransform4<T>::getInverseMatrix() const
 {
     return _inverseMatrix;
 }
