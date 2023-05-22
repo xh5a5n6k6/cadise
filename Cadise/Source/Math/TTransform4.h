@@ -13,6 +13,9 @@ public:
     TTransform4();
     explicit TTransform4(const TMatrix4<T>& matrix);
     TTransform4(const TMatrix4<T>& matrix, const TMatrix4<T>& inverseMatrix);
+    TTransform4(const TTransform4& other);
+
+    TTransform4 inverse() const;
 
     void transformPoint(
         const TVector3<T>& point,
@@ -21,9 +24,6 @@ public:
     void transformVector(
         const TVector3<T>& vector,
         TVector3<T>* const out_vector) const;
-
-    const TMatrix4<T>& getMatrix() const;
-    const TMatrix4<T>& getInverseMatrix() const;
 
 private:
     TMatrix4<T> _matrix;

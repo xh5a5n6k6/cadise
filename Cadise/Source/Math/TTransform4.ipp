@@ -25,6 +25,15 @@ inline TTransform4<T>::TTransform4(const TMatrix4<T>& matrix, const TMatrix4<T>&
 {}
 
 template<typename T>
+inline TTransform4<T>::TTransform4(const TTransform4<T>& other) = default;
+
+template<typename T>
+inline TTransform4<T> TTransform4<T>::inverse() const
+{
+    return TTransform4<T>(_inverseMatrix, _matrix);
+}
+
+template<typename T>
 inline void TTransform4<T>::transformPoint(
     const TVector3<T>& point,
     TVector3<T>* const out_point) const
@@ -42,18 +51,6 @@ inline void TTransform4<T>::transformVector(
     CS_ASSERT(out_vector);
 
     _matrix.transformVector(vector, out_vector);
-}
-
-template<typename T>
-inline const TMatrix4<T>& TTransform4<T>::getMatrix() const
-{
-    return _matrix;
-}
-
-template<typename T>
-inline const TMatrix4<T>& TTransform4<T>::getInverseMatrix() const
-{
-    return _inverseMatrix;
 }
 
 } // namespace cadise

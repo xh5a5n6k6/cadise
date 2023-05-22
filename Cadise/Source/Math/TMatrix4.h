@@ -52,6 +52,7 @@ private:
     // i.e. r1 -= r2*s
     void _substractRow(const std::size_t rowA, const std::size_t rowB, const T scalar);
 
+    // Store data in a row-based favor, i.e., first array refers to first row in the matrix.
     std::array<std::array<T, 4>, 4> _n;
 };
 
