@@ -6,7 +6,6 @@
 #include "Core/Texture/Category/TConstantTexture.h"
 #include "Foundation/Assertion.h"
 #include "Math/Constant.h"
-#include "Math/Math.h"
 #include "Math/Random.h"
 #include "Math/Warp/Hemisphere.h"
 

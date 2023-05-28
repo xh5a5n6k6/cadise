@@ -3,7 +3,7 @@
 #include "Core/Image/TImage.h"
 #include "FileIO/Path.h"
 #include "Foundation/Assertion.h"
-#include "Math/Math.h"
+#include "Math/MathUtility.h"
 #include "Math/TVector3.h"
 #include "ThirdParty/TP_stb-load.h"
 #include "FileIO/ImageUtility.h"
@@ -81,10 +81,10 @@ void PictureLoader::_loadLdrImage(const Path& path, LDRImage* const out_ldrImage
                 // TODO: transform input sRGB to linear-sRGB
                 //       ldr -> hdr -> inverseGamma -> ldr
                 real value       = static_cast<real>(imageData[indexOffset]) / 255.0_r;
-                real linearValue = math::inverse_gamma_correction(value);
+                real linearValue = MathUtility::inverseGammaCorrection(value);
                 linearValue = linearValue * 255.0_r + 0.5_r;
 
-                const uint8 ldrLinearValue = static_cast<uint8>(math::clamp(linearValue, 0.0_r, 255.0_r));
+                const uint8 ldrLinearValue = static_cast<uint8>(MathUtility::clamp(linearValue, 0.0_r, 255.0_r));
 
                 out_ldrImage->setDataValue(dataIndexOffset + 0, ldrLinearValue);
                 out_ldrImage->setDataValue(dataIndexOffset + 1, ldrLinearValue);
@@ -108,15 +108,15 @@ void PictureLoader::_loadLdrImage(const Path& path, LDRImage* const out_ldrImage
                 real b = static_cast<real>(imageData[indexOffset + 2]) / 255.0_r;
 
                 Vector3R linearRgb(
-                    math::inverse_gamma_correction(r),
-                    math::inverse_gamma_correction(g),
-                    math::inverse_gamma_correction(b));
+                    MathUtility::inverseGammaCorrection(r),
+                    MathUtility::inverseGammaCorrection(g),
+                    MathUtility::inverseGammaCorrection(b));
 
                 linearRgb.mulLocal(255.0_r).addLocal(0.5_r);
 
-                const uint8 linearR = static_cast<uint8>(math::clamp(linearRgb.x(), 0.0_r, 255.0_r));
-                const uint8 linearG = static_cast<uint8>(math::clamp(linearRgb.y(), 0.0_r, 255.0_r));
-                const uint8 linearB = static_cast<uint8>(math::clamp(linearRgb.z(), 0.0_r, 255.0_r));
+                const uint8 linearR = static_cast<uint8>(MathUtility::clamp(linearRgb.x(), 0.0_r, 255.0_r));
+                const uint8 linearG = static_cast<uint8>(MathUtility::clamp(linearRgb.y(), 0.0_r, 255.0_r));
+                const uint8 linearB = static_cast<uint8>(MathUtility::clamp(linearRgb.z(), 0.0_r, 255.0_r));
 
                 out_ldrImage->setDataValue(indexOffset + 0, linearR);
                 out_ldrImage->setDataValue(indexOffset + 1, linearG);

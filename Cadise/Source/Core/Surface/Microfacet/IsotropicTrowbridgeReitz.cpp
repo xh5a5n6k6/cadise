@@ -3,7 +3,7 @@
 #include "Core/Gear/TSurfaceSampler.h"
 #include "Foundation/Assertion.h"
 #include "Math/Constant.h"
-#include "Math/Math.h"
+#include "Math/MathUtility.h"
 #include "Math/TVector3.h"
 
 #include <cmath>
@@ -89,9 +89,11 @@ void IsotropicTrowbridgeReitz::sampleHalfVectorH(
     CS_ASSERT(out_H);
 
     // to avoid random sample with 1 value
-    const std::array<real, 2> safeSample = {
-        math::clamp(sample[0], 0.0_r, 0.9999_r),
-        math::clamp(sample[1], 0.0_r, 0.9999_r) };
+    const std::array<real, 2> safeSample =
+    {
+        MathUtility::clamp(sample[0], 0.0_r, 0.9999_r),
+        MathUtility::clamp(sample[1], 0.0_r, 0.9999_r)
+    };
 
     real sampleRoughness;
     TSurfaceSampler<real>().sample(si, _roughness.get(), &sampleRoughness);
@@ -100,7 +102,7 @@ void IsotropicTrowbridgeReitz::sampleHalfVectorH(
 
     const real phi       = constant::two_pi<real> * safeSample[0];
     const real tan2Theta = alpha * alpha * (safeSample[1] / (1.0_r - safeSample[1]));
-    const real cosTheta  = math::clamp(1.0_r / std::sqrt(1.0_r + tan2Theta), -1.0_r, 1.0_r);
+    const real cosTheta  = MathUtility::clamp(1.0_r / std::sqrt(1.0_r + tan2Theta), -1.0_r, 1.0_r);
     const real sinTheta  = std::sqrt(1.0_r - cosTheta * cosTheta);
 
     const Vector3R localH(

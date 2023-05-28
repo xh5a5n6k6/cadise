@@ -3,7 +3,7 @@
 #include "Core/Gear/TSurfaceSampler.h"
 #include "Foundation/Assertion.h"
 #include "Math/Constant.h"
-#include "Math/Math.h"
+#include "Math/MathUtility.h"
 #include "Math/TVector3.h"
 
 #include <cmath>
@@ -28,7 +28,7 @@ real AnisotropicTrowbridgeReitz::distributionD(
     const Vector3R&            N,
     const Vector3R&            H) const
 {
-    const real cosTheta = math::clamp(N.dot(H), -1.0_r, 1.0_r);
+    const real cosTheta = MathUtility::clamp(N.dot(H), -1.0_r, 1.0_r);
     if (cosTheta <= 0.0_r)
     {
         return 0.0_r;
@@ -91,9 +91,11 @@ void AnisotropicTrowbridgeReitz::sampleHalfVectorH(
     CS_ASSERT(out_H);
 
     // to avoid random sample with 1 value
-    const std::array<real, 2> safeSample = {
-        math::clamp(sample[0], 0.0_r, 0.9999_r),
-        math::clamp(sample[1], 0.0_r, 0.9999_r) };
+    const std::array<real, 2> safeSample =
+    {
+        MathUtility::clamp(sample[0], 0.0_r, 0.9999_r),
+        MathUtility::clamp(sample[1], 0.0_r, 0.9999_r)
+    };
 
     real sampleRoughnessU;
     TSurfaceSampler<real>().sample(si, _roughnessU.get(), &sampleRoughnessU);
@@ -126,7 +128,7 @@ void AnisotropicTrowbridgeReitz::sampleHalfVectorH(
     const real sinPhi         = std::sin(phi);
     const real inverseAlphaO2 = 1.0_r / (cosPhi * cosPhi / alphaX2 + sinPhi * sinPhi / alphaY2);
     const real tan2Theta      = inverseAlphaO2 * safeSample[1] / (1.0_r - safeSample[1]);
-    const real cosTheta       = math::clamp(1.0_r / std::sqrt(1.0_r + tan2Theta), -1.0_r, 1.0_r);
+    const real cosTheta       = MathUtility::clamp(1.0_r / std::sqrt(1.0_r + tan2Theta), -1.0_r, 1.0_r);
     const real sinTheta       = std::sqrt(1.0_r - cosTheta * cosTheta);
 
     const Vector3R localH(

@@ -4,7 +4,7 @@
 #include "Core/Scene.h"
 #include "Core/SurfaceIntersection.h"
 #include "Foundation/Assertion.h"
-#include "Math/Math.h"
+#include "Math/MathUtility.h"
 
 namespace cadise
 {
@@ -32,9 +32,9 @@ void UVWEstimator::estimate(
         const Vector3R& uvw = si.surfaceDetail().uvw();
 
         out_radiance->set({
-            math::fractional(uvw.x()),
-            math::fractional(uvw.y()),
-            math::fractional(uvw.z()) });
+            MathUtility::fractional(uvw.x()),
+            MathUtility::fractional(uvw.y()),
+            MathUtility::fractional(uvw.z()) });
     }
 }
 

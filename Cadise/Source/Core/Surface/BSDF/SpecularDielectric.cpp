@@ -6,7 +6,7 @@
 #include "Core/Surface/TransportInfo.h"
 #include "Core/SurfaceIntersection.h"
 #include "Foundation/Assertion.h"
-#include "Math/Math.h"
+#include "Math/MathUtility.h"
 #include "Math/Random.h"
 
 #include <utility>
@@ -77,7 +77,7 @@ void SpecularDielectric::evaluateSample(
 
     if (canReflection)
     {
-        const real     NSign = static_cast<real>(math::sign(VdotN));
+        const real     NSign = static_cast<real>(MathUtility::sign(VdotN));
         const Vector3R L     = V.reflect(Ns.mul(NSign));
         const real     LdotN = L.dot(Ns);
         if (VdotN * LdotN <= 0.0_r)

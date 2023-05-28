@@ -1,7 +1,7 @@
 #include "Core/Spectrum/RGBSpectrum.h"
 
 #include "Foundation/Assertion.h"
-#include "Math/Math.h"
+#include "Math/MathUtility.h"
 #include "Math/TVector3.h"
 
 namespace cadise
@@ -31,9 +31,9 @@ RGBSpectrum::RGBSpectrum(const RGBSpectrum& other) = default;
 void RGBSpectrum::setSrgb(const Vector3R& srgb)
 {
     const Vector3R linearSrgb(
-        math::inverse_gamma_correction(srgb.x()),
-        math::inverse_gamma_correction(srgb.y()),
-        math::inverse_gamma_correction(srgb.z()));
+        MathUtility::inverseGammaCorrection(srgb.x()),
+        MathUtility::inverseGammaCorrection(srgb.y()),
+        MathUtility::inverseGammaCorrection(srgb.z()));
 
     this->setLinearSrgb(linearSrgb);
 }

@@ -4,7 +4,7 @@
 #include "Core/Scene.h"
 #include "Core/Surface/ETransportMode.h"
 #include "Foundation/Assertion.h"
-#include "Math/Math.h"
+#include "Math/MathUtility.h"
 
 namespace cadise
 {
@@ -140,8 +140,8 @@ real BDPTMIS::weight(
     real cameraPathMisWeight = 0.0_r;
     for (std::size_t i = t; i > 1; --i)
     {
-        ri *= math::map_to_non_zero<real>(modifiedCameraPath[i - 1].pdfAReverse()) /
-            math::map_to_non_zero<real>(modifiedCameraPath[i - 1].pdfAForward());
+        ri *= MathUtility::mapZeroToOne<real>(modifiedCameraPath[i - 1].pdfAReverse()) /
+            MathUtility::mapZeroToOne<real>(modifiedCameraPath[i - 1].pdfAForward());
 
         if (modifiedCameraPath[i - 1].isConnectible() &&
             modifiedCameraPath[i - 2].isConnectible())
@@ -154,8 +154,8 @@ real BDPTMIS::weight(
     real lightPathMisWeight = 0.0_r;
     for (std::size_t i = s; i >= 1; --i)
     {
-        ri *= math::map_to_non_zero<real>(modifiedLightPath[i - 1].pdfAReverse()) /
-            math::map_to_non_zero<real>(modifiedLightPath[i - 1].pdfAForward());
+        ri *= MathUtility::mapZeroToOne<real>(modifiedLightPath[i - 1].pdfAReverse()) /
+            MathUtility::mapZeroToOne<real>(modifiedLightPath[i - 1].pdfAForward());
 
         const bool canConnect = i > 1 ?
             modifiedLightPath[i - 1].isConnectible() && modifiedLightPath[i - 2].isConnectible() :

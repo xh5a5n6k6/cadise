@@ -74,7 +74,7 @@ void ConductorMicrofacet::evaluateSample(
     Vector3R H;
     _microfacet->sampleHalfVectorH(si, sample, &H);
 
-    const real     NSign = static_cast<real>(math::sign(VdotN));
+    const real     NSign = static_cast<real>(MathUtility::sign(VdotN));
     const Vector3R L     = V.reflect(H.mul(NSign));
     const real     LdotN = L.dot(Ns);
     if (VdotN * LdotN <= 0.0_r)

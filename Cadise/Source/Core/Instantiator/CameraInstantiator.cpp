@@ -31,7 +31,7 @@ static std::shared_ptr<Camera> createPinholePerspective(
 
     const float64  aspectRatio   = floatResolution.x() / floatResolution.y();
     const Vector2D sensorSizeM   = Vector2D(sensorWidthMM, sensorWidthMM / aspectRatio) * 0.001;
-    const float64  sensorOffsetM = (sensorSizeM.x() * 0.5) / std::tan(math::to_radians(fovDegrees * 0.5));
+    const float64  sensorOffsetM = (sensorSizeM.x() * 0.5) / std::tan(MathUtility::toRadians(fovDegrees * 0.5));
 
     const Matrix4D filmToCameraMatrix = Matrix4D::makeIdentity()
         .mulLocal(Matrix4D::makeTranslate(-(sensorSizeM.x() * 0.5), sensorSizeM.y() * 0.5, -sensorOffsetM))
@@ -69,7 +69,7 @@ static std::shared_ptr<Camera> createThinLensPerspective(
 
     const float64  aspectRatio   = floatResolution.x() / floatResolution.y();
     const Vector2D sensorSizeM   = Vector2D(sensorWidthMM, sensorWidthMM / aspectRatio) * 0.001;
-    const float64  sensorOffsetM = (sensorSizeM.x() * 0.5) / std::tan(math::to_radians(fovDegrees * 0.5));
+    const float64  sensorOffsetM = (sensorSizeM.x() * 0.5) / std::tan(MathUtility::toRadians(fovDegrees * 0.5));
 
     const Matrix4D filmToCameraMatrix = Matrix4D::makeIdentity()
         .mulLocal(Matrix4D::makeTranslate(-(sensorSizeM.x() * 0.5), sensorSizeM.y() * 0.5, -sensorOffsetM))

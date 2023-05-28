@@ -5,15 +5,11 @@
 namespace cadise
 {
 
-/*
-    Some string utilities
-
-    - string trimming
-    Reference: https://stackoverflow.com/questions/216823/how-to-trim-a-stdstring
-*/
-class StringUtility
+/*! Miscellaneous string utilities. */
+class StringUtility final
 {
 public:
+    // string trimming reference: https://stackoverflow.com/questions/216823/how-to-trim-a-stdstring
     static std::string trimHead(
         const std::string& source,
         const char         trimChar);

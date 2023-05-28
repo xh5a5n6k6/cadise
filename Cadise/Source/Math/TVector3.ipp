@@ -4,7 +4,7 @@
 
 #include "Foundation/Assertion.h"
 #include "Math/TArithmeticArray.h"
-#include "Math/Math.h"
+#include "Math/MathUtility.h"
 
 #include <type_traits>
 #include <utility>
@@ -464,17 +464,17 @@ template<typename T>
 inline TVector3<T> TVector3<T>::clamp(const T min, const T max) const
 {
     return TVector3<T>(
-        math::clamp(_x, min, max),
-        math::clamp(_y, min, max),
-        math::clamp(_z, min, max));
+        MathUtility::clamp(_x, min, max),
+        MathUtility::clamp(_y, min, max),
+        MathUtility::clamp(_z, min, max));
 }
 
 template<typename T>
 inline TVector3<T>& TVector3<T>::clampLocal(const T min, const T max)
 {
-    _x = math::clamp(_x, min, max);
-    _y = math::clamp(_y, min, max);
-    _z = math::clamp(_z, min, max);
+    _x = MathUtility::clamp(_x, min, max);
+    _y = MathUtility::clamp(_y, min, max);
+    _z = MathUtility::clamp(_z, min, max);
 
     return *this;
 

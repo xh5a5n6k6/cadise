@@ -1,7 +1,7 @@
 #include "Core/Texture/Wrapper/RepeatUVWWrapper.h"
 
 #include "Foundation/Assertion.h"
-#include "Math/Math.h"
+#include "Math/MathUtility.h"
 #include "Math/TVector3.h"
 
 namespace cadise
@@ -14,9 +14,9 @@ void RepeatUVWWrapper::wrap(
     CS_ASSERT(out_wrapUvw);
 
     out_wrapUvw->set(
-        math::fractional(uvw.x()),
-        math::fractional(uvw.y()),
-        math::fractional(uvw.z()));
+        MathUtility::fractional(uvw.x()),
+        MathUtility::fractional(uvw.y()),
+        MathUtility::fractional(uvw.z()));
 }
 
 } // namespace cadise

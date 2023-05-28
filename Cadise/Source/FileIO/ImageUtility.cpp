@@ -2,7 +2,7 @@
 
 #include "Core/Image/TImage.h"
 #include "Foundation/Assertion.h"
-#include "Math/Math.h"
+#include "Math/MathUtility.h"
 
 namespace cadise
 {
@@ -35,7 +35,7 @@ void ImageUtility::hdrToLdr(
     for (std::size_t i = 0; i < hdrImage.dataSize(); ++i)
     {
         const uint8 value = static_cast<uint8>(
-            math::clamp(data[i] * 255.0_r + 0.5_r, 0.0_r, 255.0_r));
+            MathUtility::clamp(data[i] * 255.0_r + 0.5_r, 0.0_r, 255.0_r));
         out_ldrImage->setDataValue(i, value);
     }
 }

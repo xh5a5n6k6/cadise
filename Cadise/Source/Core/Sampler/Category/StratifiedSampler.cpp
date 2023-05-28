@@ -2,7 +2,7 @@
 
 #include "Core/Sampler/SampleRecord1D.h"
 #include "Core/Sampler/SampleRecord2D.h"
-#include "Math/Math.h"
+#include "Math/MathUtility.h"
 #include "Math/Random.h"
 
 #include <cmath>
@@ -13,7 +13,7 @@ namespace cadise
 StratifiedSampler::StratifiedSampler(const std::size_t sampleNumber) :
     Sampler(sampleNumber)
 {
-    const std::size_t nearestSquareNumber = math::nearest_lower_square_number(sampleNumber);
+    const std::size_t nearestSquareNumber = MathUtility::closestLowerSquareNumber(sampleNumber);
     _baseNumber = static_cast<std::size_t>(std::sqrt(nearestSquareNumber));
 }
 

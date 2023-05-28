@@ -1,4 +1,4 @@
-#include "Math/Math.h"
+#include "Math/MathUtility.h"
 
 #include "Foundation/Assertion.h"
 #include "Math/TVector2.h"
@@ -6,31 +6,39 @@
 
 #include <cmath>
 
-namespace cadise::math
+namespace cadise
 {
 
-std::size_t nearest_lower_square_number(const std::size_t number)
+real MathUtility::toRadians(const real degrees)
 {
-    const std::size_t lowerSqrtNumber
-        = static_cast<std::size_t>(std::floor(std::sqrt(static_cast<real>(number))));
+    return degrees * constant::radians_per_degree<real>;
+}
+
+real MathUtility::toDegrees(const real radians)
+{
+    return radians * constant::degrees_per_radian<real>;
+}
+
+std::size_t MathUtility::closestLowerSquareNumber(const std::size_t number)
+{
+    const auto lowerSqrtNumber = static_cast<std::size_t>(std::floor(std::sqrt(static_cast<real>(number))));
 
     return lowerSqrtNumber * lowerSqrtNumber;
 }
 
-std::size_t nearest_upper_square_number(const std::size_t number)
+std::size_t MathUtility::closestUpperSquareNumber(const std::size_t number)
 {
-    const std::size_t upperSqrtNumber
-        = static_cast<std::size_t>(std::ceil(std::sqrt(static_cast<real>(number))));
+    const auto upperSqrtNumber = static_cast<std::size_t>(std::ceil(std::sqrt(static_cast<real>(number))));
 
     return upperSqrtNumber * upperSqrtNumber;
 }
 
-real fractional(const real value)
+real MathUtility::fractional(const real value)
 {
     return value - std::floor(value);
 }
 
-void build_coordinate_system(
+void MathUtility::buildCoordinateSystem(
     const Vector3R& yAxis,
     Vector3R* const out_zAxis,
     Vector3R* const out_xAxis)
@@ -56,27 +64,21 @@ void build_coordinate_system(
     out_xAxis->set(yAxis.cross(*out_zAxis));
 }
 
-void direction_to_canonical(
-    const Vector3R& direction,
-    Vector2R* const out_canonical)
+void MathUtility::toCanonical(const Vector3R& direction, Vector2R* const out_canonical)
 {
     CS_ASSERT(out_canonical);
     CS_ASSERT(!direction.isZero());
 
     const Vector3R unitDirection = direction.normalize();
 
-    const real cosTheta = math::clamp(unitDirection.y(), -1.0_r, 1.0_r);
+    const real cosTheta = MathUtility::clamp(unitDirection.y(), -1.0_r, 1.0_r);
     const real rawPhi   = std::atan2(unitDirection.x(), unitDirection.z());
-    const real phi      = (rawPhi < 0.0_r) ? rawPhi + constant::two_pi<real> : rawPhi;
+    const real phi      = rawPhi < 0.0_r ? rawPhi + constant::two_pi<real> : rawPhi;
 
-    out_canonical->set(
-        phi * constant::rcp_two_pi<real>,
-        (cosTheta + 1.0_r) * 0.5_r);
+    out_canonical->set(phi * constant::rcp_two_pi<real>, (cosTheta + 1.0_r) * 0.5_r);
 }
 
-void canonical_to_direction(
-    const Vector2R& canonical,
-    Vector3R* const out_direction)
+void MathUtility::toDirection(const Vector2R& canonical, Vector3R* const out_direction)
 {
     CS_ASSERT(out_direction);
 
@@ -90,7 +92,7 @@ void canonical_to_direction(
         std::cos(phi) * sinTheta);
 }
 
-real forward_gamma_correction(const real value)
+real MathUtility::forwardGammaCorrection(const real value)
 {
     if (value <= 0.0031308_r)
     {
@@ -102,7 +104,7 @@ real forward_gamma_correction(const real value)
     }
 }
 
-real inverse_gamma_correction(const real value)
+real MathUtility::inverseGammaCorrection(const real value)
 {
     if (value <= 0.04045_r)
     {
@@ -114,4 +116,4 @@ real inverse_gamma_correction(const real value)
     }
 }
 
-} // namespace cadise::math
+} // namespace cadise

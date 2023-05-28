@@ -1,7 +1,7 @@
 #include "Core/Surface/Microfacet/MicrofacetUtility.h"
 
 #include "Foundation/Assertion.h"
-#include "Math/Math.h"
+#include "Math/MathUtility.h"
 #include "Math/TVector3.h"
 
 #include <utility>
@@ -25,7 +25,7 @@ bool MicrofacetUtility::canMakeReflectionH(
 
     // make sure H and N lie in the same hemisphere
     const Vector3R H = HVector.normalize();
-    switch (math::sign(N.dot(H)))
+    switch (MathUtility::sign(N.dot(H)))
     {
         case constant::SIGN_POSITIVE:
             out_H->set(H);
@@ -69,7 +69,7 @@ bool MicrofacetUtility::canMakeRefractionH(
 
     // make sure H and N lie in the same hemisphere
     const Vector3R H = HVector.normalize();
-    switch (math::sign(N.dot(H)))
+    switch (MathUtility::sign(N.dot(H)))
     {
         case constant::SIGN_POSITIVE:
             out_H->set(H);
