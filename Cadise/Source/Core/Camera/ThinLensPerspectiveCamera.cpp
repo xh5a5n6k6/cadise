@@ -5,7 +5,7 @@
 #include "Foundation/Assertion.h"
 #include "Math/Constant.h"
 #include "Math/Random.h"
-#include "Math/Transform.h"
+#include "Math/TTransform4.h"
 #include "Math/Warp/Disk.h"
 
 #include <cmath>
@@ -14,165 +14,151 @@ namespace cadise
 {
 
 ThinLensPerspectiveCamera::ThinLensPerspectiveCamera(
-    const Vector3R& position,
-    const Vector3R& direction,
-    const Vector3R& up,
-    const float64   fov,
-    const float64   sensorWidthMM,
-    const float64   focalDistanceMM,
-    const float64   lensRadiusMM) :
+    const Transform4D& cameraToWorld,
+    const Transform4D& filmToCamera,
+    const Vector2S&    resolution,
+    const Vector2D&    sensorSizeM,
+    const float64      sensorOffsetM,
+    const float64      focalDistanceM,
+    const float64      lensRadiusM) :
 
-    Camera(position),
-    _cameraToWorld(nullptr),
-    _filmToCamera(nullptr),
-    _fov(fov),
-    _sensorWidthM(sensorWidthMM * 0.001),
-    _focalDistanceM(focalDistanceMM * 0.001),
-    _lensRadiusM(lensRadiusMM * 0.001)
+    ProjectiveCamera(cameraToWorld, filmToCamera, resolution),
+    _sensorSizeM(sensorSizeM),
+    _sensorOffsetM(sensorOffsetM),
+    _focalDistanceM(focalDistanceM),
+    _lensRadiusM(lensRadiusM)
 {
-    CS_ASSERT_GT(lensRadiusMM, 0.0);
-
-    _cameraToWorld = std::make_shared<Transform>(Matrix4R::makeLookAt(position, direction, up));
-
-    this->updateTransform();
-}
-
-void ThinLensPerspectiveCamera::updateTransform()
-{
-    const auto [sensorWidth, sensorHeight] = _getSensorSizeXy();
-    const auto realResolution              = _resolution.asType<real>();
-
-    // update sensorOffset
-    _sensorOffset = (sensorWidth * 0.5_r) / std::tan(math::degree_to_radian(_fov * 0.5_r));
-
-    // matrix multiplication is right-hand-side, so we
-    // need to initialize matrix first.
-    //
-    // translate needs to be multiplied last, it means
-    // we need to multiply it first (it will be the leftmost part).
-    Matrix4R filmToCameraMatrix = Matrix4R::makeIdentity();
-    filmToCameraMatrix.mulLocal(Matrix4R::makeTranslate(-(sensorWidth * 0.5_r), sensorHeight * 0.5_r, -_sensorOffset));
-    filmToCameraMatrix.mulLocal(Matrix4R::makeScale(
-        sensorWidth / realResolution.x(), -sensorHeight / realResolution.y(), 1.0_r));
-
-    _filmToCamera = std::make_shared<Transform>(filmToCameraMatrix);
+    CS_ASSERT_GT(lensRadiusM, 0.0);
 }
 
 void ThinLensPerspectiveCamera::spawnPrimaryRay(
-    const Vector2D& filmPosition,
+    const Vector2D& positionRS,
     Ray* const      out_primaryRay) const
 {
     CS_ASSERT(out_primaryRay);
 
-    Vector3R sampleCameraPosition;
-    _filmToCamera->transformPoint(
-        Vector3D(filmPosition.x(), filmPosition.y(), 0.0).asType<real>(),
-        &sampleCameraPosition);
+    // Calculate the sample point on the focus plane
+    Vector3D positionCS;
+    _filmToCamera.transformPoint(
+        Vector3D(positionRS.x(), positionRS.y(), 0.0),
+        &positionCS);
 
-    const real focalDistanceT = _focalDistanceM / (-sampleCameraPosition.z());
+    const float64  focalDistanceT = _focalDistanceM / (-positionCS.z());
+    const Vector3D focusPointCS   = positionCS.mul(focalDistanceT);
 
-    // unnormalized direction (focal distance point)
-    const Vector3R focusPoint = sampleCameraPosition.mul(focalDistanceT);
-
-    // calculate parameter in camera space
-    Vector3R focusPointWS;
-    _cameraToWorld->transformPoint(focusPoint, &focusPointWS);
-
-    CS_ASSERT(!focusPointWS.isZero());
-
-    // Check lens radius
+    // Sample ray origin by thin lens
     const std::array<real, 2> sample = { Random::nextReal(), Random::nextReal() };
-    Vector2R lensPoint = Disk::concentricSampling(sample);
-
+    Vector2D lensPoint = Disk::concentricSampling(sample).asType<float64>();
     lensPoint.mulLocal(_lensRadiusM);
 
-    Vector3R sampledOrigin;
-    _cameraToWorld->transformPoint({ lensPoint[0], lensPoint[1], 0.0_r }, &sampledOrigin);
+    const Vector3D sampledOriginCS(lensPoint[0], lensPoint[1], 0.0);
 
-    // generate ray in world space
+    // Transform data to world space
+    Vector3D sampledOriginWS;
+    _cameraToWorld.transformPoint(sampledOriginCS, &sampledOriginWS);
+
+    Vector3D directionWS;
+    _cameraToWorld.transformVector(focusPointCS.sub(sampledOriginCS), &directionWS);
+
+    // Set ray data in world space
     out_primaryRay->reset();
-    out_primaryRay->setOrigin(sampledOrigin);
-    out_primaryRay->setDirection(focusPointWS.sub(sampledOrigin));
+    out_primaryRay->setOrigin(sampledOriginWS.asType<real>());
+    out_primaryRay->setDirection(directionWS.asType<real>());
 }
 
 void ThinLensPerspectiveCamera::evaluateCameraSample(
     CameraSample* const out_sample,
     Ray* const          out_toCameraRay) const
 {
-    CS_ASSERT_MSG(false, "Unsupported type");
-    // TODO: Fix
-    ////////////////////////////////////////////////////////////
+    CS_ASSERT(out_sample);
+    CS_ASSERT(out_toCameraRay);
 
-    //CS_ASSERT(out_sample);
-    //CS_ASSERT(out_toCameraRay);
+    // Sample ray origin by thin lens
+    const std::array<real, 2> sample = { Random::nextReal(), Random::nextReal() };
+    Vector2D lensPoint = Disk::concentricSampling(sample).asType<float64>();
+    lensPoint.mulLocal(_lensRadiusM);
 
-    //Vector3R cameraRayN;
-    //_cameraToWorld->transformVector(Vector3R(0.0_r, 0.0_r, -1.0_r), &cameraRayN);
+    const Vector3D cameraPositionCS(lensPoint[0], lensPoint[1], 0.0);
 
-    //const Vector3R targetPosition  = out_sample->targetPosition();
-    //const Vector3R cameraRayVector = targetPosition.sub(_position);
+    Vector3D cameraPositionWS;
+    _cameraToWorld.transformPoint(cameraPositionCS, &cameraPositionWS);
 
-    //CS_ASSERT(!cameraRayVector.isZero());
+    // Check if the target is in front of the camera
+    const Vector3D targetPositionWS = out_sample->targetPosition().asType<float64>();
+    const Vector3D cameraToTargetWS = targetPositionWS.sub(cameraPositionWS);
 
-    //const real     sensorArea         = _getSensorArea();
-    //const real     distance           = cameraRayVector.length();
-    //const Vector3R cameraRayDirection = cameraRayVector.div(distance);
-    //const real     cosTheta           = cameraRayDirection.dot(cameraRayN);
-    //if (cosTheta <= 0.0_r)
-    //{
-    //    return;
-    //}
+    CS_ASSERT(!cameraToTargetWS.isZero());
 
-    //Vector3R targetCameraPosition;
-    //_cameraToWorld->inverseMatrix().transformPoint(targetPosition, &targetCameraPosition);
+    Vector3D cameraForwardWS;
+    _cameraToWorld.transformVector({ 0.0, 0.0, -1.0 }, &cameraForwardWS);
 
-    //CS_ASSERT(!targetCameraPosition.isZero());
+    const float64  sensorArea                = _sensorSizeM.product();
+    const float64  cameraToTargetDistance    = cameraToTargetWS.length();
+    const Vector3D cameraToTargetDirectionWS = cameraToTargetWS.div(cameraToTargetDistance);
+    const float64  cosTheta                  = cameraToTargetDirectionWS.dot(cameraForwardWS);
+    if (cosTheta <= 0.0)
+    {
+        return;
+    }
 
-    //// transform to focus (film) plane in camera space
-    //const real     cameraToImagePointDistance  = _sensorOffset / cosTheta;
-    //const real     cameraToImagePointDistance2 = cameraToImagePointDistance * cameraToImagePointDistance;
-    //const Vector3R targetFocusPosition         = targetCameraPosition.mul(cameraToImagePointDistance / distance);
+    // Check if the target is within the view frustum
+    Vector3D targetPositionCS;
+    _cameraToWorld.inverse().transformPoint(targetPositionWS, &targetPositionCS);
 
-    //// transform from camera space to film (raster) space
-    //Vector3R filmPosition;
-    //_filmToCamera->inverseMatrix().transformPoint(targetFocusPosition, &filmPosition);
+    CS_ASSERT(!targetPositionCS.isZero());
 
-    //// check film boundary (0 ~ resolution)
-    //if (filmPosition.x() < 0.0_r ||
-    //    filmPosition.y() < 0.0_r ||
-    //    filmPosition.x() >= static_cast<real>(_resolution.x()) ||
-    //    filmPosition.y() >= static_cast<real>(_resolution.y()))
-    //{
-    //    // temporary hack for BDPG radiance estimator
-    //    // TODO: remove this situation
-    //    if (out_toCameraRay->origin().isEqualTo(targetPosition))
-    //    {
-    //        fprintf(stdout, "filmPosition error\n");
-    //        fprintf(stdout, "cos: %f, x: %lf, y: %f\n", cosTheta, double(filmPosition.x()), filmPosition.y());
+    // Transform target point to focus (film) plane in camera space
+    const float64  cameraToFocusPointDistance  = _sensorOffsetM / cosTheta;
+    const float64  cameraToFocusPointDistance2 = cameraToFocusPointDistance * cameraToFocusPointDistance;
+    const Vector3D targetFocusPositionCS       = targetPositionCS.mul(cameraToFocusPointDistance / cameraToTargetDistance);
 
-    //        out_sample->setCameraPosition(_position);
-    //        out_sample->setCameraNormal(cameraRayN);
-    //        out_sample->setFilmPosition(Vector2D(filmPosition.x(), filmPosition.y()));
-    //        out_sample->setImportance(Spectrum(cameraToImagePointDistance2 / (sensorArea * cosTheta * cosTheta)));
-    //        out_sample->setPdfW(1.0_r * distance * distance / cosTheta);
-    //    }
+    // Transform target point from camera space to film (raster) space
+    Vector3D targetFocusPositionRS;
+    _filmToCamera.inverse().transformPoint(targetFocusPositionCS, &targetFocusPositionRS);
 
-    //    return;
-    //}
+    if (!_isInsideViewFrustum(targetFocusPositionRS))
+    {
+        // temporary hack for BDPG radiance estimator
+        // TODO: remove this situation
+        //
+        // In BDPG we set targetPosition as ray's origin in the radiance estimation
+        // first intersection, which means it MUST be inside the range of film
 
-    //const real pdfA = 1.0_r;
+        /*
+        if (out_toCameraRay->origin().asType<float64>().isEqualTo(targetPositionWS))
+        {
+            fprintf(stdout, "filmPosition error\n");
+            fprintf(stdout, "cos: %f, x: %lf, y: %f\n", cosTheta, double(filmPosition.x()), filmPosition.y());
 
-    //out_sample->setCameraPosition(_position);
-    //out_sample->setCameraNormal(cameraRayN);
-    //out_sample->setFilmPosition(Vector2D(filmPosition.x(), filmPosition.y()));
-    //out_sample->setImportance(Spectrum(cameraToImagePointDistance2 / (sensorArea * cosTheta * cosTheta)));
-    //out_sample->setPdfW(pdfA * distance * distance / cosTheta);
+            out_sample->setCameraPosition(_position);
+            out_sample->setCameraNormal(cameraRayN);
+            out_sample->setFilmPosition(Vector2D(filmPosition.x(), filmPosition.y()));
+            out_sample->setImportance(Spectrum(cameraToImagePointDistance2 / (sensorArea * cosTheta * cosTheta)));
+            out_sample->setPdfW(1.0_r * distance * distance / cosTheta);
+        }
+        */
 
-    //// shooting from targetPosition
-    //out_toCameraRay->reset();
-    //out_toCameraRay->setOrigin(targetPosition);
-    //out_toCameraRay->setDirection(cameraRayDirection.negate());
-    //out_toCameraRay->setMaxT(distance - constant::ray_epsilon<real>);
+        return;
+    }
+
+    // Set sample data if passing the check above
+
+    // To make formula clearer
+    const float64 pdfA = constant::rcp_pi<float64> / (_lensRadiusM * _lensRadiusM);
+
+    out_sample->setCameraPosition(cameraPositionWS.asType<real>());
+    out_sample->setCameraNormal(cameraForwardWS.asType<real>());
+    out_sample->setFilmPosition({ targetFocusPositionRS.x(), targetFocusPositionRS.y() });
+    out_sample->setImportance(Spectrum(cameraToFocusPointDistance2 / (sensorArea * cosTheta * cosTheta)));
+    out_sample->setPdfW(pdfA * cameraToTargetDistance * cameraToTargetDistance / cosTheta);
+
+    // shooting from targetPosition
+    out_toCameraRay->setOrigin(targetPositionWS.asType<real>());
+    out_toCameraRay->setDirection(cameraToTargetDirectionWS.negate().asType<real>());
+    out_toCameraRay->setMinT(constant::ray_epsilon<real>);
+
+    // To eliminate numerical error due to intersecting objects slightly behind the camera.
+    out_toCameraRay->setMaxT(cameraToTargetDistance - constant::ray_epsilon<float64>);
 }
 
 void ThinLensPerspectiveCamera::evaluateCameraPdf(
@@ -180,61 +166,35 @@ void ThinLensPerspectiveCamera::evaluateCameraPdf(
     real* const out_pdfA,
     real* const out_pdfW) const
 {
-    CS_ASSERT_MSG(false, "Unsupported type");
-    // TODO: Fix
-    //////////////////////////////////////////
+    CS_ASSERT(out_pdfA);
+    CS_ASSERT(out_pdfW);
 
-    //CS_ASSERT(out_pdfA);
-    //CS_ASSERT(out_pdfW);
+    Vector3D cameraForwardWS;
+    _cameraToWorld.transformVector({ 0.0, 0.0, -1.0 }, &cameraForwardWS);
 
-    //Vector3R cameraRayN;
-    //_cameraToWorld->transformVector(Vector3R(0.0_r, 0.0_r, -1.0_r), &cameraRayN);
-
-    //const real cosTheta = cameraRay.direction().dot(cameraRayN);
-    //if (cosTheta <= 0.0_r)
-    //{
-    //    return;
-    //}
-
-    //const float64  sensorArea                  = _getSensorArea();
-    //const float64  cameraToImagePointDistance  = _sensorOffset / cosTheta;
-    //const float64  cameraToImagePointDistance2 = cameraToImagePointDistance * cameraToImagePointDistance;
-    //const Vector3R rayWorldFocusPosition       = cameraRay.at(cameraToImagePointDistance);
-
-    //Vector3R rayCameraFocusPosition;
-    //_cameraToWorld->inverseMatrix().transformPoint(rayWorldFocusPosition, &rayCameraFocusPosition);
-
-    //Vector3R filmPosition;
-    //_filmToCamera->inverseMatrix().transformPoint(rayCameraFocusPosition, &filmPosition);
-
-    //// check film boundary (0 ~ resolution)
-    //if (filmPosition.x() < 0.0_r ||
-    //    filmPosition.y() < 0.0_r ||
-    //    filmPosition.x() >= static_cast<real>(_resolution.x()) ||
-    //    filmPosition.y() >= static_cast<real>(_resolution.y()))
-    //{
-    //    return;
-    //}
-
-    //*out_pdfA = 1.0_r;
-    //*out_pdfW = cameraToImagePointDistance2 / (sensorArea * cosTheta);
-}
-
-std::pair<float64, float64> ThinLensPerspectiveCamera::_getSensorSizeXy() const
-{
-    const float64 aspectRatio = _getAspectRatio();
-
-    return
+    const float64 cosTheta = cameraRay.direction().asType<float64>().dot(cameraForwardWS);
+    if (cosTheta <= 0.0)
     {
-        _sensorWidthM,              // sensorWidth
-        _sensorWidthM / aspectRatio // sensorHeight
-    };
-}
+        return;
+    }
 
-float64 ThinLensPerspectiveCamera::_getSensorArea() const {
-    const auto [sensorWidth, sensorHeight] = _getSensorSizeXy();
+    const float64  sensorArea                 = _sensorSizeM.product();
+    const float64  cameraToFilmPointDistance  = _sensorOffsetM / cosTheta;
+    const Vector3D rayFocusPositionWS         = cameraRay.at(cameraToFilmPointDistance).asType<float64>();
 
-    return sensorWidth * sensorHeight;
+    Vector3D rayFocusPositionCS;
+    _cameraToWorld.inverse().transformPoint(rayFocusPositionWS, &rayFocusPositionCS);
+
+    Vector3D rayFocusPositionRS;
+    _filmToCamera.inverse().transformPoint(rayFocusPositionCS, &rayFocusPositionRS);
+
+    if (!_isInsideViewFrustum(rayFocusPositionRS))
+    {
+        return;
+    }
+
+    *out_pdfA = constant::rcp_pi<float64> / (_lensRadiusM * _lensRadiusM);
+    *out_pdfW = 1.0_r / (sensorArea * cosTheta * cosTheta * cosTheta);
 }
 
 } // namespace cadise

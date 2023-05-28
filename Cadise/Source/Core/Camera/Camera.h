@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Math/TVector2.h"
-#include "Math/TVector3.h"
+#include "Math/TTransform4.h"
 
 // forward declaration
 namespace cadise
@@ -13,18 +12,26 @@ namespace cadise
 namespace cadise
 {
 
+/*! @brief Basic camera interface
+
+It often needs to calculate data between spaces.
+For the sake of simplicity, we use the following suffix to represent different spaces:
+    - WS: world space
+    - CS: camera space
+    - RS: raster space (unnormalized)
+
+For example, samplePositionRS means a sample position in raster space
+*/
 class Camera
 {
 public:
-    explicit Camera(const Vector3R& position);
+    explicit Camera(const Transform4D& cameraToWorld);
 
     virtual ~Camera();
 
-    virtual void updateTransform() = 0;
-
-    // filmPosition: x and y are both in range of [0, resolution).
+    // samplePositionRS: x and y are both in range of [0, resolution).
     virtual void spawnPrimaryRay(
-        const Vector2D& filmPosition,
+        const Vector2D& positionRS,
         Ray* const      out_primaryRay) const = 0;
 
     virtual void evaluateCameraSample(
@@ -36,13 +43,10 @@ public:
         real* const out_pdfA,
         real* const out_pdfW) const = 0;
 
-    void setResolution(const Vector2S& resolution);
-
 protected:
-    float64 _getAspectRatio() const;
+    Vector3D _getWorldSpacePosition() const;
 
-    Vector3R _position;
-    Vector2S _resolution;
+    Transform4D _cameraToWorld;
 };
 
 } // namespace cadise

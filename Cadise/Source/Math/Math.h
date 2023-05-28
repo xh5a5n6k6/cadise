@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <concepts>
 
 /*
     some math utilities here
@@ -15,12 +16,20 @@ namespace cadise::math
 /*
     map degree to radian
 */
-real degree_to_radian(const real degree);
+template<std::floating_point FloatType>
+FloatType to_radians(const FloatType degrees)
+{
+    return degrees * constant::radians_per_degree<FloatType>;
+}
 
 /*
     map radian to degree
 */
-real radian_to_degree(const real radian);
+template<std::floating_point FloatType>
+FloatType to_degrees(const FloatType radians)
+{
+    return radians * constant::degrees_per_radian<FloatType>;
+}
 
 /*
     find the nearest perfect square number which is not greater than

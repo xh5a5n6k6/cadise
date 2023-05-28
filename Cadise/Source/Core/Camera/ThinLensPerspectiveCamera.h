@@ -1,35 +1,24 @@
 #pragma once
 
-#include "Core/Camera/Camera.h"
-
-#include <memory>
-#include <utility>
-
-// forward declaration
-namespace cadise
-{
-    class Transform;
-}
+#include "Core/Camera/ProjectiveCamera.h"
 
 namespace cadise
 {
 
-class ThinLensPerspectiveCamera : public Camera
+class ThinLensPerspectiveCamera : public ProjectiveCamera
 {
 public:
     ThinLensPerspectiveCamera(
-        const Vector3R& position,
-        const Vector3R& direction,
-        const Vector3R& up,
-        const float64   fov,
-        const float64   sensorWidthMM,
-        const float64   focalDistanceMM,
-        const float64   lensRadiusMM);
-
-    void updateTransform() override;
+        const Transform4D& cameraToWorld,
+        const Transform4D& filmToCamera,
+        const Vector2S&    resolution,
+        const Vector2D&    sensorSizeM,
+        const float64      sensorOffsetM,
+        const float64      focalDistanceM,
+        const float64      lensRadiusM);
 
     void spawnPrimaryRay(
-        const Vector2D& filmPosition,
+        const Vector2D& positionRS,
         Ray* const      out_primaryRay) const override;
 
     void evaluateCameraSample(
@@ -42,22 +31,10 @@ public:
         real* const out_pdfW) const override;
 
 private:
-    std::pair<float64, float64> _getSensorSizeXy() const;
-    float64 _getSensorArea() const;
-
-    std::shared_ptr<Transform> _cameraToWorld;
-
-    // transform from film (raster) to camera
-    std::shared_ptr<Transform> _filmToCamera;
-
-    float64 _fov;
-    float64 _sensorWidthM;
-    float64 _sensorOffset; // focal length
-    float64 _focalDistanceM;
-    float64 _lensRadiusM;
-
-    // f-number = focal length / aperture diameter
-    // aperture diameter = focal length / f-number
+    Vector2D _sensorSizeM; // x: width, y: height
+    float64  _sensorOffsetM; // it also means focal length
+    float64  _focalDistanceM;
+    float64  _lensRadiusM;
 };
 
 } // namespace cadise

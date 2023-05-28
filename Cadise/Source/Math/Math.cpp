@@ -9,16 +9,6 @@
 namespace cadise::math
 {
 
-real degree_to_radian(const real degree)
-{
-    return degree * constant::radian_per_degree<real>;
-}
-
-real radian_to_degree(const real radian)
-{
-    return radian * constant::degree_per_radian<real>;
-}
-
 std::size_t nearest_lower_square_number(const std::size_t number)
 {
     const std::size_t lowerSqrtNumber

@@ -4,12 +4,6 @@
 
 #include "Math/TVector3.h"
 
-// forward declaration
-namespace cadise
-{
-    class Transform;
-}
-
 namespace cadise
 {
 
@@ -42,7 +36,7 @@ private:
         const real  maxT,
         real* const out_finalT) const;
 
-    std::shared_ptr<Transform> _worldToLocal;
+    std::shared_ptr<Transform4R> _worldToLocal;
 
     Vector3R _center;
     real     _radius;

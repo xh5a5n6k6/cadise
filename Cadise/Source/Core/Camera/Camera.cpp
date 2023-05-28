@@ -3,21 +3,18 @@
 namespace cadise
 {
 
-Camera::Camera(const Vector3R& position) :
-    _position(position),
-    _resolution(0)
+Camera::Camera(const Transform4D& cameraToWorld) :
+    _cameraToWorld(cameraToWorld)
 {}
 
 Camera::~Camera() = default;
 
-void Camera::setResolution(const Vector2S& resolution)
+Vector3D Camera::_getWorldSpacePosition() const
 {
-    _resolution = resolution;
-}
+    Vector3D position;
+    _cameraToWorld.transformPoint({ 0, 0, 0 }, &position);
 
-float64 Camera::_getAspectRatio() const
-{
-    return static_cast<float64>(_resolution.x()) / static_cast<float64>(_resolution.y());
+    return position;
 }
 
 } // namespace cadise

@@ -9,7 +9,7 @@
 #include "Math/Constant.h"
 #include "Math/Random.h"
 #include "Math/TAABB3.h"
-#include "Math/Transform.h"
+#include "Math/TTransform4.h"
 
 #include <cmath>
 
@@ -27,7 +27,7 @@ Sphere::Sphere(
 {
     CS_ASSERT(bsdf);
 
-    _worldToLocal     = std::make_shared<Transform>(Matrix4R::makeTranslate(center.negate()));
+    _worldToLocal     = std::make_shared<Transform4R>(Matrix4R::makeTranslate(center.negate()));
     _tmptextureMapper = std::make_shared<SphericalMapper>();
 }
 

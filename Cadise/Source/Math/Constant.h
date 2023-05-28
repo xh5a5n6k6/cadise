@@ -11,12 +11,12 @@ inline constexpr T ray_epsilon
 
 // 1 degree = pi/180 radian
 template<typename T>
-inline constexpr T radian_per_degree
+inline constexpr T radians_per_degree
     = static_cast<T>(0.01745329251994329576);
 
 // 1 radian = 180/pi degree
 template<typename T>
-inline constexpr T degree_per_radian
+inline constexpr T degrees_per_radian
     = static_cast<T>(57.2957795130823208767);
 
 template<typename T>

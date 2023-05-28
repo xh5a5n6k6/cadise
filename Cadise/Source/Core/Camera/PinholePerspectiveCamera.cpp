@@ -4,73 +4,43 @@
 #include "Core/Ray.h"
 #include "Foundation/Assertion.h"
 #include "Math/Constant.h"
-#include "Math/Transform.h"
-
-#include <cmath>
 
 namespace cadise
 {
 
 PinholePerspectiveCamera::PinholePerspectiveCamera(
-    const Vector3R& position,
-    const Vector3R& direction,
-    const Vector3R& up,
-    const float64   fov,
-    const float64   sensorWidthMM) :
+    const Transform4D& cameraToWorld,
+    const Transform4D& filmToCamera,
+    const Vector2S&    resolution,
+    const Vector2D&    sensorSizeM,
+    const float64      sensorOffsetM) :
 
-    Camera(position),
-    _cameraToWorld(nullptr),
-    _filmToCamera(nullptr),
-    _fov(fov),
-    _sensorWidthMM(sensorWidthMM)
-{
-    _cameraToWorld = std::make_shared<Transform>(Matrix4R::makeLookAt(position, direction, up));
-
-    this->updateTransform();
-}
-
-void PinholePerspectiveCamera::updateTransform()
-{
-    const auto [sensorWidth, sensorHeight] = _getSensorSizeXy();
-    const auto realResolution              = _resolution.asType<real>();
-
-    // update sensorOffset
-    _sensorOffset = (sensorWidth * 0.5_r) / std::tan(math::degree_to_radian(_fov * 0.5_r));
-
-    // matrix multiplication is right-hand-side, so we
-    // need to initialize matrix first.
-    //
-    // translate needs to be multiplied last, it means
-    // we need to multiply it first (it will be the leftmost part).
-    Matrix4R filmToCameraMatrix = Matrix4R::makeIdentity();
-    filmToCameraMatrix.mulLocal(Matrix4R::makeTranslate(-(sensorWidth * 0.5_r), sensorHeight * 0.5_r, -_sensorOffset));
-    filmToCameraMatrix.mulLocal(Matrix4R::makeScale(
-        sensorWidth / realResolution.x(), -sensorHeight / realResolution.y(), 1.0_r));
-
-    _filmToCamera = std::make_shared<Transform>(filmToCameraMatrix);
-}
+    ProjectiveCamera(cameraToWorld, filmToCamera, resolution),
+    _sensorSizeM(sensorSizeM),
+    _sensorOffsetM(sensorOffsetM)
+{}
 
 void PinholePerspectiveCamera::spawnPrimaryRay(
-    const Vector2D& filmPosition,
+    const Vector2D& positionRS,
     Ray* const      out_primaryRay) const
 {
     CS_ASSERT(out_primaryRay);
 
-    Vector3R sampleCameraPosition;
-    _filmToCamera->transformPoint(
-        Vector3D(filmPosition.x(), filmPosition.y(), 0.0).asType<real>(),
-        &sampleCameraPosition);
+    Vector3D positionCS;
+    _filmToCamera.transformPoint(
+        Vector3D(positionRS.x(), positionRS.y(), 0.0),
+        &positionCS);
 
-    // calculate parameter in camera space
-    Vector3R direction;
-    _cameraToWorld->transformVector(sampleCameraPosition, &direction);
+    // No need to subtract camera's position because its coordinate is at (0, 0) in camera space
+    Vector3D directionWS;
+    _cameraToWorld.transformVector(positionCS, &directionWS);
 
-    CS_ASSERT(!direction.isZero());
+    CS_ASSERT(!directionWS.isZero());
 
-    // generate ray in world space
+    // Set ray data in world space
     out_primaryRay->reset();
-    out_primaryRay->setOrigin(_position);
-    out_primaryRay->setDirection(direction);
+    out_primaryRay->setOrigin(_getWorldSpacePosition().asType<real>());
+    out_primaryRay->setDirection(directionWS.asType<real>());
 }
 
 void PinholePerspectiveCamera::evaluateCameraSample(
@@ -80,46 +50,50 @@ void PinholePerspectiveCamera::evaluateCameraSample(
     CS_ASSERT(out_sample);
     CS_ASSERT(out_toCameraRay);
 
-    Vector3R cameraRayN;
-    _cameraToWorld->transformVector(Vector3R(0.0_r, 0.0_r, -1.0_r), &cameraRayN);
+    // Check if the target is in front of the camera
+    const Vector3D cameraPositionWS = _getWorldSpacePosition();
+    const Vector3D targetPositionWS = out_sample->targetPosition().asType<float64>();
+    const Vector3D cameraToTargetWS = targetPositionWS.sub(cameraPositionWS);
 
-    const Vector3R targetPosition  = out_sample->targetPosition();
-    const Vector3R cameraRayVector = targetPosition.sub(_position);
+    CS_ASSERT(!cameraToTargetWS.isZero());
 
-    CS_ASSERT(!cameraRayVector.isZero());
+    Vector3D cameraForwardWS;
+    _cameraToWorld.transformVector({ 0.0, 0.0, -1.0 }, &cameraForwardWS);
 
-    const real     sensorArea         = _getSensorArea();
-    const real     distance           = cameraRayVector.length();
-    const Vector3R cameraRayDirection = cameraRayVector.div(distance);
-    const real     cosTheta           = cameraRayDirection.dot(cameraRayN);
-    if (cosTheta <= 0.0_r)
+    const float64  sensorArea                = _sensorSizeM.product();
+    const float64  cameraToTargetDistance    = cameraToTargetWS.length();
+    const Vector3D cameraToTargetDirectionWS = cameraToTargetWS.div(cameraToTargetDistance);
+    const float64  cosTheta                  = cameraToTargetDirectionWS.dot(cameraForwardWS);
+    if (cosTheta <= 0.0)
     {
         return;
     }
 
-    Vector3R targetCameraPosition;
-    _cameraToWorld->inverseMatrix().transformPoint(targetPosition, &targetCameraPosition);
+    // Check if the target is within the view frustum
+    Vector3D targetPositionCS;
+    _cameraToWorld.inverse().transformPoint(targetPositionWS, &targetPositionCS);
 
-    CS_ASSERT(!targetCameraPosition.isZero());
+    CS_ASSERT(!targetPositionCS.isZero());
 
-    // transform to focus (film) plane in camera space
-    const real     cameraToImagePointDistance = _sensorOffset / cosTheta;
-    const real     cameraToImagePointDistance2 = cameraToImagePointDistance * cameraToImagePointDistance;
-    const Vector3R targetFocusPosition = targetCameraPosition.mul(cameraToImagePointDistance / distance);
+    // Transform target point to focus (film) plane in camera space
+    const float64  cameraToFocusPointDistance  = _sensorOffsetM / cosTheta;
+    const float64  cameraToFocusPointDistance2 = cameraToFocusPointDistance * cameraToFocusPointDistance;
+    const Vector3D targetFocusPositionCS       = targetPositionCS.mul(cameraToFocusPointDistance / cameraToTargetDistance);
 
-    // transform from camera space to film (raster) space
-    Vector3R filmPosition;
-    _filmToCamera->inverseMatrix().transformPoint(targetFocusPosition, &filmPosition);
+    // Transform target point from camera space to film (raster) space
+    Vector3D targetFocusPositionRS;
+    _filmToCamera.inverse().transformPoint(targetFocusPositionCS, &targetFocusPositionRS);
 
-    // check film boundary (0 ~ resolution)
-    if (filmPosition.x() < 0.0_r ||
-        filmPosition.y() < 0.0_r ||
-        filmPosition.x() >= static_cast<real>(_resolution.x()) ||
-        filmPosition.y() >= static_cast<real>(_resolution.y()))
+    if (!_isInsideViewFrustum(targetFocusPositionRS))
     {
         // temporary hack for BDPG radiance estimator
         // TODO: remove this situation
-        if (out_toCameraRay->origin().isEqualTo(targetPosition))
+        //
+        // In BDPG we set targetPosition as ray's origin in the radiance estimation
+        // first intersection, which means it MUST be inside the range of film
+        
+        /*
+        if (out_toCameraRay->origin().asType<float64>().isEqualTo(targetPositionWS))
         {
             fprintf(stdout, "filmPosition error\n");
             fprintf(stdout, "cos: %f, x: %lf, y: %f\n", cosTheta, double(filmPosition.x()), filmPosition.y());
@@ -130,23 +104,29 @@ void PinholePerspectiveCamera::evaluateCameraSample(
             out_sample->setImportance(Spectrum(cameraToImagePointDistance2 / (sensorArea * cosTheta * cosTheta)));
             out_sample->setPdfW(1.0_r * distance * distance / cosTheta);
         }
+        */
 
         return;
     }
 
-    const real pdfA = 1.0_r;
+    // Set sample data if passing the check above
 
-    out_sample->setCameraPosition(_position);
-    out_sample->setCameraNormal(cameraRayN);
-    out_sample->setFilmPosition(Vector2D(filmPosition.x(), filmPosition.y()));
-    out_sample->setImportance(Spectrum(cameraToImagePointDistance2 / (sensorArea * cosTheta * cosTheta)));
-    out_sample->setPdfW(pdfA * distance * distance / cosTheta);
+    // To make formula clearer
+    constexpr float64 pdfA = 1.0;
 
-    // shooting from targetPosition
-    out_toCameraRay->reset();
-    out_toCameraRay->setOrigin(targetPosition);
-    out_toCameraRay->setDirection(cameraRayDirection.negate());
-    out_toCameraRay->setMaxT(distance - constant::ray_epsilon<real>);
+    out_sample->setCameraPosition(cameraPositionWS.asType<real>());
+    out_sample->setCameraNormal(cameraForwardWS.asType<real>());
+    out_sample->setFilmPosition({ targetFocusPositionRS.x(), targetFocusPositionRS.y() });
+    out_sample->setImportance(Spectrum(cameraToFocusPointDistance2 / (sensorArea * cosTheta * cosTheta)));
+    out_sample->setPdfW(pdfA * cameraToTargetDistance * cameraToTargetDistance / cosTheta);
+
+    // Shooting from targetPosition
+    out_toCameraRay->setOrigin(targetPositionWS.asType<real>());
+    out_toCameraRay->setDirection(cameraToTargetDirectionWS.negate().asType<real>());
+    out_toCameraRay->setMinT(constant::ray_epsilon<real>);
+
+    // To eliminate numerical error due to intersecting objects slightly behind the camera.
+    out_toCameraRay->setMaxT(cameraToTargetDistance - constant::ray_epsilon<float64>);
 }
 
 void PinholePerspectiveCamera::evaluateCameraPdf(
@@ -157,55 +137,32 @@ void PinholePerspectiveCamera::evaluateCameraPdf(
     CS_ASSERT(out_pdfA);
     CS_ASSERT(out_pdfW);
 
-    Vector3R cameraRayN;
-    _cameraToWorld->transformVector(Vector3R(0.0_r, 0.0_r, -1.0_r), &cameraRayN);
+    Vector3D cameraForwardWS;
+    _cameraToWorld.transformVector({ 0.0, 0.0, -1.0 }, &cameraForwardWS);
 
-    const real cosTheta = cameraRay.direction().dot(cameraRayN);
-    if (cosTheta <= 0.0_r)
+    const float64 cosTheta = cameraRay.direction().asType<float64>().dot(cameraForwardWS);
+    if (cosTheta <= 0.0)
     {
         return;
     }
 
-    const float64  sensorArea                  = _getSensorArea();
-    const float64  cameraToImagePointDistance  = _sensorOffset / cosTheta;
-    const float64  cameraToImagePointDistance2 = cameraToImagePointDistance * cameraToImagePointDistance;
-    const Vector3R rayWorldFocusPosition       = cameraRay.at(cameraToImagePointDistance);
+    const float64  sensorArea                 = _sensorSizeM.product();
+    const float64  cameraToFocusPointDistance = _sensorOffsetM / cosTheta;
+    const Vector3D rayFocusPositionWS         = cameraRay.at(cameraToFocusPointDistance).asType<float64>();
 
-    Vector3R rayCameraFocusPosition;
-    _cameraToWorld->inverseMatrix().transformPoint(rayWorldFocusPosition, &rayCameraFocusPosition);
+    Vector3D rayFocusPositionCS;
+    _cameraToWorld.inverse().transformPoint(rayFocusPositionWS, &rayFocusPositionCS);
 
-    Vector3R filmPosition;
-    _filmToCamera->inverseMatrix().transformPoint(rayCameraFocusPosition, &filmPosition);
+    Vector3D rayFocusPositionRS;
+    _filmToCamera.inverse().transformPoint(rayFocusPositionCS, &rayFocusPositionRS);
 
-    // check film boundary (0 ~ resolution)
-    if (filmPosition.x() < 0.0_r ||
-        filmPosition.y() < 0.0_r ||
-        filmPosition.x() >= static_cast<real>(_resolution.x()) ||
-        filmPosition.y() >= static_cast<real>(_resolution.y()))
+    if (!_isInsideViewFrustum(rayFocusPositionRS))
     {
         return;
     }
 
     *out_pdfA = 1.0_r;
-    *out_pdfW = cameraToImagePointDistance2 / (sensorArea * cosTheta);
-}
-
-std::pair<float64, float64> PinholePerspectiveCamera::_getSensorSizeXy() const
-{
-    const float64 aspectRatio = _getAspectRatio();
-
-    return
-    {
-        _sensorWidthMM,              // sensorWidth
-        _sensorWidthMM / aspectRatio // sensorHeight
-    };
-}
-
-float64 PinholePerspectiveCamera::_getSensorArea() const
-{
-    const auto [sensorWidth, sensorHeight] = _getSensorSizeXy();
-
-    return sensorWidth * sensorHeight;
+    *out_pdfW = 1.0_r / (sensorArea * cosTheta * cosTheta * cosTheta);
 }
 
 } // namespace cadise

@@ -112,6 +112,15 @@ std::shared_ptr<Renderer> RenderDatabase::prepareRender()
 
     logger.log("Finished loading scene objects (" + std::to_string(_intersectors.size()) + " primitives)");
 
+    // HACK: set resolution from film's data to camera's data
+    {
+        const uint64 imageWidth  = _filmResource->findInt<uint64>("image-width");
+        const uint64 imageHeight = _filmResource->findInt<uint64>("image-height");
+
+        _cameraResource->addInt("image-width", std::to_string(imageWidth));
+        _cameraResource->addInt("image-height", std::to_string(imageHeight));
+    }
+
     const std::shared_ptr<Film>   film   = instantiator::makeFilm(_filmResource);
     const std::shared_ptr<Camera> camera = instantiator::makeCamera(_cameraResource);
 
@@ -147,9 +156,6 @@ std::shared_ptr<Renderer> RenderDatabase::prepareRender()
     {
         scene->setBackgroundSphere(_backgroundSphere.get());
     }
-
-    camera->setResolution(film->resolution().asType<std::size_t>());
-    camera->updateTransform();
 
     std::shared_ptr<Renderer> renderer = instantiator::makeRenderer(_rendererResource);
     renderer->setScene(scene);
