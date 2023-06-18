@@ -1,4 +1,4 @@
-# Cadise core library
+# Script for building the Cadise library.
 
 set(CADISE_LIB_DIR             "${CMAKE_CURRENT_SOURCE_DIR}/")
 set(CADISE_PUBLIC_INCLUDE_DIR  "${CADISE_LIB_DIR}/Include/")
@@ -18,7 +18,7 @@ if(NOT WIN32)
     list(FILTER CADISE_SOURCE_FILES EXCLUDE REGEX "StackWalker.")
 endif()
 
-add_library(${CADISE_LIB_NAME}
+add_library(${CADISE_LIB_NAME} STATIC
     ${CADISE_HEADER_FILES} 
     ${CADISE_SOURCE_FILES})
 

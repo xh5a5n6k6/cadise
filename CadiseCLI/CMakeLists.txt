@@ -1,4 +1,4 @@
-# Cadise command-line interface in VS Solution
+# Script for building the Cadise command-line interface.
 
 file(GLOB_RECURSE CADISE_CLI_HEADER_FILES 
     "./Source/*.h")
@@ -16,7 +16,7 @@ target_include_directories(${CADISE_CLI_NAME}
 target_link_libraries(${CADISE_CLI_NAME}
     PRIVATE ${CADISE_LIB_NAME})
 
-if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     # Tell linker to generate program database file (.pdb)
     set_target_properties(${CADISE_CLI_NAME} PROPERTIES 
         LINK_FLAGS "${LINK_FLAGS} /DEBUG:FULL")
