@@ -1,0 +1,95 @@
+#include "Core/Surface/BSDF/SpecularTransmission.h"
+
+#include "Core/Gear/Sample/BSDFSample.h"
+#include "Core/Gear/TSurfaceSampler.h"
+#include "Core/Surface/Fresnel/DielectricFresnel.h"
+#include "Core/Surface/TransportInfo.h"
+#include "Core/SurfaceIntersection.h"
+#include "Foundation/Assertion.h"
+
+#include <cmath>
+#include <utility>
+
+namespace cadise
+{
+
+SpecularTransmission::SpecularTransmission(
+    const std::shared_ptr<TTexture<Spectrum>>& albedo,
+    const std::shared_ptr<DielectricFresnel>&  fresnel) :
+
+    BSDF(BSDFLobes({ ELobe::SpecularTransmission })),
+    _albedo(albedo),
+    _fresnel(fresnel)
+{
+    CS_ASSERT(albedo);
+    CS_ASSERT(fresnel);
+}
+
+Spectrum SpecularTransmission::evaluate(
+    const TransportInfo&       info,
+    const SurfaceIntersection& si) const
+{
+    return Spectrum(0.0_r);
+}
+
+void SpecularTransmission::evaluateSample(
+    const TransportInfo&       info,
+    const SurfaceIntersection& si,
+    BSDFSample* const          out_sample) const
+{
+    CS_ASSERT(out_sample);
+
+    const Vector3R& Ns = si.surfaceDetail().shadingNormal();
+    const Vector3R& V  = si.wi();
+
+    real etaI = _fresnel->iorOuter();
+    real etaT = _fresnel->iorInner();
+
+    Vector3R L;
+    if (!V.canRefract(Ns, etaI, etaT, &L))
+    {
+        return;
+    }
+
+    const real cosThetaI = L.dot(Ns);
+    Spectrum reflectance;
+    _fresnel->evaluateReflectance(cosThetaI, &reflectance);
+
+    real btdfFactor = 1.0_r;
+    if (info.mode() == ETransportMode::Radiance)
+    {
+        if (cosThetaI < 0.0_r)
+        {
+            std::swap(etaI, etaT);
+        }
+
+        btdfFactor = (etaT * etaT) / (etaI * etaI);
+    }
+
+    const real     pdfW          = 1.0_r;
+    const real     LdotN         = std::abs(cosThetaI);
+    const Spectrum transmittance = reflectance.complement();
+
+    Spectrum sampleAlbedo;
+    TSurfaceSampler<Spectrum>().sample(si, _albedo.get(), &sampleAlbedo);
+
+    out_sample->setScatterValue(sampleAlbedo.mul(transmittance).mul(btdfFactor / LdotN));
+    out_sample->setScatterDirection(L);
+    out_sample->setPdfW(pdfW);
+}
+
+real SpecularTransmission::evaluatePdfW(
+    const TransportInfo&       info,
+    const SurfaceIntersection& si) const
+{
+    return 0.0_r;
+}
+
+ELobe SpecularTransmission::lobe(const BSDFComponents component) const
+{
+    CS_ASSERT_EQ(component, 0);
+
+    return ELobe::SpecularTransmission;
+}
+
+} // namespace cadise
