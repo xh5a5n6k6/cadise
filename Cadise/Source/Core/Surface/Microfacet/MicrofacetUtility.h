@@ -5,8 +5,7 @@
 namespace cadise
 {
 
-/*! Miscellaneous microfacet utilities. */
-class MicrofacetUtility final
+class MicrofacetUtility
 {
 public:
     static bool canMakeReflectionH(

@@ -5,8 +5,7 @@
 namespace cadise
 {
 
-/*! Miscellaneous image utilities. */
-class ImageUtility final
+class ImageUtility
 {
 public:
     static void ldrToHdr(

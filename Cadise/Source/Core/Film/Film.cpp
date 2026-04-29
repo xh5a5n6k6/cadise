@@ -6,7 +6,7 @@
 #include "Core/Image/TImage.h"
 #include "FileIO/PictureSaver.h"
 #include "Foundation/Assertion.h"
-#include "Math/MathUtility.h"
+#include "Math/Math.h"
 #include "Math/Type/ImageType.h"
 
 #include <cmath>
@@ -202,9 +202,9 @@ void Film::save(
             if (usePostProcessing)
             {
                 hdrImage.setPixelValue(ix, iy, {
-                    MathUtility::forwardGammaCorrection(recordLinearSrgb.x()),
-                    MathUtility::forwardGammaCorrection(recordLinearSrgb.y()),
-                    MathUtility::forwardGammaCorrection(recordLinearSrgb.z()) });
+                    math::forward_gamma_correction(recordLinearSrgb.x()),
+                    math::forward_gamma_correction(recordLinearSrgb.y()),
+                    math::forward_gamma_correction(recordLinearSrgb.z()) });
             }
             else
             {

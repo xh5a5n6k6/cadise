@@ -3,6 +3,7 @@
 #include "Core/Texture/Sampler/TNearestPixelSampler.h"
 
 #include "Foundation/Assertion.h"
+#include "Math/Math.h"
 #include "Math/TVector3.h"
 
 namespace cadise

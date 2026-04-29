@@ -3,7 +3,7 @@
 #include "Math/TLocalCoordinateSystem3.h"
 
 #include "Foundation/Assertion.h"
-#include "Math/MathUtility.h"
+#include "Math/Math.h"
 
 #include <cmath>
 #include <limits>
@@ -79,13 +79,13 @@ inline TVector3<T> TLocalCoordinateSystem3<T>::localToWorld(const TVector3<T>& u
 template<typename T>
 inline T TLocalCoordinateSystem3<T>::cosTheta(const TVector3<T>& unitVector) const
 {
-    return MathUtility::clamp(unitVector.dot(_yAxis), T(-1), T(1));
+    return math::clamp(unitVector.dot(_yAxis), T(-1), T(1));
 }
 
 template<typename T>
 inline T TLocalCoordinateSystem3<T>::cos2Theta(const TVector3<T>& unitVector) const
 {
-    return MathUtility::squared(this->cosTheta(unitVector));
+    return math::squared(this->cosTheta(unitVector));
 }
 
 template<typename T>
@@ -108,7 +108,7 @@ inline T TLocalCoordinateSystem3<T>::tanTheta(const TVector3<T>& unitVector) con
 
     if (cosTheta != T(0))
     {
-        return MathUtility::clamp(
+        return math::clamp(
             sinTheta / cosTheta,
             std::numeric_limits<T>::min(),
             std::numeric_limits<T>::min());
@@ -116,7 +116,7 @@ inline T TLocalCoordinateSystem3<T>::tanTheta(const TVector3<T>& unitVector) con
     else
     {
         // check sign of sinTheta to decide tanTheta is positive or negative
-        switch (MathUtility::sign(sinTheta))
+        switch (math::sign(sinTheta))
         {
             case constant::SIGN_POSITIVE:
                 return std::numeric_limits<T>::max();
@@ -139,7 +139,7 @@ inline T TLocalCoordinateSystem3<T>::tan2Theta(const TVector3<T>& unitVector) co
 
     if (cos2Theta != T(0))
     {
-        return MathUtility::clamp(
+        return math::clamp(
             sin2Theta / cos2Theta,
             std::numeric_limits<T>::min(),
             std::numeric_limits<T>::max());
@@ -168,7 +168,7 @@ inline T TLocalCoordinateSystem3<T>::cosPhi(const TVector3<T>& unitVector) const
 template<typename T>
 inline T TLocalCoordinateSystem3<T>::cos2Phi(const TVector3<T>& unitVector) const
 {
-    return MathUtility::squared(this->cosPhi(unitVector));
+    return math::squared(this->cosPhi(unitVector));
 }
 
 template<typename T>
@@ -189,7 +189,7 @@ inline T TLocalCoordinateSystem3<T>::sinPhi(const TVector3<T>& unitVector) const
 template<typename T>
 inline T TLocalCoordinateSystem3<T>::sin2Phi(const TVector3<T>& unitVector) const
 {
-    return MathUtility::squared(this->sinPhi(unitVector));
+    return math::squared(this->sinPhi(unitVector));
 }
 
 template<typename T>
@@ -200,7 +200,7 @@ inline T TLocalCoordinateSystem3<T>::tanPhi(const TVector3<T>& unitVector) const
 
     if (zProjection != T(0))
     {
-        return MathUtility::clamp(
+        return math::clamp(
             xProjection / zProjection,
             std::numeric_limits<T>::min(),
             std::numeric_limits<T>::max());
@@ -208,7 +208,7 @@ inline T TLocalCoordinateSystem3<T>::tanPhi(const TVector3<T>& unitVector) const
     else
     {
         // check sign of xProjection to decide tanPhi is positive or negative
-        switch (MathUtility::sign(xProjection))
+        switch (math::sign(xProjection))
         {
             case constant::SIGN_POSITIVE:
                 return std::numeric_limits<T>::max();
@@ -226,12 +226,12 @@ inline T TLocalCoordinateSystem3<T>::tanPhi(const TVector3<T>& unitVector) const
 template<typename T>
 inline T TLocalCoordinateSystem3<T>::tan2Phi(const TVector3<T>& unitVector) const
 {
-    const T zProjection2 = MathUtility::squared(unitVector.dot(_zAxis));
-    const T xProjection2 = MathUtility::squared(unitVector.dot(_xAxis));
+    const T zProjection2 = math::squared(unitVector.dot(_zAxis));
+    const T xProjection2 = math::squared(unitVector.dot(_xAxis));
 
     if (zProjection2 != T(0))
     {
-        return MathUtility::clamp(
+        return math::clamp(
             xProjection2 / zProjection2,
             std::numeric_limits<T>::min(),
             std::numeric_limits<T>::max());

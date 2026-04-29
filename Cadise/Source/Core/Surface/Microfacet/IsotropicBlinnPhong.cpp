@@ -3,6 +3,7 @@
 #include "Core/Gear/TSurfaceSampler.h"
 #include "Foundation/Assertion.h"
 #include "Math/Constant.h"
+#include "Math/Math.h"
 #include "Math/TVector3.h"
 
 #include <cmath>
