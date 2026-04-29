@@ -26,3 +26,31 @@ bld/
 # VS & VS Code Cache/Options Directory
 .vs/
 .vscode/
+
+# AI assistant configs and caches 
+AGENT.md
+AGENTS.md
+CLAUDE.md
+CLAUDE.local.md
+.claude/
+GEMINI.md
+.gemini/
+.codex/
+codex.md
+.openai/
+.cursor/
+.cursorrules
+.cursorignore
+.aider*
+.continue/
+.windsurf/
+.windsurfrules
+.roo/
+.cline/
+.clinerules
+.tabnine/
+.sourcegraph/
+.qodo/
+.zed/
+.github/copilot-*
+.idea/copilot/
