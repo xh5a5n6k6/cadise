@@ -5,12 +5,7 @@
 namespace cadise
 {
 
-/*
-    Some string utilities
-
-    - string trimming
-    Reference: https://stackoverflow.com/questions/216823/how-to-trim-a-stdstring
-*/
+/*! Miscellaneous string utilities. */
 class StringUtility
 {
 public:

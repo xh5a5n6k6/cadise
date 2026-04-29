@@ -12,7 +12,7 @@ namespace cadise
 namespace cadise
 {
 
-/*! @brief Basic camera interface
+/*! @brief Basic camera interface.
 
 It often needs to calculate data between spaces.
 For the sake of simplicity, we use the following suffix to represent different spaces:
