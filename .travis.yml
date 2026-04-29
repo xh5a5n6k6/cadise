@@ -14,21 +14,21 @@ matrix:
 
             - george-edison55-precise-backports
           packages:
-            - gcc-7
-            - g++-7
+            - gcc-8
+            - g++-8
 
             - cmake-data
             - cmake
       env:
-        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
 
 notification:
   email: false
 
 before_script:
   - eval "${MATRIX_EVAL}"
-  - export CC=gcc-7
-  - export CXX=g++-7
+  - export CC=gcc-8
+  - export CXX=g++-8
 
 script:
   - mkdir ./build

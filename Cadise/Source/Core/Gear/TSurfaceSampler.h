@@ -1,0 +1,34 @@
+#pragma once
+
+#include "Core/SurfaceIntersection.h"
+#include "Core/Texture/TTexture.h"
+
+namespace cadise
+{
+
+template<typename T>
+class TSurfaceSampler
+{
+public:
+    void sample(
+        const SurfaceIntersection& si,
+        const TTexture<T>* const   texture,
+        T* const                   out_value) const;
+};
+
+// template header implementation
+
+template<typename T>
+inline void TSurfaceSampler<T>::sample(
+    const SurfaceIntersection& si,
+    const TTexture<T>* const   texture,
+    T* const                   out_value) const
+{
+    CS_ASSERT(texture);
+    CS_ASSERT(out_value);
+
+    const Vector3R& uvw = si.surfaceDetail().uvw();
+    texture->evaluate(uvw, out_value);
+}
+
+} // namespace cadise

@@ -1,4 +1,5 @@
 ## Feature Lists
+
 - ### Rendering
     - Whitted Ray Tracing
     - Unidirectional Path Tracing
@@ -10,9 +11,11 @@
         - Ambient Occlusion
         - World-Space Normal Map
         - UVs Map
+
 - ### Accelerator
     - BVH (equal, SAH)
     - K-d Tree (SAH)
+
 - ### BSDF
     - Absorber
     - Lambertian Diffuse
@@ -21,16 +24,20 @@
     - Specular Dielectric
     - Modified Phong
     - Mixed
-    - Microfacet (conductor)
-        - NDF: Beckmann, GGX, Blinn-Phong
+    - Microfacet (conductor, dielectric)
+        - isotropic NDF: Trowbridge-Reitz (GGX), Beckmann, Blinn-Phong
+        - anisotropic NDF: Trowbridge-Reitz (GGX)
+
 - ### Primitive
     - Sphere
     - Triangle
     - Rectangle
+
 - ### Light
     - Point Light
     - Area Light (rectangle)
     - Environment Light (with importance sampling)
+
 - ### Texture
     - Constant
     - Checkerboard
@@ -38,11 +45,15 @@
         - supported type: gray, rgb
         - sample mode: nearest
         - UV wrap mode: clamp, repeat
+
 - ### Camera
-    - Perspective Pinhole
+    - Pinhole Perspective
+    - Thin Lens Perspective
+
 - ### Sampling
     - Random
     - Stratified
+
 - ### Reconstruction Filter
     - Box
     - Cone

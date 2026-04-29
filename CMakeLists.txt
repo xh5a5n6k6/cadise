@@ -1,45 +1,72 @@
-cmake_minimum_required(VERSION 3.1)
-project(Cadise)
+# Root CMake script to build the whole Cadise project.
 
-# In Windows command line, ensure you are in the ./build folder
-# cmake -DCMAKE_GENERATOR_PLATFORM=x64 ../
+# Cadise is updated to Visual Studio 2026,
+# and CMake began to support the generator from version 4.2.
+cmake_minimum_required(VERSION 4.2)
+project(CadiseRenderer)
 
-set(CMAKE_CONFIGURATION_TYPES "Release")
+# Restrict project to only be built from a 64-bit system.
+if(NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
+    message(FATAL_ERROR
+        "This project requires a 64-bit system.")
+endif()
 
-# Setting C++17 standard
-if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
+set(CADISE_BUILD_DIR "${PROJECT_BINARY_DIR}/bin/")
 
-    # set multi-thread compilation
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CADISE_BUILD_DIR}")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CADISE_BUILD_DIR}")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CADISE_BUILD_DIR}")
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${CADISE_BUILD_DIR}")
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE "${CADISE_BUILD_DIR}")
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CADISE_BUILD_DIR}")
+endif()
+
+#------------------------------------------------------------------------------
+# Cadise build option setup
+#------------------------------------------------------------------------------
+option(CADISE_BUILD_CLI "Build Cadise command-line interface" ON)
+
+# Setting C++20 standard
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++20")
+
+    # Set multi-thread compilation
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
 
-elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-    set(CMAKE_CXX_STANDARD_REQUIRED ON)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+    # Set debug information format
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zi")
+
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
+    
+# Match for Clang or AppleClang
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
+
+else()
+    message(STATUS 
+        "Unknown compiler ID: ${CMAKE_CXX_COMPILER_ID}, no extra flag is set.")
+
 endif()
 
-# Setting default include directory
-set(INCLUDE_DIR "${CMAKE_SOURCE_DIR}/source")
-include_directories(${INCLUDE_DIR})
+#------------------------------------------------------------------------------
+# Find & load third-party libraries
+#------------------------------------------------------------------------------
+# TODO:
 
-file(GLOB_RECURSE HEADER_DIR "./source/*.h" "./source/*.ipp")
-file(GLOB_RECURSE SRC_DIR "./source/*.cpp")
+#------------------------------------------------------------------------------
+# Subproject setup
+#------------------------------------------------------------------------------
+set(CADISE_LIB_NAME "Cadise")
+set(CADISE_CLI_NAME "Cadise-CLI")
 
-# HACK : exclude StackWalker-related files on linux environment
-# TODO : use another repository to obtain third-party libraries
-if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-    list(FILTER HEADER_DIR EXCLUDE REGEX "StackWalker.")
-    list(FILTER SRC_DIR EXCLUDE REGEX "StackWalker.")
-endif()
+add_subdirectory("./Cadise/")
 
-add_executable(${PROJECT_NAME} ${HEADER_DIR} ${SRC_DIR})
-
-# Link pthreads library
-if(UNIX)
-    find_package(Threads)
-    target_link_libraries(${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT})
-endif()
-
-if(WIN32)
-    target_compile_definitions(${PROJECT_NAME} PRIVATE _CRT_SECURE_NO_WARNINGS)
+if(CADISE_BUILD_CLI)
+    add_subdirectory("./CadiseCLI/")
 endif()
