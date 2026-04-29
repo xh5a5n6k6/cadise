@@ -1,8 +1,8 @@
 # Root CMake script to build the whole Cadise project.
 
-# Cadise is updated to Visual Studio 2022,
-# and CMake began to support the generator from version 3.21.
-cmake_minimum_required(VERSION 3.21)
+# Cadise is updated to Visual Studio 2026,
+# and CMake began to support the generator from version 4.2.
+cmake_minimum_required(VERSION 4.2)
 project(CadiseRenderer)
 
 # Restrict project to only be built from a 64-bit system.
@@ -31,10 +31,6 @@ option(CADISE_BUILD_CLI "Build Cadise command-line interface" ON)
 # Setting C++20 standard
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# Compiler check
-message(STATUS
-    "Compiler: ${CMAKE_CXX_COMPILER_ID}")
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++20")
@@ -67,10 +63,10 @@ endif()
 # Subproject setup
 #------------------------------------------------------------------------------
 set(CADISE_LIB_NAME "Cadise")
-set(CADISE_CLI_NAME "CadiseCLI")
+set(CADISE_CLI_NAME "Cadise-CLI")
 
 add_subdirectory("./Cadise/")
 
-if(BUILD_CADISE_CLI)
+if(CADISE_BUILD_CLI)
     add_subdirectory("./CadiseCLI/")
 endif()
